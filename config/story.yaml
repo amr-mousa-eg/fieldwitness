@@ -12,3 +12,9 @@ bare_calendar:
   first_year: 2016        # T2.5: "past years (>= 2016)"
   min_clear_obs_per_month: 3   # per month across all years; fewer -> "insufficient data"
   min_years_with_data: 3       # years having >= 1 clear obs in the month
+seasons:                  # T2.2 (tag A team choices; UNVERIFIED, not from a paper)
+  peak_min_ndvi: 0.40     # a season needs a smoothed peak at least this high
+  min_prominence: 0.15    # peak minus the higher of the two neighbouring troughs
+  min_peak_separation_days: 120
+  sos_frac: 0.20          # SOS = first rise to left base + 20% of amplitude
+  eos_frac: 0.50          # EOS = first fall to right base + 50% of amplitude
