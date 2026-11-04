@@ -58,8 +58,11 @@ def fixed_seasonal_mm(budget_mm: float, efficiency: float = 1.0) -> Policy:
     return Policy("fixed_seasonal_mm", efficiency, budget_mm)
 
 
-def run(rain, etc, taw_mm, p, policy: Policy | None = None, dr0=0.0, ro_frac=0.0):
+def run(rain, etc, taw_mm, p, policy: Policy | None = None, dr0=0.0, ro_frac=0.0, irr_mask=None):
     """Step the balance over days (axis 0 of `rain`/`etc`; other axes broadcast).
+
+    irr_mask (optional bool, broadcastable to rain): irrigation only where True (T3.5: no
+    irrigation on fallow days).
 
     rain, etc: mm/day (etc = Kc * ETo, unstressed). Returns dict of arrays:
     dr (end of day), ks, eta, irr (net), irr_gross, dp, ro; each shaped like rain.
@@ -71,6 +74,8 @@ def run(rain, etc, taw_mm, p, policy: Policy | None = None, dr0=0.0, ro_frac=0.0
     taw_mm = np.asarray(taw_mm, float)
     raw_mm = raw(taw_mm, p)
     shape = rain.shape
+    if irr_mask is not None:
+        irr_mask = np.broadcast_to(np.asarray(irr_mask, bool), shape)
     out = {k: np.zeros(shape) for k in ("dr", "ks", "eta", "irr", "irr_gross", "dp", "ro")}
     dr = np.broadcast_to(np.asarray(dr0, float), shape[1:]).copy()
     dr = np.clip(dr, 0.0, np.broadcast_to(taw_mm, shape[1:]))
@@ -81,6 +86,8 @@ def run(rain, etc, taw_mm, p, policy: Policy | None = None, dr0=0.0, ro_frac=0.0
         irr = np.zeros(shape[1:])
         if policy.kind != "rainfed":
             need = np.where(dr > raw_mm, dr, 0.0)
+            if irr_mask is not None:
+                need = np.where(irr_mask[t], need, 0.0)
             irr = np.minimum(need, left) if policy.kind == "fixed_seasonal_mm" else need
             if policy.kind == "fixed_seasonal_mm":
                 left = left - irr
