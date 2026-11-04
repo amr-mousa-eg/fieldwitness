@@ -6,8 +6,9 @@ none with identical geometry; DECISIONS.md), so each year's crop is taken from t
 contains the pilot field's representative point (spatial join).
 
 Names: CSB `crop:name` -> crop key via crops.yaml `label_aliases`; otherwise the HCAT3 code is
-mapped to a history state (fallow, temporary_grass, perennial_forage, other_arable, unknown) or
-"non_arable" when the year is in groups 3302-3308 (fieldwitness.data.hcat).
+mapped to a history state (fallow, temporary_grass, perennial_forage, other_arable, unknown),
+"other_annual" for an annual crop without a crop key, or "non_arable" for groups 3302-3308.
+CDL double-crop names ("Dbl Crop WinWht/Sorghum") give the first crop plus `double_crop_second`.
 Labels for season year Y are dated Y-12-31 for the `as_of` guard.
 """
 
@@ -48,12 +49,33 @@ def csb_year(region_id: str, year: int, grid: dict, src=None) -> gpd.GeoDataFram
     return gdf
 
 
-def label_of(crop_name, hcat_code, aliases: dict[str, str]) -> str:
-    """Crop key for a CSB name, else the HCAT3 history state ('non_arable' for 3302-3308)."""
-    if isinstance(crop_name, str) and crop_name in aliases:
-        return aliases[crop_name]
+# Parts of CDL double-crop names ("Dbl Crop WinWht/Sorghum") as observed in the Kansas CSB files,
+# mapped to crop keys; the first part is the earlier (winter) crop, the second the summer crop.
+DOUBLE_PARTS = {
+    "WinWht": "winter_wheat",
+    "Corn": "maize",
+    "Sorghum": "sorghum",
+    "Soybeans": "soybean",
+}
+
+
+def label_of(crop_name, hcat_code, aliases: dict[str, str]) -> tuple[str, str | None]:
+    """(crop key or history state, second crop of a double-crop year or None).
+
+    Order: CSB alias -> crop key; "Dbl Crop A/B" -> (A, B); else the HCAT3 history state, where an
+    annual arable code without a crop key becomes "other_annual" and groups 3302-3308 "non_arable".
+    """
+    if isinstance(crop_name, str):
+        if crop_name in aliases:
+            return aliases[crop_name], None
+        if crop_name.startswith("Dbl Crop "):
+            a, _, b = crop_name.removeprefix("Dbl Crop ").partition("/")
+            if a in DOUBLE_PARTS and b in DOUBLE_PARTS:
+                return DOUBLE_PARTS[a], DOUBLE_PARTS[b]
     state = history_state(hcat_code)
-    return "non_arable" if state is None else state
+    if state is None:
+        return "non_arable", None
+    return ("other_annual" if state.isdigit() else state), None
 
 
 def build_labels(region_id: str, grid: dict) -> pd.DataFrame:
@@ -70,11 +92,13 @@ def build_labels(region_id: str, grid: dict) -> pd.DataFrame:
         j = gpd.sjoin(pts.to_crs(g.crs), g[["geometry", "crop:name", "hcat:code"]], how="left")
         j = j[~j.index.duplicated(keep="first")]
         for fid, name, code in zip(j["field_id"], j["crop:name"], j["hcat:code"], strict=True):
+            crop, second = label_of(name, code, aliases)
             rows.append(
                 {
                     "field_id": fid,
                     "year": y,
-                    "crop": label_of(name, code, aliases),
+                    "crop": crop,
+                    "double_crop_second": second,
                     "crop_name_raw": name if isinstance(name, str) else None,
                     "hcat_code": None if pd.isna(code) else str(int(code)).zfill(10),
                     "crop_source": "label",

@@ -144,6 +144,7 @@ crops:
     name: Sunflower
     mvp_role: rotation
     hcat3: ["3301060500"]  # sunflower
+    label_aliases: {CSB: ["Sunflower"]}  # CDL name observed in the Kansas CSB files (T1.6)
     kc_ini: {value: 0.35, ref: {source: fao56_ch6, table: 12, row: "h. Oil Crops (group row, Kc ini)", footnote: 1}, verified: true}
     kc_mid: {value: 1.0, range: [1.0, 1.15], ref: {source: fao56_ch6, table: 12, row: "Sunflower", footnote: 9}, verified: true,
              choice: "Footnote 9: lower values are for rainfed crops with less dense plant populations; rainfed assumed (A)."}

@@ -21,7 +21,18 @@ def main() -> None:
     lb.add_argument("--region", required=True)
     pw = sub.add_parser("power", help="T1.2 cache POWER daily weather for the pilot fields")
     pw.add_argument("--region", required=True)
+    so = sub.add_parser("soil", help="T1.3 SoilGrids values for the pilot fields (WCS)")
+    so.add_argument("--region", required=True)
     a = p.parse_args()
+
+    if a.command == "soil":
+        from fieldwitness.census import tile_lonlat_bounds
+        from fieldwitness.data import soilgrids
+        from fieldwitness.resolve.pilot import load_grid
+
+        t = soilgrids.build(a.region, tile_lonlat_bounds(load_grid(a.region)))
+        print(f"rows {len(t)}, missing values {int(t['value'].isna().sum())}", flush=True)
+        return
 
     if a.command == "labels":
         from fieldwitness.data import labels

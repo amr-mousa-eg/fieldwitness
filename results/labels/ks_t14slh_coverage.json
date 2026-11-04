@@ -1,0 +1,32 @@
+{
+ "fields": 200,
+ "years": [
+  2017,
+  2018,
+  2019,
+  2020,
+  2021,
+  2022,
+  2023,
+  2024
+ ],
+ "field_years": 1600,
+ "labelled_share": 1.0,
+ "fields_with_all_years": 200,
+ "crop_mix": {
+  "winter_wheat": 489,
+  "sorghum": 352,
+  "fallow": 351,
+  "maize": 317,
+  "non_arable": 49,
+  "perennial_forage": 26,
+  "other_annual": 10,
+  "soybean": 5,
+  "sunflower": 1
+ },
+ "not_a_crop_key_by_raw_name": {
+  "Grass/Pasture": 49,
+  "Alfalfa": 26,
+  "Triticale": 10
+ }
+}
