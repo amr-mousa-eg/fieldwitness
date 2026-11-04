@@ -147,3 +147,12 @@ Decisions that change or clarify the plan, plus an end-of-session log. Newest la
   - Ukraine has no crop labels (Tier 3) and FTW boundaries are an alpha release.
   - Toulouse: 19 % of parcels in the sample are `not_known_and_other`, excluded by the definition.
 - T0.5 ticked. Next: T0.6 (configs: regions.yaml completion, crops.yaml from FAO-56/FAO-33 with refs).
+
+## 2026-11-04 — Design fix: field selection vs crop history
+
+- Problem: the annual-arable filter was described only as a field filter; applied per year it would have dropped fallow and temporary-grass years from crop sequences and broken rotations (e.g. wheat → fallow → wheat).
+- Rule (user): the HCAT3 arable filter is **selection** on the current (most recent) year. In **crop histories**, fallow and temporary grass are kept as the states "fallow" and "temporary_grass", never dropped. A field is removed from history analysis only if it leaves arable use entirely.
+- Implementation: `fieldwitness.data.hcat.history_state` and `stays_arable`. My reading of "leaves arable use": any year coded outside HCAT3 group 3301 (e.g. converted to grassland 3302 or a permanent crop 3303). Grass leys `33010902..` (poaceae_grasses) are also mapped to "temporary_grass"; other excluded 3301 classes (perennials, gardens) become "other_arable"; missing codes "unknown" — none of these remove a field. Tests: wheat → fallow → wheat kept; wheat → grassland → wheat removed.
+- PLAN.md T1.6 and `docs/hcat_annual_arable.md` updated.
+- Licence note: the EuroCrops repository (HCAT3 table) is **CC-BY-SA-4.0**; `docs/hcat_annual_arable.md` is derived from it and carries that licence. Credited in DATA.md. Relevant when choosing the project LICENSE (T10.1).
+- Pushed `be73add` and `e3c47ec` (2026-11-04).

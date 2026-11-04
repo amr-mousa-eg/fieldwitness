@@ -12,6 +12,14 @@ grassland, 3303 permanent crops, 3304 mushrooms/energy/GM, 3305 greenhouse, 3306
 forest, 3307 peat/turf, 3308 unmaintained, 3399 not known/other), missing codes, and the 3301
 classes below that are fallow, grass leys, multi-year crops or gardens rather than annual field
 crops. Used by the census, T1.4 and T1.6.
+
+Two roles (user decision 2026-11-04, DECISIONS.md):
+- *Selection* — `is_annual_arable` on the current (most recent) year decides which parcels count
+  as fields.
+- *Crop history* — `history_state` maps every year of a field's history to a crop state. Fallow
+  and temporary grass are kept as the states "fallow" and "temporary_grass", never dropped. A
+  field is removed from history analysis only when it leaves arable use (a year coded outside
+  HCAT3 group 3301), see `stays_arable`.
 """
 
 ARABLE_PREFIX = "3301"
@@ -49,3 +57,40 @@ def is_annual_arable(code) -> bool:
     if c is None or not c.startswith(ARABLE_PREFIX):
         return False
     return not any(c.startswith(p) for p in EXCLUDED_ARABLE_PREFIXES)
+
+
+FALLOW = "fallow"
+TEMPORARY_GRASS = "temporary_grass"
+OTHER_ARABLE = "other_arable"
+UNKNOWN = "unknown"
+
+# History-state prefixes inside 3301 (HCAT3.csv): fallow and grass leys stay in the history.
+_HISTORY_PREFIXES = {
+    "330111": FALLOW,  # fallow_land_not_crop
+    "33010901": TEMPORARY_GRASS,  # temporary_grass
+    "33010902": TEMPORARY_GRASS,  # poaceae_grasses (grass leys: ryegrass, cocksfoot, ...)
+}
+
+
+def history_state(code) -> str | None:
+    """Crop state of one field-year for crop histories.
+
+    Returns the 10-digit HCAT3 code for an annual arable crop (named via crops.yaml in T1.6),
+    "fallow", "temporary_grass", "other_arable" (perennials and gardens inside 3301), "unknown"
+    for a missing code, or None when the year is outside arable use (any group other than 3301).
+    """
+    c = normalise(code)
+    if c is None:
+        return UNKNOWN
+    if not c.startswith(ARABLE_PREFIX):
+        return None
+    for prefix, state in _HISTORY_PREFIXES.items():
+        if c.startswith(prefix):
+            return state
+    return c if is_annual_arable(c) else OTHER_ARABLE
+
+
+def stays_arable(codes) -> bool:
+    """True if a field stays in arable use every year of its history (else drop it from history
+    analysis). Fallow, temporary grass and unknown years do not remove a field."""
+    return all(history_state(c) is not None for c in codes)

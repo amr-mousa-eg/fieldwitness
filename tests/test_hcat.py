@@ -3,7 +3,7 @@ import math
 import pandas as pd
 import pytest
 
-from fieldwitness.data.hcat import is_annual_arable, normalise
+from fieldwitness.data.hcat import history_state, is_annual_arable, normalise, stays_arable
 
 # Codes and names from the official HCAT3.csv (EuroCrops hcat_core) and fiboa fr.csv.
 
@@ -48,3 +48,29 @@ def test_normalise():
     assert normalise(3301010000) == "3301010000"
     assert normalise("  3301010000 ") == "3301010000"
     assert normalise(None) is None
+
+
+WHEAT = 3301010101  # winter_common_soft_wheat (HCAT3.csv)
+FALLOW_CODE = 3301110000  # fallow_land_not_crop
+GRASSLAND = 3302000000  # pasture_meadow_grassland_grass
+
+
+def test_history_wheat_fallow_wheat_keeps_fallow_as_a_state():
+    history = [WHEAT, FALLOW_CODE, WHEAT]
+    assert [history_state(c) for c in history] == ["3301010101", "fallow", "3301010101"]
+    assert stays_arable(history)
+    # Selection on the most recent year is unaffected by the fallow year in between.
+    assert is_annual_arable(history[-1])
+
+
+def test_history_temporary_grass_and_unknown_are_states():
+    assert history_state(3301090100) == "temporary_grass"
+    assert history_state(3301090205) == "temporary_grass"  # lolium_ryegrass ley
+    assert history_state(None) == "unknown"
+    assert history_state(3301200000) == "other_arable"  # asparagus
+    assert stays_arable([WHEAT, 3301090100, None, WHEAT])
+
+
+def test_field_leaving_arable_use_is_removed_from_history():
+    assert history_state(GRASSLAND) is None
+    assert not stays_arable([WHEAT, GRASSLAND, WHEAT])

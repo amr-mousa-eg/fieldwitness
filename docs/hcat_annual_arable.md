@@ -2,6 +2,20 @@
 
 Generated 2026-11-04 from the official HCAT3 table (https://github.com/maja601/EuroCrops/blob/main/hcat_core/HCAT3.csv, 384 classes) by `fieldwitness.data.hcat.is_annual_arable`. User decision 2026-11-04 (DECISIONS.md); applies to the census, T1.4 and T1.6. Parcels with a missing `hcat:code` are excluded.
 
+## Selection vs crop history (user decision 2026-11-04)
+
+- **Selection** — which parcels count as fields: `is_annual_arable` on the **current (most recent) year** only, using the kept/excluded lists below.
+- **Crop history** — every year of a selected field is mapped by `history_state`:
+  - annual arable crops → their HCAT3 code (named via `crops.yaml` in T1.6);
+  - `3301110000` fallow_land_not_crop → state **"fallow"**;
+  - `33010901..` temporary_grass and `33010902..` poaceae_grasses (grass leys) → state **"temporary_grass"**;
+  - other excluded classes inside 3301 (miscanthus, kitchen gardens, strawberries, asparagus, rhubarb, artichoke) → state "other_arable";
+  - missing code → state "unknown";
+  - any code outside group 3301 → the field has **left arable use**.
+- Fallow and temporary grass are **never dropped** from histories. A field is removed from history analysis only if it leaves arable use (`stays_arable` is false). Example (tested): wheat → fallow → wheat stays, with states `[3301010101, fallow, 3301010101]`.
+
+Licence: derived from the EuroCrops HCAT3 table, **CC-BY-SA-4.0** (https://github.com/maja601/EuroCrops/blob/main/LICENSE); this file is shared under the same licence.
+
 ## Excluded top-level groups (every class below them)
 
 - `3302000000` pasture_meadow_grassland_grass

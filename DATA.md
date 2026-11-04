@@ -39,6 +39,12 @@ Only the row groups whose `bbox` statistics intersect the query box are read (se
   - 2017, 2019–2024: **Licence Ouverte / Open Licence 2.0** (Etalab). Attribution: IGN — original data from https://geoservices.ign.fr/rpg
   - 2015, 2016, 2018: from **EuroCrops V2**, **CC-BY-4.0**. Attribution: European Commission, Joint Research Centre, EuroCropsV2.
 
+### Crop taxonomy — HCAT3 (EuroCrops)
+
+- Table: `https://github.com/maja601/EuroCrops/blob/main/hcat_core/HCAT3.csv` (Hierarchical Crop and Agriculture Taxonomy v3, 384 classes), used for the annual-arable field definition (`fieldwitness.data.hcat`, `docs/hcat_annual_arable.md`).
+- French crop codes → HCAT3 mapping: `https://fiboa.org/code/fr/fr.csv` (referenced by the GeoParquet `crop:code_list`).
+- Licence: EuroCrops repository **CC-BY-SA-4.0** (share-alike). Attribution (citation from the repository README): Schneider, M., Schelte, T., Schmitz, F. & Körner, M. (2023), "EuroCrops: The Largest Harmonized Open Crop Dataset Across the European Union" — HCAT3 taxonomy. Derived lists in this repo (`docs/hcat_annual_arable.md`) carry the same licence.
+
 ## Satellite data (T0.2, T0.3)
 
 - HLS Vegetation Indices `HLSL30_VI` v2.0 and `HLSS30_VI` v2.0; HLS surface reflectance `HLSL30` v2.0 and `HLSS30` v2.0 (Fmask) —
