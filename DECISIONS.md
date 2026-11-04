@@ -396,6 +396,10 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 
 ## Autopilot handoff
 
+**2026-11-04, autopilot run (T3.6 close).** Done: T3.6 ticked. `physics/vulnerability.py` (heat in mid stage, frost after green-up, Ks<1 days, extreme rain on bare soil; share of years per month; `hazard_table`) + `config/vulnerability.yaml` + `tests/test_vulnerability.py`. 126 tests pass, ruff clean. UNVERIFIED (A): heat Tmax thresholds (35/35/32 °C placeholders, no paper read), green-up = end of ini stage, rain quantile over all days. Not done: real-field run, mapping to `CropVulnerability` schema (T8.1). In progress: nothing. Background: SMAP task `b5e1ec71-0a40-4ec7-a9ea-8c3d1c386f37` not downloaded. Next: T1.8 (SMAP/GRACE/SRTM; verify APIs first), then T3.7 (stretch) / gate-1.md. Risk: Gate 1 must report T2.2 as FAILED (78.3% vs 90%).
+
+(Previous entry:)
+
 **2026-11-04, autopilot run (T3.5 close).** Done: T3.5 ticked. `physics/rotation.py` (batched `(options, draws, years)` sim, Dr carried across seasons and fallow, weather year y+i forces season i) + `irr_mask` option in `waterbal.run` (no irrigation on fallow days) + `tests/test_rotation.py`. Benchmark 200×30×20 (3 seasons) = 8.4 s. 121 tests pass, ruff clean. UNVERIFIED (A): kc_fallow 0.3 team choice; crop windows must fit one calendar year (winter crops spanning New Year not supported). In progress: nothing. Background: SMAP task `b5e1ec71-0a40-4ec7-a9ea-8c3d1c386f37` not downloaded. Next: T3.6 (crop vulnerability) / T1.8 SMAP, then gate-1.md. Risk: Gate 1 must report T2.2 as FAILED (78.3% vs 90%).
 
 (Previous entry:)
