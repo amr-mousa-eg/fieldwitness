@@ -12,3 +12,9 @@ export function cropName(crop: string): string {
   const key = `crop.${crop}`;
   return key in en ? en[key as StringKey] : crop;
 }
+
+/** Display name of a metric key (T6.7 labels are kept exactly as PLAN.md words them). */
+export function metricName(metric: string): string {
+  const key = `metric.${metric}`;
+  return key in en ? en[key as StringKey] : metric;
+}

@@ -40,8 +40,10 @@ describe("wktToGeometry", () => {
 
 describe("hash routes", () => {
   it("round-trips region and field", () => {
-    expect(parseHash(routeHref("ks_t14slh", "abc123"))).toEqual({ regionId: "ks_t14slh", fieldId: "abc123" });
-    expect(parseHash(routeHref("ks_t14slh"))).toEqual({ regionId: "ks_t14slh", fieldId: null });
-    expect(parseHash("")).toEqual({ regionId: null, fieldId: null });
+    expect(parseHash(routeHref("ks_t14slh", "abc123"))).toEqual({ regionId: "ks_t14slh", fieldId: "abc123", tab: "story" });
+    expect(parseHash(routeHref("ks_t14slh"))).toEqual({ regionId: "ks_t14slh", fieldId: null, tab: "story" });
+    expect(parseHash(routeHref("r", "f", "options")).tab).toBe("options");
+    expect(parseHash("#/r/f/bogus").tab).toBe("story");
+    expect(parseHash("")).toEqual({ regionId: null, fieldId: null, tab: "story" });
   });
 });

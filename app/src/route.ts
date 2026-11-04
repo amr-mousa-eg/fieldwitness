@@ -1,22 +1,28 @@
 import { useEffect, useState } from "react";
 
-/** App location in the URL hash: #/<region_id> or #/<region_id>/<field_id>. */
+export type FieldTab = "story" | "options";
+const TABS: FieldTab[] = ["story", "options"];
+
+/** App location in the URL hash: #/<region_id>[/<field_id>[/<tab>]]. */
 export interface Route {
   regionId: string | null;
   fieldId: string | null;
+  tab: FieldTab;
 }
 
 export function parseHash(hash: string): Route {
-  const [regionId = null, fieldId = null] = hash
+  const [regionId = null, fieldId = null, tab = "story"] = hash
     .replace(/^#\/?/, "")
     .split("/")
     .filter(Boolean)
     .map(decodeURIComponent);
-  return { regionId, fieldId };
+  return { regionId, fieldId, tab: TABS.includes(tab as FieldTab) ? (tab as FieldTab) : "story" };
 }
 
-export function routeHref(regionId: string, fieldId?: string | null): string {
-  const parts = [regionId, fieldId].filter((p): p is string => !!p).map(encodeURIComponent);
+export function routeHref(regionId: string, fieldId?: string | null, tab?: FieldTab): string {
+  const parts = [regionId, fieldId, fieldId ? tab : null]
+    .filter((p): p is string => !!p)
+    .map(encodeURIComponent);
   return `#/${parts.join("/")}`;
 }
 

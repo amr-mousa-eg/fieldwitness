@@ -51,25 +51,26 @@ export function App() {
           </label>
         )}
       </header>
-      <main className="app-main">
-        <aside className="rail">
-          {error && <p role="alert">{error}</p>}
-          {!error && !index && <p>{t("region.loading")}</p>}
-          {index &&
-            (route.fieldId ? (
-              <FieldPage regionId={index.region_id} fieldId={route.fieldId} />
-            ) : (
-              <FieldList index={index} selectedId={null} />
-            ))}
-        </aside>
-        {index && (
-          <MapView
-            index={index}
-            selectedId={route.fieldId}
-            onSelect={(fid) => (window.location.hash = routeHref(index.region_id, fid))}
-          />
-        )}
-      </main>
+      {index && route.fieldId ? (
+        <main className="app-field">
+          <FieldPage regionId={index.region_id} fieldId={route.fieldId} tab={route.tab} />
+        </main>
+      ) : (
+        <main className="app-main">
+          <aside className="rail">
+            {error && <p role="alert">{error}</p>}
+            {!error && !index && <p>{t("region.loading")}</p>}
+            {index && <FieldList index={index} selectedId={null} />}
+          </aside>
+          {index && (
+            <MapView
+              index={index}
+              selectedId={null}
+              onSelect={(fid) => (window.location.hash = routeHref(index.region_id, fid))}
+            />
+          )}
+        </main>
+      )}
       <footer className="app-footer">{t("fixed.judgment")}</footer>
     </div>
   );
