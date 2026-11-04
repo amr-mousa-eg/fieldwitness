@@ -396,6 +396,10 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 
 ## Autopilot handoff
 
+**2026-11-04, autopilot run (T3.3 close).** Done: T3.3 ticked. `physics/waterbal.py` (Eq. 82–85, policies rainfed / trigger_at_raw(eff) / fixed_seasonal_mm; vectorised over trailing axes) + `tests/test_waterbal.py` (hypothesis: mass closes daily, 0≤Ks≤1, 0≤Dr≤TAW). 114 tests pass, ruff clean. Assumptions (A, UNVERIFIED): CR=0, runoff = ro_frac·P (default 0), irrigation refills to field capacity when Dr(prev)>RAW, fixed-budget policy uses the same trigger. In progress: nothing. Background: SMAP task `b5e1ec71-0a40-4ec7-a9ea-8c3d1c386f37` not downloaded. Next: T3.4 (season outputs, Ky). Risk: Gate 1 must report T2.2 as FAILED (78.3% vs 90%).
+
+(Previous entry:)
+
 **2026-11-04, autopilot run (T3.2 close).** Done: T3.2 ticked. `physics/kc.py` (`kc_curve` per FAO-56 Fig. 34, `kc_adjust` Eq. 62 for mid / Eq. 65 for end, threshold 0.45 applies to Eq. 65 only) + `tests/test_kc.py`; Eq. 65 and Fig. 34 added to `docs/fao56_equations.md`. 110 tests pass, ruff clean. UNVERIFIED: the validity limits of Eq. 62 itself (copied from Eq. 65, same form); day-of-stage interpolation convention is a team choice (A). In progress: nothing. Background: SMAP task `b5e1ec71-0a40-4ec7-a9ea-8c3d1c386f37` not downloaded. Next: T3.3 (water balance, Eq. 82–85; all four equations are in `docs/fao56_equations.md`). Risk: Gate 1 must report T2.2 as FAILED (78.3% vs 90%).
 
 (Previous entry:)
