@@ -1,0 +1,431 @@
+{
+ "region_id": "pb_jagraon_t43req",
+ "tier": 3,
+ "name": "Punjab around Jagraon (India)",
+ "hls": {
+  "T43REQ": {
+   "seasons": [
+    {
+     "season": "kharif",
+     "year": 2016,
+     "granules": 37,
+     "L30": 18,
+     "S30": 19,
+     "cloud_le20": 17,
+     "cloud_le50": 28,
+     "cloud_le20_spatial_ge50": 10,
+     "median_cloud_pct": 25.0,
+     "median_spatial_pct": 96.0
+    },
+    {
+     "season": "kharif",
+     "year": 2017,
+     "granules": 51,
+     "L30": 19,
+     "S30": 32,
+     "cloud_le20": 27,
+     "cloud_le50": 36,
+     "cloud_le20_spatial_ge50": 20,
+     "median_cloud_pct": 17.0,
+     "median_spatial_pct": 95.0
+    },
+    {
+     "season": "kharif",
+     "year": 2018,
+     "granules": 70,
+     "L30": 17,
+     "S30": 53,
+     "cloud_le20": 28,
+     "cloud_le50": 40,
+     "cloud_le20_spatial_ge50": 13,
+     "median_cloud_pct": 45.0,
+     "median_spatial_pct": 15.0
+    },
+    {
+     "season": "kharif",
+     "year": 2019,
+     "granules": 71,
+     "L30": 19,
+     "S30": 52,
+     "cloud_le20": 27,
+     "cloud_le50": 44,
+     "cloud_le20_spatial_ge50": 13,
+     "median_cloud_pct": 33.0,
+     "median_spatial_pct": 17.0
+    },
+    {
+     "season": "kharif",
+     "year": 2020,
+     "granules": 76,
+     "L30": 20,
+     "S30": 56,
+     "cloud_le20": 37,
+     "cloud_le50": 47,
+     "cloud_le20_spatial_ge50": 15,
+     "median_cloud_pct": 24.0,
+     "median_spatial_pct": 17.0
+    },
+    {
+     "season": "kharif",
+     "year": 2021,
+     "granules": 66,
+     "L30": 18,
+     "S30": 48,
+     "cloud_le20": 29,
+     "cloud_le50": 46,
+     "cloud_le20_spatial_ge50": 12,
+     "median_cloud_pct": 29.5,
+     "median_spatial_pct": 99.0
+    },
+    {
+     "season": "kharif",
+     "year": 2022,
+     "granules": 89,
+     "L30": 37,
+     "S30": 52,
+     "cloud_le20": 46,
+     "cloud_le50": 58,
+     "cloud_le20_spatial_ge50": 22,
+     "median_cloud_pct": 16.0,
+     "median_spatial_pct": 49.0
+    },
+    {
+     "season": "kharif",
+     "year": 2023,
+     "granules": 87,
+     "L30": 36,
+     "S30": 51,
+     "cloud_le20": 40,
+     "cloud_le50": 56,
+     "cloud_le20_spatial_ge50": 17,
+     "median_cloud_pct": 25.0,
+     "median_spatial_pct": 99.0
+    },
+    {
+     "season": "kharif",
+     "year": 2024,
+     "granules": 86,
+     "L30": 36,
+     "S30": 50,
+     "cloud_le20": 36,
+     "cloud_le50": 51,
+     "cloud_le20_spatial_ge50": 14,
+     "median_cloud_pct": 42.0,
+     "median_spatial_pct": 34.5
+    },
+    {
+     "season": "rabi",
+     "year": 2016,
+     "granules": 37,
+     "L30": 23,
+     "S30": 14,
+     "cloud_le20": 19,
+     "cloud_le50": 21,
+     "cloud_le20_spatial_ge50": 11,
+     "median_cloud_pct": 11.0,
+     "median_spatial_pct": 93.0
+    },
+    {
+     "season": "rabi",
+     "year": 2017,
+     "granules": 51,
+     "L30": 23,
+     "S30": 28,
+     "cloud_le20": 22,
+     "cloud_le50": 32,
+     "cloud_le20_spatial_ge50": 9,
+     "median_cloud_pct": 23.0,
+     "median_spatial_pct": 93.0
+    },
+    {
+     "season": "rabi",
+     "year": 2018,
+     "granules": 77,
+     "L30": 22,
+     "S30": 55,
+     "cloud_le20": 45,
+     "cloud_le50": 54,
+     "cloud_le20_spatial_ge50": 24,
+     "median_cloud_pct": 9.0,
+     "median_spatial_pct": 99.0
+    },
+    {
+     "season": "rabi",
+     "year": 2019,
+     "granules": 80,
+     "L30": 21,
+     "S30": 59,
+     "cloud_le20": 46,
+     "cloud_le50": 57,
+     "cloud_le20_spatial_ge50": 20,
+     "median_cloud_pct": 12.5,
+     "median_spatial_pct": 74.5
+    },
+    {
+     "season": "rabi",
+     "year": 2020,
+     "granules": 64,
+     "L30": 20,
+     "S30": 44,
+     "cloud_le20": 34,
+     "cloud_le50": 48,
+     "cloud_le20_spatial_ge50": 17,
+     "median_cloud_pct": 10.5,
+     "median_spatial_pct": 16.5
+    },
+    {
+     "season": "rabi",
+     "year": 2021,
+     "granules": 81,
+     "L30": 20,
+     "S30": 61,
+     "cloud_le20": 43,
+     "cloud_le50": 51,
+     "cloud_le20_spatial_ge50": 20,
+     "median_cloud_pct": 13.0,
+     "median_spatial_pct": 18.0
+    },
+    {
+     "season": "rabi",
+     "year": 2022,
+     "granules": 98,
+     "L30": 39,
+     "S30": 59,
+     "cloud_le20": 68,
+     "cloud_le50": 78,
+     "cloud_le20_spatial_ge50": 38,
+     "median_cloud_pct": 2.0,
+     "median_spatial_pct": 80.0
+    },
+    {
+     "season": "rabi",
+     "year": 2023,
+     "granules": 108,
+     "L30": 45,
+     "S30": 63,
+     "cloud_le20": 62,
+     "cloud_le50": 74,
+     "cloud_le20_spatial_ge50": 32,
+     "median_cloud_pct": 12.5,
+     "median_spatial_pct": 99.0
+    },
+    {
+     "season": "rabi",
+     "year": 2024,
+     "granules": 91,
+     "L30": 40,
+     "S30": 51,
+     "cloud_le20": 52,
+     "cloud_le50": 61,
+     "cloud_le20_spatial_ge50": 24,
+     "median_cloud_pct": 3.0,
+     "median_spatial_pct": 81.0
+    }
+   ],
+   "monthly": [
+    {
+     "month": 1,
+     "mean_granules": 9.8,
+     "mean_cloud_le20": 3.4
+    },
+    {
+     "month": 2,
+     "mean_granules": 12.8,
+     "mean_cloud_le20": 7.3
+    },
+    {
+     "month": 3,
+     "mean_granules": 14.0,
+     "mean_cloud_le20": 8.9
+    },
+    {
+     "month": 4,
+     "mean_granules": 13.7,
+     "mean_cloud_le20": 9.7
+    },
+    {
+     "month": 5,
+     "mean_granules": 14.1,
+     "mean_cloud_le20": 10.6
+    },
+    {
+     "month": 6,
+     "mean_granules": 13.4,
+     "mean_cloud_le20": 8.1
+    },
+    {
+     "month": 7,
+     "mean_granules": 13.1,
+     "mean_cloud_le20": 2.2
+    },
+    {
+     "month": 8,
+     "mean_granules": 13.6,
+     "mean_cloud_le20": 2.0
+    },
+    {
+     "month": 9,
+     "mean_granules": 14.3,
+     "mean_cloud_le20": 7.2
+    },
+    {
+     "month": 10,
+     "mean_granules": 15.9,
+     "mean_cloud_le20": 12.3
+    },
+    {
+     "month": 11,
+     "mean_granules": 14.2,
+     "mean_cloud_le20": 8.2
+    },
+    {
+     "month": 12,
+     "mean_granules": 14.9,
+     "mean_cloud_le20": 7.8
+    }
+   ]
+  }
+ },
+ "ecostress": [
+  {
+   "season": "kharif",
+   "year": 2018,
+   "v002": 18,
+   "v003": 0
+  },
+  {
+   "season": "kharif",
+   "year": 2019,
+   "v002": 7,
+   "v003": 0
+  },
+  {
+   "season": "kharif",
+   "year": 2020,
+   "v002": 16,
+   "v003": 0
+  },
+  {
+   "season": "kharif",
+   "year": 2021,
+   "v002": 22,
+   "v003": 0
+  },
+  {
+   "season": "kharif",
+   "year": 2022,
+   "v002": 27,
+   "v003": 0
+  },
+  {
+   "season": "kharif",
+   "year": 2023,
+   "v002": 28,
+   "v003": 0
+  },
+  {
+   "season": "kharif",
+   "year": 2024,
+   "v002": 10,
+   "v003": 0
+  },
+  {
+   "season": "rabi",
+   "year": 2018,
+   "v002": 0,
+   "v003": 0
+  },
+  {
+   "season": "rabi",
+   "year": 2019,
+   "v002": 3,
+   "v003": 0
+  },
+  {
+   "season": "rabi",
+   "year": 2020,
+   "v002": 13,
+   "v003": 0
+  },
+  {
+   "season": "rabi",
+   "year": 2021,
+   "v002": 25,
+   "v003": 0
+  },
+  {
+   "season": "rabi",
+   "year": 2022,
+   "v002": 25,
+   "v003": 0
+  },
+  {
+   "season": "rabi",
+   "year": 2023,
+   "v002": 46,
+   "v003": 0
+  },
+  {
+   "season": "rabi",
+   "year": 2024,
+   "v002": 7,
+   "v003": 0
+  }
+ ],
+ "tile": "T43REQ",
+ "boundary": {
+  "box20km": {
+   "read": {
+    "key": "ftw/global-data/predictions/vectors/alpha/results-by-admin-conf/admin:country_code=IN/IN_PB.parquet",
+    "rows": 10396804,
+    "row_groups": 159,
+    "row_groups_hit": 8,
+    "estimated_mb": 59.9,
+    "cap_mb": 200.0,
+    "crs": "WGS 84 (CRS84)"
+   },
+   "sample_box_lonlat": [
+    75.3654,
+    30.7002,
+    75.5746,
+    30.8798
+   ],
+   "sample_area_km2": 401.8,
+   "fields": 38712,
+   "area_ha_p10_p25_p50_p75_p90": [
+    0.1,
+    0.21,
+    0.44,
+    0.8,
+    1.32
+   ],
+   "area_ha_mean": 0.61,
+   "field_cover_fraction": 0.588,
+   "share_scale_flag_lt_0p36ha": 0.433,
+   "share_ge4_interior_px_buf30": 0.024,
+   "share_ge4_interior_px_buf15": 0.183,
+   "median_interior_px_buf30": 0.0
+  }
+ },
+ "grid": {
+  "epsg": "EPSG:32643",
+  "ulx": 499980.0,
+  "uly": 3500040.0,
+  "size_m": 109800.0
+ },
+ "label_years": [],
+ "seasons_def": {
+  "kharif": {
+   "start": 6,
+   "end": 10,
+   "tag": "A"
+  },
+  "rabi": {
+   "start": 11,
+   "end": 4,
+   "tag": "A"
+  }
+ },
+ "boundary_source": "Fields of the World global predictions (alpha)",
+ "generated": "2026-11-04T01:35:10+00:00"
+}

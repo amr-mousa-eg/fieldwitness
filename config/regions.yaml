@@ -1,0 +1,124 @@
+# Regions from the T0.5 census (PLAN.md §2, T0.5). Final choice (user, 2026-11-04, DECISIONS.md):
+# Tier 1 ks_t14slh, Tier 2 fr_toulouse_t31tcj, Tier 3 ua_central_t36uvu; eg_nile_delta showcase only.
+# T0.6 completes this file (bbox, label source, crop list, season windows).
+#
+# tiles: MGRS tile IDs verified in CMR (docs/api_notes.md). point: [lon, lat] of the census
+#   boundary sample (a 20 km x 20 km box). For multi-tile regions the sample box is centred on the
+#   chosen tile instead (the tile with the larger field cover fraction).
+# seasons: team assumptions, tag A (user decision 2026-11-04), editable. Months are inclusive.
+#   A season is named by its harvest year = calendar year of its end month (PLAN.md T2.2);
+#   start > end means the season crosses the new year.
+# boundary.year: polygons of this year only (FTW holds a 2024 and a 2025 layer).
+# sample_km: side of the boundary sample box (default 20). boundary: null = CMR-only census.
+# boundary.arable_only: keep annual arable crop parcels only (HCAT3, fieldwitness.data.hcat).
+# boundary.cap_mb / columns / cache_as: per-region read cap (default 200 MB), column subset, and a
+#   cache file name under data/census/ (gitignored) for reuse in T1.4.
+# status (user decision 2026-11-04, DECISIONS.md): selected | showcase | rejected | comparison_only.
+
+regions:
+  ks_t14slh:
+    status: selected  # Tier 1, final
+    tier: 1
+    name: Kansas High Plains (SW Kansas)
+    tiles: [T14SLH]
+    point: [-100.90, 38.00]
+    full_tile_sample: true  # CSB full-tile read is 43.9 MB (T0.4), under the cap
+    boundary:
+      source: CSB 2017-2024 edition (USDA NASS)
+      key: ftw/harmonized-field-data/us_usda_cropland/year=2024/us_usda_cropland-2024.parquet
+      year: null
+    labels:
+      source: CSB
+      key_pattern: ftw/harmonized-field-data/us_usda_cropland/year={y}/us_usda_cropland-{y}.parquet
+      years: [2017, 2024]
+    seasons:
+      summer: {start: 4, end: 10, tag: A}
+      winter_wheat: {start: 9, end: 7, tag: A}
+
+  fr_beauce_t31ucp:
+    status: comparison  # not selected; kept as the Tier 2 comparison (user 2026-11-04)
+    tier: 2
+    name: Beauce (France)
+    tiles: [T31UCP]
+    point: [1.60, 48.25]
+    boundary:
+      source: French RPG (IGN) / EuroCrops V2
+      key: ftw/harmonized-field-data/fr/year=2024/fr-2024.parquet
+      year: null
+      arable_only: true  # annual arable parcels only (fieldwitness.data.hcat), user 2026-11-04
+    labels:
+      source: RPG / EuroCrops V2
+      key_pattern: ftw/harmonized-field-data/fr/year={y}/fr-{y}.parquet
+      years: [2015, 2024]
+    seasons:
+      winter: {start: 9, end: 7, tag: A}
+      summer: {start: 4, end: 10, tag: A}
+
+  pb_jagraon_t43req:
+    status: rejected  # median field 0.44 ha; 18 % qualify at 15 m
+    tier: 3
+    name: Punjab around Jagraon (India)
+    tiles: [T43REQ]
+    point: [75.47, 30.79]
+    boundary:
+      source: Fields of the World global predictions (alpha)
+      key: ftw/global-data/predictions/vectors/alpha/results-by-admin-conf/admin:country_code=IN/IN_PB.parquet
+      year: 2024
+    labels: {source: none, years: null}
+    seasons:
+      kharif: {start: 6, end: 10, tag: A}
+      rabi: {start: 11, end: 4, tag: A}
+
+  ua_central_t36uvu:
+    status: selected  # Tier 3, final (10 km check passed: 3.29 ha, 73.8 % at 15 m)
+    tier: 3
+    name: Central Ukraine (Kirovohrad oblast area)
+    tiles: [T36UVU]
+    # Tile centre (from ULX/ULY); the earlier lookup point 32.26E 48.51N is Kropyvnytskyi city.
+    point: [32.39, 48.25]
+    sample_km: 10  # the 20 km FTW read was est. 313.6 MB (> 200 MB cap)
+    boundary:
+      source: Fields of the World global predictions (alpha)
+      key: ftw/global-data/predictions/vectors/alpha/results-by-admin-conf/admin:country_code=UA/Ukraine.parquet
+      year: 2024
+      cap_mb: 260  # one-off, user-approved 2026-11-04 (10 km box est. 254 MB with all columns)
+      columns: [geometry, "determination:datetime"]
+      cache_as: ua_t36uvu_box10km_ftw.parquet
+    labels: {source: none, years: null}
+    seasons:
+      winter: {start: 9, end: 7, tag: A}
+      summer: {start: 4, end: 10, tag: A}
+
+  eg_nile_delta:
+    status: showcase  # data-confidence map only; no pipeline beyond the census
+    tier: 3
+    name: Nile Delta (Egypt)
+    tiles: [T36RTV, T36RUV]
+    point: [31.00, 30.79]
+    boundary:
+      source: Fields of the World global predictions (alpha)
+      key: ftw/global-data/predictions/vectors/alpha/results-by-admin-conf/admin:country_code=EG/Egypt.parquet
+      year: 2024
+    labels: {source: none, years: null}
+    seasons:
+      winter: {start: 11, end: 5, tag: A}
+      summer: {start: 5, end: 10, tag: A}
+
+  fr_toulouse_t31tcj:
+    status: selected  # Tier 2, final (arable parcels: 3.62 ha, 87.5 % at 15 m)
+    tier: 2
+    name: Lauragais, SE of Toulouse (France)
+    tiles: [T31TCJ]
+    point: [1.75, 43.45]
+    boundary:
+      source: French RPG (IGN) / EuroCrops V2
+      key: ftw/harmonized-field-data/fr/year=2024/fr-2024.parquet
+      year: null
+      arable_only: true  # annual arable parcels only (fieldwitness.data.hcat), user 2026-11-04
+    labels:
+      source: RPG / EuroCrops V2
+      key_pattern: ftw/harmonized-field-data/fr/year={y}/fr-{y}.parquet
+      years: [2015, 2024]
+    seasons:
+      winter: {start: 9, end: 7, tag: A}
+      summer: {start: 4, end: 10, tag: A}

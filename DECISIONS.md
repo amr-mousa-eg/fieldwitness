@@ -101,3 +101,49 @@ Decisions that change or clarify the plan, plus an end-of-session log. Newest la
 ## 2026-11-04 — ECOSTRESS version finding (affects T1.7)
 
 - `ECO_L3T_JET` v003 (named in PLAN.md T1.7) is only partly populated: 378,068 granules from 2019-08-23, none in June 2023; at the Kansas test point 66 granules all time vs 850 for v002 (4.8 M granules from 2018-07-10). **Decision needed at T0.5/T1.7:** use v002 for history, v003, or both. Not changed yet.
+
+## 2026-11-04 — T0.5 census run (awaiting the user's region choice)
+
+- `uv run python -m fieldwitness.cli census --region <id>|all [--compare]`; outputs `docs/census/<region>.md|.json` and `docs/census/comparison.md` (+ my recommendation from `docs/census/_recommendation.md`). Raw CMR granule metadata cached in `data/census/` (gitignored). Added `pyyaml` (runtime). Candidates and season windows (tag A, user-set) in `config/regions.yaml`.
+- Code moved to owning modules: capped bbox reads `fieldwitness.data.geoparquet` (used by `scripts/check_fields.py`), interior pixels `fieldwitness.resolve.pixels` (for T1.4); unit tests for both and for season windows (11 tests pass).
+- Over-cap reads are recorded, not run: central Ukraine 20 km FTW box est. **313.6 MB > 200 MB** → no field statistics for Ukraine. Per the earlier rule, Tier 3 over-cap reads are decided at T1.4; Ukraine's field-size check needs a decision now if Ukraine is to be chosen.
+- Nile Delta tile choice: `T36RTV` (FTW 2024 field cover 0.574 in a 20 km tile-centre box) over `T36RUV` (0.553). The two tiles share the same 30 m grid alignment.
+- Finding: many HLS granules cover only part of a tile (median `SPATIAL_COVERAGE` 15–25 % in some Punjab/Nile season-years), so raw granule counts overstate observations; the comparison adds counts with cloud ≤ 20 % **and** coverage ≥ 50 %.
+- Finding: `ECO_L3T_JET` v003 median overpasses per season = 0 in every region (2019–2024); v002 11.5–110. Input for the T1.7 version decision.
+- T0.5 not ticked: acceptance requires the human region choice.
+
+## 2026-11-04 — Region decision (pending Ukraine field-size check), interior-pixel rule, Toulouse
+
+- User decision, **to be recorded as final once Ukraine passes the field-size check**: Tier 1 Kansas `T14SLH`; Tier 2 Beauce `T31UCP`; Tier 3 central Ukraine `T36UVU`. Nile Delta `T36RTV` stays only as a data-confidence-map showcase (no pipeline beyond the census numbers). Punjab rejected. Statuses set in `config/regions.yaml`.
+- Ukraine check rule (user): stop and ask if the median field is under ~2 ha or fewer than 50 % of fields qualify at the 15 m buffer.
+- **Blocked:** the Ukraine FTW 10 km box is est. 254.1 MB (> 200 MB cap; 8 row groups); a 1 km box hits the same 8 row groups; a footer-only scan of 81 10 km boxes across `T36UVU` found none under the cap (245.6–324.5 MB). Not read; waiting for the user.
+- Known limit if Ukraine is confirmed: farming in 2022–24 was disrupted by the war, which affects hindcast scoring there (to be stated on the scoreboard and Methods page).
+- **Interior-pixel rule changed (user):** PLAN.md T1.4 now uses a 15 m inward buffer (pixel centre ≥ half a pixel inside the field edge) instead of 30 m. Census shares with ≥ 4 interior pixels, 30 m → 15 m: Kansas 88.6 % → 98.1 % (full tile), Beauce 54.0 % → 61.2 %, Nile 6.9 % → 33.6 %, Punjab 2.4 % → 18.3 %. `fieldwitness.resolve.pixels` docstring updated.
+- Optional CMR-only cloud census for Lauragais `T31TCJ` (near Toulouse): clear (≤ 20 % cloud, ≥ 50 % coverage) granules per season 31 winter / 25 summer vs Beauce 30 / 19; worst years 14 / 13 vs 4 / 8. No boundary read.
+- T0.5 not ticked yet (needs the Ukraine decision).
+
+## 2026-11-04 — Field-size checks for Ukraine and Toulouse
+
+- Ukraine `T36UVU`, 10 km box at (32.39, 48.25), one-off read approved by the user: columns `geometry` + `determination:datetime` only, est. 243.6 MB (8 row groups, cap 260 MB for this read); result cached as `data/census/ua_t36uvu_box10km_ftw.parquet` (gitignored, for T1.4). FTW 2024 layer: **141 fields**, median **3.29 ha** (p10–p90 0.31–148 ha), **73.8 %** with ≥ 4 interior pixels at the 15 m buffer (55.3 % at 30 m), 10.6 % below the scale flag. **Passes** both thresholds (≥ ~2 ha, ≥ 50 %). Caveat: only 141 fields in the sample, with a bimodal size distribution.
+- Toulouse `T31TCJ`, 20 km box at (1.75, 43.45), France RPG 2024, est. 30.1 MB: **11,270 fields**, median **0.86 ha** (p10–p90 0.07–8.06 ha), **48.1 %** at 15 m (37.1 % at 30 m), 36.7 % below the scale flag; 10 label years. **Fails** both thresholds as applied to Ukraine (the user set them for Ukraine; I applied the same to Toulouse). Beauce, for comparison: median 3.01 ha, 61.2 % at 15 m (passes).
+- Stopped before recording the final regions: Tier 2 needs a user decision.
+- Reader change: `read_bbox`/`estimate_bbox_read` accept a column subset (estimate counts only those columns plus `bbox`); census boundary reads can set `cap_mb`, `columns`, `cache_as` per region.
+
+## 2026-11-04 — Final regions (T0.5) and field definition
+
+- **Field definition (user):** a field is an *annual arable crop parcel*, defined on HCAT3 (official table `maja601/EuroCrops/hcat_core/HCAT3.csv`, 384 classes) in `fieldwitness.data.hcat.is_annual_arable`; applies to the census, T1.4 and T1.6. Full list: `docs/hcat_annual_arable.md`.
+  - **Kept:** 278 classes, all under `3301` arable_crops.
+  - **Excluded groups:** `3302` pasture_meadow_grassland_grass, `3303` permanent_crops_perennial, `3304` mushrooms_energy_genetically_modified_crops, `3305` greenhouse_foil_film, `3306` tree_wood_forest, `3307` peat_turf, `3308` unmaintained, `3399` not_known_and_other; and missing codes.
+  - **Excluded inside 3301 (18):** `3301110000` fallow_land_not_crop; `3301090100` temporary_grass; `3301090200` poaceae_grasses and its 9 children `3301090201`–`3301090209` (elymus, festuca, cocksfoot, festulolium, lolium, setaria, sod_turf, switchgrass, timothy); `3301083000` miscanthus_silvergrass; `3301120000` kitchen_gardens; `3301130000` strawberries; `3301200000` asparagus; `3301230000` rhubarb; `3301270000` artichoke.
+  - A first version used prefix `3301083` for miscanthus, which wrongly dropped its siblings (incl. safflower); caught by checking against HCAT3.csv and fixed to `33010830`, with a test.
+- **French field checks on arable parcels (France RPG 2024, 20 km boxes):**
+  - Toulouse `T31TCJ`: 11,270 parcels → 5,406 kept (excluded: 3,093 in 3301 [fallow/grass/perennial], 2,164 not_known_and_other, 532 grassland, 42 permanent crops, 13 other, 22 missing code). Median **3.62 ha**, **87.5 %** with ≥ 4 interior pixels at 15 m (72.1 % at 30 m), 2.6 % below the scale flag. **Passes.**
+  - Beauce `T31UCP`: 5,977 → 3,688 kept. Median 7.55 ha, 87.0 % at 15 m.
+  - Rule (user): Toulouse passes both thresholds → **Tier 2 = Toulouse `T31TCJ`** (better sky than Beauce).
+- **Final regions (user, 2026-11-04):** Tier 1 Kansas `T14SLH`; Tier 2 Lauragais/Toulouse `T31TCJ`; Tier 3 central Ukraine `T36UVU`; Nile Delta `T36RTV` for the data-confidence map only (no pipeline beyond the census numbers). Beauce kept in the census as the comparison; Punjab rejected. Recorded in `config/regions.yaml` and PLAN.md §2.
+- **Known limits:**
+  - Ukraine field sample is small and bimodal (141 FTW 2024 fields in a 10 km box; p10 0.31 ha, p90 148 ha) — recheck at T1.4 on the full pilot set.
+  - Ukraine farming in 2022–24 was disrupted by the war; this affects hindcast scoring there (state on the scoreboard and Methods page).
+  - Ukraine has no crop labels (Tier 3) and FTW boundaries are an alpha release.
+  - Toulouse: 19 % of parcels in the sample are `not_known_and_other`, excluded by the definition.
+- T0.5 ticked. Next: T0.6 (configs: regions.yaml completion, crops.yaml from FAO-56/FAO-33 with refs).

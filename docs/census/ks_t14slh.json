@@ -1,0 +1,472 @@
+{
+ "region_id": "ks_t14slh",
+ "tier": 1,
+ "name": "Kansas High Plains (SW Kansas)",
+ "hls": {
+  "T14SLH": {
+   "seasons": [
+    {
+     "season": "summer",
+     "year": 2016,
+     "granules": 36,
+     "L30": 24,
+     "S30": 12,
+     "cloud_le20": 17,
+     "cloud_le50": 23,
+     "cloud_le20_spatial_ge50": 15,
+     "median_cloud_pct": 23.5,
+     "median_spatial_pct": 97.0
+    },
+    {
+     "season": "summer",
+     "year": 2017,
+     "granules": 47,
+     "L30": 23,
+     "S30": 24,
+     "cloud_le20": 22,
+     "cloud_le50": 29,
+     "cloud_le20_spatial_ge50": 21,
+     "median_cloud_pct": 23.0,
+     "median_spatial_pct": 55.0
+    },
+    {
+     "season": "summer",
+     "year": 2018,
+     "granules": 98,
+     "L30": 26,
+     "S30": 72,
+     "cloud_le20": 51,
+     "cloud_le50": 69,
+     "cloud_le20_spatial_ge50": 46,
+     "median_cloud_pct": 17.5,
+     "median_spatial_pct": 55.0
+    },
+    {
+     "season": "summer",
+     "year": 2019,
+     "granules": 97,
+     "L30": 25,
+     "S30": 72,
+     "cloud_le20": 48,
+     "cloud_le50": 67,
+     "cloud_le20_spatial_ge50": 44,
+     "median_cloud_pct": 22.0,
+     "median_spatial_pct": 57.0
+    },
+    {
+     "season": "summer",
+     "year": 2020,
+     "granules": 94,
+     "L30": 25,
+     "S30": 69,
+     "cloud_le20": 53,
+     "cloud_le50": 76,
+     "cloud_le20_spatial_ge50": 51,
+     "median_cloud_pct": 11.0,
+     "median_spatial_pct": 55.0
+    },
+    {
+     "season": "summer",
+     "year": 2021,
+     "granules": 102,
+     "L30": 27,
+     "S30": 75,
+     "cloud_le20": 48,
+     "cloud_le50": 66,
+     "cloud_le20_spatial_ge50": 43,
+     "median_cloud_pct": 25.5,
+     "median_spatial_pct": 77.0
+    },
+    {
+     "season": "summer",
+     "year": 2022,
+     "granules": 120,
+     "L30": 47,
+     "S30": 73,
+     "cloud_le20": 81,
+     "cloud_le50": 97,
+     "cloud_le20_spatial_ge50": 66,
+     "median_cloud_pct": 3.5,
+     "median_spatial_pct": 55.5
+    },
+    {
+     "season": "summer",
+     "year": 2023,
+     "granules": 121,
+     "L30": 47,
+     "S30": 74,
+     "cloud_le20": 70,
+     "cloud_le50": 87,
+     "cloud_le20_spatial_ge50": 60,
+     "median_cloud_pct": 7.0,
+     "median_spatial_pct": 56.0
+    },
+    {
+     "season": "summer",
+     "year": 2024,
+     "granules": 128,
+     "L30": 50,
+     "S30": 78,
+     "cloud_le20": 71,
+     "cloud_le50": 94,
+     "cloud_le20_spatial_ge50": 63,
+     "median_cloud_pct": 9.5,
+     "median_spatial_pct": 96.0
+    },
+    {
+     "season": "winter_wheat",
+     "year": 2016,
+     "granules": 52,
+     "L30": 37,
+     "S30": 15,
+     "cloud_le20": 22,
+     "cloud_le50": 30,
+     "cloud_le20_spatial_ge50": 19,
+     "median_cloud_pct": 36.0,
+     "median_spatial_pct": 63.5
+    },
+    {
+     "season": "winter_wheat",
+     "year": 2017,
+     "granules": 68,
+     "L30": 37,
+     "S30": 31,
+     "cloud_le20": 38,
+     "cloud_le50": 44,
+     "cloud_le20_spatial_ge50": 31,
+     "median_cloud_pct": 13.0,
+     "median_spatial_pct": 55.0
+    },
+    {
+     "season": "winter_wheat",
+     "year": 2018,
+     "granules": 126,
+     "L30": 38,
+     "S30": 88,
+     "cloud_le20": 65,
+     "cloud_le50": 86,
+     "cloud_le20_spatial_ge50": 56,
+     "median_cloud_pct": 18.0,
+     "median_spatial_pct": 56.0
+    },
+    {
+     "season": "winter_wheat",
+     "year": 2019,
+     "granules": 141,
+     "L30": 39,
+     "S30": 102,
+     "cloud_le20": 63,
+     "cloud_le50": 87,
+     "cloud_le20_spatial_ge50": 56,
+     "median_cloud_pct": 30.0,
+     "median_spatial_pct": 55.0
+    },
+    {
+     "season": "winter_wheat",
+     "year": 2020,
+     "granules": 137,
+     "L30": 40,
+     "S30": 97,
+     "cloud_le20": 78,
+     "cloud_le50": 102,
+     "cloud_le20_spatial_ge50": 71,
+     "median_cloud_pct": 11.0,
+     "median_spatial_pct": 69.0
+    },
+    {
+     "season": "winter_wheat",
+     "year": 2021,
+     "granules": 147,
+     "L30": 36,
+     "S30": 111,
+     "cloud_le20": 70,
+     "cloud_le50": 98,
+     "cloud_le20_spatial_ge50": 63,
+     "median_cloud_pct": 23.0,
+     "median_spatial_pct": 57.0
+    },
+    {
+     "season": "winter_wheat",
+     "year": 2022,
+     "granules": 183,
+     "L30": 69,
+     "S30": 114,
+     "cloud_le20": 102,
+     "cloud_le50": 132,
+     "cloud_le20_spatial_ge50": 88,
+     "median_cloud_pct": 13.0,
+     "median_spatial_pct": 62.0
+    },
+    {
+     "season": "winter_wheat",
+     "year": 2023,
+     "granules": 183,
+     "L30": 73,
+     "S30": 110,
+     "cloud_le20": 93,
+     "cloud_le50": 121,
+     "cloud_le20_spatial_ge50": 80,
+     "median_cloud_pct": 18.0,
+     "median_spatial_pct": 71.0
+    },
+    {
+     "season": "winter_wheat",
+     "year": 2024,
+     "granules": 184,
+     "L30": 71,
+     "S30": 113,
+     "cloud_le20": 111,
+     "cloud_le50": 143,
+     "cloud_le20_spatial_ge50": 92,
+     "median_cloud_pct": 8.0,
+     "median_spatial_pct": 56.0
+    }
+   ],
+   "monthly": [
+    {
+     "month": 1,
+     "mean_granules": 11.4,
+     "mean_cloud_le20": 6.2
+    },
+    {
+     "month": 2,
+     "mean_granules": 11.4,
+     "mean_cloud_le20": 5.6
+    },
+    {
+     "month": 3,
+     "mean_granules": 12.8,
+     "mean_cloud_le20": 7.2
+    },
+    {
+     "month": 4,
+     "mean_granules": 11.9,
+     "mean_cloud_le20": 6.0
+    },
+    {
+     "month": 5,
+     "mean_granules": 12.4,
+     "mean_cloud_le20": 5.1
+    },
+    {
+     "month": 6,
+     "mean_granules": 12.9,
+     "mean_cloud_le20": 6.7
+    },
+    {
+     "month": 7,
+     "mean_granules": 15.0,
+     "mean_cloud_le20": 7.7
+    },
+    {
+     "month": 8,
+     "mean_granules": 14.4,
+     "mean_cloud_le20": 8.6
+    },
+    {
+     "month": 9,
+     "mean_granules": 13.3,
+     "mean_cloud_le20": 8.8
+    },
+    {
+     "month": 10,
+     "mean_granules": 13.7,
+     "mean_cloud_le20": 8.4
+    },
+    {
+     "month": 11,
+     "mean_granules": 13.3,
+     "mean_cloud_le20": 7.6
+    },
+    {
+     "month": 12,
+     "mean_granules": 13.3,
+     "mean_cloud_le20": 6.1
+    }
+   ]
+  }
+ },
+ "ecostress": [
+  {
+   "season": "summer",
+   "year": 2018,
+   "v002": 20,
+   "v003": 0
+  },
+  {
+   "season": "summer",
+   "year": 2019,
+   "v002": 31,
+   "v003": 0
+  },
+  {
+   "season": "summer",
+   "year": 2020,
+   "v002": 80,
+   "v003": 0
+  },
+  {
+   "season": "summer",
+   "year": 2021,
+   "v002": 82,
+   "v003": 0
+  },
+  {
+   "season": "summer",
+   "year": 2022,
+   "v002": 66,
+   "v003": 0
+  },
+  {
+   "season": "summer",
+   "year": 2023,
+   "v002": 157,
+   "v003": 0
+  },
+  {
+   "season": "summer",
+   "year": 2024,
+   "v002": 21,
+   "v003": 0
+  },
+  {
+   "season": "winter_wheat",
+   "year": 2018,
+   "v002": 0,
+   "v003": 0
+  },
+  {
+   "season": "winter_wheat",
+   "year": 2019,
+   "v002": 24,
+   "v003": 0
+  },
+  {
+   "season": "winter_wheat",
+   "year": 2020,
+   "v002": 90,
+   "v003": 0
+  },
+  {
+   "season": "winter_wheat",
+   "year": 2021,
+   "v002": 102,
+   "v003": 0
+  },
+  {
+   "season": "winter_wheat",
+   "year": 2022,
+   "v002": 87,
+   "v003": 0
+  },
+  {
+   "season": "winter_wheat",
+   "year": 2023,
+   "v002": 163,
+   "v003": 0
+  },
+  {
+   "season": "winter_wheat",
+   "year": 2024,
+   "v002": 62,
+   "v003": 0
+  }
+ ],
+ "tile": "T14SLH",
+ "boundary": {
+  "box20km": {
+   "read": {
+    "key": "ftw/harmonized-field-data/us_usda_cropland/year=2024/us_usda_cropland-2024.parquet",
+    "rows": 7541673,
+    "row_groups": 302,
+    "row_groups_hit": 1,
+    "estimated_mb": 11.2,
+    "cap_mb": 200.0,
+    "crs": "Albers_Conic_Equal_Area"
+   },
+   "sample_box_lonlat": [
+    -101.014,
+    37.9102,
+    -100.786,
+    38.0898
+   ],
+   "sample_area_km2": 415.6,
+   "fields": 1134,
+   "area_ha_p10_p25_p50_p75_p90": [
+    1.57,
+    2.42,
+    5.98,
+    30.18,
+    55.92
+   ],
+   "area_ha_mean": 21.17,
+   "field_cover_fraction": 0.578,
+   "share_scale_flag_lt_0p36ha": 0.0,
+   "share_ge4_interior_px_buf30": 0.842,
+   "share_ge4_interior_px_buf15": 0.986,
+   "median_interior_px_buf30": 27.0
+  },
+  "full_tile": {
+   "read": {
+    "key": "ftw/harmonized-field-data/us_usda_cropland/year=2024/us_usda_cropland-2024.parquet",
+    "rows": 7541673,
+    "row_groups": 302,
+    "row_groups_hit": 4,
+    "estimated_mb": 43.9,
+    "cap_mb": 200.0,
+    "crs": "Albers_Conic_Equal_Area"
+   },
+   "sample_box_lonlat": [
+    -101.3039,
+    37.8375,
+    -100.0253,
+    38.8444
+   ],
+   "sample_area_km2": 12939.6,
+   "fields": 18739,
+   "area_ha_p10_p25_p50_p75_p90": [
+    1.89,
+    4.09,
+    24.82,
+    60.11,
+    107.64
+   ],
+   "area_ha_mean": 43.39,
+   "field_cover_fraction": 0.628,
+   "share_scale_flag_lt_0p36ha": 0.0,
+   "share_ge4_interior_px_buf30": 0.886,
+   "share_ge4_interior_px_buf15": 0.981,
+   "median_interior_px_buf30": 190.0
+  }
+ },
+ "grid": {
+  "epsg": "EPSG:32614",
+  "ulx": 300000.0,
+  "uly": 4300020.0,
+  "size_m": 109800.0
+ },
+ "label_years": [
+  2017,
+  2018,
+  2019,
+  2020,
+  2021,
+  2022,
+  2023,
+  2024
+ ],
+ "seasons_def": {
+  "summer": {
+   "start": 4,
+   "end": 10,
+   "tag": "A"
+  },
+  "winter_wheat": {
+   "start": 9,
+   "end": 7,
+   "tag": "A"
+  }
+ },
+ "boundary_source": "CSB 2017-2024 edition (USDA NASS)",
+ "generated": "2026-11-04T01:32:34+00:00"
+}

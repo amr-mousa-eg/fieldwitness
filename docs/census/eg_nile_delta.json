@@ -1,0 +1,717 @@
+{
+ "region_id": "eg_nile_delta",
+ "tier": 3,
+ "name": "Nile Delta (Egypt)",
+ "hls": {
+  "T36RTV": {
+   "seasons": [
+    {
+     "season": "winter",
+     "year": 2016,
+     "granules": 55,
+     "L30": 25,
+     "S30": 30,
+     "cloud_le20": 22,
+     "cloud_le50": 37,
+     "cloud_le20_spatial_ge50": 9,
+     "median_cloud_pct": 27.0,
+     "median_spatial_pct": 24.0
+    },
+    {
+     "season": "winter",
+     "year": 2017,
+     "granules": 63,
+     "L30": 26,
+     "S30": 37,
+     "cloud_le20": 26,
+     "cloud_le50": 43,
+     "cloud_le20_spatial_ge50": 13,
+     "median_cloud_pct": 29.0,
+     "median_spatial_pct": 98.0
+    },
+    {
+     "season": "winter",
+     "year": 2018,
+     "granules": 101,
+     "L30": 26,
+     "S30": 75,
+     "cloud_le20": 40,
+     "cloud_le50": 68,
+     "cloud_le20_spatial_ge50": 20,
+     "median_cloud_pct": 34.0,
+     "median_spatial_pct": 97.0
+    },
+    {
+     "season": "winter",
+     "year": 2019,
+     "granules": 104,
+     "L30": 27,
+     "S30": 77,
+     "cloud_le20": 48,
+     "cloud_le50": 77,
+     "cloud_le20_spatial_ge50": 23,
+     "median_cloud_pct": 25.5,
+     "median_spatial_pct": 24.0
+    },
+    {
+     "season": "winter",
+     "year": 2020,
+     "granules": 96,
+     "L30": 25,
+     "S30": 71,
+     "cloud_le20": 46,
+     "cloud_le50": 65,
+     "cloud_le20_spatial_ge50": 22,
+     "median_cloud_pct": 29.0,
+     "median_spatial_pct": 78.5
+    },
+    {
+     "season": "winter",
+     "year": 2021,
+     "granules": 104,
+     "L30": 25,
+     "S30": 79,
+     "cloud_le20": 46,
+     "cloud_le50": 72,
+     "cloud_le20_spatial_ge50": 20,
+     "median_cloud_pct": 28.0,
+     "median_spatial_pct": 99.0
+    },
+    {
+     "season": "winter",
+     "year": 2022,
+     "granules": 128,
+     "L30": 51,
+     "S30": 77,
+     "cloud_le20": 50,
+     "cloud_le50": 84,
+     "cloud_le20_spatial_ge50": 25,
+     "median_cloud_pct": 35.0,
+     "median_spatial_pct": 96.0
+    },
+    {
+     "season": "winter",
+     "year": 2023,
+     "granules": 130,
+     "L30": 50,
+     "S30": 80,
+     "cloud_le20": 45,
+     "cloud_le50": 81,
+     "cloud_le20_spatial_ge50": 22,
+     "median_cloud_pct": 37.5,
+     "median_spatial_pct": 24.0
+    },
+    {
+     "season": "winter",
+     "year": 2024,
+     "granules": 131,
+     "L30": 52,
+     "S30": 79,
+     "cloud_le20": 47,
+     "cloud_le50": 83,
+     "cloud_le20_spatial_ge50": 23,
+     "median_cloud_pct": 37.0,
+     "median_spatial_pct": 99.0
+    },
+    {
+     "season": "summer",
+     "year": 2016,
+     "granules": 55,
+     "L30": 23,
+     "S30": 32,
+     "cloud_le20": 26,
+     "cloud_le50": 47,
+     "cloud_le20_spatial_ge50": 15,
+     "median_cloud_pct": 24.0,
+     "median_spatial_pct": 23.0
+    },
+    {
+     "season": "summer",
+     "year": 2017,
+     "granules": 74,
+     "L30": 23,
+     "S30": 51,
+     "cloud_le20": 43,
+     "cloud_le50": 69,
+     "cloud_le20_spatial_ge50": 19,
+     "median_cloud_pct": 15.0,
+     "median_spatial_pct": 24.0
+    },
+    {
+     "season": "summer",
+     "year": 2018,
+     "granules": 96,
+     "L30": 23,
+     "S30": 73,
+     "cloud_le20": 47,
+     "cloud_le50": 84,
+     "cloud_le20_spatial_ge50": 26,
+     "median_cloud_pct": 21.0,
+     "median_spatial_pct": 61.0
+    },
+    {
+     "season": "summer",
+     "year": 2019,
+     "granules": 94,
+     "L30": 23,
+     "S30": 71,
+     "cloud_le20": 59,
+     "cloud_le50": 86,
+     "cloud_le20_spatial_ge50": 29,
+     "median_cloud_pct": 10.0,
+     "median_spatial_pct": 24.0
+    },
+    {
+     "season": "summer",
+     "year": 2020,
+     "granules": 95,
+     "L30": 22,
+     "S30": 73,
+     "cloud_le20": 69,
+     "cloud_le50": 87,
+     "cloud_le20_spatial_ge50": 34,
+     "median_cloud_pct": 6.0,
+     "median_spatial_pct": 24.0
+    },
+    {
+     "season": "summer",
+     "year": 2021,
+     "granules": 96,
+     "L30": 23,
+     "S30": 73,
+     "cloud_le20": 67,
+     "cloud_le50": 85,
+     "cloud_le20_spatial_ge50": 32,
+     "median_cloud_pct": 9.0,
+     "median_spatial_pct": 24.0
+    },
+    {
+     "season": "summer",
+     "year": 2022,
+     "granules": 118,
+     "L30": 45,
+     "S30": 73,
+     "cloud_le20": 71,
+     "cloud_le50": 110,
+     "cloud_le20_spatial_ge50": 32,
+     "median_cloud_pct": 15.5,
+     "median_spatial_pct": 25.0
+    },
+    {
+     "season": "summer",
+     "year": 2023,
+     "granules": 115,
+     "L30": 42,
+     "S30": 73,
+     "cloud_le20": 71,
+     "cloud_le50": 98,
+     "cloud_le20_spatial_ge50": 32,
+     "median_cloud_pct": 11.0,
+     "median_spatial_pct": 25.0
+    },
+    {
+     "season": "summer",
+     "year": 2024,
+     "granules": 119,
+     "L30": 46,
+     "S30": 73,
+     "cloud_le20": 77,
+     "cloud_le50": 112,
+     "cloud_le20_spatial_ge50": 38,
+     "median_cloud_pct": 10.0,
+     "median_spatial_pct": 25.0
+    }
+   ],
+   "monthly": [
+    {
+     "month": 1,
+     "mean_granules": 14.9,
+     "mean_cloud_le20": 5.6
+    },
+    {
+     "month": 2,
+     "mean_granules": 13.8,
+     "mean_cloud_le20": 3.9
+    },
+    {
+     "month": 3,
+     "mean_granules": 14.3,
+     "mean_cloud_le20": 5.3
+    },
+    {
+     "month": 4,
+     "mean_granules": 14.2,
+     "mean_cloud_le20": 8.2
+    },
+    {
+     "month": 5,
+     "mean_granules": 15.7,
+     "mean_cloud_le20": 9.2
+    },
+    {
+     "month": 6,
+     "mean_granules": 15.1,
+     "mean_cloud_le20": 11.6
+    },
+    {
+     "month": 7,
+     "mean_granules": 16.9,
+     "mean_cloud_le20": 12.3
+    },
+    {
+     "month": 8,
+     "mean_granules": 16.1,
+     "mean_cloud_le20": 10.3
+    },
+    {
+     "month": 9,
+     "mean_granules": 15.7,
+     "mean_cloud_le20": 8.9
+    },
+    {
+     "month": 10,
+     "mean_granules": 16.3,
+     "mean_cloud_le20": 6.6
+    },
+    {
+     "month": 11,
+     "mean_granules": 15.3,
+     "mean_cloud_le20": 5.8
+    },
+    {
+     "month": 12,
+     "mean_granules": 16.0,
+     "mean_cloud_le20": 4.6
+    }
+   ]
+  },
+  "T36RUV": {
+   "seasons": [
+    {
+     "season": "winter",
+     "year": 2016,
+     "granules": 54,
+     "L30": 26,
+     "S30": 28,
+     "cloud_le20": 23,
+     "cloud_le50": 36,
+     "cloud_le20_spatial_ge50": 18,
+     "median_cloud_pct": 35.0,
+     "median_spatial_pct": 77.0
+    },
+    {
+     "season": "winter",
+     "year": 2017,
+     "granules": 64,
+     "L30": 26,
+     "S30": 38,
+     "cloud_le20": 29,
+     "cloud_le50": 43,
+     "cloud_le20_spatial_ge50": 20,
+     "median_cloud_pct": 28.0,
+     "median_spatial_pct": 63.0
+    },
+    {
+     "season": "winter",
+     "year": 2018,
+     "granules": 101,
+     "L30": 27,
+     "S30": 74,
+     "cloud_le20": 43,
+     "cloud_le50": 61,
+     "cloud_le20_spatial_ge50": 28,
+     "median_cloud_pct": 30.0,
+     "median_spatial_pct": 62.0
+    },
+    {
+     "season": "winter",
+     "year": 2019,
+     "granules": 101,
+     "L30": 26,
+     "S30": 75,
+     "cloud_le20": 50,
+     "cloud_le50": 71,
+     "cloud_le20_spatial_ge50": 31,
+     "median_cloud_pct": 21.0,
+     "median_spatial_pct": 77.0
+    },
+    {
+     "season": "winter",
+     "year": 2020,
+     "granules": 97,
+     "L30": 25,
+     "S30": 72,
+     "cloud_le20": 42,
+     "cloud_le50": 65,
+     "cloud_le20_spatial_ge50": 27,
+     "median_cloud_pct": 31.0,
+     "median_spatial_pct": 63.0
+    },
+    {
+     "season": "winter",
+     "year": 2021,
+     "granules": 106,
+     "L30": 25,
+     "S30": 81,
+     "cloud_le20": 47,
+     "cloud_le50": 74,
+     "cloud_le20_spatial_ge50": 29,
+     "median_cloud_pct": 31.0,
+     "median_spatial_pct": 69.5
+    },
+    {
+     "season": "winter",
+     "year": 2022,
+     "granules": 129,
+     "L30": 50,
+     "S30": 79,
+     "cloud_le20": 54,
+     "cloud_le50": 70,
+     "cloud_le20_spatial_ge50": 39,
+     "median_cloud_pct": 36.0,
+     "median_spatial_pct": 62.0
+    },
+    {
+     "season": "winter",
+     "year": 2023,
+     "granules": 131,
+     "L30": 51,
+     "S30": 80,
+     "cloud_le20": 56,
+     "cloud_le50": 78,
+     "cloud_le20_spatial_ge50": 39,
+     "median_cloud_pct": 31.0,
+     "median_spatial_pct": 78.0
+    },
+    {
+     "season": "winter",
+     "year": 2024,
+     "granules": 132,
+     "L30": 53,
+     "S30": 79,
+     "cloud_le20": 53,
+     "cloud_le50": 77,
+     "cloud_le20_spatial_ge50": 34,
+     "median_cloud_pct": 38.0,
+     "median_spatial_pct": 62.5
+    },
+    {
+     "season": "summer",
+     "year": 2016,
+     "granules": 56,
+     "L30": 23,
+     "S30": 33,
+     "cloud_le20": 28,
+     "cloud_le50": 48,
+     "cloud_le20_spatial_ge50": 17,
+     "median_cloud_pct": 23.0,
+     "median_spatial_pct": 69.5
+    },
+    {
+     "season": "summer",
+     "year": 2017,
+     "granules": 75,
+     "L30": 22,
+     "S30": 53,
+     "cloud_le20": 46,
+     "cloud_le50": 66,
+     "cloud_le20_spatial_ge50": 33,
+     "median_cloud_pct": 16.0,
+     "median_spatial_pct": 65.0
+    },
+    {
+     "season": "summer",
+     "year": 2018,
+     "granules": 94,
+     "L30": 23,
+     "S30": 71,
+     "cloud_le20": 49,
+     "cloud_le50": 79,
+     "cloud_le20_spatial_ge50": 29,
+     "median_cloud_pct": 17.5,
+     "median_spatial_pct": 63.0
+    },
+    {
+     "season": "summer",
+     "year": 2019,
+     "granules": 94,
+     "L30": 23,
+     "S30": 71,
+     "cloud_le20": 58,
+     "cloud_le50": 82,
+     "cloud_le20_spatial_ge50": 36,
+     "median_cloud_pct": 12.5,
+     "median_spatial_pct": 69.5
+    },
+    {
+     "season": "summer",
+     "year": 2020,
+     "granules": 96,
+     "L30": 23,
+     "S30": 73,
+     "cloud_le20": 70,
+     "cloud_le50": 90,
+     "cloud_le20_spatial_ge50": 43,
+     "median_cloud_pct": 5.0,
+     "median_spatial_pct": 76.0
+    },
+    {
+     "season": "summer",
+     "year": 2021,
+     "granules": 97,
+     "L30": 23,
+     "S30": 74,
+     "cloud_le20": 64,
+     "cloud_le50": 89,
+     "cloud_le20_spatial_ge50": 43,
+     "median_cloud_pct": 12.0,
+     "median_spatial_pct": 77.0
+    },
+    {
+     "season": "summer",
+     "year": 2022,
+     "granules": 120,
+     "L30": 46,
+     "S30": 74,
+     "cloud_le20": 68,
+     "cloud_le50": 104,
+     "cloud_le20_spatial_ge50": 50,
+     "median_cloud_pct": 12.5,
+     "median_spatial_pct": 69.5
+    },
+    {
+     "season": "summer",
+     "year": 2023,
+     "granules": 117,
+     "L30": 45,
+     "S30": 72,
+     "cloud_le20": 72,
+     "cloud_le50": 100,
+     "cloud_le20_spatial_ge50": 52,
+     "median_cloud_pct": 14.0,
+     "median_spatial_pct": 77.0
+    },
+    {
+     "season": "summer",
+     "year": 2024,
+     "granules": 117,
+     "L30": 46,
+     "S30": 71,
+     "cloud_le20": 78,
+     "cloud_le50": 106,
+     "cloud_le20_spatial_ge50": 57,
+     "median_cloud_pct": 8.0,
+     "median_spatial_pct": 76.0
+    }
+   ],
+   "monthly": [
+    {
+     "month": 1,
+     "mean_granules": 14.8,
+     "mean_cloud_le20": 6.2
+    },
+    {
+     "month": 2,
+     "mean_granules": 13.6,
+     "mean_cloud_le20": 4.3
+    },
+    {
+     "month": 3,
+     "mean_granules": 14.4,
+     "mean_cloud_le20": 5.4
+    },
+    {
+     "month": 4,
+     "mean_granules": 14.4,
+     "mean_cloud_le20": 7.7
+    },
+    {
+     "month": 5,
+     "mean_granules": 15.8,
+     "mean_cloud_le20": 9.9
+    },
+    {
+     "month": 6,
+     "mean_granules": 15.1,
+     "mean_cloud_le20": 11.6
+    },
+    {
+     "month": 7,
+     "mean_granules": 16.8,
+     "mean_cloud_le20": 12.2
+    },
+    {
+     "month": 8,
+     "mean_granules": 16.4,
+     "mean_cloud_le20": 10.1
+    },
+    {
+     "month": 9,
+     "mean_granules": 15.7,
+     "mean_cloud_le20": 8.6
+    },
+    {
+     "month": 10,
+     "mean_granules": 16.4,
+     "mean_cloud_le20": 6.9
+    },
+    {
+     "month": 11,
+     "mean_granules": 15.7,
+     "mean_cloud_le20": 6.0
+    },
+    {
+     "month": 12,
+     "mean_granules": 16.1,
+     "mean_cloud_le20": 6.1
+    }
+   ]
+  }
+ },
+ "ecostress": [
+  {
+   "season": "winter",
+   "year": 2018,
+   "v002": 0,
+   "v003": 0
+  },
+  {
+   "season": "winter",
+   "year": 2019,
+   "v002": 0,
+   "v003": 0
+  },
+  {
+   "season": "winter",
+   "year": 2020,
+   "v002": 7,
+   "v003": 0
+  },
+  {
+   "season": "winter",
+   "year": 2021,
+   "v002": 11,
+   "v003": 0
+  },
+  {
+   "season": "winter",
+   "year": 2022,
+   "v002": 17,
+   "v003": 0
+  },
+  {
+   "season": "winter",
+   "year": 2023,
+   "v002": 53,
+   "v003": 0
+  },
+  {
+   "season": "winter",
+   "year": 2024,
+   "v002": 14,
+   "v003": 0
+  },
+  {
+   "season": "summer",
+   "year": 2018,
+   "v002": 24,
+   "v003": 0
+  },
+  {
+   "season": "summer",
+   "year": 2019,
+   "v002": 18,
+   "v003": 0
+  },
+  {
+   "season": "summer",
+   "year": 2020,
+   "v002": 16,
+   "v003": 0
+  },
+  {
+   "season": "summer",
+   "year": 2021,
+   "v002": 21,
+   "v003": 0
+  },
+  {
+   "season": "summer",
+   "year": 2022,
+   "v002": 36,
+   "v003": 0
+  },
+  {
+   "season": "summer",
+   "year": 2023,
+   "v002": 46,
+   "v003": 0
+  },
+  {
+   "season": "summer",
+   "year": 2024,
+   "v002": 6,
+   "v003": 0
+  }
+ ],
+ "tile_choice": {
+  "T36RTV": 0.574,
+  "T36RUV": 0.553
+ },
+ "tile": "T36RTV",
+ "boundary": {
+  "box20km_tile_centre": {
+   "read": {
+    "key": "ftw/global-data/predictions/vectors/alpha/results-by-admin-conf/admin:country_code=EG/Egypt.parquet",
+    "rows": 9207446,
+    "row_groups": 141,
+    "row_groups_hit": 10,
+    "estimated_mb": 151.1,
+    "cap_mb": 200.0,
+    "crs": "WGS 84 (CRS84)"
+   },
+   "sample_box_lonlat": [
+    30.3248,
+    31.0247,
+    30.5346,
+    31.2044
+   ],
+   "sample_area_km2": 417.5,
+   "fields": 17027,
+   "area_ha_p10_p25_p50_p75_p90": [
+    0.15,
+    0.36,
+    0.88,
+    1.88,
+    3.28
+   ],
+   "area_ha_mean": 1.41,
+   "field_cover_fraction": 0.574,
+   "share_scale_flag_lt_0p36ha": 0.253,
+   "share_ge4_interior_px_buf30": 0.069,
+   "share_ge4_interior_px_buf15": 0.336,
+   "median_interior_px_buf30": 0.0
+  }
+ },
+ "grid": {
+  "epsg": "EPSG:32636",
+  "ulx": 199980.0,
+  "uly": 3500040.0,
+  "size_m": 109800.0
+ },
+ "label_years": [],
+ "seasons_def": {
+  "winter": {
+   "start": 11,
+   "end": 5,
+   "tag": "A"
+  },
+  "summer": {
+   "start": 5,
+   "end": 10,
+   "tag": "A"
+  }
+ },
+ "boundary_source": "Fields of the World global predictions (alpha)",
+ "generated": "2026-11-04T01:41:13+00:00"
+}

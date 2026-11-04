@@ -1,0 +1,458 @@
+{
+ "region_id": "fr_toulouse_t31tcj",
+ "tier": 2,
+ "name": "Lauragais, SE of Toulouse (France)",
+ "hls": {
+  "T31TCJ": {
+   "seasons": [
+    {
+     "season": "winter",
+     "year": 2016,
+     "granules": 92,
+     "L30": 40,
+     "S30": 52,
+     "cloud_le20": 22,
+     "cloud_le50": 31,
+     "cloud_le20_spatial_ge50": 14,
+     "median_cloud_pct": 78.0,
+     "median_spatial_pct": 79.0
+    },
+    {
+     "season": "winter",
+     "year": 2017,
+     "granules": 121,
+     "L30": 42,
+     "S30": 79,
+     "cloud_le20": 39,
+     "cloud_le50": 56,
+     "cloud_le20_spatial_ge50": 18,
+     "median_cloud_pct": 62.0,
+     "median_spatial_pct": 77.0
+    },
+    {
+     "season": "winter",
+     "year": 2018,
+     "granules": 193,
+     "L30": 38,
+     "S30": 155,
+     "cloud_le20": 49,
+     "cloud_le50": 71,
+     "cloud_le20_spatial_ge50": 23,
+     "median_cloud_pct": 76.0,
+     "median_spatial_pct": 16.0
+    },
+    {
+     "season": "winter",
+     "year": 2019,
+     "granules": 190,
+     "L30": 39,
+     "S30": 151,
+     "cloud_le20": 72,
+     "cloud_le50": 98,
+     "cloud_le20_spatial_ge50": 33,
+     "median_cloud_pct": 48.5,
+     "median_spatial_pct": 17.0
+    },
+    {
+     "season": "winter",
+     "year": 2020,
+     "granules": 181,
+     "L30": 37,
+     "S30": 144,
+     "cloud_le20": 58,
+     "cloud_le50": 84,
+     "cloud_le20_spatial_ge50": 31,
+     "median_cloud_pct": 58.0,
+     "median_spatial_pct": 17.0
+    },
+    {
+     "season": "winter",
+     "year": 2021,
+     "granules": 190,
+     "L30": 39,
+     "S30": 151,
+     "cloud_le20": 54,
+     "cloud_le50": 83,
+     "cloud_le20_spatial_ge50": 19,
+     "median_cloud_pct": 60.0,
+     "median_spatial_pct": 17.0
+    },
+    {
+     "season": "winter",
+     "year": 2022,
+     "granules": 214,
+     "L30": 69,
+     "S30": 145,
+     "cloud_le20": 77,
+     "cloud_le50": 99,
+     "cloud_le20_spatial_ge50": 39,
+     "median_cloud_pct": 56.0,
+     "median_spatial_pct": 80.0
+    },
+    {
+     "season": "winter",
+     "year": 2023,
+     "granules": 232,
+     "L30": 79,
+     "S30": 153,
+     "cloud_le20": 74,
+     "cloud_le50": 96,
+     "cloud_le20_spatial_ge50": 31,
+     "median_cloud_pct": 69.5,
+     "median_spatial_pct": 77.0
+    },
+    {
+     "season": "winter",
+     "year": 2024,
+     "granules": 217,
+     "L30": 79,
+     "S30": 138,
+     "cloud_le20": 69,
+     "cloud_le50": 101,
+     "cloud_le20_spatial_ge50": 31,
+     "median_cloud_pct": 66.0,
+     "median_spatial_pct": 77.0
+    },
+    {
+     "season": "summer",
+     "year": 2016,
+     "granules": 80,
+     "L30": 26,
+     "S30": 54,
+     "cloud_le20": 29,
+     "cloud_le50": 35,
+     "cloud_le20_spatial_ge50": 14,
+     "median_cloud_pct": 68.5,
+     "median_spatial_pct": 78.5
+    },
+    {
+     "season": "summer",
+     "year": 2017,
+     "granules": 97,
+     "L30": 27,
+     "S30": 70,
+     "cloud_le20": 38,
+     "cloud_le50": 46,
+     "cloud_le20_spatial_ge50": 13,
+     "median_cloud_pct": 55.0,
+     "median_spatial_pct": 17.0
+    },
+    {
+     "season": "summer",
+     "year": 2018,
+     "granules": 134,
+     "L30": 25,
+     "S30": 109,
+     "cloud_le20": 57,
+     "cloud_le50": 75,
+     "cloud_le20_spatial_ge50": 31,
+     "median_cloud_pct": 43.0,
+     "median_spatial_pct": 16.0
+    },
+    {
+     "season": "summer",
+     "year": 2019,
+     "granules": 120,
+     "L30": 22,
+     "S30": 98,
+     "cloud_le20": 46,
+     "cloud_le50": 62,
+     "cloud_le20_spatial_ge50": 25,
+     "median_cloud_pct": 47.0,
+     "median_spatial_pct": 17.0
+    },
+    {
+     "season": "summer",
+     "year": 2020,
+     "granules": 127,
+     "L30": 27,
+     "S30": 100,
+     "cloud_le20": 46,
+     "cloud_le50": 66,
+     "cloud_le20_spatial_ge50": 23,
+     "median_cloud_pct": 49.0,
+     "median_spatial_pct": 17.0
+    },
+    {
+     "season": "summer",
+     "year": 2021,
+     "granules": 130,
+     "L30": 27,
+     "S30": 103,
+     "cloud_le20": 44,
+     "cloud_le50": 65,
+     "cloud_le20_spatial_ge50": 16,
+     "median_cloud_pct": 50.5,
+     "median_spatial_pct": 17.0
+    },
+    {
+     "season": "summer",
+     "year": 2022,
+     "granules": 152,
+     "L30": 49,
+     "S30": 103,
+     "cloud_le20": 70,
+     "cloud_le50": 84,
+     "cloud_le20_spatial_ge50": 30,
+     "median_cloud_pct": 31.0,
+     "median_spatial_pct": 78.0
+    },
+    {
+     "season": "summer",
+     "year": 2023,
+     "granules": 153,
+     "L30": 52,
+     "S30": 101,
+     "cloud_le20": 63,
+     "cloud_le50": 81,
+     "cloud_le20_spatial_ge50": 27,
+     "median_cloud_pct": 43.0,
+     "median_spatial_pct": 75.0
+    },
+    {
+     "season": "summer",
+     "year": 2024,
+     "granules": 147,
+     "L30": 51,
+     "S30": 96,
+     "cloud_le20": 57,
+     "cloud_le50": 75,
+     "cloud_le20_spatial_ge50": 27,
+     "median_cloud_pct": 47.0,
+     "median_spatial_pct": 78.0
+    }
+   ],
+   "monthly": [
+    {
+     "month": 1,
+     "mean_granules": 14.3,
+     "mean_cloud_le20": 2.1
+    },
+    {
+     "month": 2,
+     "mean_granules": 14.2,
+     "mean_cloud_le20": 5.3
+    },
+    {
+     "month": 3,
+     "mean_granules": 17.9,
+     "mean_cloud_le20": 5.2
+    },
+    {
+     "month": 4,
+     "mean_granules": 15.0,
+     "mean_cloud_le20": 5.0
+    },
+    {
+     "month": 5,
+     "mean_granules": 17.6,
+     "mean_cloud_le20": 5.4
+    },
+    {
+     "month": 6,
+     "mean_granules": 16.7,
+     "mean_cloud_le20": 4.9
+    },
+    {
+     "month": 7,
+     "mean_granules": 20.3,
+     "mean_cloud_le20": 9.8
+    },
+    {
+     "month": 8,
+     "mean_granules": 20.1,
+     "mean_cloud_le20": 9.9
+    },
+    {
+     "month": 9,
+     "mean_granules": 18.3,
+     "mean_cloud_le20": 8.3
+    },
+    {
+     "month": 10,
+     "mean_granules": 18.7,
+     "mean_cloud_le20": 6.7
+    },
+    {
+     "month": 11,
+     "mean_granules": 17.4,
+     "mean_cloud_le20": 3.6
+    },
+    {
+     "month": 12,
+     "mean_granules": 17.4,
+     "mean_cloud_le20": 2.3
+    }
+   ]
+  }
+ },
+ "ecostress": [
+  {
+   "season": "winter",
+   "year": 2018,
+   "v002": 3,
+   "v003": 0
+  },
+  {
+   "season": "winter",
+   "year": 2019,
+   "v002": 53,
+   "v003": 0
+  },
+  {
+   "season": "winter",
+   "year": 2020,
+   "v002": 109,
+   "v003": 0
+  },
+  {
+   "season": "winter",
+   "year": 2021,
+   "v002": 191,
+   "v003": 0
+  },
+  {
+   "season": "winter",
+   "year": 2022,
+   "v002": 200,
+   "v003": 0
+  },
+  {
+   "season": "winter",
+   "year": 2023,
+   "v002": 382,
+   "v003": 0
+  },
+  {
+   "season": "winter",
+   "year": 2024,
+   "v002": 83,
+   "v003": 0
+  },
+  {
+   "season": "summer",
+   "year": 2018,
+   "v002": 41,
+   "v003": 0
+  },
+  {
+   "season": "summer",
+   "year": 2019,
+   "v002": 40,
+   "v003": 0
+  },
+  {
+   "season": "summer",
+   "year": 2020,
+   "v002": 114,
+   "v003": 0
+  },
+  {
+   "season": "summer",
+   "year": 2021,
+   "v002": 168,
+   "v003": 0
+  },
+  {
+   "season": "summer",
+   "year": 2022,
+   "v002": 183,
+   "v003": 0
+  },
+  {
+   "season": "summer",
+   "year": 2023,
+   "v002": 298,
+   "v003": 0
+  },
+  {
+   "season": "summer",
+   "year": 2024,
+   "v002": 42,
+   "v003": 0
+  }
+ ],
+ "tile": "T31TCJ",
+ "boundary": {
+  "box20km": {
+   "read": {
+    "key": "ftw/harmonized-field-data/fr/year=2024/fr-2024.parquet",
+    "rows": 9671682,
+    "row_groups": 387,
+    "row_groups_hit": 4,
+    "estimated_mb": 30.1,
+    "cap_mb": 200.0,
+    "crs": "RGF93 v1 / Lambert-93",
+    "columns": "all"
+   },
+   "sample_box_lonlat": [
+    1.6263,
+    43.3602,
+    1.8737,
+    43.5398
+   ],
+   "sample_area_km2": 411.6,
+   "fields": 5406,
+   "area_ha_p10_p25_p50_p75_p90": [
+    0.82,
+    1.71,
+    3.62,
+    7.08,
+    11.96
+   ],
+   "area_ha_mean": 5.31,
+   "field_cover_fraction": 0.698,
+   "share_scale_flag_lt_0p36ha": 0.026,
+   "share_ge4_interior_px_buf30": 0.721,
+   "share_ge4_interior_px_buf15": 0.875,
+   "median_interior_px_buf30": 14.0,
+   "field_definition": "annual arable (HCAT3, fieldwitness.data.hcat)",
+   "arable_filter": {
+    "parcels_all": 11270,
+    "parcels_kept": 5406,
+    "excluded_by_hcat_group": {
+     "3301": 3093,
+     "3302": 532,
+     "3303": 42,
+     "3304": 5,
+     "3305": 3,
+     "3306": 3,
+     "3399": 2164
+    },
+    "excluded_missing_code": 22
+   }
+  }
+ },
+ "grid": {
+  "epsg": "EPSG:32631",
+  "ulx": 300000.0,
+  "uly": 4900020.0,
+  "size_m": 109800.0
+ },
+ "label_years": [
+  2015,
+  2016,
+  2017,
+  2018,
+  2019,
+  2020,
+  2021,
+  2022,
+  2023,
+  2024
+ ],
+ "seasons_def": {
+  "winter": {
+   "start": 9,
+   "end": 7,
+   "tag": "A"
+  },
+  "summer": {
+   "start": 4,
+   "end": 10,
+   "tag": "A"
+  }
+ },
+ "boundary_source": "French RPG (IGN) / EuroCrops V2",
+ "generated": "2026-11-04T02:02:39+00:00"
+}
