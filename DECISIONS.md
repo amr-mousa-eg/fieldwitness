@@ -388,7 +388,15 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 - Per the decision: T2.2 not ticked, no further tuning, no BLOCKED. Winter wheat is the weak crop (0.66–0.75); likely causes (not tested, UNVERIFIED): ragged autumn/spring signals, labels (CSB) vs. actual abandonment. Any later change needs a new fresh test set and a new user decision. T2.3 and downstream steps that need seasons should use the current detector as a documented 78 %-accurate one.
 - Test added: synthetic winter wheat with a Dec–Feb dip above bare soil gives one winter-variant season per harvest year (99 tests pass, ruff clean).
 
+## 2026-11-04 — FAO-56 source for Phase 3 (BLOCKED.md for T3.1 resolved)
+
+- **Source = FAO-56 1998 HTML edition** (fao.org/4/x0490e/x0490e*.htm). The PDF route failed (openknowledge link redirects; the repository search shows only the 2025 2nd edition). The 2025 2nd edition exists but is **not used**, for consistency with `config/crops.yaml` (1998 tables).
+- Pages Ch. 2 (`x0490e06`), Ch. 3 (`07`), Ch. 4 (`08`), Ch. 6 (`0b`), Ch. 8 (`0e`) and Annex 2 (`0j`) and their 181 images were saved to `docs/refs/fao56_eq/` (2.2 MB, **gitignored**: `/docs/refs/` added to `.gitignore`, licence unclear, not redistributed); `index.json` maps images to equation numbers. The equations needed so far were read visually (images) or from the page text and transcribed to `docs/fao56_equations.md` (committed; formulas only): Eq. 6, 7, 8, 11, 12, 13, 17, 19, 21–25, 34, 35, 37–40, 42, 62, 82–85, with Gsc and σ. Cite by **equation number + page URL** (the HTML has no page numbers).
+- **ETo verified:** `src/fieldwitness/physics/eto.py` (daily FAO-PM, Eq. 6 chain, numpy) reproduces Example 18 (Ch. 4): ETo 3.88 mm/day (printed 3.88 ≈ 3.9), Ra 41.09, Rs 22.07, Rso 30.90, Rnl 3.71 (`tests/test_eto.py`). T3.1 is not ticked: its POWER forcing and acceptance still belong to the loop.
+
 ## Autopilot handoff
+
+**2026-11-04, FAO-56 source decided (interactive session; `BLOCKED.md` deleted).** Phase 3 cites the FAO-56 1998 HTML (not the 2025 edition): equations in `docs/fao56_equations.md` (number + page URL), page and image copies in `docs/refs/fao56_eq/` (gitignored). `physics/eto.py` passes Example 18. Next: finish T3.1 (POWER forcing per field, acceptance), then T3.2 (Kc, Eq. 62), T3.3 (Eq. 82–85); T2.2 re-check and T1.8 SMAP as listed below. A missing equation: read it from the same page (image with the Read tool) and add it to `docs/fao56_equations.md`.
 
 **2026-11-04, run after the T2.2 decision (later).** Tried T3.1: FAO-56 HTML equations are images; PDF returns 403. Rule 8 => `BLOCKED.md` written (options inside). No code changed; git otherwise clean. Background: SMAP task `b5e1ec71-0a40-4ec7-a9ea-8c3d1c386f37` not downloaded. Next: after the user supplies FAO-56 text, T3.1–T3.5; or T1.8 SMAP first (needs no paper). Risk: Phase 3 and the Gate 2/3 schedule slip until the paper is available.
 
