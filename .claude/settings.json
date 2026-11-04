@@ -4,7 +4,6 @@
     "allow": [
       "Read(/**)",
       "Edit(/**)",
-
       "Bash(uv sync)",
       "Bash(uv sync --frozen)",
       "Bash(uv sync --locked)",
@@ -21,7 +20,6 @@
       "Bash(git push)",
       "Bash(git push origin main)",
       "Bash(git pull *)",
-
       "PowerShell(uv sync)",
       "PowerShell(uv sync --frozen)",
       "PowerShell(uv sync --locked)",
@@ -38,7 +36,6 @@
       "PowerShell(git push)",
       "PowerShell(git push origin main)",
       "PowerShell(git pull *)",
-
       "WebSearch",
       "WebFetch(domain:nasa.gov)",
       "WebFetch(domain:*.nasa.gov)",
@@ -78,7 +75,7 @@
       "Read(~/_netrc)",
       "Read(~/.netrc)",
       "Edit(/.claude/settings.json)",
-
+      "Edit(/scripts/autopilot.ps1)",
       "Bash(git push *--force*)",
       "Bash(git push * -f)",
       "Bash(git push * -f *)",
@@ -93,26 +90,18 @@
       "PowerShell(git push *+*)",
       "PowerShell(git push *--mirror*)",
       "PowerShell(git push *--delete*)",
-
       "Bash(rm /*)",
       "Bash(rm * /*)",
       "Bash(rm ~*)",
       "Bash(rm * ~*)",
       "Bash(rm *..*)",
-      "Bash(rm *:*)",
+      "Bash(rm *:/*)",
       "Bash(rmdir /*)",
       "Bash(rmdir * /*)",
       "Bash(rmdir ~*)",
       "Bash(rmdir *..*)",
-      "Bash(rmdir *:*)",
-      "PowerShell(Remove-Item /*)",
-      "PowerShell(Remove-Item * /*)",
-      "PowerShell(Remove-Item ~*)",
-      "PowerShell(Remove-Item * ~*)",
-      "PowerShell(Remove-Item *..*)",
-      "PowerShell(Remove-Item *:*)",
-      "PowerShell(Remove-Item *\\\\*)",
-
+      "Bash(rmdir *:/*)",
+      "PowerShell(Remove-Item *)",
       "Bash(gh repo edit *)",
       "Bash(gh repo create *)",
       "Bash(gh repo delete *)",
@@ -121,7 +110,6 @@
       "PowerShell(gh repo create *)",
       "PowerShell(gh repo delete *)",
       "PowerShell(gh api *)",
-
       "Bash(uv add *)",
       "Bash(uv remove *)",
       "Bash(uv pip *)",
