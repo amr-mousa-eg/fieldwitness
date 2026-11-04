@@ -354,6 +354,10 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 
 - Weekly usage at 86 %. `scripts/autopilot.ps1` now runs `claude -p --model sonnet` (user-approved one-time write; `--model` checked in `claude --help`). `AUTOPILOT_PROMPT.md` §1: read `CLAUDE.md`, the `## Autopilot handoff` section and only the `PLAN.md` sections for the current task and phase, not whole files; new item: "Be terse; minimise tokens; keep logs and command output short."
 
+## 2026-11-04 — Autopilot uv allow rules (BLOCKED.md from the 19:36 run resolved)
+
+- Cause: the loop window predated the user-PATH change, so `uv` was not on its PATH and the agent called `uv.exe` by full path, which no allow rule matched. Fix (user-approved one-time write of `.claude/settings.json`): 60 allow rules for `uv run pytest[ *]`, `uv run ruff check|format *`, `uv run python *`, `uv run python -m fieldwitness*`, `uv sync*`, `uv --version`, each as plain `uv` and as full-path `uv.exe` (quoted Windows, quoted and escaped POSIX path; PowerShell also with `&`), for Bash and PowerShell. Deny rules unchanged (87). Test from a fresh-PATH shell: `claude -p --model sonnet --max-turns 4` → exit 0, "Both were allowed" (uv 0.13.7; 88 tests passed). `BLOCKED.md` deleted. Start the loop from a new window so it inherits the user PATH.
+
 ## Autopilot handoff
 
 **2026-11-04, autopilot run (local time not checked: date/time commands are not on the allow-list). Status: BLOCKED (`BLOCKED.md`, `uv` not on PATH).**
