@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+.hypothesis/
+*.egg-info/
+build/
+dist/
+
+# Secrets (credentials come from ~/.netrc or env vars, never the repo)
+.netrc
+_netrc
+.env
+.env.*
+
+# Data caches and downloads
+/.cache/
+/data/
+
+# Generated field packs: only demo packs are committed
+packs/*
+!packs/demo/
+
+# Web app
+node_modules/
+app/dist/
+
+# Locally installed agent skills (not project code)
+/.agents/
+/.claude/skills/
+/skills-lock.json
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
