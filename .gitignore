@@ -32,6 +32,12 @@ app/dist/
 /.claude/skills/
 /skills-lock.json
 
+# Autopilot loop (scripts/autopilot.ps1): run logs and control files
+logs/
+AUTOPILOT_STOP
+AUTOPILOT_WAIT
+BLOCKED.md
+
 # OS / editors
 .DS_Store
 Thumbs.db

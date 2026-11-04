@@ -17,6 +17,7 @@ def main() -> None:
     hs.add_argument("--region", required=True)
     hw = sub.add_parser("hls-wait", help="T1.5 wait for AppEEARS tasks and download (1 GB cap)")
     hw.add_argument("--region", required=True)
+    hw.add_argument("--once", action="store_true", help="one poll/download pass, then exit")
     lb = sub.add_parser("labels", help="T1.6 crop labels per pilot field and year")
     lb.add_argument("--region", required=True)
     pw = sub.add_parser("power", help="T1.2 cache POWER daily weather for the pilot fields")
@@ -114,7 +115,7 @@ def main() -> None:
 
             hls_series.submit_region(a.region, load_grid(a.region))
         else:
-            hls_series.wait_and_download(a.region)
+            hls_series.wait_and_download(a.region, once=a.once)
         return
 
     if a.command == "pilot-fields":

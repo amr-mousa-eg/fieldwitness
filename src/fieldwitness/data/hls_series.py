@@ -127,9 +127,11 @@ def submit_region(region_id: str, grid: dict) -> dict:
     return reg
 
 
-def wait_and_download(region_id: str, poll_s: int = 120) -> None:
+def wait_and_download(region_id: str, poll_s: int = 120, once: bool = False) -> None:
     """Wait for all tasks and download them; stop before further downloads if the size projected
-    from the downloaded tasks exceeds the 1 GB cap (CLAUDE.md rule 11)."""
+    from the downloaded tasks exceeds the 1 GB cap (CLAUDE.md rule 11). With `once`, make a
+    single pass (download what is done, report the rest) and return, so no process outlives an
+    unattended run."""
     reg = json.loads(registry_path(region_id).read_text(encoding="utf-8"))
     ids = {v["task_id"]: k for k, v in reg["tasks"].items()}
     s = ae.login()
@@ -160,6 +162,8 @@ def wait_and_download(region_id: str, poll_s: int = 120) -> None:
                     pending.discard(tid)
             if pending:
                 print(time.strftime("%H:%M:%S"), "status of remaining tasks:", counts, flush=True)
+                if once:
+                    return
                 time.sleep(poll_s)
     finally:
         print("logout HTTP", ae.logout(s), flush=True)
