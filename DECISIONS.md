@@ -396,6 +396,10 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 
 ## Autopilot handoff
 
+**2026-11-04, autopilot run (T3.2 close).** Done: T3.2 ticked. `physics/kc.py` (`kc_curve` per FAO-56 Fig. 34, `kc_adjust` Eq. 62 for mid / Eq. 65 for end, threshold 0.45 applies to Eq. 65 only) + `tests/test_kc.py`; Eq. 65 and Fig. 34 added to `docs/fao56_equations.md`. 110 tests pass, ruff clean. UNVERIFIED: the validity limits of Eq. 62 itself (copied from Eq. 65, same form); day-of-stage interpolation convention is a team choice (A). In progress: nothing. Background: SMAP task `b5e1ec71-0a40-4ec7-a9ea-8c3d1c386f37` not downloaded. Next: T3.3 (water balance, Eq. 82–85; all four equations are in `docs/fao56_equations.md`). Risk: Gate 1 must report T2.2 as FAILED (78.3% vs 90%).
+
+(Previous entry:)
+
 **2026-11-04, autopilot run (T3.1 close).** Done: T3.1 ticked. Added `physics/forcing.py` (POWER → daily `eto`, `rain`; mean-RH route Eq. 19, G=0; NaN on missing input) + `tests/test_forcing.py`. 105 tests pass, ruff clean. Not done: real-field POWER run (not needed for acceptance). In progress: nothing. Background: SMAP task `b5e1ec71-0a40-4ec7-a9ea-8c3d1c386f37` not downloaded. Next: T3.2 (Kc, Eq. 62; read it from `docs/fao56_equations.md`, add from the FAO page if missing), then T3.3. Risk: Gate 1 must report T2.2 as FAILED (78.3% vs 90%).
 
 **2026-11-04, FAO-56 source decided (interactive session; `BLOCKED.md` deleted).** Phase 3 cites the FAO-56 1998 HTML (not the 2025 edition): equations in `docs/fao56_equations.md` (number + page URL), page and image copies in `docs/refs/fao56_eq/` (gitignored). `physics/eto.py` passes Example 18. Next: finish T3.1 (POWER forcing per field, acceptance), then T3.2 (Kc, Eq. 62), T3.3 (Eq. 82–85); T2.2 re-check and T1.8 SMAP as listed below. A missing equation: read it from the same page (image with the Read tool) and add it to `docs/fao56_equations.md`.

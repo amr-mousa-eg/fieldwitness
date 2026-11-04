@@ -27,6 +27,8 @@ Equations were read visually from the equation images of the chapter pages (or f
 | 40 | Rn = Rns − Rnl | Ch. 3 | text |
 | 42 | G_day ≈ 0 | Ch. 3 | text |
 | 62 | Kc mid = Kc mid (Tab) + [0.04 (u2 − 2) − 0.004 (RHmin − 45)] (h/3)^0.3 | [Ch. 6](https://www.fao.org/4/x0490e/x0490e0b.htm) | image `ch6/x0490e2d.gif` |
+| 65 | Kc end = Kc end (Tab) + [0.04 (u2 − 2) − 0.004 (RHmin − 45)] (h/3)^0.3; applied only when Kc end (Tab) ≥ 0.45; limits 1 ≤ u2 ≤ 6 m/s, 20 ≤ RHmin ≤ 80 %, 0.1 ≤ h ≤ 10 m | Ch. 6 | image `ch6/x0490e2i.gif` + text |
+| Fig. 34 | Kc curve: flat Kc ini (initial), straight line to Kc mid (development), flat Kc mid (mid-season), straight line to Kc end (late season) | Ch. 6 | image `ch6/x0490e6k.gif` |
 | 82 | TAW = 1000 (θFC − θWP) Zr | [Ch. 8](https://www.fao.org/4/x0490e/x0490e0e.htm) | text |
 | 83 | RAW = p TAW | Ch. 8 | text |
 | 84 | Ks = (TAW − Dr)/(TAW − RAW) = (TAW − Dr)/((1 − p) TAW), for Dr > RAW | Ch. 8 | image `ch8/x0490e2w.gif` + text |
