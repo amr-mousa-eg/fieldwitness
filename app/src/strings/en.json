@@ -1,0 +1,13 @@
+{
+  "app.title": "FieldWitness",
+  "app.tagline": "Rotation options for your field, each backed by three witnesses.",
+  "demo.banner": "DEMO DATA — every number on this page is synthetic test data, not a real field.",
+  "fixed.judgment": "FieldWitness helps you explore options. It does not replace your judgment or local agricultural advice.",
+  "region.label": "Region",
+  "region.loading": "Loading region…",
+  "fields.heading": "Fields",
+  "fields.area": "{area} ha",
+  "fields.current": "Current rotation",
+  "fields.top": "Top option grade {grade}",
+  "error.load": "Could not load data: {message}"
+}
