@@ -372,7 +372,7 @@ Each task: **ID · goal · output · acceptance test**. Tick `[x]` and add a one
 
 ### Phase 3 — Witness 1: physics (`src/fieldwitness/physics/`)
 
-- [ ] **T3.1 ETo.** FAO-56 Penman–Monteith daily (Eq. 6 and supporting equations). *Accept:* unit tests reproduce the FAO-56 worked examples (numbers taken from the paper) within the rounding shown there.
+- [x] **T3.1 ETo.** *(done 2026-11-04: Example 18 reproduced in tests/test_eto.py; POWER→ETo/rain forcing in physics/forcing.py.)* FAO-56 Penman–Monteith daily (Eq. 6 and supporting equations). *Accept:* unit tests reproduce the FAO-56 worked examples (numbers taken from the paper) within the rounding shown there.
 - [ ] **T3.2 Crop coefficient curve.** Piecewise Kc from stage lengths, adjusted Kc_mid for climate (FAO-56 Eq. 62). Sowing date is a parameter. *Accept:* tests on known shapes.
 - [ ] **T3.3 Water balance.** Daily root-zone depletion (FAO-56 Eq. 85) with TAW, RAW, Ks (Eq. 84), runoff (simple), deep percolation; irrigation policies: `rainfed`, `trigger_at_RAW(efficiency)`, `fixed_seasonal_mm`. *Accept:* property tests: mass closes each day, 0 ≤ Ks ≤ 1, 0 ≤ Dr ≤ TAW.
 - [ ] **T3.4 Season outputs.** ETa, irrigation mm, Relative Yield Index via FAO-33 Ky (`1 − Ya/Ym = Ky (1 − ETa/ETc)`), simulated canopy proxy (Kc-shaped curve) for comparison with HLS, cover days. *Accept:* outputs tagged `D`.
