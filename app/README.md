@@ -44,3 +44,15 @@ npm run build     # production build into app/dist (real packs only)
   metrics only; `packs/regions.json`.
 - Dev server: run from `app/` (`npm run dev`). `npm --prefix "<path with space>"` fails on this
   machine (cmd splits `C:\Users\Amr 13_03`).
+
+## Browser checks (local Chrome, no extra packages)
+
+```
+node scripts/screenshot.mjs http://localhost:5173/ '.map[data-state="ready"]' map.png 1280 800 light
+npm run build && npx vite preview --port 5180   # then:
+node scripts/offline-check.mjs http://localhost:5180/ offline.png
+```
+
+`screenshot.mjs` waits for the map's `data-state="ready"` marker and prints console errors.
+`offline-check.mjs` visits once, goes offline, reloads and checks the app shell renders (T9.1).
+Set `CHROME=<path>` if Chrome is not in the default Windows location.

@@ -1,23 +1,80 @@
 :root {
-  --bg: #f7f6f2;
-  --fg: #1d1f1c;
-  --muted: #5c615a;
+  --page: #eef1ef;
+  --panel: #f8faf8;
+  --ink: #22313a;
+  --muted: #56646b;
+  --rule: #c9d1cd;
+  --focus: #1f6fb2;
   --demo-bg: #8a1c1c;
   --demo-fg: #ffffff;
-  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-  color: var(--fg);
-  background: var(--bg);
+  /* crop chips: colour supports the text label, never replaces it */
+  --crop-wheat: #e7cf7e;
+  --crop-sorghum: #d9a184;
+  --crop-maize: #c9d98a;
+  --crop-fallow: #d6c9b3;
+  --crop-cover: #a9cfa4;
+  --crop-other: #d5dbd8;
+  --grade-a: #2f6b3a;
+  --grade-b: #3d6f8e;
+  --grade-c: #8a6a1f;
+  --grade-d: #8a3a2a;
+  --display: Bahnschrift, "DIN Alternate", "Roboto Condensed", "Arial Narrow", system-ui, sans-serif;
+  --body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.45;
+  color: var(--ink);
+  background: var(--page);
+  color-scheme: light dark;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #161815;
-    --fg: #e8e9e4;
-    --muted: #a3a89f;
+    --page: #151c20;
+    --panel: #1c252a;
+    --ink: #e4ebe8;
+    --muted: #a2b0b6;
+    --rule: #34424a;
+    --focus: #7cb8ec;
+    --crop-wheat: #6e5d22;
+    --crop-sorghum: #6b3f2c;
+    --crop-maize: #55622a;
+    --crop-fallow: #5a4f3e;
+    --crop-cover: #34573a;
+    --crop-other: #3b464c;
   }
+}
+
+* {
+  box-sizing: border-box;
 }
 body {
   margin: 0;
-  background: var(--bg);
+  background: var(--page);
+}
+a {
+  color: inherit;
+}
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.muted {
+  color: var(--muted);
+}
+
+/* ---- shell ---- */
+.app {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
 }
 .demo-banner {
   position: sticky;
@@ -28,16 +85,179 @@ body {
   color: var(--demo-fg);
   font-weight: 700;
   text-align: center;
-  letter-spacing: 0.02em;
 }
-.app-header,
-main,
-.app-footer {
-  padding: 0 1rem;
-  max-width: 72rem;
-  margin: 0 auto;
+.app-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 1.5rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--rule);
 }
-.app-footer {
+.app-header h1 {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 1.6rem;
+  letter-spacing: 0.01em;
+}
+.tagline {
+  margin: 0;
   color: var(--muted);
-  padding-block: 2rem;
+}
+.region-switch {
+  margin-left: auto;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+.region-switch select {
+  font: inherit;
+  padding: 0.25rem 0.5rem;
+}
+.app-main {
+  display: grid;
+  grid-template-columns: minmax(18rem, 24rem) 1fr;
+  min-height: 0;
+}
+.rail {
+  padding: 1rem;
+  background: var(--panel);
+  border-right: 1px solid var(--rule);
+  overflow-y: auto;
+}
+.map {
+  min-height: 28rem;
+  height: 100%;
+}
+.app-footer {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--rule);
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+@media (max-width: 48rem) {
+  .app-main {
+    grid-template-columns: 1fr;
+  }
+  .map {
+    order: -1;
+    height: 55vh;
+    min-height: 18rem;
+  }
+  .rail {
+    border-right: 0;
+  }
+  .region-switch {
+    margin-left: 0;
+  }
+}
+
+/* ---- field list ---- */
+.field-list h2,
+.field-page h2 {
+  margin: 0 0 0.25rem;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+.field-list p {
+  margin: 0;
+}
+.field-list ul {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+.field-item {
+  display: grid;
+  gap: 0.4rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--rule);
+  border-left: 4px solid #c9a43a; /* same wheat-straw as the map fill */
+  text-decoration: none;
+  background: var(--page);
+}
+.field-item:hover,
+.field-item[aria-current="true"] {
+  border-color: var(--ink);
+}
+.field-item-head {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+.field-id {
+  font-family: var(--display);
+  font-weight: 600;
+}
+.grade {
+  margin-left: auto;
+  min-width: 1.6rem;
+  text-align: center;
+  font-family: var(--display);
+  font-weight: 700;
+  color: #fff;
+  border-radius: 3px;
+}
+.grade-A {
+  background: var(--grade-a);
+}
+.grade-B {
+  background: var(--grade-b);
+}
+.grade-C {
+  background: var(--grade-c);
+}
+.grade-D {
+  background: var(--grade-d);
+}
+
+/* ---- crop chips ---- */
+.crop-chips {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+  font-size: 0.85rem;
+}
+.crop-chip {
+  padding: 0.05rem 0.45rem;
+  border-radius: 999px;
+  background: var(--crop-other);
+}
+.crop-winter_wheat,
+.crop-spring_wheat,
+.crop-winter_barley,
+.crop-spring_barley {
+  background: var(--crop-wheat);
+}
+.crop-sorghum {
+  background: var(--crop-sorghum);
+}
+.crop-maize {
+  background: var(--crop-maize);
+}
+.crop-fallow {
+  background: var(--crop-fallow);
+}
+.crop-cover_crop {
+  background: var(--crop-cover);
+}
+
+/* ---- field page ---- */
+.field-page {
+  display: grid;
+  gap: 0.5rem;
+}
+.field-page h3 {
+  margin: 0.5rem 0 0;
+  font-size: 1rem;
+}
+.field-page p {
+  margin: 0;
 }
