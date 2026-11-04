@@ -66,7 +66,10 @@ while ($true) {
         break
     }
 
-    $prompt | claude -p --model sonnet --permission-mode acceptEdits --max-turns $maxTurns *> $runLog
+    # disableAllHooks: user-level plugin hooks (e.g. caveman) rewrite Bash commands before the
+    # permission check, so no allow rule matches them. The project defines no Claude hooks; git's own
+    # pre-commit hooks still run. PS 5.1 needs \" to pass the JSON quotes to a native program.
+    $prompt | claude -p --model sonnet --settings '{\"disableAllHooks\": true}' --permission-mode acceptEdits --max-turns $maxTurns *> $runLog
     $code = $LASTEXITCODE
     # claude -p exits 1 with "Error: Reached max turns (N)" at the turn cap: a normal end of a run,
     # not a failure, so it gets the short pause. Every other non-zero exit waits 30 minutes.
