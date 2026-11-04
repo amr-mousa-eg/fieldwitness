@@ -237,3 +237,12 @@ Gate 0 is **not fully closed**: it needs the SoilGrids retry (or an approved WCS
 
 Gate 0 stays **open on one item: SoilGrids**.
 
+## 2026-11-04 — PLAN v1.2 merged; pre-event rule; Gate 0/1 soil rule
+
+- **Pre-event code:** *assumed allowed; confirm against the official 2026 Submission Guide on 13 Nov.* (The user's message left the source field as a placeholder, so no source is recorded; re-check on 13 Nov and record the result here.)
+- **PLAN addendum v1.2 merged into PLAN.md (user):** rules-gate note replaced by the pre-event build note; new §1b challenge alignment (both tables); new tasks T1.8, T2.5, T3.6, T3.7 (stretch), T6.0, T6.6–T6.9, T9.9–T9.11, fixed "does not replace your judgment" line, Phase 10 deployment note; T9.3 changed; §6 replaced by the 10-day pre-event schedule with cut lines. All v1.1 changes and the six Phase 0 ticks kept.
+- **Schema change (§3, rule 11) approved by the user via the addendum:** `Explanation(why, evidence, benefits, gaps, risks)` added and `Option.explanation: Explanation`; option id `"current"` = the field's current rotation (T6.0).
+- `docs/official_challenge.md` and `PLAN_ADDENDUM_v1.2.md` were not on disk; both arrived as attachments. `docs/official_challenge.md` was created verbatim from the attachment; the addendum was merged from the attachment, so there was no file to delete.
+- **Gate 0 / Gate 1 soil rule (user):** Phase 1 may start now with the tasks that do not need soil (T1.1, T1.2, T1.4, T1.5, T1.6, T1.8). Soil values for the pilot fields (T1.3) are required for **Gate 1**, not Gate 0. With this rule, the essential Gate 0 sources HLS, POWER and CSB pass, and SoilGrids moves to Gate 1.
+- **Soil fetch timing (user):** soil values are fetched once the pilot-field list exists (T1.4), not for the census boxes. SoilGrids retry 2 runs as scheduled (5 Nov); if it fails, check and use the `maps.isric.org` WCS fallback (docs and licence first).
+- `field_id` rule (user): SHA-1 hex of the WKB of the field geometry in EPSG:4326, coordinates rounded to 6 decimals; written into PLAN.md §3. Working mode from now: build Phase 1 (Kansas) without per-task approval; stop only for the user's listed conditions; push when tests pass and gitleaks is clean.

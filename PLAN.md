@@ -1,12 +1,14 @@
 # PLAN.md — FieldWitness implementation plan
 
-Version 1.1 · 4 Nov 2026 · Hackathon 14–15 Nov 2026 (submission closes 23:59 local time on 15 Nov).
+Version 1.2 · 4 Nov 2026 · Hackathon 14–15 Nov 2026 (submission closes 23:59 local time on 15 Nov).
 
 **Changes in v1.1** (answers to Claude Code's first review): Python pinned to 3.12; gitleaks CLI instead of the Action; a walking-skeleton milestone (§1); explicit tagging rule and schema fixes (§3); season-year convention (T2.2); batched physics runtime targets (T3.5, T6.2); two hindcast modes and documented boundary leakage (Phase 7); HLS true-colour basemap for offline use (T9.1); Kluger et al. 2025 citation confirmed (T5.4).
 
+**Changes in v1.2** (addendum merged 4 Nov 2026, user): pre-event build schedule (§6 replaced); challenge alignment with the official text in `docs/official_challenge.md` (§1b); new tasks T1.8, T2.5, T3.6, T3.7 (stretch), T6.0, T6.6–T6.9, T9.9–T9.11; T9.3 changed; `Explanation` added to `Option` (§3); fixed "does not replace your judgment" line; Phase 10 deployment note.
+
 This plan is ordered so that the end-to-end loop works early and gets better later. Never start a phase before the previous phase's **gate** passes. Stretch tasks (`S*`) only start when every MVP task is ticked.
 
-> **Rules gate (13 Nov).** The 2026 Submission and Judging Guides are released on 13 Nov. Until then, do only Phase 0 work: setup, access checks, census, configs and docs. If the guides forbid pre-event code, Phase 0 code is rewritten during the event from this plan.
+> **Pre-event build (v1.2).** Code written before the event is assumed allowed (see DECISIONS.md; to be confirmed against the official 2026 Submission Guide on 13 Nov). Build the full MVP before 13 Nov; 13 Nov is a review and freeze day; 14–15 Nov are for polish, demo and submission. The CLAUDE.md working agreement is unchanged: one task at a time, plan first at the start of each phase, gates still apply.
 
 ---
 
@@ -30,6 +32,37 @@ This plan is ordered so that the end-to-end loop works early and gets better lat
 - Grades use only physics + credibility until Witness 3 exists (max grade B).
 
 Then add, in this order: Witness 3 (Tier 1) → Advisor Console → Tier 3 region → Tier 2 region. Each addition must leave the app deployable.
+
+## 1b. Challenge alignment (v1.2)
+
+The official challenge text is in `docs/official_challenge.md`.
+
+| Challenge asks | Status in v1.1 | Change |
+|---|---|---|
+| Compare at least three rotation strategies, **including the existing rotation** | Options are new sequences only | **T6.0**: the field's current rotation (from its story) is always option 1, labelled "Current"; at least 2 alternatives; benefits and regret are shown relative to Current |
+| For each strategy: **why suggested, evidence, benefits, information gaps, risks for local review** | Grades + witnesses only | **T6.6**: a deterministic `Explanation` with these five parts on every option (no LLM) |
+| Times when fields are **typically bare** | `bare_days` per season | **T2.5**: monthly bare-soil calendar from HLS history |
+| Seasons when current crops are **more vulnerable** (heat stress, frost, water stress, extreme rain) | Not covered | **T3.6**: crop-stage vulnerability calendar |
+| Farmer priorities: water use, **forage value, N-fixing, erosion reduction, organic matter, market suitability** | Water, cover, RYI | **T6.7**: priority metrics, all tagged, with proxies named as proxies |
+| Interrupt **pest cycles** | Family-break constraint only | Shown as a metric: number of family breaks (T6.7) |
+| **Long-term water trends**; GRACE/GRACE-FO, SRTM, SMAP, MODIS | SMAP context only | **T1.8**: GRACE/GRACE-FO regional water-storage trend (context, scale-flagged); SRTM slope for erosion exposure; SMAP root-zone anomaly context |
+| Supportive tool, does not replace farmer judgment | Non-promises list | Add one fixed line to the Field Card and the Methods page; the "risks for local review" part of every option |
+
+From the Potential Considerations on the official page (optional for teams, but judges will read them):
+
+| Consideration | Status | Change |
+|---|---|---|
+| Explain ET, soil moisture anomalies, NDVI, frost risk, water balance | Not covered | **T9.10**: plain-language "What is this?" explainers next to each term |
+| How satellite differs from ground measurement, and how combining both helps | Scale contract only | **T6.9**: farmer corrections (crop history, sowing date, irrigation yes/no) enter as ground data, tag E, and re-run calibration; Methods page explains satellite vs ground |
+| Compare different SI/statistical approaches | Baselines B0–B3 | Frame the hindcast scoreboard explicitly as an approach comparison; add the T2.3 classifier comparison (phenology rules vs Random Forest) |
+| Explain uncertainty and where local expertise is needed | Grades, intervals, gaps, risks | Covered; make the "risks for local review" list name the human check needed |
+| Harmonize datasets to a common grid (SMAP, ECOSTRESS LST, GPM, Landsat/MODIS, GEDI, soil) | Deliberately field-based | Keep the field polygon as the common analysis unit; explain on the Methods page why we aggregate to fields rather than resample to one grid (the scale contract). ECOSTRESS LST is added as an observed heat-stress check (**T3.7**, stretch). GEDI is noted and not used (sparse footprints, mostly forest structure); say so on the Methods page |
+| Nutrient cycling, erosion, organic matter, pest disruption, water, forage, markets | Covered by T6.7 | Add `deep_root_share` from FAO-56 Table 22 rooting depth (verified data) |
+| Brief explanations of N-fixing, cover, deep-rooting and drought-tolerant crops | Not covered | Part of **T9.10**: short cited explainers |
+| Maps of trends over time (soil moisture, heat waves, water-storage decline) | Context strip only | **T9.11**: a map layer switcher for the regional trends (GRACE storage, SMAP anomaly, heat-wave days from POWER) with a year slider |
+| Field-level vulnerability zones (erosion risk, water stress hotspots, frost-prone) | Not on the map | **T9.11**: colour fields on the map by erosion exposure, water-stress share and frost share |
+| Scenario sliders for rainfall or temperature | Not covered | **T6.8**: precomputed weather what-ifs per field |
+| Farmer inputs: water availability, equipment limits, market preferences | Crop bans, irrigation yes/no | **T9.3** constraints: seasonal water cap (mm), crops I can't plant or harvest, crops I can sell |
 
 ## 2. Pilot regions and crops
 
@@ -59,7 +92,7 @@ class Tagged(BaseModel):          # every user-facing number
     source: str                   # dataset id or "model:<module>@<version>"
 
 class Field(BaseModel):
-    field_id: str                 # sha1 of rounded WKB geometry
+    field_id: str                 # sha1 hex of the WKB of the geometry in EPSG:4326 rounded to 6 decimals (user 2026-11-04)
     geometry_wkt: str
     area_ha: float
     region_id: str; tier: Literal[1, 2, 3]
@@ -83,6 +116,13 @@ class WitnessResult(BaseModel):
     n: int | None = None          # neighbours: number of field-seasons
     diagnostics: dict[str, float | bool | str]
 
+class Explanation(BaseModel):     # v1.2, T6.6: deterministic, every sentence traceable to a number or flag
+    why: list[str]                # which priority or pattern produced it
+    evidence: list[str]           # witnesses and grade, with tags
+    benefits: list[str]           # metric deltas vs Current, with units and tags
+    gaps: list[str]               # tag-A inputs, missing witnesses, scale flags, unverified parameters
+    risks: list[str]              # items needing local review (disease, timing, markets, equipment, missing Ky)
+
 class Option(BaseModel):
     option_id: str
     sequence: list[str]           # e.g. ["soybean", "winter_wheat", "maize"]
@@ -91,6 +131,7 @@ class Option(BaseModel):
     witnesses: list[WitnessResult]
     grade: Literal["A", "B", "C", "D"]; grade_reasons: list[str]
     regret: Tagged; rank: int
+    explanation: Explanation      # v1.2 (T6.6); option_id "current" = the field's current rotation (T6.0)
 
 class Advice(BaseModel):
     measure_next: str; flip_probability: Tagged
@@ -145,7 +186,7 @@ Each task: **ID · goal · output · acceptance test**. Tick `[x]` and add a one
 - [x] **T0.5 Data census** *Done 2026-11-04: `fieldwitness.cli census`; `docs/census/` (6 regions + comparison); regions chosen by the user: Kansas T14SLH, Toulouse T31TCJ, central Ukraine T36UVU (Nile T36RTV showcase).* (`cli census --region <id>`). Per candidate region: field-size distribution, share of fields with ≥ 4 interior HLS pixels, clear HLS observations per season (2016–2024), label years available, ECOSTRESS overpass count. *Accept:* `docs/census/<region>.md`; **human picks the three regions** and records it in `DECISIONS.md`.
 - [x] **T0.6 Configs.** *Done 2026-11-04: `crops.yaml` 11 crops, 82 values verified from FAO-56 Tables 11/12/22/24 and 9 unverified (tag A); crop lists per region from CSB/RPG/FAOSTAT; `grading.yaml` team choices; Pydantic validation in `fieldwitness.config` (tests pass).* Fill `regions.yaml`; fill `crops.yaml` from FAO-56 Tables 11 (stage lengths), 12 (Kc, height), 22 (rooting depth, p) and 24 (seasonal Ky, reproduced from FAO-33), each with `ref:` (table numbers verified 2026-11-04; FAO-33 itself not found on fao.org). *Accept:* schema validation passes; unverified values flagged.
 
-**Gate 0:** access works for every **essential** Tier 1 source; regions chosen; configs validate. *Rule change 2026-11-04 (user): Tier 1 sources are split into essential (HLS, POWER, CSB, SoilGrids) and validation-only (WIMAS, ECOSTRESS; OpenET moved to stretch). Gate 0 requires all essential sources; validation sources may be pending.*
+**Gate 0:** access works for every **essential** Tier 1 source; regions chosen; configs validate. *Rule change 2026-11-04 (user): Tier 1 sources are split into essential (HLS, POWER, CSB, SoilGrids) and validation-only (WIMAS, ECOSTRESS; OpenET moved to stretch). Gate 0 requires all essential sources; validation sources may be pending. Further change 2026-11-04 (user): Phase 1 may start with the tasks that do not need soil (T1.1, T1.2, T1.4, T1.5, T1.6, T1.8); soil values for the pilot fields (T1.3) are required for Gate 1, not Gate 0.*
 
 ### Phase 1 — Data layer (`src/fieldwitness/data/`)
 
@@ -156,8 +197,9 @@ Each task: **ID · goal · output · acceptance test**. Tick `[x]` and add a one
 - [ ] **T1.5 HLS-VI series.** (a) AppEEARS area request for all pilot fields per region; (b) fallback: STAC search + COG windowed reads with `rioxarray`. Use the HLS quality layer (Fmask) to drop cloud, shadow, snow. Output: per field, per date, median NDVI/EVI over interior pixels + clear-pixel fraction. *Accept:* series for all pilot fields 2016–2024; QA rule documented.
 - [ ] **T1.6 Labels.** Per field-year crop label from CSB (Tier 1, `ftw/harmonized-field-data/us_usda_cropland`, 2017–2024 edition) and the French RPG/EuroCrops V2 series (Tier 2, `ftw/harmonized-field-data/fr`); harmonise crop names to `crops.yaml`; select fields as annual arable crop parcels on the current (most recent) year (`fieldwitness.data.hcat.is_annual_arable`, same definition as T1.4); in crop histories keep fallow and temporary grass as the crop states "fallow" and "temporary_grass" (`history_state`), never dropped, and remove a field from history analysis only if it leaves arable use (`stays_arable`: a year in HCAT3 groups 3302–3308; 3399 and missing codes are "unknown" states); map the unmapped France `crop:code` values (null `hcat:code` in 2023–24). *Accept:* label table with coverage report.
 - [ ] **T1.7 Water truth (Tier 1).** Kansas WIMAS annual volumes for points of diversion in the region (verify access); (OpenET removed from the MVP 2026-11-04, see S6); ECOSTRESS ET overpasses (`ECO_L3T_JET` v003) for Tier 2–3 pilot fields. *Accept:* whichever sources are accessible are cached; unavailable ones are logged in `DECISIONS.md`.
+- [ ] **T1.8 Context datasets.** Verify collection IDs and access first (rule 2). (a) SRTM or NASADEM 30 m elevation → slope per field (mean over interior pixels). (b) GRACE/GRACE-FO mascon terrestrial water storage → regional monthly series and linear trend since 2002 for each pilot region; it is coarse, so context only, with a scale flag, never a field claim. (c) SMAP L4 root-zone soil moisture → monthly anomaly for the region (context). *Accept:* values cached for all three regions; ids and response shapes in `docs/api_notes.md`.
 
-**Gate 1:** one full Tier 1 region has polygons, HLS series, weather, soil and labels on disk.
+**Gate 1:** one full Tier 1 region has polygons, HLS series, weather, **soil values for the pilot fields (T1.3)** and labels on disk.
 
 ### Phase 2 — Field story (`src/fieldwitness/story/`)
 
@@ -165,6 +207,7 @@ Each task: **ID · goal · output · acceptance test**. Tick `[x]` and add a one
 - [ ] **T2.2 Seasons and phenology.** Segment the series into seasons and assign each to its **harvest year** (calendar year of EOS), matching how CDL/CSB label winter wheat; a second season ending in the same year gets `index = 1`; where a crop has winter and spring variants (wheat, barley; `config/crops.yaml`), assign the variant per field-season from the observed green-up: autumn green-up before winter → winter variant, spring green-up only → spring variant (tag `D`); SOS/EOS by amplitude-threshold method (e.g. 20%/50% of seasonal amplitude, choice documented); peak, canopy integral, cover days (NDVI ≥ cover threshold), bare days. Each output `Tagged` with tag `O` (direct metrics) or `D` (thresholded). *Accept:* on 30 labelled fields, the number of detected seasons matches the crop calendar for ≥ 90% (target, team choice).
 - [ ] **T2.3 Crop classifier.** Random Forest on phenology features + monthly composites; train on Tier 1–2 labels; spatially blocked CV; calibrated probabilities → `crop_conf`. *Accept:* `results/classifier/` with per-crop F1, confusion matrix, US→EU and EU→US transfer scores.
 - [ ] **T2.4 WorldCereal cross-check (Tier 3).** Compare 2021 classifier output with WorldCereal 2021 maize/cereal maps. *Accept:* agreement table.
+- [ ] **T2.5 Bare-soil calendar.** Per field: for each month, the share of past years (≥ 2016) in which the field was bare (NDVI below the cover threshold in T2.2), with clear-observation counts. Tag O. *Accept:* calendar for all pilot fields; months with too few clear observations are marked "insufficient data", not filled.
 
 **Gate 2:** field stories for all pilot fields; classifier report committed.
 
@@ -175,6 +218,7 @@ Each task: **ID · goal · output · acceptance test**. Tick `[x]` and add a one
 - [ ] **T3.3 Water balance.** Daily root-zone depletion (FAO-56 Eq. 85) with TAW, RAW, Ks (Eq. 84), runoff (simple), deep percolation; irrigation policies: `rainfed`, `trigger_at_RAW(efficiency)`, `fixed_seasonal_mm`. *Accept:* property tests: mass closes each day, 0 ≤ Ks ≤ 1, 0 ≤ Dr ≤ TAW.
 - [ ] **T3.4 Season outputs.** ETa, irrigation mm, Relative Yield Index via FAO-33 Ky (`1 − Ya/Ym = Ky (1 − ETa/ETc)`), simulated canopy proxy (Kc-shaped curve) for comparison with HLS, cover days. *Accept:* outputs tagged `D`.
 - [ ] **T3.5 Rotation simulation.** Run a sequence of crops with carry-over soil water between seasons and fallow periods. **Design for batching from day one:** state arrays shaped `(options, draws, years)` stepped through days in NumPy, so one call simulates everything for a field. *Accept:* benchmark test — 200 sequences × 30 draws × 20 years for one field in < 60 s on the laptop. If it misses, profile first, then consider `numba` (ask before adding it).
+- [ ] **T3.6 Vulnerability calendar.** For the current crop and each option crop, using the crop stages from T3.2 and POWER weather 2001–cut-off: share of years with (a) heat-stress days in the sensitive stage (Tmax above a crop-specific threshold), (b) frost after green-up (Tmin ≤ 0 °C), (c) water stress (simulated Ks < 1) by stage, (d) extreme-rain days (above the local 99th percentile of daily rain) falling on bare soil. **Thresholds come from a cited source or are tagged A with a note; never from memory.** *Accept:* a month × hazard table per field-crop.
 
 **Gate 3:** physics runs for every pilot field and crop; FAO tests pass.
 
@@ -200,11 +244,24 @@ Each task: **ID · goal · output · acceptance test**. Tick `[x]` and add a one
 
 ### Phase 6 — Agreement and rotation engine (`agree/`, `rotate/`)
 
+- [ ] **T6.0 Current rotation.** Derive the field's current rotation from its last three seasons in the field story (labels in Tier 1–2, classifier in Tier 3, with confidence). It is always option 1 ("Current"), even when it contains a crop excluded from new options (then it is simulated where possible and the gap is shown). *Accept:* every pack has a Current option; benefits are shown as deltas against it.
 - [ ] **T6.1 Candidates.** Enumerate 3-season sequences from the region's **rotation options** (`fieldwitness.config.rotation_options`: crops with `mvp_role` rotation or rotation_no_yield; barley is prediction-only because RYI needs a verified Ky, rapeseed is history-only; user decision 2026-11-04); hard constraints: allowed crops, calendar fit (season windows from observed local SOS/EOS), max consecutive same family, user bans. *Accept:* banned crop never appears (property test).
 - [ ] **T6.2 Evaluate.** Prune candidates with hard constraints first, then for each survivor simulate in one batched call (T3.5) over posterior worlds (subsample, default 30) × weather years 2001–cut-off; metrics: mean water use, irrigation, RYI, cover days, CVaR10 of water and of RYI. *Accept:* runtime < 60 s per field for all candidates (cache as needed).
 - [ ] **T6.3 Rank.** Pareto filter + weighted score (default weights in config, user-movable in the app via precomputed per-weight-preset rankings or in-browser recomputation from per-option metrics). Regret matrix across weather years. *Accept:* rankings reproducible with seed.
 - [ ] **T6.4 What to measure next + counterfactual flip.** For each uncertain input (TAW, sowing offset, irrigation, Kc scale): share of posterior draws where rank 1 changes; smallest single-input change that flips rank 1. *Accept:* values in `Advice`.
 - [ ] **T6.5 Grades.** Apply `grading.yaml` rule using physics vs neighbour effects for the matching transition. *Accept:* each option has grade + reasons; unit tests for each grade branch.
+- [ ] **T6.6 Strategy explanation.** Add `Explanation` (§3) to every `Option`: `why`, `evidence`, `benefits`, `gaps`, `risks`. Generated by deterministic rules and templates from the computed metrics; every sentence is traceable to a number or flag (no LLM). *Accept:* unit tests for each template; no option has an empty `gaps` or `risks` list.
+- [ ] **T6.7 Priority metrics** (each a `Tagged` value in `Option.metrics`):
+  - `legume_share`: share of seasons with a Fabaceae crop (family from GBIF, verified). Label: "nitrogen-fixing crops in the rotation". Tag D. No kg N claim.
+  - `family_breaks`: number of family changes between consecutive seasons. Label: "pest and disease break opportunities". Tag D.
+  - `erosion_exposure`: relative index = Σ over days of (simulated bare or low cover) × (daily rain above an erosive threshold, IMERG/POWER) × slope factor (SRTM). Unitless, compared between options of the same field only. Tag D. **Not tonnes of soil.**
+  - `residue_proxy`: organic-matter input proxy from simulated canopy integral plus cover days. Label: "organic matter input (proxy, not soil carbon)". Tag D.
+  - `forage_value`: per crop, a yes/no forage use from a cited source (e.g. FAO crop descriptions), else tag A.
+  - `deep_root_share`: share of seasons with a crop whose maximum rooting depth (FAO-56 Table 22, verified) is above a stated threshold. Label: "deep-rooting crops in the rotation". Tag D.
+  - Market suitability is **not** a metric. It is a user constraint ("crops I can sell") on the Field Card, stored as user input.
+  *Accept:* all metrics present for every option; labels match this list exactly.
+- [ ] **T6.8 Weather what-ifs.** For each field, precompute every option under a small grid of weather changes applied to the historical years: temperature +0, +1, +2 °C × rainfall −20%, −10%, 0, +10%. Store per-option metrics per scenario in the pack, so the app's sliders switch between precomputed results instead of simulating in the browser. These are sensitivity tests, not climate projections; say so in the UI. *Accept:* 12 scenarios per field; pack size still under the limit, or the scenarios split into a second file per field.
+- [ ] **T6.9 Farmer corrections.** The app lets a user correct the field's crop history, sowing date and irrigation status. Corrections are stored locally in the browser, tagged E ("farmer-entered"), and shown alongside the satellite version. In the static demo, a correction switches to a precomputed alternative where one exists, and otherwise shows "re-run needed: available in live mode" (API, T8.3). *Accept:* a corrected history visibly changes the Current option and its tags.
 
 **Gate 6:** full `FieldPack` (minus ledger) for one field validates against the schema.
 
@@ -238,18 +295,23 @@ React + Vite + TypeScript, MapLibre GL, a chart library (Recharts or Observable 
 
 - [ ] **T9.1 Shell + Map view.** Region switcher; field polygons from `index.json`; click → open field. **Basemap = our own HLS true-colour composite** of each pilot tile (cloud-free median, peak season), rendered by the pipeline as a small raster or PMTiles file. It is NASA data (no licence problem) and ships with the app, so it works offline. Fallback: a plain neutral background with field outlines. No third-party imagery tiles. *Accept:* loads offline after first visit.
 - [ ] **T9.2 Field story view.** Season timeline (crop chips with confidence), NDVI curve with SOS/peak/EOS marks, scale-flag badges.
-- [ ] **T9.3 Field Card view.** Three option cards: sequence, water use, bad-year water, cover days, RYI, grade badge; priority sliders re-rank in the browser from per-option metrics; constraint toggles (ban crop, irrigation yes/no).
+- [ ] **T9.3 Field Card view (changed in v1.2).** Shows Current + at least 2 alternatives (sequence, water use, bad-year water, cover days, RYI, grade badge), priority sliders for water, bare-soil months, bad-year risk, erosion exposure, legume share and residue proxy (re-ranked in the browser from per-option metrics), constraint toggles (ban crop, irrigation yes/no, seasonal water cap in mm, crops I can't plant or harvest) plus a "crops I can sell" constraint. Each option opens a detail panel with the five explanation parts (T6.6).
 - [ ] **T9.4 Advisor Console view.** Witnesses side by side per option (estimate + interval + n + diagnostics), credibility and back-test chart (observed vs simulated seasons), what-to-measure-next, counterfactual flip; source-tag legend (O/D/E/A) on every number.
 - [ ] **T9.5 Hindcast scoreboard.** Per region: FieldWitness vs B0–B3 on CRPS, coverage, timing error; one field's predicted-vs-observed 2022–24 as the story chart.
 - [ ] **T9.6 Methods & data page.** Datasets, licences, non-promises, limits, link to repo.
 - [ ] **T9.7 Responsive + accessibility.** 380 px viewport works; keyboard navigation; colour never carries meaning alone.
 - [ ] **T9.8 Deploy.** GitHub Pages (or Netlify) via GitHub Actions on push to `main`. *Accept:* public URL opens in a private window with no login.
+- [ ] **T9.9 Calendar view.** The bare-soil calendar (T2.5) and the vulnerability calendar (T3.6) for the current rotation, with a toggle to show an alternative's calendar. A regional context strip shows the GRACE trend, SMAP anomaly and slope, each scale-flagged.
+- [ ] **T9.10 Explainers.** A small "What is this?" next to evapotranspiration, soil moisture anomaly, NDVI, frost risk, water balance, Relative Yield Index, evidence grade and source tags, plus short explainers on nitrogen-fixing, cover, deep-rooting and drought-tolerant crops. Each explainer is two or three plain sentences with a cited source (FAO-56, NASA Earthdata pages, or the FAO crop chapters), kept in `app/src/strings/en.json`.
+- [ ] **T9.11 Map layers.** (a) Field colouring by erosion exposure, water-stress share or frost share (from T3.6 and T6.7). (b) Regional trend layers with a year slider: GRACE water storage, SMAP soil-moisture anomaly, and heat-wave days from POWER. Every layer shows its resolution and scale flag.
+- [ ] **Fixed line** on the Field Card and the Methods page: "FieldWitness helps you explore options. It does not replace your judgment or local agricultural advice."
 
 ### Phase 10 — Hardening and submission
 
 - [ ] **T10.1** README (what, why, how to run, results summary, screenshots), DATA.md, AI_USE.md (tools used and where; mark AI-generated code in file headers or commit messages as the 2026 guide requires), LICENSE (MIT or Apache-2.0).
 - [ ] **T10.2 Red-team checklist:** no untagged numbers, no forbidden claims, all links public, English everywhere, every external resource listed for the References field.
 - [ ] **T10.3** Freeze `main`, tag `v1.0-spaceapps`, verify the deployed URL and repo in a private window.
+- [ ] **Deployment note.** GitHub Pages from a private repository may need a paid GitHub plan (verify). Since pre-event code is allowed, either make the repo public when the first deploy happens, or deploy from Netlify/Vercel. Ask the user before making the repo public.
 
 ### Stretch (only after all MVP boxes are ticked)
 
@@ -259,20 +321,29 @@ React + Vite + TypeScript, MapLibre GL, a chart library (Recharts or Observable 
 - [ ] S4 Tier 3 neighbour effects from inferred crop histories.
 - [ ] S5 Live any-point mode via the API.
 - [ ] S6 OpenET seasonal ET as an extra water witness for Kansas fields — only if the user accepts OpenET's terms (moved from T1.7, 2026-11-04).
+- [ ] T3.7 Observed heat stress (stretch). ECOSTRESS land-surface temperature (verify the collection first) on pilot fields during sensitive stages, as an observed check on the POWER-based heat-stress calendar.
 
 ---
 
-## 6. Event schedule (14–15 Nov) with cut lines
+## 6. Pre-event schedule (v1.2) with cut lines
 
-| When | Tasks | Cut line if late |
-|---|---|---|
-| Day 1, 09:00–12:00 | Phase 1 for Tier 1 (reuse Phase 0 only if rules allow) | Drop Tier 2 |
-| Day 1, 12:00–16:00 | Phase 2 + Phase 3 | GPR smoothing, classifier transfer test |
-| Day 1, 16:00–22:00 | Phase 4 (synthetic first) + T7.1 skeleton | Amortised estimator (never in MVP) |
-| Day 2, 08:00–11:00 | Phase 5 (Tier 1) + Phase 6 | Regret matrix; keep CVaR |
-| Day 2, 11:00–14:00 | Phase 7 + Phase 8 | Ablation, degradation curve |
-| Day 2, 14:00–19:00 | Phase 9 (T9.1–T9.5, T9.8) | Methods page becomes a README link |
-| Day 2, 19:00–23:00 | Phase 10, demo video/slides, submission page | — submit by 22:30 local |
+Assumes Claude Code builds and the user reviews at each gate. Each day ends with green tests, a commit, and a deployable state from day 6 onward.
+
+| Day | Date | Work | Gate at end of day |
+|---|---|---|---|
+| 1 | Wed 4 Nov | Close Gate 0 (SoilGrids, families); merge this addendum | Gate 0 closed |
+| 2 | Thu 5 Nov | Phase 1 for Kansas (T1.1–T1.6) + T1.8 | Gate 1 (Kansas) |
+| 3 | Fri 6 Nov | Phase 2 (incl. T2.5) + Phase 3 (incl. T3.6) for Kansas | Gates 2 and 3 (Kansas) |
+| 4 | Sat 7 Nov | Phase 4: synthetic diagnostics, then real fields + credibility | Gate 4 (Kansas) |
+| 5 | Sun 8 Nov | Phase 6 (T6.0–T6.8) + Phase 8 packs for Kansas | Gate 6: one valid pack |
+| 6 | Mon 9 Nov | Phase 9: Map, Field story, Field Card, Calendar, explainers; first deploy | **Walking skeleton live** |
+| 7 | Tue 10 Nov | Phase 7 hindcast (both modes, B0–B3) + scoreboard view; map layers (T9.11) | Gate 7 (Kansas) |
+| 8 | Wed 11 Nov | Phase 5 neighbours (Kansas) + Advisor Console + farmer corrections (T6.9); grade A becomes possible | Gate 5 |
+| 9 | Thu 12 Nov | Toulouse and Ukraine through Phases 1–8; Nile confidence-map numbers | All three regions in the app |
+| 10 | Fri 13 Nov | Read official rules; red team (T10.2); README, DATA, AI_USE, LICENSE; feature freeze | Release candidate |
+| — | 14–15 Nov | Bug fixes only, 30-second demo, submission page, References, final deploy | Submitted |
+
+**Cut lines if a day slips:** first drop T3.7 (ECOSTRESS heat check), then the Ukraine and Toulouse neighbour analysis, then the regional trend layers' year slider, then Tier 2, then forced-mode hindcast. Never drop: Current option, the five explanation parts, Kansas hindcast vs baselines, the bare-soil and vulnerability calendars, the what-if sliders, the explainers.
 
 ## 7. How to drive Claude Code
 
