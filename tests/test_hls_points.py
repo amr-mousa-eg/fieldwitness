@@ -2,7 +2,15 @@ import geopandas as gpd
 from shapely.affinity import rotate
 from shapely.geometry import box
 
-from fieldwitness.data.hls_series import PERIODS, chunk_by_field, interior_points
+from fieldwitness.data.hls_series import (
+    APPROVED_OVER_CAP,
+    CAP_BYTES,
+    PERIODS,
+    chunk_by_field,
+    download_cap,
+    interior_points,
+    projected_bytes,
+)
 from fieldwitness.resolve.pixels import interior_pixel_counts
 
 GRID = {"epsg": "EPSG:32614", "ulx": 300000.0, "uly": 4300020.0, "size_m": 109800.0}
@@ -46,3 +54,21 @@ def test_chunks_never_split_a_field_and_respect_the_cap():
     for c in chunks:
         fields = {p["category"] for p in c}
         assert all(sum(p["category"] == f for p in c) == 7 for f in fields)
+
+
+def test_download_cap_exception_is_narrow():
+    approved, cap = APPROVED_OVER_CAP["ks_t14slh"]
+    assert len(approved) == 30 and cap == 1_317.5e6
+    assert download_cap("ks_t14slh", approved) == cap
+    assert download_cap("ks_t14slh", sorted(approved)[:11]) == cap  # a subset is still approved
+    # every other download keeps the 1 GB cap
+    assert download_cap("ks_t14slh", set(approved) | {"other-task"}) == CAP_BYTES
+    assert download_cap("fr_t31tcj", approved) == CAP_BYTES
+    assert download_cap("ks_t14slh", {"other-task"}) == CAP_BYTES
+
+
+def test_projected_bytes_uses_exact_sizes_when_all_listed():
+    assert projected_bytes({}, 30) == 0.0
+    assert projected_bytes({"a": 10, "b": 30}, 4) == 80.0  # 40 listed + 2 x mean 20
+    assert projected_bytes({"a": 10, "b": 30}, 2) == 40.0
+    assert projected_bytes({"a": 600_000_000, "b": 500_000_000}, 2) > CAP_BYTES

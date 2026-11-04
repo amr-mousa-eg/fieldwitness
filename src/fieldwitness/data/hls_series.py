@@ -25,7 +25,51 @@ from fieldwitness.resolve.fields import SEED
 from fieldwitness.resolve.pixels import HLS_RES_M
 
 OUT = Path("data/appeears")
-CAP_BYTES = 1e9
+CAP_BYTES = 1e9  # CLAUDE.md rule 11: ask before downloading more than 1 GB
+
+# One-time exception approved by the user on 2026-11-04 (DECISIONS.md, "User approval: T1.5 HLS
+# download over the 1 GB cap"): the 30 Kansas T1.5 point tasks below, 1,317 MB in total from the
+# AppEEARS bundle listings. The cap is 1,317.5 MB, the largest total the approved "1,317 MB" can
+# denote; no other margin. It applies only when every task being downloaded is one of these IDs.
+APPROVED_OVER_CAP: dict[str, tuple[frozenset[str], float]] = {
+    "ks_t14slh": (
+        frozenset(
+            {
+                "f8c665a6-2a8f-4e1d-a131-886e96ae0daa",
+                "ae736313-dd01-4a81-87de-844b622f3516",
+                "88a1ef5a-f935-44a9-9b48-4dbff0d5b9dd",
+                "6a5e2bf9-9d1d-4cab-a047-176605ae0551",
+                "a5d9e797-23e5-42d7-a2f9-4dc514b98949",
+                "83e1b307-c3d6-4812-b3e9-dc28598cf4f8",
+                "74ef5285-4843-42bc-9364-bfb4b7678139",
+                "fee5b585-b517-4e6c-a33f-a273bd55ee17",
+                "7b42e912-f5b9-436a-aa97-e9229987758f",
+                "0d854682-f827-4fc5-84d7-6dfcfb3991a7",
+                "4bd9bb18-80b6-49b4-895b-c07727ba5c33",
+                "dec79915-d4a6-488b-9e4b-d829230e1557",
+                "93c4bf46-966f-4de6-93dd-510338e58518",
+                "24030ae6-cfc1-4987-b427-c19a0e05e4e0",
+                "a1c02f72-da9b-45b1-b0a9-a399996d2e42",
+                "dccdbe3f-61a6-4c7b-a951-9868339b82e4",
+                "5c9160d1-8e0b-45ff-b2fb-67d6ff85bca0",
+                "95958354-0dd4-45a3-847c-858c7e5704bc",
+                "5bd0ec8a-8530-4182-9ca9-8ce974a5a8e7",
+                "33605d4a-1fd5-490b-aa1d-a09724852301",
+                "bf8e4a17-9232-46a3-afa0-f524a89728b8",
+                "2e6530aa-b946-40da-9423-c75d8eef5a95",
+                "c5a1e1bd-aaaa-4304-863f-bf689de5b215",
+                "d541d0dd-7c1f-43dd-b593-ca21a77a541c",
+                "260dcaa7-e0c6-4315-91b6-8bb7b2eda79a",
+                "7678c27c-75d0-43a5-beab-276355148cff",
+                "ec590ff0-c310-4bbb-843b-7c8bc942e689",
+                "7219687a-961a-4eba-82c8-11a13189759a",
+                "8d47e76e-4aa8-41d6-a88f-d53f594172fb",
+                "cf441cd4-721a-49db-8850-5a24ef9c9faa",
+            }
+        ),
+        1_317.5e6,
+    ),
+}
 MAX_POINTS = 12
 MAX_COORDS = 1000  # AppEEARS: "maximum of 1,000 per request"
 PERIODS = [("2015", "09-01-2015", "12-31-2015")] + [
@@ -127,19 +171,35 @@ def submit_region(region_id: str, grid: dict) -> dict:
     return reg
 
 
+def download_cap(region_id: str, task_ids) -> float:
+    """Byte cap for downloading `task_ids`: 1 GB (CLAUDE.md rule 11), unless every ID is in the
+    user-approved exception for this region (APPROVED_OVER_CAP)."""
+    approved, cap = APPROVED_OVER_CAP.get(region_id, (frozenset(), CAP_BYTES))
+    return cap if set(task_ids) <= approved else CAP_BYTES
+
+
+def projected_bytes(sizes: dict[str, int], n_tasks: int) -> float:
+    """Total bundle size: exact listed sizes, plus their mean for each task not yet listed."""
+    if not sizes:
+        return 0.0
+    return sum(sizes.values()) + sum(sizes.values()) / len(sizes) * (n_tasks - len(sizes))
+
+
 def wait_and_download(region_id: str, poll_s: int = 120, once: bool = False) -> None:
-    """Wait for all tasks and download them; stop before further downloads if the size projected
-    from the downloaded tasks exceeds the 1 GB cap (CLAUDE.md rule 11). With `once`, make a
-    single pass (download what is done, report the rest) and return, so no process outlives an
-    unattended run."""
+    """Wait for all tasks and download them. Each pass lists every finished bundle first and
+    stops before downloading anything if the projected total of all tasks exceeds the cap
+    (`download_cap`). With `once`, make a single pass (download what is done, report the rest)
+    and return, so no process outlives an unattended run."""
     reg = json.loads(registry_path(region_id).read_text(encoding="utf-8"))
     ids = {v["task_id"]: k for k, v in reg["tasks"].items()}
+    cap = download_cap(region_id, ids)
     s = ae.login()
     try:
         sizes: dict[str, int] = {}
         pending = set(ids)
         while pending:
             counts: dict[str, int] = {}
+            done: dict[str, list[dict]] = {}
             for tid in sorted(pending):
                 t = ae.task(s, tid)
                 counts[t.get("status", "?")] = counts.get(t.get("status", "?"), 0) + 1
@@ -147,19 +207,26 @@ def wait_and_download(region_id: str, poll_s: int = 120, once: bool = False) -> 
                     print("ERROR", ids[tid], tid, t.get("error"), flush=True)
                     pending.discard(tid)
                 elif t.get("status") == "done":
-                    files = ae.bundle(s, tid)
-                    sizes[tid] = sum(f["file_size"] for f in files)
-                    projected = sum(sizes.values()) / len(sizes) * len(ids)
-                    if projected > CAP_BYTES:
-                        print(f"STOP: projected {projected / 1e6:.0f} MB > 1 GB cap", flush=True)
-                        return
-                    ae.download(s, tid, files, OUT / region_id / ids[tid])
-                    print(
-                        f"downloaded {ids[tid]}: {len(files)} files, {sizes[tid] / 1e6:.1f} MB; "
-                        f"projected total {projected / 1e6:.0f} MB",
-                        flush=True,
-                    )
-                    pending.discard(tid)
+                    done[tid] = ae.bundle(s, tid)
+                    sizes[tid] = sum(f["file_size"] for f in done[tid])
+            projected = projected_bytes(sizes, len(ids))
+            print(
+                f"bundles listed {len(sizes)}/{len(ids)}: {sum(sizes.values()) / 1e6:.1f} MB; "
+                f"projected total {projected / 1e6:.1f} MB; cap {cap / 1e6:.1f} MB",
+                flush=True,
+            )
+            if projected > cap:
+                print(
+                    f"STOP: projected {projected / 1e6:.1f} MB > cap {cap / 1e6:.1f} MB", flush=True
+                )
+                return
+            for tid, files in done.items():
+                ae.download(s, tid, files, OUT / region_id / ids[tid])
+                print(
+                    f"downloaded {ids[tid]}: {len(files)} files, {sizes[tid] / 1e6:.1f} MB",
+                    flush=True,
+                )
+                pending.discard(tid)
             if pending:
                 print(time.strftime("%H:%M:%S"), "status of remaining tasks:", counts, flush=True)
                 if once:
