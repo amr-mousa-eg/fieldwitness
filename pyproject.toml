@@ -5,6 +5,12 @@ description = "Crop rotation decision support backed by physics, a field's own s
 requires-python = ">=3.12,<3.13"
 dependencies = [
     "earthaccess>=0.19.0",
+    "geopandas>=1.2.0",
+    "h5netcdf[h5py]>=1.8.2",
+    "pyarrow>=26.0.1",
+    "requests>=2.34.2",
+    "shapely>=2.2.0",
+    "xarray>=2026.9.0",
 ]
 
 [build-system]
