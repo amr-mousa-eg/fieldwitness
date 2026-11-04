@@ -18,8 +18,9 @@ Two roles (user decision 2026-11-04, DECISIONS.md):
   as fields.
 - *Crop history* — `history_state` maps every year of a field's history to a crop state. Fallow
   and temporary grass are kept as the states "fallow" and "temporary_grass", never dropped. A
-  field is removed from history analysis only when it leaves arable use (a year coded outside
-  HCAT3 group 3301), see `stays_arable`.
+  field is removed from history analysis only when it leaves arable use: a year coded in HCAT3
+  groups 3302-3308 (grassland, permanent crops, other non-arable groups), see `stays_arable`.
+  3399 not_known_and_other and missing codes are "unknown" states and never remove a field.
 """
 
 ARABLE_PREFIX = "3301"
@@ -64,6 +65,11 @@ TEMPORARY_GRASS = "temporary_grass"
 OTHER_ARABLE = "other_arable"
 UNKNOWN = "unknown"
 
+# HCAT3 groups whose presence in any year means the field left arable use (user rule 2026-11-04):
+# 3302 pasture/meadow/grassland, 3303 permanent crops, 3304 mushrooms/energy/GM, 3305 greenhouse,
+# 3306 tree/wood/forest, 3307 peat/turf, 3308 unmaintained.
+NON_ARABLE_GROUPS = ("3302", "3303", "3304", "3305", "3306", "3307", "3308")
+
 # History-state prefixes inside 3301 (HCAT3.csv): fallow and grass leys stay in the history.
 _HISTORY_PREFIXES = {
     "330111": FALLOW,  # fallow_land_not_crop
@@ -76,14 +82,17 @@ def history_state(code) -> str | None:
     """Crop state of one field-year for crop histories.
 
     Returns the 10-digit HCAT3 code for an annual arable crop (named via crops.yaml in T1.6),
-    "fallow", "temporary_grass", "other_arable" (perennials and gardens inside 3301), "unknown"
-    for a missing code, or None when the year is outside arable use (any group other than 3301).
+    "fallow", "temporary_grass", "other_arable" (perennials and gardens inside 3301), None when
+    the year is in a non-arable group (3302-3308), and "unknown" for everything else: a missing
+    code, 3399 not_known_and_other, or a generic code above group level.
     """
     c = normalise(code)
     if c is None:
         return UNKNOWN
-    if not c.startswith(ARABLE_PREFIX):
+    if c[:4] in NON_ARABLE_GROUPS:
         return None
+    if not c.startswith(ARABLE_PREFIX):
+        return UNKNOWN
     for prefix, state in _HISTORY_PREFIXES.items():
         if c.startswith(prefix):
             return state
@@ -92,5 +101,6 @@ def history_state(code) -> str | None:
 
 def stays_arable(codes) -> bool:
     """True if a field stays in arable use every year of its history (else drop it from history
-    analysis). Fallow, temporary grass and unknown years do not remove a field."""
+    analysis). Only years in HCAT3 groups 3302-3308 remove a field; fallow, temporary grass and
+    unknown years (missing, 3399) do not."""
     return all(history_state(c) is not None for c in codes)

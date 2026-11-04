@@ -74,3 +74,18 @@ def test_history_temporary_grass_and_unknown_are_states():
 def test_field_leaving_arable_use_is_removed_from_history():
     assert history_state(GRASSLAND) is None
     assert not stays_arable([WHEAT, GRASSLAND, WHEAT])
+
+
+NOT_KNOWN = 3399000000  # not_known_and_other
+
+
+def test_history_unknown_year_does_not_remove_field():
+    assert history_state(NOT_KNOWN) == "unknown"
+    assert stays_arable([WHEAT, NOT_KNOWN, WHEAT])
+    assert stays_arable([WHEAT, None, WHEAT])
+
+
+@pytest.mark.parametrize("group_code", [3302000000, 3303040000, 3306000000, 3308000000])
+def test_non_arable_groups_remove_field(group_code):
+    assert history_state(group_code) is None
+    assert not stays_arable([WHEAT, group_code, WHEAT])

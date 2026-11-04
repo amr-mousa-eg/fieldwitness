@@ -10,11 +10,11 @@ Generated 2026-11-04 from the official HCAT3 table (https://github.com/maja601/E
   - `3301110000` fallow_land_not_crop → state **"fallow"**;
   - `33010901..` temporary_grass and `33010902..` poaceae_grasses (grass leys) → state **"temporary_grass"**;
   - other excluded classes inside 3301 (miscanthus, kitchen gardens, strawberries, asparagus, rhubarb, artichoke) → state "other_arable";
-  - missing code → state "unknown";
-  - any code outside group 3301 → the field has **left arable use**.
+  - missing code, `3399` not_known_and_other or a generic code → state "unknown" (never removes a field);
+  - a code in groups `3302`–`3308` → the field has **left arable use**.
 - Fallow and temporary grass are **never dropped** from histories. A field is removed from history analysis only if it leaves arable use (`stays_arable` is false). Example (tested): wheat → fallow → wheat stays, with states `[3301010101, fallow, 3301010101]`.
 
-Licence: derived from the EuroCrops HCAT3 table, **CC-BY-SA-4.0** (https://github.com/maja601/EuroCrops/blob/main/LICENSE); this file is shared under the same licence.
+Licence: derived from the EuroCrops HCAT3 table, **CC-BY-SA-4.0** (https://github.com/maja601/EuroCrops/blob/main/LICENSE); this file is shared under the same licence, separate from the code licence (T10.1).
 
 ## Excluded top-level groups (every class below them)
 

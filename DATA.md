@@ -43,7 +43,7 @@ Only the row groups whose `bbox` statistics intersect the query box are read (se
 
 - Table: `https://github.com/maja601/EuroCrops/blob/main/hcat_core/HCAT3.csv` (Hierarchical Crop and Agriculture Taxonomy v3, 384 classes), used for the annual-arable field definition (`fieldwitness.data.hcat`, `docs/hcat_annual_arable.md`).
 - French crop codes → HCAT3 mapping: `https://fiboa.org/code/fr/fr.csv` (referenced by the GeoParquet `crop:code_list`).
-- Licence: EuroCrops repository **CC-BY-SA-4.0** (share-alike). Attribution (citation from the repository README): Schneider, M., Schelte, T., Schmitz, F. & Körner, M. (2023), "EuroCrops: The Largest Harmonized Open Crop Dataset Across the European Union" — HCAT3 taxonomy. Derived lists in this repo (`docs/hcat_annual_arable.md`) carry the same licence.
+- Licence: EuroCrops repository **CC-BY-SA-4.0** (share-alike). Attribution (citation from the repository README): Schneider, M., Schelte, T., Schmitz, F. & Körner, M. (2023), "EuroCrops: The Largest Harmonized Open Crop Dataset Across the European Union" — HCAT3 taxonomy. **Licensing decision (user, 2026-11-04):** the derived HCAT class list lives in its own file, `docs/hcat_annual_arable.md`, under **CC-BY-SA-4.0**, separate from the code licence (chosen in T10.1). The code (`fieldwitness.data.hcat`) holds only the prefix rules and cites the HCAT3 table; it does not redistribute the table.
 
 ## Satellite data (T0.2, T0.3)
 

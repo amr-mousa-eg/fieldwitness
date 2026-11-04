@@ -156,3 +156,9 @@ Decisions that change or clarify the plan, plus an end-of-session log. Newest la
 - PLAN.md T1.6 and `docs/hcat_annual_arable.md` updated.
 - Licence note: the EuroCrops repository (HCAT3 table) is **CC-BY-SA-4.0**; `docs/hcat_annual_arable.md` is derived from it and carries that licence. Credited in DATA.md. Relevant when choosing the project LICENSE (T10.1).
 - Pushed `be73add` and `e3c47ec` (2026-11-04).
+
+## 2026-11-04 — History rule fix and HCAT licensing
+
+- `stays_arable` fix (user): HCAT3 3399 not_known_and_other, missing codes and generic codes are "unknown" history states and do **not** remove a field; only years in groups 3302–3308 (grassland, permanent crops, other non-arable groups) mean the field left arable use. Tests: wheat → 3399 → wheat kept; wheat → {3302, 3303, 3306, 3308} → wheat removed.
+- Toulouse check (`scripts/check_history_rule.py`; France RPG 2015–2024, 20 km box, histories by the parcel containing each 2024 field's representative point; reads 19–36 MB per year, cached): **5,582** fields (2024 annual arable parcels intersecting the box). Removed from history analysis: **100 with the old rule** (any year outside 3301) vs **96 with the new rule** (3302–3308 only). 400 field-years are "unknown" (no containing parcel that year, missing code or 3399).
+- **Licensing (user):** the derived HCAT class list lives in its own file, `docs/hcat_annual_arable.md`, under CC-BY-SA-4.0, separate from the code licence (to be chosen in T10.1). Recorded in DATA.md.
