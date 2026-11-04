@@ -26,6 +26,7 @@ Deliverables: (1) a public static web app (no login, offline from precomputed fi
 9. **Report negative results.** If a test or validation fails, record it in `results/` and `DECISIONS.md`. Never tune on the test set or hide a failure.
 10. **No secrets in the repo.** Earthdata credentials live in `%USERPROFILE%\_netrc` on Windows (the file earthaccess reads by default), or in environment variables. Never read or print that file. Run the secret scan before every commit.
 11. **Ask before** downloading more than 1 GB, adding a dependency not listed in `PLAN.md`, or changing a schema in `PLAN.md §3`.
+12. Never extract tokens or passwords from credential managers, keychains or config files. If an action needs authentication you don't already have through a configured tool, ask me.
 
 ## Working agreement
 
