@@ -350,6 +350,10 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 - The 16:18 run (exit 1, 30-minute wait) was the account's 5-hour usage limit ("You've hit your 5-hour limit · resets 7:20pm (Africa/Cairo)"), correctly treated as a failure; it made no commits.
 - `AUTOPILOT_PROMPT.md` §7 (user): "A run can be cut off at the turn cap at any moment, so update the handoff and commit after every finished task, not only at the end."
 
+## 2026-11-04 — Autopilot token budget (user)
+
+- Weekly usage at 86 %. `scripts/autopilot.ps1` now runs `claude -p --model sonnet` (user-approved one-time write; `--model` checked in `claude --help`). `AUTOPILOT_PROMPT.md` §1: read `CLAUDE.md`, the `## Autopilot handoff` section and only the `PLAN.md` sections for the current task and phase, not whole files; new item: "Be terse; minimise tokens; keep logs and command output short."
+
 ## Autopilot handoff
 
 **2026-11-04, autopilot run (local time not checked: date/time commands are not on the allow-list). Status: BLOCKED (`BLOCKED.md`, `uv` not on PATH).**

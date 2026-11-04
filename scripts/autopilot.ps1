@@ -66,7 +66,7 @@ while ($true) {
         break
     }
 
-    $prompt | claude -p --permission-mode acceptEdits --max-turns $maxTurns *> $runLog
+    $prompt | claude -p --model sonnet --permission-mode acceptEdits --max-turns $maxTurns *> $runLog
     $code = $LASTEXITCODE
     # claude -p exits 1 with "Error: Reached max turns (N)" at the turn cap: a normal end of a run,
     # not a failure, so it gets the short pause. Every other non-zero exit waits 30 minutes.
