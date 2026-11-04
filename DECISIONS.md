@@ -367,7 +367,7 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 
 ## Autopilot handoff
 
-**2026-11-04, run after T1.5.** Done: T2.1 (`story/smooth.py`, numpy-only Savitzky–Golay, no scipy added), T2.5 (`story/bare.py`, Kansas 200/200 fields, 0 insufficient months, mean bare share by month 0.39–0.83), params in `config/story.yaml` (all tag A team choices; cover NDVI 0.30), `tests/test_story.py`. Both ticked in PLAN. **In progress:** nothing. **Next:** T2.2 seasons/phenology (uses `smooth_series`, cover threshold from `config/story.yaml`), then T2.3, T1.8 SMAP (task `b5e1ec71-0a40-4ec7-a9ea-8c3d1c386f37`), Phase 3 T3.1–T3.5, gate-1.md. **Risk:** `uv --directory` form needs approval; use plain `uv run` from the repo root. Push of f56aa80 and this run's commit is still refused unattended; push interactively. Background tasks: none besides SMAP (not downloaded).
+**2026-11-04, run after T1.5.** Done: T2.1 (`story/smooth.py`, numpy-only Savitzky–Golay, no scipy added), T2.5 (`story/bare.py`, Kansas 200/200 fields, 0 insufficient months, mean bare share by month 0.39–0.83), params in `config/story.yaml` (all tag A team choices; cover NDVI 0.30), `tests/test_story.py`. Both ticked in PLAN. **In progress:** nothing. **Next:** T2.2 seasons/phenology (uses `smooth_series`, cover threshold from `config/story.yaml`), then T2.3, T1.8 SMAP (task `b5e1ec71-0a40-4ec7-a9ea-8c3d1c386f37`), Phase 3 T3.1–T3.5, gate-1.md. **Risk:** `uv --directory` form needs approval; use plain `uv run` from the repo root. Push worked this run (`main` at ca26373 incl. f56aa80). Background tasks: none besides SMAP (not downloaded).
 
 (Previous run, kept for history:)
 
