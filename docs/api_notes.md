@@ -232,7 +232,7 @@ Checked 2026-11-04 (docs: https://power.larc.nasa.gov/docs/services/api/temporal
 
 ## ISRIC SoilGrids — REST properties/query (Gate 0, for T1.3)
 
-Checked 2026-11-04: **service unavailable.** `GET https://rest.isric.org/soilgrids/v2.0/properties/query?lon=-100.6604&lat=38.3425&property=sand&property=clay&property=soc&property=bdod&depth=0-5cm&depth=30-60cm&value=mean&value=Q0.05&value=Q0.5&value=Q0.95` → HTTP 503 "Service Temporarily Unavailable" (nginx); the OpenAPI document and the docs page also failed (503 / timeout). ISRIC's map server `https://maps.isric.org/` answers HTTP 200 (WCS/WMS) — candidate fallback for T1.3, not yet verified from its docs. Retry REST before T1.3.
+Checked 2026-11-04: **service unavailable.** `GET https://rest.isric.org/soilgrids/v2.0/properties/query?lon=-100.6604&lat=38.3425&property=sand&property=clay&property=soc&property=bdod&depth=0-5cm&depth=30-60cm&value=mean&value=Q0.05&value=Q0.5&value=Q0.95` → HTTP 503 "Service Temporarily Unavailable" (nginx); the OpenAPI document and the docs page also failed (503 / timeout). ISRIC's map server `https://maps.isric.org/` answers HTTP 200 (WCS/WMS) — candidate fallback for T1.3, not yet verified from its docs. Retry 1 at 2026-11-04T02:56Z: no response within 90 s (curl timeout). Retry 2 scheduled for 2026-11-05; if still down, check the WCS fallback (docs and licence first).
 
 ## Kansas WIMAS (Gate 0, for T1.7)
 
@@ -240,7 +240,7 @@ Checked 2026-11-04: `https://geohydro.kgs.ku.edu/geohydro/wimas/` is public (no 
 
 ## OpenET (Gate 0)
 
-**Pending user decision on terms. Not accessed.**
+**Removed from the MVP and moved to stretch S6 (user, 2026-11-04), pending the user's reading of its terms. Not accessed.**
 
 ## HLS direct COG read via earthaccess (Gate 0; T1.5b fallback)
 
@@ -267,4 +267,4 @@ Checked 2026-11-04 with one call each, then `scripts/check_families.py`.
 
 - GBIF: `GET https://api.gbif.org/v1/species/match?name=Zea%20mays&kingdom=Plantae` → keys `usageKey, scientificName, canonicalName, rank, status, confidence, matchType, kingdom, phylum, class, order, family, genus, species` (+ `*Key`). Zea mays: usageKey 5290052, ACCEPTED, EXACT, confidence 100, family Poaceae.
 - USDA PLANTS (no key needed): `GET https://plantsservices.sc.egov.usda.gov/api/PlantSearch?searchText=<name>` → list of `{Text, Plant{Id, Symbol, ScientificName (HTML), CommonName, Rank, ...}}`; `GET .../api/PlantProfile?symbol=<SYMBOL>` → profile with `Ancestors` (family rank, e.g. "Poaceae Barnhart", authority included).
-- Results: 8 crops (scientific names from FAO-66): GBIF and USDA families agree — Poaceae (maize, sorghum, wheat, barley), Asteraceae (sunflower), Fabaceae (soybean). Rapeseed and the oat cover-crop proxy: no FAO-66 name, and GBIF vernacular search and USDA common names did not agree on a binomial → unverified.
+- Results: 8 crops (scientific names from FAO-66): GBIF and USDA families agree — Poaceae (maize, sorghum, wheat, barley), Asteraceae (sunflower), Fabaceae (soybean). Rapeseed and the oat cover-crop proxy (no FAO-66 chapter): names specified by the user, *Brassica napus* → Brassicaceae (GBIF 3042636, USDA BRNA) and *Avena sativa* → Poaceae (GBIF 2705290, USDA AVSA); GBIF and USDA agree for all 10 crops.

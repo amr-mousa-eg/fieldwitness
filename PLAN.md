@@ -37,7 +37,7 @@ Then add, in this order: Witness 3 (Tier 1) → Advisor Console → Tier 3 regio
 
 | Tier | Region | Labels | Ground truth for water |
 |---|---|---|---|
-| 1 | Kansas High Plains, one HLS MGRS tile | USDA Crop Sequence Boundaries 2017–2024 | OpenET (if access allowed), Kansas WIMAS annual volumes |
+| 1 | Kansas High Plains, one HLS MGRS tile | USDA Crop Sequence Boundaries 2017–2024 | Kansas WIMAS annual volumes (validation-only; OpenET moved to stretch S6) |
 | 2 | One French region, one HLS tile | French RPG field data 2015–2024 via `ftw/harmonized-field-data/fr` (IGN RPG, Licence Ouverte 2.0; 2015, 2016, 2018 from EuroCrops V2, CC-BY-4.0) | ECOSTRESS overpasses |
 | 3 | One unlabeled region (Nile Delta / Indian Punjab / central Ukraine) | None (inferred) + WorldCereal 2021 cross-check | ECOSTRESS overpasses |
 
@@ -145,7 +145,7 @@ Each task: **ID · goal · output · acceptance test**. Tick `[x]` and add a one
 - [x] **T0.5 Data census** *Done 2026-11-04: `fieldwitness.cli census`; `docs/census/` (6 regions + comparison); regions chosen by the user: Kansas T14SLH, Toulouse T31TCJ, central Ukraine T36UVU (Nile T36RTV showcase).* (`cli census --region <id>`). Per candidate region: field-size distribution, share of fields with ≥ 4 interior HLS pixels, clear HLS observations per season (2016–2024), label years available, ECOSTRESS overpass count. *Accept:* `docs/census/<region>.md`; **human picks the three regions** and records it in `DECISIONS.md`.
 - [x] **T0.6 Configs.** *Done 2026-11-04: `crops.yaml` 11 crops, 82 values verified from FAO-56 Tables 11/12/22/24 and 9 unverified (tag A); crop lists per region from CSB/RPG/FAOSTAT; `grading.yaml` team choices; Pydantic validation in `fieldwitness.config` (tests pass).* Fill `regions.yaml`; fill `crops.yaml` from FAO-56 Tables 11 (stage lengths), 12 (Kc, height), 22 (rooting depth, p) and 24 (seasonal Ky, reproduced from FAO-33), each with `ref:` (table numbers verified 2026-11-04; FAO-33 itself not found on fao.org). *Accept:* schema validation passes; unverified values flagged.
 
-**Gate 0:** access works for every source in Tier 1; regions chosen; configs validate.
+**Gate 0:** access works for every **essential** Tier 1 source; regions chosen; configs validate. *Rule change 2026-11-04 (user): Tier 1 sources are split into essential (HLS, POWER, CSB, SoilGrids) and validation-only (WIMAS, ECOSTRESS; OpenET moved to stretch). Gate 0 requires all essential sources; validation sources may be pending.*
 
 ### Phase 1 — Data layer (`src/fieldwitness/data/`)
 
@@ -155,7 +155,7 @@ Each task: **ID · goal · output · acceptance test**. Tick `[x]` and add a one
 - [ ] **T1.4 Field resolver** (`resolve/`). Point → polygon (CSB/EuroCrops first in Tier 1–2, FTW otherwise); `field_id` hash; interior-pixel mask on the HLS 30 m grid: fields are **annual arable crop parcels** where a crop taxonomy exists (HCAT3 rule in `fieldwitness.data.hcat`, full class list in `docs/hcat_annual_arable.md`); a pixel is interior when its centre lies ≥ 15 m (half a pixel) inside the field edge, i.e. a 15 m inward buffer (`fieldwitness.resolve.pixels`). *Changed 2026-11-04 from a one-pixel (30 m) buffer: in the T0.5 census the share of fields with ≥ 4 interior pixels at 30 m vs 15 m was Kansas 88.6 % → 98.1 % (full tile), Beauce 54 % → 61 %, Nile Delta 6.9 % → 33.6 %, Punjab 2.4 % → 18.3 %; 30 m discarded many usable fields, 15 m still keeps every counted pixel centre half a pixel from the edge (DECISIONS.md).* Scale flags. *Accept:* 20 points across regions return a polygon or "no field"; interior pixel counts match a manual check on 3 fields.
 - [ ] **T1.5 HLS-VI series.** (a) AppEEARS area request for all pilot fields per region; (b) fallback: STAC search + COG windowed reads with `rioxarray`. Use the HLS quality layer (Fmask) to drop cloud, shadow, snow. Output: per field, per date, median NDVI/EVI over interior pixels + clear-pixel fraction. *Accept:* series for all pilot fields 2016–2024; QA rule documented.
 - [ ] **T1.6 Labels.** Per field-year crop label from CSB (Tier 1, `ftw/harmonized-field-data/us_usda_cropland`, 2017–2024 edition) and the French RPG/EuroCrops V2 series (Tier 2, `ftw/harmonized-field-data/fr`); harmonise crop names to `crops.yaml`; select fields as annual arable crop parcels on the current (most recent) year (`fieldwitness.data.hcat.is_annual_arable`, same definition as T1.4); in crop histories keep fallow and temporary grass as the crop states "fallow" and "temporary_grass" (`history_state`), never dropped, and remove a field from history analysis only if it leaves arable use (`stays_arable`: a year in HCAT3 groups 3302–3308; 3399 and missing codes are "unknown" states); map the unmapped France `crop:code` values (null `hcat:code` in 2023–24). *Accept:* label table with coverage report.
-- [ ] **T1.7 Water truth (Tier 1).** Kansas WIMAS annual volumes for points of diversion in the region (verify access); OpenET seasonal ET for pilot fields if terms allow; ECOSTRESS ET overpasses (`ECO_L3T_JET` v003) for Tier 2–3 pilot fields. *Accept:* whichever sources are accessible are cached; unavailable ones are logged in `DECISIONS.md`.
+- [ ] **T1.7 Water truth (Tier 1).** Kansas WIMAS annual volumes for points of diversion in the region (verify access); (OpenET removed from the MVP 2026-11-04, see S6); ECOSTRESS ET overpasses (`ECO_L3T_JET` v003) for Tier 2–3 pilot fields. *Accept:* whichever sources are accessible are cached; unavailable ones are logged in `DECISIONS.md`.
 
 **Gate 1:** one full Tier 1 region has polygons, HLS series, weather, soil and labels on disk.
 
@@ -258,6 +258,7 @@ React + Vite + TypeScript, MapLibre GL, a chart library (Recharts or Observable 
 - [ ] S3 Prithvi-EO-2.0 crop classifier benchmark vs Random Forest (Colab GPU).
 - [ ] S4 Tier 3 neighbour effects from inferred crop histories.
 - [ ] S5 Live any-point mode via the API.
+- [ ] S6 OpenET seasonal ET as an extra water witness for Kansas fields — only if the user accepts OpenET's terms (moved from T1.7, 2026-11-04).
 
 ---
 

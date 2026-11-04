@@ -2,9 +2,9 @@
 
 Usage:  uv run python -u scripts/check_families.py
 
-Scientific names come from FAO-66 crop chapters (PDF page cited) where they exist; for crops without
-a FAO-66 chapter the name is taken only if GBIF's vernacular-name search and USDA PLANTS' search
-agree. APIs verified with one call each on 2026-11-04 (docs/api_notes.md). Prints a JSON summary.
+Scientific names come from FAO-66 crop chapters (PDF page cited) where they exist; rapeseed and the
+oat cover-crop proxy have no FAO-66 chapter, so their names were specified by the user (2026-11-04).
+APIs verified with one call each on 2026-11-04 (docs/api_notes.md). Prints a JSON summary.
 """
 
 import datetime as dt
@@ -27,8 +27,12 @@ NAMES = {
     "spring_barley": ("Hordeum vulgare", FAO66.format(149)),
     "sunflower": ("Helianthus annuus", FAO66.format(179)),
     "soybean": ("Glycine max", FAO66.format(139)),
+    "rapeseed": ("Brassica napus", "specified by the user (2026-11-04); no FAO-66 chapter"),
+    "cover_crop": (
+        "Avena sativa",
+        "specified by the user (2026-11-04) for the oat proxy; no FAO-66 chapter",
+    ),
 }
-VERNACULAR = {"rapeseed": "rapeseed", "cover_crop": "oat"}  # no FAO-66 chapter
 
 
 def gbif_match(name: str) -> dict:
@@ -65,33 +69,9 @@ def usda_species(name: str) -> dict | None:
     return None
 
 
-def vernacular_name(word: str) -> str | None:
-    """Species name for a common name, only if GBIF and USDA PLANTS agree on the binomial."""
-    r = requests.get(
-        f"{GBIF}/search",
-        params={"q": word, "qField": "VERNACULAR", "rank": "SPECIES", "limit": 20},
-        timeout=60,
-    )
-    r.raise_for_status()
-    gbif = {
-        res.get("canonicalName") for res in r.json().get("results", []) if res.get("canonicalName")
-    }
-    usda = []
-    for hit in usda_search(word):
-        p = hit.get("Plant") or {}
-        if p.get("Rank") == "Species" and (p.get("CommonName") or "").lower() == word:
-            usda.append(" ".join(re.sub(r"<[^>]+>", "", p["ScientificName"]).split()[:2]))
-    both = [n for n in usda if n in gbif]
-    return both[0] if both else None
-
-
 def main() -> None:
-    names = dict(NAMES)
-    for crop, word in VERNACULAR.items():
-        n = vernacular_name(word)
-        names[crop] = (n, f"GBIF vernacular search + USDA PLANTS common name '{word}' (agree)")
     out = {}
-    for crop, (name, src) in names.items():
+    for crop, (name, src) in NAMES.items():
         if name is None:
             out[crop] = {"error": "no agreed scientific name"}
             continue

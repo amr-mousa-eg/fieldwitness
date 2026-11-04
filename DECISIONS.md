@@ -215,3 +215,25 @@ User decisions recorded:
 | T0.1–T0.6 acceptance tests | Pass (T0.3 now including the T1.5b fallback write-up) |
 
 Gate 0 is **not fully closed**: it needs the SoilGrids retry (or an approved WCS fallback) and the user's decisions on WIMAS and OpenET. Next: those three items; Phase 1 starts after the rules gate (13 Nov).
+
+## 2026-11-04 — Gate 0 rule change, OpenET to stretch, families complete
+
+- **Gate 0 rule change (user):** Tier 1 sources are split into **essential** (HLS, POWER, CSB, SoilGrids) and **validation-only** (WIMAS, ECOSTRESS; OpenET). Gate 0 requires all essential sources; validation sources may be pending. Recorded in PLAN.md (Gate 0 line).
+- **OpenET (user):** removed from the MVP and moved to stretch S6, pending the user's reading of its terms. PLAN.md §2 table and T1.7 updated.
+- **WIMAS (user):** wait; the user will read the disclaimer and say whether read-only queries may accept it.
+- **SoilGrids:** retry 1 at 2026-11-04T02:56Z failed (no response within 90 s; earlier calls HTTP 503). Retry 2 is scheduled for 2026-11-05 ~10:07 local (session-only reminder; if the session is closed, run it manually). If still down: check `maps.isric.org` (WCS) docs and licence, verify with one small call, then use it.
+- **Blocker for soil values "for all pilot fields":** pilot fields are not selected yet (T1.4, Phase 1). Proposal for the user: fetch soil values once the pilot-field list exists, or now for the census sample boxes. Not fetched yet.
+- **Families complete:** rapeseed *Brassica napus* L. → Brassicaceae (GBIF usageKey 3042636, EXACT, ACCEPTED; USDA BRNA) and oat proxy *Avena sativa* L. → Poaceae (GBIF 2705290; USDA AVSA); names specified by the user, GBIF and USDA agree. Now 10 of 11 crop entries have a verified family (fallow has none). `scripts/check_families.py` no longer uses vernacular search.
+
+**Gate 0 re-run (new rule, 2026-11-04 02:57 UTC):**
+
+| Condition | Status |
+|---|---|
+| Essential Tier 1 sources | HLS ✅ (CMR search, AppEEARS, direct COG) · POWER ✅ · CSB ✅ · **SoilGrids ❌ (REST down; retry 2 tomorrow, then WCS fallback)** |
+| Validation-only sources (may be pending) | WIMAS ⏸ (disclaimer, user deciding) · ECOSTRESS ✅ in CMR (v002/v003 counts; no data read) · OpenET → stretch |
+| Regions chosen | ✅ |
+| Configs validate | ✅ (47 tests) |
+| T0.1–T0.6 acceptance | ✅ |
+
+Gate 0 stays **open on one item: SoilGrids**.
+

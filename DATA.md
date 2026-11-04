@@ -61,7 +61,7 @@ Only the row groups whose `bbox` statistics intersect the query box are read (se
 ## Weather, soil, water use and taxonomy (Gate 0 access checks)
 
 - **NASA POWER** daily point API, community AG: `https://power.larc.nasa.gov/api/temporal/daily/point` (parameters T2M_MAX, T2M_MIN, RH2M, WS2M, ALLSKY_SFC_SW_DWN, PRECTOTCORR). Verified 2026-11-04. Terms and citation to be read from the POWER site before T10.1 (not yet read).
-- **ISRIC SoilGrids** REST `properties/query`: unavailable on 2026-11-04 (HTTP 503); licence to be read from ISRIC before use (T1.3).
+- **ISRIC SoilGrids** REST `properties/query`: unavailable on 2026-11-04 (HTTP 503 at 02:3x UTC; no response within 90 s at 02:56 UTC); retry 2 scheduled 2026-11-05; WCS fallback (`maps.isric.org`) to be checked after that, docs and licence first.
 - **Kansas WIMAS** (Kansas Geological Survey / Kansas Department of Agriculture, Division of Water Resources): `https://geohydro.kgs.ku.edu/geohydro/wimas/`; requires accepting a disclaimer; not used yet (user decision pending).
-- **OpenET**: pending user decision on terms; not accessed.
+- **OpenET**: removed from the MVP and moved to stretch S6 (2026-11-04), pending the user's reading of its terms; not accessed.
 - **GBIF Backbone Taxonomy** via `https://api.gbif.org/v1/species/match` and **USDA NRCS PLANTS Database** via `https://plantsservices.sc.egov.usda.gov/api/`: crop families in `config/crops.yaml` (accessed 2026-11-04). Licence and citation text to be read from both sites before T10.1 (not yet read).

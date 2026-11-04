@@ -173,7 +173,7 @@ crops:
     stage_lengths_days:
       fr_toulouse_t31tcj: {value: null, verified: false, note: "FAO-56 Table 11 has no rapeseed row; UNVERIFIED (tag A)."}
       ua_central_t36uvu: {value: null, verified: false, note: "FAO-56 Table 11 has no rapeseed row; UNVERIFIED (tag A)."}
-    family: {value: null, verified: false, note: "No scientific name from FAO-66, and GBIF vernacular search and USDA PLANTS common names did not agree on one (2026-11-04); UNVERIFIED."}
+    family: {value: Brassicaceae, verified: true, ref: {source: gbif_backbone, usage_key: 3042636, scientific_name: "Brassica napus L.", match_type: EXACT, name_source: "specified by the user (2026-11-04); no FAO-66 chapter", usda_symbol: BRNA, usda_family_agrees: true, accessed: 2026-11-04}}
 
   soybean:
     name: Soybeans
@@ -215,3 +215,4 @@ crops:
     p: {value: 0.55, ref: {source: fao56_ch8, table: 22, row: "Oats", note: "for ET ≈ 5 mm/day"}, verified: true, choice: "Proxy crop (A)."}
     ky: {value: null, verified: false, note: "No yield for a cover crop; RYI not computed (A)."}
     stage_lengths_days: {}  # cover-crop windows are set per region in T6.1 (A)
+    family: {value: Poaceae, verified: true, ref: {source: gbif_backbone, usage_key: 2705290, scientific_name: "Avena sativa L.", match_type: EXACT, name_source: "specified by the user (2026-11-04) for the oat proxy; no FAO-66 chapter", usda_symbol: AVSA, usda_family_agrees: true, accessed: 2026-11-04}}
