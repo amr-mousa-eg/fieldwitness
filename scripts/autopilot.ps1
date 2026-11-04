@@ -1,7 +1,8 @@
 # FieldWitness autopilot loop
 # Runs Claude Code non-interactively, one task per run, again and again.
 # Stops when AUTOPILOT_STOP or BLOCKED.md exists in the repo root.
-# Waits 30 minutes after a failed run (for example a usage limit), then retries.
+# Waits 30 minutes after a failed run (for example a usage limit), then retries. A run cut off at
+# the turn cap ("Reached max turns" in its log) is a normal end: status "maxturns", 1-minute pause.
 # Stops (writes BLOCKED.md) if AUTOPILOT_PROMPT.md is missing or empty.
 #
 # Start from the repo root:
@@ -35,7 +36,7 @@ if (-not (Test-Path $runsCsv)) { Add-Content $runsCsv 'start,end,exit_code,next_
 $promptPath = Join-Path $repo 'AUTOPILOT_PROMPT.md'
 
 $failWaitMin = 30   # wait after a failed run (usage limit, network, crash)
-$okWaitMin   = 1    # short pause between successful runs
+$okWaitMin   = 1    # short pause between successful runs (and runs cut off at the turn cap)
 $maxTurns    = $MaxTurns
 
 while ($true) {
@@ -67,9 +68,15 @@ while ($true) {
 
     $prompt | claude -p --permission-mode acceptEdits --max-turns $maxTurns *> $runLog
     $code = $LASTEXITCODE
+    # claude -p exits 1 with "Error: Reached max turns (N)" at the turn cap: a normal end of a run,
+    # not a failure, so it gets the short pause. Every other non-zero exit waits 30 minutes.
+    $status = "$code"
+    if ($code -ne 0 -and (Select-String -Path $runLog -SimpleMatch 'Reached max turns' -Quiet)) {
+        $status = 'maxturns'
+    }
 
     $sleepMin = $okWaitMin
-    if ($code -ne 0) { $sleepMin = $failWaitMin }
+    if ($code -ne 0 -and $status -ne 'maxturns') { $sleepMin = $failWaitMin }
     if (Test-Path 'AUTOPILOT_WAIT') {
         $requested = (Get-Content 'AUTOPILOT_WAIT' -Raw).Trim()
         Remove-Item 'AUTOPILOT_WAIT' -Force
@@ -78,11 +85,11 @@ while ($true) {
 
     $end = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
     if ($Once) {
-        Add-Content $runsCsv "$start,$end,$code,0"
-        Write-Host "[$end] run ended with exit code $code - -Once given, exiting."
+        Add-Content $runsCsv "$start,$end,$status,0"
+        Write-Host "[$end] run ended with status $status - -Once given, exiting."
         break
     }
-    Add-Content $runsCsv "$start,$end,$code,$sleepMin"
-    Write-Host "[$end] run ended with exit code $code - sleeping $sleepMin min"
+    Add-Content $runsCsv "$start,$end,$status,$sleepMin"
+    Write-Host "[$end] run ended with status $status - sleeping $sleepMin min"
     Start-Sleep -Seconds ($sleepMin * 60)
 }

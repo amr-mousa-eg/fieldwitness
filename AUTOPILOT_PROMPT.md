@@ -51,6 +51,8 @@ If the only thing left to do is wait for background tasks (nothing else has read
 
 ## 7. End of every run (always, even when blocked)
 
+A run can be cut off at the turn cap at any moment, so update the handoff and commit after every finished task, not only at the end.
+
 1. Commit finished work (and push if green).
 2. Replace the `## Autopilot handoff` section at the end of `DECISIONS.md` with: date/time, what this run did, what is in progress, background task IDs and their status, the next task, and any risk the user should know. Commit it.
 3. End with a 3-line summary.

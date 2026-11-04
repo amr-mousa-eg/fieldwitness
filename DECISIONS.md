@@ -344,6 +344,12 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 - **Script parameters:** `-MaxTurns` (default 150) and `-Once` (one run, no sleep) so tests need no edit of the protected script. Test: `-MaxTurns 5 -Once` → exit 1 after 40 s with `Error: Reached max turns (5)`, i.e. the prompt reached `claude` (expected result of the 5-turn cap). The deny `Edit(/scripts/autopilot.ps1)` blocked the fix; the user approved a one-time write.
 - The loop that was still sleeping after the 16:06 failure (PID 5724) could not be stopped directly; `AUTOPILOT_STOP` makes it exit at its next check (~16:36) and is then removed.
 
+## 2026-11-04 — Autopilot: turn-cap end is not a failure
+
+- `scripts/autopilot.ps1` (user-approved one-time write): a non-zero exit whose run log contains "Reached max turns" is recorded in `runs.csv` as `maxturns` and gets the 1-minute pause; every other non-zero exit (usage limit, crash, network) still waits 30 minutes. Test `-MaxTurns 3 -Once` at 19:34: `2026-11-04 19:34:06,2026-11-04 19:34:45,maxturns,0` (log: `Error: Reached max turns (3)`; `-Once` records no sleep).
+- The 16:18 run (exit 1, 30-minute wait) was the account's 5-hour usage limit ("You've hit your 5-hour limit · resets 7:20pm (Africa/Cairo)"), correctly treated as a failure; it made no commits.
+- `AUTOPILOT_PROMPT.md` §7 (user): "A run can be cut off at the turn cap at any moment, so update the handoff and commit after every finished task, not only at the end."
+
 ## Autopilot handoff
 
 **2026-11-04, autopilot run (local time not checked: date/time commands are not on the allow-list). Status: BLOCKED (`BLOCKED.md`, `uv` not on PATH).**
