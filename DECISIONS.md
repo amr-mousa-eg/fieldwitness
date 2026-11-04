@@ -396,6 +396,10 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 
 ## Autopilot handoff
 
+**2026-11-04, autopilot run (T1.8 close).** Done: T1.8 ticked. SMAP task `b5e1ec71-0a40-4ec7-a9ea-8c3d1c386f37` was done on the server; only the 9 MB results CSV was downloaded (sha256 ok) to `data/context/smap/`. `context.smap_build` → `data/context/smap_monthly.parquet` (351 rows, 3 regions, monthly mean + anomaly vs 2015–2024 climatology, tag D, 9 km scale flag; the base_end argument keeps hindcast use leak-free). Response shape in `docs/api_notes.md`. 127 tests pass, ruff clean. Note: slope exists for Kansas fields only (no fields yet for the other regions). In progress: nothing. Background: none. Next: write `docs/gates/gate-1.md` (T2.2 FAILED 78.3% vs 90%; SoilGrids tag-A vs real per property; irrigated/rainfed stratification not done; 12-pixel sampling: 15 of 200 fields have <12 interior pixels), then T2.3 / T3.7 (stretch). Risk: Gate 1 cannot be fully green because of T2.2.
+
+(Previous entry:)
+
 **2026-11-04, autopilot run (T3.6 close).** Done: T3.6 ticked. `physics/vulnerability.py` (heat in mid stage, frost after green-up, Ks<1 days, extreme rain on bare soil; share of years per month; `hazard_table`) + `config/vulnerability.yaml` + `tests/test_vulnerability.py`. 126 tests pass, ruff clean. UNVERIFIED (A): heat Tmax thresholds (35/35/32 °C placeholders, no paper read), green-up = end of ini stage, rain quantile over all days. Not done: real-field run, mapping to `CropVulnerability` schema (T8.1). In progress: nothing. Background: SMAP task `b5e1ec71-0a40-4ec7-a9ea-8c3d1c386f37` not downloaded. Next: T1.8 (SMAP/GRACE/SRTM; verify APIs first), then T3.7 (stretch) / gate-1.md. Risk: Gate 1 must report T2.2 as FAILED (78.3% vs 90%).
 
 (Previous entry:)
