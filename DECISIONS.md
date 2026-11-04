@@ -369,7 +369,26 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 
 `story/seasons.py` (amplitude-threshold seasons; params in `config/story.yaml`, tag A, UNVERIFIED) and `story/check_seasons.py` (pre-registered rule in its docstring). Run once on 30 seeded Kansas fields (10 wheat, 10 summer-crop, 10 fallow; 240 field-years): **74.6% match, target 90%**. By crop: maize 0.92, sorghum 0.92, winter wheat 0.64, fallow 0.65. Expected vs detected: wheat 21/80 gave 2 seasons (6 gave 0); fallow 25/72 gave 1 season (weeds/volunteer growth, so the "0 seasons" expectation may be too strict). No parameter was changed after seeing this. Honest fix needs a separate development set of fields (not these 30) and a user decision on the fallow expectation.
 
+## 2026-11-04 — T2.2 acceptance failure: user decision (BLOCKED.md resolved)
+
+- **Result on record:** the pre-registered T2.2 season-count check on the first 30 labelled Kansas fields gave **74.6 %** (target 90 %): maize/sorghum 0.92, winter wheat 0.64 (21 of 80 field-years split into 2 seasons), fallow 0.65 (25 of 72 showed a season). This is the **first pre-registered T2.2 result** and stays on record in `results/story/ks_seasons_check.json`; it must not be overwritten or edited (CLAUDE.md rule 9).
+- **Decision (user, Option 1):**
+  1. **Winter-dormancy rule, defined from agronomy, not tuned:** two green-ups separated by a Dec–Feb dip that stays above the bare-soil level are one season. The harvest-year rule is unchanged (season year = calendar year of EOS).
+  2. **Fallow expectation:** "no crop-like season". A low-amplitude green-up on a fallow field-year is weeds or volunteers, not a crop season. The amplitude threshold that separates the two is set on the dev set.
+  3. **Protocol:** tune on a **seeded dev set of 30 other labelled fields**, then run the acceptance check **once** on a **fresh test set of 30**. The original 30, the dev set and the test set come from **different 10 km blocks** (no block shared between any two sets; seed 20261114). Report all three results (original 74.6 %, dev, test).
+  4. **Target stays 90 %.** If the fresh test set still misses, report it as a negative result in `results/` and here, and continue; no further tuning.
+  5. Meanwhile the loop may continue Phase 3 (T3.1–T3.5) and T1.8 SMAP, which do not depend on T2.2.
+
 ## Autopilot handoff
+
+**2026-11-04, user decision on T2.2 (interactive session; `BLOCKED.md` deleted).** See the log entry "T2.2 acceptance failure: user decision" above.
+
+- **Next, in this order:**
+  1. **T2.2 re-check per the decision:** keep `results/story/ks_seasons_check.json` (74.6 %, first pre-registered result) untouched; write new results to new files (e.g. `results/story/ks_seasons_dev.json`, `results/story/ks_seasons_test.json`). Implement the winter-dormancy rule (Dec–Feb dip above the bare-soil level = same season) and the fallow rule ("no crop-like season"; amplitude threshold set on dev only). Draw the dev and test sets (30 labelled fields each, seed 20261114) from 10 km blocks used by neither the original 30 nor each other; record the block lists. Tune only on dev; run test once; report all three results. Tick T2.2 only if test ≥ 90 %; otherwise log a negative result and move on (no further tuning, no `BLOCKED.md` for this).
+  2. **Phase 3** T3.1–T3.5 and **T1.8 SMAP** (download + monthly anomaly) may run before or after item 1.
+  3. Gate 1 review items (unchanged, see below).
+
+(Earlier handoff notes below, kept for history.)
 
 **2026-11-04, run after T2.1/T2.5.** Done: T2.2 code + 4 tests (98 pass, ruff clean). T2.2 acceptance FAILED (see entry above), so T2.2 is not ticked and `BLOCKED.md` is written. In progress: nothing; uncommitted work is committed. Background: SMAP task `b5e1ec71-0a40-4ec7-a9ea-8c3d1c386f37` still not downloaded. Next after the user decides: T1.8 SMAP, Phase 3 T3.1–T3.5 (need no T2.2), gate-1.md. Risk: T2.3 and T2.2 acceptance depend on the decision.
 
