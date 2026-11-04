@@ -250,4 +250,38 @@ Gate 0 stays **open on one item: SoilGrids**.
 ## 2026-11-04 — Phase 1 (Kansas) log
 
 - **T1.4 done.** `fieldwitness.cli pilot-fields --region ks_t14slh`: CSB 2024 tile read (est. 43.2 MB, cached in `data/fields/`), 9,905 candidates (annual arable on 2024, crop in the rotation options, ≥ 4 interior pixels at 15 m, representative point in the tile) → 200 pilot fields: winter wheat 89, sorghum 57, maize 54 (proportional quotas, min 40), one field per 10 km block per round, seed 20261114; 116 of 121 blocks covered; median 31.9 ha, 310 interior pixels; no HLS scale flag. No irrigation stratum: the WorldCereal 2021 irrigation layer (CC-BY-4.0) needs a Terrascope login, which is beyond the allowed credentials. Known bias: fields fallow in 2024 cannot be selected (selection on the current year), so wheat–fallow fields enter only via their wheat years.
+- **T1.5 route change (forced by AppEEARS limits, logged per working mode):** area tasks are capped by output files (probe: 1 field × 1 year accepted, 5 fields × 1 year 9.5 % over, 200 fields × 4 months 836 % over → ~4 field-years per task, ~450 tasks for Kansas); direct COG reads would be ~36 GB (striped VI COGs, fields across the whole tile). AppEEARS **point** tasks are capped at **1,000 coordinates per request** and by values (4,599 points × 9 years was 2,492 % over; 1,000 points × 1 year accepted). Chosen: each pilot field sampled at **up to 12 seeded-random interior HLS pixel centres** (15 m rule; all of them when fewer) → 2,325 points, grouped by field into 3 chunks of ≤ 1,000, one task per chunk per year (Sep–Dec 2015, then 2016–2024) = 30 tasks. Field value per date = median over its clear sampled pixels (PLAN.md T1.5 said "median over interior pixels": now a sample of up to 12). Accepted probe tasks were deleted (`DELETE /task/{id}`).
+- **T1.5 AppEEARS tasks submitted 2026-11-04** (registry `data/appeears/ks_t14slh_tasks.json`, points `data/appeears/ks_t14slh_points.json`). Resume: `uv run python -u -m fieldwitness.cli hls-wait --region ks_t14slh` (logs in again, waits, downloads with sha256 checks and the 1 GB guard, logs out).
+  - `2015_c0`: `f8c665a6-2a8f-4e1d-a131-886e96ae0daa` (09-01-2015 → 12-31-2015, 995 points)
+  - `2015_c1`: `ae736313-dd01-4a81-87de-844b622f3516` (09-01-2015 → 12-31-2015, 999 points)
+  - `2015_c2`: `88a1ef5a-f935-44a9-9b48-4dbff0d5b9dd` (09-01-2015 → 12-31-2015, 331 points)
+  - `2016_c0`: `6a5e2bf9-9d1d-4cab-a047-176605ae0551` (01-01-2016 → 12-31-2016, 995 points)
+  - `2016_c1`: `a5d9e797-23e5-42d7-a2f9-4dc514b98949` (01-01-2016 → 12-31-2016, 999 points)
+  - `2016_c2`: `83e1b307-c3d6-4812-b3e9-dc28598cf4f8` (01-01-2016 → 12-31-2016, 331 points)
+  - `2017_c0`: `74ef5285-4843-42bc-9364-bfb4b7678139` (01-01-2017 → 12-31-2017, 995 points)
+  - `2017_c1`: `fee5b585-b517-4e6c-a33f-a273bd55ee17` (01-01-2017 → 12-31-2017, 999 points)
+  - `2017_c2`: `7b42e912-f5b9-436a-aa97-e9229987758f` (01-01-2017 → 12-31-2017, 331 points)
+  - `2018_c0`: `0d854682-f827-4fc5-84d7-6dfcfb3991a7` (01-01-2018 → 12-31-2018, 995 points)
+  - `2018_c1`: `4bd9bb18-80b6-49b4-895b-c07727ba5c33` (01-01-2018 → 12-31-2018, 999 points)
+  - `2018_c2`: `dec79915-d4a6-488b-9e4b-d829230e1557` (01-01-2018 → 12-31-2018, 331 points)
+  - `2019_c0`: `93c4bf46-966f-4de6-93dd-510338e58518` (01-01-2019 → 12-31-2019, 995 points)
+  - `2019_c1`: `24030ae6-cfc1-4987-b427-c19a0e05e4e0` (01-01-2019 → 12-31-2019, 999 points)
+  - `2019_c2`: `a1c02f72-da9b-45b1-b0a9-a399996d2e42` (01-01-2019 → 12-31-2019, 331 points)
+  - `2020_c0`: `dccdbe3f-61a6-4c7b-a951-9868339b82e4` (01-01-2020 → 12-31-2020, 995 points)
+  - `2020_c1`: `5c9160d1-8e0b-45ff-b2fb-67d6ff85bca0` (01-01-2020 → 12-31-2020, 999 points)
+  - `2020_c2`: `95958354-0dd4-45a3-847c-858c7e5704bc` (01-01-2020 → 12-31-2020, 331 points)
+  - `2021_c0`: `5bd0ec8a-8530-4182-9ca9-8ce974a5a8e7` (01-01-2021 → 12-31-2021, 995 points)
+  - `2021_c1`: `33605d4a-1fd5-490b-aa1d-a09724852301` (01-01-2021 → 12-31-2021, 999 points)
+  - `2021_c2`: `bf8e4a17-9232-46a3-afa0-f524a89728b8` (01-01-2021 → 12-31-2021, 331 points)
+  - `2022_c0`: `2e6530aa-b946-40da-9423-c75d8eef5a95` (01-01-2022 → 12-31-2022, 995 points)
+  - `2022_c1`: `c5a1e1bd-aaaa-4304-863f-bf689de5b215` (01-01-2022 → 12-31-2022, 999 points)
+  - `2022_c2`: `d541d0dd-7c1f-43dd-b593-ca21a77a541c` (01-01-2022 → 12-31-2022, 331 points)
+  - `2023_c0`: `260dcaa7-e0c6-4315-91b6-8bb7b2eda79a` (01-01-2023 → 12-31-2023, 995 points)
+  - `2023_c1`: `7678c27c-75d0-43a5-beab-276355148cff` (01-01-2023 → 12-31-2023, 999 points)
+  - `2023_c2`: `ec590ff0-c310-4bbb-843b-7c8bc942e689` (01-01-2023 → 12-31-2023, 331 points)
+  - `2024_c0`: `7219687a-961a-4eba-82c8-11a13189759a` (01-01-2024 → 12-31-2024, 995 points)
+  - `2024_c1`: `8d47e76e-4aa8-41d6-a88f-d53f594172fb` (01-01-2024 → 12-31-2024, 999 points)
+  - `2024_c2`: `cf441cd4-721a-49db-8850-5a24ef9c9faa` (01-01-2024 → 12-31-2024, 331 points)
+- **T1.1 done.** `as_of` guard via a context variable; readers clip requests with `limit_end` and call `guard`; the only exception is `forcing_weather()` for weather readers (Phase 7 forced mode), tested. Registered readers so far: `power`, `labels` (HLS reader joins with T1.5).
+- **T1.2 done.** POWER daily point client; one 2001–2024 call per pilot point (rounded to 0.01°; the POWER docs we read give no grid size, so no grid-cell key). Pilot-field weather caching runs in the background.
 

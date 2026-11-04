@@ -1,0 +1,106 @@
+{
+ "type": "Feature",
+ "geometry": {
+  "type": "Point",
+  "coordinates": [
+   -100.66,
+   38.343,
+   852.2
+  ]
+ },
+ "properties": {
+  "parameter": {
+   "T2M_MAX": {
+    "20010101": -2.42,
+    "20010102": 5.08,
+    "20010103": 11.08,
+    "20220101": -8.27,
+    "20220102": 3.55,
+    "20220103": 8.91
+   },
+   "T2M_MIN": {
+    "20010101": -10.5,
+    "20010102": -8.84,
+    "20010103": -4.08,
+    "20220101": -12.79,
+    "20220102": -13.26,
+    "20220103": -5.51
+   },
+   "RH2M": {
+    "20010101": 84.25,
+    "20010102": 82.96,
+    "20010103": 63.75,
+    "20220101": 66.82,
+    "20220102": 51.18,
+    "20220103": 49.44
+   },
+   "WS2M": {
+    "20010101": 2.08,
+    "20010102": 2.19,
+    "20010103": 3.13,
+    "20220101": 6.06,
+    "20220102": 2.29,
+    "20220103": 2.64
+   },
+   "ALLSKY_SFC_SW_DWN": {
+    "20010101": 4.19,
+    "20010102": 9.51,
+    "20010103": 10.55,
+    "20220101": 3.92,
+    "20220102": 10.62,
+    "20220103": 10.6
+   },
+   "PRECTOTCORR": {
+    "20010101": 0.0,
+    "20010102": 0.05,
+    "20010103": 0.0,
+    "20220101": 5.21,
+    "20220102": 0.0,
+    "20220103": 0.04
+   }
+  }
+ },
+ "header": {
+  "title": "NASA/POWER Source Native Resolution Daily Data",
+  "api": {
+   "version": "v2.10.2",
+   "name": "POWER Daily API"
+  },
+  "sources": [
+   "MERRA2",
+   "SYN1DEG",
+   "POWER"
+  ],
+  "fill_value": -999.0,
+  "time_standard": "LST",
+  "start": "20010101",
+  "end": "20241231"
+ },
+ "messages": [],
+ "parameters": {
+  "T2M_MAX": {
+   "units": "C",
+   "longname": "Temperature at 2 Meters Maximum"
+  },
+  "T2M_MIN": {
+   "units": "C",
+   "longname": "Temperature at 2 Meters Minimum"
+  },
+  "RH2M": {
+   "units": "%",
+   "longname": "Relative Humidity at 2 Meters"
+  },
+  "WS2M": {
+   "units": "m/s",
+   "longname": "Wind Speed at 2 Meters"
+  },
+  "ALLSKY_SFC_SW_DWN": {
+   "units": "MJ/m^2/day",
+   "longname": "All Sky Surface Shortwave Downward Irradiance"
+  },
+  "PRECTOTCORR": {
+   "units": "mm/day",
+   "longname": "Precipitation Corrected"
+  }
+ }
+}
