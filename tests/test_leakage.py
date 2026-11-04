@@ -9,6 +9,7 @@ from pathlib import Path
 import pandas as pd
 import pytest
 
+import fieldwitness.data.context  # noqa: F401  (registers its reader)
 import fieldwitness.data.labels  # noqa: F401  (registers its reader)
 import fieldwitness.data.power  # noqa: F401  (registers its reader)
 from fieldwitness.data.asof import READERS, LeakageError, as_of, forcing_weather, guard
@@ -33,7 +34,17 @@ def _labels_table():
     )
 
 
+def _grace_table():
+    return pd.DataFrame(
+        {
+            "time": pd.to_datetime(["2021-06-16", "2021-12-16", "2022-06-16"]),
+            "lwe_cm": [1.0, 2.0, 3.0],
+        }
+    )
+
+
 CASES = {
+    "grace": lambda fn: list(pd.to_datetime(fn(table=_grace_table())["time"])),
     "power": lambda fn: fn(-100.66, 38.34, end=dt.date(2024, 12, 31), loader=_power_loader).index,
     "labels": lambda fn: [dt.date(y, 12, 31) for y in fn(table=_labels_table())["year"]],
 }

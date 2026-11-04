@@ -268,3 +268,20 @@ Checked 2026-11-04 with one call each, then `scripts/check_families.py`.
 - GBIF: `GET https://api.gbif.org/v1/species/match?name=Zea%20mays&kingdom=Plantae` → keys `usageKey, scientificName, canonicalName, rank, status, confidence, matchType, kingdom, phylum, class, order, family, genus, species` (+ `*Key`). Zea mays: usageKey 5290052, ACCEPTED, EXACT, confidence 100, family Poaceae.
 - USDA PLANTS (no key needed): `GET https://plantsservices.sc.egov.usda.gov/api/PlantSearch?searchText=<name>` → list of `{Text, Plant{Id, Symbol, ScientificName (HTML), CommonName, Rank, ...}}`; `GET .../api/PlantProfile?symbol=<SYMBOL>` → profile with `Ancestors` (family rank, e.g. "Poaceae Barnhart", authority included).
 - Results: 8 crops (scientific names from FAO-66): GBIF and USDA families agree — Poaceae (maize, sorghum, wheat, barley), Asteraceae (sunflower), Fabaceae (soybean). Rapeseed and the oat cover-crop proxy (no FAO-66 chapter): names specified by the user, *Brassica napus* → Brassicaceae (GBIF 3042636, USDA BRNA) and *Avena sativa* → Poaceae (GBIF 2705290, USDA AVSA); GBIF and USDA agree for all 10 crops.
+
+## SoilGrids 2.0 via WCS (T1.3; REST fallback)
+
+Checked 2026-11-04 (docs: https://docs.isric.org/globaldata/soilgrids/wcs.html; units table: https://docs.isric.org/globaldata/soilgrids/SoilGrids_faqs_01.html; licence: ISRIC data policy v2024-1, CC-BY 4.0 for SoilGrids).
+
+- GetCapabilities: `GET https://maps.isric.org/mapserv?map=/map/<property>.map&SERVICE=WCS&VERSION=2.0.0&REQUEST=GetCapabilities` → 30 coverage ids per property: `<property>_<depth>_<stat>` with depths 0-5cm, 5-15cm, 15-30cm, 30-60cm, 60-100cm, 100-200cm and stats Q0.05, Q0.5, Q0.95, mean, uncertainty.
+- GetCoverage: `SERVICE=WCS&VERSION=2.0.1&REQUEST=GetCoverage&COVERAGEID=sand_0-5cm_mean&FORMAT=GEOTIFF_INT16&SUBSET=X(w,e)&SUBSET=Y(s,n)&SUBSETTINGCRS=http://www.opengis.net/def/crs/EPSG/0/4326&OUTPUTCRS=http://www.opengis.net/def/crs/EPSG/0/4326` → `image/tiff`, int16, EPSG:4326, ≈ 0.0023° cells (server reprojects from the native EPSG:152160 Homolosine 250 m grid); ≈ 200 KB for the Kansas tile.
+- DescribeCoverage: `swe:nilValues` is empty (no declared nodata). Raw 0 appears outside soil (water/urban); we mask a cell when the property's `mean` coverage is 0 there.
+- Units (mapped → conventional): bdod cg/cm3 ÷ 100 → kg/dm3; clay, sand, silt g/kg ÷ 10 → %; soc dg/kg ÷ 10 → g/kg.
+
+## Context datasets (T1.8)
+
+Checked 2026-11-04 in CMR, then downloaded with earthaccess.
+
+- NASADEM_HGT v001 (`C2763264762-LPCLOUD`): granules `NASADEM_HGT_n37w101`, `n37w102`, `n38w101`, `n38w102` (≈ 6.5 MB zip each) cover T14SLH; each zip holds `<tile>.hgt`, `.num`, `.swb`; read via `zip://…!<tile>.hgt` (GDAL SRTMHGT). Also available: `NASADEM_SC` (slope/curvature), not used.
+- TELLUS_GRAC-GRFO_MASCON_CRI_GRID_RL06.3_V4 (`C3195527175-POCLOUD`): one granule `GRCTellus.JPL.200204_202608.GLO.RL06.3M.MSCNv04CRI.nc` (46 MB). Dims time 260 × lat 360 × lon 720 (0.5°, lon 0.25–359.75). Variables: `lwe_thickness` (cm), `uncertainty`, `land_mask`, `scale_factor` ("to be used with mascon solution that has the CRI filter applied; based on CLM data from 2002-2009"), `mascon_ID`, `GAD`, bounds. Global attributes: `time_mean_removed` 2004.000–2009.999; licence link https://science.nasa.gov/earth-science/earth-science-data/data-information-policy.
+- SPL4SMGP v008 (`C3480440870-NSIDC_CPRD`): 3-hourly 9 km granules; used through AppEEARS product `SPL4SMGP.008`, layer `Geophysical_Data_sm_rootzone` ("Root zone soil moisture (0-100 cm)", m^3/m^3, fill −9999).

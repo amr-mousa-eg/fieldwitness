@@ -47,3 +47,14 @@ def test_conversion_factors_match_isric_table():
     assert PROPERTIES["bdod"] == ("cg/cm3", 100, "kg/dm3")
     assert PROPERTIES["soc"] == ("dg/kg", 10, "g/kg")
     assert all(PROPERTIES[p] == ("g/kg", 10, "%") for p in ("clay", "sand", "silt"))
+
+
+def test_zero_in_a_quantile_is_kept_when_the_mean_has_data(tmp_path):
+    q05 = np.array([[0, 0, 5, 5]] * 4)  # genuine zeros in a lower quantile
+    mean = np.array([[10, 10, 0, 0]] * 4)  # right half is no-data (mean = 0)
+    _tif(tmp_path / "q.tif", q05)
+    _tif(tmp_path / "m.tif", mean)
+    left = gpd.GeoDataFrame(geometry=[box(0, 0, 0.5, 1.0)], crs="EPSG:4326")
+    right = gpd.GeoDataFrame(geometry=[box(0.5, 0, 1.0, 1.0)], crs="EPSG:4326")
+    assert field_medians(tmp_path / "q.tif", left, nodata_from=tmp_path / "m.tif") == [(0.0, 8)]
+    assert field_medians(tmp_path / "q.tif", right, nodata_from=tmp_path / "m.tif") == [(None, 0)]

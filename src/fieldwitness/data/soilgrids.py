@@ -7,8 +7,9 @@ wcs.html; GetCapabilities verified). Licence: CC-BY 4.0 for SoilGrids per the IS
 bdod cg/cm3 /100 -> kg/dm3; clay, sand, silt g/kg /10 -> %; soc dg/kg /10 -> g/kg.
 
 SoilGrids is 250 m: context/forcing only, never a field-level claim (CLAUDE.md rule 5); values
-are tag E. The coverages declare no nil value; a raw value of 0 is treated as missing (tag A
-assumption: 0 % sand or 0 g/kg SOC is implausible on cropland; DECISIONS.md).
+are tag E. The coverages declare no nil value; a cell is treated as missing where the property's
+`mean` coverage at that depth is 0 (tag A assumption, DECISIONS.md), and that mask applies to all
+statistics, so a genuine 0 in a lower quantile (e.g. deep SOC Q0.05) is kept.
 """
 
 from pathlib import Path
@@ -65,13 +66,17 @@ def fetch_coverage(prop: str, depth: str, stat: str, bbox, out: Path, session=No
     return path
 
 
-def field_medians(tif: Path, fields_4326: gpd.GeoDataFrame) -> list[tuple[float | None, int]]:
-    """Per field: median raw value over grid cells whose centres fall inside the field (0 is
-    missing), or the cell under the representative point if no centre falls inside.
-    Returns (raw value, number of cells)."""
+def field_medians(
+    tif: Path, fields_4326: gpd.GeoDataFrame, nodata_from: Path | None = None
+) -> list[tuple[float | None, int]]:
+    """Per field: median raw value over grid cells whose centres fall inside the field, or the cell
+    under the representative point if no centre falls inside. Cells are missing where the raster
+    `nodata_from` (default: `tif` itself) is 0. Returns (raw value, number of cells)."""
+    with rasterio.open(nodata_from or tif) as ref:
+        missing = ref.read(1) == 0
     with rasterio.open(tif) as src:
         a = src.read(1).astype(float)
-        a[a == 0] = np.nan
+        a[missing] = np.nan
         t = src.transform
         rows, cols = np.indices(a.shape)
         xs, ys = rasterio.transform.xy(t, rows.ravel(), cols.ravel())
@@ -102,9 +107,9 @@ def build(region_id: str, bbox) -> pd.DataFrame:
             for depth in DEPTHS:
                 for stat in STATS:
                     tif = fetch_coverage(prop, depth, stat, bbox, out_dir, session=s)
-                    for fid, (raw, n) in zip(
-                        pilot["field_id"], field_medians(tif, pilot), strict=True
-                    ):
+                    mean_tif = fetch_coverage(prop, depth, "mean", bbox, out_dir, session=s)
+                    vals = field_medians(tif, pilot, nodata_from=mean_tif)
+                    for fid, (raw, n) in zip(pilot["field_id"], vals, strict=True):
                         rows.append(
                             {
                                 "field_id": fid,

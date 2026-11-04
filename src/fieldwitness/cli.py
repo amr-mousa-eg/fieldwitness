@@ -23,7 +23,57 @@ def main() -> None:
     pw.add_argument("--region", required=True)
     so = sub.add_parser("soil", help="T1.3 SoilGrids values for the pilot fields (WCS)")
     so.add_argument("--region", required=True)
+    cx = sub.add_parser("context", help="T1.8 slope (pilot fields), GRACE and SMAP context")
+    cx.add_argument("--region", required=True, help="region for the slope step")
     a = p.parse_args()
+
+    if a.command == "context":
+        import json
+        from pathlib import Path
+
+        import geopandas as gpd
+
+        from fieldwitness.census import tile_centre_lonlat
+        from fieldwitness.config import load_regions
+        from fieldwitness.data import appeears as ae
+        from fieldwitness.data import context as cx_
+        from fieldwitness.resolve.pilot import load_grid
+
+        grid = load_grid(a.region)
+        pilot = gpd.read_parquet(f"data/fields/{a.region}_pilot.parquet")
+        slope = cx_.slope_degrees(cx_.tile_dem(grid, cx_.nasadem_zips()))
+        sl = cx_.field_slopes(pilot, grid, slope)
+        sl.to_parquet(cx_.OUT / f"{a.region}_slope.parquet")
+        print("slope:", sl["slope_deg_mean"].describe().round(3).to_dict(), flush=True)
+        regions = [r for r, v in load_regions().items() if v.status == "selected"]
+        summary, points = {}, {}
+        for rid in regions:
+            g = load_grid(rid)
+            bbox = load_regions()[rid].bbox_lonlat
+            df = cx_.grace_region_series(cx_.grace_file(), bbox)
+            df.to_parquet(cx_.OUT / f"{rid}_grace.parquet")
+            summary[rid] = {
+                "grace_months": len(df),
+                "grace_cells": int(df["n_cells"].iloc[0]),
+                "grace_trend_cm_per_year_2002_on": round(cx_.trend_cm_per_year(df), 3),
+            }
+            points[rid] = tile_centre_lonlat(g)
+        reg = cx_.OUT / "smap_task.json"
+        if not reg.exists():
+            s_ = ae.login()
+            try:
+                body = cx_.smap_task_body(points, "04-01-2015", "12-31-2024")
+                tid = ae.submit(s_, body)
+                reg.write_text(json.dumps({"task_id": tid, "points": points}), encoding="utf-8")
+            finally:
+                ae.logout(s_)
+        summary["smap_task"] = json.loads(reg.read_text(encoding="utf-8"))["task_id"]
+        Path("results/context").mkdir(parents=True, exist_ok=True)
+        Path("results/context/summary.json").write_text(
+            json.dumps(summary, indent=1), encoding="utf-8"
+        )
+        print(summary, flush=True)
+        return
 
     if a.command == "soil":
         from fieldwitness.census import tile_lonlat_bounds

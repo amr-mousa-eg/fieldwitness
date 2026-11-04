@@ -1,0 +1,18 @@
+{
+ "ks_t14slh": {
+  "grace_months": 260,
+  "grace_cells": 6,
+  "grace_trend_cm_per_year_2002_on": -0.927
+ },
+ "ua_central_t36uvu": {
+  "grace_months": 260,
+  "grace_cells": 6,
+  "grace_trend_cm_per_year_2002_on": -1.862
+ },
+ "fr_toulouse_t31tcj": {
+  "grace_months": 260,
+  "grace_cells": 6,
+  "grace_trend_cm_per_year_2002_on": -0.578
+ },
+ "smap_task": "b5e1ec71-0a40-4ec7-a9ea-8c3d1c386f37"
+}
