@@ -91,7 +91,13 @@ Decisions that change or clarify the plan, plus an end-of-session log. Newest la
 - Added dependencies `xarray` and `h5netcdf[h5py]` (user approved xarray + h5netcdf; h5netcdf 1.8 needs its `h5py` backend extra to open files — flagged to the user). `cftime` was **not** added: AppEEARS NetCDF times are decoded manually (see `docs/api_notes.md`).
 - 47-vs-33 L30 date gap: 12 dates fully cloud/shadow/adjacent (VI granule exists, AppEEARS drops all-fill dates — inferred); 2 dates (2023-10-02/03) have no `HLSL30_VI` granule in CMR although SR exists (cause unexplained). Details in `docs/api_notes.md`.
 - T0.3 and T0.4 ticked.
+- `h5netcdf[h5py]` approved by the user (2026-11-04). Commit `c88deff` pushed.
+- AppEEARS time decoding is one function, `fieldwitness.data.appeears.decode_time(values, units)`, tested against Statistics-CSV dates for both products. Finding: the reference date in `units` differs per product (HLSL30: `days since 2013-04-11`, HLSS30: `days since 2015-11-28`), so the function reads it from `units` instead of assuming 2013-04-11.
 - France crop classes: every year 2015–2024 has `hcat:code`. It is null for 53,056 rows in 2023 and 60,765 rows in 2024 (~0.6 %; `crop:code` has no nulls), and `hcat:name_en` is null for 56 rows in 2015. **T1.6 must map the unmapped `crop:code` values** for those years.
 - Added dependency `earthaccess` 0.19.0 (named in PLAN.md T0.2).
 - Verified via CMR (no login): `HLSL30_VI` v`2.0` (`C3246892554-LPCLOUD`), `HLSS30_VI` v`2.0` (`C3246894861-LPCLOUD`), `ECO_L3T_JET` v`003` (`C4057232489-LPCLOUD`; v002 also live, so searches must pin the version). Details in `docs/api_notes.md`.
 - Blocked: no netrc file found in `C:\Users\Amr 13_03` (neither `.netrc` nor `_netrc`). earthaccess on Windows reads `~/_netrc` by default (or `$NETRC`). Login + granule search not run yet.
+
+## 2026-11-04 — ECOSTRESS version finding (affects T1.7)
+
+- `ECO_L3T_JET` v003 (named in PLAN.md T1.7) is only partly populated: 378,068 granules from 2019-08-23, none in June 2023; at the Kansas test point 66 granules all time vs 850 for v002 (4.8 M granules from 2018-07-10). **Decision needed at T0.5/T1.7:** use v002 for history, v003, or both. Not changed yet.

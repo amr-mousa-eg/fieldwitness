@@ -210,3 +210,10 @@ Checked 2026-11-04 (geopandas 1.2.0, pyarrow 26.0.1, from installed source).
 | FTW `US_KS.parquet` (531 MB, 17 RGs) | T14SLH footprint | 5 / 17 | 204.1 MB | not run (> 200 MB cap) |
 
 - FTW `Ukraine.parquet`: 4,116,875 rows, 63 row groups, 1,985 MB (~32 MB per row group) — larger row groups than Punjab (~6 MB).
+
+## CMR facts for the census (T0.5 planning, 2026-11-04)
+
+- HLS granule cloud cover: `umm.AdditionalAttributes[Name="CLOUD_COVERAGE"].Values[0]` (string, percent of the tile); `umm.CloudCover` is absent. Also useful: `SPATIAL_COVERAGE` (percent of the tile with data), `MGRS_TILE_ID`, `SENSING_TIME`.
+- MGRS tiles at candidate points (HLSS30_VI search, June 2023): Beauce (1.60, 48.25) → `T31UCP`; Punjab/Jagraon (75.47, 30.79) → `T43REQ`; central Ukraine (32.26, 48.51) → `T36UVU`; Nile Delta (31.00, 30.79) → `T36RTV` and `T36RUV` (overlap).
+- FTW Egypt partition: `.../admin:country_code=EG/Egypt.parquet` (size not yet read).
+- **ECOSTRESS `ECO_L3T_JET` v003 is a partial archive**: 378,068 granules, earliest 2019-08-23, latest 2026-10-28, and zero granules in June 2023 (no spatial filter). v002: 4,803,551 granules, 2018-07-10 → 2026-10-31. At the Kansas point (−100.9, 38.0), all time: v003 66, v002 850. `point=` and `bounding_box=` searches work for both.
