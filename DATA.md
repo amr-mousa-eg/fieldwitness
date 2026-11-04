@@ -57,3 +57,11 @@ Only the row groups whose `bbox` statistics intersect the query box are read (se
 - **FAO-33** (Doorenbos & Kassam, 1979, *Yield response to water*) — not found on fao.org; its seasonal Ky values are used as reproduced in FAO-56 Table 24.
 - **FAO-66** — Steduto, P., Hsiao, T.C., Fereres, E., Raes, D. (2012). *Crop yield response to water.* FAO Irrigation and Drainage Paper 66. `https://www.fao.org/4/i2800e/i2800e.pdf`, read with pypdf (dev dependency) on 2026-11-04: no Ky for barley or rapeseed (see `config/crops.yaml`); no values taken from it.
 - **FAOSTAT QCL** — FAO. 2025 (last update 2025-12-31). FAOSTAT: Production — Crops and livestock products, bulk file `Production_Crops_Livestock_E_All_Data_(Normalized).zip` from `https://bulks-faostat.fao.org/production/`. Accessed 4 November 2026. Licence: **CC-BY-4.0** (FAO database terms of use). Used for the proposed Ukraine crop list (area harvested, national). The FAOSTAT API needs authentication and is not used.
+
+## Weather, soil, water use and taxonomy (Gate 0 access checks)
+
+- **NASA POWER** daily point API, community AG: `https://power.larc.nasa.gov/api/temporal/daily/point` (parameters T2M_MAX, T2M_MIN, RH2M, WS2M, ALLSKY_SFC_SW_DWN, PRECTOTCORR). Verified 2026-11-04. Terms and citation to be read from the POWER site before T10.1 (not yet read).
+- **ISRIC SoilGrids** REST `properties/query`: unavailable on 2026-11-04 (HTTP 503); licence to be read from ISRIC before use (T1.3).
+- **Kansas WIMAS** (Kansas Geological Survey / Kansas Department of Agriculture, Division of Water Resources): `https://geohydro.kgs.ku.edu/geohydro/wimas/`; requires accepting a disclaimer; not used yet (user decision pending).
+- **OpenET**: pending user decision on terms; not accessed.
+- **GBIF Backbone Taxonomy** via `https://api.gbif.org/v1/species/match` and **USDA NRCS PLANTS Database** via `https://plantsservices.sc.egov.usda.gov/api/`: crop families in `config/crops.yaml` (accessed 2026-11-04). Licence and citation text to be read from both sites before T10.1 (not yet read).

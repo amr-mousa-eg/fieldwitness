@@ -11,6 +11,7 @@ dependencies = [
     "pydantic>=2.14.2",
     "pyyaml>=6.0.3",
     "requests>=2.34.2",
+    "rioxarray>=0.23.0",
     "shapely>=2.2.0",
     "xarray>=2026.9.0",
 ]

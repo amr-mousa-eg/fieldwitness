@@ -1,6 +1,14 @@
 import pytest
 
-from fieldwitness.config import CropsFile, Param, _params, load_crops, load_grading, load_regions
+from fieldwitness.config import (
+    CropsFile,
+    Param,
+    _params,
+    load_crops,
+    load_grading,
+    load_regions,
+    rotation_options,
+)
 
 SELECTED = ("ks_t14slh", "fr_toulouse_t31tcj", "ua_central_t36uvu")
 
@@ -63,3 +71,28 @@ def test_crops_file_rejects_unknown_source():
     }
     with pytest.raises(ValueError):
         CropsFile.model_validate(raw)
+
+
+def test_rotation_options_have_verified_ky_and_stage_lengths():
+    """A crop offered as an MVP rotation option needs a verified Ky (for RYI) and verified stage
+    lengths in every selected region that lists it (user decisions 2026-11-04)."""
+    crops = load_crops()
+    regions = load_regions()
+    for rid in SELECTED:
+        for c in rotation_options(crops, regions[rid].crops or []):
+            crop = crops.crops[c]
+            if crop.mvp_role == "rotation_no_yield":
+                continue
+            assert crop.ky is not None and crop.ky.verified, f"{c}: rotation option without Ky"
+            stages = crop.stage_lengths_days.get(rid)
+            assert stages is not None and stages.verified, f"{rid}/{c}: no verified stages"
+
+
+def test_barley_and_rapeseed_are_not_rotation_options():
+    crops = load_crops()
+    assert crops.crops["rapeseed"].mvp_role == "history_only"
+    assert crops.crops["winter_barley"].mvp_role == "prediction_only"
+    assert crops.crops["spring_barley"].mvp_role == "prediction_only"
+    toulouse = load_regions()["fr_toulouse_t31tcj"].crops
+    assert "rapeseed" not in rotation_options(crops, toulouse)
+    assert "winter_barley" not in rotation_options(crops, toulouse)

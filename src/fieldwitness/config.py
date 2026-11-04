@@ -1,5 +1,6 @@
 """Load and validate config/regions.yaml, crops.yaml and grading.yaml (PLAN.md §4, T0.6)."""
 
+from datetime import date
 from pathlib import Path
 from typing import Literal
 
@@ -46,10 +47,33 @@ class Param(_Strict):
         return self
 
 
+class FamilyRef(_Strict):
+    source: str
+    usage_key: int
+    scientific_name: str
+    match_type: str
+    name_source: str
+    usda_symbol: str
+    usda_family_agrees: bool
+    accessed: date
+
+
 class FamilyParam(_Strict):
     value: str | None = None
     verified: bool
+    ref: FamilyRef | None = None
     note: str | None = None
+
+    @model_validator(mode="after")
+    def _provenance(self):
+        if self.verified and (self.ref is None or not self.ref.usda_family_agrees):
+            raise ValueError("verified family needs a GBIF ref with USDA agreement")
+        if not self.verified and (self.value is not None or not self.note):
+            raise ValueError("unverified family must have no value and a note")
+        return self
+
+
+MvpRole = Literal["rotation", "rotation_no_yield", "prediction_only", "history_only"]
 
 
 class KcIniByRegion(_Strict):
@@ -61,6 +85,7 @@ class KcIniByRegion(_Strict):
 
 class Crop(_Strict):
     name: str
+    mvp_role: MvpRole
     hcat3: list[str]
     label_aliases: dict[str, list[str]] = Field(default_factory=dict)
     proxy_for: str | None = None
@@ -99,6 +124,8 @@ class CropsFile(_Strict):
             for p in _params(crop):
                 if p.ref is not None and p.ref.source not in self.sources:
                     raise ValueError(f"{key}: unknown source {p.ref.source}")
+            if crop.family and crop.family.ref and crop.family.ref.source not in self.sources:
+                raise ValueError(f"{key}: unknown family source {crop.family.ref.source}")
         return self
 
 
@@ -129,6 +156,11 @@ class Region(BaseModel):
     seasons: dict[str, Season]
     bbox_lonlat: list[float] | None = None
     crops: list[str] | None = None
+
+
+def rotation_options(crops: CropsFile, region_crops: list[str]) -> list[str]:
+    """Crops of a region that may be offered as MVP rotation options (PLAN.md T6.1)."""
+    return [c for c in region_crops if crops.crops[c].mvp_role in ("rotation", "rotation_no_yield")]
 
 
 def load_crops(path: Path = CONFIG / "crops.yaml") -> CropsFile:

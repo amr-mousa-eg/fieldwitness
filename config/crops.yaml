@@ -18,10 +18,14 @@ sources:
   fao56_ch8:
     citation: "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. (1998). Crop evapotranspiration. FAO Irrigation and Drainage Paper 56, Chapter 8"
     url: https://www.fao.org/4/x0490e/x0490e0e.htm
+  gbif_backbone:
+    citation: "GBIF Backbone Taxonomy via the GBIF species-match API (api.gbif.org/v1/species/match); family cross-checked with the USDA NRCS PLANTS Database API (plantsservices.sc.egov.usda.gov). Accessed 2026-11-04."
+    url: https://api.gbif.org/v1/species/match
 
 crops:
   maize:
     name: Maize, field (grain)
+    mvp_role: rotation
     hcat3: ["3301010600"]  # grain_maize_corn_popcorn
     label_aliases: {CSB: ["Corn"]}
     kc_ini: {value: 0.3, ref: {source: fao56_ch6, table: 12, row: "i. Cereals (group row, Kc ini)", footnote: 1}, verified: true}
@@ -39,10 +43,11 @@ crops:
                            choice: "Closest southern-European row to Toulouse (A)."}
       ua_central_t36uvu: {value: [30, 40, 50, 50], ref: {source: fao56_ch6, table: 11, row: "Maize (grain) | April | Idaho, USA"}, verified: true,
                           choice: "Continental row, closest to central Ukraine (A)."}
-    family: {value: null, verified: false, note: "Botanical family to be filled from a named taxonomy source (not from memory)."}
+    family: {value: Poaceae, verified: true, ref: {source: gbif_backbone, usage_key: 5290052, scientific_name: "Zea mays L.", match_type: EXACT, name_source: "FAO-66 (Steduto et al. 2012), PDF p. 129", usda_symbol: ZEMA, usda_family_agrees: true, accessed: 2026-11-04}}
 
   sorghum:
     name: Sorghum (grain)
+    mvp_role: rotation
     hcat3: ["3301010900"]  # millet_sorghum
     label_aliases: {CSB: ["Sorghum"]}
     kc_ini: {value: 0.3, ref: {source: fao56_ch6, table: 12, row: "i. Cereals (group row, Kc ini)", footnote: 1}, verified: true}
@@ -56,10 +61,11 @@ crops:
     stage_lengths_days:
       ks_t14slh: {value: [20, 35, 40, 30], ref: {source: fao56_ch6, table: 11, row: "Sorghum | May/June | USA, Pakis., Med."}, verified: true}
       fr_toulouse_t31tcj: {value: [20, 35, 40, 30], ref: {source: fao56_ch6, table: 11, row: "Sorghum | May/June | USA, Pakis., Med."}, verified: true}
-    family: {value: null, verified: false, note: "Botanical family to be filled from a named taxonomy source (not from memory)."}
+    family: {value: Poaceae, verified: true, ref: {source: gbif_backbone, usage_key: 2705181, scientific_name: "Sorghum bicolor (L.) Moench", match_type: EXACT, name_source: "FAO-66 (Steduto et al. 2012), PDF p. 159", usda_symbol: SOBI2, usda_family_agrees: true, accessed: 2026-11-04}}
 
   winter_wheat:
     name: Winter wheat (soft and durum)
+    mvp_role: rotation
     hcat3: ["3301010101", "3301010201"]  # winter_common_soft_wheat, winter_durum_hard_wheat
     label_aliases: {CSB: ["Winter Wheat"]}
     kc_ini:
@@ -81,10 +87,11 @@ crops:
                            choice: "Mediterranean row, closest to Toulouse (A)."}
       ua_central_t36uvu: {value: [160, 75, 75, 25], ref: {source: fao56_ch6, table: 11, row: "Winter Wheat | October | Idaho, USA"}, verified: true,
                           choice: "Continental row with winter dormancy, closest to central Ukraine (A)."}
-    family: {value: null, verified: false, note: "Botanical family to be filled from a named taxonomy source (not from memory)."}
+    family: {value: Poaceae, verified: true, ref: {source: gbif_backbone, usage_key: 7795888, scientific_name: "Triticum aestivum L.", match_type: EXACT, name_source: "FAO-66 (Steduto et al. 2012), PDF p. 107", usda_symbol: TRAE, usda_family_agrees: true, accessed: 2026-11-04}}
 
   winter_barley:
     name: Winter barley
+    mvp_role: prediction_only  # Ky unverified -> no RYI; in hindcast predictions (Kc + stages), not an MVP rotation option (user 2026-11-04).
     hcat3: ["3301010401"]  # winter_barley
     kc_ini: {value: 0.3, ref: {source: fao56_ch6, table: 12, row: "i. Cereals (group row, Kc ini)", footnote: 1}, verified: true}
     kc_mid: {value: 1.15, ref: {source: fao56_ch6, table: 12, row: "Barley"}, verified: true}
@@ -98,10 +105,11 @@ crops:
                           choice: "No continental winter-barley row; continental winter-wheat row used as proxy (A)."}
       fr_toulouse_t31tcj: {value: [30, 140, 40, 30], ref: {source: fao56_ch6, table: 11, row: "Winter Wheat | November | Mediterranean"}, verified: true,
                            choice: "No Mediterranean winter-barley row (Barley/Oats/Wheat rows are other climates; two have no region printed). Winter wheat row used as proxy (A)."}
-    family: {value: null, verified: false, note: "Botanical family to be filled from a named taxonomy source (not from memory)."}
+    family: {value: Poaceae, verified: true, ref: {source: gbif_backbone, usage_key: 2706056, scientific_name: "Hordeum vulgare L.", match_type: EXACT, name_source: "FAO-66 (Steduto et al. 2012), PDF p. 149", usda_symbol: HOVU, usda_family_agrees: true, accessed: 2026-11-04}}
 
   spring_wheat:
     name: Spring wheat (soft and durum)
+    mvp_role: rotation
     hcat3: ["3301010102", "3301010202"]  # spring_common_soft_wheat, spring_durum_hard_wheat
     kc_ini: {value: 0.3, ref: {source: fao56_ch6, table: 12, row: "i. Cereals (group row, Kc ini)", footnote: 1}, verified: true}
     kc_mid: {value: 1.15, ref: {source: fao56_ch6, table: 12, row: "Spring Wheat"}, verified: true}
@@ -114,10 +122,11 @@ crops:
     stage_lengths_days:
       ua_central_t36uvu: {value: [20, 25, 60, 30], ref: {source: fao56_ch6, table: 11, row: "Barley/Oats/Wheat | March/Apr | 35-45 °L", note: "region printed as latitude 35-45 degrees"}, verified: true,
                           choice: "Only spring-sown temperate row; Ukraine (about 48 N) is just north of the printed latitude band (A)."}
-    family: {value: null, verified: false, note: "Botanical family to be filled from a named taxonomy source (not from memory)."}
+    family: {value: Poaceae, verified: true, ref: {source: gbif_backbone, usage_key: 7795888, scientific_name: "Triticum aestivum L.", match_type: EXACT, name_source: "FAO-66 (Steduto et al. 2012), PDF p. 107", usda_symbol: TRAE, usda_family_agrees: true, accessed: 2026-11-04}}
 
   spring_barley:
     name: Spring barley
+    mvp_role: prediction_only  # Ky unverified -> no RYI; in hindcast predictions (Kc + stages), not an MVP rotation option (user 2026-11-04).
     hcat3: ["3301010402"]  # spring_barley
     kc_ini: {value: 0.3, ref: {source: fao56_ch6, table: 12, row: "i. Cereals (group row, Kc ini)", footnote: 1}, verified: true}
     kc_mid: {value: 1.15, ref: {source: fao56_ch6, table: 12, row: "Barley"}, verified: true}
@@ -129,10 +138,11 @@ crops:
     stage_lengths_days:
       ua_central_t36uvu: {value: [20, 25, 60, 30], ref: {source: fao56_ch6, table: 11, row: "Barley/Oats/Wheat | March/Apr | 35-45 °L", note: "region printed as latitude 35-45 degrees"}, verified: true,
                           choice: "Only spring-sown temperate row; Ukraine (about 48 N) is just north of the printed latitude band (A)."}
-    family: {value: null, verified: false, note: "Botanical family to be filled from a named taxonomy source (not from memory)."}
+    family: {value: Poaceae, verified: true, ref: {source: gbif_backbone, usage_key: 2706056, scientific_name: "Hordeum vulgare L.", match_type: EXACT, name_source: "FAO-66 (Steduto et al. 2012), PDF p. 149", usda_symbol: HOVU, usda_family_agrees: true, accessed: 2026-11-04}}
 
   sunflower:
     name: Sunflower
+    mvp_role: rotation
     hcat3: ["3301060500"]  # sunflower
     kc_ini: {value: 0.35, ref: {source: fao56_ch6, table: 12, row: "h. Oil Crops (group row, Kc ini)", footnote: 1}, verified: true}
     kc_mid: {value: 1.0, range: [1.0, 1.15], ref: {source: fao56_ch6, table: 12, row: "Sunflower", footnote: 9}, verified: true,
@@ -146,10 +156,11 @@ crops:
       fr_toulouse_t31tcj: {value: [25, 35, 45, 25], ref: {source: fao56_ch6, table: 11, row: "Sunflower | April/May | Medit.; California"}, verified: true}
       ua_central_t36uvu: {value: [25, 35, 45, 25], ref: {source: fao56_ch6, table: 11, row: "Sunflower | April/May | Medit.; California"}, verified: true,
                           choice: "Only sunflower row in Table 11 (A)."}
-    family: {value: null, verified: false, note: "Botanical family to be filled from a named taxonomy source (not from memory)."}
+    family: {value: Asteraceae, verified: true, ref: {source: gbif_backbone, usage_key: 9206251, scientific_name: "Helianthus annuus L.", match_type: EXACT, name_source: "FAO-66 (Steduto et al. 2012), PDF p. 179", usda_symbol: HEAN3, usda_family_agrees: true, accessed: 2026-11-04}}
 
   rapeseed:
     name: Winter rapeseed (canola)
+    mvp_role: history_only  # No verified stage lengths or Ky; history state only, not an MVP rotation option (user 2026-11-04).
     hcat3: ["3301060401"]  # winter_rapeseed_rape
     kc_ini: {value: 0.35, ref: {source: fao56_ch6, table: 12, row: "h. Oil Crops (group row, Kc ini)", footnote: 1}, verified: true}
     kc_mid: {value: 1.0, range: [1.0, 1.15], ref: {source: fao56_ch6, table: 12, row: "Rapeseed, Canola", footnote: 9}, verified: true,
@@ -162,10 +173,11 @@ crops:
     stage_lengths_days:
       fr_toulouse_t31tcj: {value: null, verified: false, note: "FAO-56 Table 11 has no rapeseed row; UNVERIFIED (tag A)."}
       ua_central_t36uvu: {value: null, verified: false, note: "FAO-56 Table 11 has no rapeseed row; UNVERIFIED (tag A)."}
-    family: {value: null, verified: false, note: "Botanical family to be filled from a named taxonomy source (not from memory)."}
+    family: {value: null, verified: false, note: "No scientific name from FAO-66, and GBIF vernacular search and USDA PLANTS common names did not agree on one (2026-11-04); UNVERIFIED."}
 
   soybean:
     name: Soybeans
+    mvp_role: rotation
     hcat3: ["3301160000"]  # soy_soybeans
     label_aliases: {CSB: ["Soybeans"]}
     kc_ini: {value: 0.4, ref: {source: fao56_ch6, table: 12, row: "e. Legumes (Leguminosae) (group row, Kc ini)", footnote: 1}, verified: true}
@@ -178,10 +190,11 @@ crops:
     stage_lengths_days:
       ua_central_t36uvu: {value: [20, 30, 60, 25], ref: {source: fao56_ch6, table: 11, row: "Soybeans | May | Central USA", note: "Ldev printed as 30/35"}, verified: true,
                           choice: "Continental row; first of the two printed Ldev values (A)."}
-    family: {value: null, verified: false, note: "Botanical family to be filled from a named taxonomy source (not from memory)."}
+    family: {value: Fabaceae, verified: true, ref: {source: gbif_backbone, usage_key: 5359660, scientific_name: "Glycine max (L.) Merr.", match_type: EXACT, name_source: "FAO-66 (Steduto et al. 2012), PDF p. 139", usda_symbol: GLMA4, usda_family_agrees: true, accessed: 2026-11-04}}
 
   fallow:
     name: Fallow (bare soil)
+    mvp_role: rotation_no_yield  # Rotation state without a yield (RYI not applicable).
     hcat3: ["3301110000"]  # fallow_land_not_crop (history state "fallow")
     label_aliases: {CSB: ["Fallow/Idle Cropland"]}
     kc_ini: {value: null, verified: false, note: "FAO-56 Table 12 has no fallow row; bare-soil evaporation to come from FAO-56 Chapter 7 (Ke) in T3.3. UNVERIFIED (tag A)."}
@@ -191,6 +204,7 @@ crops:
 
   cover_crop:
     name: "Cover crop (proxy: oats)"
+    mvp_role: rotation_no_yield  # Rotation state without a yield (RYI not applicable).
     hcat3: []
     proxy_for: "Oats (FAO-56 Tables 12 and 22) — team assumption (A): no FAO-56 row for cover crops."
     kc_ini: {value: 0.3, ref: {source: fao56_ch6, table: 12, row: "i. Cereals (group row, Kc ini)", footnote: 1}, verified: true, choice: "Proxy crop (A)."}

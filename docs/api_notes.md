@@ -217,3 +217,54 @@ Checked 2026-11-04 (geopandas 1.2.0, pyarrow 26.0.1, from installed source).
 - MGRS tiles at candidate points (HLSS30_VI search, June 2023): Beauce (1.60, 48.25) → `T31UCP`; Punjab/Jagraon (75.47, 30.79) → `T43REQ`; central Ukraine (32.26, 48.51) → `T36UVU`; Nile Delta (31.00, 30.79) → `T36RTV` and `T36RUV` (overlap).
 - FTW Egypt partition: `.../admin:country_code=EG/Egypt.parquet` (size not yet read).
 - **ECOSTRESS `ECO_L3T_JET` v003 is a partial archive**: 378,068 granules, earliest 2019-08-23, latest 2026-10-28, and zero granules in June 2023 (no spatial filter). v002: 4,803,551 granules, 2018-07-10 → 2026-10-31. At the Kansas point (−100.9, 38.0), all time: v003 66, v002 850. `point=` and `bounding_box=` searches work for both.
+
+## NASA POWER — daily point API (Gate 0, for T1.2)
+
+Checked 2026-11-04 (docs: https://power.larc.nasa.gov/docs/services/api/temporal/daily/).
+
+- Request: `GET https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MAX,T2M_MIN,RH2M,WS2M,ALLSKY_SFC_SW_DWN,PRECTOTCORR&community=AG&longitude=-100.6604&latitude=38.3425&start=20230101&end=20231231&format=JSON` (Kansas T14SLH tile centre). Max 20 parameters per point request; dates `YYYYMMDD`.
+- Response: HTTP 200, 36,856 bytes. Top keys: `type`, `geometry`, `properties`, `header`, `messages`, `parameters`, `times`.
+  - `geometry.coordinates` = `[-100.66, 38.343, 852.2]` (lon, lat, **elevation m** — needed for ETo).
+  - `properties.parameter.<NAME>` = `{ "YYYYMMDD": value, ... }` — 365 days each for 2023.
+  - `parameters.<NAME>` = `{units, longname}`: T2M_MAX / T2M_MIN `C`; RH2M `%`; WS2M `m/s`; ALLSKY_SFC_SW_DWN `MJ/m^2/day`; PRECTOTCORR `mm/day`.
+  - `header.fill_value` = −999.0 (no fill values in this year); `header.sources` = MERRA2, SYN1DEG, POWER.
+- All six parameter names in PLAN.md T1.2 are valid (RH2M used; dew point not needed).
+
+## ISRIC SoilGrids — REST properties/query (Gate 0, for T1.3)
+
+Checked 2026-11-04: **service unavailable.** `GET https://rest.isric.org/soilgrids/v2.0/properties/query?lon=-100.6604&lat=38.3425&property=sand&property=clay&property=soc&property=bdod&depth=0-5cm&depth=30-60cm&value=mean&value=Q0.05&value=Q0.5&value=Q0.95` → HTTP 503 "Service Temporarily Unavailable" (nginx); the OpenAPI document and the docs page also failed (503 / timeout). ISRIC's map server `https://maps.isric.org/` answers HTTP 200 (WCS/WMS) — candidate fallback for T1.3, not yet verified from its docs. Retry REST before T1.3.
+
+## Kansas WIMAS (Gate 0, for T1.7)
+
+Checked 2026-11-04: `https://geohydro.kgs.ku.edu/geohydro/wimas/` is public (no registration) but opens on a **disclaimer page that must be accepted ("I ACCEPT")** before any query. Terms (from the page): DWR and KGS offer "no warranty or guarantee of the accuracy or completeness"; data reflect files as of 11/01/2026; products must not be used in violation of K.S.A 45-220(c)(2). No bulk download without the disclaimer was found (the KGS High Plains data page links only to WIMAS). **Not queried: accepting the terms is the user's decision.**
+
+## OpenET (Gate 0)
+
+**Pending user decision on terms. Not accessed.**
+
+## HLS direct COG read via earthaccess (Gate 0; T1.5b fallback)
+
+Checked 2026-11-04 with `scripts/check_hls_cog.py` (rasterio 1.5.2 / GDAL 3.12.2, rioxarray 0.23.0).
+
+- Auth: `earthaccess.login(strategy="netrc")`, then `fs = earthaccess.get_fsspec_https_session()` and `rasterio.open(url, opener=fs.open)` (rasterio's `opener` serves GDAL through Python file objects). **No credentials, cookies or tokens are written to disk**; no GDAL netrc/cookie settings are used.
+- Test: granule `HLS-VI.S30.T14SLH.2023185T172901.v2.0`, 256 × 256 window at (−100.90, 38.00).
+  - `…NDVI.tif`: EPSG:32614, 3660 × 3660, int16, nodata −19999, `scale_factor` 0.0001, `add_offset` 0, **block shape 1 × 3660 (striped, not tiled) and no overviews** → a window reads whole rows: 1.68 MB for 256 rows.
+  - `HLS.S30.…Fmask.tif` (from the HLSS30 SR product): uint8, nodata 255, **256 × 256 tiles, overviews 2/4/8/16**; window read ≈ 0.04 MB. Most common values in the window: 64, 128, 192, 96, 160.
+  - Total transferred: **1.72 MB**.
+
+### T1.5b fallback (direct COG reads) — how to use it
+
+1. Find granules: `earthaccess.search_data(short_name="HLS{L,S}30_VI", version="2.0", granule_name="HLS-VI.*.T<tile>.*", temporal=(start, end))`.
+2. For each granule take the `NDVI`/`EVI` links (HLS*_VI.020) and the `Fmask` link (HLS*30.020 — it is in the VI granule's `data_links()`).
+3. Open with `rasterio.open(url, opener=fs.open)` and read **one window per granule spanning all pilot fields of the tile** (row range from the fields' bounds), not one window per field: the VI files are striped, so cost grows with the number of rows and nearby fields share rows. Cost ≈ 6.6 KB per row per band (1.68 MB / 256 rows); a full tile ≈ 24 MB per band per date.
+4. Apply scale 0.0001 and fill −19999 (VI), fill 255 (Fmask); decode Fmask bits with the HLS lookup (AppEEARS ships one per product; confirm against the HLS user guide in T1.5).
+5. Join VI and Fmask **by date**: some dates have Fmask but no VI granule (47-vs-33 gap above).
+6. Use AppEEARS (task route, T0.3) for many fields over many years; use this route for small or urgent reads.
+
+## GBIF species match and USDA PLANTS (crop families, T0.6)
+
+Checked 2026-11-04 with one call each, then `scripts/check_families.py`.
+
+- GBIF: `GET https://api.gbif.org/v1/species/match?name=Zea%20mays&kingdom=Plantae` → keys `usageKey, scientificName, canonicalName, rank, status, confidence, matchType, kingdom, phylum, class, order, family, genus, species` (+ `*Key`). Zea mays: usageKey 5290052, ACCEPTED, EXACT, confidence 100, family Poaceae.
+- USDA PLANTS (no key needed): `GET https://plantsservices.sc.egov.usda.gov/api/PlantSearch?searchText=<name>` → list of `{Text, Plant{Id, Symbol, ScientificName (HTML), CommonName, Rank, ...}}`; `GET .../api/PlantProfile?symbol=<SYMBOL>` → profile with `Ancestors` (family rank, e.g. "Poaceae Barnhart", authority included).
+- Results: 8 crops (scientific names from FAO-66): GBIF and USDA families agree — Poaceae (maize, sorghum, wheat, barley), Asteraceae (sunflower), Fabaceae (soybean). Rapeseed and the oat cover-crop proxy: no FAO-66 name, and GBIF vernacular search and USDA common names did not agree on a binomial → unverified.

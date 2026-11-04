@@ -186,3 +186,32 @@ Decisions that change or clarify the plan, plus an end-of-session log. Newest la
 - **FAO-66 (pypdf, dev-only dependency added):** read all 505 pages. No Ky for barley (barley section printed pp. 134–141 = PDF pp. 149–156; Table 2 "Comparison of Ky values between FAO-33 and IAEA", printed p. 12 = PDF p. 27, has no barley row) and none for rapeseed (mentioned only on PDF pp. 94, 179, 253). Barley (winter and spring) and rapeseed Ky stay null, tag A, unverified, with these page refs in `crops.yaml`.
 - **T5.4 scope (user):** the literature check covers only maize / wheat / sorghum / fallow transitions for the western Kansas tile `T14SLH` (no soybean: 0.1 % of the tile). PLAN.md §1 walking-skeleton crop list updated accordingly.
 - `crops.yaml`: 11 crops, 82 verified parameters, 9 unverified (tag A). Tests: 45 pass. **T0.6 ticked.** Phase 0 remaining: Gate 0 review; next phase starts after the rules gate (13 Nov).
+
+## 2026-11-04 — Gate 0 access checks and re-review
+
+Access checks only (no product code); details and response shapes in `docs/api_notes.md`.
+
+- **POWER** (T1.2 source): one daily point call, Kansas tile centre (−100.6604, 38.3425), 2023 → HTTP 200, all six parameters valid, 365 days, no fill values, elevation 852.2 m returned. **Pass.**
+- **SoilGrids** (T1.3 source): `properties/query` → **HTTP 503** (ISRIC REST service temporarily unavailable; docs/OpenAPI also failed). `maps.isric.org` (WCS/WMS) answers 200 — candidate fallback, not verified. **Fail (external outage); retry before T1.3.**
+- **WIMAS** (T1.7 source): public, no registration, but a **disclaimer must be accepted** ("I ACCEPT") before any query. Not accepted on the user's behalf; no bulk download without it found. **Pending user decision.**
+- **OpenET**: **pending user decision on terms; not accessed.**
+- **HLS direct COG read** (T1.5b): windowed read of NDVI + Fmask for one HLSS30_VI granule via earthaccess's authenticated fsspec session as rasterio `opener` → 1.72 MB total, nothing written to disk. **Pass.** Finding: HLS-VI COGs are striped (1 × 3660 blocks, no overviews) while Fmask is tiled 256 × 256 with overviews → read one row-window per granule spanning all pilot fields. T1.5b fallback written up; **T0.3 now complete.**
+- Added dependency `rioxarray` (named in PLAN.md T1.5; brings rasterio 1.5.2 / GDAL 3.12.2).
+
+User decisions recorded:
+
+- **Rapeseed:** history state only; excluded from MVP rotation options (`mvp_role: history_only`).
+- **Barley (winter and spring):** included in hindcast predictions (SOS, canopy, cover days, water use need only Kc and stages); excluded from MVP rotation options because RYI needs Ky (`mvp_role: prediction_only`). Rule in PLAN.md T6.1 and T7.1; enforced by `fieldwitness.config.rotation_options` and a test that every rotation option has a verified Ky and verified stage lengths in each selected region.
+- **Botanical family:** GBIF Backbone via the species-match API, cross-checked with USDA PLANTS (`scripts/check_families.py`). Scientific names from FAO-66 crop chapters (PDF pages cited). Verified for 8 crops (Poaceae: maize, sorghum, winter/spring wheat, winter/spring barley; Asteraceae: sunflower; Fabaceae: soybean), GBIF and USDA agree for all 8. **Rapeseed and the oat cover-crop proxy stay unverified**: no FAO-66 name, and GBIF vernacular search and USDA common names did not agree on a binomial (no name chosen from memory).
+- Rotation options now: Kansas [maize, sorghum, winter_wheat, fallow, cover_crop]; Toulouse [sunflower, winter_wheat, sorghum, maize, fallow, cover_crop]; Ukraine [winter_wheat, spring_wheat, sunflower, maize, soybean, fallow, cover_crop].
+
+**Gate 0 re-run (2026-11-04):**
+
+| Condition | Status |
+|---|---|
+| Access works for every Tier 1 source | **Partly.** Pass: CMR/earthaccess search, HLS direct COG read, AppEEARS, CSB, POWER. Not yet: SoilGrids (external HTTP 503), WIMAS (needs the user to accept a disclaimer), OpenET (terms decision pending). |
+| Regions chosen | Pass |
+| Configs validate | Pass (47 tests) |
+| T0.1–T0.6 acceptance tests | Pass (T0.3 now including the T1.5b fallback write-up) |
+
+Gate 0 is **not fully closed**: it needs the SoilGrids retry (or an approved WCS fallback) and the user's decisions on WIMAS and OpenET. Next: those three items; Phase 1 starts after the rules gate (13 Nov).
