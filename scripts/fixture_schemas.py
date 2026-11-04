@@ -54,6 +54,7 @@ class Season(BaseModel):
     crop: str | None
     crop_conf: float
     crop_source: Literal["label", "classifier", "user"]
+    # day of the harvest year, negative = previous autumn (user decision Q1, 2026-11-04)
     sos: Tagged
     peak: Tagged
     eos: Tagged
@@ -179,16 +180,6 @@ class TaggedSeries(BaseModel):
 # --- <field_id>.series.json --------------------------------------------------------------------
 
 
-class SeasonMarks(BaseModel):
-    """SOS / peak / EOS of one story season. Must equal the matching `Season` in the pack."""
-
-    season_year: int
-    season_index: int = 0
-    sos: Tagged
-    peak: Tagged
-    eos: Tagged
-
-
 class FieldSeries(BaseModel):
     schema_version: str
     field_id: str
@@ -196,7 +187,7 @@ class FieldSeries(BaseModel):
     evi: TaggedSeries  # observed, tag O
     clear_frac: list[float]  # clear-pixel fraction per date in `ndvi.x` (bookkeeping)
     ndvi_smooth: TaggedSeries  # smoothed curve, tag D
-    marks: list[SeasonMarks]
+    # SOS / peak / EOS marks are not repeated here: the app reads them from FieldPack.story (Q2).
     data_as_of: date
 
     @model_validator(mode="after")
@@ -240,11 +231,18 @@ class FieldCalendar(BaseModel):
 # --- <field_id>.scenarios.json -----------------------------------------------------------------
 
 
+# T6.7 metrics defined only by the crop sequence: identical in every weather scenario, so they live
+# once in the pack's Option.metrics and are not repeated in scenarios (user decision Q6).
+SEQUENCE_ONLY_METRICS = frozenset(
+    {"legume_share", "family_breaks", "forage_value", "deep_root_share"}
+)
+
+
 class Scenario(BaseModel):
     scenario_id: str  # e.g. "t+1_p-10"
     dt_c: float  # temperature change, °C (grid coordinate)
     dp_pct: float  # rainfall change, % (grid coordinate)
-    metrics: dict[str, dict[str, Tagged]]  # option_id -> metric -> value (same keys as Option)
+    metrics: dict[str, dict[str, Tagged]]  # option_id -> weather-sensitive metric -> value (Q6)
     ranks: dict[str, int]  # option_id -> rank under default weights
 
 
@@ -262,6 +260,10 @@ class FieldScenarios(BaseModel):
             raise ValueError(f"T6.8 needs 12 scenarios, got {len(self.scenarios)}")
         if self.baseline_id not in {s.scenario_id for s in self.scenarios}:
             raise ValueError("baseline_id is not one of the scenarios")
+        for s in self.scenarios:
+            for oid, m in s.metrics.items():
+                if fixed := SEQUENCE_ONLY_METRICS & m.keys():
+                    raise ValueError(f"{s.scenario_id}/{oid}: weather-independent {sorted(fixed)}")
         return self
 
 
@@ -300,8 +302,8 @@ class RegionLayers(BaseModel):
     schema_version: str
     region_id: str
     layers: list[RegionalLayer]
-    field_colouring: dict[FieldColourMetric, dict[str, Tagged]]  # metric -> field_id -> value
-    colouring_option: str  # option the colouring describes, "current"
+    # metric -> field_id -> value, always for the Current option (Q5; alternatives = stretch)
+    field_colouring: dict[FieldColourMetric, dict[str, Tagged]]
     data_as_of: date
 
 

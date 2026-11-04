@@ -10,7 +10,7 @@ import react from "@vitejs/plugin-react";
  *  - "packs":    real field packs under public/packs (after Gate 6 and the merge).
  * Default: fixtures in dev, packs in a build. A build with fixtures is refused.
  */
-const FIXTURES_DIR = resolve(__dirname, "fixtures");
+const FIXTURES_DIR = resolve(import.meta.dirname, "fixtures");
 const FIXTURE_FILE = /\.SYNTHETIC\.json$/;
 const FIXTURE_MARKER = "SYNTHETIC:fixture"; // every Tagged.source in the fixtures
 
@@ -27,11 +27,14 @@ function serveFixtures(): Plugin {
     apply: (_, env) => env.command === "serve" && dataMode("serve") === "fixtures",
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
-        const url = (req.url ?? "").split("?")[0];
-        const m = /^\/packs\/([\w/-]+)\.json$/.exec(url);
-        if (!m || m[1].includes("..")) return next();
-        const file = join(FIXTURES_DIR, `${m[1]}.SYNTHETIC.json`);
-        if (!existsSync(file)) return next();
+        const url = decodeURIComponent((req.url ?? "").split("?")[0]);
+        if (!url.startsWith("/packs/")) return next();
+        const m = /^\/packs\/([\w./-]+)\.json$/.exec(url);
+        const file = m && !m[1].includes("..") && join(FIXTURES_DIR, `${m[1]}.SYNTHETIC.json`);
+        if (!file || !existsSync(file)) {
+          res.statusCode = 404; // never fall back to index.html for data
+          return res.end();
+        }
         res.setHeader("Content-Type", "application/json");
         res.end(readFileSync(file));
       });

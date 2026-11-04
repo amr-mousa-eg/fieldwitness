@@ -34,6 +34,7 @@ export interface Season {
   crop: string | null;
   crop_conf: number;
   crop_source: "label" | "classifier" | "user";
+  /** day of the harvest year; negative = previous autumn */
   sos: Tagged;
   peak: Tagged;
   eos: Tagged;
@@ -118,14 +119,7 @@ export interface TaggedSeries {
   source: string;
 }
 
-/** PROPOSED: <field_id>.series.json */
-export interface SeasonMarks {
-  season_year: number;
-  season_index: number;
-  sos: Tagged;
-  peak: Tagged;
-  eos: Tagged;
-}
+/** PROPOSED: <field_id>.series.json. SOS/peak/EOS marks come from FieldPack.story. */
 export interface FieldSeries {
   schema_version: string;
   field_id: string;
@@ -133,7 +127,6 @@ export interface FieldSeries {
   evi: TaggedSeries;
   clear_frac: number[];
   ndvi_smooth: TaggedSeries;
-  marks: SeasonMarks[];
   data_as_of: string;
 }
 
@@ -168,6 +161,7 @@ export interface Scenario {
   scenario_id: string;
   dt_c: number;
   dp_pct: number;
+  /** option_id -> weather-sensitive metric -> value; sequence-only metrics live in the pack. */
   metrics: Record<string, Record<string, Tagged>>;
   ranks: Record<string, number>;
 }
@@ -206,8 +200,8 @@ export interface RegionLayers {
   schema_version: string;
   region_id: string;
   layers: RegionalLayer[];
+  /** metric -> field_id -> value, always for the Current option. */
   field_colouring: Record<FieldColourMetric, Record<string, Tagged>>;
-  colouring_option: string;
   data_as_of: string;
 }
 

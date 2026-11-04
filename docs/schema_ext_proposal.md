@@ -1,6 +1,6 @@
-# PROPOSED extension to PLAN.md §3 (data contracts)
+# Extension to PLAN.md §3 (data contracts) — approved 2026-11-04
 
-**Status:** PROPOSAL, app branch only, 2026-11-04. Not approved for `main`. CLAUDE.md rule 11: §3 changes need the user's approval. After approval, the models move into `src/fieldwitness/schemas.py` (on `main`), T8.2 generates `app/src/types.ts` from them, and `scripts/fixture_schemas.py` Part 1 is deleted.
+**Status:** FINAL — approved by the user on 2026-11-04 (answers Q1–Q7, §5). Ready to merge into `main` (CLAUDE.md rule 11 satisfied). Written on the `app` branch; nothing on `main` has changed yet. Merge steps: §6.
 
 **Canonical code:** `scripts/fixture_schemas.py` (Part 2). The models below are a copy of it. The synthetic fixtures in `app/fixtures/ks_demo_synthetic/` validate against it; the examples below are trimmed from those fixtures. **Every number in the examples is SYNTHETIC.**
 
@@ -10,9 +10,9 @@ Several Phase 9 views need data that §3 does not define:
 
 | View | Needs | Proposed file |
 |---|---|---|
-| T9.2 Field story | HLS NDVI/EVI per date, smoothed curve, SOS/peak/EOS marks | `<field_id>.series.json` |
+| T9.2 Field story | HLS NDVI/EVI per date, smoothed curve (SOS/peak/EOS marks come from the pack's `story`) | `<field_id>.series.json` |
 | T9.9 Calendar | bare-soil calendar (T2.5), vulnerability calendar (T3.6), an alternative's bare months | `<field_id>.calendar.json` |
-| T9.3 what-if sliders | T6.8 weather grid, per option and metric | `<field_id>.scenarios.json` |
+| T9.3 what-if sliders | T6.8 weather grid, per option, weather-sensitive metrics only | `<field_id>.scenarios.json` |
 | T9.11 + T9.9 strip | GRACE, SMAP anomaly, heat-wave days; field colouring values | `packs/<region>/layers.json` |
 | T9.1 Map, T9.5 Scoreboard | `index.json` and `hindcast.json` are *named* in §3 but have no model | `index.json`, `hindcast.json` |
 | T9.1 region switcher | list of regions | `packs/regions.json` (new) |
@@ -25,14 +25,20 @@ The `FieldPack` (§3) is unchanged. File layout (user decision 2026-11-04): per 
    - `TaggedSeries` — `x` (dates, years or months) plus `values` (and optional `lo90`/`hi90`), same length (validated).
    - `TaggedGrid` — a coarse raster as cells; each cell has a `bbox_lonlat` and one value per year.
    The validator (`check_tagged`) treats `Tagged`, `TaggedSeries` and `TaggedGrid` as tagged, and fails on any other float that is not exempt.
-2. **Proposed additions to `EXEMPT_FIELDS`** (all bookkeeping, geometry or inputs, not claims about the field):
+2. **Additions to `EXEMPT_FIELDS`** (approved, Q3; all bookkeeping, geometry or inputs, not claims about the field):
    `bbox_lonlat` (geometry), `dt_c` and `dp_pct` (scenario grid coordinates that we choose), `resolution_km` (product metadata, shown with its `resolution_source`), `years_with_data` and `clear_frac` (counts and fractions of observations, like §3's `clear_obs`).
-3. **Day-of-year for seasons that cross the new year.** §3 says `sos`/`peak`/`eos` are "day of year", which is ambiguous for winter wheat (sown Oct 2022, harvest year 2023). The fixtures use **day of the harvest year, negative = the previous autumn** (unit string `"day of harvest year"`; 15 Oct 2022 → −77 (31 Dec 2022 = 0) for harvest year 2023). See open question Q1.
-4. **Size.** Largest synthetic file: `scenarios` at 83 KB (4 options × 12 metrics × 12 scenarios); `series` 25–27 KB for 8 years; `layers` 20 KB with a 12 × 12 SMAP grid.
+3. **Season dates (approved, Q1).** `Season.sos/peak/eos` are the **day of the harvest year, negative = the previous autumn** (unit string `"day of harvest year"`). 1 Jan of the harvest year = 1 and 31 Dec of the previous year = 0, so 15 Oct 2022 = −77 for harvest year 2023. This replaces §3's ambiguous "day of year".
+4. **Scenarios hold weather-sensitive metrics only (approved, Q6).** `SEQUENCE_ONLY_METRICS` (`legume_share`, `family_breaks`, `forage_value`, `deep_root_share`, all defined from the crop sequence alone in T6.7) live once in the pack's `Option.metrics`; the validator rejects them in a scenario. Every other `Option.metrics` key is repeated per scenario.
+5. **Size.** Largest synthetic file: `scenarios` at 55.5 KB (4 options × 8 metrics × 12 scenarios); `series` 22–24 KB for 8 years; `layers` 20 KB with a 12 × 12 SMAP grid; pack 22–23 KB.
 
 ## 3. Models (Pydantic v2)
 
 ```python
+# --- changes to existing §3 models ----------------------------------------------------
+# Season.sos / peak / eos: "day of year" -> "day of the harvest year, negative = previous autumn" (Q1)
+# EXEMPT_FIELDS += {"bbox_lonlat", "dt_c", "dp_pct", "resolution_km", "years_with_data", "clear_frac"} (Q3)
+# The tag validator treats Tagged, TaggedSeries and TaggedGrid as tagged containers.
+
 class TaggedSeries(BaseModel):
     """Many numbers that share one unit, tag and source (keeps per-field files small)."""
     x: list[date] | list[int]  # dates, or years / months
@@ -45,12 +51,6 @@ class TaggedSeries(BaseModel):
     # validator: values / lo90 / hi90 have the same length as x
 
 # --- <field_id>.series.json -----------------------------------------------------------
-class SeasonMarks(BaseModel):
-    """SOS / peak / EOS of one story season. Must equal the matching `Season` in the pack."""
-    season_year: int
-    season_index: int = 0
-    sos: Tagged; peak: Tagged; eos: Tagged
-
 class FieldSeries(BaseModel):
     schema_version: str
     field_id: str
@@ -58,7 +58,7 @@ class FieldSeries(BaseModel):
     evi: TaggedSeries          # observed, tag O
     clear_frac: list[float]    # clear-pixel fraction per date in ndvi.x (bookkeeping)
     ndvi_smooth: TaggedSeries  # smoothed curve, tag D
-    marks: list[SeasonMarks]
+    # SOS / peak / EOS are not repeated: the app reads them from FieldPack.story (Q2)
     data_as_of: date
     # validator: ndvi, evi and clear_frac share the same dates
 
@@ -89,11 +89,14 @@ class FieldCalendar(BaseModel):
     data_as_of: date
 
 # --- <field_id>.scenarios.json --------------------------------------------------------
+# T6.7 metrics defined only by the crop sequence: identical in every scenario, kept in the pack (Q6)
+SEQUENCE_ONLY_METRICS = frozenset({"legume_share", "family_breaks", "forage_value", "deep_root_share"})
+
 class Scenario(BaseModel):
     scenario_id: str                          # e.g. "t+1_p-10"
     dt_c: float                               # temperature change, °C (grid coordinate)
     dp_pct: float                             # rainfall change, % (grid coordinate)
-    metrics: dict[str, dict[str, Tagged]]     # option_id -> metric -> value (same keys as Option)
+    metrics: dict[str, dict[str, Tagged]]     # option_id -> weather-sensitive metric -> value
     ranks: dict[str, int]                     # option_id -> rank under default weights
 
 class FieldScenarios(BaseModel):
@@ -103,7 +106,7 @@ class FieldScenarios(BaseModel):
     note: str                  # "Sensitivity tests on past weather, not climate projections."
     scenarios: list[Scenario]  # 3 temperatures x 4 rainfall = 12 (T6.8)
     data_as_of: date
-    # validator: exactly 12 scenarios; baseline_id is one of them
+    # validator: exactly 12 scenarios; baseline_id is one of them; no SEQUENCE_ONLY_METRICS
 
 # --- packs/<region>/layers.json -------------------------------------------------------
 class GridCell(BaseModel):
@@ -133,8 +136,7 @@ class RegionLayers(BaseModel):
     schema_version: str
     region_id: str
     layers: list[RegionalLayer]
-    field_colouring: dict[FieldColourMetric, dict[str, Tagged]]  # metric -> field_id -> value
-    colouring_option: str      # option the colouring describes: "current"
+    field_colouring: dict[FieldColourMetric, dict[str, Tagged]]  # metric -> field_id -> value, Current option (Q5)
     data_as_of: date
 
 # --- packs/<region>/index.json, packs/<region>/hindcast.json, packs/regions.json -------
@@ -197,14 +199,6 @@ class RegionList(BaseModel):   # packs/regions.json, for the region switcher (T9
   "ndvi_smooth": { "x": ["2016-09-01", "2016-09-08", "2016-09-15" /* … weekly */],
                    "values": [0.141, 0.142, 0.145], "unit": "NDVI", "tag": "D",
                    "source": "SYNTHETIC:fixture@0.1" },
-  "marks": [
-    { "season_year": 2017, "season_index": 0,
-      "sos":  { "value": -77.0, "lo50": -80.0, "hi50": -74.0, "lo90": -85.0, "hi90": -69.0,
-                "unit": "day of harvest year", "tag": "O", "source": "SYNTHETIC:fixture@0.1" },
-      "peak": { "value": 123.0, "unit": "day of harvest year", "tag": "O", "source": "SYNTHETIC:fixture@0.1" /* bands cut */ },
-      "eos":  { "value": 168.0, "unit": "day of harvest year", "tag": "O", "source": "SYNTHETIC:fixture@0.1" } }
-    // … one per story season
-  ],
   "data_as_of": "2024-12-31"
 }
 ```
@@ -261,7 +255,7 @@ class RegionList(BaseModel):   # packs/regions.json, for the region switcher (T9
         "current": {
           "water_use_mm": { "value": 440.0, "lo50": 419.0, "hi50": 460.0, "lo90": 390.0, "hi90": 489.0,
                             "unit": "mm/season", "tag": "D", "source": "SYNTHETIC:fixture@0.1" }
-          // … every key of Option.metrics
+          // … every weather-sensitive key of Option.metrics (no legume_share, family_breaks, forage_value, deep_root_share)
         }
         // … one per option_id
       },
@@ -300,7 +294,6 @@ class RegionList(BaseModel):   # packs/regions.json, for the region switcher (T9
     }
     // … water_stress_share, frost_share
   },
-  "colouring_option": "current",
   "data_as_of": "2024-12-31"
 }
 ```
@@ -351,12 +344,24 @@ class RegionList(BaseModel):   # packs/regions.json, for the region switcher (T9
 { "regions": [ { "region_id": "ks_demo_synthetic", "name": "Kansas — DEMO DATA (synthetic)", "tier": 1 } ] }
 ```
 
-## 5. Open questions (need a decision before `main` adopts this)
+## 5. Decisions (user, 2026-11-04)
 
-- **Q1 Day-of-year convention** (§2.3). Adopt "day of harvest year, negative = previous autumn" for `Season.sos/peak/eos` and `SeasonMarks`? This touches §3 `Season` and T2.2 on `main`.
-- **Q2 Duplicated marks.** `SeasonMarks` repeats `Season.sos/peak/eos` from the pack, as requested. The generator checks that they are equal. Alternative: drop `marks` and let the app read them from the pack (one source of truth, smaller file).
-- **Q3 Exempt additions** (§2.2): confirm `bbox_lonlat`, `dt_c`, `dp_pct`, `resolution_km`, `years_with_data`, `clear_frac`.
-- **Q4 `bare_by_option`** is new pipeline output (simulated cover from physics, tag D), not part of T2.5. It is needed for T9.9's "show an alternative's calendar" toggle.
-- **Q5 Field colouring** describes the Current option only (`colouring_option`). Should a user be able to colour the map by an alternative?
-- **Q6 Scenario size.** Scenarios repeat all 12 metrics; only the weather-sensitive ones change (water use, irrigation, RYI, bad-year values, erosion). Storing only those would roughly halve the file.
-- **Q7 `regions.json`** is a new file not named in §3.
+| # | Question | Decision |
+|---|---|---|
+| Q1 | Day-of-year for seasons crossing the new year | Day of the harvest year, negative = previous autumn (§2.3) |
+| Q2 | SOS/peak/EOS repeated in `series` | Dropped; the app reads them from the pack's `story` |
+| Q3 | Six new exempt fields | Approved (§2.2) |
+| Q4 | `bare_by_option` (simulated, tag D) for T9.9's alternative calendar | Approved; new pipeline output from physics (T3/T6), not part of T2.5 |
+| Q5 | Map colouring by an alternative | Current only; colouring by an alternative becomes a stretch item |
+| Q6 | Scenario size | Scenarios store weather-sensitive metrics only (§2.4) |
+| Q7 | `packs/regions.json` | Approved |
+
+## 6. Merge into `main`
+
+Done on `main`, not on the app branch:
+
+1. PLAN.md §3: add the models of §3 above, change the `Season` comment (Q1), extend `EXEMPT_FIELDS` and the tagging rule (Q3 and the three tagged containers), and list the region-level files `index.json`, `hindcast.json`, `layers.json` and `packs/regions.json`.
+2. PLAN.md: T2.2 uses the Q1 date convention; T9.9 reads `bare_by_option` (Q4); add a stretch item "map colouring by an alternative option" (Q5).
+3. `src/fieldwitness/schemas.py`: implement these models with the validators listed here (same code as `scripts/fixture_schemas.py` Part 2).
+4. DECISIONS.md: log Q1–Q7 with this file as the reference.
+5. At the app merge (Gate 6): T8.2 generates `app/src/types.ts`, and `scripts/fixture_schemas.py` Part 1 is deleted in favour of `fieldwitness.schemas`.

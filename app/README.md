@@ -38,3 +38,9 @@ npm run build     # production build into app/dist (real packs only)
 - 2026-11-04 (user): approved packages react, react-dom, @types/react, @types/react-dom, vite,
   @vitejs/plugin-react, vitest (MIT), typescript (Apache-2.0); Recharts (MIT) later for charts.
   The user runs `npm install` personally.
+- 2026-11-04 (user): §3 extension answers Q1–Q7 approved (`docs/schema_ext_proposal.md` §5):
+  harvest-year day for SOS/peak/EOS; no marks in `series`; six exempt fields; `bare_by_option`;
+  map colouring = Current only (alternative = stretch item); scenarios hold weather-sensitive
+  metrics only; `packs/regions.json`.
+- Dev server: run from `app/` (`npm run dev`). `npm --prefix "<path with space>"` fails on this
+  machine (cmd splits `C:\Users\Amr 13_03`).

@@ -154,7 +154,7 @@ def make_field(i, spec, rng: random.Random):
         weeks.append(start)
         start += timedelta(days=7)
 
-    story, marks = [], []
+    story = []
     for y, crop in history:
         cropped = crop in TIMING
         sos, peak, eos = TIMING.get(crop, (None, None, None))
@@ -174,7 +174,6 @@ def make_field(i, spec, rng: random.Random):
             clear_obs=rng.randint(28, 52),
         )
         story.append(season)
-        marks.append(S.SeasonMarks(season_year=y, sos=season.sos, peak=season.peak, eos=season.eos))
     series = S.FieldSeries(
         schema_version=VERSION,
         field_id=fid,
@@ -184,7 +183,6 @@ def make_field(i, spec, rng: random.Random):
         ndvi_smooth=S.TaggedSeries(
             x=weeks, values=[smooth(x) for x in weeks], unit="NDVI", tag="D", source=SRC
         ),
-        marks=marks,
         data_as_of=AS_OF,
     )
 
@@ -425,7 +423,10 @@ def make_field(i, spec, rng: random.Random):
             for o in options:
                 f_w = 1 + 0.03 * dt - 0.004 * dp
                 f_y = 1 - 0.04 * dt + 0.005 * dp
-                mm = dict(o.metrics)
+                # weather-independent metrics stay in the pack only (Q6)
+                mm = {k: v for k, v in o.metrics.items() if k not in S.SEQUENCE_ONLY_METRICS}
+                v = o.metrics["erosion_exposure"].value
+                mm["erosion_exposure"] = T(v * (1 + 0.01 * dp), "relative index", "D", 0.1, 2)
                 for key in ("water_use_mm", "bad_year_water_mm", "irrigation_mm"):
                     v = o.metrics[key].value
                     mm[key] = T(v * f_w, o.metrics[key].unit, "D", 30, 0)
@@ -510,7 +511,6 @@ def region_files(packs, calendars, rng: random.Random):
         region_id=REGION,
         layers=layers,
         field_colouring=colour,
-        colouring_option="current",
         data_as_of=AS_OF,
     )
     index = S.RegionIndex(
@@ -564,14 +564,6 @@ def region_files(packs, calendars, rng: random.Random):
     return index, hindcast, region_layers, regions
 
 
-def check_consistency(pack: S.FieldPack, series: S.FieldSeries) -> None:
-    by_key = {(s.year, s.index): s for s in pack.story}
-    for m in series.marks:
-        s = by_key[(m.season_year, m.season_index)]
-        if (m.sos, m.peak, m.eos) != (s.sos, s.peak, s.eos):
-            raise ValueError(f"series marks differ from story for season {m.season_year}")
-
-
 def main() -> int:
     rng = random.Random(SEED)
     OUT.mkdir(parents=True, exist_ok=True)
@@ -581,7 +573,6 @@ def main() -> int:
     packs, cals = [], []
     for i, spec in enumerate(FIELDS):
         pack, series, cal, scen = make_field(i, spec, rng)
-        check_consistency(pack, series)
         fid = pack.field.field_id
         out |= {
             f"{fid}.SYNTHETIC.json": pack,

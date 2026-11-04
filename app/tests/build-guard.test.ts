@@ -5,7 +5,7 @@ import { join, resolve } from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import { build } from "vite";
 
-const APP = resolve(__dirname, "..");
+const APP = resolve(import.meta.dirname, "..");
 const FIXTURE = join(APP, "fixtures", "ks_demo_synthetic", "index.SYNTHETIC.json");
 const temps: string[] = [];
 const savedEnv = process.env.VITE_DATA;
