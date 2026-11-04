@@ -1,0 +1,191 @@
+{
+ "points": [
+  {
+   "region": "ks_t14slh",
+   "kind": "field_point",
+   "lon": -100.015272,
+   "lat": 38.06904,
+   "result": "polygon",
+   "field_id": "6a08037877f3c6c68619b59a12f52cfeed82d1d5"
+  },
+  {
+   "region": "ks_t14slh",
+   "kind": "field_point",
+   "lon": -100.611076,
+   "lat": 38.54003,
+   "result": "polygon",
+   "field_id": "cd3220bc71fd6c50a188d061f82af4bad559ffbb"
+  },
+  {
+   "region": "ks_t14slh",
+   "kind": "field_point",
+   "lon": -100.139864,
+   "lat": 38.688376,
+   "result": "polygon",
+   "field_id": "5cf22bb36bcfe718e483989b468c8e5890abb266"
+  },
+  {
+   "region": "ks_t14slh",
+   "kind": "field_point",
+   "lon": -100.237462,
+   "lat": 38.548227,
+   "result": "polygon",
+   "field_id": "48c4a0964ebb49956c267ae2efeae4f15ad51902"
+  },
+  {
+   "region": "ks_t14slh",
+   "kind": "field_point",
+   "lon": -100.075733,
+   "lat": 38.686489,
+   "result": "polygon",
+   "field_id": "61d84bc9f0891686ab6eb74706b9dbe1d0b20756"
+  },
+  {
+   "region": "ks_t14slh",
+   "kind": "random_point",
+   "lon": -100.047718,
+   "lat": 38.810401,
+   "result": "no field",
+   "field_id": null
+  },
+  {
+   "region": "ks_t14slh",
+   "kind": "random_point",
+   "lon": -101.374473,
+   "lat": 38.77106,
+   "result": "no field",
+   "field_id": null
+  },
+  {
+   "region": "ks_t14slh",
+   "kind": "random_point",
+   "lon": -100.947261,
+   "lat": 37.947428,
+   "result": "no field",
+   "field_id": null
+  },
+  {
+   "region": "fr_toulouse_t31tcj",
+   "kind": "field_point",
+   "lon": 1.662734,
+   "lat": 43.532837,
+   "result": "polygon",
+   "field_id": "4ad3a1e09d830a56226a9ca6f6edbc7a10304be8"
+  },
+  {
+   "region": "fr_toulouse_t31tcj",
+   "kind": "field_point",
+   "lon": 1.744678,
+   "lat": 43.511212,
+   "result": "polygon",
+   "field_id": "4962cb2536569c347466291f766fb6e515eab338"
+  },
+  {
+   "region": "fr_toulouse_t31tcj",
+   "kind": "field_point",
+   "lon": 1.650749,
+   "lat": 43.484002,
+   "result": "polygon",
+   "field_id": "9cf21d8d8153b136acdd253ed4c44c2e75bef904"
+  },
+  {
+   "region": "fr_toulouse_t31tcj",
+   "kind": "random_point",
+   "lon": 1.705443,
+   "lat": 43.352347,
+   "result": "no field",
+   "field_id": null
+  },
+  {
+   "region": "fr_toulouse_t31tcj",
+   "kind": "random_point",
+   "lon": 1.805706,
+   "lat": 43.374454,
+   "result": "polygon",
+   "field_id": "07900d53c6a133c8a390f9b024182cbfd17e90a1"
+  },
+  {
+   "region": "fr_toulouse_t31tcj",
+   "kind": "random_point",
+   "lon": 1.81754,
+   "lat": 43.391041,
+   "result": "polygon",
+   "field_id": "6362c9ffcaae1d1476556470dfa1c9573d2910b7"
+  },
+  {
+   "region": "ua_central_t36uvu",
+   "kind": "field_point",
+   "lon": 32.35938,
+   "lat": 48.200119,
+   "result": "polygon",
+   "field_id": "90fb65e023e262ff653b08bda4ea94c621455873"
+  },
+  {
+   "region": "ua_central_t36uvu",
+   "kind": "field_point",
+   "lon": 32.323762,
+   "lat": 48.291208,
+   "result": "polygon",
+   "field_id": "402c830fa9981b6eaae1a342fd5a8361b25f1cb1"
+  },
+  {
+   "region": "ua_central_t36uvu",
+   "kind": "field_point",
+   "lon": 32.326143,
+   "lat": 48.206901,
+   "result": "polygon",
+   "field_id": "286ba043a912985847387ef38a8eb3ccd2f23baa"
+  },
+  {
+   "region": "ua_central_t36uvu",
+   "kind": "random_point",
+   "lon": 32.429808,
+   "lat": 48.270461,
+   "result": "no field",
+   "field_id": null
+  },
+  {
+   "region": "ua_central_t36uvu",
+   "kind": "random_point",
+   "lon": 32.348938,
+   "lat": 48.293878,
+   "result": "no field",
+   "field_id": null
+  },
+  {
+   "region": "ua_central_t36uvu",
+   "kind": "random_point",
+   "lon": 32.325927,
+   "lat": 48.263104,
+   "result": "polygon",
+   "field_id": "13c32410916afc83d6d04404a5f15ca4e51e6f9e"
+  }
+ ],
+ "n_points": 20,
+ "n_polygon": 14,
+ "n_no_field": 6,
+ "field_points_resolved": true,
+ "interior_pixel_checks": [
+  {
+   "field_id": "05ecf98f9da9a300dfa515c79bbc73943964e773",
+   "stored": 1318,
+   "vector": 1318,
+   "raster_gdal": 1318,
+   "match": true
+  },
+  {
+   "field_id": "4b4da0dc696fedea0e910c211b959aec20b7442f",
+   "stored": 7,
+   "vector": 7,
+   "raster_gdal": 7,
+   "match": true
+  },
+  {
+   "field_id": "e202b5664876c0808f86e018b040ec4fac69a1f9",
+   "stored": 63,
+   "vector": 63,
+   "raster_gdal": 63,
+   "match": true
+  }
+ ]
+}

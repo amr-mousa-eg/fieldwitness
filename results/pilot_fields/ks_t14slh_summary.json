@@ -1,0 +1,22 @@
+{
+ "region_id": "ks_t14slh",
+ "candidates": 9905,
+ "candidates_by_crop": {
+  "winter_wheat": 4413,
+  "sorghum": 2814,
+  "maize": 2678
+ },
+ "quotas": {
+  "winter_wheat": 89,
+  "sorghum": 57,
+  "maize": 54
+ },
+ "pilot_fields": 200,
+ "blocks_covered": 116,
+ "blocks_with_candidates": 121,
+ "area_ha_median": 31.935,
+ "interior_px_median": 310.0,
+ "hls_scale_flagged": 0,
+ "seed": 20261114,
+ "stratification": "crop x 10 km block (no irrigation stratum; DECISIONS.md)"
+}

@@ -246,3 +246,8 @@ Gate 0 stays **open on one item: SoilGrids**.
 - **Gate 0 / Gate 1 soil rule (user):** Phase 1 may start now with the tasks that do not need soil (T1.1, T1.2, T1.4, T1.5, T1.6, T1.8). Soil values for the pilot fields (T1.3) are required for **Gate 1**, not Gate 0. With this rule, the essential Gate 0 sources HLS, POWER and CSB pass, and SoilGrids moves to Gate 1.
 - **Soil fetch timing (user):** soil values are fetched once the pilot-field list exists (T1.4), not for the census boxes. SoilGrids retry 2 runs as scheduled (5 Nov); if it fails, check and use the `maps.isric.org` WCS fallback (docs and licence first).
 - `field_id` rule (user): SHA-1 hex of the WKB of the field geometry in EPSG:4326, coordinates rounded to 6 decimals; written into PLAN.md §3. Working mode from now: build Phase 1 (Kansas) without per-task approval; stop only for the user's listed conditions; push when tests pass and gitleaks is clean.
+
+## 2026-11-04 — Phase 1 (Kansas) log
+
+- **T1.4 done.** `fieldwitness.cli pilot-fields --region ks_t14slh`: CSB 2024 tile read (est. 43.2 MB, cached in `data/fields/`), 9,905 candidates (annual arable on 2024, crop in the rotation options, ≥ 4 interior pixels at 15 m, representative point in the tile) → 200 pilot fields: winter wheat 89, sorghum 57, maize 54 (proportional quotas, min 40), one field per 10 km block per round, seed 20261114; 116 of 121 blocks covered; median 31.9 ha, 310 interior pixels; no HLS scale flag. No irrigation stratum: the WorldCereal 2021 irrigation layer (CC-BY-4.0) needs a Terrascope login, which is beyond the allowed credentials. Known bias: fields fallow in 2024 cannot be selected (selection on the current year), so wheat–fallow fields enter only via their wheat years.
+

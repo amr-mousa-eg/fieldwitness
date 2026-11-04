@@ -11,7 +11,16 @@ def main() -> None:
     c.add_argument(
         "--compare", action="store_true", help="only rebuild comparison.md from existing results"
     )
+    pf = sub.add_parser("pilot-fields", help="T1.4 select pilot fields for a region")
+    pf.add_argument("--region", required=True)
     a = p.parse_args()
+
+    if a.command == "pilot-fields":
+        from fieldwitness.resolve.pilot import build_pilot_fields
+
+        _, summary = build_pilot_fields(a.region)
+        print(summary, flush=True)
+        return
 
     if a.command == "census":
         from fieldwitness import census
