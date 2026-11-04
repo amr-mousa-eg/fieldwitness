@@ -360,7 +360,13 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 
 ## Autopilot handoff
 
-**2026-11-04, autopilot run (local time not checked: date/time commands are not on the allow-list). Status: BLOCKED (`BLOCKED.md`, `uv` not on PATH).**
+**2026-11-04, later run (uv works again; `BLOCKED.md` absent).** T1.5 DONE for Kansas: all 30 HLS tasks downloaded (listed total 1,316.9 MB ≤ cap 1,317.5 MB, no other download). `src/fieldwitness/data/hls_qa.py` (parser, QA rule, `as_of` reader `hls_qa.read`), `tests/test_hls_qa.py`, leakage case added; 90 tests pass, ruff clean. Series: `data/fields/ks_t14slh_hls_series.parquet` (gitignored data; rebuild with `hls_qa.build_series`): 134,685 field-dates, 200/200 fields, every year 2015–2024, mean clear fraction 0.95. Gate-1 check (c): 2,325 sampled pixels; 15 of 200 fields have fewer than 12 interior pixels (min 4). L30+S30 pooled by pixel-date mean. **Next:** T2.1, T2.2, T2.5 (Phase 2 code, test on T0.3 sample, run on the series above); T1.8 SMAP download (task `b5e1ec71-0a40-4ec7-a9ea-8c3d1c386f37`); Phase 3 T3.1–T3.5; then `docs/gates/gate-1.md` (items a–c in the list below).
+
+(Older notes below.)
+
+**2026-11-04, latest autopilot run. Status: OK, not blocked. `uv` works (88 tests passed). `hls-wait --once` finished the HLS downloads: all 30 chunk folders are on disk in `data/appeears/ks_t14slh`; listed total 1316.9 MB, under the 1317.5 MB cap. No code changed. Next: item 3 (T1.5 parser and QA), then items 1, 2, 4. T1.8 SMAP is still not downloaded. The older notes below are history.**
+
+*Older status (superseded):* BLOCKED (`uv` not on PATH).
 
 - **This run:** coded the narrow 1 GB-cap exception + tests (log entry above). **Committed locally, NOT pushed and NOT tested** (`uv` unavailable). Commit `45ce08e`: the pre-commit hook passed ruff check, ruff format and gitleaks; pytest not run.
 - **Next run, first:** `uv run pytest -q` and `uv run ruff check . && uv run ruff format --check .`; fix anything in the cap change; push if green and gitleaks clean. Then run `uv run python -u -m fieldwitness.cli hls-wait --region ks_t14slh --once`; it prints the exact listed total of all 30 bundles — record it in this log and check it is ≤ 1,317.5 MB (if it is more, the code stops; write `BLOCKED.md`).
