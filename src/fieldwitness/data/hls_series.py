@@ -137,8 +137,10 @@ def wait_and_download(region_id: str, poll_s: int = 120) -> None:
         sizes: dict[str, int] = {}
         pending = set(ids)
         while pending:
+            counts: dict[str, int] = {}
             for tid in sorted(pending):
                 t = ae.task(s, tid)
+                counts[t.get("status", "?")] = counts.get(t.get("status", "?"), 0) + 1
                 if t.get("status") == "error":
                     print("ERROR", ids[tid], tid, t.get("error"), flush=True)
                     pending.discard(tid)
@@ -157,6 +159,7 @@ def wait_and_download(region_id: str, poll_s: int = 120) -> None:
                     )
                     pending.discard(tid)
             if pending:
+                print(time.strftime("%H:%M:%S"), "status of remaining tasks:", counts, flush=True)
                 time.sleep(poll_s)
     finally:
         print("logout HTTP", ae.logout(s), flush=True)

@@ -68,6 +68,18 @@ def login() -> requests.Session:
     return s
 
 
+def _call(session: requests.Session, method: str, url: str, **kw) -> requests.Response:
+    """Request with one re-login on HTTP 403. AppEEARS docs: "All programs should check for an HTTP
+    403 Forbidden status code to successfully handle token expiration by acquiring a new token."
+    (Observed 2026-11-04: a logout in another process revoked this session's token.)"""
+    r = session.request(method, url, **kw)
+    if r.status_code == 403:
+        fresh = login()
+        session.headers["Authorization"] = fresh.headers["Authorization"]
+        r = session.request(method, url, **kw)
+    return r
+
+
 def logout(session: requests.Session) -> int:
     r = session.post(f"{API}/logout", timeout=60)
     session.headers.pop("Authorization", None)
@@ -89,20 +101,20 @@ def area_task(name: str, geojson: dict, start: str, end: str, layers=HLS_LAYERS)
 
 
 def submit(session: requests.Session, body: dict) -> str:
-    r = session.post(f"{API}/task", json=body, timeout=120)
+    r = _call(session, "POST", f"{API}/task", json=body, timeout=120)
     if r.status_code >= 400:
         raise RuntimeError(f"submit failed: HTTP {r.status_code} {r.text[:500]}")
     return r.json()["task_id"]
 
 
 def task(session: requests.Session, task_id: str) -> dict:
-    r = session.get(f"{API}/task/{task_id}", timeout=60)
+    r = _call(session, "GET", f"{API}/task/{task_id}", timeout=60)
     r.raise_for_status()
     return r.json()
 
 
 def bundle(session: requests.Session, task_id: str) -> list[dict]:
-    r = session.get(f"{API}/bundle/{task_id}", timeout=60)
+    r = _call(session, "GET", f"{API}/bundle/{task_id}", timeout=60)
     r.raise_for_status()
     return r.json()["files"]
 
@@ -116,7 +128,8 @@ def download(session: requests.Session, task_id: str, files: list[dict], out: Pa
         if path.exists() and hashlib.sha256(path.read_bytes()).hexdigest() == f["sha256"]:
             continue
         h = hashlib.sha256()
-        with session.get(f"{API}/bundle/{task_id}/{f['file_id']}", stream=True, timeout=600) as d:
+        url = f"{API}/bundle/{task_id}/{f['file_id']}"
+        with _call(session, "GET", url, stream=True, timeout=600) as d:
             d.raise_for_status()
             with open(path, "wb") as fh:
                 for chunk in d.iter_content(1 << 20):
