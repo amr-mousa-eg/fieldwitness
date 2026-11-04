@@ -24,7 +24,7 @@ Deliverables: (1) a public static web app (no login, offline from precomputed fi
 7. **Spatially blocked validation.** Train and test splits are separated by HLS tile or by ≥ 10 km blocks, never random field splits.
 8. **Formulas cite their source** in the docstring (e.g. `FAO-56 Eq. 6`). Take constants and table values from the papers; do not recall them from memory. If you cannot open the paper, stop and ask.
 9. **Report negative results.** If a test or validation fails, record it in `results/` and `DECISIONS.md`. Never tune on the test set or hide a failure.
-10. **No secrets in the repo.** Earthdata credentials come from `~/.netrc` or environment variables. Run the secret scan before every commit.
+10. **No secrets in the repo.** Earthdata credentials live in `%USERPROFILE%\_netrc` on Windows (the file earthaccess reads by default), or in environment variables. Never read or print that file. Run the secret scan before every commit.
 11. **Ask before** downloading more than 1 GB, adding a dependency not listed in `PLAN.md`, or changing a schema in `PLAN.md §3`.
 
 ## Working agreement
@@ -41,6 +41,7 @@ Deliverables: (1) a public static web app (no login, offline from precomputed fi
 - Hardware: Dell Precision 7520, 16 GB RAM, CPU only (GPU unknown; do not assume CUDA).
 - Python 3.12 (pinned with `uv python pin 3.12`; the system Python 3.15 is too new for geospatial wheels), managed with `uv`. Node 20+ for the app.
 - OS: Windows. The user's home path contains a space (`C:\Users\Amr 13_03`); quote paths in every command.
+- Earthdata credentials: `%USERPROFILE%\_netrc` (underscore, no extension), entry `machine urs.earthdata.nasa.gov`. Never read or print it.
 - Commands:
   - `uv sync` — install
   - `uv run pytest -q` — tests
