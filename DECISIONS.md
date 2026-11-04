@@ -313,7 +313,7 @@ Gate 0 stays **open on one item: SoilGrids**.
 
 **2026-11-04, autopilot run (local time not checked: date/time commands are not on the allow-list). Status: BLOCKED (`BLOCKED.md`, `uv` not on PATH).**
 
-- **This run:** coded the narrow 1 GB-cap exception + tests (log entry above). **Committed locally, NOT pushed and NOT tested** (`uv` unavailable). The pre-commit hook result is in the commit log line below.
+- **This run:** coded the narrow 1 GB-cap exception + tests (log entry above). **Committed locally, NOT pushed and NOT tested** (`uv` unavailable). Commit `45ce08e`: the pre-commit hook passed ruff check, ruff format and gitleaks; pytest not run.
 - **Next run, first:** `uv run pytest -q` and `uv run ruff check . && uv run ruff format --check .`; fix anything in the cap change; push if green and gitleaks clean. Then run `uv run python -u -m fieldwitness.cli hls-wait --region ks_t14slh --once`; it prints the exact listed total of all 30 bundles — record it in this log and check it is ≤ 1,317.5 MB (if it is more, the code stops; write `BLOCKED.md`).
 - **Done before:** autopilot setup. `hls-wait --once` committed. Phase 1 Kansas: T1.1–T1.4 and T1.6 ticked; T1.5 and T1.8 open.
 - **In progress, background (server side):**
