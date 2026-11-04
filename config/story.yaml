@@ -1,0 +1,14 @@
+# Field-story parameters (T2.1, T2.2, T2.5). ALL values are TEAM CHOICES (tag A), not from a paper.
+# UNVERIFIED: none of these numbers is taken from a source; they are tuned only by reading the
+# acceptance tests, never on test labels (CLAUDE.md rule 9).
+smoothing:
+  grid_days: 5            # regular grid the series is gap-filled onto (linear interpolation)
+  max_gap_days: 60        # gaps longer than this are NOT filled (left NaN)
+  savgol_window: 7        # odd number of grid steps (35 days)
+  savgol_order: 2
+cover:
+  ndvi_threshold: 0.30    # NDVI >= this -> covered; below -> bare (A)
+bare_calendar:
+  first_year: 2016        # T2.5: "past years (>= 2016)"
+  min_clear_obs_per_month: 3   # per month across all years; fewer -> "insufficient data"
+  min_years_with_data: 3       # years having >= 1 clear obs in the month
