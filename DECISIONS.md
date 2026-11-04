@@ -396,6 +396,10 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 
 ## Autopilot handoff
 
+**2026-11-05, autopilot run (T2.3 check).** Done: nothing coded. T2.3 needs scikit-learn (not in PLAN/pyproject, rule 11) and EU fields for the transfer scores (none exist) → `BLOCKED.md` written with options. In progress: nothing; git clean apart from BLOCKED.md and this entry. Background: none. Next: after your answer, T2.3 Kansas-only (recommended) or T3.7. Risk: schedule slips while blocked; T2.2 still FAILED.
+
+(Previous entry:)
+
 **2026-11-05, autopilot run (Gate 1).** Done: `docs/gates/gate-1.md` written (Kansas data layer PASS; T2.2 FAILED 78.3 % vs 90 %; T1.7 open; checks a-c answered: 0/24,000 soil values missing, no irrigated/rainfed split, 15/200 fields <12 interior pixels). Added `scripts/gate1_soil_check.py` + `results/gate1_soil_nodata.json`. 127 tests pass, ruff clean. In progress: nothing. Background: none. Next: T2.3 (crop classifier; uses the 78 % season detector) or T3.7 (stretch); T1.7 needs user (WIMAS disclaimer). Risk: Gate 1 not fully green because of T2.2; only Kansas has fields.
 
 (Previous entry:)
