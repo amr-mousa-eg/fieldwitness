@@ -379,12 +379,22 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
   4. **Target stays 90 %.** If the fresh test set still misses, report it as a negative result in `results/` and here, and continue; no further tuning.
   5. Meanwhile the loop may continue Phase 3 (T3.1–T3.5) and T1.8 SMAP, which do not depend on T2.2.
 
+## 2026-11-04 — T2.2 re-check per user decision: NEGATIVE RESULT (target 90 % missed)
+
+- Code: `story/seasons.py` now merges peaks split by a Dec–Feb dip that stays ≥ cover threshold 0.30 (dormancy rule, `dormancy.months` in `config/story.yaml`, not tuned) and drops green-ups with amplitude (peak − lower base) < `seasons.min_crop_amplitude`. Also fixed: SOS is now the first crossing after the left trough (before, it could land on the previous season's peak); season counts and so all match shares are unchanged (checked: test set 0.783 before and after).
+- Sets (`check_seasons.py`; lists and block lists in `results/story/ks_seasons_sets.json`): original 30 (29 blocks), dev 30 (26 blocks), test 30 (26 blocks); no block shared (asserted in code). Blocks outside the original 29 were shuffled (seed 20261114) and split in two halves.
+- Dev grid (fixed before running; `results/story/ks_seasons_dev_grid.json`): match share 0.812 (no amplitude filter, dormancy only) … **0.829 at 0.35** (best) … 0.713 at 0.50. Chosen `min_crop_amplitude = 0.35` (tag A, dev only).
+- **Results:** original 30 (no new rules): **74.6 %** (on record, untouched). Dev: **82.9 %** (fallow 0.82, maize 0.89, sorghum 0.92, winter wheat 0.75). Test, run once: **78.3 %** (fallow 0.80, maize 0.83, sorghum 0.90, winter wheat 0.66; `results/story/ks_seasons_test.json`). Target 90 % **not met**.
+- Per the decision: T2.2 not ticked, no further tuning, no BLOCKED. Winter wheat is the weak crop (0.66–0.75); likely causes (not tested, UNVERIFIED): ragged autumn/spring signals, labels (CSB) vs. actual abandonment. Any later change needs a new fresh test set and a new user decision. T2.3 and downstream steps that need seasons should use the current detector as a documented 78 %-accurate one.
+- Test added: synthetic winter wheat with a Dec–Feb dip above bare soil gives one winter-variant season per harvest year (99 tests pass, ruff clean).
+
 ## Autopilot handoff
 
-**2026-11-04, user decision on T2.2 (interactive session; `BLOCKED.md` deleted).** See the log entry "T2.2 acceptance failure: user decision" above.
+**2026-11-04, run after the T2.2 decision.** Done: T2.2 re-check (item 1 below), negative result logged in the entry above; T2.2 stays unticked. In progress: nothing. Background: SMAP task `b5e1ec71-0a40-4ec7-a9ea-8c3d1c386f37` not downloaded. Next: T1.8 SMAP, Phase 3 T3.1–T3.5, then gate-1.md. Risk: T2.3 inherits a 78 % season detector; gate 1 must report T2.2 as FAILED.
 
+- **Done (item 1, kept for history):** see the T2.2 re-check entry.
 - **Next, in this order:**
-  1. **T2.2 re-check per the decision:** keep `results/story/ks_seasons_check.json` (74.6 %, first pre-registered result) untouched; write new results to new files (e.g. `results/story/ks_seasons_dev.json`, `results/story/ks_seasons_test.json`). Implement the winter-dormancy rule (Dec–Feb dip above the bare-soil level = same season) and the fallow rule ("no crop-like season"; amplitude threshold set on dev only). Draw the dev and test sets (30 labelled fields each, seed 20261114) from 10 km blocks used by neither the original 30 nor each other; record the block lists. Tune only on dev; run test once; report all three results. Tick T2.2 only if test ≥ 90 %; otherwise log a negative result and move on (no further tuning, no `BLOCKED.md` for this).
+  1. ~~T2.2 re-check~~ (done, negative).
   2. **Phase 3** T3.1–T3.5 and **T1.8 SMAP** (download + monthly anomaly) may run before or after item 1.
   3. Gate 1 review items (unchanged, see below).
 

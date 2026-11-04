@@ -1,0 +1,272 @@
+{
+ "0.0": {
+  "n_field_years": 240,
+  "match_share": 0.812,
+  "passed": false,
+  "by_crop": {
+   "fallow": {
+    "mean": 0.709,
+    "count": 55
+   },
+   "maize": {
+    "mean": 0.935,
+    "count": 62
+   },
+   "sorghum": {
+    "mean": 0.947,
+    "count": 38
+   },
+   "soybean": {
+    "mean": 1.0,
+    "count": 1
+   },
+   "winter_wheat": {
+    "mean": 0.726,
+    "count": 84
+   }
+  }
+ },
+ "0.1": {
+  "n_field_years": 240,
+  "match_share": 0.812,
+  "passed": false,
+  "by_crop": {
+   "fallow": {
+    "mean": 0.709,
+    "count": 55
+   },
+   "maize": {
+    "mean": 0.935,
+    "count": 62
+   },
+   "sorghum": {
+    "mean": 0.947,
+    "count": 38
+   },
+   "soybean": {
+    "mean": 1.0,
+    "count": 1
+   },
+   "winter_wheat": {
+    "mean": 0.726,
+    "count": 84
+   }
+  }
+ },
+ "0.15": {
+  "n_field_years": 240,
+  "match_share": 0.812,
+  "passed": false,
+  "by_crop": {
+   "fallow": {
+    "mean": 0.709,
+    "count": 55
+   },
+   "maize": {
+    "mean": 0.935,
+    "count": 62
+   },
+   "sorghum": {
+    "mean": 0.947,
+    "count": 38
+   },
+   "soybean": {
+    "mean": 1.0,
+    "count": 1
+   },
+   "winter_wheat": {
+    "mean": 0.726,
+    "count": 84
+   }
+  }
+ },
+ "0.2": {
+  "n_field_years": 240,
+  "match_share": 0.812,
+  "passed": false,
+  "by_crop": {
+   "fallow": {
+    "mean": 0.709,
+    "count": 55
+   },
+   "maize": {
+    "mean": 0.935,
+    "count": 62
+   },
+   "sorghum": {
+    "mean": 0.947,
+    "count": 38
+   },
+   "soybean": {
+    "mean": 1.0,
+    "count": 1
+   },
+   "winter_wheat": {
+    "mean": 0.726,
+    "count": 84
+   }
+  }
+ },
+ "0.25": {
+  "n_field_years": 240,
+  "match_share": 0.825,
+  "passed": false,
+  "by_crop": {
+   "fallow": {
+    "mean": 0.745,
+    "count": 55
+   },
+   "maize": {
+    "mean": 0.935,
+    "count": 62
+   },
+   "sorghum": {
+    "mean": 0.947,
+    "count": 38
+   },
+   "soybean": {
+    "mean": 1.0,
+    "count": 1
+   },
+   "winter_wheat": {
+    "mean": 0.738,
+    "count": 84
+   }
+  }
+ },
+ "0.3": {
+  "n_field_years": 240,
+  "match_share": 0.825,
+  "passed": false,
+  "by_crop": {
+   "fallow": {
+    "mean": 0.782,
+    "count": 55
+   },
+   "maize": {
+    "mean": 0.903,
+    "count": 62
+   },
+   "sorghum": {
+    "mean": 0.947,
+    "count": 38
+   },
+   "soybean": {
+    "mean": 1.0,
+    "count": 1
+   },
+   "winter_wheat": {
+    "mean": 0.738,
+    "count": 84
+   }
+  }
+ },
+ "0.35": {
+  "n_field_years": 240,
+  "match_share": 0.829,
+  "passed": false,
+  "by_crop": {
+   "fallow": {
+    "mean": 0.818,
+    "count": 55
+   },
+   "maize": {
+    "mean": 0.887,
+    "count": 62
+   },
+   "sorghum": {
+    "mean": 0.921,
+    "count": 38
+   },
+   "soybean": {
+    "mean": 1.0,
+    "count": 1
+   },
+   "winter_wheat": {
+    "mean": 0.75,
+    "count": 84
+   }
+  }
+ },
+ "0.4": {
+  "n_field_years": 240,
+  "match_share": 0.808,
+  "passed": false,
+  "by_crop": {
+   "fallow": {
+    "mean": 0.836,
+    "count": 55
+   },
+   "maize": {
+    "mean": 0.806,
+    "count": 62
+   },
+   "sorghum": {
+    "mean": 0.921,
+    "count": 38
+   },
+   "soybean": {
+    "mean": 1.0,
+    "count": 1
+   },
+   "winter_wheat": {
+    "mean": 0.738,
+    "count": 84
+   }
+  }
+ },
+ "0.45": {
+  "n_field_years": 240,
+  "match_share": 0.758,
+  "passed": false,
+  "by_crop": {
+   "fallow": {
+    "mean": 0.836,
+    "count": 55
+   },
+   "maize": {
+    "mean": 0.79,
+    "count": 62
+   },
+   "sorghum": {
+    "mean": 0.868,
+    "count": 38
+   },
+   "soybean": {
+    "mean": 1.0,
+    "count": 1
+   },
+   "winter_wheat": {
+    "mean": 0.631,
+    "count": 84
+   }
+  }
+ },
+ "0.5": {
+  "n_field_years": 240,
+  "match_share": 0.713,
+  "passed": false,
+  "by_crop": {
+   "fallow": {
+    "mean": 0.855,
+    "count": 55
+   },
+   "maize": {
+    "mean": 0.726,
+    "count": 62
+   },
+   "sorghum": {
+    "mean": 0.842,
+    "count": 38
+   },
+   "soybean": {
+    "mean": 1.0,
+    "count": 1
+   },
+   "winter_wheat": {
+    "mean": 0.548,
+    "count": 84
+   }
+  }
+ }
+}

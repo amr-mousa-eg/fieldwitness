@@ -60,3 +60,25 @@ def test_bare_calendar_shares_and_insufficient():
     assert cal[6].bare_share.value == 1.0 and cal[6].bare_share.tag == "O"
     assert cal[0].bare_share.value == 0.0
     assert cal[2].insufficient and cal[2].bare_share is None
+
+
+def _wheat(dip: float) -> pd.DataFrame:
+    # synthetic winter wheat: bare 0.15; Nov peak 0.6; Jan dip `dip`; May peak 0.85; harvest July
+    pts = []
+    for y in range(2016, 2021):
+        pts += [(f"{y}-08-15", 0.15), (f"{y}-10-01", 0.15), (f"{y}-11-15", 0.6)]
+        pts += [(f"{y}-12-20", 0.55), (f"{y + 1}-01-15", dip), (f"{y + 1}-02-15", dip + 0.03)]
+        pts += [(f"{y + 1}-03-15", 0.5), (f"{y + 1}-05-10", 0.85)]
+        pts += [(f"{y + 1}-06-20", 0.5), (f"{y + 1}-07-15", 0.15)]
+    s = pd.DataFrame(pts, columns=["date", "ndvi"])
+    s["date"] = pd.to_datetime(s["date"])
+    return s.sort_values("date").reset_index(drop=True)
+
+
+def test_winter_dormancy_dip_above_bare_is_one_season():
+    from fieldwitness.story.seasons import detect_seasons
+
+    s = _wheat(0.45)
+    got = [x for x in detect_seasons(s["date"], s["ndvi"], CFG) if 2018 <= x.year <= 2020]
+    assert [x.year for x in got] == [2018, 2019, 2020]
+    assert all(x.variant == "winter" for x in got)

@@ -18,3 +18,6 @@ seasons:                  # T2.2 (tag A team choices; UNVERIFIED, not from a pap
   min_peak_separation_days: 120
   sos_frac: 0.20          # SOS = first rise to left base + 20% of amplitude
   eos_frac: 0.50          # EOS = first fall to right base + 50% of amplitude
+  min_crop_amplitude: 0.35 # crop-like season: peak minus lower base >= this (A). Chosen on DEV only (grid in results/story/ks_seasons_dev_grid.json)
+dormancy:                 # user decision 2026-11-04 (agronomy rule, not tuned)
+  months: [12, 1, 2]      # a dip in these months that stays >= cover threshold = same season

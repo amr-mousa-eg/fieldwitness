@@ -6,6 +6,11 @@ peak minus the left / right trough), the usual threshold method; fractions are c
 paper (UNVERIFIED). Seasons whose rise or fall is not fully inside the data are dropped.
 Harvest year = calendar year of EOS; a 2nd season ending the same year gets index 1.
 Day numbers: 1 Jan of the harvest year = 1, 31 Dec before = 0, negative = earlier.
+Winter dormancy (user decision 2026-11-04, from agronomy, not tuned): two peaks whose trough lies
+in Dec-Feb and stays at or above the cover threshold (not bare soil) are one season; the higher
+peak is kept. Crop-like season: seasonal amplitude (peak minus the lower base) must reach
+seasons.min_crop_amplitude (tag A, set on the dev set only); weaker green-ups (weeds, volunteers)
+are not seasons.
 Variant: SOS in an earlier calendar year than EOS -> winter green-up, else spring (tag D).
 Cover / bare days: smoothed days inside [SOS, EOS] with NDVI >= / < cover threshold.
 """
@@ -63,6 +68,26 @@ def _peaks(sm: np.ndarray, step: int, sc: dict) -> list[int]:
     return out
 
 
+def _merge_dormant(
+    pk: list[int], sm: np.ndarray, grid: np.ndarray, cover: float, cfg: dict
+) -> list[int]:
+    """Merge neighbouring peaks separated by a Dec-Feb dip that stays above bare soil."""
+    months = set(cfg.get("dormancy", {}).get("months", []))
+    if not months or not pk:
+        return pk
+    out = [pk[0]]
+    for j in pk[1:]:
+        seg = sm[out[-1] : j + 1]
+        if np.isfinite(seg).all():
+            k = out[-1] + int(np.argmin(seg))
+            if seg.min() >= cover and _date(grid[k]).month in months:
+                if sm[j] > sm[out[-1]]:
+                    out[-1] = j
+                continue
+        out.append(j)
+    return out
+
+
 def detect_seasons(
     dates: pd.Series, ndvi: pd.Series, cfg: dict | None = None
 ) -> list[SeasonMetrics]:
@@ -77,7 +102,7 @@ def detect_seasons(
         return []
     grid, sm = smooth_series(days, v[ok], cfg["smoothing"])
     step = int(cfg["smoothing"]["grid_days"])
-    pk = _peaks(sm, step, sc)
+    pk = _merge_dormant(_peaks(sm, step, sc), sm, grid, cover, cfg)
     res: list[SeasonMetrics] = []
     for n, i in enumerate(pk):
         lo = pk[n - 1] if n else 0
@@ -93,7 +118,13 @@ def detect_seasons(
         bl, br, pv = float(left.min()), float(right.min()), float(sm[i])
         if pv - max(bl, br) < sc["min_prominence"]:
             continue
-        a = np.where(left >= bl + sc["sos_frac"] * (pv - bl))[0]
+        if pv - min(bl, br) < sc.get("min_crop_amplitude", 0.0):
+            continue  # weak green-up: weeds / volunteers, not a crop season
+        thr = bl + sc["sos_frac"] * (pv - bl)
+        tl = int(np.argmin(left))  # SOS = first crossing AFTER the left trough
+        a = np.where(left[tl:] >= thr)[0] + tl
+        if lo == 0 and left[0] >= thr:
+            continue  # data starts above the SOS level -> rise not observed
         b = np.where(right <= br + sc["eos_frac"] * (pv - br))[0]
         if not len(a) or not len(b) or (lo == 0 and a[0] == 0):
             continue  # rise or fall not inside the data -> incomplete season
