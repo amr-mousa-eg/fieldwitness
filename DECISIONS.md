@@ -390,6 +390,8 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 
 ## Autopilot handoff
 
+**2026-11-04, run after the T2.2 decision (later).** Tried T3.1: FAO-56 HTML equations are images; PDF returns 403. Rule 8 => `BLOCKED.md` written (options inside). No code changed; git otherwise clean. Background: SMAP task `b5e1ec71-0a40-4ec7-a9ea-8c3d1c386f37` not downloaded. Next: after the user supplies FAO-56 text, T3.1–T3.5; or T1.8 SMAP first (needs no paper). Risk: Phase 3 and the Gate 2/3 schedule slip until the paper is available.
+
 **2026-11-04, run after the T2.2 decision.** Done: T2.2 re-check (item 1 below), negative result logged in the entry above; T2.2 stays unticked. In progress: nothing. Background: SMAP task `b5e1ec71-0a40-4ec7-a9ea-8c3d1c386f37` not downloaded. Next: T1.8 SMAP, Phase 3 T3.1–T3.5, then gate-1.md. Risk: T2.3 inherits a 78 % season detector; gate 1 must report T2.2 as FAILED.
 
 - **Done (item 1, kept for history):** see the T2.2 re-check entry.
