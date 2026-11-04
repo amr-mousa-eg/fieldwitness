@@ -4,7 +4,7 @@ Version 1.2 · 4 Nov 2026 · Hackathon 14–15 Nov 2026 (submission closes 23:59
 
 **Changes in v1.1** (answers to Claude Code's first review): Python pinned to 3.12; gitleaks CLI instead of the Action; a walking-skeleton milestone (§1); explicit tagging rule and schema fixes (§3); season-year convention (T2.2); batched physics runtime targets (T3.5, T6.2); two hindcast modes and documented boundary leakage (Phase 7); HLS true-colour basemap for offline use (T9.1); Kluger et al. 2025 citation confirmed (T5.4).
 
-**Changes in v1.2-ext** (user approval 4 Nov 2026): §3b app data files (`TaggedSeries`, `TaggedGrid`, series, calendar, scenarios, layers, index, hindcast and region-list models); six new exempt fields; season day-of-year rule (§3 `Season`, T2.2); T8.1/T8.2 cover the new files.
+**Changes in v1.2-ext** (user approval 4 Nov 2026, final proposal Q1–Q7): §3b app data files (`TaggedSeries`, `TaggedGrid`, series, calendar, scenarios, layers, index, hindcast and region-list models) implemented in `src/fieldwitness/schemas.py`; six new exempt fields; season day-of-year rule (§3 `Season`, T2.2); no SOS/peak/EOS in `series`; scenarios hold weather-sensitive metrics only (T6.8); T9.9 reads `bare_by_option`; stretch S7 (colouring by an alternative); T8.1/T8.2 cover the new files.
 
 **Changes in v1.2** (addendum merged 4 Nov 2026, user): pre-event build schedule (§6 replaced); challenge alignment with the official text in `docs/official_challenge.md` (§1b); new tasks T1.8, T2.5, T3.6, T3.7 (stretch), T6.0, T6.6–T6.9, T9.9–T9.11; T9.3 changed; `Explanation` added to `Option` (§3); fixed "does not replace your judgment" line; Phase 10 deployment note.
 
@@ -156,15 +156,20 @@ class FieldPack(BaseModel):       # one JSON per field, < 300 KB
     data_as_of: date; generated_at: datetime
 ```
 
-Region-level files: `packs/<region>/index.json` (list of fields, bbox) and `packs/<region>/hindcast.json` (baseline comparison table); models and the full file layout in §3b.
+Region-level files: `packs/<region>/index.json` (list of fields, bbox), `packs/<region>/hindcast.json` (baseline comparison table), `packs/<region>/layers.json` (regional trend layers and Current-option field colouring) and `packs/regions.json` (region list); models and the full file layout in §3b.
 
 **Tagging rule (what the "no untagged numbers" validator checks).** Every value a user reads as a claim about the field or an option must be `Tagged`, or sit inside a `TaggedSeries` / `TaggedGrid` (§3b: one unit, tag and source for a whole array): all `Season` metrics, `credibility`, every `Option.metrics` entry, `Option.regret`, `Advice.flip_probability`, `WitnessResult.estimate`, and `LedgerEntry.predicted` / `observed`. Exempt by design, listed in `schemas.EXEMPT_FIELDS`: identifiers, `area_ha`, `interior_pixels`, `clear_obs`, `crop_conf`, `n`, `rank`, `diagnostics`, `scores` (these are bookkeeping or scoring outputs whose provenance is the module itself), and from §3b `bbox_lonlat` (geometry), `dt_c` and `dp_pct` (scenario grid coordinates we choose), `resolution_km` (product metadata, shown with its `resolution_source`), `years_with_data` and `clear_frac` (observation counts and fractions, like `clear_obs`). The validator walks the pack and fails on any float outside `Tagged` that is not on the exempt list.
 
-### 3b. Extension: app data files (approved by the user 2026-11-04)
+### 3b. Extension: app data files (final, approved by the user 2026-11-04)
 
-Copied from `docs/schema_ext_proposal.md` §3 on branch `app` (canonical code there: `scripts/fixture_schemas.py` Part 2, which also implements the validators noted as comments). These models go into `src/fieldwitness/schemas.py` with the §3 models (T8.1) and are exported to `app/src/types.ts` (T8.2). `FieldPack` is unchanged.
+Copied from the final `docs/schema_ext_proposal.md` §3 on branch `app` (commit `dd97bf5`; decisions Q1–Q7 in its §5 and in DECISIONS.md). **Implemented in `src/fieldwitness/schemas.py`** (with the §3 models, the validators noted as comments below, `EXEMPT_FIELDS`, `SEQUENCE_ONLY_METRICS` and `check_tagged`; tests in `tests/test_schemas.py`). Pipeline code imports the models from `fieldwitness.schemas`; it does not define its own. T8.2 exports them to `app/src/types.ts`. `FieldPack` is unchanged.
 
 ```python
+# --- changes to existing §3 models ----------------------------------------------------
+# Season.sos / peak / eos: "day of year" -> "day of the harvest year, negative = previous autumn" (Q1)
+# EXEMPT_FIELDS += {"bbox_lonlat", "dt_c", "dp_pct", "resolution_km", "years_with_data", "clear_frac"} (Q3)
+# The tag validator treats Tagged, TaggedSeries and TaggedGrid as tagged containers.
+
 class TaggedSeries(BaseModel):
     """Many numbers that share one unit, tag and source (keeps per-field files small)."""
     x: list[date] | list[int]  # dates, or years / months
@@ -177,12 +182,6 @@ class TaggedSeries(BaseModel):
     # validator: values / lo90 / hi90 have the same length as x
 
 # --- <field_id>.series.json -----------------------------------------------------------
-class SeasonMarks(BaseModel):
-    """SOS / peak / EOS of one story season. Must equal the matching `Season` in the pack."""
-    season_year: int
-    season_index: int = 0
-    sos: Tagged; peak: Tagged; eos: Tagged
-
 class FieldSeries(BaseModel):
     schema_version: str
     field_id: str
@@ -190,7 +189,7 @@ class FieldSeries(BaseModel):
     evi: TaggedSeries          # observed, tag O
     clear_frac: list[float]    # clear-pixel fraction per date in ndvi.x (bookkeeping)
     ndvi_smooth: TaggedSeries  # smoothed curve, tag D
-    marks: list[SeasonMarks]
+    # SOS / peak / EOS are not repeated: the app reads them from FieldPack.story (Q2)
     data_as_of: date
     # validator: ndvi, evi and clear_frac share the same dates
 
@@ -221,11 +220,14 @@ class FieldCalendar(BaseModel):
     data_as_of: date
 
 # --- <field_id>.scenarios.json --------------------------------------------------------
+# T6.7 metrics defined only by the crop sequence: identical in every scenario, kept in the pack (Q6)
+SEQUENCE_ONLY_METRICS = frozenset({"legume_share", "family_breaks", "forage_value", "deep_root_share"})
+
 class Scenario(BaseModel):
     scenario_id: str                          # e.g. "t+1_p-10"
     dt_c: float                               # temperature change, °C (grid coordinate)
     dp_pct: float                             # rainfall change, % (grid coordinate)
-    metrics: dict[str, dict[str, Tagged]]     # option_id -> metric -> value (same keys as Option)
+    metrics: dict[str, dict[str, Tagged]]     # option_id -> weather-sensitive metric -> value
     ranks: dict[str, int]                     # option_id -> rank under default weights
 
 class FieldScenarios(BaseModel):
@@ -235,7 +237,7 @@ class FieldScenarios(BaseModel):
     note: str                  # "Sensitivity tests on past weather, not climate projections."
     scenarios: list[Scenario]  # 3 temperatures x 4 rainfall = 12 (T6.8)
     data_as_of: date
-    # validator: exactly 12 scenarios; baseline_id is one of them
+    # validator: exactly 12 scenarios; baseline_id is one of them; no SEQUENCE_ONLY_METRICS
 
 # --- packs/<region>/layers.json -------------------------------------------------------
 class GridCell(BaseModel):
@@ -265,8 +267,7 @@ class RegionLayers(BaseModel):
     schema_version: str
     region_id: str
     layers: list[RegionalLayer]
-    field_colouring: dict[FieldColourMetric, dict[str, Tagged]]  # metric -> field_id -> value
-    colouring_option: str      # option the colouring describes: "current"
+    field_colouring: dict[FieldColourMetric, dict[str, Tagged]]  # metric -> field_id -> value, Current option (Q5)
     data_as_of: date
 
 # --- packs/<region>/index.json, packs/<region>/hindcast.json, packs/regions.json -------
@@ -312,7 +313,9 @@ class RegionList(BaseModel):   # packs/regions.json, for the region switcher (T9
     regions: list[RegionEntry]
 ```
 
-**File layout** (user decision 2026-11-04). Per field: `packs/<region>/<field_id>.json` (`FieldPack`), `<field_id>.series.json` (`FieldSeries`), `<field_id>.calendar.json` (`FieldCalendar`), `<field_id>.scenarios.json` (`FieldScenarios`). Per region: `packs/<region>/index.json` (`RegionIndex`), `hindcast.json` (`RegionHindcast`), `layers.json` (`RegionLayers`). Global: `packs/regions.json` (`RegionList`). Each file < 300 KB. The proposal's other open questions keep the models exactly as proposed: Q2 `SeasonMarks` duplicates `Season.sos/peak/eos` and must equal them (the pack builder checks); Q4 `bare_by_option` is new simulated output (tag D); Q5 field colouring describes the Current option only; Q6 scenarios store all metrics; Q7 `packs/regions.json` is a new file.
+**File layout** (user decision 2026-11-04). Per field: `packs/<region>/<field_id>.json` (`FieldPack`), `<field_id>.series.json` (`FieldSeries`), `<field_id>.calendar.json` (`FieldCalendar`), `<field_id>.scenarios.json` (`FieldScenarios`). Per region: `packs/<region>/index.json` (`RegionIndex`), `hindcast.json` (`RegionHindcast`), `layers.json` (`RegionLayers`). Global: `packs/regions.json` (`RegionList`, Q7). Each file < 300 KB.
+
+**Decisions (Q1–Q7):** Q1 season dates are days of the harvest year (T2.2); Q2 `series` does not repeat SOS/peak/EOS — the app reads them from `FieldPack.story`; Q3 six new exempt fields; Q4 `bare_by_option` is new simulated output (tag D) from physics (T3/T6), not part of T2.5, used by T9.9; Q5 field colouring describes the Current option only (colouring by an alternative is stretch S7); Q6 scenarios store weather-sensitive metrics only — `SEQUENCE_ONLY_METRICS` (`legume_share`, `family_breaks`, `forage_value`, `deep_root_share`) live once in `Option.metrics` and the validator rejects them in a scenario; Q7 `packs/regions.json` approved.
 
 ## 4. Configuration files
 
@@ -360,7 +363,7 @@ Each task: **ID · goal · output · acceptance test**. Tick `[x]` and add a one
 ### Phase 2 — Field story (`src/fieldwitness/story/`)
 
 - [ ] **T2.1 Smoothing.** Savitzky–Golay on gap-filled series (window and order in config); optional GPR later. *Accept:* property test: output length = input; no values outside [-1, 1].
-- [ ] **T2.2 Seasons and phenology.** Segment the series into seasons and assign each to its **harvest year** (calendar year of EOS), matching how CDL/CSB label winter wheat; a second season ending in the same year gets `index = 1`; where a crop has winter and spring variants (wheat, barley; `config/crops.yaml`), assign the variant per field-season from the observed green-up: autumn green-up before winter → winter variant, spring green-up only → spring variant (tag `D`); SOS/EOS by amplitude-threshold method (e.g. 20%/50% of seasonal amplitude, choice documented); peak, canopy integral, cover days (NDVI ≥ cover threshold), bare days. Each output `Tagged` with tag `O` (direct metrics) or `D` (thresholded). **Day-of-year rule (v1.2-ext):** `sos`, `peak` and `eos` are counted in days of the harvest year, negative for the previous autumn, with 31 Dec of the previous year = 0 (unit string `"day of harvest year"`); e.g. sown 15 Oct 2022, harvest year 2023 → SOS = −77. *Accept:* on 30 labelled fields, the number of detected seasons matches the crop calendar for ≥ 90% (target, team choice).
+- [ ] **T2.2 Seasons and phenology.** Segment the series into seasons and assign each to its **harvest year** (calendar year of EOS), matching how CDL/CSB label winter wheat; a second season ending in the same year gets `index = 1`; where a crop has winter and spring variants (wheat, barley; `config/crops.yaml`), assign the variant per field-season from the observed green-up: autumn green-up before winter → winter variant, spring green-up only → spring variant (tag `D`); SOS/EOS by amplitude-threshold method (e.g. 20%/50% of seasonal amplitude, choice documented); peak, canopy integral, cover days (NDVI ≥ cover threshold), bare days. Each output `Tagged` with tag `O` (direct metrics) or `D` (thresholded). **Day-of-year rule (v1.2-ext):** `sos`, `peak` and `eos` are counted in days of the harvest year, negative for the previous autumn, with 1 Jan of the harvest year = 1 and 31 Dec of the previous year = 0 (unit string `"day of harvest year"`); e.g. sown 15 Oct 2022, harvest year 2023 → SOS = −77. *Accept:* on 30 labelled fields, the number of detected seasons matches the crop calendar for ≥ 90% (target, team choice).
 - [ ] **T2.3 Crop classifier.** Random Forest on phenology features + monthly composites; train on Tier 1–2 labels; spatially blocked CV; calibrated probabilities → `crop_conf`. *Accept:* `results/classifier/` with per-crop F1, confusion matrix, US→EU and EU→US transfer scores.
 - [ ] **T2.4 WorldCereal cross-check (Tier 3).** Compare 2021 classifier output with WorldCereal 2021 maize/cereal maps. *Accept:* agreement table.
 - [ ] **T2.5 Bare-soil calendar.** Per field: for each month, the share of past years (≥ 2016) in which the field was bare (NDVI below the cover threshold in T2.2), with clear-observation counts. Tag O. *Accept:* calendar for all pilot fields; months with too few clear observations are marked "insufficient data", not filled.
@@ -416,7 +419,7 @@ Each task: **ID · goal · output · acceptance test**. Tick `[x]` and add a one
   - `deep_root_share`: share of seasons with a crop whose maximum rooting depth (FAO-56 Table 22, verified) is above a stated threshold. Label: "deep-rooting crops in the rotation". Tag D.
   - Market suitability is **not** a metric. It is a user constraint ("crops I can sell") on the Field Card, stored as user input.
   *Accept:* all metrics present for every option; labels match this list exactly.
-- [ ] **T6.8 Weather what-ifs.** For each field, precompute every option under a small grid of weather changes applied to the historical years: temperature +0, +1, +2 °C × rainfall −20%, −10%, 0, +10%. Store per-option metrics per scenario in the pack, so the app's sliders switch between precomputed results instead of simulating in the browser. These are sensitivity tests, not climate projections; say so in the UI. *Accept:* 12 scenarios per field; pack size still under the limit, or the scenarios split into a second file per field.
+- [ ] **T6.8 Weather what-ifs.** For each field, precompute every option under a small grid of weather changes applied to the historical years: temperature +0, +1, +2 °C × rainfall −20%, −10%, 0, +10%. Store per-option metrics per scenario in `<field_id>.scenarios.json` (§3b `FieldScenarios`; weather-sensitive metrics only — `SEQUENCE_ONLY_METRICS` stay in the pack's `Option.metrics`, Q6), so the app's sliders switch between precomputed results instead of simulating in the browser. These are sensitivity tests, not climate projections; say so in the UI. *Accept:* 12 scenarios per field; pack size still under the limit, or the scenarios split into a second file per field.
 - [ ] **T6.9 Farmer corrections.** The app lets a user correct the field's crop history, sowing date and irrigation status. Corrections are stored locally in the browser, tagged E ("farmer-entered"), and shown alongside the satellite version. In the static demo, a correction switches to a precomputed alternative where one exists, and otherwise shows "re-run needed: available in live mode" (API, T8.3). *Accept:* a corrected history visibly changes the Current option and its tags.
 
 **Gate 6:** full `FieldPack` (minus ledger) for one field validates against the schema.
@@ -441,7 +444,7 @@ Each task: **ID · goal · output · acceptance test**. Tick `[x]` and add a one
 
 ### Phase 8 — Packs and API (`packs/`, `api/`)
 
-- [ ] **T8.1 Export packs.** `cli build-packs --region <id>` writes every file in the §3b layout: per field `<field_id>.json`, `.series.json`, `.calendar.json`, `.scenarios.json`; per region `index.json`, `hindcast.json`, `layers.json`; and `packs/regions.json`; validates every file against the schema; fails if any user-facing number is untagged. *Accept:* each pack < 300 KB; validator in CI.
+- [ ] **T8.1 Export packs.** `cli build-packs --region <id>` writes every file in the §3b layout: per field `<field_id>.json`, `.series.json`, `.calendar.json`, `.scenarios.json`; per region `index.json`, `hindcast.json`, `layers.json`; and `packs/regions.json`; validates every file against the models in `src/fieldwitness/schemas.py` (already written; do not redefine them) with `check_tagged`; fails if any user-facing number is untagged. *Accept:* each pack < 300 KB; validator in CI.
 - [ ] **T8.2 Types.** Generate `app/src/types.ts` from the Pydantic schemas, §3 and §3b (JSON Schema → TS). *Accept:* app compiles against generated types.
 - [ ] **T8.3 Optional API.** FastAPI serving packs and a `/simulate` endpoint for live mode. Not used by the deployed demo.
 
@@ -457,7 +460,7 @@ React + Vite + TypeScript, MapLibre GL, a chart library (Recharts or Observable 
 - [ ] **T9.6 Methods & data page.** Datasets, licences, non-promises, limits, link to repo.
 - [ ] **T9.7 Responsive + accessibility.** 380 px viewport works; keyboard navigation; colour never carries meaning alone.
 - [ ] **T9.8 Deploy.** GitHub Pages (or Netlify) via GitHub Actions on push to `main`. *Accept:* public URL opens in a private window with no login.
-- [ ] **T9.9 Calendar view.** The bare-soil calendar (T2.5) and the vulnerability calendar (T3.6) for the current rotation, with a toggle to show an alternative's calendar. A regional context strip shows the GRACE trend, SMAP anomaly and slope, each scale-flagged.
+- [ ] **T9.9 Calendar view.** The bare-soil calendar (T2.5) and the vulnerability calendar (T3.6) for the current rotation, with a toggle to show an alternative's calendar: observed bare months from `FieldCalendar.bare_observed` (T2.5), an option's simulated bare months from `FieldCalendar.bare_by_option` (tag D, Q4). A regional context strip shows the GRACE trend, SMAP anomaly and slope, each scale-flagged.
 - [ ] **T9.10 Explainers.** A small "What is this?" next to evapotranspiration, soil moisture anomaly, NDVI, frost risk, water balance, Relative Yield Index, evidence grade and source tags, plus short explainers on nitrogen-fixing, cover, deep-rooting and drought-tolerant crops. Each explainer is two or three plain sentences with a cited source (FAO-56, NASA Earthdata pages, or the FAO crop chapters), kept in `app/src/strings/en.json`.
 - [ ] **T9.11 Map layers.** (a) Field colouring by erosion exposure, water-stress share or frost share (from T3.6 and T6.7). (b) Regional trend layers with a year slider: GRACE water storage, SMAP soil-moisture anomaly, and heat-wave days from POWER. Every layer shows its resolution and scale flag.
 - [ ] **Fixed line** on the Field Card and the Methods page: "FieldWitness helps you explore options. It does not replace your judgment or local agricultural advice."
@@ -477,6 +480,7 @@ React + Vite + TypeScript, MapLibre GL, a chart library (Recharts or Observable 
 - [ ] S4 Tier 3 neighbour effects from inferred crop histories.
 - [ ] S5 Live any-point mode via the API.
 - [ ] S6 OpenET seasonal ET as an extra water witness for Kansas fields — only if the user accepts OpenET's terms (moved from T1.7, 2026-11-04).
+- [ ] S7 Map colouring by an alternative option (T9.11a colours by the Current option only; user decision Q5, 2026-11-04).
 - [ ] T3.7 Observed heat stress (stretch). ECOSTRESS land-surface temperature (verify the collection first) on pilot fields during sensitive stages, as an observed check on the POWER-based heat-stress calendar.
 
 ---

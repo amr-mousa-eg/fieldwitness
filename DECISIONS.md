@@ -318,6 +318,23 @@ Gate 0 stays **open on one item: SoilGrids**.
 - **Plan text changed:** version note (v1.2-ext), §3 `Season` comment, §3 region-files line, tagging rule, T2.2, T8.1 (writes every §3b file), T8.2 (types from §3 and §3b). `src/fieldwitness/schemas.py` does not exist yet; it is written with T8.1 (or earlier when a task needs the models).
 - Tests and lint run before pushing (they also covered the autopilot's unpushed commit `45ce08e`): 75 passed, ruff clean.
 
+## 2026-11-04 — §3 extension final (Q1–Q7) applied on main; `schemas.py` written
+
+Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINAL, approved by the user 2026-11-04; decisions in its §5, merge steps in its §6). Supersedes the "other open questions" note in the previous §3 entry.
+
+| # | Question | Decision (user) |
+|---|---|---|
+| Q1 | Day of year for seasons crossing the new year | Day of the harvest year, negative = previous autumn; 1 Jan = 1, 31 Dec of the previous year = 0 (15 Oct 2022 → −77 for 2023) |
+| Q2 | SOS/peak/EOS repeated in `series` | Dropped (`SeasonMarks` removed); the app reads them from `FieldPack.story` |
+| Q3 | Six new exempt fields | Approved: `bbox_lonlat`, `dt_c`, `dp_pct`, `resolution_km`, `years_with_data`, `clear_frac` |
+| Q4 | `bare_by_option` for T9.9's alternative calendar | Approved: new simulated output (tag D) from physics (T3/T6), not part of T2.5 |
+| Q5 | Map colouring by an alternative | Current only (`colouring_option` removed); alternative colouring = stretch S7 |
+| Q6 | Scenario size | Weather-sensitive metrics only; `SEQUENCE_ONLY_METRICS` (`legume_share`, `family_breaks`, `forage_value`, `deep_root_share`) stay in `Option.metrics`, rejected in scenarios by the validator |
+| Q7 | `packs/regions.json` | Approved |
+
+- **Merge steps done (§6 steps 1–4):** PLAN.md §3 (region-file list), §3b (final models copied; checked field-for-field against `schemas.py`), T2.2 (Q1), T6.8 (Q6), T8.1 (use `schemas.py`), T9.9 (Q4), stretch S7 (Q5), version note. `src/fieldwitness/schemas.py` = `scripts/fixture_schemas.py` from `app` at `dd97bf5`, with two edits: §3's model keeps its PLAN name `Field` (the app copy says `FieldModel`; the app's `types.ts` already says `Field`), so pydantic's `Field` is imported as `PydanticField`; comments no longer say "proposed"/"mirror". `tests/test_schemas.py`: 13 tests (tag check incl. exempt fields and paths, series alignment and no marks, month range, 12-point scenario grid, baseline, every sequence-only metric rejected, layers Current-only, region files). One-off check: all 16 SYNTHETIC fixtures in the `app` worktree validate against `fieldwitness.schemas` with no untagged numbers.
+- **Not done (§6 step 5, at the app merge, Gate 6):** T8.2 generates `app/src/types.ts`; delete `scripts/fixture_schemas.py` Part 1 on `app` in favour of `fieldwitness.schemas`. Nothing else from `app` was merged.
+
 ## Autopilot handoff
 
 **2026-11-04, autopilot run (local time not checked: date/time commands are not on the allow-list). Status: BLOCKED (`BLOCKED.md`, `uv` not on PATH).**
@@ -328,7 +345,7 @@ Gate 0 stays **open on one item: SoilGrids**.
 - **In progress, background (server side):**
   - **T1.5 HLS point tasks**: 30 tasks, registry `data/appeears/ks_t14slh_tasks.json`; all task IDs are listed in the Phase 1 log above. All 30 tasks were `done` on the server at the last check (not polled this run). 19 of 30 chunk folders on disk (593 MB). **Approved by the user: one-time exception to the 1 GB cap for exactly these 30 task IDs, 1,317 MB total** — now coded (untested). Any other download over 1 GB → `BLOCKED.md`. Still pending (696 MB) (registry minus folders on disk): `2021_c0` `5bd0ec8a-8530-4182-9ca9-8ce974a5a8e7`, `2021_c1` `33605d4a-1fd5-490b-aa1d-a09724852301`, `2022_c0` `2e6530aa-b946-40da-9423-c75d8eef5a95`, `2022_c1` `c5a1e1bd-aaaa-4304-863f-bf689de5b215`, `2022_c2` `d541d0dd-7c1f-43dd-b593-ca21a77a541c`, `2023_c0` `260dcaa7-e0c6-4315-91b6-8bb7b2eda79a`, `2023_c1` `7678c27c-75d0-43a5-beab-276355148cff`, `2023_c2` `ec590ff0-c310-4bbb-843b-7c8bc942e689`, `2024_c0` `7219687a-961a-4eba-82c8-11a13189759a`, `2024_c1` `8d47e76e-4aa8-41d6-a88f-d53f594172fb`, `2024_c2` `cf441cd4-721a-49db-8850-5a24ef9c9faa`. The interactive long-running downloader was stopped at 14:58 (a partial file, if any, fails the sha256 check and is re-fetched). Each run polls with `uv run python -u -m fieldwitness.cli hls-wait --region ks_t14slh --once`.
   - **T1.8 SMAP L4** task `b5e1ec71-0a40-4ec7-a9ea-8c3d1c386f37` (registry `data/context/smap_task.json`): not yet downloaded; no download command exists yet (to write: download + monthly anomaly with `context.smap_monthly_anomaly`).
-- **Schema (PLAN v1.2-ext, merged by the interactive session):** PLAN.md §3b now defines the app data files. Follow it: T2.2 uses the **day-of-harvest-year** rule (negative = previous autumn); T2.5 output feeds `FieldCalendar.bare_observed`; T3.6 feeds `CropVulnerability`; T6.8 feeds `FieldScenarios` (12 scenarios); Phase 8 (T8.1) writes `src/fieldwitness/schemas.py` with the §3 + §3b models and `EXEMPT_FIELDS` (incl. `bbox_lonlat`, `dt_c`, `dp_pct`, `resolution_km`, `years_with_data`, `clear_frac`) and builds every file in the §3b layout. Do not merge the `app` branch (worktree `D:/NASA Project-app`); it holds a synthetic-data app scaffold only.
+- **Schema (PLAN v1.2-ext, final Q1–Q7, see the log entry of that name):** use `src/fieldwitness/schemas.py` — do not write your own models. T2.2: SOS/peak/EOS as days of the harvest year (1 Jan = 1, negative = previous autumn). T2.5 → `FieldCalendar.bare_observed`; T3.6 → `CropVulnerability`; physics/T6 → `bare_by_option` (tag D); T6.8 → `FieldScenarios`, 12 scenarios, weather-sensitive metrics only (no `SEQUENCE_ONLY_METRICS`); `series` has no SOS/peak/EOS; field colouring is Current-only. T8.1 builds every file in the §3b layout and validates with `check_tagged`. Do not merge the `app` branch (worktree `D:/NASA Project-app`).
 - **Pushed by the interactive session:** the cap-exception commit `45ce08e` was tested there (75 passed, ruff clean) and pushed with the schema merge, so the "not pushed / not tested" note above is resolved. `BLOCKED.md` (uv PATH) is still open for the user.
 - **Next, in this order (user's pending items):**
   1. **Phase 3 exception:** start Phase 3 physics T3.1–T3.5 now while HLS downloads run (logged exception: needs only POWER, soil and `crops.yaml`).
