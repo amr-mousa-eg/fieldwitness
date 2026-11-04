@@ -50,3 +50,10 @@ Only the row groups whose `bbox` statistics intersect the query box are read (se
 - HLS Vegetation Indices `HLSL30_VI` v2.0 and `HLSS30_VI` v2.0; HLS surface reflectance `HLSL30` v2.0 and `HLSS30` v2.0 (Fmask) —
   NASA LP DAAC, via earthaccess (CMR) and AppEEARS. NASA Earthdata data: no restrictions on use; cite the product DOIs (to be added in T10.1).
 - ECOSTRESS `ECO_L3T_JET` v003 — NASA LP DAAC (verified in CMR; not yet read).
+
+## Crop parameters and statistics (T0.6)
+
+- **FAO-56** — Allen, R.G., Pereira, L.S., Raes, D., Smith, M. (1998). *Crop evapotranspiration — Guidelines for computing crop water requirements.* FAO Irrigation and Drainage Paper 56. HTML edition: Chapter 6 `https://www.fao.org/4/x0490e/x0490e0b.htm` (Tables 11, 12), Chapter 8 `https://www.fao.org/4/x0490e/x0490e0e.htm` (Tables 22, 24). Values copied into `config/crops.yaml` with table/row references (`scripts/extract_fao56.py`).
+- **FAO-33** (Doorenbos & Kassam, 1979, *Yield response to water*) — not found on fao.org; its seasonal Ky values are used as reproduced in FAO-56 Table 24.
+- **FAO-66** — Steduto, P., Hsiao, T.C., Fereres, E., Raes, D. (2012). *Crop yield response to water.* FAO Irrigation and Drainage Paper 66. `https://www.fao.org/4/i2800e/i2800e.pdf`, read with pypdf (dev dependency) on 2026-11-04: no Ky for barley or rapeseed (see `config/crops.yaml`); no values taken from it.
+- **FAOSTAT QCL** — FAO. 2025 (last update 2025-12-31). FAOSTAT: Production — Crops and livestock products, bulk file `Production_Crops_Livestock_E_All_Data_(Normalized).zip` from `https://bulks-faostat.fao.org/production/`. Accessed 4 November 2026. Licence: **CC-BY-4.0** (FAO database terms of use). Used for the proposed Ukraine crop list (area harvested, national). The FAOSTAT API needs authentication and is not used.

@@ -89,3 +89,13 @@ def test_history_unknown_year_does_not_remove_field():
 def test_non_arable_groups_remove_field(group_code):
     assert history_state(group_code) is None
     assert not stays_arable([WHEAT, group_code, WHEAT])
+
+
+ALFALFA = 3301090301  # alfalfa_lucerne
+
+
+def test_alfalfa_is_a_history_state_not_a_selected_field():
+    assert not is_annual_arable(ALFALFA)
+    assert history_state(ALFALFA) == "perennial_forage"
+    assert stays_arable([WHEAT, ALFALFA, ALFALFA, WHEAT])
+    assert is_annual_arable(3301090303)  # clover (sibling) is unchanged

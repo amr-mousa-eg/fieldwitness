@@ -9,10 +9,11 @@ Generated 2026-11-04 from the official HCAT3 table (https://github.com/maja601/E
   - annual arable crops → their HCAT3 code (named via `crops.yaml` in T1.6);
   - `3301110000` fallow_land_not_crop → state **"fallow"**;
   - `33010901..` temporary_grass and `33010902..` poaceae_grasses (grass leys) → state **"temporary_grass"**;
+  - `3301090301` alfalfa_lucerne → state **"perennial_forage"** (kept in histories, never a rotation option in the MVP; user decision 2026-11-04);
   - other excluded classes inside 3301 (miscanthus, kitchen gardens, strawberries, asparagus, rhubarb, artichoke) → state "other_arable";
   - missing code, `3399` not_known_and_other or a generic code → state "unknown" (never removes a field);
   - a code in groups `3302`–`3308` → the field has **left arable use**.
-- Fallow and temporary grass are **never dropped** from histories. A field is removed from history analysis only if it leaves arable use (`stays_arable` is false). Example (tested): wheat → fallow → wheat stays, with states `[3301010101, fallow, 3301010101]`.
+- Fallow, temporary grass and alfalfa are **never dropped** from histories. A field is removed from history analysis only if it leaves arable use (`stays_arable` is false). Example (tested): wheat → fallow → wheat stays, with states `[3301010101, fallow, 3301010101]`.
 
 Licence: derived from the EuroCrops HCAT3 table, **CC-BY-SA-4.0** (https://github.com/maja601/EuroCrops/blob/main/LICENSE); this file is shared under the same licence, separate from the code licence (T10.1).
 
@@ -27,7 +28,7 @@ Licence: derived from the EuroCrops HCAT3 table, **CC-BY-SA-4.0** (https://githu
 - `3308000000` unmaintained
 - `3399000000` not_known_and_other
 
-## Excluded classes inside 3301 arable_crops (18)
+## Excluded classes inside 3301 arable_crops (19)
 
 - `3301083000` miscanthus_silvergrass
 - `3301090100` temporary_grass
@@ -41,6 +42,7 @@ Licence: derived from the EuroCrops HCAT3 table, **CC-BY-SA-4.0** (https://githu
 - `3301090207` sod_turf
 - `3301090208` switchgrass
 - `3301090209` timothy
+- `3301090301` alfalfa_lucerne
 - `3301110000` fallow_land_not_crop
 - `3301120000` kitchen_gardens
 - `3301130000` strawberries
@@ -48,9 +50,9 @@ Licence: derived from the EuroCrops HCAT3 table, **CC-BY-SA-4.0** (https://githu
 - `3301230000` rhubarb
 - `3301270000` artichoke
 
-Exclusion prefixes: `330111` (fallow_land_not_crop), `33010901` (temporary_grass), `33010902` (poaceae_grasses), `33010830` (miscanthus_silvergrass), `330112` (kitchen_gardens), `330113` (strawberries), `330120` (asparagus), `330123` (rhubarb), `330127` (artichoke).
+Exclusion prefixes: see `EXCLUDED_ARABLE_PREFIXES` in `fieldwitness.data.hcat` (alfalfa added 2026-11-04).
 
-## Kept classes (278, all under 3301 arable_crops)
+## Kept classes (277, all under 3301 arable_crops)
 
 - `3301000000` arable_crops
 - `3301010000` cereal
@@ -250,7 +252,6 @@ Exclusion prefixes: `330111` (fallow_land_not_crop), `33010901` (temporary_grass
 - `3301089900` other_flowers_ornamental_plants
 - `3301090000` plants_harvested_green
 - `3301090300` legumes_harvested_green
-- `3301090301` alfalfa_lucerne
 - `3301090302` arachis
 - `3301090303` clover
 - `3301090304` melilot

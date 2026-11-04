@@ -1,0 +1,203 @@
+# Crop parameters for the FAO-56 water balance (PLAN.md §4, T0.6).
+#
+# Values were read on 2026-11-04 from the official FAO-56 HTML edition with
+# scripts/extract_fao56.py (cells copied as text; footnote marks kept apart). Each parameter has
+#   value | range  — the number(s) as printed (range = [first, second] as printed)
+#   ref           — source id, table, row label as printed (and footnote)
+#   verified      — true: read from the cited table; false: not from a paper (shown as tag A)
+#   choice        — why a value was picked inside a published range (a team choice, tag A)
+# Page numbers: the FAO-56 HTML edition has no printed page numbers, so refs cite the chapter page
+# URL. FAO-33 itself was not found on fao.org; Ky comes from FAO-56 Table 24, which reproduces
+# FAO-33 seasonal values. FAO-66 (https://www.fao.org/4/i2800e/i2800e.pdf) was read with pypdf
+# (dev dependency) and has no Ky for barley or rapeseed, so those stay unverified (null, tag A).
+
+sources:
+  fao56_ch6:
+    citation: "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. (1998). Crop evapotranspiration. FAO Irrigation and Drainage Paper 56, Chapter 6"
+    url: https://www.fao.org/4/x0490e/x0490e0b.htm
+  fao56_ch8:
+    citation: "Allen, R.G., Pereira, L.S., Raes, D., Smith, M. (1998). Crop evapotranspiration. FAO Irrigation and Drainage Paper 56, Chapter 8"
+    url: https://www.fao.org/4/x0490e/x0490e0e.htm
+
+crops:
+  maize:
+    name: Maize, field (grain)
+    hcat3: ["3301010600"]  # grain_maize_corn_popcorn
+    label_aliases: {CSB: ["Corn"]}
+    kc_ini: {value: 0.3, ref: {source: fao56_ch6, table: 12, row: "i. Cereals (group row, Kc ini)", footnote: 1}, verified: true}
+    kc_mid: {value: 1.20, ref: {source: fao56_ch6, table: 12, row: "Maize, Field (grain) (field corn)"}, verified: true}
+    kc_end: {value: 0.35, range: [0.60, 0.35], ref: {source: fao56_ch6, table: 12, row: "Maize, Field (grain) (field corn)", footnote: 11}, verified: true,
+             choice: "Footnote 11: second value = harvest after complete field drying of the grain; dry grain harvest assumed (A)."}
+    h_max_m: {value: 2, ref: {source: fao56_ch6, table: 12, row: "Maize, Field (grain) (field corn)"}, verified: true}
+    root_depth_m: {range: [1.0, 1.7], ref: {source: fao56_ch8, table: 22, row: "Maize, Field (grain) (field corn)"}, verified: true}
+    p: {value: 0.55, ref: {source: fao56_ch8, table: 22, row: "Maize, Field (grain) (field corn)", note: "for ET ≈ 5 mm/day"}, verified: true}
+    ky: {value: 1.25, ref: {source: fao56_ch8, table: 24, row: "Maize", note: "from FAO-33"}, verified: true}
+    stage_lengths_days:
+      ks_t14slh: {value: [30, 40, 50, 50], ref: {source: fao56_ch6, table: 11, row: "Maize (grain) | April | Idaho, USA"}, verified: true,
+                  choice: "Closest continental US row to SW Kansas (A)."}
+      fr_toulouse_t31tcj: {value: [30, 40, 50, 30], ref: {source: fao56_ch6, table: 11, row: "Maize (grain) | April | Spain (spr, sum.); Calif."}, verified: true,
+                           choice: "Closest southern-European row to Toulouse (A)."}
+      ua_central_t36uvu: {value: [30, 40, 50, 50], ref: {source: fao56_ch6, table: 11, row: "Maize (grain) | April | Idaho, USA"}, verified: true,
+                          choice: "Continental row, closest to central Ukraine (A)."}
+    family: {value: null, verified: false, note: "Botanical family to be filled from a named taxonomy source (not from memory)."}
+
+  sorghum:
+    name: Sorghum (grain)
+    hcat3: ["3301010900"]  # millet_sorghum
+    label_aliases: {CSB: ["Sorghum"]}
+    kc_ini: {value: 0.3, ref: {source: fao56_ch6, table: 12, row: "i. Cereals (group row, Kc ini)", footnote: 1}, verified: true}
+    kc_mid: {value: 1.05, range: [1.00, 1.10], ref: {source: fao56_ch6, table: 12, row: "Sorghum - grain"}, verified: true,
+             choice: "Midpoint of the printed range; no footnote guides the choice (A)."}
+    kc_end: {value: 0.55, ref: {source: fao56_ch6, table: 12, row: "Sorghum - grain"}, verified: true}
+    h_max_m: {range: [1, 2], ref: {source: fao56_ch6, table: 12, row: "Sorghum - grain"}, verified: true}
+    root_depth_m: {range: [1.0, 2.0], ref: {source: fao56_ch8, table: 22, row: "Sorghum - grain"}, verified: true}
+    p: {value: 0.55, ref: {source: fao56_ch8, table: 22, row: "Sorghum - grain", note: "for ET ≈ 5 mm/day"}, verified: true}
+    ky: {value: 0.9, ref: {source: fao56_ch8, table: 24, row: "Sorghum", note: "from FAO-33"}, verified: true}
+    stage_lengths_days:
+      ks_t14slh: {value: [20, 35, 40, 30], ref: {source: fao56_ch6, table: 11, row: "Sorghum | May/June | USA, Pakis., Med."}, verified: true}
+      fr_toulouse_t31tcj: {value: [20, 35, 40, 30], ref: {source: fao56_ch6, table: 11, row: "Sorghum | May/June | USA, Pakis., Med."}, verified: true}
+    family: {value: null, verified: false, note: "Botanical family to be filled from a named taxonomy source (not from memory)."}
+
+  winter_wheat:
+    name: Winter wheat (soft and durum)
+    hcat3: ["3301010101", "3301010201"]  # winter_common_soft_wheat, winter_durum_hard_wheat
+    label_aliases: {CSB: ["Winter Wheat"]}
+    kc_ini:
+      frozen_soils: {value: 0.4, ref: {source: fao56_ch6, table: 12, row: "Winter Wheat - with frozen soils"}, verified: true}
+      non_frozen_soils: {value: 0.7, ref: {source: fao56_ch6, table: 12, row: "Winter Wheat - with non-frozen soils"}, verified: true}
+      by_region: {ks_t14slh: frozen_soils, ua_central_t36uvu: frozen_soils, fr_toulouse_t31tcj: non_frozen_soils}
+      choice: "Region → frozen/non-frozen soils is a team assumption (A)."
+    kc_mid: {value: 1.15, ref: {source: fao56_ch6, table: 12, row: "Winter Wheat"}, verified: true}
+    kc_end: {value: 0.25, range: [0.25, 0.4], ref: {source: fao56_ch6, table: 12, row: "Winter Wheat", footnote: 10}, verified: true,
+             choice: "Footnote 10: the higher value is for hand-harvested crops; machine harvest assumed (A)."}
+    h_max_m: {value: 1, ref: {source: fao56_ch6, table: 12, row: "Winter Wheat - with frozen soils"}, verified: true}
+    root_depth_m: {range: [1.5, 1.8], ref: {source: fao56_ch8, table: 22, row: "Winter Wheat"}, verified: true}
+    p: {value: 0.55, ref: {source: fao56_ch8, table: 22, row: "Winter Wheat", note: "for ET ≈ 5 mm/day"}, verified: true}
+    ky: {value: 1.05, ref: {source: fao56_ch8, table: 24, row: "Winter wheat", note: "from FAO-33"}, verified: true}
+    stage_lengths_days:
+      ks_t14slh: {value: [160, 75, 75, 25], ref: {source: fao56_ch6, table: 11, row: "Winter Wheat | October | Idaho, USA"}, verified: true,
+                  choice: "Continental row with winter dormancy, closest to Kansas (A)."}
+      fr_toulouse_t31tcj: {value: [30, 140, 40, 30], ref: {source: fao56_ch6, table: 11, row: "Winter Wheat | November | Mediterranean"}, verified: true,
+                           choice: "Mediterranean row, closest to Toulouse (A)."}
+      ua_central_t36uvu: {value: [160, 75, 75, 25], ref: {source: fao56_ch6, table: 11, row: "Winter Wheat | October | Idaho, USA"}, verified: true,
+                          choice: "Continental row with winter dormancy, closest to central Ukraine (A)."}
+    family: {value: null, verified: false, note: "Botanical family to be filled from a named taxonomy source (not from memory)."}
+
+  winter_barley:
+    name: Winter barley
+    hcat3: ["3301010401"]  # winter_barley
+    kc_ini: {value: 0.3, ref: {source: fao56_ch6, table: 12, row: "i. Cereals (group row, Kc ini)", footnote: 1}, verified: true}
+    kc_mid: {value: 1.15, ref: {source: fao56_ch6, table: 12, row: "Barley"}, verified: true}
+    kc_end: {value: 0.25, ref: {source: fao56_ch6, table: 12, row: "Barley"}, verified: true}
+    h_max_m: {value: 1, ref: {source: fao56_ch6, table: 12, row: "Barley"}, verified: true}
+    root_depth_m: {range: [1.0, 1.5], ref: {source: fao56_ch8, table: 22, row: "Barley"}, verified: true}
+    p: {value: 0.55, ref: {source: fao56_ch8, table: 22, row: "Barley", note: "for ET ≈ 5 mm/day"}, verified: true}
+    ky: {value: null, verified: false, note: "Not in FAO-56 Table 24. FAO-66 (Steduto et al. 2012, https://www.fao.org/4/i2800e/i2800e.pdf) read with pypdf on 2026-11-04: the barley section (printed pp. 134-141, PDF pp. 149-156) gives no Ky, and Table 2 (printed p. 12, PDF p. 27) has no barley row. UNVERIFIED (tag A)."}
+    stage_lengths_days:
+      ua_central_t36uvu: {value: [160, 75, 75, 25], ref: {source: fao56_ch6, table: 11, row: "Winter Wheat | October | Idaho, USA"}, verified: true,
+                          choice: "No continental winter-barley row; continental winter-wheat row used as proxy (A)."}
+      fr_toulouse_t31tcj: {value: [30, 140, 40, 30], ref: {source: fao56_ch6, table: 11, row: "Winter Wheat | November | Mediterranean"}, verified: true,
+                           choice: "No Mediterranean winter-barley row (Barley/Oats/Wheat rows are other climates; two have no region printed). Winter wheat row used as proxy (A)."}
+    family: {value: null, verified: false, note: "Botanical family to be filled from a named taxonomy source (not from memory)."}
+
+  spring_wheat:
+    name: Spring wheat (soft and durum)
+    hcat3: ["3301010102", "3301010202"]  # spring_common_soft_wheat, spring_durum_hard_wheat
+    kc_ini: {value: 0.3, ref: {source: fao56_ch6, table: 12, row: "i. Cereals (group row, Kc ini)", footnote: 1}, verified: true}
+    kc_mid: {value: 1.15, ref: {source: fao56_ch6, table: 12, row: "Spring Wheat"}, verified: true}
+    kc_end: {value: 0.25, range: [0.25, 0.4], ref: {source: fao56_ch6, table: 12, row: "Spring Wheat", footnote: 10}, verified: true,
+             choice: "Footnote 10: the higher value is for hand-harvested crops; machine harvest assumed (A)."}
+    h_max_m: {value: 1, ref: {source: fao56_ch6, table: 12, row: "Spring Wheat"}, verified: true}
+    root_depth_m: {range: [1.0, 1.5], ref: {source: fao56_ch8, table: 22, row: "Spring Wheat"}, verified: true}
+    p: {value: 0.55, ref: {source: fao56_ch8, table: 22, row: "Spring Wheat", note: "for ET ≈ 5 mm/day"}, verified: true}
+    ky: {value: 1.15, ref: {source: fao56_ch8, table: 24, row: "Spring Wheat", note: "from FAO-33"}, verified: true}
+    stage_lengths_days:
+      ua_central_t36uvu: {value: [20, 25, 60, 30], ref: {source: fao56_ch6, table: 11, row: "Barley/Oats/Wheat | March/Apr | 35-45 °L", note: "region printed as latitude 35-45 degrees"}, verified: true,
+                          choice: "Only spring-sown temperate row; Ukraine (about 48 N) is just north of the printed latitude band (A)."}
+    family: {value: null, verified: false, note: "Botanical family to be filled from a named taxonomy source (not from memory)."}
+
+  spring_barley:
+    name: Spring barley
+    hcat3: ["3301010402"]  # spring_barley
+    kc_ini: {value: 0.3, ref: {source: fao56_ch6, table: 12, row: "i. Cereals (group row, Kc ini)", footnote: 1}, verified: true}
+    kc_mid: {value: 1.15, ref: {source: fao56_ch6, table: 12, row: "Barley"}, verified: true}
+    kc_end: {value: 0.25, ref: {source: fao56_ch6, table: 12, row: "Barley"}, verified: true}
+    h_max_m: {value: 1, ref: {source: fao56_ch6, table: 12, row: "Barley"}, verified: true}
+    root_depth_m: {range: [1.0, 1.5], ref: {source: fao56_ch8, table: 22, row: "Barley"}, verified: true}
+    p: {value: 0.55, ref: {source: fao56_ch8, table: 22, row: "Barley", note: "for ET ≈ 5 mm/day"}, verified: true}
+    ky: {value: null, verified: false, note: "Not in FAO-56 Table 24. FAO-66 (Steduto et al. 2012, https://www.fao.org/4/i2800e/i2800e.pdf) read with pypdf on 2026-11-04: the barley section (printed pp. 134-141, PDF pp. 149-156) gives no Ky, and Table 2 (printed p. 12, PDF p. 27) has no barley row. UNVERIFIED (tag A)."}
+    stage_lengths_days:
+      ua_central_t36uvu: {value: [20, 25, 60, 30], ref: {source: fao56_ch6, table: 11, row: "Barley/Oats/Wheat | March/Apr | 35-45 °L", note: "region printed as latitude 35-45 degrees"}, verified: true,
+                          choice: "Only spring-sown temperate row; Ukraine (about 48 N) is just north of the printed latitude band (A)."}
+    family: {value: null, verified: false, note: "Botanical family to be filled from a named taxonomy source (not from memory)."}
+
+  sunflower:
+    name: Sunflower
+    hcat3: ["3301060500"]  # sunflower
+    kc_ini: {value: 0.35, ref: {source: fao56_ch6, table: 12, row: "h. Oil Crops (group row, Kc ini)", footnote: 1}, verified: true}
+    kc_mid: {value: 1.0, range: [1.0, 1.15], ref: {source: fao56_ch6, table: 12, row: "Sunflower", footnote: 9}, verified: true,
+             choice: "Footnote 9: lower values are for rainfed crops with less dense plant populations; rainfed assumed (A)."}
+    kc_end: {value: 0.35, ref: {source: fao56_ch6, table: 12, row: "Sunflower"}, verified: true}
+    h_max_m: {value: 2.0, ref: {source: fao56_ch6, table: 12, row: "Sunflower"}, verified: true}
+    root_depth_m: {range: [0.8, 1.5], ref: {source: fao56_ch8, table: 22, row: "Sunflower"}, verified: true}
+    p: {value: 0.45, ref: {source: fao56_ch8, table: 22, row: "Sunflower", note: "for ET ≈ 5 mm/day"}, verified: true}
+    ky: {value: 0.95, ref: {source: fao56_ch8, table: 24, row: "Sunflower", note: "from FAO-33"}, verified: true}
+    stage_lengths_days:
+      fr_toulouse_t31tcj: {value: [25, 35, 45, 25], ref: {source: fao56_ch6, table: 11, row: "Sunflower | April/May | Medit.; California"}, verified: true}
+      ua_central_t36uvu: {value: [25, 35, 45, 25], ref: {source: fao56_ch6, table: 11, row: "Sunflower | April/May | Medit.; California"}, verified: true,
+                          choice: "Only sunflower row in Table 11 (A)."}
+    family: {value: null, verified: false, note: "Botanical family to be filled from a named taxonomy source (not from memory)."}
+
+  rapeseed:
+    name: Winter rapeseed (canola)
+    hcat3: ["3301060401"]  # winter_rapeseed_rape
+    kc_ini: {value: 0.35, ref: {source: fao56_ch6, table: 12, row: "h. Oil Crops (group row, Kc ini)", footnote: 1}, verified: true}
+    kc_mid: {value: 1.0, range: [1.0, 1.15], ref: {source: fao56_ch6, table: 12, row: "Rapeseed, Canola", footnote: 9}, verified: true,
+             choice: "Footnote 9: lower values are for rainfed crops with less dense plant populations; rainfed assumed (A)."}
+    kc_end: {value: 0.35, ref: {source: fao56_ch6, table: 12, row: "Rapeseed, Canola"}, verified: true}
+    h_max_m: {value: 0.6, ref: {source: fao56_ch6, table: 12, row: "Rapeseed, Canola"}, verified: true}
+    root_depth_m: {range: [1.0, 1.5], ref: {source: fao56_ch8, table: 22, row: "Rapeseed, Canola"}, verified: true}
+    p: {value: 0.60, ref: {source: fao56_ch8, table: 22, row: "Rapeseed, Canola", note: "for ET ≈ 5 mm/day"}, verified: true}
+    ky: {value: null, verified: false, note: "Not in FAO-56 Table 24. FAO-66 (Steduto et al. 2012, https://www.fao.org/4/i2800e/i2800e.pdf) read with pypdf on 2026-11-04: rapeseed/canola appears only in passing (PDF pp. 94, 179, 253), with no Ky; Table 2 (printed p. 12) has no rapeseed row. UNVERIFIED (tag A)."}
+    stage_lengths_days:
+      fr_toulouse_t31tcj: {value: null, verified: false, note: "FAO-56 Table 11 has no rapeseed row; UNVERIFIED (tag A)."}
+      ua_central_t36uvu: {value: null, verified: false, note: "FAO-56 Table 11 has no rapeseed row; UNVERIFIED (tag A)."}
+    family: {value: null, verified: false, note: "Botanical family to be filled from a named taxonomy source (not from memory)."}
+
+  soybean:
+    name: Soybeans
+    hcat3: ["3301160000"]  # soy_soybeans
+    label_aliases: {CSB: ["Soybeans"]}
+    kc_ini: {value: 0.4, ref: {source: fao56_ch6, table: 12, row: "e. Legumes (Leguminosae) (group row, Kc ini)", footnote: 1}, verified: true}
+    kc_mid: {value: 1.15, ref: {source: fao56_ch6, table: 12, row: "Soybeans"}, verified: true}
+    kc_end: {value: 0.50, ref: {source: fao56_ch6, table: 12, row: "Soybeans"}, verified: true}
+    h_max_m: {range: [0.5, 1.0], ref: {source: fao56_ch6, table: 12, row: "Soybeans"}, verified: true}
+    root_depth_m: {range: [0.6, 1.3], ref: {source: fao56_ch8, table: 22, row: "Soybeans"}, verified: true}
+    p: {value: 0.50, ref: {source: fao56_ch8, table: 22, row: "Soybeans", note: "for ET ≈ 5 mm/day"}, verified: true}
+    ky: {value: 0.85, ref: {source: fao56_ch8, table: 24, row: "Soybean", note: "from FAO-33"}, verified: true}
+    stage_lengths_days:
+      ua_central_t36uvu: {value: [20, 30, 60, 25], ref: {source: fao56_ch6, table: 11, row: "Soybeans | May | Central USA", note: "Ldev printed as 30/35"}, verified: true,
+                          choice: "Continental row; first of the two printed Ldev values (A)."}
+    family: {value: null, verified: false, note: "Botanical family to be filled from a named taxonomy source (not from memory)."}
+
+  fallow:
+    name: Fallow (bare soil)
+    hcat3: ["3301110000"]  # fallow_land_not_crop (history state "fallow")
+    label_aliases: {CSB: ["Fallow/Idle Cropland"]}
+    kc_ini: {value: null, verified: false, note: "FAO-56 Table 12 has no fallow row; bare-soil evaporation to come from FAO-56 Chapter 7 (Ke) in T3.3. UNVERIFIED (tag A)."}
+    kc_mid: {value: null, verified: false, note: "Not applicable to bare soil; see kc_ini."}
+    kc_end: {value: null, verified: false, note: "Not applicable to bare soil; see kc_ini."}
+    stage_lengths_days: {}
+
+  cover_crop:
+    name: "Cover crop (proxy: oats)"
+    hcat3: []
+    proxy_for: "Oats (FAO-56 Tables 12 and 22) — team assumption (A): no FAO-56 row for cover crops."
+    kc_ini: {value: 0.3, ref: {source: fao56_ch6, table: 12, row: "i. Cereals (group row, Kc ini)", footnote: 1}, verified: true, choice: "Proxy crop (A)."}
+    kc_mid: {value: 1.15, ref: {source: fao56_ch6, table: 12, row: "Oats"}, verified: true, choice: "Proxy crop (A)."}
+    kc_end: {value: 0.25, ref: {source: fao56_ch6, table: 12, row: "Oats"}, verified: true, choice: "Proxy crop (A)."}
+    h_max_m: {value: 1, ref: {source: fao56_ch6, table: 12, row: "Oats"}, verified: true, choice: "Proxy crop (A)."}
+    root_depth_m: {range: [1.0, 1.5], ref: {source: fao56_ch8, table: 22, row: "Oats"}, verified: true, choice: "Proxy crop (A)."}
+    p: {value: 0.55, ref: {source: fao56_ch8, table: 22, row: "Oats", note: "for ET ≈ 5 mm/day"}, verified: true, choice: "Proxy crop (A)."}
+    ky: {value: null, verified: false, note: "No yield for a cover crop; RYI not computed (A)."}
+    stage_lengths_days: {}  # cover-crop windows are set per region in T6.1 (A)

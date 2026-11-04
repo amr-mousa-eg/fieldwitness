@@ -1,0 +1,25 @@
+# Evidence grades and related thresholds (PLAN.md §4). ALL values below are initial TEAM CHOICES
+# (tag A), not taken from a paper; they are adjustable and every change is logged in DECISIONS.md.
+
+grades:
+  A:  # physics and neighbours agree AND credibility high AND no key input tagged A
+    require_same_sign: true
+    interval_level: 0.90        # 90 % intervals must overlap
+    credibility_min: 0.6        # team choice (A)
+    max_key_inputs_tag_A: 0
+  B:  # two witnesses agree
+    min_agreeing_witnesses: 2
+  C: {}  # one witness available or witnesses disagree
+  D:  # decision-driving inputs mostly tagged A
+    min_share_inputs_tag_A: 0.5  # team choice (A): "mostly" = more than half
+
+credibility:  # T4.5: combine season-rank agreement and timing error into 0-1
+  weight_spearman: 0.5          # team choice (A)
+  timing_error_scale_days: 20   # team choice (A): timing score = max(0, 1 - median_error / scale)
+
+scale_flag:
+  pixel_area_ratio: 4           # CLAUDE.md rule 5: flag when pixel area > field area / 4
+
+interior_pixels:                # PLAN.md T1.4 (user decision 2026-11-04)
+  buffer_m: 15
+  min_pixels: 4

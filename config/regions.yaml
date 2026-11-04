@@ -1,6 +1,7 @@
 # Regions from the T0.5 census (PLAN.md §2, T0.5). Final choice (user, 2026-11-04, DECISIONS.md):
 # Tier 1 ks_t14slh, Tier 2 fr_toulouse_t31tcj, Tier 3 ua_central_t36uvu; eg_nile_delta showcase only.
-# T0.6 completes this file (bbox, label source, crop list, season windows).
+# T0.6 (2026-11-04): bbox_lonlat = HLS tile footprint [W, S, E, N] from the tile grid (CMR ULX/ULY);
+# crops = keys of config/crops.yaml, chosen from area shares in the census boxes (DECISIONS.md).
 #
 # tiles: MGRS tile IDs verified in CMR (docs/api_notes.md). point: [lon, lat] of the census
 #   boundary sample (a 20 km x 20 km box). For multi-tile regions the sample box is centred on the
@@ -21,6 +22,10 @@ regions:
     tier: 1
     name: Kansas High Plains (SW Kansas)
     tiles: [T14SLH]
+    bbox_lonlat: [-101.3039, 37.8375, -100.0253, 38.8444]
+    # CSB 2024, full tile, share of field area: winter wheat 31.4 %, fallow/idle 22.7 %, corn 19.5 %,
+    # sorghum 18.1 % (cum. 91.7 %); soybean 0.1 % (dropped).
+    crops: [maize, sorghum, winter_wheat, fallow, cover_crop]
     point: [-100.90, 38.00]
     full_tile_sample: true  # CSB full-tile read is 43.9 MB (T0.4), under the cap
     boundary:
@@ -74,6 +79,21 @@ regions:
     tier: 3
     name: Central Ukraine (Kirovohrad oblast area)
     tiles: [T36UVU]
+    bbox_lonlat: [31.6392, 47.7574, 33.1328, 48.753]
+    # Approved by the user 2026-11-04 (FAOSTAT national list, tag E). Wheat and barley enter as winter and
+    # spring variants; T2.2 assigns the variant per field-season from autumn vs spring green-up (tag D).
+    crops: [winter_wheat, spring_wheat, sunflower, maize, winter_barley, spring_barley, soybean, rapeseed, fallow, cover_crop]
+    crops_source:
+      status: approved_by_user_2026-11-04
+      tag: E
+      source: "FAO. 2025 (last update 2025-12-31). FAOSTAT: Production — Crops and livestock products (QCL), bulk file
+        Production_Crops_Livestock_E_All_Data_(Normalized). Area harvested (element 5312), Ukraine (area code 230).
+        Accessed 4 November 2026. https://bulks-faostat.fao.org/production/. Licence: CC-BY-4.0."
+      level: "national (oblast data: ukrstat.gov.ua unreachable, stat.gov.ua HTTP 403 on 2026-11-04)"
+      faostat_items: [Wheat, Sunflower seed, Maize (corn), Barley, Soya beans, Rape or colza seed]
+      shares_2019_2021_mean: {wheat: 25.5, sunflower: 23.7, maize: 19.7, barley: 9.3, soybean: 5.3, rapeseed: 4.2}
+      shares_2023_2024_mean: {sunflower: 23.3, wheat: 21.8, maize: 18.3, soybean: 10.4, barley: 6.6, rapeseed: 6.1}
+      open_questions: "FAOSTAT 'Wheat' and 'Barley' do not split winter/spring; potatoes (4.9-5.5 %) left out."
     # Tile centre (from ULX/ULY); the earlier lookup point 32.26E 48.51N is Kropyvnytskyi city.
     point: [32.39, 48.25]
     sample_km: 10  # the 20 km FTW read was est. 313.6 MB (> 200 MB cap)
@@ -94,6 +114,7 @@ regions:
     tier: 3
     name: Nile Delta (Egypt)
     tiles: [T36RTV, T36RUV]
+    bbox_lonlat: [29.8382, 30.6072, 31.0153, 31.6198]  # chosen tile T36RTV
     point: [31.00, 30.79]
     boundary:
       source: Fields of the World global predictions (alpha)
@@ -109,6 +130,11 @@ regions:
     tier: 2
     name: Lauragais, SE of Toulouse (France)
     tiles: [T31TCJ]
+    bbox_lonlat: [0.4959, 43.2383, 1.8887, 44.2478]
+    # RPG 2024, 20 km box, annual arable area: sunflower 30.3 %, winter durum wheat 27.6 %, winter soft
+    # wheat 11.2 %, winter barley 4.3 %, sorghum 3.4 %, winter rapeseed 3.3 %, maize 3.0 % (alfalfa 4.2 %
+    # and soybean 2.0 % not listed). Durum and soft winter wheat are one crop key.
+    crops: [sunflower, winter_wheat, winter_barley, sorghum, rapeseed, maize, fallow, cover_crop]
     point: [1.75, 43.45]
     boundary:
       source: French RPG (IGN) / EuroCrops V2

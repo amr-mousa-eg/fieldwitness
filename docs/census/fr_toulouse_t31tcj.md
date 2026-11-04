@@ -1,6 +1,6 @@
 # Census — Lauragais, SE of Toulouse (France) (`fr_toulouse_t31tcj`, Tier 2)
 
-Generated 2026-11-04T02:02:39+00:00 by `fieldwitness.cli census`. Tile **T31TCJ** (EPSG:32631). Numbers are counts from CMR metadata and bbox reads; no imagery downloaded.
+Generated 2026-11-04T02:32:30+00:00 by `fieldwitness.cli census`. Tile **T31TCJ** (EPSG:32631). Numbers are counts from CMR metadata and bbox reads; no imagery downloaded.
 
 Season windows (tag **A**, team assumption, editable in `config/regions.yaml`; named by harvest year): winter months 9–7; summer months 4–10
 
@@ -98,26 +98,26 @@ Monthly means 2016–2024 (T31TCJ):
   43.5398
  ],
  "sample_area_km2": 411.6,
- "fields": 5406,
+ "fields": 5040,
  "area_ha_p10_p25_p50_p75_p90": [
-  0.82,
-  1.71,
-  3.62,
-  7.08,
-  11.96
+  0.89,
+  1.84,
+  3.76,
+  7.27,
+  12.14
  ],
- "area_ha_mean": 5.31,
- "field_cover_fraction": 0.698,
- "share_scale_flag_lt_0p36ha": 0.026,
- "share_ge4_interior_px_buf30": 0.721,
- "share_ge4_interior_px_buf15": 0.875,
- "median_interior_px_buf30": 14.0,
+ "area_ha_mean": 5.46,
+ "field_cover_fraction": 0.668,
+ "share_scale_flag_lt_0p36ha": 0.022,
+ "share_ge4_interior_px_buf30": 0.738,
+ "share_ge4_interior_px_buf15": 0.886,
+ "median_interior_px_buf30": 15.0,
  "field_definition": "annual arable (HCAT3, fieldwitness.data.hcat)",
  "arable_filter": {
   "parcels_all": 11270,
-  "parcels_kept": 5406,
+  "parcels_kept": 5040,
   "excluded_by_hcat_group": {
-   "3301": 3093,
+   "3301": 3459,
    "3302": 532,
    "3303": 42,
    "3304": 5,

@@ -16,9 +16,10 @@ crops. Used by the census, T1.4 and T1.6.
 Two roles (user decision 2026-11-04, DECISIONS.md):
 - *Selection* — `is_annual_arable` on the current (most recent) year decides which parcels count
   as fields.
-- *Crop history* — `history_state` maps every year of a field's history to a crop state. Fallow
-  and temporary grass are kept as the states "fallow" and "temporary_grass", never dropped. A
-  field is removed from history analysis only when it leaves arable use: a year coded in HCAT3
+- *Crop history* — `history_state` maps every year of a field's history to a crop state. Fallow,
+  temporary grass and alfalfa are kept as the states "fallow", "temporary_grass" and
+  "perennial_forage", never dropped; alfalfa is not a rotation option in the MVP. A field is
+  removed from history analysis only when it leaves arable use: a year coded in HCAT3
   groups 3302-3308 (grassland, permanent crops, other non-arable groups), see `stays_arable`.
   3399 not_known_and_other and missing codes are "unknown" states and never remove a field.
 """
@@ -36,6 +37,7 @@ EXCLUDED_ARABLE_PREFIXES = {
     "330120": "asparagus",  # perennial
     "330123": "rhubarb",  # perennial
     "330127": "artichoke",  # perennial
+    "3301090301": "alfalfa_lucerne",  # multi-year forage (user decision 2026-11-04)
 }
 
 
@@ -62,6 +64,7 @@ def is_annual_arable(code) -> bool:
 
 FALLOW = "fallow"
 TEMPORARY_GRASS = "temporary_grass"
+PERENNIAL_FORAGE = "perennial_forage"  # alfalfa: a history state, never a rotation option (MVP)
 OTHER_ARABLE = "other_arable"
 UNKNOWN = "unknown"
 
@@ -75,6 +78,7 @@ _HISTORY_PREFIXES = {
     "330111": FALLOW,  # fallow_land_not_crop
     "33010901": TEMPORARY_GRASS,  # temporary_grass
     "33010902": TEMPORARY_GRASS,  # poaceae_grasses (grass leys: ryegrass, cocksfoot, ...)
+    "3301090301": PERENNIAL_FORAGE,  # alfalfa_lucerne
 }
 
 
@@ -82,7 +86,8 @@ def history_state(code) -> str | None:
     """Crop state of one field-year for crop histories.
 
     Returns the 10-digit HCAT3 code for an annual arable crop (named via crops.yaml in T1.6),
-    "fallow", "temporary_grass", "other_arable" (perennials and gardens inside 3301), None when
+    "fallow", "temporary_grass", "perennial_forage" (alfalfa), "other_arable" (other perennials
+    and gardens inside 3301), None when
     the year is in a non-arable group (3302-3308), and "unknown" for everything else: a missing
     code, 3399 not_known_and_other, or a generic code above group level.
     """

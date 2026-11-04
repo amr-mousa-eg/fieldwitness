@@ -1,6 +1,6 @@
 # Census — Beauce (France) (`fr_beauce_t31ucp`, Tier 2)
 
-Generated 2026-11-04T02:03:23+00:00 by `fieldwitness.cli census`. Tile **T31UCP** (EPSG:32631). Numbers are counts from CMR metadata and bbox reads; no imagery downloaded.
+Generated 2026-11-04T02:33:22+00:00 by `fieldwitness.cli census`. Tile **T31UCP** (EPSG:32631). Numbers are counts from CMR metadata and bbox reads; no imagery downloaded.
 
 Season windows (tag **A**, team assumption, editable in `config/regions.yaml`; named by harvest year): winter months 9–7; summer months 4–10
 
@@ -98,26 +98,26 @@ Monthly means 2016–2024 (T31UCP):
   48.3398
  ],
  "sample_area_km2": 414.7,
- "fields": 3688,
+ "fields": 3656,
  "area_ha_p10_p25_p50_p75_p90": [
-  0.8,
-  3.1,
-  7.55,
-  12.19,
-  19.07
+  0.81,
+  3.13,
+  7.58,
+  12.2,
+  19.09
  ],
- "area_ha_mean": 9.08,
- "field_cover_fraction": 0.807,
- "share_scale_flag_lt_0p36ha": 0.051,
- "share_ge4_interior_px_buf30": 0.798,
- "share_ge4_interior_px_buf15": 0.87,
+ "area_ha_mean": 9.12,
+ "field_cover_fraction": 0.804,
+ "share_scale_flag_lt_0p36ha": 0.05,
+ "share_ge4_interior_px_buf30": 0.801,
+ "share_ge4_interior_px_buf15": 0.872,
  "median_interior_px_buf30": 44.0,
  "field_definition": "annual arable (HCAT3, fieldwitness.data.hcat)",
  "arable_filter": {
   "parcels_all": 5977,
-  "parcels_kept": 3688,
+  "parcels_kept": 3656,
   "excluded_by_hcat_group": {
-   "3301": 1727,
+   "3301": 1759,
    "3302": 83,
    "3303": 9,
    "3304": 4,
