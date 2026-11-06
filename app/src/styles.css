@@ -783,3 +783,100 @@ table.mini {
 .best-label {
   font-size: 0.8rem;
 }
+
+/* ---------------------------------------------------------------- T9.9 Calendar */
+:root {
+  /* shade steps for shares; the printed % carries the meaning, the shade only supports it */
+  --bare-1: #f1e6d2;
+  --bare-2: #e3cfa9;
+  --bare-3: #d2b47e;
+  --bare-4: #bf9757;
+  --risk-1: #f7e2d6;
+  --risk-2: #efbfa6;
+  --risk-3: #e39874;
+  --risk-4: #d27148;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bare-1: #3a3226;
+    --bare-2: #54452c;
+    --bare-3: #6e5731;
+    --bare-4: #8a6a35;
+    --risk-1: #3d2a22;
+    --risk-2: #5a3527;
+    --risk-3: #78402b;
+    --risk-4: #964a2c;
+  }
+}
+.calendar-view {
+  display: grid;
+  gap: 1rem;
+}
+.calendar-view .chart-controls {
+  align-items: center;
+}
+.cal {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 46rem;
+  table-layout: fixed;
+  font-variant-numeric: tabular-nums;
+}
+.cal thead th:first-child {
+  width: 15rem;
+}
+.cal th,
+.cal td {
+  border: 1px solid var(--rule);
+  padding: 0.3rem 0.35rem;
+  text-align: center;
+  font-size: 0.85rem;
+}
+.cal th[scope="row"] {
+  text-align: left;
+  font-weight: 600;
+  min-width: 13rem;
+}
+.cal-cell.insufficient {
+  font-size: 0.7rem;
+  color: var(--muted);
+  background: repeating-linear-gradient(45deg, transparent 0 4px, var(--rule) 4px 5px);
+}
+.bare-1 { background: var(--bare-1); }
+.bare-2 { background: var(--bare-2); }
+.bare-3 { background: var(--bare-3); }
+.bare-4 { background: var(--bare-4); }
+.risk-1 { background: var(--risk-1); }
+.risk-2 { background: var(--risk-2); }
+.risk-3 { background: var(--risk-3); }
+.risk-4 { background: var(--risk-4); }
+.cal-crop h4 {
+  margin: 0.75rem 0 0.25rem;
+}
+.thresholds {
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+}
+.context-strip > ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1rem;
+}
+.ctx-item {
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  padding: 0.75rem;
+}
+.ctx-item h4 {
+  margin: 0 0 0.25rem;
+}
+.ctx-item p {
+  margin: 0.2rem 0;
+  font-size: 0.9rem;
+}
+.ctx-source {
+  font-size: 0.75rem;
+}

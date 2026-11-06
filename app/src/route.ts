@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
-export type FieldTab = "story" | "options" | "advisor";
-export const TABS: FieldTab[] = ["story", "options", "advisor"];
+export type FieldTab = "story" | "options" | "calendar" | "advisor";
+export const TABS: FieldTab[] = ["story", "options", "calendar", "advisor"];
 
 /** Region-level pages. Field ids are 40-hex hashes, so these names never collide with one. */
 export type RegionPage = "map" | "scoreboard";

@@ -5,6 +5,10 @@ const SHARE_UNITS = /^(share|probability)/;
 /** "0.33 share of seasons" -> "33 %"; other units keep their own name. */
 export function formatNumber(value: number, unit: string, digits?: number): string {
   if (SHARE_UNITS.test(unit)) return `${Math.round(value * 100)} %`;
+  // Below 1, keep two significant digits so small anomalies (0.002 m³/m³) do not print as 0.
+  if (digits === undefined && value !== 0 && Math.abs(value) < 1) {
+    return value.toLocaleString("en", { maximumSignificantDigits: 2 });
+  }
   const d = digits ?? (Math.abs(value) >= 100 ? 0 : Math.abs(value) >= 10 ? 1 : 2);
   return value.toLocaleString("en", { maximumFractionDigits: d, minimumFractionDigits: 0 });
 }

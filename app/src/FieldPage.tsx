@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { AdvisorConsole } from "./AdvisorConsole";
+import { CalendarView } from "./CalendarView";
 import { FieldCard } from "./FieldCard";
 import { FieldStory } from "./FieldStory";
 import { ScaleFlags } from "./ScaleFlags";
@@ -59,6 +60,7 @@ export function FieldPage({ regionId, fieldId, tab }: { regionId: string; fieldI
           </nav>
           {tab === "story" && <FieldStory pack={pack} regionId={regionId} />}
           {tab === "options" && <FieldCard pack={pack} regionId={regionId} />}
+          {tab === "calendar" && <CalendarView pack={pack} regionId={regionId} />}
           {tab === "advisor" && <AdvisorConsole pack={pack} />}
           <div className="field-aside">
             <ScaleFlags flags={pack.field.scale_flags} />
