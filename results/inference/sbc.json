@@ -1,0 +1,110 @@
+{
+  "n_test": 500,
+  "n_ref_per_year": 6000,
+  "k": 300,
+  "bins": 10,
+  "variables": {
+    "sow_offset_days": {
+      "n_fields": 500,
+      "hist": [
+        19,
+        27,
+        35,
+        77,
+        110,
+        98,
+        50,
+        45,
+        25,
+        14
+      ],
+      "chi2_uniform_9dof": 205.88,
+      "uniform_at_5pct": false,
+      "ends_share": 0.066,
+      "centre_share": 0.416,
+      "shape": "hump (posterior too wide)"
+    },
+    "taw_scale": {
+      "n_fields": 500,
+      "hist": [
+        48,
+        55,
+        54,
+        44,
+        59,
+        48,
+        59,
+        51,
+        39,
+        43
+      ],
+      "chi2_uniform_9dof": 8.36,
+      "uniform_at_5pct": true,
+      "ends_share": 0.182,
+      "centre_share": 0.214,
+      "shape": "flat"
+    },
+    "irrigated": {
+      "n_fields": 500,
+      "hist": [
+        48,
+        48,
+        40,
+        53,
+        50,
+        54,
+        50,
+        54,
+        53,
+        50
+      ],
+      "chi2_uniform_9dof": 3.16,
+      "uniform_at_5pct": true,
+      "ends_share": 0.196,
+      "centre_share": 0.208,
+      "shape": "flat"
+    },
+    "irrigation_mm": {
+      "n_fields": 260,
+      "hist": [
+        1,
+        10,
+        11,
+        26,
+        34,
+        35,
+        36,
+        31,
+        35,
+        41
+      ],
+      "chi2_uniform_9dof": 64.69,
+      "uniform_at_5pct": false,
+      "ends_share": 0.162,
+      "centre_share": 0.265,
+      "shape": "hump (posterior too wide)"
+    },
+    "kc_mid_scale": {
+      "n_fields": 500,
+      "hist": [
+        34,
+        39,
+        63,
+        54,
+        50,
+        56,
+        59,
+        44,
+        63,
+        38
+      ],
+      "chi2_uniform_9dof": 20.56,
+      "uniform_at_5pct": false,
+      "ends_share": 0.144,
+      "centre_share": 0.212,
+      "shape": "skewed (bias)"
+    }
+  },
+  "tag": "D",
+  "note": "ABC tolerance k/N makes the posterior approximate; one shared forward model"
+}
