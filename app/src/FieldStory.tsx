@@ -157,7 +157,7 @@ function GreennessChart({ pack, series }: { pack: FieldPack; series: FieldSeries
         </li>
         {showEvi && (
           <li>
-            <span className="key-dot" style={{ background: CHART.evi }} /> {t("story.series.evi")}{" "}
+            <span className="key-triangle" style={{ borderBottomColor: CHART.evi }} /> {t("story.series.evi")}{" "}
             <TagBadge tag={series.evi.tag} source={series.evi.source} />
           </li>
         )}
@@ -203,7 +203,14 @@ function GreennessChart({ pack, series }: { pack: FieldPack; series: FieldSeries
             />
             <Scatter data={ndvi.filter(inView)} dataKey="y" name={t("story.series.ndvi")} fill={CHART.ndvi} isAnimationActive={false} />
             {showEvi && (
-              <Scatter data={evi.filter(inView)} dataKey="y" name={t("story.series.evi")} fill={CHART.evi} isAnimationActive={false} />
+              <Scatter
+                data={evi.filter(inView)}
+                dataKey="y"
+                name={t("story.series.evi")}
+                fill={CHART.evi}
+                shape="triangle"
+                isAnimationActive={false}
+              />
             )}
             {seasons.map((s) => {
               const peak = markTime(s, s.peak);

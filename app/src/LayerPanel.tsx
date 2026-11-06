@@ -46,6 +46,10 @@ export function LayerPanel({
   const years = layer?.grid.years ?? [];
   const year = choice.year !== null && years.includes(choice.year) ? choice.year : years[years.length - 1];
   const yi = layer ? layer.region_mean.x.findIndex((x) => Number(x) === year) : -1;
+  // Text twin of the map colours (T9.7): the lowest and highest cell of the shown year.
+  const gi = layer && year !== undefined ? layer.grid.years.indexOf(year) : -1;
+  const cellValues = layer && gi >= 0 ? layer.grid.cells.map((c) => c.values[gi]).filter((v): v is number => v != null) : [];
+  const cellRange = cellValues.length > 0 ? [Math.min(...cellValues), Math.max(...cellValues)] : null;
 
   return (
     <section className="layer-panel" aria-labelledby="layers-h">
@@ -120,6 +124,16 @@ export function LayerPanel({
                 }}
               />
             </p>
+            {cellRange && (
+              <p>
+                {t("layers.cells", {
+                  year,
+                  lo: formatTagged({ ...layer.grid, value: cellRange[0] }),
+                  hi: formatTagged({ ...layer.grid, value: cellRange[1] }),
+                })}{" "}
+                <TagBadge tag={layer.grid.tag} source={layer.grid.source} />
+              </p>
+            )}
             <p>
               {t("ctx.trend")} <TaggedValue v={layer.trend} />
             </p>

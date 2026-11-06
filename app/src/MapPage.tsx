@@ -43,7 +43,7 @@ export function MapPage({ index }: { index: RegionIndex }) {
   const sample = layers && choice.colourBy ? layers.field_colouring[choice.colourBy] : undefined;
 
   return (
-    <main className="app-main">
+    <main id="main" tabIndex={-1} className="app-main">
       <aside className="rail">
         {layers && <LayerPanel layers={layers} choice={choice} set={setChoice} />}
         <FieldList

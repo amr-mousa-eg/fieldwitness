@@ -49,10 +49,23 @@ npm run build     # production build into app/dist (real packs only)
 
 ```
 node scripts/screenshot.mjs http://localhost:5173/ '.map[data-state="ready"]' map.png 1280 800 light
+node scripts/keyboard-check.mjs http://localhost:5173/
 npm run build && npx vite preview --port 5180   # then:
 node scripts/offline-check.mjs http://localhost:5180/ offline.png
 ```
 
-`screenshot.mjs` waits for the map's `data-state="ready"` marker and prints console errors.
+`screenshot.mjs` waits for a selector (e.g. the map's `data-state="ready"` marker), prints console
+errors, and emulates the exact viewport (so `380 800` is a real 380 px phone width). An optional 7th
+argument is JS run in the page first, e.g. `'document.querySelector(".explain-btn").click()'`.
+`keyboard-check.mjs` drives the app at 380 px with real Tab / Enter / Escape key events (skip link,
+field list, focus on page change, field tabs, explainers, option details, no page overflow; T9.7).
 `offline-check.mjs` visits once, goes offline, reloads and checks the app shell renders (T9.1).
 Set `CHROME=<path>` if Chrome is not in the default Windows location.
+
+## Views (Phase 9, on SYNTHETIC fixtures)
+
+- Header nav: Map (T9.1, T9.11 layers), Scoreboard (T9.5), Methods & data (T9.6).
+- Field tabs: Field story (T9.2), Options (T9.3), Calendar (T9.9), Advisor console (T9.4).
+- Explainers (T9.10): text and cited sources in `src/strings/en.json` (`explain.<id>.*`).
+- Accessibility (T9.7): skip link; focus moves to `<main>` on page change; colour always has a
+  text twin (values printed in lists, tables and legends; marker shapes differ in charts).

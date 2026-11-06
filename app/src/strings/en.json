@@ -373,5 +373,7 @@
   "methods.ds.taxonomy.licence": "Licence and citation still to be confirmed from both sites",
   "methods.terms": "Terms used in the app",
   "methods.repo": "Code, tests and results",
-  "methods.repo.text": "The pipeline, tests, validation results and this app are public:"
+  "methods.repo.text": "The pipeline, tests, validation results and this app are public:",
+  "skip.main": "Skip to main content",
+  "layers.cells": "Grid cells in {year}: from {lo} to {hi}."
 }

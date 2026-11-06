@@ -469,8 +469,40 @@ a {
     grid-template-columns: 1fr;
   }
 }
+/* T9.7 keyboard: visible only when focused; absolute, so it takes no row in the .app grid */
+.skip-link {
+  position: absolute;
+  left: 0.5rem;
+  top: -10rem;
+  z-index: 100;
+  padding: 0.5rem 1rem;
+  background: var(--panel);
+  color: var(--ink);
+  border: 2px solid var(--focus);
+}
+.skip-link:focus {
+  top: 0.5rem;
+}
+main:focus {
+  outline: none; /* focused by script only, as a starting point; not an interactive control */
+}
 .table-wrap {
   overflow-x: auto;
+  /* contain absolutely positioned children (.sr-only) in the scroll box,
+     otherwise they escape it and widen the page on small screens */
+  position: relative;
+}
+/* T9.7: grid items default to min-width: auto, so a wide table would widen the whole page.
+   Let them shrink; wide tables scroll inside .table-wrap instead. */
+.app > *,
+.field-page > *,
+.card-layout > *,
+.advisor > *,
+.calendar-view > *,
+.scoreboard > *,
+.methods > *,
+.story > * {
+  min-width: 0;
 }
 table.options {
   width: 100%;
@@ -701,6 +733,15 @@ table.mini {
   font-size: 0.9rem;
   margin: 0.5rem 0 0;
 }
+.key-triangle {
+  display: inline-block;
+  vertical-align: middle;
+  width: 0;
+  height: 0;
+  border-left: 0.35rem solid transparent;
+  border-right: 0.35rem solid transparent;
+  border-bottom: 0.6rem solid;
+}
 .key-diamond {
   display: inline-block;
   width: 0.7rem;
@@ -909,11 +950,9 @@ table.mini {
   color: var(--page);
 }
 .explain-pop {
-  position: absolute;
-  z-index: 20;
-  top: calc(100% + 0.3rem);
-  left: 0;
-  width: min(22rem, calc(100vw - 2rem));
+  /* top, left and width are set from the button's position (Explain.tsx) */
+  position: fixed;
+  z-index: 50;
   display: grid;
   gap: 0.35rem;
   padding: 0.75rem;

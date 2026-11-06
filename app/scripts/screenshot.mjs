@@ -56,6 +56,13 @@ const send = (method, params = {}) =>
 await send("Runtime.enable");
 await send("Page.enable");
 await send("Emulation.setEmulatedMedia", { features: [{ name: "prefers-color-scheme", value: scheme }] });
+// Headless Chrome windows have a minimum width (~500 px); emulate the exact viewport instead.
+await send("Emulation.setDeviceMetricsOverride", {
+  width: Number(w),
+  height: Number(h),
+  deviceScaleFactor: 1,
+  mobile: Number(w) < 600,
+});
 await send("Page.navigate", { url });
 let found = false;
 for (let i = 0; i < 100 && !found; i++) {
