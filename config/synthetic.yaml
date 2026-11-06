@@ -6,7 +6,9 @@ region: ks_t14slh
 
 # Nominal sowing day of year. FAO-56 Table 11 prints "April" for the chosen maize row (Idaho, USA,
 # see config/crops.yaml); mid-April (day 105) is our pick inside that month.
-nominal_sow_doy: {maize: 105}
+# sorghum: FAO-56 Table 11 row "Sorghum | May/June | USA" (crops.yaml); 1 June (day 152) is our pick
+# inside that window (A, UNVERIFIED). Added for T4.5 so more pilot fields have a modelled crop.
+nominal_sow_doy: {maize: 105, sorghum: 152}
 
 # POWER point whose cached weather forces the synthetic seasons (cache exists in data/power).
 weather_point: {lon: -100.04, lat: 38.47}

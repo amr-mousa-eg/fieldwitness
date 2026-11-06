@@ -402,7 +402,19 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 - T6.0 takes the Current rotation from CSB labels for Kansas. T2.2 is still FAILED (78.3 %); downstream steps use it as a documented 78 %-accurate detector.
 - `BLOCKED.md` and `AUTOPILOT_STOP` deleted.
 
+## 2026-11-07 — T4.5 credibility on the 200 Kansas pilot fields (not ticked)
+
+- `scripts/t45_credibility.py` (N=3000/season, k=150): ABC per labelled season (CSB label = maize or sorghum, POWER of the field's own cell, HLS NDVI), then per field: rank score = max(0, Spearman of observed vs simulated canopy integral, needs ≥ 3 seasons), timing score = max(0, 1 − median season error of SOS/peak/EOS / 20 d); weights from `grading.yaml`. < 3 seasons → timing only (flagged).
+- Added sorghum to the forward model via `nominal_sow_doy.sorghum = 152` (1 June; FAO-56 Table 11 says "May/June"; tag A, UNVERIFIED). Winter wheat and sunflower are not modelled (calendar-year window), so no config change for them.
+- **Result:** 185/200 fields have a credibility (101 full, 84 timing-only); 15 winter-wheat-only fields are `not_assessable` (null). Median 0.50; 42.7 % reach 0.6 (grade-A minimum). Weakness: in-sample posterior predictive (fit and comparison use the same season), so this is consistency of physics with canopy, not out-of-sample skill; truth model is simplified (T4.3 caveat).
+- **Acceptance "credibility for every pilot field" is NOT met** (15 null), so T4.5 stays unticked. Decision for the user: accept null (→ grade capped at C/D for those fields) or add a winter-wheat window model. Not decided unattended.
+- `scripts/_explore45.py` is an empty scratch stub (delete is not permitted unattended); delete it by hand.
+
 ## Autopilot handoff
+
+**2026-11-07, autopilot run (T4.5).** Done: T4.5 code and results (`results/inference/credibility.json`, `credibility_hist.svg`); NOT ticked, 15/200 winter-wheat-only fields have no credibility (see entry above). Lint clean. In progress: nothing. Background: none. Next: user decision on the 15 fields; meanwhile T6.0 (Current rotation from CSB labels, `data/labels`) can start since T4.6 needs WIMAS (T1.7 open, disclaimer → needs the user). Risk: schedule (Gate 6 due Sun 8 Nov); T2.2 still FAILED; credibility is in-sample.
+
+(Previous entry:)
 
 **2026-11-07, autopilot run (T4.4).** Done: T4.4 ticked. `scripts/t44_sbc.py` → `results/inference/sbc.json` + `sbc_<var>.svg` (500 synthetic fields, N=6000/yr, k=300, 10 bins, random tie-break; chi² vs 16.92 for 9 dof). Flat: irrigated (3.2), taw_scale (8.4). Not uniform: sow_offset_days (205.9, hump = posterior too wide, matches T4.3 over-coverage), irrigation_mm (64.7, hump), kc_mid_scale (20.6, skewed, slight bias). Reported as is, no tuning; likely cause is the k/N = 5 % ABC tolerance. In progress: nothing. Background: none. Next: T4.5 (Kansas pilot fields from `data/fields/ks_t14slh_hls_series.parquet`; credibility = Spearman of canopy integral + median timing error per `config/grading.yaml`; distribution figure), then T4.6 (needs WIMAS; T1.7 open, disclaimer blocks → likely BLOCKED.md). Risk: schedule (Gate 6 due Sun 8 Nov); T2.2 still FAILED.
 
