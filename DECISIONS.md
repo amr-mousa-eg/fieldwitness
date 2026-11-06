@@ -412,6 +412,10 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 
 ## Autopilot handoff
 
+**2026-11-07, autopilot run (T6.0 code).** Done: `rotate/current.py` (last 3 CSB-labelled seasons, oldest first, tag E, confidence 1.0, gaps for unsimulated crops / double crops / short history; `as_of` via `labels.read`), `tests/test_current.py` (7 pass, ruff clean), `results/rotate/current_summary.json`: 200/200 Kansas fields have a Current; 190 fully simulatable, 13 with gaps (perennial forage, other_annual, double crops). T6.0 NOT ticked: acceptance is pack-level (Current option + deltas), needs T6.x/T8.1. In progress: nothing. Background: none. Next: T6.1 (candidate enumeration, property test for bans). Still open for the user: the 15 fields without credibility (T4.5), WIMAS disclaimer (T1.7/T4.6). Risk: schedule (Gate 6 due Sun 8 Nov); T2.2 FAILED.
+
+(Previous entry:)
+
 **2026-11-07, autopilot run (T4.5).** Done: T4.5 code and results (`results/inference/credibility.json`, `credibility_hist.svg`); NOT ticked, 15/200 winter-wheat-only fields have no credibility (see entry above). Lint clean. In progress: nothing. Background: none. Next: user decision on the 15 fields; meanwhile T6.0 (Current rotation from CSB labels, `data/labels`) can start since T4.6 needs WIMAS (T1.7 open, disclaimer → needs the user). Risk: schedule (Gate 6 due Sun 8 Nov); T2.2 still FAILED; credibility is in-sample.
 
 (Previous entry:)

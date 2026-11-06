@@ -1,0 +1,46 @@
+{
+ "n": 200,
+ "allowed": [
+  "cover_crop",
+  "fallow",
+  "maize",
+  "sorghum",
+  "winter_wheat"
+ ],
+ "simulatable": 190,
+ "with_gaps": 13,
+ "top_sequences": [
+  [
+   "sorghum>fallow>winter_wheat",
+   33
+  ],
+  [
+   "fallow>winter_wheat>sorghum",
+   27
+  ],
+  [
+   "fallow>winter_wheat>winter_wheat",
+   13
+  ],
+  [
+   "fallow>winter_wheat>maize",
+   11
+  ],
+  [
+   "winter_wheat>fallow>winter_wheat",
+   10
+  ],
+  [
+   "maize>fallow>winter_wheat",
+   9
+  ],
+  [
+   "winter_wheat>sorghum>maize",
+   9
+  ],
+  [
+   "winter_wheat>maize>winter_wheat",
+   8
+  ]
+ ]
+}
