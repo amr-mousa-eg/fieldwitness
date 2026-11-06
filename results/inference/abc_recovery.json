@@ -1,0 +1,73 @@
+{
+  "n_test": 300,
+  "n_ref_per_year": 6000,
+  "k": 300,
+  "years": [
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024
+  ],
+  "variables": {
+    "sow_offset_days": {
+      "n_fields": 300,
+      "coverage_50": 0.85,
+      "coverage_90": 0.997,
+      "posterior_sd_over_prior_sd": 0.309,
+      "corr_truth_post_mean": 0.989,
+      "within_5pts": false,
+      "identifiable": false,
+      "direction": "over-covers (conservative)"
+    },
+    "taw_scale": {
+      "n_fields": 300,
+      "coverage_50": 0.523,
+      "coverage_90": 0.9,
+      "posterior_sd_over_prior_sd": 0.897,
+      "corr_truth_post_mean": 0.442,
+      "within_5pts": true,
+      "identifiable": true,
+      "direction": "calibrated"
+    },
+    "irrigated": {
+      "n_fields": 300,
+      "coverage_50": 0.937,
+      "coverage_90": 1.0,
+      "posterior_sd_over_prior_sd": 0.739,
+      "corr_truth_post_mean": 0.648,
+      "within_5pts": false,
+      "identifiable": true,
+      "accuracy_at_0.5": 0.773,
+      "note": "coverage not meaningful for a 0/1 variable; accuracy used",
+      "direction": "over-covers (conservative)"
+    },
+    "irrigation_mm": {
+      "n_fields": 149,
+      "coverage_50": 0.51,
+      "coverage_90": 0.913,
+      "posterior_sd_over_prior_sd": 0.764,
+      "corr_truth_post_mean": 0.683,
+      "within_5pts": true,
+      "identifiable": true,
+      "direction": "calibrated"
+    },
+    "kc_mid_scale": {
+      "n_fields": 300,
+      "coverage_50": 0.483,
+      "coverage_90": 0.883,
+      "posterior_sd_over_prior_sd": 0.86,
+      "corr_truth_post_mean": 0.625,
+      "within_5pts": true,
+      "identifiable": true,
+      "direction": "calibrated"
+    }
+  },
+  "tag": "D",
+  "note": "truth and ABC share one forward model: identifiability under a perfect model only"
+}
