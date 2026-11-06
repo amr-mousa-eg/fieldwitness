@@ -4,7 +4,8 @@ import { FieldList } from "./FieldList";
 import { FieldPage } from "./FieldPage";
 import { MapView } from "./MapView";
 import { cacheRegionForOffline, loadIndex, loadRegions } from "./data";
-import { routeHref, useRoute } from "./route";
+import { PAGES, pageHref, routeHref, useRoute } from "./route";
+import { Scoreboard } from "./Scoreboard";
 import { t } from "./strings";
 import type { RegionIndex, RegionList } from "./types";
 
@@ -41,7 +42,10 @@ export function App() {
         {regions && regionId && (
           <label className="region-switch">
             {t("region.label")}
-            <select value={regionId} onChange={(e) => (window.location.hash = routeHref(e.target.value))}>
+            <select
+              value={regionId}
+              onChange={(e) => (window.location.hash = pageHref(e.target.value, route.page))}
+            >
               {regions.regions.map((r) => (
                 <option key={r.region_id} value={r.region_id}>
                   {r.name}
@@ -50,10 +54,27 @@ export function App() {
             </select>
           </label>
         )}
+        {regionId && (
+          <nav className="app-nav" aria-label={t("nav.label")}>
+            {PAGES.map((p) => (
+              <a
+                key={p}
+                href={pageHref(regionId, p)}
+                aria-current={!route.fieldId && route.page === p ? "page" : undefined}
+              >
+                {t(`nav.${p}`)}
+              </a>
+            ))}
+          </nav>
+        )}
       </header>
       {index && route.fieldId ? (
         <main className="app-field">
           <FieldPage regionId={index.region_id} fieldId={route.fieldId} tab={route.tab} />
+        </main>
+      ) : index && route.page === "scoreboard" ? (
+        <main className="app-field">
+          <Scoreboard index={index} />
         </main>
       ) : (
         <main className="app-main">

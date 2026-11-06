@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { boundsOf, wktToGeometry } from "../src/wkt";
-import { parseHash, routeHref } from "../src/route";
+import { pageHref, parseHash, routeHref } from "../src/route";
 
 describe("wktToGeometry", () => {
   it("parses a polygon with a hole", () => {
@@ -40,10 +40,17 @@ describe("wktToGeometry", () => {
 
 describe("hash routes", () => {
   it("round-trips region and field", () => {
-    expect(parseHash(routeHref("ks_t14slh", "abc123"))).toEqual({ regionId: "ks_t14slh", fieldId: "abc123", tab: "story" });
-    expect(parseHash(routeHref("ks_t14slh"))).toEqual({ regionId: "ks_t14slh", fieldId: null, tab: "story" });
+    const map = { page: "map", tab: "story" };
+    expect(parseHash(routeHref("ks_t14slh", "abc123"))).toEqual({ ...map, regionId: "ks_t14slh", fieldId: "abc123" });
+    expect(parseHash(routeHref("ks_t14slh"))).toEqual({ ...map, regionId: "ks_t14slh", fieldId: null });
     expect(parseHash(routeHref("r", "f", "options")).tab).toBe("options");
+    expect(parseHash(routeHref("r", "f", "advisor")).tab).toBe("advisor");
     expect(parseHash("#/r/f/bogus").tab).toBe("story");
-    expect(parseHash("")).toEqual({ regionId: null, fieldId: null, tab: "story" });
+    expect(parseHash("")).toEqual({ ...map, regionId: null, fieldId: null });
+  });
+
+  it("round-trips region pages, which are never field ids", () => {
+    expect(parseHash(pageHref("ks", "scoreboard"))).toMatchObject({ regionId: "ks", page: "scoreboard", fieldId: null });
+    expect(pageHref("ks", "map")).toBe("#/ks");
   });
 });

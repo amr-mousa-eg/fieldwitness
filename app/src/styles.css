@@ -714,3 +714,72 @@ table.mini {
 .miss {
   font-weight: 600;
 }
+
+/* ---------------------------------------------------------------- header nav */
+.app-nav {
+  display: flex;
+  gap: 0.25rem;
+  flex-basis: 100%;
+}
+.app-nav a {
+  padding: 0.2rem 0.6rem;
+  text-decoration: none;
+  font-family: var(--display);
+  font-weight: 600;
+  border-bottom: 3px solid transparent;
+}
+.app-nav a[aria-current="page"] {
+  border-bottom-color: var(--ink);
+}
+
+/* ---------------------------------------------------------------- T9.5 Scoreboard */
+.scoreboard {
+  display: grid;
+  gap: 0.75rem;
+}
+.scoreboard h2 {
+  margin: 0.25rem 0 0;
+  font-family: var(--display);
+  font-size: 1.5rem;
+}
+.scoreboard h3,
+.scoreboard h4 {
+  font-family: var(--display);
+  font-size: 1.15rem;
+  margin: 1rem 0 0.25rem;
+}
+.scoreboard p {
+  margin: 0;
+  max-width: 60rem;
+}
+.scores {
+  border-collapse: collapse;
+  width: 100%;
+}
+.scores th,
+.scores td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.4rem 0.6rem;
+  border-bottom: 1px solid var(--rule);
+}
+.scores td {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.th-note,
+.method-desc {
+  display: block;
+  font-weight: 400;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.method-name {
+  display: block;
+}
+.scores .best {
+  font-weight: 700;
+}
+.best-label {
+  font-size: 0.8rem;
+}

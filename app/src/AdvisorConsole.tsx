@@ -149,7 +149,8 @@ function Hit({ v }: { v: boolean | null }) {
   );
 }
 
-function Backtest({ pack }: { pack: FieldPack }) {
+/** Predicted vs observed seasons from a pack's ledger; also the scoreboard's story chart (T9.5). */
+export function Backtest({ pack }: { pack: FieldPack }) {
   const metrics = useMemo(() => backtestMetrics(pack.ledger), [pack.ledger]);
   const [metric, setMetric] = useState(metrics[0] ?? "");
   const rows = useMemo(() => backtestRows(pack.ledger, metric), [pack.ledger, metric]);
