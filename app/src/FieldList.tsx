@@ -1,10 +1,22 @@
 import { CropChips } from "./CropChips";
 import { routeHref } from "./route";
 import { t } from "./strings";
-import type { RegionIndex } from "./types";
+import { TaggedValue } from "./tags";
+import type { RegionIndex, Tagged } from "./types";
 
 /** Keyboard-reachable list of the same fields the map shows. */
-export function FieldList({ index, selectedId }: { index: RegionIndex; selectedId: string | null }) {
+export function FieldList({
+  index,
+  selectedId,
+  values,
+  valueLabel = "",
+}: {
+  index: RegionIndex;
+  selectedId: string | null;
+  /** Map colouring values (T9.11a), printed per field so colour never carries meaning alone. */
+  values?: Record<string, Tagged>;
+  valueLabel?: string;
+}) {
   return (
     <section className="field-list" aria-labelledby="fields-heading">
       <h2 id="fields-heading">{t("fields.heading")}</h2>
@@ -26,6 +38,12 @@ export function FieldList({ index, selectedId }: { index: RegionIndex; selectedI
               </span>
               <span className="sr-only">{t("fields.current")}: </span>
               <CropChips sequence={f.current_sequence} />
+              {values && (
+                <span className="field-value">
+                  {valueLabel}:{" "}
+                  {values[f.field_id] ? <TaggedValue v={values[f.field_id]} /> : t("value.none")}
+                </span>
+              )}
             </a>
           </li>
         ))}

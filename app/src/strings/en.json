@@ -295,5 +295,15 @@
   "explain.drought_tolerant.title": "Drought tolerance and bad years",
   "explain.drought_tolerant.body": "Here a crop counts as more drought-tolerant when its yield response factor Ky is lower: its relative yield falls less when water runs short. Ky values are crop specific and may vary over the growing season. Bad-year numbers are the average of the worst 10 % of simulated weather years.",
   "explain.drought_tolerant.source": "FAO-56 (Allen et al. 1998), Chapter 8, Table 24",
-  "explain.drought_tolerant.url": "https://www.fao.org/4/x0490e/x0490e0e.htm"
+  "explain.drought_tolerant.url": "https://www.fao.org/4/x0490e/x0490e0e.htm",
+  "layers.heading": "Map layers",
+  "layers.colour": "Colour fields by",
+  "layers.colour.note": "Values for each field's current rotation. Darker = higher.",
+  "layers.regional": "Regional layer (coarse context)",
+  "layers.none": "None",
+  "layers.year": "Year",
+  "layers.mean": "Regional mean in {year}:",
+  "layers.noValue": "no value",
+  "metric.water_stress_share": "water-stress share",
+  "metric.frost_share": "frost share"
 }

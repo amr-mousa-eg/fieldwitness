@@ -1,9 +1,17 @@
-import { useEffect, useMemo, useRef } from "react";
-import { Map as MapLibreMap, type MapOptions, NavigationControl, setWorkerUrl } from "maplibre-gl";
+import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  type AddLayerObject,
+  type GeoJSONSource,
+  Map as MapLibreMap,
+  type MapOptions,
+  NavigationControl,
+  setWorkerUrl,
+} from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 // MapLibre 6 finds its worker next to its own module; once bundled that file is not there,
 // so hand it the bundled worker URL (same origin, cached by the service worker).
 import workerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?url";
+import { type Domain, RAMPS, rampExpression } from "./mapLayers";
 import { t } from "./strings";
 import type { RegionIndex } from "./types";
 import { boundsOf, wktToGeometry } from "./wkt";
@@ -110,11 +118,33 @@ interface Props {
   index: RegionIndex;
   selectedId: string | null;
   onSelect: (fieldId: string) => void;
+  /** T9.11a: field colouring values (Current option) and their colour domain. */
+  colouring?: { values: Record<string, number | null>; domain: Domain } | null;
+  /** T9.11b: one year of a regional grid layer, drawn under the fields. */
+  grid?: { data: GeoJSON.FeatureCollection; domain: Domain; ramp: readonly string[] } | null;
 }
 
-export function MapView({ index, selectedId, onSelect }: Props) {
+/** MapLibre does not re-export its expression types either; take the colour type from a fill layer. */
+type ColourValue = NonNullable<NonNullable<Extract<AddLayerObject, { type: "fill" }>["paint"]>["fill-color"]>;
+
+const EMPTY: GeoJSON.FeatureCollection = { type: "FeatureCollection", features: [] };
+const NO_VALUE = "#9aa3a0"; // field or cell without a value: neutral grey, also named in the legend
+
+/** Copy of a field collection with the colouring value as property `cv`. */
+function withValues(fc: GeoJSON.FeatureCollection, values: Record<string, number | null> | undefined) {
+  return {
+    ...fc,
+    features: fc.features.map((f) => ({
+      ...f,
+      properties: { ...f.properties, cv: values?.[f.properties?.field_id as string] ?? null },
+    })),
+  };
+}
+
+export function MapView({ index, selectedId, onSelect, colouring = null, grid = null }: Props) {
   const container = useRef<HTMLDivElement>(null);
   const map = useRef<MapLibreMap | null>(null);
+  const [ready, setReady] = useState(false);
   const onSelectRef = useRef(onSelect);
   onSelectRef.current = onSelect;
   const selectedIdRef = useRef(selectedId);
@@ -141,6 +171,15 @@ export function MapView({ index, selectedId, onSelect }: Props) {
     m.on("load", () => {
       m.addSource("region", { type: "geojson", data: regionGeoJSON(index.bbox_lonlat) });
       m.addSource("fields", { type: "geojson", data: fields });
+      // Regional grid (T9.11b) sits under the region outline and the fields.
+      m.addSource("grid", { type: "geojson", data: EMPTY });
+      m.addLayer({
+        id: "grid-fill",
+        type: "fill",
+        source: "grid",
+        layout: { visibility: "none" },
+        paint: { "fill-color": NO_VALUE, "fill-opacity": 0.6, "fill-outline-color": COLOURS.regionLine },
+      });
       m.addLayer({
         id: "region-outline",
         type: "line",
@@ -208,9 +247,11 @@ export function MapView({ index, selectedId, onSelect }: Props) {
       // Marker for the screenshot driver: fields are drawn once the map first goes idle.
       m.once("idle", () => container.current?.setAttribute("data-state", "ready"));
       showSelected(m, selectedIdRef.current);
+      setReady(true);
     });
     return () => {
       map.current = null;
+      setReady(false);
       m.remove();
     };
   }, [index, fields]);
@@ -218,6 +259,33 @@ export function MapView({ index, selectedId, onSelect }: Props) {
   useEffect(() => {
     if (map.current) showSelected(map.current, selectedId);
   }, [selectedId]);
+
+  // T9.11a: colour fields (fill and markers) by a Current-option value; no colouring = default.
+  useEffect(() => {
+    const m = map.current;
+    if (!ready || !m) return;
+    const coloured = withValues(fields, colouring?.values);
+    (m.getSource("fields") as GeoJSONSource).setData(coloured);
+    (m.getSource("field-points") as GeoJSONSource).setData(fieldPoints(coloured));
+    const colour = (
+      colouring ? rampExpression("cv", colouring.domain, RAMPS.sequential, NO_VALUE) : COLOURS.fieldFill
+    ) as ColourValue;
+    m.setPaintProperty("fields-fill", "fill-color", colour);
+    m.setPaintProperty("fields-fill", "fill-opacity", colouring ? 0.85 : 0.55);
+    m.setPaintProperty("fields-marker", "circle-color", colour);
+    m.setPaintProperty("fields-marker-selected", "circle-color", colour);
+  }, [ready, fields, colouring]);
+
+  // T9.11b: one year of a regional layer.
+  useEffect(() => {
+    const m = map.current;
+    if (!ready || !m) return;
+    (m.getSource("grid") as GeoJSONSource).setData(grid?.data ?? EMPTY);
+    m.setLayoutProperty("grid-fill", "visibility", grid ? "visible" : "none");
+    if (grid) {
+      m.setPaintProperty("grid-fill", "fill-color", rampExpression("v", grid.domain, grid.ramp, NO_VALUE) as ColourValue);
+    }
+  }, [ready, grid]);
 
   return <div ref={container} className="map" role="region" aria-label={t("map.label")} />;
 }

@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { DemoBanner } from "./DemoBanner";
-import { FieldList } from "./FieldList";
 import { FieldPage } from "./FieldPage";
-import { MapView } from "./MapView";
+import { MapPage } from "./MapPage";
 import { cacheRegionForOffline, loadIndex, loadRegions } from "./data";
-import { PAGES, pageHref, routeHref, useRoute } from "./route";
+import { PAGES, pageHref, useRoute } from "./route";
 import { Scoreboard } from "./Scoreboard";
 import { t } from "./strings";
 import type { RegionIndex, RegionList } from "./types";
@@ -76,20 +75,13 @@ export function App() {
         <main className="app-field">
           <Scoreboard index={index} />
         </main>
+      ) : index ? (
+        <MapPage index={index} />
       ) : (
         <main className="app-main">
           <aside className="rail">
-            {error && <p role="alert">{error}</p>}
-            {!error && !index && <p>{t("region.loading")}</p>}
-            {index && <FieldList index={index} selectedId={null} />}
+            {error ? <p role="alert">{error}</p> : <p>{t("region.loading")}</p>}
           </aside>
-          {index && (
-            <MapView
-              index={index}
-              selectedId={null}
-              onSelect={(fid) => (window.location.hash = routeHref(index.region_id, fid))}
-            />
-          )}
         </main>
       )}
       <footer className="app-footer">{t("fixed.judgment")}</footer>

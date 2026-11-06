@@ -932,3 +932,60 @@ table.mini {
   font-size: 0.8rem;
   color: var(--muted);
 }
+
+/* ---------------------------------------------------------------- T9.11 Map layers */
+.layer-panel {
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--rule);
+}
+.layer-panel h2 {
+  font-family: var(--display);
+  font-size: 1.15rem;
+  margin: 0 0 0.5rem;
+}
+.layer-panel fieldset {
+  border: 1px solid var(--rule);
+  margin: 0 0 0.75rem;
+  padding: 0.5rem 0.75rem;
+  display: grid;
+  gap: 0.25rem;
+}
+.layer-panel legend {
+  font-weight: 600;
+}
+.layer-panel p {
+  margin: 0.2rem 0;
+  font-size: 0.9rem;
+}
+.layer-detail {
+  display: grid;
+  gap: 0.25rem;
+  margin-top: 0.25rem;
+}
+.legend {
+  display: grid;
+  gap: 0.15rem;
+  font-size: 0.8rem;
+}
+.legend-ramp {
+  display: block;
+  height: 0.7rem;
+  border: 1px solid var(--rule);
+}
+.legend-ends {
+  display: flex;
+  justify-content: space-between;
+}
+.legend-swatch {
+  display: inline-block;
+  width: 0.8rem;
+  height: 0.8rem;
+  background: #9aa3a0;
+  vertical-align: middle;
+}
+.field-value {
+  display: block;
+  font-size: 0.85rem;
+  margin-top: 0.2rem;
+}
