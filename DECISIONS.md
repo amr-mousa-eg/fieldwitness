@@ -410,7 +410,21 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 - **Acceptance "credibility for every pilot field" is NOT met** (15 null), so T4.5 stays unticked. Decision for the user: accept null (→ grade capped at C/D for those fields) or add a winter-wheat window model. Not decided unattended.
 - `scripts/_explore45.py` is an empty scratch stub (delete is not permitted unattended); delete it by hand.
 
+## 2026-11-07 — T6.2 design: option A (BLOCKED.md for T6.2 resolved, user); WIMAS approved
+
+- **Option A.** `physics/rotation.py` gets a continuous multi-year daily timeline. Seasons are placed by sowing day. Dr is carried across New Year. A winter crop sown in year t is harvested in year t+1 (harvest-year rule). Afterwards, re-run T4.5 credibility for the 15 fields with null credibility.
+- **Cover crop.** It fills the gap between the previous crop's harvest and the next crop's sowing, capped by the oat-proxy stage lengths. Tag A, UNVERIFIED. First check FAO-56 Table 11 for an autumn-sown oats / small-grain row; use it if it fits.
+- **Fallow.** Use FAO-56 bare-soil evaporation (Ch. 6/7, Kc ini for bare soil) if it can be read from `docs/refs/fao56_eq`. Otherwise keep `kc_fallow = 0.3`, tag A.
+- **Approved:** item 3 (store pooled per-field posterior draws) and item 4 (`p` per crop / option).
+- **Gate 6 may slip.** Do not cut scope to meet the date.
+- **WIMAS (T1.7 / T4.6).** The user reviewed the disclaimer (liability only, no use limits) and approves its use. Acceptance needs the user's email, so the user accepts and downloads the data manually. At T4.6: do **not** write `BLOCKED.md`. Write the exact WIMAS query and download steps to `docs/wimas_request.md`, mark T4.6 "waiting for user data", and continue with the next task. T4.6 resumes when `data/wimas/` contains the file.
+- `BLOCKED.md` deleted.
+
 ## Autopilot handoff
+
+**2026-11-07, interactive session (user decision on T6.2).** Done: decisions recorded (entry above); `BLOCKED.md` deleted. In progress: nothing. Background: none. **Next: T6.2 with option A** (multi-year timeline in `rotation.py`; cover-crop gap fill; fallow Kc per FAO-56 if readable; pooled posterior draws; `p` per option), then re-run T4.5 for the 15 null fields. At T4.6: write `docs/wimas_request.md`, mark "waiting for user data", continue. Risk: Gate 6 may slip (accepted by the user); T2.2 FAILED.
+
+(Previous entry:)
 
 **2026-11-07, autopilot run (T6.2 blocked).** Done: nothing coded. Read `physics/rotation.py`, `kc.py`, `forward.py`, `waterbal.py`, `crops.yaml`. T6.2 is BLOCKED (see `BLOCKED.md`): the engine cannot simulate winter wheat (window spans New Year) and cover crop has no window; both are in most Kansas candidates. Also needed, not decision-bound: per-field posterior draws are not stored (T4.5 saved scores only) and `p` is one scalar in `rotation.simulate`. In progress: nothing. Background: none. Next: after the user picks option A/B/C in `BLOCKED.md`, do T6.2 (recommended A, multi-year timeline). Risk: schedule (Gate 6 due Sun 8 Nov); T2.2 FAILED; 15 fields without credibility.
 
