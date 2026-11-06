@@ -1,0 +1,34 @@
+{
+  "n_fields": 2000,
+  "weather_years_used": [
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024
+  ],
+  "n_gap_templates": 1805,
+  "median_obs_per_year": 81.0,
+  "noise_sd_ndvi": 0.0129,
+  "true_peak_ndvi_quantiles_5_50_95": [
+    0.781,
+    0.85,
+    0.85
+  ],
+  "eta_mm_quantiles_5_50_95": [
+    389.1,
+    574.0,
+    830.8
+  ],
+  "tags": {
+    "noise_sd_ndvi": "D",
+    "gaps": "D",
+    "truth": "A (priors)",
+    "ndvi_map": "A"
+  }
+}

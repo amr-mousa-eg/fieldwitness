@@ -1,0 +1,29 @@
+# Synthetic-field settings (PLAN.md T4.2). Every value is a TEAM CHOICE (tag A, UNVERIFIED) unless
+# the comment says it is measured from the HLS census (tag D).
+
+crop: maize
+region: ks_t14slh
+
+# Nominal sowing day of year. FAO-56 Table 11 prints "April" for the chosen maize row (Idaho, USA,
+# see config/crops.yaml); mid-April (day 105) is our pick inside that month.
+nominal_sow_doy: {maize: 105}
+
+# POWER point whose cached weather forces the synthetic seasons (cache exists in data/power).
+weather_point: {lon: -100.04, lat: 38.47}
+weather_years: [2015, 2024]
+
+# Canopy -> NDVI. Canopy fraction cf = clip((Kc - Kc_ini) / (Kc_mid*scale - Kc_ini), 0, 1) inside
+# the crop window, 0 outside. NDVI = bare + (peak - bare) * cf. Linear map is a team choice.
+ndvi_bare: 0.15
+ndvi_peak: 0.85
+
+# Water stress shrinks the canopy: cf *= 1 - stress_coupling * (1 - Ks). Without this the canopy
+# would carry no information on TAW or irrigation. The coupling value is a guess (A, UNVERIFIED).
+stress_coupling: 0.5
+
+# Kc on fallow days and the start-of-year depletion (same team choices as physics/rotation.py).
+kc_fallow: 0.3
+dr0_mm: 0.0
+
+# Soil: base TAW of the synthetic fields (mm). Placeholder mid value; the hidden taw_scale multiplies it.
+taw_base_mm: 150.0

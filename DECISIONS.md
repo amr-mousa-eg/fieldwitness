@@ -404,6 +404,10 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 
 ## Autopilot handoff
 
+**2026-11-07, autopilot run (T4.2).** Done: T4.2 ticked. `infer/forward.py` (hidden vars + weather → daily canopy NDVI via kc_curve and waterbal.run; irrigation budget per draw), `infer/synthetic.py` (census of gaps and noise from the Kansas HLS series; seeded `make_fields`), `config/synthetic.yaml`, `scripts/t42_synthetic.py` → `results/inference/synthetic_summary.json` (2000 fields; noise sd 0.013 NDVI, tag D; 1805 gap templates, median 81 obs/yr). 140 tests pass, ruff clean. UNVERIFIED (A): NDVI map (0.15–0.85, linear in canopy fraction), `stress_coupling` 0.5 (without it the canopy carries no TAW/irrigation signal), nominal sow day 105 (FAO-56 Table 11 says "April"), taw_base 150 mm. Caveat: truth and ABC share one forward model, so T4.3 recovery shows identifiability under a perfect model only; kc_mid_scale affects ETa only, so expect it to be not identifiable from canopy. In progress: nothing. Background: none. Next: T4.3 (ABC rejection; summary stats SOS/peak/EOS/canopy integral, k = 300, 50/90 % coverage). Risk: schedule (Gate 6 due Sun 8 Nov); T2.2 still FAILED.
+
+(Previous entry:)
+
 **2026-11-07, autopilot run (T4.1).** Done: T4.1 ticked. `config/priors.yaml` (5 hidden variables: sow_offset_days U(-21,21), taw_scale logU(0.5,2), irrigated Bern(0.5), irrigation_mm U(50,400) if irrigated, kc_mid_scale U(0.85,1.15); all tag A, UNVERIFIED team choices, each with a reason) + `infer/priors.py` (seeded sampler, loader checks reasons) + `tests/test_priors.py`. 132 tests pass, ruff clean. In progress: nothing. Background: none. Next: T4.2 (synthetic fields; needs a cloud-gap census from HLS series `data/fields/ks_t14slh_hls_series.parquet`), then T4.3. Risk: schedule tight (Gate 6 due Sun 8 Nov); T2.2 still FAILED.
 
 (Previous entry:)
