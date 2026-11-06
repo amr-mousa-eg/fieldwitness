@@ -412,6 +412,10 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 
 ## Autopilot handoff
 
+**2026-11-07, autopilot run (T6.1).** Done: T6.1 ticked. `rotate/candidates.py` (pool = rotation_options minus bans; calendar fit from config windows + FAO-56 stage sums with 7-day slack; max 2 consecutive same family, fallow breaks a run; deterministic order) + `tests/test_candidates.py` (hypothesis ban property). Kansas: pool maize, sorghum, winter_wheat, fallow, cover_crop → 61 candidates. 155 tests pass, ruff clean. UNVERIFIED (A): family run limit 2, slack 7 d, config windows instead of observed SOS/EOS (T2.2 failed). In progress: nothing. Background: none. Next: T6.2 (evaluate candidates in one batched call via `physics/rotation.py` over posterior draws x weather years; <60 s/field). Still open for the user: 15 fields without credibility (T4.5), WIMAS disclaimer (T1.7/T4.6). Risk: schedule (Gate 6 due Sun 8 Nov); T2.2 FAILED.
+
+(Previous entry:)
+
 **2026-11-07, autopilot run (T6.0 code).** Done: `rotate/current.py` (last 3 CSB-labelled seasons, oldest first, tag E, confidence 1.0, gaps for unsimulated crops / double crops / short history; `as_of` via `labels.read`), `tests/test_current.py` (7 pass, ruff clean), `results/rotate/current_summary.json`: 200/200 Kansas fields have a Current; 190 fully simulatable, 13 with gaps (perennial forage, other_annual, double crops). T6.0 NOT ticked: acceptance is pack-level (Current option + deltas), needs T6.x/T8.1. In progress: nothing. Background: none. Next: T6.1 (candidate enumeration, property test for bans). Still open for the user: the 15 fields without credibility (T4.5), WIMAS disclaimer (T1.7/T4.6). Risk: schedule (Gate 6 due Sun 8 Nov); T2.2 FAILED.
 
 (Previous entry:)
