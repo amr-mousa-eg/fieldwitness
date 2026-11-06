@@ -1,4 +1,5 @@
 import en from "./strings/en.json";
+import type { Option } from "./types";
 
 export type StringKey = keyof typeof en;
 
@@ -17,4 +18,11 @@ export function cropName(crop: string): string {
 export function metricName(metric: string): string {
   const key = `metric.${metric}`;
   return key in en ? en[key as StringKey] : metric;
+}
+
+/** "Current", "Alternative 1", …; unknown option ids are shown as written. */
+export function optionName(o: Pick<Option, "option_id">): string {
+  if (o.option_id === "current") return t("card.current");
+  const n = /^alt(\d+)$/.exec(o.option_id)?.[1];
+  return n ? t("card.alt", { n }) : o.option_id;
 }

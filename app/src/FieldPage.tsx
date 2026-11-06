@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react";
+import { AdvisorConsole } from "./AdvisorConsole";
 import { FieldCard } from "./FieldCard";
 import { FieldStory } from "./FieldStory";
 import { ScaleFlags } from "./ScaleFlags";
 import { loadPack } from "./data";
 import { formatDate } from "./format";
-import { type FieldTab, routeHref } from "./route";
+import { type FieldTab, TABS, routeHref } from "./route";
 import { t } from "./strings";
 import { TagLegend } from "./tags";
 import type { FieldPack } from "./types";
-
-const TABS: FieldTab[] = ["story", "options"];
 
 export function FieldPage({ regionId, fieldId, tab }: { regionId: string; fieldId: string; tab: FieldTab }) {
   const [pack, setPack] = useState<FieldPack | null>(null);
@@ -60,6 +59,7 @@ export function FieldPage({ regionId, fieldId, tab }: { regionId: string; fieldI
           </nav>
           {tab === "story" && <FieldStory pack={pack} regionId={regionId} />}
           {tab === "options" && <FieldCard pack={pack} regionId={regionId} />}
+          {tab === "advisor" && <AdvisorConsole pack={pack} />}
           <div className="field-aside">
             <ScaleFlags flags={pack.field.scale_flags} />
             <TagLegend />

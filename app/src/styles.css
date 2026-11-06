@@ -634,3 +634,83 @@ table.mini {
   font: inherit;
   width: 8rem;
 }
+
+/* ---------------------------------------------------------------- T9.4 Advisor console */
+.advisor {
+  display: grid;
+  gap: 1.5rem;
+}
+.advisor-top {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 1rem 2rem;
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  padding: 1rem;
+}
+.advisor-top h3 {
+  margin: 0 0 0.25rem;
+  font-size: 1rem;
+}
+.big-number {
+  font-family: var(--display);
+  font-size: 2rem;
+  margin: 0;
+}
+.range,
+.witness-n {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.witness-option {
+  border-top: 1px solid var(--rule);
+  padding-top: 0.75rem;
+  margin-top: 0.75rem;
+}
+.witness-option summary {
+  cursor: pointer;
+  margin-bottom: 0.35rem;
+}
+.witness-option-name {
+  font-weight: 600;
+}
+.witness-table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+.witness-table th,
+.witness-table td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.4rem 0.6rem;
+  border-bottom: 1px solid var(--rule);
+}
+.witness-table td {
+  min-width: 11rem;
+}
+.diagnostics {
+  list-style: none;
+  padding: 0;
+  margin: 0.25rem 0 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.grade-reasons {
+  font-size: 0.9rem;
+  margin: 0.5rem 0 0;
+}
+.key-diamond {
+  display: inline-block;
+  width: 0.7rem;
+  height: 0.7rem;
+  transform: rotate(45deg);
+}
+.hit,
+.miss {
+  white-space: nowrap;
+}
+.miss {
+  font-weight: 600;
+}

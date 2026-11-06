@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
-export type FieldTab = "story" | "options";
-const TABS: FieldTab[] = ["story", "options"];
+export type FieldTab = "story" | "options" | "advisor";
+export const TABS: FieldTab[] = ["story", "options", "advisor"];
 
 /** App location in the URL hash: #/<region_id>[/<field_id>[/<tab>]]. */
 export interface Route {

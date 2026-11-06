@@ -15,9 +15,9 @@ import {
   isDefault,
   rankOptions,
 } from "./rank";
-import { cropName, metricName, t } from "./strings";
+import { cropName, metricName, optionName, t } from "./strings";
 import { TaggedValue } from "./tags";
-import type { FieldPack, FieldScenarios, Option, Tagged } from "./types";
+import type { FieldPack, FieldScenarios, Tagged } from "./types";
 
 const TABLE_METRICS = ["water_use_mm", "bad_year_water_mm", "cover_days", "ryi"] as const;
 const TEMPS = [0, 1, 2];
@@ -42,12 +42,6 @@ function useStored<T>(key: string, initial: T): [T, (v: T) => void] {
     }
   };
   return [value, set];
-}
-
-function optionName(o: Option): string {
-  if (o.option_id === "current") return t("card.current");
-  const n = /^alt(\d+)$/.exec(o.option_id)?.[1];
-  return n ? t("card.alt", { n }) : o.option_id;
 }
 
 function why(v: Violation): string {
