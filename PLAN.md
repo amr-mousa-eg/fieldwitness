@@ -383,7 +383,7 @@ Each task: **ID · goal · output · acceptance test**. Tick `[x]` and add a one
 
 ### Phase 4 — Witness 2: own past (`src/fieldwitness/infer/`)
 
-- [ ] **T4.1 Hidden variables and priors.** sowing-date offset, TAW scale, irrigated (bool), seasonal irrigation mm, Kc_mid scale. Priors in config, with reasons.
+- [x] **T4.1 Hidden variables and priors.** *(done 2026-11-07: `config/priors.yaml` + `infer/priors.py` + tests; all priors tag A, UNVERIFIED team choices with reasons.)* sowing-date offset, TAW scale, irrigated (bool), seasonal irrigation mm, Kc_mid scale. Priors in config, with reasons.
 - [ ] **T4.2 Synthetic fields.** Generate fields with known hidden values; simulate their seasons; add realistic noise and cloud gaps taken from the census.
 - [ ] **T4.3 ABC rejection.** Summary statistics: SOS, peak timing, EOS, canopy integral (+ seasonal ET where available). Distance on standardised stats; keep the closest *k* draws as posterior "worlds" (k = 300 default). *Accept:* on synthetic fields: parameter recovery plots, 50/90% coverage per variable within ±5 points of nominal, or the variable is listed as not identifiable.
 - [ ] **T4.4 Simulation-based calibration.** SBC rank histograms per variable. *Accept:* figures in `results/inference/`.

@@ -404,6 +404,10 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 
 ## Autopilot handoff
 
+**2026-11-07, autopilot run (T4.1).** Done: T4.1 ticked. `config/priors.yaml` (5 hidden variables: sow_offset_days U(-21,21), taw_scale logU(0.5,2), irrigated Bern(0.5), irrigation_mm U(50,400) if irrigated, kc_mid_scale U(0.85,1.15); all tag A, UNVERIFIED team choices, each with a reason) + `infer/priors.py` (seeded sampler, loader checks reasons) + `tests/test_priors.py`. 132 tests pass, ruff clean. In progress: nothing. Background: none. Next: T4.2 (synthetic fields; needs a cloud-gap census from HLS series `data/fields/ks_t14slh_hls_series.parquet`), then T4.3. Risk: schedule tight (Gate 6 due Sun 8 Nov); T2.2 still FAILED.
+
+(Previous entry:)
+
 **2026-11-07, interactive session (user decision on T2.3).** Done: T2.3 postponed (see the entry above); `BLOCKED.md` and `AUTOPILOT_STOP` deleted. In progress: nothing. Background: none. **Next: T4.1**, then T4.2–T4.6, then T6.0–T6.9, then Phase 8 (T8.1 …) → Gate 6 for Kansas. T2.3 resumes on the Tier 2/3 day (scikit-learn allowed). Risk: T2.2 still FAILED; schedule (Gate 6 due Sun 8 Nov) is tight.
 
 (Previous entry:)

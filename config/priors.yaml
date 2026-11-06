@@ -1,0 +1,39 @@
+# Priors for the hidden field variables inferred by ABC (PLAN.md T4.1).
+# ALL priors are TEAM CHOICES (tag A). None is taken from a paper; every range is UNVERIFIED
+# and is a deliberately wide placeholder. Changing one is logged in DECISIONS.md.
+# T4.3 reports which variables are not identifiable; a prior that dominates the posterior is a
+# finding, not a bug.
+
+sow_offset_days:
+  kind: uniform
+  low: -21
+  high: 21
+  unit: days relative to the nominal sowing day of the crop (config/crops.yaml stage table)
+  reason: "Farmers sow within a few weeks of the nominal date; +-3 weeks is a wide team guess (A, UNVERIFIED). Integer-valued after sampling."
+
+taw_scale:
+  kind: loguniform
+  low: 0.5
+  high: 2.0
+  unit: multiplier on the SoilGrids-derived TAW (waterbal.taw)
+  reason: "SoilGrids is 250 m context data with unknown error at field scale and soil properties may be tag A (no-data rule); a factor of 2 either way, symmetric on the log scale (A, UNVERIFIED)."
+
+irrigated:
+  kind: bernoulli
+  p: 0.5
+  unit: bool
+  reason: "No irrigated/rainfed stratification exists (WorldCereal needs a Terrascope login, see T1.4), so the prior is uninformative (A). A per-field override (p near 0 or 1) is allowed when a source exists."
+
+irrigation_mm:
+  kind: uniform
+  low: 50
+  high: 400
+  unit: net mm per season, used only when irrigated is true; 0 otherwise
+  reason: "Placeholder range for a net seasonal depth (A, UNVERIFIED); to be compared with WIMAS annual volumes in T4.6, which must not be used to tune it."
+
+kc_mid_scale:
+  kind: uniform
+  low: 0.85
+  high: 1.15
+  unit: multiplier on Kc_mid (and the whole mid-season plateau)
+  reason: "FAO-56 Table 12 prints Kc_mid ranges for some crops and the Eq. 62 climate adjustment is approximate; +-15 % is a team guess (A, UNVERIFIED)."
