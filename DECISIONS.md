@@ -394,7 +394,19 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 - Pages Ch. 2 (`x0490e06`), Ch. 3 (`07`), Ch. 4 (`08`), Ch. 6 (`0b`), Ch. 8 (`0e`) and Annex 2 (`0j`) and their 181 images were saved to `docs/refs/fao56_eq/` (2.2 MB, **gitignored**: `/docs/refs/` added to `.gitignore`, licence unclear, not redistributed); `index.json` maps images to equation numbers. The equations needed so far were read visually (images) or from the page text and transcribed to `docs/fao56_equations.md` (committed; formulas only): Eq. 6, 7, 8, 11, 12, 13, 17, 19, 21–25, 34, 35, 37–40, 42, 62, 82–85, with Gsc and σ. Cite by **equation number + page URL** (the HTML has no page numbers).
 - **ETo verified:** `src/fieldwitness/physics/eto.py` (daily FAO-PM, Eq. 6 chain, numpy) reproduces Example 18 (Ch. 4): ETo 3.88 mm/day (printed 3.88 ≈ 3.9), Ra 41.09, Rs 22.07, Rso 30.90, Rnl 3.71 (`tests/test_eto.py`). T3.1 is not ticked: its POWER forcing and acceptance still belong to the loop.
 
+## 2026-11-07 — T2.3 postponed; walking skeleton for Kansas (BLOCKED.md for T2.3 resolved, user)
+
+- **T2.3 postponed to the Tier 2/3 day.** The crop classifier is needed only for unlabelled regions. Kansas uses CSB labels (Tier 1), so the Kansas pipeline does not need it.
+- **scikit-learn is allowed** when T2.3 resumes: it is named in `PLAN.md`, so rule 11 does not block it. The US→EU / EU→US transfer scores wait for EU fields.
+- **New order for Kansas (walking skeleton):** Phase 4 (T4.1–T4.6), then Phase 6 (T6.0–T6.9), then Phase 8 (packs), to reach **Gate 6** (one full `FieldPack`, minus ledger, validates against the schema).
+- T6.0 takes the Current rotation from CSB labels for Kansas. T2.2 is still FAILED (78.3 %); downstream steps use it as a documented 78 %-accurate detector.
+- `BLOCKED.md` and `AUTOPILOT_STOP` deleted.
+
 ## Autopilot handoff
+
+**2026-11-07, interactive session (user decision on T2.3).** Done: T2.3 postponed (see the entry above); `BLOCKED.md` and `AUTOPILOT_STOP` deleted. In progress: nothing. Background: none. **Next: T4.1**, then T4.2–T4.6, then T6.0–T6.9, then Phase 8 (T8.1 …) → Gate 6 for Kansas. T2.3 resumes on the Tier 2/3 day (scikit-learn allowed). Risk: T2.2 still FAILED; schedule (Gate 6 due Sun 8 Nov) is tight.
+
+(Previous entry:)
 
 **2026-11-05, autopilot run (T2.3 check).** Done: nothing coded. T2.3 needs scikit-learn (not in PLAN/pyproject, rule 11) and EU fields for the transfer scores (none exist) → `BLOCKED.md` written with options. In progress: nothing; git clean apart from BLOCKED.md and this entry. Background: none. Next: after your answer, T2.3 Kansas-only (recommended) or T3.7. Risk: schedule slips while blocked; T2.2 still FAILED.
 
