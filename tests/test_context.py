@@ -28,3 +28,20 @@ def test_smap_climatology_uses_only_months_up_to_base_end():
     pre = m[m["month"].dt.year <= 2021]["anomaly"]
     post = m[m["month"].dt.year >= 2022]["anomaly"]
     assert np.allclose(pre, 0.0) and np.allclose(post, 0.20)
+
+
+def test_smap_build_groups_by_region(tmp_path):
+    from fieldwitness.data.context import smap_build
+
+    col = "SPL4SMGP_008_Geophysical_Data_sm_rootzone"
+    rows = [
+        {"ID": r, "Date": f"{y}-{m:02d}-15 01:30:00 UTC", col: v}
+        for r, v in (("a", 0.2), ("b", 0.3))
+        for y in (2016, 2017)
+        for m in (1, 2)
+    ]
+    p = tmp_path / "s.csv"
+    pd.DataFrame(rows).to_csv(p, index=False)
+    out = smap_build(p, dt.date(2017, 12, 31))
+    assert set(out.region_id) == {"a", "b"} and len(out) == 8
+    assert out["anomaly"].abs().max() < 1e-12

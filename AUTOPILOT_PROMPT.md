@@ -4,9 +4,10 @@ You are running **unattended** inside a loop (`scripts/autopilot.ps1`). No human
 
 ## 1. Start of every run
 
-1. Read `CLAUDE.md`, `PLAN.md` and `DECISIONS.md` in full. Find the section `## Autopilot handoff` at the end of `DECISIONS.md` (create it if missing): it says where the previous run stopped, what runs in the background, and what to do next.
+1. Read `CLAUDE.md`, the `## Autopilot handoff` section at the end of `DECISIONS.md` (create it if missing) and only the `PLAN.md` sections for the current task and phase — not whole files (search for the section, then read just that range). The handoff says where the previous run stopped, what runs in the background, and what to do next.
 2. Run `git status`. If the previous run left uncommitted work, finish it or revert it to the last commit, and say which in the handoff.
 3. Check background work recorded in the handoff (e.g. AppEEARS task IDs): poll their status and download finished results.
+4. Be terse; minimise tokens; keep logs and command output short.
 
 ## 2. What to work on
 
@@ -50,6 +51,8 @@ Write `BLOCKED.md` in the repo root (short: what, why, the exact question, optio
 If the only thing left to do is wait for background tasks (nothing else has ready inputs), write the number of minutes to wait (e.g. `60`) into the file `AUTOPILOT_WAIT` and end the run. The loop sleeps that long before the next run.
 
 ## 7. End of every run (always, even when blocked)
+
+A run can be cut off at the turn cap at any moment, so update the handoff and commit after every finished task, not only at the end.
 
 1. Commit finished work (and push if green).
 2. Replace the `## Autopilot handoff` section at the end of `DECISIONS.md` with: date/time, what this run did, what is in progress, background task IDs and their status, the next task, and any risk the user should know. Commit it.

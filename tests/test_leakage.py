@@ -10,6 +10,7 @@ import pandas as pd
 import pytest
 
 import fieldwitness.data.context  # noqa: F401  (registers its reader)
+import fieldwitness.data.hls_qa  # noqa: F401  (registers its reader)
 import fieldwitness.data.labels  # noqa: F401  (registers its reader)
 import fieldwitness.data.power  # noqa: F401  (registers its reader)
 from fieldwitness.data.asof import READERS, LeakageError, as_of, forcing_weather, guard
@@ -43,10 +44,17 @@ def _grace_table():
     )
 
 
+def _hls_table():
+    return pd.DataFrame({"date": pd.to_datetime(["2020-06-01", "2021-12-31", "2022-03-01"])})
+
+
 CASES = {
     "grace": lambda fn: list(pd.to_datetime(fn(table=_grace_table())["time"])),
     "power": lambda fn: fn(-100.66, 38.34, end=dt.date(2024, 12, 31), loader=_power_loader).index,
     "labels": lambda fn: [dt.date(y, 12, 31) for y in fn(table=_labels_table())["year"]],
+    "hls_series": lambda fn: list(
+        fn("x", end=dt.date(2024, 12, 31), table=_hls_table())["date"].dt.date
+    ),
 }
 
 

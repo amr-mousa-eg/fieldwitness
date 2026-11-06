@@ -154,6 +154,23 @@ def smap_monthly_anomaly(series: pd.DataFrame, base_end: dt.date) -> pd.DataFram
     return m.reset_index()
 
 
+def smap_build(csv_path: str | Path, base_end: dt.date) -> pd.DataFrame:
+    """AppEEARS SPL4SMGP results CSV (3-hourly, one 9 km cell per region) -> monthly mean and
+    anomaly per region (tag D, context only, scale flag: 9 km >> field). Column names as
+    returned by AppEEARS 2026-11-04 (see docs/api_notes.md)."""
+    raw = pd.read_csv(csv_path)
+    col = "SPL4SMGP_008_Geophysical_Data_sm_rootzone"
+    raw["date"] = pd.to_datetime(raw["Date"].str.replace(" UTC", "", regex=False)).dt.date
+    parts = []
+    for rid, g in raw.groupby("ID"):
+        m = smap_monthly_anomaly(g.rename(columns={col: "sm_rootzone"}), base_end)
+        m.insert(0, "region_id", rid)
+        parts.append(m)
+    out = pd.concat(parts, ignore_index=True)
+    out["month"] = out["month"].astype(str)
+    return out
+
+
 def nasadem_zips() -> list[str]:
     return sorted(glob.glob(str(OUT / "nasadem" / "*.zip")))
 

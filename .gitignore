@@ -15,6 +15,9 @@ _netrc
 .env
 .env.*
 
+# Reference papers with unclear licence: local copies only, never redistribute
+/docs/refs/
+
 # Data caches and downloads
 /.cache/
 /data/

@@ -1,0 +1,23 @@
+# Field-story parameters (T2.1, T2.2, T2.5). ALL values are TEAM CHOICES (tag A), not from a paper.
+# UNVERIFIED: none of these numbers is taken from a source; they are tuned only by reading the
+# acceptance tests, never on test labels (CLAUDE.md rule 9).
+smoothing:
+  grid_days: 5            # regular grid the series is gap-filled onto (linear interpolation)
+  max_gap_days: 60        # gaps longer than this are NOT filled (left NaN)
+  savgol_window: 7        # odd number of grid steps (35 days)
+  savgol_order: 2
+cover:
+  ndvi_threshold: 0.30    # NDVI >= this -> covered; below -> bare (A)
+bare_calendar:
+  first_year: 2016        # T2.5: "past years (>= 2016)"
+  min_clear_obs_per_month: 3   # per month across all years; fewer -> "insufficient data"
+  min_years_with_data: 3       # years having >= 1 clear obs in the month
+seasons:                  # T2.2 (tag A team choices; UNVERIFIED, not from a paper)
+  peak_min_ndvi: 0.40     # a season needs a smoothed peak at least this high
+  min_prominence: 0.15    # peak minus the higher of the two neighbouring troughs
+  min_peak_separation_days: 120
+  sos_frac: 0.20          # SOS = first rise to left base + 20% of amplitude
+  eos_frac: 0.50          # EOS = first fall to right base + 50% of amplitude
+  min_crop_amplitude: 0.35 # crop-like season: peak minus lower base >= this (A). Chosen on DEV only (grid in results/story/ks_seasons_dev_grid.json)
+dormancy:                 # user decision 2026-11-04 (agronomy rule, not tuned)
+  months: [12, 1, 2]      # a dip in these months that stays >= cover threshold = same season

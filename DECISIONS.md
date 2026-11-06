@@ -309,9 +309,152 @@ Gate 0 stays **open on one item: SoilGrids**.
 - **Blocked:** `uv` is not on PATH in the loop's shell (Bash: `command not found`; PowerShell: not recognized). Full-path `uv.exe`, `$env:Path` changes, `python -m uv` and `.venv\Scripts\python.exe -m pytest` all need permissions that `-p` runs cannot get. No test, download or pipeline step could run. `BLOCKED.md` written (recommendation: add uv's folder to the user PATH and restart the loop from a new window).
 - **Coded, untested:** the user-approved cap exception in `hls_series.py`. `APPROVED_OVER_CAP` lists exactly the 30 Kansas T1.5 task IDs (checked against the registry and the Phase 1 log) with cap 1,317.5 MB (the largest total that the approved "1,317 MB" can denote; no other margin). `download_cap(region, ids)` returns it only when every ID is in that set, else 1 GB. The size check also changed: each pass now lists every finished bundle first and checks `projected_bytes` (exact listed sizes + mean for unlisted tasks) **before any download**, instead of an order-dependent running projection (which had overshot to 2,024 MB). Tests added: other regions, extra IDs and unknown IDs keep 1 GB; projection arithmetic.
 
+## 2026-11-04 — §3 schema extension merged (PLAN v1.2-ext, user approval)
+
+- **Decision (user):** approved the app-data schema extension proposed on branch `app` (`docs/schema_ext_proposal.md`, commit `af00838`). Merged into `PLAN.md` as **§3b** (models copied verbatim from the proposal's §3, plus the `month` 1–12 constraint that the canonical code `scripts/fixture_schemas.py` Part 2 has). Only the schema text was merged; **the rest of the `app` branch (app scaffold, synthetic fixtures, scripts) was not merged**.
+- **Q1 adopted — day-of-year rule:** `Season.sos/peak/eos` (and `SeasonMarks`) are days of the harvest year, negative for the previous autumn, 31 Dec of the previous year = 0, unit `"day of harvest year"` (15 Oct 2022 → −77 for harvest year 2023; checked). Written into §3 `Season` and T2.2.
+- **Q3 adopted — new exempt fields:** `bbox_lonlat`, `dt_c`, `dp_pct`, `resolution_km`, `years_with_data`, `clear_frac` (added to the §3 tagging rule; `schemas.EXEMPT_FIELDS` must list them). `TaggedSeries` and `TaggedGrid` count as tagged containers.
+- **Other open questions:** not decided separately; the models are kept exactly as proposed (Q2 duplicated `SeasonMarks`, Q4 `bare_by_option`, Q5 Current-only colouring, Q6 all metrics in scenarios, Q7 `packs/regions.json`).
+- **Plan text changed:** version note (v1.2-ext), §3 `Season` comment, §3 region-files line, tagging rule, T2.2, T8.1 (writes every §3b file), T8.2 (types from §3 and §3b). `src/fieldwitness/schemas.py` does not exist yet; it is written with T8.1 (or earlier when a task needs the models).
+- Tests and lint run before pushing (they also covered the autopilot's unpushed commit `45ce08e`): 75 passed, ruff clean.
+
+## 2026-11-04 — §3 extension final (Q1–Q7) applied on main; `schemas.py` written
+
+Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINAL, approved by the user 2026-11-04; decisions in its §5, merge steps in its §6). Supersedes the "other open questions" note in the previous §3 entry.
+
+| # | Question | Decision (user) |
+|---|---|---|
+| Q1 | Day of year for seasons crossing the new year | Day of the harvest year, negative = previous autumn; 1 Jan = 1, 31 Dec of the previous year = 0 (15 Oct 2022 → −77 for 2023) |
+| Q2 | SOS/peak/EOS repeated in `series` | Dropped (`SeasonMarks` removed); the app reads them from `FieldPack.story` |
+| Q3 | Six new exempt fields | Approved: `bbox_lonlat`, `dt_c`, `dp_pct`, `resolution_km`, `years_with_data`, `clear_frac` |
+| Q4 | `bare_by_option` for T9.9's alternative calendar | Approved: new simulated output (tag D) from physics (T3/T6), not part of T2.5 |
+| Q5 | Map colouring by an alternative | Current only (`colouring_option` removed); alternative colouring = stretch S7 |
+| Q6 | Scenario size | Weather-sensitive metrics only; `SEQUENCE_ONLY_METRICS` (`legume_share`, `family_breaks`, `forage_value`, `deep_root_share`) stay in `Option.metrics`, rejected in scenarios by the validator |
+| Q7 | `packs/regions.json` | Approved |
+
+- **Merge steps done (§6 steps 1–4):** PLAN.md §3 (region-file list), §3b (final models copied; checked field-for-field against `schemas.py`), T2.2 (Q1), T6.8 (Q6), T8.1 (use `schemas.py`), T9.9 (Q4), stretch S7 (Q5), version note. `src/fieldwitness/schemas.py` = `scripts/fixture_schemas.py` from `app` at `dd97bf5`, with two edits: §3's model keeps its PLAN name `Field` (the app copy says `FieldModel`; the app's `types.ts` already says `Field`), so pydantic's `Field` is imported as `PydanticField`; comments no longer say "proposed"/"mirror". `tests/test_schemas.py`: 13 tests (tag check incl. exempt fields and paths, series alignment and no marks, month range, 12-point scenario grid, baseline, every sequence-only metric rejected, layers Current-only, region files). One-off check: all 16 SYNTHETIC fixtures in the `app` worktree validate against `fieldwitness.schemas` with no untagged numbers.
+- **Not done (§6 step 5, at the app merge, Gate 6):** T8.2 generates `app/src/types.ts`; delete `scripts/fixture_schemas.py` Part 1 on `app` in favour of `fieldwitness.schemas`. Nothing else from `app` was merged.
+
+## 2026-11-04 — Autopilot loop failure: missing prompt file (fixed)
+
+- **Symptom:** runs at 16:05 and 16:06 exited 1 in ~5 s: "Input must be provided either through stdin or as a prompt argument when using --print".
+- **Cause:** `AUTOPILOT_PROMPT.md` was deleted from the working tree (still committed; `git status` showed ` D`) between the 16:00 commit and 16:05; not by an autopilot run (none ran then) — who or what deleted it is unknown. `Get-Content` on the missing file wrote its error to the console, not the log, and piped nothing. The UTF-8 change was not the cause (runs at 14:58 and 15:13 used it, exit 0). Restored with `git checkout -- AUTOPILOT_PROMPT.md` (identical to HEAD).
+- **Second bug found:** `Get-Content -Raw` without `-Encoding` reads the BOM-less UTF-8 prompt as ANSI in PS 5.1, so every run since the setup received mojibake for non-ASCII characters (`—` → `â€”`; byte test: 4,228 bytes received vs 4,205 in the file). Fixed: the prompt is read with `[IO.File]::ReadAllText(<absolute path>, UTF-8)` and piped with `$OutputEncoding` UTF-8 (byte test: identical to the file).
+- **Guard:** if the prompt is missing or blank the loop logs `EMPTY PROMPT` (run log, `runs.csv` exit_code `EMPTY_PROMPT`), writes `BLOCKED.md` with the reason and stops instead of retrying every 30 min. Tested by moving the prompt aside: no `claude` call, `BLOCKED.md` written, loop stopped.
+- **Script parameters:** `-MaxTurns` (default 150) and `-Once` (one run, no sleep) so tests need no edit of the protected script. Test: `-MaxTurns 5 -Once` → exit 1 after 40 s with `Error: Reached max turns (5)`, i.e. the prompt reached `claude` (expected result of the 5-turn cap). The deny `Edit(/scripts/autopilot.ps1)` blocked the fix; the user approved a one-time write.
+- The loop that was still sleeping after the 16:06 failure (PID 5724) could not be stopped directly; `AUTOPILOT_STOP` makes it exit at its next check (~16:36) and is then removed.
+
+## 2026-11-04 — Autopilot: turn-cap end is not a failure
+
+- `scripts/autopilot.ps1` (user-approved one-time write): a non-zero exit whose run log contains "Reached max turns" is recorded in `runs.csv` as `maxturns` and gets the 1-minute pause; every other non-zero exit (usage limit, crash, network) still waits 30 minutes. Test `-MaxTurns 3 -Once` at 19:34: `2026-11-04 19:34:06,2026-11-04 19:34:45,maxturns,0` (log: `Error: Reached max turns (3)`; `-Once` records no sleep).
+- The 16:18 run (exit 1, 30-minute wait) was the account's 5-hour usage limit ("You've hit your 5-hour limit · resets 7:20pm (Africa/Cairo)"), correctly treated as a failure; it made no commits.
+- `AUTOPILOT_PROMPT.md` §7 (user): "A run can be cut off at the turn cap at any moment, so update the handoff and commit after every finished task, not only at the end."
+
+## 2026-11-04 — Autopilot token budget (user)
+
+- Weekly usage at 86 %. `scripts/autopilot.ps1` now runs `claude -p --model sonnet` (user-approved one-time write; `--model` checked in `claude --help`). `AUTOPILOT_PROMPT.md` §1: read `CLAUDE.md`, the `## Autopilot handoff` section and only the `PLAN.md` sections for the current task and phase, not whole files; new item: "Be terse; minimise tokens; keep logs and command output short."
+
+## 2026-11-04 — Autopilot uv allow rules (BLOCKED.md from the 19:36 run resolved)
+
+- Cause: the loop window predated the user-PATH change, so `uv` was not on its PATH and the agent called `uv.exe` by full path, which no allow rule matched. Fix (user-approved one-time write of `.claude/settings.json`): 60 allow rules for `uv run pytest[ *]`, `uv run ruff check|format *`, `uv run python *`, `uv run python -m fieldwitness*`, `uv sync*`, `uv --version`, each as plain `uv` and as full-path `uv.exe` (quoted Windows, quoted and escaped POSIX path; PowerShell also with `&`), for Bash and PowerShell. Deny rules unchanged (87). Test from a fresh-PATH shell: `claude -p --model sonnet --max-turns 4` → exit 0, "Both were allowed" (uv 0.13.7; 88 tests passed). `BLOCKED.md` deleted. Start the loop from a new window so it inherits the user PATH.
+
+## 2026-11-04 — Autopilot git refusals: plugin hook rewrote commands (BLOCKED.md from the 19:48 run resolved)
+
+- Refused forms in the run transcripts: PowerShell `git push -q origin main` (only `git push` and `git push origin main` were allowed), Bash `git -C "D:/NASA Project" status --short` (no `-C` rules), Bash `git add DECISIONS.md` (19:36), and compound commands (`cd x && ...`, `a; b`), which built-in checks refuse regardless of rules.
+- **Root cause** (from `--output-format json` `permission_denials`): a PreToolUse hook of the user-level caveman plugin (`~/.claude/settings.json`) rewrites Bash commands to `'C:/Users/Amr 13_03/AppData/Roaming/npm/caveman.CMD' shrink -- git status --short` before the permission check, so no `git ...` rule matches (even read-only `git status` was denied). With `--settings '{"disableAllHooks": true}'` the same test had no denials.
+- **Fix:** `scripts/autopilot.ps1` passes `--settings '{"disableAllHooks": true}'` to `claude -p` (user choice; one-time write approval). Interactive sessions keep caveman; the project defines no Claude hooks; git's own pre-commit hooks (ruff, gitleaks) still run.
+- **Rules** (one-time write of `.claude/settings.json`): allow `git status|diff|log|add|commit|push|pull` plain, with arguments, and as `git -C <repo> ...` (`"D:/NASA Project"`, `"d:/NASA Project"`, backslash forms, `"/d/NASA Project"`, `.`), Bash and PowerShell (+182). `git push *` now allowed; the existing denies (force, `-f`, `+refspec`, mirror, delete) are unchanged and still win; the same denies added for the `-C` form (+14), which the existing ones did not match.
+
+## 2026-11-04 — T2.2 acceptance check FAILED (negative result, rule 9)
+
+`story/seasons.py` (amplitude-threshold seasons; params in `config/story.yaml`, tag A, UNVERIFIED) and `story/check_seasons.py` (pre-registered rule in its docstring). Run once on 30 seeded Kansas fields (10 wheat, 10 summer-crop, 10 fallow; 240 field-years): **74.6% match, target 90%**. By crop: maize 0.92, sorghum 0.92, winter wheat 0.64, fallow 0.65. Expected vs detected: wheat 21/80 gave 2 seasons (6 gave 0); fallow 25/72 gave 1 season (weeds/volunteer growth, so the "0 seasons" expectation may be too strict). No parameter was changed after seeing this. Honest fix needs a separate development set of fields (not these 30) and a user decision on the fallow expectation.
+
+## 2026-11-04 — T2.2 acceptance failure: user decision (BLOCKED.md resolved)
+
+- **Result on record:** the pre-registered T2.2 season-count check on the first 30 labelled Kansas fields gave **74.6 %** (target 90 %): maize/sorghum 0.92, winter wheat 0.64 (21 of 80 field-years split into 2 seasons), fallow 0.65 (25 of 72 showed a season). This is the **first pre-registered T2.2 result** and stays on record in `results/story/ks_seasons_check.json`; it must not be overwritten or edited (CLAUDE.md rule 9).
+- **Decision (user, Option 1):**
+  1. **Winter-dormancy rule, defined from agronomy, not tuned:** two green-ups separated by a Dec–Feb dip that stays above the bare-soil level are one season. The harvest-year rule is unchanged (season year = calendar year of EOS).
+  2. **Fallow expectation:** "no crop-like season". A low-amplitude green-up on a fallow field-year is weeds or volunteers, not a crop season. The amplitude threshold that separates the two is set on the dev set.
+  3. **Protocol:** tune on a **seeded dev set of 30 other labelled fields**, then run the acceptance check **once** on a **fresh test set of 30**. The original 30, the dev set and the test set come from **different 10 km blocks** (no block shared between any two sets; seed 20261114). Report all three results (original 74.6 %, dev, test).
+  4. **Target stays 90 %.** If the fresh test set still misses, report it as a negative result in `results/` and here, and continue; no further tuning.
+  5. Meanwhile the loop may continue Phase 3 (T3.1–T3.5) and T1.8 SMAP, which do not depend on T2.2.
+
+## 2026-11-04 — T2.2 re-check per user decision: NEGATIVE RESULT (target 90 % missed)
+
+- Code: `story/seasons.py` now merges peaks split by a Dec–Feb dip that stays ≥ cover threshold 0.30 (dormancy rule, `dormancy.months` in `config/story.yaml`, not tuned) and drops green-ups with amplitude (peak − lower base) < `seasons.min_crop_amplitude`. Also fixed: SOS is now the first crossing after the left trough (before, it could land on the previous season's peak); season counts and so all match shares are unchanged (checked: test set 0.783 before and after).
+- Sets (`check_seasons.py`; lists and block lists in `results/story/ks_seasons_sets.json`): original 30 (29 blocks), dev 30 (26 blocks), test 30 (26 blocks); no block shared (asserted in code). Blocks outside the original 29 were shuffled (seed 20261114) and split in two halves.
+- Dev grid (fixed before running; `results/story/ks_seasons_dev_grid.json`): match share 0.812 (no amplitude filter, dormancy only) … **0.829 at 0.35** (best) … 0.713 at 0.50. Chosen `min_crop_amplitude = 0.35` (tag A, dev only).
+- **Results:** original 30 (no new rules): **74.6 %** (on record, untouched). Dev: **82.9 %** (fallow 0.82, maize 0.89, sorghum 0.92, winter wheat 0.75). Test, run once: **78.3 %** (fallow 0.80, maize 0.83, sorghum 0.90, winter wheat 0.66; `results/story/ks_seasons_test.json`). Target 90 % **not met**.
+- Per the decision: T2.2 not ticked, no further tuning, no BLOCKED. Winter wheat is the weak crop (0.66–0.75); likely causes (not tested, UNVERIFIED): ragged autumn/spring signals, labels (CSB) vs. actual abandonment. Any later change needs a new fresh test set and a new user decision. T2.3 and downstream steps that need seasons should use the current detector as a documented 78 %-accurate one.
+- Test added: synthetic winter wheat with a Dec–Feb dip above bare soil gives one winter-variant season per harvest year (99 tests pass, ruff clean).
+
+## 2026-11-04 — FAO-56 source for Phase 3 (BLOCKED.md for T3.1 resolved)
+
+- **Source = FAO-56 1998 HTML edition** (fao.org/4/x0490e/x0490e*.htm). The PDF route failed (openknowledge link redirects; the repository search shows only the 2025 2nd edition). The 2025 2nd edition exists but is **not used**, for consistency with `config/crops.yaml` (1998 tables).
+- Pages Ch. 2 (`x0490e06`), Ch. 3 (`07`), Ch. 4 (`08`), Ch. 6 (`0b`), Ch. 8 (`0e`) and Annex 2 (`0j`) and their 181 images were saved to `docs/refs/fao56_eq/` (2.2 MB, **gitignored**: `/docs/refs/` added to `.gitignore`, licence unclear, not redistributed); `index.json` maps images to equation numbers. The equations needed so far were read visually (images) or from the page text and transcribed to `docs/fao56_equations.md` (committed; formulas only): Eq. 6, 7, 8, 11, 12, 13, 17, 19, 21–25, 34, 35, 37–40, 42, 62, 82–85, with Gsc and σ. Cite by **equation number + page URL** (the HTML has no page numbers).
+- **ETo verified:** `src/fieldwitness/physics/eto.py` (daily FAO-PM, Eq. 6 chain, numpy) reproduces Example 18 (Ch. 4): ETo 3.88 mm/day (printed 3.88 ≈ 3.9), Ra 41.09, Rs 22.07, Rso 30.90, Rnl 3.71 (`tests/test_eto.py`). T3.1 is not ticked: its POWER forcing and acceptance still belong to the loop.
+
 ## Autopilot handoff
 
-**2026-11-04, autopilot run (local time not checked: date/time commands are not on the allow-list). Status: BLOCKED (`BLOCKED.md`, `uv` not on PATH).**
+**2026-11-05, autopilot run (Gate 1).** Done: `docs/gates/gate-1.md` written (Kansas data layer PASS; T2.2 FAILED 78.3 % vs 90 %; T1.7 open; checks a-c answered: 0/24,000 soil values missing, no irrigated/rainfed split, 15/200 fields <12 interior pixels). Added `scripts/gate1_soil_check.py` + `results/gate1_soil_nodata.json`. 127 tests pass, ruff clean. In progress: nothing. Background: none. Next: T2.3 (crop classifier; uses the 78 % season detector) or T3.7 (stretch); T1.7 needs user (WIMAS disclaimer). Risk: Gate 1 not fully green because of T2.2; only Kansas has fields.
+
+(Previous entry:)
+
+**2026-11-04, autopilot run (T1.8 close).** Done: T1.8 ticked. SMAP task `b5e1ec71-0a40-4ec7-a9ea-8c3d1c386f37` was done on the server; only the 9 MB results CSV was downloaded (sha256 ok) to `data/context/smap/`. `context.smap_build` → `data/context/smap_monthly.parquet` (351 rows, 3 regions, monthly mean + anomaly vs 2015–2024 climatology, tag D, 9 km scale flag; the base_end argument keeps hindcast use leak-free). Response shape in `docs/api_notes.md`. 127 tests pass, ruff clean. Note: slope exists for Kansas fields only (no fields yet for the other regions). In progress: nothing. Background: none. Next: write `docs/gates/gate-1.md` (T2.2 FAILED 78.3% vs 90%; SoilGrids tag-A vs real per property; irrigated/rainfed stratification not done; 12-pixel sampling: 15 of 200 fields have <12 interior pixels), then T2.3 / T3.7 (stretch). Risk: Gate 1 cannot be fully green because of T2.2.
+
+(Previous entry:)
+
+**2026-11-04, autopilot run (T3.6 close).** Done: T3.6 ticked. `physics/vulnerability.py` (heat in mid stage, frost after green-up, Ks<1 days, extreme rain on bare soil; share of years per month; `hazard_table`) + `config/vulnerability.yaml` + `tests/test_vulnerability.py`. 126 tests pass, ruff clean. UNVERIFIED (A): heat Tmax thresholds (35/35/32 °C placeholders, no paper read), green-up = end of ini stage, rain quantile over all days. Not done: real-field run, mapping to `CropVulnerability` schema (T8.1). In progress: nothing. Background: SMAP task `b5e1ec71-0a40-4ec7-a9ea-8c3d1c386f37` not downloaded. Next: T1.8 (SMAP/GRACE/SRTM; verify APIs first), then T3.7 (stretch) / gate-1.md. Risk: Gate 1 must report T2.2 as FAILED (78.3% vs 90%).
+
+(Previous entry:)
+
+**2026-11-04, autopilot run (T3.5 close).** Done: T3.5 ticked. `physics/rotation.py` (batched `(options, draws, years)` sim, Dr carried across seasons and fallow, weather year y+i forces season i) + `irr_mask` option in `waterbal.run` (no irrigation on fallow days) + `tests/test_rotation.py`. Benchmark 200×30×20 (3 seasons) = 8.4 s. 121 tests pass, ruff clean. UNVERIFIED (A): kc_fallow 0.3 team choice; crop windows must fit one calendar year (winter crops spanning New Year not supported). In progress: nothing. Background: SMAP task `b5e1ec71-0a40-4ec7-a9ea-8c3d1c386f37` not downloaded. Next: T3.6 (crop vulnerability) / T1.8 SMAP, then gate-1.md. Risk: Gate 1 must report T2.2 as FAILED (78.3% vs 90%).
+
+(Previous entry:)
+
+**2026-11-04, autopilot run (T3.4 close).** Done: T3.4 ticked. `physics/season.py` (RYI = 1 − Ky(1 − ΣETa/ΣETc), clipped; canopy proxy = Kc/Kc_mid; cover days at proxy ≥ 0.5; all tag D) + `tests/test_season.py`. 116 tests pass, ruff clean. UNVERIFIED (A): FAO-33 equation number (not read from the paper), cover_frac 0.5 team choice. In progress: nothing. Background: SMAP task `b5e1ec71-0a40-4ec7-a9ea-8c3d1c386f37` not downloaded. Next: T3.5 (batched rotation simulation, benchmark 200×30×20 < 60 s). Risk: Gate 1 must report T2.2 as FAILED (78.3% vs 90%).
+
+(Previous entry:)
+
+**2026-11-04, autopilot run (T3.3 close).** Done: T3.3 ticked. `physics/waterbal.py` (Eq. 82–85, policies rainfed / trigger_at_raw(eff) / fixed_seasonal_mm; vectorised over trailing axes) + `tests/test_waterbal.py` (hypothesis: mass closes daily, 0≤Ks≤1, 0≤Dr≤TAW). 114 tests pass, ruff clean. Assumptions (A, UNVERIFIED): CR=0, runoff = ro_frac·P (default 0), irrigation refills to field capacity when Dr(prev)>RAW, fixed-budget policy uses the same trigger. In progress: nothing. Background: SMAP task `b5e1ec71-0a40-4ec7-a9ea-8c3d1c386f37` not downloaded. Next: T3.4 (season outputs, Ky). Risk: Gate 1 must report T2.2 as FAILED (78.3% vs 90%).
+
+(Previous entry:)
+
+**2026-11-04, autopilot run (T3.2 close).** Done: T3.2 ticked. `physics/kc.py` (`kc_curve` per FAO-56 Fig. 34, `kc_adjust` Eq. 62 for mid / Eq. 65 for end, threshold 0.45 applies to Eq. 65 only) + `tests/test_kc.py`; Eq. 65 and Fig. 34 added to `docs/fao56_equations.md`. 110 tests pass, ruff clean. UNVERIFIED: the validity limits of Eq. 62 itself (copied from Eq. 65, same form); day-of-stage interpolation convention is a team choice (A). In progress: nothing. Background: SMAP task `b5e1ec71-0a40-4ec7-a9ea-8c3d1c386f37` not downloaded. Next: T3.3 (water balance, Eq. 82–85; all four equations are in `docs/fao56_equations.md`). Risk: Gate 1 must report T2.2 as FAILED (78.3% vs 90%).
+
+(Previous entry:)
+
+**2026-11-04, autopilot run (T3.1 close).** Done: T3.1 ticked. Added `physics/forcing.py` (POWER → daily `eto`, `rain`; mean-RH route Eq. 19, G=0; NaN on missing input) + `tests/test_forcing.py`. 105 tests pass, ruff clean. Not done: real-field POWER run (not needed for acceptance). In progress: nothing. Background: SMAP task `b5e1ec71-0a40-4ec7-a9ea-8c3d1c386f37` not downloaded. Next: T3.2 (Kc, Eq. 62; read it from `docs/fao56_equations.md`, add from the FAO page if missing), then T3.3. Risk: Gate 1 must report T2.2 as FAILED (78.3% vs 90%).
+
+**2026-11-04, FAO-56 source decided (interactive session; `BLOCKED.md` deleted).** Phase 3 cites the FAO-56 1998 HTML (not the 2025 edition): equations in `docs/fao56_equations.md` (number + page URL), page and image copies in `docs/refs/fao56_eq/` (gitignored). `physics/eto.py` passes Example 18. Next: finish T3.1 (POWER forcing per field, acceptance), then T3.2 (Kc, Eq. 62), T3.3 (Eq. 82–85); T2.2 re-check and T1.8 SMAP as listed below. A missing equation: read it from the same page (image with the Read tool) and add it to `docs/fao56_equations.md`.
+
+**2026-11-04, run after the T2.2 decision (later).** Tried T3.1: FAO-56 HTML equations are images; PDF returns 403. Rule 8 => `BLOCKED.md` written (options inside). No code changed; git otherwise clean. Background: SMAP task `b5e1ec71-0a40-4ec7-a9ea-8c3d1c386f37` not downloaded. Next: after the user supplies FAO-56 text, T3.1–T3.5; or T1.8 SMAP first (needs no paper). Risk: Phase 3 and the Gate 2/3 schedule slip until the paper is available.
+
+**2026-11-04, run after the T2.2 decision.** Done: T2.2 re-check (item 1 below), negative result logged in the entry above; T2.2 stays unticked. In progress: nothing. Background: SMAP task `b5e1ec71-0a40-4ec7-a9ea-8c3d1c386f37` not downloaded. Next: T1.8 SMAP, Phase 3 T3.1–T3.5, then gate-1.md. Risk: T2.3 inherits a 78 % season detector; gate 1 must report T2.2 as FAILED.
+
+- **Done (item 1, kept for history):** see the T2.2 re-check entry.
+- **Next, in this order:**
+  1. ~~T2.2 re-check~~ (done, negative).
+  2. **Phase 3** T3.1–T3.5 and **T1.8 SMAP** (download + monthly anomaly) may run before or after item 1.
+  3. Gate 1 review items (unchanged, see below).
+
+(Earlier handoff notes below, kept for history.)
+
+**2026-11-04, run after T2.1/T2.5.** Done: T2.2 code + 4 tests (98 pass, ruff clean). T2.2 acceptance FAILED (see entry above), so T2.2 is not ticked and `BLOCKED.md` is written. In progress: nothing; uncommitted work is committed. Background: SMAP task `b5e1ec71-0a40-4ec7-a9ea-8c3d1c386f37` still not downloaded. Next after the user decides: T1.8 SMAP, Phase 3 T3.1–T3.5 (need no T2.2), gate-1.md. Risk: T2.3 and T2.2 acceptance depend on the decision.
+
+**2026-11-04, run after T1.5.** Done: T2.1 (`story/smooth.py`, numpy-only Savitzky–Golay, no scipy added), T2.5 (`story/bare.py`, Kansas 200/200 fields, 0 insufficient months, mean bare share by month 0.39–0.83), params in `config/story.yaml` (all tag A team choices; cover NDVI 0.30), `tests/test_story.py`. Both ticked in PLAN. **In progress:** nothing. **Next:** T2.2 seasons/phenology (uses `smooth_series`, cover threshold from `config/story.yaml`), then T2.3, T1.8 SMAP (task `b5e1ec71-0a40-4ec7-a9ea-8c3d1c386f37`), Phase 3 T3.1–T3.5, gate-1.md. **Risk:** `uv --directory` form needs approval; use plain `uv run` from the repo root. Push worked this run (`main` at ca26373 incl. f56aa80). Background tasks: none besides SMAP (not downloaded).
+
+(Previous run, kept for history:)
+
+**2026-11-04, later run (uv works again; `BLOCKED.md` absent).** T1.5 DONE for Kansas: all 30 HLS tasks downloaded (listed total 1,316.9 MB ≤ cap 1,317.5 MB, no other download). `src/fieldwitness/data/hls_qa.py` (parser, QA rule, `as_of` reader `hls_qa.read`), `tests/test_hls_qa.py`, leakage case added; 90 tests pass, ruff clean. Series: `data/fields/ks_t14slh_hls_series.parquet` (gitignored data; rebuild with `hls_qa.build_series`): 134,685 field-dates, 200/200 fields, every year 2015–2024, mean clear fraction 0.95. Gate-1 check (c): 2,325 sampled pixels; 15 of 200 fields have fewer than 12 interior pixels (min 4). L30+S30 pooled by pixel-date mean. **Next:** T2.1, T2.2, T2.5 (Phase 2 code, test on T0.3 sample, run on the series above); T1.8 SMAP download (task `b5e1ec71-0a40-4ec7-a9ea-8c3d1c386f37`); Phase 3 T3.1–T3.5; then `docs/gates/gate-1.md` (items a–c in the list below).
+
+**Push:** `git push` is refused with "requires approval" in this unattended run, so commit `f56aa80` (T1.5) is local only; tests and gitleaks passed. Push it from the interactive session.
+
+(Older notes below.)
+
+**2026-11-04, latest autopilot run. Status: OK, not blocked. `uv` works (88 tests passed). `hls-wait --once` finished the HLS downloads: all 30 chunk folders are on disk in `data/appeears/ks_t14slh`; listed total 1316.9 MB, under the 1317.5 MB cap. No code changed. Next: item 3 (T1.5 parser and QA), then items 1, 2, 4. T1.8 SMAP is still not downloaded. The older notes below are history.**
+
+*Older status (superseded):* BLOCKED (`uv` not on PATH).
 
 - **This run:** coded the narrow 1 GB-cap exception + tests (log entry above). **Committed locally, NOT pushed and NOT tested** (`uv` unavailable). Commit `45ce08e`: the pre-commit hook passed ruff check, ruff format and gitleaks; pytest not run.
 - **Next run, first:** `uv run pytest -q` and `uv run ruff check . && uv run ruff format --check .`; fix anything in the cap change; push if green and gitleaks clean. Then run `uv run python -u -m fieldwitness.cli hls-wait --region ks_t14slh --once`; it prints the exact listed total of all 30 bundles — record it in this log and check it is ≤ 1,317.5 MB (if it is more, the code stops; write `BLOCKED.md`).
@@ -319,9 +462,12 @@ Gate 0 stays **open on one item: SoilGrids**.
 - **In progress, background (server side):**
   - **T1.5 HLS point tasks**: 30 tasks, registry `data/appeears/ks_t14slh_tasks.json`; all task IDs are listed in the Phase 1 log above. All 30 tasks were `done` on the server at the last check (not polled this run). 19 of 30 chunk folders on disk (593 MB). **Approved by the user: one-time exception to the 1 GB cap for exactly these 30 task IDs, 1,317 MB total** — now coded (untested). Any other download over 1 GB → `BLOCKED.md`. Still pending (696 MB) (registry minus folders on disk): `2021_c0` `5bd0ec8a-8530-4182-9ca9-8ce974a5a8e7`, `2021_c1` `33605d4a-1fd5-490b-aa1d-a09724852301`, `2022_c0` `2e6530aa-b946-40da-9423-c75d8eef5a95`, `2022_c1` `c5a1e1bd-aaaa-4304-863f-bf689de5b215`, `2022_c2` `d541d0dd-7c1f-43dd-b593-ca21a77a541c`, `2023_c0` `260dcaa7-e0c6-4315-91b6-8bb7b2eda79a`, `2023_c1` `7678c27c-75d0-43a5-beab-276355148cff`, `2023_c2` `ec590ff0-c310-4bbb-843b-7c8bc942e689`, `2024_c0` `7219687a-961a-4eba-82c8-11a13189759a`, `2024_c1` `8d47e76e-4aa8-41d6-a88f-d53f594172fb`, `2024_c2` `cf441cd4-721a-49db-8850-5a24ef9c9faa`. The interactive long-running downloader was stopped at 14:58 (a partial file, if any, fails the sha256 check and is re-fetched). Each run polls with `uv run python -u -m fieldwitness.cli hls-wait --region ks_t14slh --once`.
   - **T1.8 SMAP L4** task `b5e1ec71-0a40-4ec7-a9ea-8c3d1c386f37` (registry `data/context/smap_task.json`): not yet downloaded; no download command exists yet (to write: download + monthly anomaly with `context.smap_monthly_anomaly`).
+- **Schema (PLAN v1.2-ext, final Q1–Q7, see the log entry of that name):** use `src/fieldwitness/schemas.py` — do not write your own models. T2.2: SOS/peak/EOS as days of the harvest year (1 Jan = 1, negative = previous autumn). T2.5 → `FieldCalendar.bare_observed`; T3.6 → `CropVulnerability`; physics/T6 → `bare_by_option` (tag D); T6.8 → `FieldScenarios`, 12 scenarios, weather-sensitive metrics only (no `SEQUENCE_ONLY_METRICS`); `series` has no SOS/peak/EOS; field colouring is Current-only. T8.1 builds every file in the §3b layout and validates with `check_tagged`. Do not merge the `app` branch (worktree `D:/NASA Project-app`).
+- **Pushed by the interactive session:** the cap-exception commit `45ce08e` was tested there (75 passed, ruff clean) and pushed with the schema merge, so the "not pushed / not tested" note above is resolved. `BLOCKED.md` (uv PATH) is still open for the user.
 - **Next, in this order (user's pending items):**
   1. **Phase 3 exception:** start Phase 3 physics T3.1–T3.5 now while HLS downloads run (logged exception: needs only POWER, soil and `crops.yaml`).
   2. **Phase 2 code on the sample:** write T2.1, T2.2, T2.5 and test them on the T0.3 AppEEARS sample; run on the pilot fields once all 30 HLS tasks are downloaded and the T1.5 parser exists.
   3. **T1.5 finish:** parser and QA (drop cloud, adjacent cloud/shadow, cloud shadow, snow/ice, water via the decoded Fmask columns; scale 0.0001, fill −19999), median per field and date over clear sampled pixels, `as_of` reader registered, leakage test; then tick T1.5.
   4. **Gate 1 review** (`docs/gates/gate-1.md`) must include three checks: (a) SoilGrids values from the no-data rule (tag A) vs real values, per property; (b) whether the irrigated/rainfed stratification was done and the split — not done, WorldCereal needs a Terrascope login (see T1.4); (c) the 12-pixel sampling (seeded, pixel centres) and how many fields have fewer than 12 interior pixels.
+- **Run 2026-11-04 (later):** did nothing but check. Git clean. `uv` (bare and by full path) is refused with "requires approval" in this unattended run, so no tests or pipeline work is possible. Wrote `BLOCKED.md` again (allow-list `uv` + PATH). Next task unchanged: items 1–4 above.
 - **Risk:** the loop stops on `BLOCKED.md` until the user fixes PATH; the schedule (Gate 1 due 5 Nov) slips by that time. The local commit on `main` is unpushed and untested; do not push it before tests pass.

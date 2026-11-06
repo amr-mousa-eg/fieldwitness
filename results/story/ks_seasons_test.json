@@ -1,0 +1,2257 @@
+{
+ "min_crop_amplitude": 0.35,
+ "fields": {
+  "winter_wheat": [
+   "18bd71b52d1ad4e9ced104f247c018f8419442a3",
+   "4da67b6118bf018e60a71259e2411c9c932bf960",
+   "5007e150251b78684ebb4d9d1f33df4bcb10a3a9",
+   "72e4ed0bd7f51ca59348e36b7a7caa892024a0d4",
+   "7bf8c222f93f4d44a763d9bc84d5e90b4c921d06",
+   "9399b1c9728025fbcebfe0bb3321292fa27d5eab",
+   "b92fecfd2d4a4d3de1dfbc9ed1a37fe5b01ee928",
+   "c5edda3a59c71783407fa1c4220bcdf8c76568ae",
+   "f300b264b3c4c645d8aa7731b7239d3068309597",
+   "f30e4e4d033a432232391184984fca9f02ee24b5"
+  ],
+  "summer_crop": [
+   "0aa8b9234d54dcf896741987942859413b6f1aa5",
+   "36d838d85e96ad2538320b1ce0b5668a8f44101d",
+   "905e1f18bfd01edcc9f457e66691b2901cf4f198",
+   "90d2b4b975f20d3c1f54961f71501979f2d99233",
+   "a6f8fbe357539ecbf3798964048295e83097b82d",
+   "b48e13edd44dd716c6ec11fd314265b201c99560",
+   "d745010999e3b0fff4f751ad78c0fe4bae7b276f",
+   "da438bc7b421460080a0eff51b3c16db41d8eec5",
+   "f09fe4661937262ac79e5a623c1a1caa942766fa",
+   "f2cce773675d4f5a3ecbe8756cdb9c2f89025053"
+  ],
+  "fallow": [
+   "07069cd08a053f9e048a3e12daa12bbac58dd14f",
+   "199d05c80a94d32fb8088a15d9231d8e9ec05464",
+   "1ce6e474f605025b83af3a0ff5b71442ec09a337",
+   "240fa53927d596d52790d19668e14589534072f2",
+   "474345acff3ccb0ac2fe4fcf94cebf1019903923",
+   "52a7fe052fd657d44c274f13da235a449d71e56d",
+   "9a5bd695c8670424a7a65c29e9aae5b25921dd1a",
+   "b19fc2ff1df981dedaec3416e184fb597f5726de",
+   "c27812de2f00e10444012353b748fbe2b55c2a66",
+   "e21cf42fdb444b7b4414fcce6fb40d0844c3707a"
+  ]
+ },
+ "blocks": [
+  "c01r00",
+  "c01r02",
+  "c01r03",
+  "c01r06",
+  "c02r00",
+  "c02r05",
+  "c02r08",
+  "c03r08",
+  "c03r10",
+  "c04r07",
+  "c05r00",
+  "c05r01",
+  "c06r06",
+  "c06r07",
+  "c07r04",
+  "c07r09",
+  "c08r06",
+  "c08r10",
+  "c09r03",
+  "c09r09",
+  "c09r10",
+  "c10r00",
+  "c10r01",
+  "c10r02",
+  "c10r05",
+  "c10r07"
+ ],
+ "n_field_years": 240,
+ "match_share": 0.783,
+ "passed": false,
+ "by_crop": {
+  "fallow": {
+   "mean": 0.8,
+   "count": 60
+  },
+  "maize": {
+   "mean": 0.829,
+   "count": 41
+  },
+  "sorghum": {
+   "mean": 0.902,
+   "count": 61
+  },
+  "soybean": {
+   "mean": 0.0,
+   "count": 1
+  },
+  "winter_wheat": {
+   "mean": 0.662,
+   "count": 77
+  }
+ },
+ "target": 0.9,
+ "rows": [
+  {
+   "stratum": "winter_wheat",
+   "field_id": "18bd71b52d1ad4e9ced104f247c018f8419442a3",
+   "year": 2017,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "18bd71b52d1ad4e9ced104f247c018f8419442a3",
+   "year": 2018,
+   "crop": "maize",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "18bd71b52d1ad4e9ced104f247c018f8419442a3",
+   "year": 2019,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 2,
+   "match": false
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "18bd71b52d1ad4e9ced104f247c018f8419442a3",
+   "year": 2020,
+   "crop": "maize",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "18bd71b52d1ad4e9ced104f247c018f8419442a3",
+   "year": 2021,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "18bd71b52d1ad4e9ced104f247c018f8419442a3",
+   "year": 2022,
+   "crop": "maize",
+   "expected": 1,
+   "detected": 0,
+   "match": false
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "18bd71b52d1ad4e9ced104f247c018f8419442a3",
+   "year": 2023,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "18bd71b52d1ad4e9ced104f247c018f8419442a3",
+   "year": 2024,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "4da67b6118bf018e60a71259e2411c9c932bf960",
+   "year": 2017,
+   "crop": "maize",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "4da67b6118bf018e60a71259e2411c9c932bf960",
+   "year": 2018,
+   "crop": "maize",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "4da67b6118bf018e60a71259e2411c9c932bf960",
+   "year": 2019,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "4da67b6118bf018e60a71259e2411c9c932bf960",
+   "year": 2020,
+   "crop": "maize",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "4da67b6118bf018e60a71259e2411c9c932bf960",
+   "year": 2021,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "4da67b6118bf018e60a71259e2411c9c932bf960",
+   "year": 2022,
+   "crop": "maize",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "4da67b6118bf018e60a71259e2411c9c932bf960",
+   "year": 2023,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "4da67b6118bf018e60a71259e2411c9c932bf960",
+   "year": 2024,
+   "crop": "maize",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "5007e150251b78684ebb4d9d1f33df4bcb10a3a9",
+   "year": 2017,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "5007e150251b78684ebb4d9d1f33df4bcb10a3a9",
+   "year": 2018,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "5007e150251b78684ebb4d9d1f33df4bcb10a3a9",
+   "year": 2019,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "5007e150251b78684ebb4d9d1f33df4bcb10a3a9",
+   "year": 2020,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "5007e150251b78684ebb4d9d1f33df4bcb10a3a9",
+   "year": 2021,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "5007e150251b78684ebb4d9d1f33df4bcb10a3a9",
+   "year": 2022,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "5007e150251b78684ebb4d9d1f33df4bcb10a3a9",
+   "year": 2023,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "5007e150251b78684ebb4d9d1f33df4bcb10a3a9",
+   "year": 2024,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "72e4ed0bd7f51ca59348e36b7a7caa892024a0d4",
+   "year": 2017,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "72e4ed0bd7f51ca59348e36b7a7caa892024a0d4",
+   "year": 2018,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "72e4ed0bd7f51ca59348e36b7a7caa892024a0d4",
+   "year": 2019,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "72e4ed0bd7f51ca59348e36b7a7caa892024a0d4",
+   "year": 2020,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 2,
+   "match": false
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "72e4ed0bd7f51ca59348e36b7a7caa892024a0d4",
+   "year": 2021,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "72e4ed0bd7f51ca59348e36b7a7caa892024a0d4",
+   "year": 2022,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "72e4ed0bd7f51ca59348e36b7a7caa892024a0d4",
+   "year": 2023,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "72e4ed0bd7f51ca59348e36b7a7caa892024a0d4",
+   "year": 2024,
+   "crop": "maize",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "7bf8c222f93f4d44a763d9bc84d5e90b4c921d06",
+   "year": 2017,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "7bf8c222f93f4d44a763d9bc84d5e90b4c921d06",
+   "year": 2018,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "7bf8c222f93f4d44a763d9bc84d5e90b4c921d06",
+   "year": 2019,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 1,
+   "match": false
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "7bf8c222f93f4d44a763d9bc84d5e90b4c921d06",
+   "year": 2020,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 0,
+   "match": false
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "7bf8c222f93f4d44a763d9bc84d5e90b4c921d06",
+   "year": 2021,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "7bf8c222f93f4d44a763d9bc84d5e90b4c921d06",
+   "year": 2022,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "7bf8c222f93f4d44a763d9bc84d5e90b4c921d06",
+   "year": 2023,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "7bf8c222f93f4d44a763d9bc84d5e90b4c921d06",
+   "year": 2024,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "9399b1c9728025fbcebfe0bb3321292fa27d5eab",
+   "year": 2017,
+   "crop": "maize",
+   "expected": 1,
+   "detected": 0,
+   "match": false
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "9399b1c9728025fbcebfe0bb3321292fa27d5eab",
+   "year": 2018,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 1,
+   "match": false
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "9399b1c9728025fbcebfe0bb3321292fa27d5eab",
+   "year": 2019,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 0,
+   "match": false
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "9399b1c9728025fbcebfe0bb3321292fa27d5eab",
+   "year": 2020,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "9399b1c9728025fbcebfe0bb3321292fa27d5eab",
+   "year": 2021,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 1,
+   "match": false
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "9399b1c9728025fbcebfe0bb3321292fa27d5eab",
+   "year": 2022,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 0,
+   "match": false
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "9399b1c9728025fbcebfe0bb3321292fa27d5eab",
+   "year": 2023,
+   "crop": "maize",
+   "expected": 1,
+   "detected": 0,
+   "match": false
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "9399b1c9728025fbcebfe0bb3321292fa27d5eab",
+   "year": 2024,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "b92fecfd2d4a4d3de1dfbc9ed1a37fe5b01ee928",
+   "year": 2017,
+   "crop": "maize",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "b92fecfd2d4a4d3de1dfbc9ed1a37fe5b01ee928",
+   "year": 2018,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "b92fecfd2d4a4d3de1dfbc9ed1a37fe5b01ee928",
+   "year": 2019,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "b92fecfd2d4a4d3de1dfbc9ed1a37fe5b01ee928",
+   "year": 2020,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "b92fecfd2d4a4d3de1dfbc9ed1a37fe5b01ee928",
+   "year": 2021,
+   "crop": "maize",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "b92fecfd2d4a4d3de1dfbc9ed1a37fe5b01ee928",
+   "year": 2022,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "b92fecfd2d4a4d3de1dfbc9ed1a37fe5b01ee928",
+   "year": 2023,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "b92fecfd2d4a4d3de1dfbc9ed1a37fe5b01ee928",
+   "year": 2024,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "c5edda3a59c71783407fa1c4220bcdf8c76568ae",
+   "year": 2017,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 1,
+   "match": false
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "c5edda3a59c71783407fa1c4220bcdf8c76568ae",
+   "year": 2018,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "c5edda3a59c71783407fa1c4220bcdf8c76568ae",
+   "year": 2019,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "c5edda3a59c71783407fa1c4220bcdf8c76568ae",
+   "year": 2020,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "c5edda3a59c71783407fa1c4220bcdf8c76568ae",
+   "year": 2021,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "c5edda3a59c71783407fa1c4220bcdf8c76568ae",
+   "year": 2022,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "c5edda3a59c71783407fa1c4220bcdf8c76568ae",
+   "year": 2023,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 0,
+   "match": false
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "c5edda3a59c71783407fa1c4220bcdf8c76568ae",
+   "year": 2024,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "f300b264b3c4c645d8aa7731b7239d3068309597",
+   "year": 2017,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 0,
+   "match": false
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "f300b264b3c4c645d8aa7731b7239d3068309597",
+   "year": 2018,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "f300b264b3c4c645d8aa7731b7239d3068309597",
+   "year": 2019,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 1,
+   "match": false
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "f300b264b3c4c645d8aa7731b7239d3068309597",
+   "year": 2020,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 2,
+   "match": false
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "f300b264b3c4c645d8aa7731b7239d3068309597",
+   "year": 2021,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "f300b264b3c4c645d8aa7731b7239d3068309597",
+   "year": 2022,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "f300b264b3c4c645d8aa7731b7239d3068309597",
+   "year": 2023,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "f300b264b3c4c645d8aa7731b7239d3068309597",
+   "year": 2024,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "f30e4e4d033a432232391184984fca9f02ee24b5",
+   "year": 2017,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "f30e4e4d033a432232391184984fca9f02ee24b5",
+   "year": 2018,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 1,
+   "match": false
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "f30e4e4d033a432232391184984fca9f02ee24b5",
+   "year": 2019,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "f30e4e4d033a432232391184984fca9f02ee24b5",
+   "year": 2020,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "f30e4e4d033a432232391184984fca9f02ee24b5",
+   "year": 2021,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "f30e4e4d033a432232391184984fca9f02ee24b5",
+   "year": 2022,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "f30e4e4d033a432232391184984fca9f02ee24b5",
+   "year": 2023,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "winter_wheat",
+   "field_id": "f30e4e4d033a432232391184984fca9f02ee24b5",
+   "year": 2024,
+   "crop": "maize",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "0aa8b9234d54dcf896741987942859413b6f1aa5",
+   "year": 2017,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "0aa8b9234d54dcf896741987942859413b6f1aa5",
+   "year": 2018,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "0aa8b9234d54dcf896741987942859413b6f1aa5",
+   "year": 2019,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "0aa8b9234d54dcf896741987942859413b6f1aa5",
+   "year": 2020,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "0aa8b9234d54dcf896741987942859413b6f1aa5",
+   "year": 2021,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "0aa8b9234d54dcf896741987942859413b6f1aa5",
+   "year": 2022,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "0aa8b9234d54dcf896741987942859413b6f1aa5",
+   "year": 2023,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "0aa8b9234d54dcf896741987942859413b6f1aa5",
+   "year": 2024,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "36d838d85e96ad2538320b1ce0b5668a8f44101d",
+   "year": 2017,
+   "crop": "maize",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "36d838d85e96ad2538320b1ce0b5668a8f44101d",
+   "year": 2018,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 2,
+   "match": false
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "36d838d85e96ad2538320b1ce0b5668a8f44101d",
+   "year": 2019,
+   "crop": "maize",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "36d838d85e96ad2538320b1ce0b5668a8f44101d",
+   "year": 2020,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "36d838d85e96ad2538320b1ce0b5668a8f44101d",
+   "year": 2021,
+   "crop": "maize",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "36d838d85e96ad2538320b1ce0b5668a8f44101d",
+   "year": 2022,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 0,
+   "match": false
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "36d838d85e96ad2538320b1ce0b5668a8f44101d",
+   "year": 2023,
+   "crop": "maize",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "36d838d85e96ad2538320b1ce0b5668a8f44101d",
+   "year": 2024,
+   "crop": "maize",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "905e1f18bfd01edcc9f457e66691b2901cf4f198",
+   "year": 2017,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 0,
+   "match": false
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "905e1f18bfd01edcc9f457e66691b2901cf4f198",
+   "year": 2018,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "905e1f18bfd01edcc9f457e66691b2901cf4f198",
+   "year": 2019,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "905e1f18bfd01edcc9f457e66691b2901cf4f198",
+   "year": 2020,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "905e1f18bfd01edcc9f457e66691b2901cf4f198",
+   "year": 2021,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "905e1f18bfd01edcc9f457e66691b2901cf4f198",
+   "year": 2022,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "905e1f18bfd01edcc9f457e66691b2901cf4f198",
+   "year": 2023,
+   "crop": "winter_wheat",
+   "expected": 2,
+   "detected": 1,
+   "match": false
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "905e1f18bfd01edcc9f457e66691b2901cf4f198",
+   "year": 2024,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "90d2b4b975f20d3c1f54961f71501979f2d99233",
+   "year": 2017,
+   "crop": "maize",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "90d2b4b975f20d3c1f54961f71501979f2d99233",
+   "year": 2018,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 0,
+   "match": false
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "90d2b4b975f20d3c1f54961f71501979f2d99233",
+   "year": 2019,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "90d2b4b975f20d3c1f54961f71501979f2d99233",
+   "year": 2020,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 0,
+   "match": false
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "90d2b4b975f20d3c1f54961f71501979f2d99233",
+   "year": 2021,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "90d2b4b975f20d3c1f54961f71501979f2d99233",
+   "year": 2022,
+   "crop": "soybean",
+   "expected": 1,
+   "detected": 0,
+   "match": false
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "90d2b4b975f20d3c1f54961f71501979f2d99233",
+   "year": 2023,
+   "crop": "winter_wheat",
+   "expected": 2,
+   "detected": 0,
+   "match": false
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "90d2b4b975f20d3c1f54961f71501979f2d99233",
+   "year": 2024,
+   "crop": "maize",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "a6f8fbe357539ecbf3798964048295e83097b82d",
+   "year": 2017,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "a6f8fbe357539ecbf3798964048295e83097b82d",
+   "year": 2018,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 2,
+   "match": false
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "a6f8fbe357539ecbf3798964048295e83097b82d",
+   "year": 2019,
+   "crop": "maize",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "a6f8fbe357539ecbf3798964048295e83097b82d",
+   "year": 2020,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "a6f8fbe357539ecbf3798964048295e83097b82d",
+   "year": 2021,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "a6f8fbe357539ecbf3798964048295e83097b82d",
+   "year": 2022,
+   "crop": "maize",
+   "expected": 1,
+   "detected": 0,
+   "match": false
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "a6f8fbe357539ecbf3798964048295e83097b82d",
+   "year": 2023,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "a6f8fbe357539ecbf3798964048295e83097b82d",
+   "year": 2024,
+   "crop": "maize",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "b48e13edd44dd716c6ec11fd314265b201c99560",
+   "year": 2017,
+   "crop": "maize",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "b48e13edd44dd716c6ec11fd314265b201c99560",
+   "year": 2018,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "b48e13edd44dd716c6ec11fd314265b201c99560",
+   "year": 2019,
+   "crop": "maize",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "b48e13edd44dd716c6ec11fd314265b201c99560",
+   "year": 2020,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "b48e13edd44dd716c6ec11fd314265b201c99560",
+   "year": 2021,
+   "crop": "maize",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "b48e13edd44dd716c6ec11fd314265b201c99560",
+   "year": 2022,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "b48e13edd44dd716c6ec11fd314265b201c99560",
+   "year": 2023,
+   "crop": "maize",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "b48e13edd44dd716c6ec11fd314265b201c99560",
+   "year": 2024,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "d745010999e3b0fff4f751ad78c0fe4bae7b276f",
+   "year": 2017,
+   "crop": "maize",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "d745010999e3b0fff4f751ad78c0fe4bae7b276f",
+   "year": 2018,
+   "crop": "maize",
+   "expected": 1,
+   "detected": 2,
+   "match": false
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "d745010999e3b0fff4f751ad78c0fe4bae7b276f",
+   "year": 2019,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "d745010999e3b0fff4f751ad78c0fe4bae7b276f",
+   "year": 2020,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "d745010999e3b0fff4f751ad78c0fe4bae7b276f",
+   "year": 2021,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 2,
+   "match": false
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "d745010999e3b0fff4f751ad78c0fe4bae7b276f",
+   "year": 2022,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 2,
+   "match": false
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "d745010999e3b0fff4f751ad78c0fe4bae7b276f",
+   "year": 2023,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 2,
+   "match": false
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "d745010999e3b0fff4f751ad78c0fe4bae7b276f",
+   "year": 2024,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 2,
+   "match": false
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "da438bc7b421460080a0eff51b3c16db41d8eec5",
+   "year": 2017,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "da438bc7b421460080a0eff51b3c16db41d8eec5",
+   "year": 2018,
+   "crop": "maize",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "da438bc7b421460080a0eff51b3c16db41d8eec5",
+   "year": 2019,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 2,
+   "match": false
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "da438bc7b421460080a0eff51b3c16db41d8eec5",
+   "year": 2020,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "da438bc7b421460080a0eff51b3c16db41d8eec5",
+   "year": 2021,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "da438bc7b421460080a0eff51b3c16db41d8eec5",
+   "year": 2022,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "da438bc7b421460080a0eff51b3c16db41d8eec5",
+   "year": 2023,
+   "crop": "maize",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "da438bc7b421460080a0eff51b3c16db41d8eec5",
+   "year": 2024,
+   "crop": "maize",
+   "expected": 1,
+   "detected": 0,
+   "match": false
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "f09fe4661937262ac79e5a623c1a1caa942766fa",
+   "year": 2017,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "f09fe4661937262ac79e5a623c1a1caa942766fa",
+   "year": 2018,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "f09fe4661937262ac79e5a623c1a1caa942766fa",
+   "year": 2019,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 2,
+   "match": false
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "f09fe4661937262ac79e5a623c1a1caa942766fa",
+   "year": 2020,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 1,
+   "match": false
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "f09fe4661937262ac79e5a623c1a1caa942766fa",
+   "year": 2021,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "f09fe4661937262ac79e5a623c1a1caa942766fa",
+   "year": 2022,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "f09fe4661937262ac79e5a623c1a1caa942766fa",
+   "year": 2023,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "f09fe4661937262ac79e5a623c1a1caa942766fa",
+   "year": 2024,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "f2cce773675d4f5a3ecbe8756cdb9c2f89025053",
+   "year": 2017,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "f2cce773675d4f5a3ecbe8756cdb9c2f89025053",
+   "year": 2018,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "f2cce773675d4f5a3ecbe8756cdb9c2f89025053",
+   "year": 2019,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "f2cce773675d4f5a3ecbe8756cdb9c2f89025053",
+   "year": 2020,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "f2cce773675d4f5a3ecbe8756cdb9c2f89025053",
+   "year": 2021,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "f2cce773675d4f5a3ecbe8756cdb9c2f89025053",
+   "year": 2022,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "f2cce773675d4f5a3ecbe8756cdb9c2f89025053",
+   "year": 2023,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "summer_crop",
+   "field_id": "f2cce773675d4f5a3ecbe8756cdb9c2f89025053",
+   "year": 2024,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "07069cd08a053f9e048a3e12daa12bbac58dd14f",
+   "year": 2017,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "07069cd08a053f9e048a3e12daa12bbac58dd14f",
+   "year": 2018,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "07069cd08a053f9e048a3e12daa12bbac58dd14f",
+   "year": 2019,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "07069cd08a053f9e048a3e12daa12bbac58dd14f",
+   "year": 2020,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "07069cd08a053f9e048a3e12daa12bbac58dd14f",
+   "year": 2021,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "07069cd08a053f9e048a3e12daa12bbac58dd14f",
+   "year": 2022,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "07069cd08a053f9e048a3e12daa12bbac58dd14f",
+   "year": 2023,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "07069cd08a053f9e048a3e12daa12bbac58dd14f",
+   "year": 2024,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "199d05c80a94d32fb8088a15d9231d8e9ec05464",
+   "year": 2017,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 0,
+   "match": false
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "199d05c80a94d32fb8088a15d9231d8e9ec05464",
+   "year": 2018,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "199d05c80a94d32fb8088a15d9231d8e9ec05464",
+   "year": 2019,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "199d05c80a94d32fb8088a15d9231d8e9ec05464",
+   "year": 2020,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "199d05c80a94d32fb8088a15d9231d8e9ec05464",
+   "year": 2021,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "199d05c80a94d32fb8088a15d9231d8e9ec05464",
+   "year": 2022,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "199d05c80a94d32fb8088a15d9231d8e9ec05464",
+   "year": 2023,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "199d05c80a94d32fb8088a15d9231d8e9ec05464",
+   "year": 2024,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "1ce6e474f605025b83af3a0ff5b71442ec09a337",
+   "year": 2017,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "1ce6e474f605025b83af3a0ff5b71442ec09a337",
+   "year": 2018,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "1ce6e474f605025b83af3a0ff5b71442ec09a337",
+   "year": 2019,
+   "crop": "maize",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "1ce6e474f605025b83af3a0ff5b71442ec09a337",
+   "year": 2020,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "1ce6e474f605025b83af3a0ff5b71442ec09a337",
+   "year": 2021,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 2,
+   "match": false
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "1ce6e474f605025b83af3a0ff5b71442ec09a337",
+   "year": 2022,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "1ce6e474f605025b83af3a0ff5b71442ec09a337",
+   "year": 2023,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "1ce6e474f605025b83af3a0ff5b71442ec09a337",
+   "year": 2024,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "240fa53927d596d52790d19668e14589534072f2",
+   "year": 2017,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "240fa53927d596d52790d19668e14589534072f2",
+   "year": 2018,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "240fa53927d596d52790d19668e14589534072f2",
+   "year": 2019,
+   "crop": "maize",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "240fa53927d596d52790d19668e14589534072f2",
+   "year": 2020,
+   "crop": "maize",
+   "expected": 1,
+   "detected": 0,
+   "match": false
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "240fa53927d596d52790d19668e14589534072f2",
+   "year": 2021,
+   "crop": "maize",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "240fa53927d596d52790d19668e14589534072f2",
+   "year": 2022,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "240fa53927d596d52790d19668e14589534072f2",
+   "year": 2023,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "240fa53927d596d52790d19668e14589534072f2",
+   "year": 2024,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "474345acff3ccb0ac2fe4fcf94cebf1019903923",
+   "year": 2017,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "474345acff3ccb0ac2fe4fcf94cebf1019903923",
+   "year": 2018,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "474345acff3ccb0ac2fe4fcf94cebf1019903923",
+   "year": 2019,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 1,
+   "match": false
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "474345acff3ccb0ac2fe4fcf94cebf1019903923",
+   "year": 2020,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "474345acff3ccb0ac2fe4fcf94cebf1019903923",
+   "year": 2021,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "474345acff3ccb0ac2fe4fcf94cebf1019903923",
+   "year": 2022,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 0,
+   "match": false
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "474345acff3ccb0ac2fe4fcf94cebf1019903923",
+   "year": 2023,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 2,
+   "match": false
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "474345acff3ccb0ac2fe4fcf94cebf1019903923",
+   "year": 2024,
+   "crop": "maize",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "52a7fe052fd657d44c274f13da235a449d71e56d",
+   "year": 2017,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 0,
+   "match": false
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "52a7fe052fd657d44c274f13da235a449d71e56d",
+   "year": 2018,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "52a7fe052fd657d44c274f13da235a449d71e56d",
+   "year": 2019,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "52a7fe052fd657d44c274f13da235a449d71e56d",
+   "year": 2020,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "52a7fe052fd657d44c274f13da235a449d71e56d",
+   "year": 2021,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "52a7fe052fd657d44c274f13da235a449d71e56d",
+   "year": 2022,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 0,
+   "match": false
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "52a7fe052fd657d44c274f13da235a449d71e56d",
+   "year": 2023,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 1,
+   "match": false
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "52a7fe052fd657d44c274f13da235a449d71e56d",
+   "year": 2024,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 0,
+   "match": false
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "9a5bd695c8670424a7a65c29e9aae5b25921dd1a",
+   "year": 2017,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "9a5bd695c8670424a7a65c29e9aae5b25921dd1a",
+   "year": 2018,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "9a5bd695c8670424a7a65c29e9aae5b25921dd1a",
+   "year": 2019,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "9a5bd695c8670424a7a65c29e9aae5b25921dd1a",
+   "year": 2020,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "9a5bd695c8670424a7a65c29e9aae5b25921dd1a",
+   "year": 2021,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "9a5bd695c8670424a7a65c29e9aae5b25921dd1a",
+   "year": 2022,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "9a5bd695c8670424a7a65c29e9aae5b25921dd1a",
+   "year": 2023,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "9a5bd695c8670424a7a65c29e9aae5b25921dd1a",
+   "year": 2024,
+   "crop": "maize",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "b19fc2ff1df981dedaec3416e184fb597f5726de",
+   "year": 2017,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "b19fc2ff1df981dedaec3416e184fb597f5726de",
+   "year": 2018,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 2,
+   "match": false
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "b19fc2ff1df981dedaec3416e184fb597f5726de",
+   "year": 2019,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "b19fc2ff1df981dedaec3416e184fb597f5726de",
+   "year": 2020,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "b19fc2ff1df981dedaec3416e184fb597f5726de",
+   "year": 2021,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "b19fc2ff1df981dedaec3416e184fb597f5726de",
+   "year": 2022,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 0,
+   "match": false
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "b19fc2ff1df981dedaec3416e184fb597f5726de",
+   "year": 2023,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "b19fc2ff1df981dedaec3416e184fb597f5726de",
+   "year": 2024,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "c27812de2f00e10444012353b748fbe2b55c2a66",
+   "year": 2017,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "c27812de2f00e10444012353b748fbe2b55c2a66",
+   "year": 2018,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "c27812de2f00e10444012353b748fbe2b55c2a66",
+   "year": 2019,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "c27812de2f00e10444012353b748fbe2b55c2a66",
+   "year": 2020,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 0,
+   "match": false
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "c27812de2f00e10444012353b748fbe2b55c2a66",
+   "year": 2021,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "c27812de2f00e10444012353b748fbe2b55c2a66",
+   "year": 2022,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "c27812de2f00e10444012353b748fbe2b55c2a66",
+   "year": 2023,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 1,
+   "match": false
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "c27812de2f00e10444012353b748fbe2b55c2a66",
+   "year": 2024,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 0,
+   "match": false
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "e21cf42fdb444b7b4414fcce6fb40d0844c3707a",
+   "year": 2017,
+   "crop": "maize",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "e21cf42fdb444b7b4414fcce6fb40d0844c3707a",
+   "year": 2018,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "e21cf42fdb444b7b4414fcce6fb40d0844c3707a",
+   "year": 2019,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "e21cf42fdb444b7b4414fcce6fb40d0844c3707a",
+   "year": 2020,
+   "crop": "sorghum",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "e21cf42fdb444b7b4414fcce6fb40d0844c3707a",
+   "year": 2021,
+   "crop": "fallow",
+   "expected": 0,
+   "detected": 0,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "e21cf42fdb444b7b4414fcce6fb40d0844c3707a",
+   "year": 2022,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 3,
+   "match": false
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "e21cf42fdb444b7b4414fcce6fb40d0844c3707a",
+   "year": 2023,
+   "crop": "maize",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  },
+  {
+   "stratum": "fallow",
+   "field_id": "e21cf42fdb444b7b4414fcce6fb40d0844c3707a",
+   "year": 2024,
+   "crop": "winter_wheat",
+   "expected": 1,
+   "detected": 1,
+   "match": true
+  }
+ ]
+}
