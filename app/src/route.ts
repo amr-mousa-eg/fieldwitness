@@ -4,8 +4,8 @@ export type FieldTab = "story" | "options" | "calendar" | "advisor";
 export const TABS: FieldTab[] = ["story", "options", "calendar", "advisor"];
 
 /** Region-level pages. Field ids are 40-hex hashes, so these names never collide with one. */
-export type RegionPage = "map" | "scoreboard";
-export const PAGES: RegionPage[] = ["map", "scoreboard"];
+export type RegionPage = "map" | "scoreboard" | "methods";
+export const PAGES: RegionPage[] = ["map", "scoreboard", "methods"];
 
 /** App location in the URL hash: #/<region_id>[/<page> | /<field_id>[/<tab>]]. */
 export interface Route {

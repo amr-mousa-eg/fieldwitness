@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { DemoBanner } from "./DemoBanner";
 import { FieldPage } from "./FieldPage";
 import { MapPage } from "./MapPage";
+import { MethodsPage } from "./MethodsPage";
 import { cacheRegionForOffline, loadIndex, loadRegions } from "./data";
 import { PAGES, pageHref, useRoute } from "./route";
 import { Scoreboard } from "./Scoreboard";
@@ -74,6 +75,10 @@ export function App() {
       ) : index && route.page === "scoreboard" ? (
         <main className="app-field">
           <Scoreboard index={index} />
+        </main>
+      ) : route.page === "methods" ? (
+        <main className="app-field">
+          <MethodsPage />
         </main>
       ) : index ? (
         <MapPage index={index} />

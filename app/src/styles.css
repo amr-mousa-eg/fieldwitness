@@ -989,3 +989,35 @@ table.mini {
   font-size: 0.85rem;
   margin-top: 0.2rem;
 }
+
+/* ---------------------------------------------------------------- T9.6 Methods & data */
+.methods {
+  display: grid;
+  gap: 0.75rem;
+  max-width: 62rem;
+}
+.methods h2 {
+  margin: 0.25rem 0 0;
+  font-family: var(--display);
+  font-size: 1.5rem;
+}
+.methods h3 {
+  font-family: var(--display);
+  font-size: 1.15rem;
+  margin: 1rem 0 0.25rem;
+}
+.methods li {
+  margin: 0.25rem 0;
+}
+.datasets td {
+  white-space: normal;
+}
+.glossary div {
+  margin: 0 0 0.6rem;
+}
+.glossary dt {
+  font-weight: 700;
+}
+.glossary dd {
+  margin: 0.1rem 0 0;
+}
