@@ -6,7 +6,9 @@ import { loadCalendar, loadLayers } from "./data";
 import { formatTagged } from "./format";
 import { cropName, optionName, t } from "./strings";
 import { TagBadge, TaggedValue } from "./tags";
-import type { FieldCalendar, FieldPack, RegionLayers, RegionalLayer, Tag } from "./types";
+import { Explain } from "./Explain";
+import type { ExplainerId } from "./explainers";
+import type { FieldCalendar, FieldPack, Hazard, RegionLayers, RegionalLayer, Tag } from "./types";
 
 const MONTH_NAMES = MONTHS.map((m) => new Date(Date.UTC(2001, m - 1, 1)).toLocaleDateString("en-GB", { month: "short", timeZone: "UTC" }));
 
@@ -33,10 +35,13 @@ function ShareCell({ share, kind }: { share: number | null; kind: "bare" | "risk
   return <td className={`cal-cell ${kind}-${lvl}`}>{Math.round(share! * 100)}%</td>;
 }
 
-function RowHead({ label, tag, source }: { label: string; tag: Tag; source: string }) {
+const HAZARD_EXPLAINER: Partial<Record<Hazard, ExplainerId>> = { frost: "frost", water_stress: "water_balance" };
+
+function RowHead({ label, tag, source, explain }: { label: string; tag: Tag; source: string; explain?: ExplainerId }) {
   return (
     <th scope="row">
       {label} <TagBadge tag={tag} source={source} />
+      {explain && <Explain id={explain} />}
     </th>
   );
 }
@@ -105,7 +110,7 @@ function VulnerabilityCalendar({ cal, sequence }: { cal: FieldCalendar; sequence
                   if (!s) return null;
                   return (
                     <tr key={hz}>
-                      <RowHead label={t(`hazard.${hz}`)} tag={s.tag} source={s.source} />
+                      <RowHead label={t(`hazard.${hz}`)} tag={s.tag} source={s.source} explain={HAZARD_EXPLAINER[hz]} />
                       {MONTHS.map((m) => (
                         <ShareCell key={m} share={monthValue(s.x, s.values, m)} kind="risk" />
                       ))}
@@ -162,7 +167,10 @@ export function ContextStrip({ layers }: { layers: RegionLayers }) {
           const last = m.values[lastI];
           return (
             <li key={l.layer_id} className="ctx-item">
-              <h4>{t(`layer.${l.layer_id}`)}</h4>
+              <h4>
+                {t(`layer.${l.layer_id}`)}
+                {l.layer_id === "smap_anomaly" && <Explain id="soil_moisture_anomaly" />}
+              </h4>
               <Sparkline layer={l} />
               <p>
                 {t("ctx.latest", { year: years[lastI] ?? "" })}{" "}

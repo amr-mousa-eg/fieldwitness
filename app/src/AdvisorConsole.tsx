@@ -11,6 +11,7 @@ import {
   YAxis,
 } from "recharts";
 import { CropChips } from "./CropChips";
+import { Explain, MetricLabel } from "./Explain";
 import {
   type BacktestRow,
   WITNESSES,
@@ -104,6 +105,7 @@ function OptionWitnesses({ option }: { option: Option }) {
               {WITNESSES.map((w) => (
                 <th key={w} scope="col">
                   {t(`witness.${w}`)}
+                  {w === "physics" && <Explain id="water_balance" />}
                 </th>
               ))}
             </tr>
@@ -111,7 +113,9 @@ function OptionWitnesses({ option }: { option: Option }) {
           <tbody>
             {rows.map((r) => (
               <tr key={r.metric}>
-                <th scope="row">{metricName(r.metric)}</th>
+                <th scope="row">
+                  <MetricLabel metric={r.metric} />
+                </th>
                 {WITNESSES.map((w) => (
                   <WitnessCell key={w} w={r.cells[w]} />
                 ))}
@@ -270,7 +274,10 @@ export function AdvisorConsole({ pack }: { pack: FieldPack }) {
         </div>
       </section>
       <section aria-labelledby="witness-h">
-        <h3 id="witness-h">{t("advisor.witnesses")}</h3>
+        <h3 id="witness-h">
+          {t("advisor.witnesses")}
+          <Explain id="evidence_grade" />
+        </h3>
         <p className="muted">{t("advisor.witnesses.note")}</p>
         {options.map((o) => (
           <OptionWitnesses key={o.option_id} option={o} />

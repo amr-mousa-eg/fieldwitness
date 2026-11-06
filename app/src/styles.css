@@ -880,3 +880,55 @@ table.mini {
 .ctx-source {
   font-size: 0.75rem;
 }
+
+/* ---------------------------------------------------------------- T9.10 Explainers */
+.explain {
+  position: relative;
+  display: inline-block;
+  margin-left: 0.3rem;
+  vertical-align: baseline;
+  font-family: var(--body);
+  font-weight: 400;
+}
+.explain-btn {
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  border: 1px solid var(--muted);
+  background: var(--panel);
+  color: var(--ink);
+  cursor: pointer;
+  padding: 0;
+}
+.explain-btn[aria-expanded="true"] {
+  background: var(--ink);
+  color: var(--page);
+}
+.explain-pop {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 0.3rem);
+  left: 0;
+  width: min(22rem, calc(100vw - 2rem));
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.75rem;
+  background: var(--panel);
+  color: var(--ink);
+  border: 1px solid var(--ink);
+  box-shadow: 0 4px 14px rgb(0 0 0 / 0.18);
+  font-size: 0.9rem;
+  text-align: left;
+  white-space: normal;
+}
+.explain-title {
+  font-weight: 700;
+}
+.explain-source {
+  font-size: 0.8rem;
+  color: var(--muted);
+}

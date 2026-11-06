@@ -1,5 +1,6 @@
 import { Fragment, useEffect, useMemo, useState } from "react";
 import { CropChips } from "./CropChips";
+import { Explain, MetricLabel } from "./Explain";
 import { loadScenarios } from "./data";
 import { formatDelta, formatTagged } from "./format";
 import {
@@ -130,7 +131,9 @@ function Detail({ row, current }: { row: Ranked; current: Ranked | undefined }) 
             const delta = current && row !== current ? formatDelta(v, current.metrics[k] ?? v) : null;
             return (
               <div key={k}>
-                <dt>{metricName(k)}</dt>
+                <dt>
+                  <MetricLabel metric={k} />
+                </dt>
                 <dd>
                   <TaggedValue v={v} />
                   {delta && <span className="delta">{t("card.vsCurrent", { delta })}</span>}
@@ -359,10 +362,13 @@ export function FieldCard({ pack, regionId }: { pack: FieldPack; regionId: strin
                 <th scope="col">{t("card.option")}</th>
                 {TABLE_METRICS.map((m) => (
                   <th key={m} scope="col">
-                    {metricName(m)}
+                    <MetricLabel metric={m} />
                   </th>
                 ))}
-                <th scope="col">{t("card.grade")}</th>
+                <th scope="col">
+                  {t("card.grade")}
+                  <Explain id="evidence_grade" />
+                </th>
                 <th scope="col">
                   <span className="sr-only">{t("card.details.show")}</span>
                 </th>

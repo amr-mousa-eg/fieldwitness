@@ -1,11 +1,12 @@
 // Dev helper (needs a local Chrome; set CHROME=<path> if elsewhere). Minimal CDP driver: open URL, wait for a selector, print console
-// errors, save a screenshot. Usage: node shot.mjs <url> <selector> <out.png> [width] [height] [dark|light]
+// errors, save a screenshot. Usage: node shot.mjs <url> <selector> <out.png> [width] [height] [dark|light] [js]
+// [js] is an optional expression run in the page once the selector is ready (e.g. a click).
 import { spawn } from "node:child_process";
 import { mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-const [url, selector, out, w = "1280", h = "800", scheme = "light"] = process.argv.slice(2);
+const [url, selector, out, w = "1280", h = "800", scheme = "light", action] = process.argv.slice(2);
 const CHROME = process.env.CHROME ?? "C:/Program Files/Google/Chrome/Application/chrome.exe";
 const port = 9333;
 const chrome = spawn(CHROME, [
@@ -62,6 +63,7 @@ for (let i = 0; i < 100 && !found; i++) {
   const r = await send("Runtime.evaluate", { expression: `!!document.querySelector(${JSON.stringify(selector)})` });
   found = r.result?.result?.value === true;
 }
+if (found && action) await send("Runtime.evaluate", { expression: action });
 await sleep(300);
 const shot = await send("Page.captureScreenshot", { format: "png" });
 writeFileSync(out, Buffer.from(shot.result.data, "base64"));

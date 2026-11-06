@@ -1,3 +1,4 @@
+import { Explain } from "./Explain";
 import { formatTagged } from "./format";
 import { t } from "./strings";
 import type { Tag, Tagged } from "./types";
@@ -33,7 +34,10 @@ export function TaggedValue({ v, digits, text }: { v: Tagged; digits?: number; t
 export function TagLegend() {
   return (
     <section className="tag-legend" aria-labelledby="tag-legend-h">
-      <h3 id="tag-legend-h">{t("tag.legend")}</h3>
+      <h3 id="tag-legend-h">
+        {t("tag.legend")}
+        <Explain id="source_tags" />
+      </h3>
       <ul>
         {(["O", "D", "E", "A"] as const).map((tag) => (
           <li key={tag}>

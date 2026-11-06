@@ -12,6 +12,7 @@ import {
   YAxis,
 } from "recharts";
 import { CropChips } from "./CropChips";
+import { Explain } from "./Explain";
 import { loadSeries } from "./data";
 import { formatDate, harvestDayToDate } from "./format";
 import { cropName, t } from "./strings";
@@ -127,7 +128,10 @@ function GreennessChart({ pack, series }: { pack: FieldPack; series: FieldSeries
 
   return (
     <section aria-labelledby="chart-h">
-      <h3 id="chart-h">{t("story.chart")}</h3>
+      <h3 id="chart-h">
+        {t("story.chart")}
+        <Explain id="ndvi" />
+      </h3>
       <p className="muted">{t("story.chart.note")}</p>
       <div className="chart-controls">
         <label>
