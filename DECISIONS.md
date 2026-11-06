@@ -412,6 +412,10 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 
 ## Autopilot handoff
 
+**2026-11-07, autopilot run (T6.2 blocked).** Done: nothing coded. Read `physics/rotation.py`, `kc.py`, `forward.py`, `waterbal.py`, `crops.yaml`. T6.2 is BLOCKED (see `BLOCKED.md`): the engine cannot simulate winter wheat (window spans New Year) and cover crop has no window; both are in most Kansas candidates. Also needed, not decision-bound: per-field posterior draws are not stored (T4.5 saved scores only) and `p` is one scalar in `rotation.simulate`. In progress: nothing. Background: none. Next: after the user picks option A/B/C in `BLOCKED.md`, do T6.2 (recommended A, multi-year timeline). Risk: schedule (Gate 6 due Sun 8 Nov); T2.2 FAILED; 15 fields without credibility.
+
+(Previous entry:)
+
 **2026-11-07, autopilot run (T6.1).** Done: T6.1 ticked. `rotate/candidates.py` (pool = rotation_options minus bans; calendar fit from config windows + FAO-56 stage sums with 7-day slack; max 2 consecutive same family, fallow breaks a run; deterministic order) + `tests/test_candidates.py` (hypothesis ban property). Kansas: pool maize, sorghum, winter_wheat, fallow, cover_crop → 61 candidates. 155 tests pass, ruff clean. UNVERIFIED (A): family run limit 2, slack 7 d, config windows instead of observed SOS/EOS (T2.2 failed). In progress: nothing. Background: none. Next: T6.2 (evaluate candidates in one batched call via `physics/rotation.py` over posterior draws x weather years; <60 s/field). Still open for the user: 15 fields without credibility (T4.5), WIMAS disclaimer (T1.7/T4.6). Risk: schedule (Gate 6 due Sun 8 Nov); T2.2 FAILED.
 
 (Previous entry:)
