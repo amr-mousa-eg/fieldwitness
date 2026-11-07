@@ -430,6 +430,10 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 
 ## Autopilot handoff
 
+**2026-11-07, autopilot run (blocked at Phase 9).** Done: nothing coded. Next tasks T8.2/T9.x need the `app` worktree (`D:\NASA Project-app`), which this run cannot read; T5.2 still needs scikit-learn/doubleml OK. `BLOCKED.md` written with options (recommended: grant access to the app worktree; T8.2 via a small Python generator, no new dependency). In progress: nothing. Background: none. Risk: schedule; `scripts/_probe.py`, `scripts/_shape.py` still untracked (delete by hand).
+
+(Previous entry:)
+
 **2026-11-07, autopilot run (T8.1 close + Gate 6).** Done: `packs/validate.py` + `cli validate-packs <dir>` + `tests/test_packs_validate.py` + CI step (runs on `packs/demo` if present). Kansas packs: 0 problems (all file types incl. `hindcast.json`, size < 300 KB). T8.1 ticked (hindcast/ledger via `scripts/t72_export.py` after `build-packs`; heat-wave layer dropped, no honest grid). `docs/gates/gate-6.md` written: gate test PASS with caveats (T2.2 failed, no A grades, weak hindcast skill, fragile rankings). 231 tests pass, ruff and gitleaks clean. `scripts/_probe.py` and `scripts/_shape.py` still need deleting by hand. In progress: nothing. Background: none. **Next:** Phase 9 app (lives in the `app` worktree; check PLAN §6 for the first unticked task), or T5.2 once the user allows scikit-learn/doubleml. Risk: no `packs/demo` committed yet, so the CI validator step is untested on GitHub; WIMAS open.
 
 (Previous entry:)
