@@ -472,7 +472,7 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 
 ## Autopilot handoff
 
-**2026-11-07, autopilot run (no progress, 25th in a row).** Tree clean, nothing coded, no background work. T5.4 still BLOCKED (rule 8, arXiv:2506.02384 unreadable). Remaining tasks (T6.9 UI, T7.1 barley, T7.4) need a large interactive session. **Next:** user grants WebFetch / pastes method section, or runs T6.9 interactively. Please pause the loop.
+**2026-11-07, autopilot run (no progress, 26th in a row).** Tree clean, nothing coded, no background work. T5.4 still BLOCKED (rule 8, arXiv:2506.02384 unreadable). Remaining tasks (T6.9 UI, T7.1 barley, T7.4) need a large interactive session. **Next:** user grants WebFetch / pastes method section, or runs T6.9 interactively. Please pause the loop.
 
 (Previous entry: 21st-24th runs, same state.)
 (Previous entry: 20th run.) Same state: T5.4 BLOCKED (rule 8, arXiv:2506.02384 unreadable), tree clean, nothing coded, no background work. **Next:** user grants WebFetch / pastes method section, or runs T6.9 interactively. Please pause the loop.
