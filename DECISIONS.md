@@ -420,7 +420,23 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 - **WIMAS (T1.7 / T4.6).** The user reviewed the disclaimer (liability only, no use limits) and approves its use. Acceptance needs the user's email, so the user accepts and downloads the data manually. At T4.6: do **not** write `BLOCKED.md`. Write the exact WIMAS query and download steps to `docs/wimas_request.md`, mark T4.6 "waiting for user data", and continue with the next task. T4.6 resumes when `data/wimas/` contains the file.
 - `BLOCKED.md` deleted.
 
+## 2026-11-07 — RYI metric for ranking: option A (BLOCKED.md for T6.4 resolved, user)
+
+- **Option A.** The ranking uses RYI per rotation year = (sum of RYI over all seasons) / (number of seasons). Fallow and cover-crop seasons count as RYI = 0. Water carry-over from fallow shows up through the next crop's RYI (multi-year engine). The app label is **"production per rotation year (relative)"**.
+- **New hard constraints (team choice, tag A, UNVERIFIED):** (1) every sequence has at least one harvested crop; (2) at most one consecutive non-crop season (fallow or cover crop). Update the T6.1 constraints in `rotate/candidates.py` and their property test.
+- **Then:** re-run `scripts/t63_rank.py` and report the new top-1 distribution per profile (balanced, yield_first, water_saver) in the T6.3 log and the handoff. Then continue with T6.4.
+- **Not open any more (already decided above; do not list them as open again):** WIMAS approved, manual download by the user via `docs/wimas_request.md` at T4.6, no blocking; the 15 null-credibility fields are re-run after the multi-year engine; T2.2 stays a recorded negative result.
+- `BLOCKED.md` deleted.
+
 ## Autopilot handoff
+
+**2026-11-07, interactive session (user decision on the RYI metric).** Done: decision recorded (entry above); `BLOCKED.md` deleted. Nothing coded. In progress: nothing. Background: none. **Next:** (1) T6.1 update: the two new hard constraints + property test; (2) RYI per rotation year (fallow/cover = 0) in `rotate/rank.py`; (3) re-run `scripts/t63_rank.py`, report top-1 per profile; (4) T6.4. Risk: Gate 6 may slip (accepted by the user).
+
+(Previous entry:)
+
+**2026-11-07, autopilot run (T6.4 check).** Done: nothing coded. Git was clean. T6.4 (flip analysis) and T6.5 depend on rank 1, which is a metric artefact (see T6.3 entry), so `BLOCKED.md` asks which RYI aggregate to use (recommended: crop-year-sum, fallow = 0). In progress: nothing. Background: none. Next: after the answer, re-run `scripts/t63_rank.py`, then T6.4; alternatively T5.1 as work-ahead. Risk: Gate 6 slipping; T2.2 FAILED; WIMAS open.
+
+(Previous entry:)
 
 **2026-11-07, autopilot run (T6.3).** Done: T6.3 ticked. `rotate/rank.py` (6 oriented metrics, Pareto flag, weighted min-max score per preset, regret matrix over weather years, tie-break by index), `config/ranking.yaml` (4 presets, all weights tag A UNVERIFIED), `scripts/t63_rank.py` → `results/rotate/ranking.json` + `ranking_summary.json` (200 fields, reproducible = true, mean Pareto share 0.64), `tests/test_rank.py`. `evaluate` now also stores `ryi_by_year`/`water_by_year`; T6.2 re-run (max 21 s/field, pass). 175 tests pass, ruff clean. **Caveat (negative, not tuned):** `ryi` is the mean over crop slots only, so a rotation with one crop and fallow/cover years is not penalised for lost crop years. Result: "fallow-sorghum-cover_crop" is top-1 in 181/200 fields (balanced) and 191/200 (yield_first); water_saver picks all-fallow in 182. These rankings are a metric artefact, not agronomic advice. Decision for the user: add a crop-year-sum RYI (fallow = 0) or a crop-count term. Not changed unasked (weights/metric = team choice). In progress: nothing. Background: none. Next: T6.4 (flip analysis), but first decide the RYI metric above. Risk: Gate 6 may slip; T2.2 FAILED; WIMAS open.
 
