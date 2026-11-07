@@ -472,7 +472,9 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 
 ## Autopilot handoff
 
-**2026-11-08, autopilot run (no progress, 100th in a row).** WebFetch arxiv.org re-tried, still refused. Same state as the 99th.
+**2026-11-08, autopilot run (no progress, 101st in a row).** Tree clean, nothing coded, no background work. T5.4 still BLOCKED (rule 8, arXiv:2506.02384 unreadable; WebFetch not granted). **Next:** user grants WebFetch / pastes method section, or runs T6.9 interactively. Please pause the loop.
+
+(Previous entry: 100th run.) WebFetch arxiv.org re-tried, still refused. Same state as the 99th.
 
 (Previous entry: 99th run.) WebFetch arxiv.org re-tried, still refused. Same state; tree clean, nothing coded, no background work. T5.4 BLOCKED (rule 8, arXiv:2506.02384 unreadable). **Next:** user grants WebFetch / pastes method section, or runs T6.9 interactively. Please pause the loop.
 
