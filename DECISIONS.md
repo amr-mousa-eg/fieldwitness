@@ -472,6 +472,10 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 
 ## Autopilot handoff
 
+**2026-11-07, autopilot run (T5.3).** Done: `neighbours/diagnostics.py` + `scripts/t53_diagnostics.py` + `tests/test_neighbours_diagnostics.py` (241 tests pass, ruff clean); `dml.py` refactored (`fit_plr`, effects.csv unchanged). **Negative result:** 0 of 92 contrasts pass all four checks (placebo 6 fail/36 untested, negative control 5 fail/64 untested, overlap 32 fail, balance 92 fail because the crop two years back is structurally tied to the previous crop). No neighbour effect is shown as evidence; thresholds were fixed beforehand (A, UNVERIFIED), not tuned. See `results/neighbours/diagnostics.md`. T5.3 ticked. So the neighbour witness stays off: `scripts/t65_grade.py` re-run is pointless until a better design exists; T7.3 B3 (neighbour-only baseline) is also not meaningful. In progress: nothing. Background: none. **Next:** T5.4 (literature check, needs opening arXiv:2506.02384), then T6.9 UI part / Phase 7 (T7.1 barley, T7.3 tier table), Gate 5 file. Risk: main JS chunk 1.77 MB.
+
+(Previous entry:)
+
 **2026-11-07, autopilot run (T5.2).** Done: `neighbours/dml.py` + `scripts/t52_dml.py` + `tests/test_neighbours_dml.py` -> `results/neighbours/effects.csv` (DoubleMLPLR, RF nuisance learners, 5 folds = GroupKFold over 10 km blocks, rule 7). Contrasts: previous-crop pairs with >= 30 rows per arm per outcome crop; outcomes canopy integral, peak, cover days, canopy drop; strata all/wet/dry (>= 20 per arm). 144 rows, 92 fitted, 20 CIs exclude 0. **Caution:** 92 tests with no multiple-testing correction, so about 5 false positives are expected by chance; learners untuned (A, UNVERIFIED); pilot fields only; soybean/sunflower contrasts absent (too few rows). Effects must NOT be shown as evidence until T5.3 diagnostics pass. 238 tests pass. In progress: nothing. Background: none. **Next:** T5.3 diagnostics (placebo, negative control, overlap, balance), then re-run `scripts/t65_grade.py` with the neighbour witness, then T6.9, Phase 7 (T7.1, T7.3 B3, T7.4). Risk: main JS chunk 1.77 MB.
 
 (Previous entry:)

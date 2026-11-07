@@ -55,6 +55,19 @@ def contrast_list(df: pd.DataFrame) -> list[tuple[str, str, str]]:
     return out
 
 
+def fit_plr(data: pd.DataFrame, x_cols, groups: np.ndarray) -> DoubleMLPLR:
+    """Fit DoubleMLPLR on a frame with columns x_cols, `y`, `d`; folds = whole spatial blocks."""
+    n_folds = min(5, len(set(groups)))
+    folds = list(GroupKFold(n_splits=n_folds).split(data, groups=groups))
+    obj = DoubleMLData(data, y_col="y", d_cols="d", x_cols=list(x_cols))
+    ml_l = RandomForestRegressor(n_estimators=200, min_samples_leaf=5, random_state=SEED, n_jobs=1)
+    ml_m = RandomForestClassifier(n_estimators=200, min_samples_leaf=5, random_state=SEED, n_jobs=1)
+    plr = DoubleMLPLR(obj, ml_l, ml_m, n_folds=n_folds, draw_sample_splitting=False)
+    plr.set_sample_splitting([folds])
+    plr.fit()
+    return plr
+
+
 def fit_contrast(
     df: pd.DataFrame, crop: str, treated: str, ref: str, outcome: str, stratum: str
 ) -> dict:
@@ -91,15 +104,7 @@ def fit_contrast(
         [x, pd.Series(s[outcome].to_numpy(), name="y"), d.reset_index(drop=True).rename("d")],
         axis=1,
     )
-    groups = s["block"].to_numpy()
-    n_folds = min(5, row["n_blocks"])
-    folds = list(GroupKFold(n_splits=n_folds).split(x, groups=groups))
-    obj = DoubleMLData(data, y_col="y", d_cols="d", x_cols=list(x.columns))
-    ml_l = RandomForestRegressor(n_estimators=200, min_samples_leaf=5, random_state=SEED, n_jobs=1)
-    ml_m = RandomForestClassifier(n_estimators=200, min_samples_leaf=5, random_state=SEED, n_jobs=1)
-    plr = DoubleMLPLR(obj, ml_l, ml_m, n_folds=n_folds, draw_sample_splitting=False)
-    plr.set_sample_splitting([folds])
-    plr.fit()
+    plr = fit_plr(data, x.columns, s["block"].to_numpy())
     ci = plr.confint(level=0.95)
     row.update(
         effect=float(plr.coef[0]),
