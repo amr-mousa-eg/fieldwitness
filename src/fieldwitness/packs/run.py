@@ -16,18 +16,22 @@ import pandas as pd
 
 from fieldwitness.data import labels as labels_mod
 from fieldwitness.data import power
+from fieldwitness.data.context import grace_file
 from fieldwitness.packs import build as B
+from fieldwitness.packs import extras as X
 from fieldwitness.physics.forcing import forcing
 from fieldwitness.rotate.current import all_current
 from fieldwitness.rotate.evaluate import evaluate
 from fieldwitness.rotate.priority import load_crops
-from fieldwitness.schemas import RegionIndex, check_tagged
+from fieldwitness.schemas import RegionIndex, Tagged, check_tagged
 from fieldwitness.story.seasons import EPOCH, detect_seasons, load_story
 from fieldwitness.story.smooth import smooth_series
 
 MAX_PACK_BYTES = 300_000
 Y0, Y1 = 2001, 2024
 R = Path("results")
+# lon, lat of the SMAP AppEEARS point per region (data/context/smap_task.json, T1.8)
+SMAP_POINTS = {"ks_t14slh": (-100.66036757568659, 38.34248485880243)}
 
 
 def _j(p: str) -> dict:
@@ -90,6 +94,9 @@ def build_region(region_id: str, out_root: Path = Path("packs"), limit: int | No
     cfg = load_story()
     problems: list[str] = []
     summaries, sizes = [], []
+    vcfg = X.load_vuln_cfg()
+    bare = _j(f"story/{region_id.split('_')[0]}_bare_calendar.json")
+    colour: dict[str, dict] = {"erosion_exposure": {}, "water_stress_share": {}, "frost_share": {}}
     rows = pilot if limit is None else pilot.head(limit)
     for _, r in rows.iterrows():
         fid = str(r["field_id"])
@@ -128,6 +135,48 @@ def build_region(region_id: str, out_root: Path = Path("packs"), limit: int | No
             B.field_scenarios(fid, sc[fid], ev[fid]["candidates"], ev[fid]["tag"], as_of),
             problems,
         )
+        # calendar (T2.5 observed, simulated bare per option, T3.6 vulnerability)
+        canopies = {}
+        all_seqs = [tuple(k) for k in ev[fid]["candidates"]] + [tuple(cur.sequence)]
+        for key in dict.fromkeys(all_seqs):
+            try:
+                canopies[B.oid(key)] = X.canopy_for(key, region_id)
+            except KeyError:  # a crop without a slot (e.g. soybean in Current)
+                continue
+        wx = power.read(float(r["lon"]), float(r["lat"]), f"{Y0}-01-01", f"{Y1}-12-31")
+        _, elev = power.cached(float(r["lon"]), float(r["lat"]))
+        f_ = forcing(wx, float(r["lat"]), float(elev or 0.0))
+        vcrops = list(cur.sequence) + [c for key in ev[fid]["candidates"] for c in key]
+        vuln = X.vulnerability(
+            wx,
+            f_["eto"],
+            vcrops,
+            region_id,
+            vcfg,
+            float(np.median(pd_[fid]["taw_mm"])),
+            float(np.median(pd_[fid]["kc_scale"])),
+        )
+        cal = X.field_calendar(
+            fid,
+            bare[fid],
+            (int(cfg["bare_calendar"]["first_year"]), as_of.year),
+            X.bare_by_option(canopies),
+            vuln,
+            as_of,
+        )
+        _write(out / f"{fid}.calendar.json", cal, problems)
+        eros = opts[0].metrics.get("erosion_exposure")
+        if eros is not None and eros.value is not None:
+            colour["erosion_exposure"][fid] = eros
+        for m, h in (("frost_share", "frost"), ("water_stress_share", "water_stress")):
+            v = X.worst_month_share(cal.vulnerability, h)
+            if v is not None:
+                colour[m][fid] = Tagged(
+                    value=round(v, 3),
+                    unit="share of years (worst month, mean of Current crops)",
+                    tag="D",
+                    source=X.VULN_SRC,
+                )
         top = min(opts[1:], key=lambda o: o.rank)
         summaries.append(B.field_summary(fld, cur.sequence, top))
         sizes.append((out / f"{fid}.json").stat().st_size)
@@ -143,4 +192,16 @@ def build_region(region_id: str, out_root: Path = Path("packs"), limit: int | No
         data_as_of=as_of,
     )
     _write(out / "index.json", idx, problems)
+    grace = X.grace_layer(grace_file(), bb)
+    smap = pd.read_parquet("data/context/smap_monthly.parquet")
+    smap = smap[smap["region_id"] == region_id]
+    lon_c, lat_c = SMAP_POINTS[region_id]
+    lay = X.region_layers(
+        region_id,
+        [grace, X.smap_layer(smap, lon_c, lat_c)],
+        colour,
+        as_of,  # type: ignore[arg-type]
+    )
+    _write(out / "layers.json", lay, problems)
+    _write(out_root / "regions.json", X.regions_list([(region_id, region_id, 1)]), problems)
     return {"fields": len(summaries), "max_pack_bytes": max(sizes), "problems": problems}
