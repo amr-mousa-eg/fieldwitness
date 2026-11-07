@@ -460,6 +460,10 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 
 ## Autopilot handoff
 
+**2026-11-07, autopilot run (T8.2 generator).** Done: `scripts/gen_types.py` (Pydantic JSON Schema -> `app/src/types.ts`, no new dependency; `--check` mode) + `tests/test_gen_types.py`; `types.ts` regenerated (26 models; optional only when the default is null; Tag/Grade/Hazard/FieldColourMetric/HindcastMethod aliases kept; Hazard-keyed dicts became `Record<string, ...>`). 235 tests pass, ruff clean. **T8.2 NOT ticked and NOT pushed:** npm (build/tsc/test) is refused with "requires approval" in this unattended run, so the app was NOT compiled against the new types. Next: `cd app && npm run build && npm test`; fix type errors in app code (generator only if the schema is wrong), then tick T8.2 and push. In progress: nothing. Background: none. After that: sync real packs into the app and check every view, T6.9, Phase 7 (T7.1, T7.3, T7.4), Phase 5 (T5.1, T5.2). Risk: if the build fails, revert the `types.ts` change.
+
+(Previous entry:)
+
 **2026-11-07, interactive session (Gate 6 merge + rank fix).** Done: branch `app` merged into `main`; rank bug fixed, packs rebuilt and validated (0 problems), synced into `app/public/packs`; `scripts/fixture_schemas.py` removed; drafts moved to `README.md` / `AI_USE.md`; Python 234 pass, npm test 45 pass, npm build OK (see the two entries above). In progress: nothing. Background: none. **Next, in this order:** (1) **T8.2**: generate `app/src/types.ts` from `src/fieldwitness/schemas.py` (§3 + §3b), app must compile against it; (2) sync the real packs into the app (`node scripts/sync-packs.mjs ../packs` from `app/`) and check every view on them; (3) T6.9; (4) Phase 7 (T7.1, T7.3, T7.4); (5) Phase 5 (T5.1, then T5.2 with scikit-learn + doubleml, see above). The app now lives in `D:\NASA Project\app`; the `app` worktree is no longer needed. Risk: main JS chunk 1.77 MB (build warning).
 
 (Previous entry:)
