@@ -428,7 +428,17 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 - **Not open any more (already decided above; do not list them as open again):** WIMAS approved, manual download by the user via `docs/wimas_request.md` at T4.6, no blocking; the 15 null-credibility fields are re-run after the multi-year engine; T2.2 stays a recorded negative result.
 - `BLOCKED.md` deleted.
 
+## 2026-11-07 — App access deferred to the Gate 6 merge; scikit-learn + doubleml approved (BLOCKED.md for Phase 9 resolved, user)
+
+- **App worktree:** no folder access is granted to the autopilot for `D:\NASA Project-app`. The user merges branch `app` into `main` at the next pause (the planned Gate 6 merge). Until then, **T8.2 and Phase 9 integration are deferred**. The loop continues with **T6.9**, **Phase 7** (hindcast vs baselines: T7.1, T7.3, T7.4) and **Phase 5** (T5.1 onward).
+- **T5.2 dependencies:** `scikit-learn` and `doubleml` are approved by the user (rule 11). Before adding them: verify doubleml's licence and current API from its official docs and record both in `docs/api_notes.md`. Then `uv add scikit-learn doubleml`, run the tests, and log the installed versions here. T2.3 (crop classifier) may also use scikit-learn when it resumes.
+- `BLOCKED.md` deleted.
+
 ## Autopilot handoff
+
+**2026-11-07, interactive session (user answers on app access and T5.2).** Done: decisions recorded (entry above); `BLOCKED.md` deleted. Nothing coded; dependencies not added yet. In progress: nothing. Background: none. **Next:** T6.9, Phase 7 (T7.1, T7.3, T7.4) and Phase 5 (T5.1, then T5.2: verify doubleml licence + API from its docs, `uv add scikit-learn doubleml`, tests, log; afterwards re-run `scripts/t65_grade.py` with the neighbour witness). **Deferred until the user merges branch `app` (Gate 6 merge):** T8.2 and Phase 9. Do not ask for app worktree access again.
+
+(Previous entry:)
 
 **2026-11-07, interactive session (autopilot prompt change, one-time user approval).** `AUTOPILOT_PROMPT.md` changed: new §5a decision policy (reversible, in-scope decisions with a reasoned recommendation are taken, tagged A, logged here and in `docs/review_queue.md`, then work continues); a failed acceptance test is a negative result, not a stop; development runs use a fixed seeded 20-field Kansas subset, all 200 fields once per task; simulation results cached by input hash. **Early integration note:** the T8.1 pack writer already exists (`packs/ks_t14slh/`, 200 fields), so the "thin pack after T6.3" step applies to new regions only; for Kansas, rebuild and validate the packs whenever a task changes what they show (T6.9, T7.x). `BLOCKED.md` (Phase 9, app worktree access) is **still open** and was not answered in this session. `AUTOPILOT_STOP` was already absent.
 
