@@ -1,0 +1,153 @@
+{
+ "schema_version": "1",
+ "region_id": "ks_t14slh",
+ "cutoff": "2021-12-31",
+ "scored_years": [
+  2022,
+  2023,
+  2024
+ ],
+ "crop_observed_source": "label",
+ "rows": [
+  {
+   "method": "fieldwitness",
+   "mode": "forecast",
+   "metric": "sos",
+   "n": 266,
+   "scores": {
+    "crps": 19.29910385338346,
+    "covered50": 0.3308270676691729,
+    "covered90": 0.5225563909774437,
+    "mae_median": 22.49624060150376
+   }
+  },
+  {
+   "method": "fieldwitness",
+   "mode": "forecast",
+   "metric": "peak",
+   "n": 266,
+   "scores": {
+    "crps": 11.467647368421051,
+    "covered50": 0.5977443609022557,
+    "covered90": 0.8872180451127819,
+    "mae_median": 15.483082706766917
+   }
+  },
+  {
+   "method": "fieldwitness",
+   "mode": "forecast",
+   "metric": "canopy_integral",
+   "n": 266,
+   "scores": {
+    "crps": 14.87050013167865,
+    "covered50": 0.17293233082706766,
+    "covered90": 0.34962406015037595,
+    "mae_median": 17.26223975738852,
+    "spearman": 0.26415126219194374
+   }
+  },
+  {
+   "method": "fieldwitness",
+   "mode": "forecast",
+   "metric": "cover_days",
+   "n": 266,
+   "scores": {
+    "crps": 30.375241071428576,
+    "covered50": 0.04887218045112782,
+    "covered90": 0.09022556390977443,
+    "mae_median": 31.654135338345863
+   }
+  },
+  {
+   "method": "fieldwitness",
+   "mode": "forced",
+   "metric": "sos",
+   "n": 266,
+   "scores": {
+    "crps": 19.053438345864663,
+    "covered50": 0.3082706766917293,
+    "covered90": 0.5451127819548872,
+    "mae_median": 22.043233082706767
+   }
+  },
+  {
+   "method": "fieldwitness",
+   "mode": "forced",
+   "metric": "peak",
+   "n": 266,
+   "scores": {
+    "crps": 11.79387462406015,
+    "covered50": 0.48872180451127817,
+    "covered90": 0.7105263157894737,
+    "mae_median": 15.056390977443609
+   }
+  },
+  {
+   "method": "fieldwitness",
+   "mode": "forced",
+   "metric": "canopy_integral",
+   "n": 266,
+   "scores": {
+    "crps": 14.736771414065013,
+    "covered50": 0.13533834586466165,
+    "covered90": 0.2894736842105263,
+    "mae_median": 16.768842071380085,
+    "spearman": 0.3137635769140258
+   }
+  },
+  {
+   "method": "fieldwitness",
+   "mode": "forced",
+   "metric": "cover_days",
+   "n": 266,
+   "scores": {
+    "crps": 30.667387312030076,
+    "covered50": 0.03007518796992481,
+    "covered90": 0.07518796992481203,
+    "mae_median": 31.76127819548872
+   }
+  }
+ ],
+ "story_field_id": "7008ff6ba15fc8da1d2ebe4a739699117e7ae646",
+ "data_as_of": "2021-12-31",
+ "extra": {
+  "n_field_seasons": 266,
+  "fit_source": {
+   "own_crop_posterior": 203,
+   "other_crop_posterior": 47,
+   "prior": 16
+  },
+  "crop": {
+   "sorghum": 142,
+   "maize": 124
+  },
+  "spearman_by_year": {
+   "forecast_2022": {
+    "n": 87,
+    "spearman": 0.391357439673398
+   },
+   "forecast_2023": {
+    "n": 68,
+    "spearman": 0.2715959842730084
+   },
+   "forecast_2024": {
+    "n": 111,
+    "spearman": 0.14172516672516672
+   },
+   "forced_2022": {
+    "n": 87,
+    "spearman": 0.3460669242545746
+   },
+   "forced_2023": {
+    "n": 68,
+    "spearman": 0.31076077413444286
+   },
+   "forced_2024": {
+    "n": 111,
+    "spearman": 0.15379080379080376
+   }
+  },
+  "tag": "D (model) vs O (HLS) statistics; labels tag E",
+  "caveats": "conditional on the observed CSB crop; maize/sorghum only; fit years <= 2021 only; baselines B0-B3 not yet run"
+ }
+}
