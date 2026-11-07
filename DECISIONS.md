@@ -430,6 +430,10 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 
 ## Autopilot handoff
 
+**2026-11-07, autopilot run (T6.9 backend).** Done: `rotate/corrections.py` (`apply_corrections`: crop-history corrections replace the Current sequence, kept next to the label version, per-season source farmer/label, tag E; sowing date / irrigation, or a crop change without a precomputed alternative, set `needs_rerun` with the text "re-run needed: available in live mode"; `correction_key` names precomputed alternatives) + `tests/test_corrections.py` (5). 221 tests pass, ruff clean. T6.9 NOT ticked: the acceptance (visible change in the app, browser storage) needs the app UI (Phase 9; `app/` is not in main, lives in the app worktree), and no precomputed alternatives exist yet (T8.1 decides which). In progress: nothing. Background: none. **Next:** Phase 8 T8.1 (packs for Kansas, all §3b files) then Gate 6. T5.2 still needs the scikit-learn/doubleml OK (rule 11). Risk: Gate 6 may slip; T2.2 FAILED; WIMAS open.
+
+(Previous entry:)
+
 **2026-11-07, autopilot run (T6.8).** Done: T6.8 ticked. `rotate/scenarios.py` (shift T2M_MAX/T2M_MIN by +0/1/2 C, rain x 0.8/0.9/1.0/1.1; RH, wind, radiation unchanged; A, UNVERIFIED) + `tests/test_scenarios.py` (4) + `scripts/t68_scenarios.py` (resumable) + `t68_summary.py` -> `results/rotate/scenarios.json`, `scenarios_summary.json`: 200 fields x 12 scenarios x 36 options x 6 weather-sensitive metrics, 9.3 MB total, 46.7 KB/field (PLAN total limit 200 MB: ok). Uses 10 posterior worlds per field (cost; ranking uses 20), so the baseline scenario can differ slightly from `ranking.json`. Rank 1 (balanced) differs from the baseline scenario in 21-93 % of fields (e.g. rain -20 %: 90 %; +2 C: 55 %): recommendations are weather-fragile, reported as is, not tuned. UI must say "sensitivity test, not climate projection". Previous commit already pushed. In progress: nothing. Background: none. **Next:** T6.9, then Phase 8 (T8.1 packs split scenarios per field) and Gate 6. T5.2 still needs the scikit-learn/doubleml OK (rule 11). Risk: Gate 6 may slip; T2.2 FAILED; WIMAS open.
 
 (Previous entry:)
