@@ -430,6 +430,10 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 
 ## Autopilot handoff
 
+**2026-11-07, autopilot run (T6.2/T6.3 re-run after option A).** Done: re-ran `t62_run.py` (200 fields × 36 candidates, max 18.4 s/field, median 5.0 s, pass) and `t63_rank.py` (reproducible, mean Pareto share 0.58, down from 0.64). 177 tests pass. Top-1 per profile (fields of 200): balanced sorghum-fallow-sorghum 82 / sorghum-sorghum-fallow 74 / fallow-sorghum-cover_crop 30 / winter_wheat-sorghum-fallow 14; yield_first sorghum-fallow-sorghum 188; resilient sorghum-fallow-sorghum 157 / sorghum-sorghum-fallow 39; water_saver fallow-sorghum-cover_crop 188. The all-fallow artefact is gone. Caveat: maize never ranks first and every top option contains sorghum with a fallow or cover year — plausibly from the 2-consecutive-family limit (A) and sorghum's water-use profile; not checked against agronomy, weights are tag A. In progress: nothing. Background: none. **Next:** T6.4 (flip analysis). Risk: Gate 6 may slip; T2.2 FAILED; WIMAS open.
+
+(Previous entry:)
+
 **2026-11-07, autopilot run (T6.1 update + RYI option A).** Done (commit 8782ae9): `non_crop_ok` in `rotate/candidates.py` (≥1 harvested crop; no two consecutive fallow/cover seasons; A, UNVERIFIED) + property test; Kansas candidates 61 → 36. `rotate/evaluate.py`: RYI per rotation year = sum over seasons / S (fallow/cover = 0). 177 tests pass, ruff clean. In progress: re-run of `scripts/t62_run.py` (results/rotate/evaluation.json, ~15–30 min) — if `evaluation.json` is older than commit 8782ae9, re-run it, then `scripts/t63_rank.py`, and report top-1 per profile here. Background: none that survives the run. **Next:** t62 + t63 re-run and top-1 report, then T6.4. Risk: Gate 6 may slip (accepted); results/ not yet refreshed if this note is unchanged.
 
 (Previous entry:)

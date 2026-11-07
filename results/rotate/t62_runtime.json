@@ -1,8 +1,8 @@
 {
   "n_fields": 200,
-  "n_candidates": 61,
-  "max_s": 21.0,
-  "median_s": 7.2,
+  "n_candidates": 36,
+  "max_s": 18.4,
+  "median_s": 5.0,
   "limit_s": 60,
   "pass": true
 }

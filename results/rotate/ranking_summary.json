@@ -1,67 +1,67 @@
 {
   "n_fields": 200,
-  "n_candidates": 61,
-  "mean_pareto_share": 0.64,
+  "n_candidates": 36,
+  "mean_pareto_share": 0.579,
   "reproducible": true,
   "top1_by_preset": {
     "balanced": [
       [
-        "fallow-sorghum-cover_crop",
-        181
+        "sorghum-fallow-sorghum",
+        82
       ],
       [
-        "sorghum-cover_crop-fallow",
-        19
+        "sorghum-sorghum-fallow",
+        74
+      ],
+      [
+        "fallow-sorghum-cover_crop",
+        30
+      ],
+      [
+        "winter_wheat-sorghum-fallow",
+        14
       ]
     ],
     "water_saver": [
       [
-        "fallow-fallow-fallow",
-        182
+        "fallow-sorghum-cover_crop",
+        188
       ],
       [
-        "cover_crop-cover_crop-fallow",
-        6
+        "sorghum-sorghum-fallow",
+        8
       ],
       [
         "fallow-sorghum-fallow",
         4
-      ],
-      [
-        "cover_crop-fallow-fallow",
-        3
-      ],
-      [
-        "fallow-sorghum-cover_crop",
-        3
       ]
     ],
     "yield_first": [
       [
-        "fallow-sorghum-cover_crop",
-        191
-      ],
-      [
-        "sorghum-cover_crop-fallow",
-        6
-      ],
-      [
         "sorghum-fallow-sorghum",
+        188
+      ],
+      [
+        "sorghum-sorghum-fallow",
+        9
+      ],
+      [
+        "fallow-sorghum-sorghum",
         3
       ]
     ],
     "resilient": [
       [
-        "fallow-sorghum-cover_crop",
-        169
-      ],
-      [
-        "sorghum-cover_crop-fallow",
-        30
-      ],
-      [
         "sorghum-fallow-sorghum",
-        1
+        157
+      ],
+      [
+        "sorghum-sorghum-fallow",
+        39
+      ],
+      [
+        "fallow-sorghum-sorghum",
+        4
       ]
     ]
   },
