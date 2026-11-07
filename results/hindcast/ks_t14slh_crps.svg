@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="360" font-family="sans-serif" font-size="12">
+<text x="40" y="22" font-size="14">Kansas hindcast 2022-24 (cut-off 2021-12-31), forecast mode: CRPS, lower is better</text>
+<text x="40" y="346">sos</text>
+<rect x="40" y="132.8" width="32" height="193.2" fill="#1b6ca8"/>
+<text x="40" y="128.8" font-size="10">19.3</text>
+<rect x="78" y="119.1" width="32" height="206.9" fill="#888"/>
+<text x="78" y="115.1" font-size="10">20.7</text>
+<rect x="116" y="66.0" width="32" height="260.0" fill="#c77d1a"/>
+<text x="116" y="62.0" font-size="10">26.0</text>
+<rect x="154" y="103.3" width="32" height="222.7" fill="#7a4fa3"/>
+<text x="154" y="99.3" font-size="10">22.2</text>
+<text x="220" y="346">peak</text>
+<rect x="220" y="127.9" width="32" height="198.1" fill="#1b6ca8"/>
+<text x="220" y="123.9" font-size="10">11.5</text>
+<rect x="258" y="66.0" width="32" height="260.0" fill="#888"/>
+<text x="258" y="62.0" font-size="10">15.1</text>
+<rect x="296" y="81.5" width="32" height="244.5" fill="#c77d1a"/>
+<text x="296" y="77.5" font-size="10">14.2</text>
+<rect x="334" y="107.3" width="32" height="218.7" fill="#7a4fa3"/>
+<text x="334" y="103.3" font-size="10">12.7</text>
+<text x="400" y="346">canopy_integral</text>
+<rect x="400" y="87.6" width="32" height="238.4" fill="#1b6ca8"/>
+<text x="400" y="83.6" font-size="10">14.9</text>
+<rect x="438" y="83.5" width="32" height="242.5" fill="#888"/>
+<text x="438" y="79.5" font-size="10">15.1</text>
+<rect x="476" y="67.9" width="32" height="258.1" fill="#c77d1a"/>
+<text x="476" y="63.9" font-size="10">16.1</text>
+<rect x="514" y="66.0" width="32" height="260.0" fill="#7a4fa3"/>
+<text x="514" y="62.0" font-size="10">16.2</text>
+<text x="580" y="346">cover_days</text>
+<rect x="580" y="70.0" width="32" height="256.0" fill="#1b6ca8"/>
+<text x="580" y="66.0" font-size="10">30.4</text>
+<rect x="618" y="112.8" width="32" height="213.2" fill="#888"/>
+<text x="618" y="108.8" font-size="10">25.3</text>
+<rect x="656" y="66.0" width="32" height="260.0" fill="#c77d1a"/>
+<text x="656" y="62.0" font-size="10">30.9</text>
+<rect x="694" y="68.6" width="32" height="257.4" fill="#7a4fa3"/>
+<text x="694" y="64.6" font-size="10">30.5</text>
+<rect x="560" y="30" width="10" height="10" fill="#1b6ca8"/><text x="574" y="40" font-size="10">fieldwitness</text>
+<rect x="610" y="30" width="10" height="10" fill="#888"/><text x="624" y="40" font-size="10">B0</text>
+<rect x="660" y="30" width="10" height="10" fill="#c77d1a"/><text x="674" y="40" font-size="10">B1</text>
+<rect x="710" y="30" width="10" height="10" fill="#7a4fa3"/><text x="724" y="40" font-size="10">B2</text>
+</svg>
