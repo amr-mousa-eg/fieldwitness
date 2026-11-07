@@ -1,0 +1,23 @@
+{
+ "fields": 200,
+ "scenarios_per_field": [
+  12
+ ],
+ "total_mb": 9.33,
+ "kb_per_field": 46.7,
+ "share_fields_rank1_changes_vs_baseline": {
+  "t+0_p-20": 0.905,
+  "t+0_p-10": 0.645,
+  "t+0_p+0": 0.0,
+  "t+0_p+10": 0.685,
+  "t+1_p-20": 0.92,
+  "t+1_p-10": 0.755,
+  "t+1_p+0": 0.425,
+  "t+1_p+10": 0.495,
+  "t+2_p-20": 0.93,
+  "t+2_p-10": 0.845,
+  "t+2_p+0": 0.55,
+  "t+2_p+10": 0.21
+ },
+ "note": "sensitivity tests on past weather, not climate projections; shifts are tag A"
+}
