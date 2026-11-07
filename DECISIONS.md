@@ -464,7 +464,17 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 - **Not done (blocked by `.claude/settings.json` deny rules, not bypassed):** `uv add scikit-learn doubleml` (deny `Bash(uv add *)`), so no versions to log and no test run with them yet; the settings change for npm/node (deny `Edit(/.claude/settings.json)`). A complete proposed `settings.json` was written to the session scratchpad for the user to copy (adds allow: `npm --prefix app run build|test`, `npm run build|test`, `node scripts/*.mjs`, `node app/scripts/*.mjs`, `cd app`; adds deny: `npm ci`, `npm --prefix * ci|install|i|add`, bare `npm install|i|add`, `npx`; Bash and PowerShell). The `claude -p` permission check is not run yet (it needs the new settings).
 - **AUTOPILOT_PROMPT.md §6** (user): a blocked task is logged in the handoff and the loop continues with the next ready task; `BLOCKED.md` only if nothing can proceed; `AUTOPILOT_WAIT` only for server-side downloads, at most 60 minutes.
 
+## 2026-11-07 — scikit-learn + doubleml installed; npm allow rules verified; T8.2 ticked
+
+- **Installed by the user** (`uv add scikit-learn doubleml`): scikit-learn **1.9.1**, doubleml **0.11.4**; pulled in, among others: statsmodels 0.15.0, optuna 5.0.0, matplotlib 3.11.2, seaborn 0.13.2, plotly 7.1.0, mypy 2.4.1, scipy 1.18.1. Installed API matches the docs; one synthetic test call recovers the effect (0.43, 95 % CI 0.33–0.53, true 0.5); details in `docs/api_notes.md`. Python: 235 tests pass, ruff clean.
+- **`.claude/settings.json`** replaced by the user with the proposed file (npm/node allows, npm ci / install / npx denies; entry above). Check: `claude -p --model sonnet --max-turns 4 --settings '{"disableAllHooks": true}'` (the loop's flags) ran `npm --prefix app run build` and `npm --prefix app test`: both **allowed**, build OK, 45 tests pass. Without `disableAllHooks` both still need approval (caveman hook rewrite, see the 2026-11-04 git-refusal entry); this affects interactive `claude -p` checks only, not the loop.
+- **T8.2 ticked:** the app compiles (`tsc --noEmit` in `npm run build`) against the generated `app/src/types.ts`.
+
 ## Autopilot handoff
+
+**2026-11-07, interactive session (deps + npm rules).** Done: scikit-learn 1.9.1 + doubleml 0.11.4 installed and checked; npm allow rules verified with the loop's flags; T8.2 ticked (entry above). In progress: nothing. Background: none. **Next:** (1) sync the real packs into the app (`node scripts/sync-packs.mjs ../packs` from `app/`) and check every view; (2) T6.9; (3) Phase 7 (T7.1, T7.3, T7.4); (4) Phase 5 (T5.1, then T5.2 with doubleml; use `set_sample_splitting` with spatial blocks; then re-run `scripts/t65_grade.py`). Risk: main JS chunk 1.77 MB.
+
+(Previous entry:)
 
 **2026-11-07, interactive session (doubleml check, §6 rule).** Done: doubleml licence + API in `docs/api_notes.md`; `AUTOPILOT_PROMPT.md` §6 rewritten (entry above). **Blocked for the user:** `uv add scikit-learn doubleml` and the `.claude/settings.json` npm/node allow rules (both denied by settings; the user applies them). In progress: nothing. Background: none. **Next:** T6.9, Phase 7 (T7.1, T7.3, T7.4), Phase 5 T5.1. T5.2 starts once `doubleml` is in `pyproject.toml` (then read the installed source, make one small test call, log versions). T8.2 app compile check (`npm --prefix app run build`) once the npm allow rules are in place. Risk: main JS chunk 1.77 MB.
 
