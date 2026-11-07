@@ -1,0 +1,204 @@
+{
+  "rows": 1400,
+  "rows_with_outcome": 1040,
+  "fields": 200,
+  "tags": {
+    "canopy_integral": "D",
+    "peak_ndvi": "D",
+    "cover_days": "D",
+    "season_length": "D",
+    "canopy_drop": "D",
+    "season_precip_mm": "D",
+    "season_tmax_c": "D",
+    "clay_pct": "E",
+    "sand_pct": "E",
+    "soc_g_kg": "E",
+    "area_ha": "E",
+    "crop": "E",
+    "prev_crop": "E",
+    "prev2_crop": "E",
+    "dry_season": "A"
+  },
+  "windows_tag_A": {
+    "maize": [
+      91,
+      304
+    ],
+    "sorghum": [
+      91,
+      304
+    ],
+    "soybean": [
+      91,
+      304
+    ],
+    "sunflower": [
+      91,
+      304
+    ],
+    "winter_wheat": [
+      1,
+      196
+    ]
+  },
+  "contrast_counts": [
+    {
+      "crop": "maize",
+      "prev_crop": "winter_wheat",
+      "n": 111,
+      "n_fields": 71
+    },
+    {
+      "crop": "maize",
+      "prev_crop": "maize",
+      "n": 92,
+      "n_fields": 43
+    },
+    {
+      "crop": "maize",
+      "prev_crop": "sorghum",
+      "n": 49,
+      "n_fields": 36
+    },
+    {
+      "crop": "maize",
+      "prev_crop": "fallow",
+      "n": 19,
+      "n_fields": 13
+    },
+    {
+      "crop": "maize",
+      "prev_crop": "other_annual",
+      "n": 4,
+      "n_fields": 2
+    },
+    {
+      "crop": "maize",
+      "prev_crop": "soybean",
+      "n": 4,
+      "n_fields": 4
+    },
+    {
+      "crop": "maize",
+      "prev_crop": "non_arable",
+      "n": 2,
+      "n_fields": 2
+    },
+    {
+      "crop": "maize",
+      "prev_crop": "perennial_forage",
+      "n": 1,
+      "n_fields": 1
+    },
+    {
+      "crop": "maize",
+      "prev_crop": "sunflower",
+      "n": 1,
+      "n_fields": 1
+    },
+    {
+      "crop": "sorghum",
+      "prev_crop": "winter_wheat",
+      "n": 185,
+      "n_fields": 119
+    },
+    {
+      "crop": "sorghum",
+      "prev_crop": "sorghum",
+      "n": 76,
+      "n_fields": 47
+    },
+    {
+      "crop": "sorghum",
+      "prev_crop": "maize",
+      "n": 34,
+      "n_fields": 28
+    },
+    {
+      "crop": "sorghum",
+      "prev_crop": "fallow",
+      "n": 16,
+      "n_fields": 16
+    },
+    {
+      "crop": "sorghum",
+      "prev_crop": "non_arable",
+      "n": 3,
+      "n_fields": 3
+    },
+    {
+      "crop": "sorghum",
+      "prev_crop": "perennial_forage",
+      "n": 2,
+      "n_fields": 2
+    },
+    {
+      "crop": "sorghum",
+      "prev_crop": "other_annual",
+      "n": 1,
+      "n_fields": 1
+    },
+    {
+      "crop": "soybean",
+      "prev_crop": "maize",
+      "n": 3,
+      "n_fields": 3
+    },
+    {
+      "crop": "soybean",
+      "prev_crop": "sorghum",
+      "n": 1,
+      "n_fields": 1
+    },
+    {
+      "crop": "sunflower",
+      "prev_crop": "winter_wheat",
+      "n": 1,
+      "n_fields": 1
+    },
+    {
+      "crop": "winter_wheat",
+      "prev_crop": "fallow",
+      "n": 307,
+      "n_fields": 149
+    },
+    {
+      "crop": "winter_wheat",
+      "prev_crop": "maize",
+      "n": 67,
+      "n_fields": 37
+    },
+    {
+      "crop": "winter_wheat",
+      "prev_crop": "winter_wheat",
+      "n": 50,
+      "n_fields": 32
+    },
+    {
+      "crop": "winter_wheat",
+      "prev_crop": "sorghum",
+      "n": 5,
+      "n_fields": 5
+    },
+    {
+      "crop": "winter_wheat",
+      "prev_crop": "non_arable",
+      "n": 3,
+      "n_fields": 3
+    },
+    {
+      "crop": "winter_wheat",
+      "prev_crop": "perennial_forage",
+      "n": 2,
+      "n_fields": 2
+    },
+    {
+      "crop": "winter_wheat",
+      "prev_crop": "soybean",
+      "n": 1,
+      "n_fields": 1
+    }
+  ],
+  "irrigation_proxy": "not available (WorldCereal needs a login, T1.4)",
+  "et_outcome": "not available (no ECOSTRESS data)"
+}
