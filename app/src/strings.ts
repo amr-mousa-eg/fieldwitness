@@ -20,9 +20,13 @@ export function metricName(metric: string): string {
   return key in en ? en[key as StringKey] : metric;
 }
 
-/** "Current", "Alternative 1", …; unknown option ids are shown as written. */
+/**
+ * "Current", "Alternative 1" (fixture ids), "Sorghum → Fallow → Sorghum" (pipeline ids are the
+ * crop keys joined by "|"); other ids are shown as written.
+ */
 export function optionName(o: Pick<Option, "option_id">): string {
   if (o.option_id === "current") return t("card.current");
   const n = /^alt(\d+)$/.exec(o.option_id)?.[1];
-  return n ? t("card.alt", { n }) : o.option_id;
+  if (n) return t("card.alt", { n });
+  return o.option_id.includes("|") ? o.option_id.split("|").map(cropName).join(" → ") : o.option_id;
 }

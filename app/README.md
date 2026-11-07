@@ -25,6 +25,13 @@ npm run build     # production build into app/dist (real packs only)
 - **Build guard** (`vite.config.ts`, tested in `tests/build-guard.test.ts`): a build refuses
   `VITE_DATA=fixtures`, and fails if any `*.SYNTHETIC.json` file or the `SYNTHETIC:fixture` marker
   ends up in the output.
+- **Real packs (no merge needed):** `node scripts/sync-packs.mjs "D:/NASA Project/packs"` copies
+  `regions.json` and every listed region folder into `app/public/packs/` (gitignored by
+  `app/.gitignore`, replaced on each run; refuses files with the fixture marker). Then run the dev
+  server on them with `VITE_DATA=packs npm run dev` (Git Bash) or
+  `$env:VITE_DATA="packs"; npm run dev` (PowerShell). `npm run build` always uses them.
+  `tests/real-packs.test.ts` runs the data helpers and the tag check over every copied file; it is
+  skipped when `public/packs/` is empty.
 - Types: `src/types.ts` is a hand-written mirror of PLAN.md §3 + the PROPOSED extension; T8.2
   replaces it with generated types at merge.
 
@@ -42,6 +49,14 @@ npm run build     # production build into app/dist (real packs only)
   harvest-year day for SOS/peak/EOS; no marks in `series`; six exempt fields; `bare_by_option`;
   map colouring = Current only (alternative = stretch item); scenarios hold weather-sensitive
   metrics only; `packs/regions.json`.
+- 2026-11-07: first test on real Kansas packs (`ks_t14slh`, 200 fields, 803 files, 85.7 MB).
+  App fixes: back-test filters by hindcast mode (real ledgers hold forecast + forced per season);
+  scoreboard columns follow the score keys present (`mae_median` added; `timing_err_days` absent)
+  and the baseline count is not hard-coded (B3 not run); option names from `|` ids; Current is
+  the unranked reference. **Pipeline issue for main (not fixed here):** `packs/build.py` gives
+  candidate *i* `rank = rk["rank"][preset][i]`, but `rotate/rank.py` stores the sort order
+  (candidate index at each place), not each candidate's place. In the 200 packs the top option
+  matches the ranking scores in 11 fields; the top 3 match in none.
 - Dev server: run from `app/` (`npm run dev`). `npm --prefix "<path with space>"` fails on this
   machine (cmd splits `C:\Users\Amr 13_03`).
 

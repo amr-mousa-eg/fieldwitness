@@ -19,13 +19,14 @@ import {
   backtestOffsets,
   backtestRows,
   inside,
+  ledgerModes,
   missingWitnesses,
   witnessRows,
 } from "./advisor";
 import { formatDate, formatTagged, harvestDayToDate } from "./format";
 import { cropName, metricName, optionName, t } from "./strings";
 import { TagBadge, TaggedValue } from "./tags";
-import type { FieldPack, Option, Tagged, WitnessResult } from "./types";
+import type { FieldPack, LedgerEntry, Option, Tagged, WitnessResult } from "./types";
 
 const CHART = { pred: "#3d6f8e", obs: "#8a6a1f" };
 const SEASON_DAY_UNIT = "day of harvest year";
@@ -81,14 +82,17 @@ function WitnessCell({ w }: { w: WitnessResult | undefined }) {
   );
 }
 
-function OptionWitnesses({ option }: { option: Option }) {
+/** `place` = 1-based place among the alternatives; null for Current (the reference, not ranked). */
+function OptionWitnesses({ option, place }: { option: Option; place: number | null }) {
   const rows = witnessRows(option);
   const missing = missingWitnesses(option);
   return (
-    <details className="witness-option" open={option.rank === 1}>
+    <details className="witness-option" open={place === 1}>
       <summary>
         <span className="witness-option-name">
-          {t("advisor.optionHead", { rank: option.rank, name: optionName(option) })}{" "}
+          {place === null
+            ? t("advisor.currentHead", { name: optionName(option) })
+            : t("advisor.optionHead", { rank: place, name: optionName(option) })}{" "}
           <span className={`grade grade-${option.grade}`}>
             <span className="sr-only">{t("card.grade")} </span>
             {option.grade}
@@ -154,11 +158,14 @@ function Hit({ v }: { v: boolean | null }) {
 }
 
 /** Predicted vs observed seasons from a pack's ledger; also the scoreboard's story chart (T9.5). */
-export function Backtest({ pack }: { pack: FieldPack }) {
+export function Backtest({ pack, mode: fixedMode }: { pack: FieldPack; mode?: LedgerEntry["mode"] }) {
   const metrics = useMemo(() => backtestMetrics(pack.ledger), [pack.ledger]);
+  const modes = useMemo(() => ledgerModes(pack.ledger), [pack.ledger]);
   const [metric, setMetric] = useState(metrics[0] ?? "");
-  const rows = useMemo(() => backtestRows(pack.ledger, metric), [pack.ledger, metric]);
-  if (metrics.length === 0) {
+  const [ownMode, setOwnMode] = useState<LedgerEntry["mode"]>(modes[0] ?? "forecast");
+  const mode = fixedMode ?? ownMode; // the scoreboard sets the mode; the advisor offers a choice
+  const rows = useMemo(() => backtestRows(pack.ledger, metric, mode), [pack.ledger, metric, mode]);
+  if (metrics.length === 0 || rows.length === 0) {
     return (
       <section aria-labelledby="backtest-h">
         <h3 id="backtest-h">{t("advisor.backtest")}</h3>
@@ -186,6 +193,18 @@ export function Backtest({ pack }: { pack: FieldPack }) {
             ))}
           </select>
         </label>
+        {!fixedMode && modes.length > 1 && (
+          <label>
+            {t("score.mode")}{" "}
+            <select value={mode} onChange={(e) => setOwnMode(e.target.value as LedgerEntry["mode"])}>
+              {modes.map((m) => (
+                <option key={m} value={m}>
+                  {t(`score.mode.${m}`)}
+                </option>
+              ))}
+            </select>
+          </label>
+        )}
       </div>
       <ul className="chart-key">
         <li>
@@ -251,7 +270,10 @@ export function Backtest({ pack }: { pack: FieldPack }) {
 }
 
 export function AdvisorConsole({ pack }: { pack: FieldPack }) {
-  const options = [...pack.options].sort((a, b) => a.rank - b.rank);
+  // Current first as the reference; then the alternatives in the pack's rank order, numbered 1, 2, …
+  // (pipeline packs give Current rank 0 and number alternatives from 0; fixtures from 1).
+  const current = pack.options.filter((o) => o.option_id === "current");
+  const alternatives = pack.options.filter((o) => o.option_id !== "current").sort((a, b) => a.rank - b.rank);
   return (
     <div className="advisor">
       <section className="advisor-top" aria-labelledby="cred-h">
@@ -279,8 +301,11 @@ export function AdvisorConsole({ pack }: { pack: FieldPack }) {
           <Explain id="evidence_grade" />
         </h3>
         <p className="muted">{t("advisor.witnesses.note")}</p>
-        {options.map((o) => (
-          <OptionWitnesses key={o.option_id} option={o} />
+        {current.map((o) => (
+          <OptionWitnesses key={o.option_id} option={o} place={null} />
+        ))}
+        {alternatives.map((o, i) => (
+          <OptionWitnesses key={o.option_id} option={o} place={i + 1} />
         ))}
       </section>
       <Backtest pack={pack} />

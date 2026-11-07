@@ -43,10 +43,18 @@ export interface BacktestRow {
   observed: Tagged;
 }
 
-/** Ledger entries that have both a prediction and an observation of `metric`, oldest first. */
-export function backtestRows(ledger: LedgerEntry[], metric: string): BacktestRow[] {
+/** Hindcast modes present in a ledger, headline (forecast) first. */
+export function ledgerModes(ledger: LedgerEntry[]): LedgerEntry["mode"][] {
+  return (["forecast", "forced"] as const).filter((m) => ledger.some((e) => e.mode === m));
+}
+
+/**
+ * Ledger entries of one mode that have both a prediction and an observation of `metric`, oldest
+ * first. Real packs hold a forecast and a forced entry for the same season; never mix them.
+ */
+export function backtestRows(ledger: LedgerEntry[], metric: string, mode: LedgerEntry["mode"]): BacktestRow[] {
   return ledger
-    .filter((e) => e.predicted[metric] && e.observed?.[metric])
+    .filter((e) => e.mode === mode && e.predicted[metric] && e.observed?.[metric])
     .sort((a, b) => a.season_year - b.season_year || a.season_index - b.season_index)
     .map((e) => ({
       season_year: e.season_year,

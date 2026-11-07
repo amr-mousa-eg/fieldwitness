@@ -6,7 +6,22 @@ export const METHODS: HindcastRow["method"][] = ["fieldwitness", "B0", "B1", "B2
 /** Timing error is only meaningful for date metrics (T7.2). */
 export const TIMING_METRICS = new Set(["sos", "peak", "eos"]);
 
-export type ScoreKey = "crps" | "covered50" | "covered90" | "timing_err_days";
+export type ScoreKey = "crps" | "covered50" | "covered90" | "mae_median" | "timing_err_days";
+
+/** Display order. `mae_median` = mean |observed − median prediction| (scripts/t72_score.py on main). */
+const SCORE_KEYS: ScoreKey[] = ["crps", "covered50", "covered90", "mae_median", "timing_err_days"];
+
+/** Score columns for one metric table: only keys some row has (packs differ in what they score). */
+export function scoreKeysOf(rows: HindcastRow[], metric: string): ScoreKey[] {
+  return SCORE_KEYS.filter(
+    (k) => (k !== "timing_err_days" || TIMING_METRICS.has(metric)) && rows.some((r) => typeof r.scores[k] === "number"),
+  );
+}
+
+/** Baselines without any row in this hindcast (e.g. B3 not run), so the page can say so. */
+export function methodsNotRun(h: RegionHindcast): HindcastRow["method"][] {
+  return METHODS.filter((m) => !h.rows.some((r) => r.method === m));
+}
 
 /** Nominal coverage of each interval: a calibrated method covers this share of seasons. */
 const COVERAGE_TARGET: Partial<Record<ScoreKey, number>> = { covered50: 0.5, covered90: 0.9 };

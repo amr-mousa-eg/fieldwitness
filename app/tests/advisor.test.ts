@@ -1,7 +1,7 @@
 import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { WITNESSES, backtestMetrics, backtestOffsets, backtestRows, inside, missingWitnesses, witnessRows } from "../src/advisor";
+import { WITNESSES, backtestMetrics, backtestOffsets, backtestRows, inside, ledgerModes, missingWitnesses, witnessRows } from "../src/advisor";
 import type { FieldPack, Tagged } from "../src/types";
 
 const DIR = join(import.meta.dirname, "../fixtures/ks_demo_synthetic");
@@ -66,7 +66,7 @@ describe("backtestRows", () => {
   it("keeps only seasons with prediction and observation, oldest first", () => {
     for (const p of packs) {
       for (const m of backtestMetrics(p.ledger)) {
-        const rows = backtestRows(p.ledger, m);
+        const rows = backtestRows(p.ledger, m, "forecast");
         expect(rows.length).toBeGreaterThan(0);
         const years = rows.map((r) => r.season_year);
         expect(years).toEqual([...years].sort((a, b) => a - b));
@@ -76,6 +76,26 @@ describe("backtestRows", () => {
         }
       }
     }
-    expect(backtestRows(packs[0].ledger, "no_such_metric")).toEqual([]);
+    expect(backtestRows(packs[0].ledger, "no_such_metric", "forecast")).toEqual([]);
+  });
+});
+
+describe("backtestRows with two modes", () => {
+  it("never mixes forecast and forced entries of the same season", () => {
+    const ledger = packs[0].ledger.filter((e) => e.mode === "forecast");
+    const both = [...ledger, ...ledger.map((e) => ({ ...e, mode: "forced" as const }))];
+    expect(ledgerModes(both)).toEqual(["forecast", "forced"]);
+    for (const m of backtestMetrics(both)) {
+      expect(backtestRows(both, m, "forecast")).toEqual(backtestRows(ledger, m, "forecast"));
+      expect(backtestRows(both, m, "forced").length).toBe(backtestRows(ledger, m, "forecast").length);
+    }
+  });
+});
+
+describe("optionName", () => {
+  it("names fixture ids, pipeline sequence ids and Current", async () => {
+    const { optionName } = await import("../src/strings");
+    expect(optionName({ option_id: "current" })).toBe("Current");
+    expect(optionName({ option_id: "sorghum|fallow|winter_wheat" })).toMatch(/^Sorghum → Fallow → /);
   });
 });

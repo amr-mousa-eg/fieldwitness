@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Backtest } from "./AdvisorConsole";
 import { loadHindcast, loadPack } from "./data";
 import { formatDate } from "./format";
-import { type ScoreKey, TIMING_METRICS, bestMethods, metricsOf, modesOf, rowsFor } from "./hindcast";
+import { type ScoreKey, bestMethods, methodsNotRun, metricsOf, modesOf, rowsFor, scoreKeysOf } from "./hindcast";
 import { routeHref } from "./route";
 import { metricName, t } from "./strings";
 import { TagLegend } from "./tags";
@@ -16,8 +16,7 @@ function fmt(key: ScoreKey, v: number): string {
 }
 
 function ScoreTable({ rows, metric }: { rows: HindcastRow[]; metric: string }) {
-  const keys: ScoreKey[] = ["crps", "covered50", "covered90"];
-  if (TIMING_METRICS.has(metric)) keys.push("timing_err_days");
+  const keys = scoreKeysOf(rows, metric);
   const best = Object.fromEntries(keys.map((k) => [k, bestMethods(rows, k)])) as Record<ScoreKey, Set<string>>;
   const id = `score-${metric}`;
   return (
@@ -89,6 +88,7 @@ export function Scoreboard({ index }: { index: RegionIndex }) {
   if (!h) return <p>{t("region.loading")}</p>;
   const modes = modesOf(h);
   const years = h.scored_years;
+  const notRun = methodsNotRun(h);
 
   return (
     <article className="scoreboard" aria-labelledby="score-h">
@@ -98,8 +98,10 @@ export function Scoreboard({ index }: { index: RegionIndex }) {
           cutoff: date(h.cutoff),
           first: years[0] ?? "",
           last: years[years.length - 1] ?? "",
+          n: new Set(h.rows.map((r) => r.method).filter((m) => m !== "fieldwitness")).size,
         })}
       </p>
+      {notRun.length > 0 && <p className="muted">{t("score.notRun", { methods: notRun.join(", ") })}</p>}
       <p className="muted">{t("score.honest")}</p>
       {h.crop_observed_source === "classifier" && (
         <p className="notice">{t("score.classifier")}</p>
@@ -120,7 +122,7 @@ export function Scoreboard({ index }: { index: RegionIndex }) {
         <ScoreTable key={m} metric={m} rows={rowsFor(h, mode, m)} />
       ))}
       <div className="score-story">
-        {story ? <Backtest pack={story} /> : <p>{t("field.loading")}</p>}
+        {story ? <Backtest pack={story} mode={mode} /> : <p>{t("field.loading")}</p>}
         <p>
           {t("score.story")}{" "}
           <a href={routeHref(region, h.story_field_id)}>

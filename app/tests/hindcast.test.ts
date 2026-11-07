@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { METHODS, badness, bestMethods, metricsOf, modesOf, rowsFor } from "../src/hindcast";
+import { METHODS, badness, bestMethods, methodsNotRun, metricsOf, modesOf, rowsFor, scoreKeysOf } from "../src/hindcast";
 import type { HindcastRow, RegionHindcast } from "../src/types";
 
 const h = JSON.parse(
@@ -37,5 +37,16 @@ describe("hindcast helpers", () => {
     expect([...bestMethods(rows, "crps")].sort()).toEqual(["B0", "B1"]);
     expect(bestMethods(rows, "covered90").size).toBe(0);
     expect([...bestMethods([row("B0", { covered90: 0.99 }), row("B1", { covered90: 0.85 })], "covered90")]).toEqual(["B1"]);
+  });
+});
+
+describe("scoreKeysOf / methodsNotRun", () => {
+  it("shows only score columns the rows have; timing only for date metrics", () => {
+    const rows = [row("fieldwitness", { crps: 1, covered90: 0.9, mae_median: 3, timing_err_days: 2 }), row("B0", { crps: 2 })];
+    expect(scoreKeysOf(rows, "sos")).toEqual(["crps", "covered90", "mae_median", "timing_err_days"]);
+    expect(scoreKeysOf(rows, "canopy_integral")).toEqual(["crps", "covered90", "mae_median"]);
+  });
+  it("names baselines with no rows", () => {
+    expect(methodsNotRun({ ...h, rows: h.rows.filter((r) => r.method !== "B3") })).toEqual(["B3"]);
   });
 });
