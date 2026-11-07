@@ -1,0 +1,162 @@
+{
+ "region_id": "ks_t14slh",
+ "cutoff": "2021-12-31",
+ "mode": "forecast",
+ "n_field_seasons": 266,
+ "b3": "NOT RUN: neighbour effects (T5.2) do not exist; dependency decision open",
+ "b0_sources": {
+  "own_field_past": 203,
+  "region_crop_pool": 63
+ },
+ "caveats": "same field-seasons and statistics as the fieldwitness forecast; B0 intervals come from few past seasons (coverage unreliable); B1/B2 add HLS noise like fieldwitness; tags: model D, observed O/D, labels E",
+ "table": [
+  {
+   "method": "fieldwitness",
+   "metric": "sos",
+   "n": 266,
+   "crps": 19.29910385338346,
+   "covered50": 0.3308270676691729,
+   "covered90": 0.5225563909774437,
+   "mae_median": 22.49624060150376
+  },
+  {
+   "method": "fieldwitness",
+   "metric": "peak",
+   "n": 266,
+   "crps": 11.467647368421051,
+   "covered50": 0.5977443609022557,
+   "covered90": 0.8872180451127819,
+   "mae_median": 15.483082706766917
+  },
+  {
+   "method": "fieldwitness",
+   "metric": "canopy_integral",
+   "n": 266,
+   "crps": 14.87050013167865,
+   "covered50": 0.17293233082706766,
+   "covered90": 0.34962406015037595,
+   "mae_median": 17.26223975738852,
+   "spearman": 0.26415126219194374
+  },
+  {
+   "method": "fieldwitness",
+   "metric": "cover_days",
+   "n": 266,
+   "crps": 30.375241071428576,
+   "covered50": 0.04887218045112782,
+   "covered90": 0.09022556390977443,
+   "mae_median": 31.654135338345863
+  },
+  {
+   "method": "B0",
+   "metric": "sos",
+   "n": 266,
+   "crps": 20.669723486831,
+   "covered50": 0.21052631578947367,
+   "covered90": 0.37593984962406013,
+   "mae_median": 23.353383458646615
+  },
+  {
+   "method": "B0",
+   "metric": "peak",
+   "n": 266,
+   "crps": 15.050011916828188,
+   "covered50": 0.23684210526315788,
+   "covered90": 0.41729323308270677,
+   "mae_median": 17.93609022556391
+  },
+  {
+   "method": "B0",
+   "metric": "canopy_integral",
+   "n": 266,
+   "crps": 15.126315616325284,
+   "covered50": 0.16917293233082706,
+   "covered90": 0.32706766917293234,
+   "mae_median": 17.217834951754384,
+   "spearman": 0.3288627785956301
+  },
+  {
+   "method": "B0",
+   "metric": "cover_days",
+   "n": 266,
+   "crps": 25.29560680354477,
+   "covered50": 0.17669172932330826,
+   "covered90": 0.31954887218045114,
+   "mae_median": 29.208646616541355
+  },
+  {
+   "method": "B1",
+   "metric": "sos",
+   "n": 266,
+   "crps": 25.96869172932331,
+   "covered50": 0.05263157894736842,
+   "covered90": 0.12406015037593984,
+   "mae_median": 27.12406015037594
+  },
+  {
+   "method": "B1",
+   "metric": "peak",
+   "n": 266,
+   "crps": 14.151223966165412,
+   "covered50": 0.5338345864661654,
+   "covered90": 0.849624060150376,
+   "mae_median": 21.56766917293233
+  },
+  {
+   "method": "B1",
+   "metric": "canopy_integral",
+   "n": 266,
+   "crps": 16.098065542739224,
+   "covered50": 0.10902255639097744,
+   "covered90": 0.2932330827067669,
+   "mae_median": 18.18525463377628,
+   "spearman": -0.10292932007526952
+  },
+  {
+   "method": "B1",
+   "metric": "cover_days",
+   "n": 266,
+   "crps": 30.852145018796993,
+   "covered50": 0.02631578947368421,
+   "covered90": 0.07142857142857142,
+   "mae_median": 31.907894736842106
+  },
+  {
+   "method": "B2",
+   "metric": "sos",
+   "n": 266,
+   "crps": 22.23969680451128,
+   "covered50": 0.2932330827067669,
+   "covered90": 0.5488721804511278,
+   "mae_median": 27.721804511278197
+  },
+  {
+   "method": "B2",
+   "metric": "peak",
+   "n": 266,
+   "crps": 12.661249718045113,
+   "covered50": 0.5827067669172933,
+   "covered90": 0.9172932330827067,
+   "mae_median": 17.36842105263158
+  },
+  {
+   "method": "B2",
+   "metric": "canopy_integral",
+   "n": 266,
+   "crps": 16.215836827061924,
+   "covered50": 0.17293233082706766,
+   "covered90": 0.36466165413533835,
+   "mae_median": 19.57699155932065,
+   "spearman": -0.09834181542742729
+  },
+  {
+   "method": "B2",
+   "metric": "cover_days",
+   "n": 266,
+   "crps": 30.54609003759398,
+   "covered50": 0.03759398496240601,
+   "covered90": 0.09022556390977443,
+   "mae_median": 31.832706766917294
+  }
+ ]
+}
