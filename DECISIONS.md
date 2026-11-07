@@ -430,6 +430,10 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 
 ## Autopilot handoff
 
+**2026-11-07, autopilot run (T6.6).** Done: T6.6 ticked. `rotate/explain.py` (`explain(ExplainInput) -> Explanation`; pure templates: why = rank/Pareto/family breaks/crop seasons; evidence = grade + reasons + credibility + witnesses; benefits = deltas vs Current with 90 % interval and tag; gaps = tag-A key inputs, missing neighbours, scale flag, team-choice weights; risks = missing Ky, fallow/cover scores 0, local review) + `tests/test_explain.py` (7 tests; gaps/risks never empty). 203 tests pass, ruff clean. Not done: filling `Option.explanation` in packs (T8.1), `ExplainInput` built from `grades.json`/`ranking.json`/`flip.json` at that time. In progress: nothing. Background: none. **Next:** T6.7 (priority metrics, tagged; deep_root_share from FAO-56 Table 22 needs a verified read), then T6.8+. T5.2 still needs the scikit-learn/doubleml OK (rule 11). Risk: Gate 6 may slip; T2.2 FAILED; WIMAS open.
+
+(Previous entry:)
+
 **2026-11-07, autopilot run (T6.5 applied).** Done: T6.5 ticked (with caveat). `scripts/t65_grade.py` → `results/rotate/grades.json`, `grades_summary.json`: physics effect = RYI(option) − RYI(Current, simulated with the field's posterior worlds) per weather year; value = median, 90 % interval = 5–95 % over years (weather variability, A, UNVERIFIED). Key-input tags (A, UNVERIFIED): taw/kc/budget D if posterior else A; sowing dates A; POWER weather D. Result over 187 fields × 36 options: B 2772, C 3600, D 360 (prior-world fields); 13 fields skipped (Current has gaps/double crop). No A grades possible (no neighbour witness). 196 tests pass, ruff clean. T5.2 still needs scikit-learn/doubleml (rule 11) → needs the user's OK; not blocking T6.6. In progress: nothing. Background: none. **Next:** T6.6 (deterministic `Explanation` per option), then T6.7+. T5.2 → `BLOCKED.md` only when nothing else is ready. Risk: Gate 6 may slip; T2.2 FAILED; WIMAS open; 13 fields have no Current deltas.
 
 (Previous entry:)
