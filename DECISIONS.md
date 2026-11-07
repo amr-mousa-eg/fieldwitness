@@ -472,7 +472,7 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 
 ## Autopilot handoff
 
-**2026-11-07, autopilot run (no progress, 47th in a row).** WebFetch arxiv.org retried once: still "haven't granted". T5.4 BLOCKED (rule 8). Tree clean, nothing coded. Please pause the loop.
+**2026-11-07, autopilot run (no progress, 48th in a row).** WebFetch arxiv.org retried once: still "haven't granted". T5.4 BLOCKED (rule 8). Tree clean, nothing coded. Please pause the loop.
 
 (Previous entry: 43rd-45th runs, same state.)
 
