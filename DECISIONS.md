@@ -472,7 +472,9 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 
 ## Autopilot handoff
 
-**2026-11-07, autopilot run (no progress, 15th in a row).** WebFetch arxiv.org re-tried: still "haven't granted". T5.4 BLOCKED (rule 8). Nothing coded; tree clean. T6.9 UI, T7.1 barley, T7.4 need a large interactive session. Background: none. **Next:** user grants WebFetch / pastes method section, or runs T6.9 interactively. Please pause the loop.
+**2026-11-07, autopilot run (no progress, 17th in a row).** Same state as the 16th run (its uncommitted handoff edit was kept and committed). T5.4 still BLOCKED (rule 8: paper unreadable without WebFetch grant). No code changed. Background: none. **Next:** user grants WebFetch / pastes the method section, or runs T6.9 interactively. Please pause the loop.
+
+(Previous entry: 15th run.) WebFetch arxiv.org re-tried: still "haven't granted". T5.4 BLOCKED (rule 8). Nothing coded; tree clean. T6.9 UI, T7.1 barley, T7.4 need a large interactive session. Background: none. **Next:** user grants WebFetch / pastes method section, or runs T6.9 interactively. Please pause the loop.
 
 (Previous entry: 13th run, same state.)
 
