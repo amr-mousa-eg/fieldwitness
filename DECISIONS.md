@@ -472,6 +472,10 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 
 ## Autopilot handoff
 
+**2026-11-07, autopilot run (no progress, 3rd in a row).** `WebFetch https://arxiv.org/abs/2506.02384` is still not permitted, so T5.4 stays BLOCKED (rule 8). Nothing coded; tree clean. Remaining ready tasks (T6.9 UI TS port + browser check, T7.1 barley window, T7.3 B0-B2 baselines, T7.4) each need a large focused session. Background: none. **Next:** user allows WebFetch for arxiv.org (or pastes the paper's method section) for T5.4; otherwise T7.3 B0-B2 (Python only), then T6.9 UI, T7.1 barley.
+
+(Previous entry:)
+
 **2026-11-07, autopilot run (no progress).** Re-tried `WebFetch https://arxiv.org/abs/2506.02384` for T5.4: still not permitted, so T5.4 stays BLOCKED (rule 8). Nothing coded, tree clean. T6.9 UI (TS port of `apply_corrections` + browser check) and T7.1 barley (needs a barley physics window) are too large to finish safely in the remaining budget of this run; they are the next tasks. Background: none. **Next:** user allows WebFetch for arxiv.org (or pastes the paper's method section) for T5.4; otherwise T6.9 UI, then T7.1 barley.
 
 (Previous entry:)
