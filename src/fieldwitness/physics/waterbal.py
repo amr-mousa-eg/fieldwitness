@@ -53,16 +53,32 @@ def trigger_at_raw(efficiency: float) -> Policy:
 
 
 def fixed_seasonal_mm(budget_mm: float, efficiency: float = 1.0) -> Policy:
-    if budget_mm < 0 or not 0 < efficiency <= 1:
+    if np.any(np.asarray(budget_mm) < 0) or not 0 < efficiency <= 1:
         raise ValueError("bad budget or efficiency")
     return Policy("fixed_seasonal_mm", efficiency, budget_mm)
 
 
-def run(rain, etc, taw_mm, p, policy: Policy | None = None, dr0=0.0, ro_frac=0.0, irr_mask=None):
+def run(
+    rain,
+    etc,
+    taw_mm,
+    p,
+    policy: Policy | None = None,
+    dr0=0.0,
+    ro_frac=0.0,
+    irr_mask=None,
+    budget_reset=None,
+):
     """Step the balance over days (axis 0 of `rain`/`etc`; other axes broadcast).
 
     irr_mask (optional bool, broadcastable to rain): irrigation only where True (T3.5: no
     irrigation on fallow days).
+
+    p may vary by day (T6.2): an array with the same ndim as `rain` and a leading axis of 1 or
+    T is read per day (p[t]); lower-dimensional p is constant in time as before.
+    budget_reset (optional bool, broadcastable to rain): where True the seasonal budget of
+    `fixed_seasonal_mm` is refilled to `policy.budget_mm` (start of a new season). The budget
+    may be an array broadcastable to the trailing axes (one budget per draw).
 
     rain, etc: mm/day (etc = Kc * ETo, unstressed). Returns dict of arrays:
     dr (end of day), ks, eta, irr (net), irr_gross, dp, ro; each shaped like rain.
@@ -72,15 +88,26 @@ def run(rain, etc, taw_mm, p, policy: Policy | None = None, dr0=0.0, ro_frac=0.0
     rain = np.asarray(rain, float)
     etc = np.broadcast_to(np.asarray(etc, float), rain.shape)
     taw_mm = np.asarray(taw_mm, float)
-    raw_mm = raw(taw_mm, p)
     shape = rain.shape
+    p = np.asarray(p, float)
+    p_t = p.ndim == rain.ndim
+    if p_t and p.shape[0] not in (1, shape[0]):
+        raise ValueError("time-varying p needs a leading axis of 1 or T")
+    raw_mm = None if p_t else raw(taw_mm, p)
+    if budget_reset is not None:
+        budget_reset = np.broadcast_to(np.asarray(budget_reset, bool), shape)
     if irr_mask is not None:
         irr_mask = np.broadcast_to(np.asarray(irr_mask, bool), shape)
     out = {k: np.zeros(shape) for k in ("dr", "ks", "eta", "irr", "irr_gross", "dp", "ro")}
     dr = np.broadcast_to(np.asarray(dr0, float), shape[1:]).copy()
     dr = np.clip(dr, 0.0, np.broadcast_to(taw_mm, shape[1:]))
-    left = np.full(shape[1:], policy.budget_mm)
+    budget = np.broadcast_to(np.asarray(policy.budget_mm, float), shape[1:])
+    left = budget.copy()
     for t in range(shape[0]):
+        if p_t:
+            raw_mm = raw(taw_mm, p[min(t, p.shape[0] - 1)])
+        if budget_reset is not None:
+            left = np.where(budget_reset[t], budget, left)
         ro = ro_frac * rain[t]
         pe = rain[t] - ro
         irr = np.zeros(shape[1:])

@@ -422,6 +422,10 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 
 ## Autopilot handoff
 
+**2026-11-07, autopilot run (T6.2 part 1).** Done: finished and committed the multi-year timeline engine (`simulate_timeline` in `rotation.py`; time-varying p and per-season budget refill in `waterbal.run`). `tests/test_timeline.py` 8/8, full suite green, ruff clean, gitleaks clean. Fixed two code bugs (taw dims, per-draw budget shape) and two test mismatches (p_fallow, scalar budget). In progress: T6.2 NOT ticked. Still to do: the evaluate layer (posterior draws subsample 30 × weather years; metrics water use / irrigation / RYI / cover days / CVaR10; pooled posterior draws stored per field; p per option), cover-crop check vs FAO-56 Table 11, fallow Kc check, runtime < 60 s per field on real candidates, then re-run T4.5 for the 15 null fields. Background: none. Next: T6.2 evaluate layer. Risk: Gate 6 may slip (accepted); T2.2 FAILED.
+
+(Previous entry:)
+
 **2026-11-07, interactive session (user decision on T6.2).** Done: decisions recorded (entry above); `BLOCKED.md` deleted. In progress: nothing. Background: none. **Next: T6.2 with option A** (multi-year timeline in `rotation.py`; cover-crop gap fill; fallow Kc per FAO-56 if readable; pooled posterior draws; `p` per option), then re-run T4.5 for the 15 null fields. At T4.6: write `docs/wimas_request.md`, mark "waiting for user data", continue. Risk: Gate 6 may slip (accepted by the user); T2.2 FAILED.
 
 (Previous entry:)
