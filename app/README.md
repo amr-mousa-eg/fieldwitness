@@ -60,6 +60,11 @@ npm run build     # production build into app/dist (real packs only)
 - Dev server: run from `app/` (`npm run dev`). `npm --prefix "<path with space>"` fails on this
   machine (cmd splits `C:\Users\Amr 13_03`).
 
+## Deploy
+
+Prepared, not deployed: see `deploy/README.md` (GitHub Pages vs Netlify, checked facts, load
+estimate). `VITE_BASE` sets the public path (default `/`).
+
 ## Browser checks (local Chrome, no extra packages)
 
 ```

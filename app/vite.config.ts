@@ -73,7 +73,18 @@ export function refuseFixtures(): Plugin {
   };
 }
 
+/**
+ * Public path the app is served from: "/" (Netlify, local) or "/<repo>/" (a GitHub Pages project
+ * site). Data, the service worker and its scope all follow it (import.meta.env.BASE_URL).
+ */
+function basePath(): string {
+  const b = process.env.VITE_BASE ?? "/";
+  if (!b.startsWith("/") || !b.endsWith("/")) throw new Error(`VITE_BASE must start and end with "/", got ${b}`);
+  return b;
+}
+
 export default defineConfig(({ command }) => ({
+  base: basePath(),
   plugins: [react(), serveFixtures(), refuseFixtures()],
   // The app reads this to show the DEMO DATA banner; a build can only be "packs".
   define: { __FW_DATA_MODE__: JSON.stringify(dataMode(command)) },
