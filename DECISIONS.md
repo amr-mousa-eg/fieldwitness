@@ -430,6 +430,10 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 
 ## Autopilot handoff
 
+**2026-11-07, autopilot run (T6.1 update + RYI option A).** Done (commit 8782ae9): `non_crop_ok` in `rotate/candidates.py` (≥1 harvested crop; no two consecutive fallow/cover seasons; A, UNVERIFIED) + property test; Kansas candidates 61 → 36. `rotate/evaluate.py`: RYI per rotation year = sum over seasons / S (fallow/cover = 0). 177 tests pass, ruff clean. In progress: re-run of `scripts/t62_run.py` (results/rotate/evaluation.json, ~15–30 min) — if `evaluation.json` is older than commit 8782ae9, re-run it, then `scripts/t63_rank.py`, and report top-1 per profile here. Background: none that survives the run. **Next:** t62 + t63 re-run and top-1 report, then T6.4. Risk: Gate 6 may slip (accepted); results/ not yet refreshed if this note is unchanged.
+
+(Previous entry:)
+
 **2026-11-07, interactive session (user decision on the RYI metric).** Done: decision recorded (entry above); `BLOCKED.md` deleted. Nothing coded. In progress: nothing. Background: none. **Next:** (1) T6.1 update: the two new hard constraints + property test; (2) RYI per rotation year (fallow/cover = 0) in `rotate/rank.py`; (3) re-run `scripts/t63_rank.py`, report top-1 per profile; (4) T6.4. Risk: Gate 6 may slip (accepted by the user).
 
 (Previous entry:)
