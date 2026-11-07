@@ -422,6 +422,10 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 
 ## Autopilot handoff
 
+**2026-11-07, autopilot run (T6.3).** Done: T6.3 ticked. `rotate/rank.py` (6 oriented metrics, Pareto flag, weighted min-max score per preset, regret matrix over weather years, tie-break by index), `config/ranking.yaml` (4 presets, all weights tag A UNVERIFIED), `scripts/t63_rank.py` → `results/rotate/ranking.json` + `ranking_summary.json` (200 fields, reproducible = true, mean Pareto share 0.64), `tests/test_rank.py`. `evaluate` now also stores `ryi_by_year`/`water_by_year`; T6.2 re-run (max 21 s/field, pass). 175 tests pass, ruff clean. **Caveat (negative, not tuned):** `ryi` is the mean over crop slots only, so a rotation with one crop and fallow/cover years is not penalised for lost crop years. Result: "fallow-sorghum-cover_crop" is top-1 in 181/200 fields (balanced) and 191/200 (yield_first); water_saver picks all-fallow in 182. These rankings are a metric artefact, not agronomic advice. Decision for the user: add a crop-year-sum RYI (fallow = 0) or a crop-count term. Not changed unasked (weights/metric = team choice). In progress: nothing. Background: none. Next: T6.4 (flip analysis), but first decide the RYI metric above. Risk: Gate 6 may slip; T2.2 FAILED; WIMAS open.
+
+(Previous entry:)
+
 **2026-11-07, autopilot run (T6.2 close).** Done: T6.2 ticked. `scripts/t62_run.py` → `results/rotate/evaluation.json` (200 fields × 61 candidates, metrics + `p_by_slot`; 185 posterior worlds tag D in-sample, 15 prior worlds tag A) and `t62_runtime.json` (max 18.3 s, median 8.9 s per field, limit 60 s: pass). 168 tests pass, ruff clean. In progress: nothing. Background: none. Next: T6.3 (Pareto filter + weighted score, regret matrix, seeded). Risk: Gate 6 may slip; T2.2 FAILED; WIMAS (T1.7/T4.6) still open for the user.
 
 (Previous entry:)

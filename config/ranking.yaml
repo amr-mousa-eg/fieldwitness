@@ -1,0 +1,34 @@
+# T6.3 ranking weights. ALL values are TEAM CHOICES (tag A, UNVERIFIED): no paper gives them.
+# Score = sum(weight * min-max normalised metric) per field; "higher is better" after orientation.
+# Metrics: ryi (up), cvar10_ryi (up), cover_days (up), water_use_mm (down), irrigation_mm (down),
+# cvar10_water_mm (down). A missing RYI (no crop slot with a Ky) counts as 0 (A).
+default_preset: balanced
+presets:
+  balanced:
+    ryi: 0.25
+    cvar10_ryi: 0.15
+    cover_days: 0.20
+    water_use_mm: 0.15
+    irrigation_mm: 0.15
+    cvar10_water_mm: 0.10
+  water_saver:
+    ryi: 0.10
+    cvar10_ryi: 0.10
+    cover_days: 0.10
+    water_use_mm: 0.30
+    irrigation_mm: 0.30
+    cvar10_water_mm: 0.10
+  yield_first:
+    ryi: 0.45
+    cvar10_ryi: 0.25
+    cover_days: 0.10
+    water_use_mm: 0.05
+    irrigation_mm: 0.05
+    cvar10_water_mm: 0.10
+  resilient:
+    ryi: 0.10
+    cvar10_ryi: 0.35
+    cover_days: 0.20
+    water_use_mm: 0.05
+    irrigation_mm: 0.05
+    cvar10_water_mm: 0.25

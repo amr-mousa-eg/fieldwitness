@@ -70,6 +70,12 @@ def evaluate(rain, eto, candidates, region_id: str, draws: dict, cover_frac: flo
         "cover_days": r["cover_days"].sum(-1).astype(int).tolist(),
         "cvar10_water_mm": [cvar(x, upper=True) for x in water],
         "cvar10_ryi": [None if np.all(np.isnan(x)) else cvar(x) for x in ryi],
+        # per weather start year, mean over worlds (axis 1); feeds the T6.3 regret matrix
+        "ryi_by_year": [
+            None if np.all(np.isnan(x)) else np.nanmean(x, axis=0).round(4).tolist()
+            for x in ryi.reshape(n, len(draws["taw_mm"]), -1)
+        ],
+        "water_by_year": water.reshape(n, len(draws["taw_mm"]), -1).mean(1).round(1).tolist(),
         "p_by_slot": [[s.p for s in o] for o in options],
         "n_samples": int(water.shape[1]),
         "tag": "D",
