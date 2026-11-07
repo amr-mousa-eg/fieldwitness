@@ -23,7 +23,7 @@ You are running **unattended** inside a loop (`scripts/autopilot.ps1`). No human
 When a phase's tasks are done, write the gate review to `docs/gates/gate-<N>.md`: every acceptance test, with pass / fail / unverified and the evidence.
 
 - If **every** acceptance test passes with evidence, you may continue to the next phase. The user reads the gate file later.
-- If any acceptance test fails or is unverified and you cannot fix it within the rules, write `BLOCKED.md` (see §5) and stop.
+- If any acceptance test fails or is unverified and you cannot fix it within the rules, record it as a negative result (§5a) and continue. Write `BLOCKED.md` only for a §5 hard stop.
 
 ## 4. Rules for unattended work
 
@@ -34,6 +34,9 @@ All rules in `CLAUDE.md` apply. In addition:
 - **No local process may outlive this run.** Long downloads must be server-side tasks (AppEEARS) whose IDs go into the handoff and are polled next run, or local downloads that finish within this run. Never rely on a background process surviving.
 - Keep each command's output short (use `python -u`, log to files under `logs/`, show only summaries).
 - Never use bypass permission modes, never edit `.claude/settings.json`, never change the loop script.
+- **Development subset.** During development, run on a fixed seeded subset of 20 Kansas fields (`SEED = 20261114`; record the field IDs in `DECISIONS.md` the first time). Run all 200 fields only once per task: for its acceptance check and for the packs.
+- **Cache simulations by input hash.** Key each field's simulation result on a hash of all its inputs (field data, configs, code version of the physics). A field whose inputs did not change is never recomputed.
+- **Keep the packs current (early integration).** The T8.1 pack writer exists (`packs/ks_t14slh/`, all 200 fields). When a task changes anything a pack shows (e.g. T6.9, T7.x), rebuild the packs and validate them (`cli validate-packs`) in the same task. A metric not yet computed is `null` with a "not yet computed" note and must stay schema-valid. For a new region, write a thin pack (story + Current + ranked options) for its 20-field subset right after T6.3 passes, then extend it as T6.4–T6.9 land.
 
 ## 5. Stop conditions → write `BLOCKED.md` and end the run
 
@@ -45,7 +48,22 @@ Write `BLOCKED.md` in the repo root (short: what, why, the exact question, optio
 - accepting any terms, licence or disclaimer (e.g. WIMAS);
 - credentials beyond the allowed `_netrc` use;
 - making the repository public, deploying publicly, or anything touching money;
-- a failed acceptance test you cannot fix honestly (never weaken a test to make it pass).
+- a decision whose options change the product's meaning when none of them is clearly better (see §5a).
+
+A failed acceptance test is **not** a stop: see §5a. Never weaken a test to make it pass.
+
+## 5a. Decision policy (decide, log, continue)
+
+If a decision is **reversible**, **within `PLAN.md` scope**, and you can name a recommended option with a reason (a cited source or an agronomic argument):
+
+1. Take the recommended option and tag it A (team choice).
+2. Log it in `DECISIONS.md`.
+3. Append it to `docs/review_queue.md` with: date, question, options, chosen option, reason, how to revert.
+4. Continue.
+
+Write `BLOCKED.md` only for the §5 hard stops, or when the options change the product's meaning and none is clearly better.
+
+A **failed acceptance test** is recorded as a negative result (in `results/` and `DECISIONS.md`, rule 9). Do not tune further. Then continue with the next task.
 
 ## 6. Waiting
 
