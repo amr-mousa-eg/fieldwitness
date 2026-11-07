@@ -26,7 +26,21 @@ def main() -> None:
     so.add_argument("--region", required=True)
     cx = sub.add_parser("context", help="T1.8 slope (pilot fields), GRACE and SMAP context")
     cx.add_argument("--region", required=True, help="region for the slope step")
+    bp = sub.add_parser("build-packs", help="T8.1 write per-field pack files and index.json")
+    bp.add_argument("--region", required=True)
+    bp.add_argument("--limit", type=int, default=None, help="only the first N fields (test)")
     a = p.parse_args()
+
+    if a.command == "build-packs":
+        import json
+
+        from fieldwitness.packs.run import build_region
+
+        res = build_region(a.region, limit=a.limit)
+        print(json.dumps({k: v for k, v in res.items() if k != "problems"}), flush=True)
+        for pr in res["problems"][:20]:
+            print("PROBLEM", pr, flush=True)
+        raise SystemExit(1 if res["problems"] else 0)
 
     if a.command == "context":
         import json
