@@ -29,7 +29,20 @@ def main() -> None:
     bp = sub.add_parser("build-packs", help="T8.1 write per-field pack files and index.json")
     bp.add_argument("--region", required=True)
     bp.add_argument("--limit", type=int, default=None, help="only the first N fields (test)")
+    vp = sub.add_parser("validate-packs", help="T8.1 validate pack files against the schemas")
+    vp.add_argument("path", help="pack directory, e.g. packs/ks_t14slh or packs/demo")
     a = p.parse_args()
+
+    if a.command == "validate-packs":
+        from pathlib import Path
+
+        from fieldwitness.packs.validate import validate_dir
+
+        probs = validate_dir(Path(a.path))
+        print(f"validate-packs {a.path}: {len(probs)} problems", flush=True)
+        for pr in probs[:20]:
+            print("PROBLEM", pr, flush=True)
+        raise SystemExit(1 if probs else 0)
 
     if a.command == "build-packs":
         import json

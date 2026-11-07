@@ -444,7 +444,7 @@ Each task: **ID · goal · output · acceptance test**. Tick `[x]` and add a one
 
 ### Phase 8 — Packs and API (`packs/`, `api/`)
 
-- [ ] **T8.1 Export packs.** `cli build-packs --region <id>` writes every file in the §3b layout: per field `<field_id>.json`, `.series.json`, `.calendar.json`, `.scenarios.json`; per region `index.json`, `hindcast.json`, `layers.json`; and `packs/regions.json`; validates every file against the models in `src/fieldwitness/schemas.py` (already written; do not redefine them) with `check_tagged`; fails if any user-facing number is untagged. *Accept:* each pack < 300 KB; validator in CI.
+- [x] **T8.1 Export packs.** *(Done 2026-11-07, Kansas: 802 files valid, max 279 KB; `cli validate-packs` + CI step on `packs/demo`; `hindcast.json` and the story-field ledger come from `scripts/t72_export.py`, run after `build-packs`; heat-wave layer not built, see DECISIONS.)* `cli build-packs --region <id>` writes every file in the §3b layout: per field `<field_id>.json`, `.series.json`, `.calendar.json`, `.scenarios.json`; per region `index.json`, `hindcast.json`, `layers.json`; and `packs/regions.json`; validates every file against the models in `src/fieldwitness/schemas.py` (already written; do not redefine them) with `check_tagged`; fails if any user-facing number is untagged. *Accept:* each pack < 300 KB; validator in CI.
 - [ ] **T8.2 Types.** Generate `app/src/types.ts` from the Pydantic schemas, §3 and §3b (JSON Schema → TS). *Accept:* app compiles against generated types.
 - [ ] **T8.3 Optional API.** FastAPI serving packs and a `/simulate` endpoint for live mode. Not used by the deployed demo.
 
