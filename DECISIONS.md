@@ -430,6 +430,10 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 
 ## Autopilot handoff
 
+**2026-11-07, interactive session (autopilot prompt change, one-time user approval).** `AUTOPILOT_PROMPT.md` changed: new §5a decision policy (reversible, in-scope decisions with a reasoned recommendation are taken, tagged A, logged here and in `docs/review_queue.md`, then work continues); a failed acceptance test is a negative result, not a stop; development runs use a fixed seeded 20-field Kansas subset, all 200 fields once per task; simulation results cached by input hash. **Early integration note:** the T8.1 pack writer already exists (`packs/ks_t14slh/`, 200 fields), so the "thin pack after T6.3" step applies to new regions only; for Kansas, rebuild and validate the packs whenever a task changes what they show (T6.9, T7.x). `BLOCKED.md` (Phase 9, app worktree access) is **still open** and was not answered in this session. `AUTOPILOT_STOP` was already absent.
+
+(Previous entry:)
+
 **2026-11-07, autopilot run (blocked at Phase 9).** Done: nothing coded. Next tasks T8.2/T9.x need the `app` worktree (`D:\NASA Project-app`), which this run cannot read; T5.2 still needs scikit-learn/doubleml OK. `BLOCKED.md` written with options (recommended: grant access to the app worktree; T8.2 via a small Python generator, no new dependency). In progress: nothing. Background: none. Risk: schedule; `scripts/_probe.py`, `scripts/_shape.py` still untracked (delete by hand).
 
 (Previous entry:)
