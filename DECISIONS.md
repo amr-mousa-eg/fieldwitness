@@ -472,6 +472,10 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 
 ## Autopilot handoff
 
+**2026-11-07, autopilot run (T5.2).** Done: `neighbours/dml.py` + `scripts/t52_dml.py` + `tests/test_neighbours_dml.py` -> `results/neighbours/effects.csv` (DoubleMLPLR, RF nuisance learners, 5 folds = GroupKFold over 10 km blocks, rule 7). Contrasts: previous-crop pairs with >= 30 rows per arm per outcome crop; outcomes canopy integral, peak, cover days, canopy drop; strata all/wet/dry (>= 20 per arm). 144 rows, 92 fitted, 20 CIs exclude 0. **Caution:** 92 tests with no multiple-testing correction, so about 5 false positives are expected by chance; learners untuned (A, UNVERIFIED); pilot fields only; soybean/sunflower contrasts absent (too few rows). Effects must NOT be shown as evidence until T5.3 diagnostics pass. 238 tests pass. In progress: nothing. Background: none. **Next:** T5.3 diagnostics (placebo, negative control, overlap, balance), then re-run `scripts/t65_grade.py` with the neighbour witness, then T6.9, Phase 7 (T7.1, T7.3 B3, T7.4). Risk: main JS chunk 1.77 MB.
+
+(Previous entry:)
+
 **2026-11-07, interactive session (deps + npm rules).** Done: scikit-learn 1.9.1 + doubleml 0.11.4 installed and checked; npm allow rules verified with the loop's flags; T8.2 ticked (entry above). In progress: nothing. Background: none. **Next:** (1) sync the real packs into the app (`node scripts/sync-packs.mjs ../packs` from `app/`) and check every view; (2) T6.9; (3) Phase 7 (T7.1, T7.3, T7.4); (4) Phase 5 (T5.1, then T5.2 with doubleml; use `set_sample_splitting` with spatial blocks; then re-run `scripts/t65_grade.py`). Risk: main JS chunk 1.77 MB.
 
 (Previous entry:)
