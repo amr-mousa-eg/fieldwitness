@@ -1,0 +1,75 @@
+{
+  "n_fields": 200,
+  "n_worlds": 20,
+  "n_candidates": 36,
+  "presets": {
+    "balanced": {
+      "mean_flip_share": {
+        "taw_mm": 0.187,
+        "kc_scale": 0.188,
+        "budget_mm": 0.253
+      },
+      "most_influential_input": {
+        "budget_mm": 89,
+        "kc_scale": 44,
+        "taw_mm": 67
+      },
+      "fields_with_any_flip_in_grid": {
+        "taw_mm": 129,
+        "kc_scale": 186,
+        "budget_mm": 187
+      }
+    },
+    "water_saver": {
+      "mean_flip_share": {
+        "taw_mm": 0.134,
+        "kc_scale": 0.045,
+        "budget_mm": 0.171
+      },
+      "most_influential_input": {
+        "budget_mm": 99,
+        "taw_mm": 94,
+        "kc_scale": 7
+      },
+      "fields_with_any_flip_in_grid": {
+        "taw_mm": 57,
+        "kc_scale": 101,
+        "budget_mm": 158
+      }
+    },
+    "yield_first": {
+      "mean_flip_share": {
+        "taw_mm": 0.196,
+        "kc_scale": 0.101,
+        "budget_mm": 0.089
+      },
+      "most_influential_input": {
+        "taw_mm": 156,
+        "budget_mm": 21,
+        "kc_scale": 23
+      },
+      "fields_with_any_flip_in_grid": {
+        "taw_mm": 124,
+        "kc_scale": 173,
+        "budget_mm": 105
+      }
+    },
+    "resilient": {
+      "mean_flip_share": {
+        "taw_mm": 0.263,
+        "kc_scale": 0.186,
+        "budget_mm": 0.151
+      },
+      "most_influential_input": {
+        "taw_mm": 125,
+        "budget_mm": 40,
+        "kc_scale": 35
+      },
+      "fields_with_any_flip_in_grid": {
+        "taw_mm": 141,
+        "kc_scale": 194,
+        "budget_mm": 158
+      }
+    }
+  }
+}
