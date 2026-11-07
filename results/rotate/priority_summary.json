@@ -1,0 +1,21 @@
+{
+  "n_fields": 200,
+  "n_options": 36,
+  "metrics": [
+    "deep_root_share",
+    "erosion_exposure",
+    "family_breaks",
+    "forage_value",
+    "legume_share",
+    "residue_proxy"
+  ],
+  "n_options_with_missing_metric": 0,
+  "labels": {
+    "legume_share": "nitrogen-fixing crops in the rotation",
+    "family_breaks": "pest and disease break opportunities",
+    "deep_root_share": "deep-rooting crops in the rotation",
+    "forage_value": "forage use in the rotation (assumed list)",
+    "erosion_exposure": "erosion exposure (relative index, not tonnes of soil)",
+    "residue_proxy": "organic matter input (proxy, not soil carbon)"
+  }
+}
