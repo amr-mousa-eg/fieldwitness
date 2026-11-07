@@ -1,0 +1,12 @@
+{
+  "n_fields_graded": 187,
+  "skipped": {
+    "current_not_simulatable": 13
+  },
+  "grade_counts_all_options": {
+    "C": 3600,
+    "B": 2772,
+    "D": 360
+  },
+  "note": "no neighbour witness (T5.2 blocked) -> max grade B; physics interval = weather variability (A)"
+}
