@@ -472,6 +472,10 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 
 ## Autopilot handoff
 
+**2026-11-07, autopilot run (no progress, 5th in a row).** `WebFetch https://arxiv.org/abs/2506.02384` still not granted; T5.4 BLOCKED (rule 8). Nothing coded; tree clean. Open: T6.9 UI port, T7.1 barley, T7.4, T7.3 B3 (not meaningful, Gate 5 failed); each needs a large focused session. Background: none. **Next:** user grants WebFetch for arxiv.org (or pastes the method section); otherwise run T6.9 UI interactively.
+
+(Previous entry:)
+
 **2026-11-07, autopilot run (no progress, 4th in a row).** `WebFetch` for arxiv.org still not granted; T5.4 BLOCKED. Note: T7.3 B0-B2 already exist (`scripts/t73_baselines.py`, entry below); only B3 and the per-tier table are open (B3 not meaningful, Gate 5 failed). Remaining: T6.9 UI port, T7.1 barley, T7.4 (if time), each a large session. Background: none. **Next:** user grants WebFetch for arxiv.org (or pastes the method section); otherwise T6.9 UI in an interactive session.
 
 (Previous entry:)
