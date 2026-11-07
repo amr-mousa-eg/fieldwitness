@@ -5,7 +5,8 @@ years. A "world" is one posterior draw: TAW (mm), Kc scale, seasonal irrigation 
 rainfed). Samples = worlds x start years; metrics are taken over all samples of an option:
 - water_use_mm: ETa of the S timeline years 1..S (crops, cover, bare soil), summed over years;
 - irrigation_mm: net irrigation applied in those years, summed;
-- ryi: mean Relative Yield Index over the slots that have one (crops with a Ky); NaN if none;
+- ryi: Relative Yield Index per rotation year = sum of RYI over all S seasons / S (fallow and
+  cover crop count 0; app label "production per rotation year (relative)"); NaN if no crop;
 - cover_days: days with canopy proxy >= `cover_frac` over the S years (same in every sample);
 - cvar10_water_mm: mean of the highest 10 % of water-use samples; cvar10_ryi: mean of the lowest
   10 % of RYI samples (tail = bad outcome; CVaR level 0.10, PLAN T6.2).
@@ -61,7 +62,9 @@ def evaluate(rain, eto, candidates, region_id: str, draws: dict, cover_frac: flo
     ok = ~np.isnan(r["ryi"])
     cnt = ok.sum(-1)
     tot = np.where(ok, r["ryi"], 0.0).sum(-1)
-    ryi = np.where(cnt > 0, tot / np.maximum(cnt, 1), np.nan).reshape(n, -1)  # NaN: no slot RYI
+    # option A (user decision 2026-11-07): RYI per rotation year = sum over all seasons / number
+    # of seasons; fallow and cover-crop seasons (no RYI) count as 0. NaN only if no crop at all.
+    ryi = np.where(cnt > 0, tot / r["ryi"].shape[-1], np.nan).reshape(n, -1)
     return {
         "candidates": [list(c) for c in candidates],
         "water_use_mm": water.mean(1).tolist(),

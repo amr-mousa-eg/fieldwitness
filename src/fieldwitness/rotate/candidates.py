@@ -7,7 +7,9 @@ A candidate is a sequence of N_SEASONS crop keys (oldest first). Constraints, in
    crops without stage lengths (fallow, cover crop) always fit. Observed local SOS/EOS are not
    used yet (T2.2 failed its acceptance), so the configured windows stand in. UNVERIFIED (A);
 3. at most `max_consecutive_family` seasons in a row of the same botanical family
-   (default 2, a team choice, tag A, UNVERIFIED). Fallow has no family and breaks a run.
+   (default 2, a team choice, tag A, UNVERIFIED). Fallow has no family and breaks a run;
+4. at least one harvested crop, and no two consecutive non-crop seasons (fallow / cover crop)
+   (team choice 2026-11-07, tag A, UNVERIFIED).
 """
 
 from calendar import monthrange
@@ -18,6 +20,7 @@ from fieldwitness.config import CropsFile, Region, load_crops, load_regions, rot
 N_SEASONS = 3
 MAX_CONSECUTIVE_FAMILY = 2  # A, UNVERIFIED team choice
 SLACK_DAYS = 7  # A: windows are whole months, stage sums are in days
+NON_CROP_KEYS = frozenset({"fallow", "cover_crop"})
 WINTER_CROPS = {"winter_wheat", "winter_barley"}
 
 
@@ -57,6 +60,15 @@ def family_ok(seq: tuple[str, ...], crops: CropsFile, max_run: int) -> bool:
     return True
 
 
+def non_crop_ok(seq: tuple[str, ...], crops: CropsFile) -> bool:
+    """Team constraints (A, UNVERIFIED, 2026-11-07): at least one harvested crop and at most
+    one consecutive non-crop season (fallow or cover crop)."""
+    nc = [c in NON_CROP_KEYS for c in seq]
+    if all(nc):
+        return False
+    return not any(a and b for a, b in zip(nc, nc[1:], strict=False))
+
+
 def allowed_crops(
     region_id: str,
     bans: set[str] | frozenset[str] = frozenset(),
@@ -83,5 +95,7 @@ def enumerate_candidates(
     regions = regions or load_regions()
     pool = sorted(allowed_crops(region_id, bans, crops, regions))
     return [
-        s for s in product(pool, repeat=n_seasons) if family_ok(s, crops, max_consecutive_family)
+        s
+        for s in product(pool, repeat=n_seasons)
+        if family_ok(s, crops, max_consecutive_family) and non_crop_ok(s, crops)
     ]

@@ -28,5 +28,21 @@ def test_family_limit_and_determinism():
     assert ("maize", "fallow", "sorghum") in a  # fallow breaks the run
 
 
+@settings(deadline=None)
+@given(st.sets(st.sampled_from(POOL)))
+def test_non_crop_constraints(bans):
+    for seq in cd.enumerate_candidates(REGION, bans=bans):
+        nc = [c in cd.NON_CROP_KEYS for c in seq]
+        assert not all(nc)
+        assert not any(a and b for a, b in zip(nc, nc[1:], strict=False))
+
+
+def test_non_crop_examples():
+    a = cd.enumerate_candidates(REGION)
+    assert ("fallow", "fallow", "fallow") not in a
+    assert ("maize", "fallow", "cover_crop") not in a
+    assert ("fallow", "maize", "fallow") in a
+
+
 def test_all_banned_gives_empty():
     assert cd.enumerate_candidates(REGION, bans=set(POOL)) == []

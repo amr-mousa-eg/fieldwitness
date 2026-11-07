@@ -59,5 +59,5 @@ def test_runtime_all_kansas_candidates():
     t0 = time.time()
     out = evaluate(rain, eto, cands, REGION, draws(30, budget=200.0))
     assert time.time() - t0 < 60
-    assert len(out["water_use_mm"]) == len(cands) == 61
+    assert len(out["water_use_mm"]) == len(cands) == 36  # 61 before the non-crop constraints
     assert out["n_samples"] == 30 * (24 - 3)
