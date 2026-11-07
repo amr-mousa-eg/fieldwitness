@@ -430,6 +430,10 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 
 ## Autopilot handoff
 
+**2026-11-07, autopilot run (T6.7 part 1).** Done: `rotate/priority.py` + `tests/test_priority.py` (4 tests; 207 pass, ruff clean): `legume_share`, `family_breaks`, `deep_root_share` (tag D; family from GBIF/USDA, depth from FAO-56 Table 22 in crops.yaml, both verified) and `forage_value` (tag A: team crop list, no source read; UNVERIFIED). `sequence_metrics(seq)` returns the four `SEQUENCE_ONLY_METRICS` as `Tagged`. UNVERIFIED (A): deep-root threshold 1.5 m vs upper end of range; fallow/cover counts as a family break. T6.7 NOT ticked: `erosion_exposure` (needs simulated daily bare/low cover, rain above an erosive threshold, SRTM slope factor) and `residue_proxy` (canopy integral + cover days) still to do; the erosive-rain threshold needs a cited source (rule 8) or tag A. In progress: nothing. Background: none. **Next:** T6.7 part 2 (erosion, residue; check SRTM slope is in `data/context`), then label check + tick, then T6.8. T5.2 still needs the scikit-learn/doubleml OK (rule 11). Risk: Gate 6 may slip; T2.2 FAILED; WIMAS open.
+
+(Previous entry:)
+
 **2026-11-07, autopilot run (T6.6).** Done: T6.6 ticked. `rotate/explain.py` (`explain(ExplainInput) -> Explanation`; pure templates: why = rank/Pareto/family breaks/crop seasons; evidence = grade + reasons + credibility + witnesses; benefits = deltas vs Current with 90 % interval and tag; gaps = tag-A key inputs, missing neighbours, scale flag, team-choice weights; risks = missing Ky, fallow/cover scores 0, local review) + `tests/test_explain.py` (7 tests; gaps/risks never empty). 203 tests pass, ruff clean. Not done: filling `Option.explanation` in packs (T8.1), `ExplainInput` built from `grades.json`/`ranking.json`/`flip.json` at that time. In progress: nothing. Background: none. **Next:** T6.7 (priority metrics, tagged; deep_root_share from FAO-56 Table 22 needs a verified read), then T6.8+. T5.2 still needs the scikit-learn/doubleml OK (rule 11). Risk: Gate 6 may slip; T2.2 FAILED; WIMAS open.
 
 (Previous entry:)
