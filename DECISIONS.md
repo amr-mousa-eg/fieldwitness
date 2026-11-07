@@ -458,7 +458,17 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 - **Corrected result (T6.8):** the share of fields whose balanced rank 1 changes vs the baseline scenario was wrong (it tracked candidate 1's place). New values (`results/rotate/scenarios_summary.json`): 0 % (baseline) to 59.5 % (+2 °C, rain −20 %); rain −20 %: 54 % (was reported as 90 %); range 10–59.5 % over the 11 non-baseline scenarios (was 21–93 %). The T6.8 log entry below keeps the old numbers for history; these supersede them.
 - T6.3 (`ranking.json`, top-1 distributions via `order[0]`), T6.4 (`flip.py`, own argmax) and T6.5 (grades) did not use the wrong mapping; not re-run.
 
+## 2026-11-07 — doubleml checked; `uv add` and the settings change wait for the user; §6 blocked-task rule
+
+- **doubleml (T5.2):** licence BSD 3-Clause, latest 0.11.4; API checked in the official docs (`DoubleMLData`, `DoubleMLPLR`, `fit`, `confint`, `set_sample_splitting` for our spatial folds); notes in `docs/api_notes.md`. doubleml 0.11.4 **requires** optuna, matplotlib, seaborn, plotly, mypy and statsmodels at runtime (not optional extras); these come in with the approved `doubleml`.
+- **Not done (blocked by `.claude/settings.json` deny rules, not bypassed):** `uv add scikit-learn doubleml` (deny `Bash(uv add *)`), so no versions to log and no test run with them yet; the settings change for npm/node (deny `Edit(/.claude/settings.json)`). A complete proposed `settings.json` was written to the session scratchpad for the user to copy (adds allow: `npm --prefix app run build|test`, `npm run build|test`, `node scripts/*.mjs`, `node app/scripts/*.mjs`, `cd app`; adds deny: `npm ci`, `npm --prefix * ci|install|i|add`, bare `npm install|i|add`, `npx`; Bash and PowerShell). The `claude -p` permission check is not run yet (it needs the new settings).
+- **AUTOPILOT_PROMPT.md §6** (user): a blocked task is logged in the handoff and the loop continues with the next ready task; `BLOCKED.md` only if nothing can proceed; `AUTOPILOT_WAIT` only for server-side downloads, at most 60 minutes.
+
 ## Autopilot handoff
+
+**2026-11-07, interactive session (doubleml check, §6 rule).** Done: doubleml licence + API in `docs/api_notes.md`; `AUTOPILOT_PROMPT.md` §6 rewritten (entry above). **Blocked for the user:** `uv add scikit-learn doubleml` and the `.claude/settings.json` npm/node allow rules (both denied by settings; the user applies them). In progress: nothing. Background: none. **Next:** T6.9, Phase 7 (T7.1, T7.3, T7.4), Phase 5 T5.1. T5.2 starts once `doubleml` is in `pyproject.toml` (then read the installed source, make one small test call, log versions). T8.2 app compile check (`npm --prefix app run build`) once the npm allow rules are in place. Risk: main JS chunk 1.77 MB.
+
+(Previous entry:)
 
 **2026-11-07, autopilot run (blocked on tooling, no progress).** Tried `uv add scikit-learn doubleml` for T5.2 (approved by the user): the command was denied in this unattended run. npm is also refused (T8.2). Nothing changed, tree clean. Next: run `uv add scikit-learn doubleml` by hand (then verify the doubleml API from its docs and do T5.2), and `npm --prefix app run build && npm --prefix app test` (T8.2). Without either, only T7.1 (barley predictions) and T7.3 B3 remain, and B3 needs T5.2. Background: none. Risk: loop makes no progress until these two commands are allowed.
 

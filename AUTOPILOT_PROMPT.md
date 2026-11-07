@@ -65,9 +65,15 @@ Write `BLOCKED.md` only for the §5 hard stops, or when the options change the p
 
 A **failed acceptance test** is recorded as a negative result (in `results/` and `DECISIONS.md`, rule 9). Do not tune further. Then continue with the next task.
 
-## 6. Waiting
+## 6. Blocked tasks and waiting
 
-If the only thing left to do is wait for background tasks (nothing else has ready inputs), write the number of minutes to wait (e.g. `60`) into the file `AUTOPILOT_WAIT` and end the run. The loop sleeps that long before the next run.
+**A blocked task does not stop the loop.** If a task is blocked (a permission is refused, an input is missing):
+
+1. Log the blocked task in the handoff: task ID, what is blocked, the exact refused command or missing input.
+2. Continue with the next task whose inputs are ready (current order: T6.9, Phase 7, Phase 5).
+3. Write `BLOCKED.md` only if **no** task can proceed.
+
+**Waiting.** Use `AUTOPILOT_WAIT` only to wait for server-side downloads (e.g. AppEEARS tasks), and only when nothing else has ready inputs. Write the number of minutes into the file (**at most `60`**) and end the run. The loop sleeps that long before the next run.
 
 ## 7. End of every run (always, even when blocked)
 
