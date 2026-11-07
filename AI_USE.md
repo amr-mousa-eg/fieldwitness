@@ -1,4 +1,4 @@
-<!-- DRAFT (branch app, 2026-11-07). Moves to /AI_USE.md at the merge. Before that:
+<!-- DRAFT (moved from docs/drafts/ at the Gate 6 merge, 2026-11-07). Before release:
      - check the 2026 Space Apps Project Submission Guide (released 13 Nov 2026) for the
        required AI disclosure and file-marking rules, and adjust this file to them;
      - the owner confirms the "What the people did" section. -->

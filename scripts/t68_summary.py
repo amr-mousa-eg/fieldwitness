@@ -10,7 +10,8 @@ chg = {}
 for per in d.values():
     r0 = per[base]["rank_balanced"]
     for sid, p in per.items():
-        chg.setdefault(sid, []).append(p["rank_balanced"].index(1) != r0.index(1))
+        # rank_balanced is the best-first order: [0] is the rank-1 candidate
+        chg.setdefault(sid, []).append(p["rank_balanced"][0] != r0[0])
 out = {
     "fields": len(d),
     "scenarios_per_field": sorted(n_sc),

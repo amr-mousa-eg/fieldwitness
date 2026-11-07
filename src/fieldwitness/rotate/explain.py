@@ -36,7 +36,7 @@ class ExplainInput:
     key_input_tags: dict[str, str]
     deltas: dict[str, Delta] = field(default_factory=dict)
     profile: str = "balanced"
-    rank: int | None = None
+    rank: int | None = None  # 1-based (1 = best), as Option.rank
     pareto: bool | None = None
     family: dict[str, str | None] = field(default_factory=dict)
     ky_verified: dict[str, bool] = field(default_factory=dict)
@@ -77,9 +77,7 @@ def explain(x: ExplainInput) -> Explanation:
         why.append(f"This is the field's current rotation ({seq}), from crop labels (tag E).")
     else:
         if x.rank is not None:
-            why.append(
-                f"Rank {x.rank + 1} under the '{x.profile}' priority profile (weights tag A)."
-            )
+            why.append(f"Rank {x.rank} under the '{x.profile}' priority profile (weights tag A).")
         if x.pareto is not None:
             why.append(
                 "On the Pareto front: no other option is better on every metric."

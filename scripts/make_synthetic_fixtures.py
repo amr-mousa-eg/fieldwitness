@@ -6,7 +6,7 @@ contains ".SYNTHETIC.", and the region is named "DEMO DATA (synthetic)". The pro
 refuses to ship these files (app/vite.config.ts, app/tests/build-guard.test.ts).
 
 Run:  uv run python scripts/make_synthetic_fixtures.py
-Out:  app/fixtures/<REGION>/*.SYNTHETIC.json (validated against scripts/fixture_schemas.py)
+Out:  app/fixtures/<REGION>/*.SYNTHETIC.json (validated against fieldwitness.schemas)
 """
 
 from __future__ import annotations
@@ -17,10 +17,11 @@ import sys
 from datetime import date, datetime, timedelta
 from pathlib import Path
 
-import fixture_schemas as S
 import shapely
+from pydantic import BaseModel
 from pyproj import Transformer
 
+from fieldwitness import schemas as S
 from fieldwitness.resolve.fields import SEED, field_id
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -121,7 +122,7 @@ def make_field(i, spec, rng: random.Random):
     fid = field_id(geom)
     area_ha = round(shapely.transform(geom, TO_UTM, interleaved=False).area / 10_000, 2)
     interior = max(0, int(w / 30) - 2) * max(0, int(h / 30) - 2)
-    field = S.FieldModel(
+    field = S.Field(
         field_id=fid,
         geometry_wkt=geom.wkt,
         area_ha=area_ha,
@@ -569,7 +570,7 @@ def main() -> int:
     OUT.mkdir(parents=True, exist_ok=True)
     for old in OUT.glob("*.json"):
         old.unlink()
-    out: dict[str, S.BaseModel] = {}
+    out: dict[str, BaseModel] = {}
     packs, cals = [], []
     for i, spec in enumerate(FIELDS):
         pack, series, cal, scen = make_field(i, spec, rng)

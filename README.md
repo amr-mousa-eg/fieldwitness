@@ -1,4 +1,4 @@
-<!-- DRAFT (branch app, 2026-11-07). Moves to /README.md at the merge. Before that:
+<!-- DRAFT (moved from docs/drafts/ at the Gate 6 merge, 2026-11-07). Before release:
      - fill the deployed URL (not deployed yet) and add screenshots from real packs;
      - re-check every number against results/ on main (numbers below: packs/ks_t14slh/hindcast.json, 7 Nov);
      - remove the "Known issues" items that main has fixed. -->
@@ -74,8 +74,6 @@ What this means:
 
 ## Known issues
 
-- **Option ranks in the packs are inverted.** `packs/build.py` (the pack builder) stores the sort
-  order of the options where each option's rank should be.
 - The season detector missed its pre-registered target: 78 % against a 90 % target (T2.2,
   `results/story/`).
 - Only maize and sorghum have calibrated physics. Winter wheat fields cannot get a credibility score.

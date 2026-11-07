@@ -72,8 +72,22 @@ def regret(ev: dict) -> np.ndarray | None:
     return a.max(0, keepdims=True) - a
 
 
+def rank_positions(order: list[int]) -> list[int]:
+    """1-based rank of each option from a best-first `order` of option indices.
+
+    `rank_field(...)["rank"][preset]` (and `rank_balanced` in scenarios.json) is that order:
+    order[0] is the index of the best option, not option 0's rank. rank_positions(order)[i] is
+    option i's rank (1 = best)."""
+    pos = np.empty(len(order), dtype=int)
+    pos[np.asarray(order, dtype=int)] = np.arange(1, len(order) + 1)
+    return pos.tolist()
+
+
 def rank_field(ev: dict, presets: dict) -> dict:
-    """Ranking per preset + Pareto flags + regret summary for one field."""
+    """Ranking per preset + Pareto flags + regret summary for one field.
+
+    out["rank"][preset] is the best-first ORDER of option indices; use `rank_positions` to get
+    each option's rank."""
     m = oriented(ev)
     par = pareto_mask(m)
     out = {"pareto": par.tolist(), "rank": {}, "score": {}}

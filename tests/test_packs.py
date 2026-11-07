@@ -25,11 +25,11 @@ def test_field_scenarios_has_12_and_no_sequence_only_metrics():
         "water_use_mm": [900.0, 950.0],
         "irrigation_mm": [0.0, 5.0],
         "cvar10_water_mm": [1000.0, 1100.0],
-        "rank_balanced": [2, 1],
+        "rank_balanced": [1, 0],  # best-first order: candidate 1 is best
     }
     fs = B.field_scenarios("f", {i: one for i in ids}, cands, "D", date(2024, 12, 31))
     assert len(fs.scenarios) == 12 and fs.baseline_id in ids
-    assert fs.scenarios[0].ranks["fallow|maize|fallow"] == 1
+    assert fs.scenarios[0].ranks == {"fallow|maize|fallow": 1, "sorghum|fallow|sorghum": 2}
     assert not check_tagged(fs)
     FieldScenarios.model_validate_json(fs.model_dump_json())
 

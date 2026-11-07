@@ -26,11 +26,11 @@ def test_family_breaks():
 
 
 def test_why_has_rank_and_pareto():
-    e = explain(_x(rank=0, pareto=True))
+    e = explain(_x(rank=1, pareto=True))
     assert any("Rank 1" in s for s in e.why)
     assert any("On the Pareto front" in s for s in e.why)
     assert not any("Not on" in s for s in e.why)
-    e = explain(_x(rank=3, pareto=False))
+    e = explain(_x(rank=4, pareto=False))
     assert any("Not on the Pareto front" in s for s in e.why)
 
 

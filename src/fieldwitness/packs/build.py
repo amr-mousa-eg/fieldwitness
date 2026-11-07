@@ -17,6 +17,7 @@ from shapely import wkb
 
 from fieldwitness.rotate.explain import Delta, ExplainInput, explain
 from fieldwitness.rotate.flip import advice
+from fieldwitness.rotate.rank import rank_positions
 from fieldwitness.schemas import (
     SEQUENCE_ONLY_METRICS,
     Field,
@@ -221,7 +222,7 @@ def options(
         )
     )
     # --- candidates ---
-    ranks = rk["rank"][PRESET]
+    ranks = rank_positions(rk["rank"][PRESET])  # option i's rank, 1 = best
     regret_mean = rk.get("regret_mean")
     pareto = rk["pareto"]
     for i, cand in enumerate(ev["candidates"]):
@@ -268,7 +269,7 @@ def options(
                 key_input_tags=key_tags,
                 deltas=deltas,
                 profile=PRESET,
-                rank=int(ranks[i]),
+                rank=ranks[i],
                 pareto=bool(pareto[i]),
                 family=fam,
                 ky_verified=ky_ok,
@@ -290,7 +291,7 @@ def options(
                     tag=tag,
                     source="rotate.rank regret matrix",
                 ),
-                rank=int(ranks[i]),
+                rank=ranks[i],
                 explanation=ex,
             )
         )
@@ -346,7 +347,8 @@ def field_scenarios(
                     source="scenarios",
                 )
             metrics[oid(c)] = m
-        ranks = mets.get("rank_balanced") or []
+        order = mets.get("rank_balanced") or []  # best-first order of candidate indices
+        ranks = rank_positions(order) if order else []
         out.append(
             Scenario(
                 scenario_id=sid,
