@@ -460,6 +460,10 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 
 ## Autopilot handoff
 
+**2026-11-07, autopilot run (blocked on tooling, no progress).** Tried `uv add scikit-learn doubleml` for T5.2 (approved by the user): the command was denied in this unattended run. npm is also refused (T8.2). Nothing changed, tree clean. Next: run `uv add scikit-learn doubleml` by hand (then verify the doubleml API from its docs and do T5.2), and `npm --prefix app run build && npm --prefix app test` (T8.2). Without either, only T7.1 (barley predictions) and T7.3 B3 remain, and B3 needs T5.2. Background: none. Risk: loop makes no progress until these two commands are allowed.
+
+(Previous entry:)
+
 **2026-11-07, autopilot run (short, no progress).** Tried `npm run build` for T8.2 three ways (Set-Location, `--prefix`, plain); every form is refused with "requires approval" in this unattended run. Nothing changed: tree clean, no commit. T8.2 still NOT ticked, types.ts uncompiled. Next: run `npm --prefix app run build` and `npm --prefix app test` interactively (or allow npm), fix type errors, tick T8.2, push. Meanwhile T6.9, Phase 7 and Phase 5 (T5.2 approved) are Python-only and can be taken by the next autopilot run. Background: none. Risk: loop keeps hitting the npm wall; consider allowing `npm run build/test` in the settings.
 
 (Previous entry:)
