@@ -1,5 +1,3 @@
-from pathlib import Path
-
 import numpy as np
 import pandas as pd
 import pytest
@@ -113,9 +111,7 @@ def test_observations_follow_truth_within_noise():
     assert abs(res.mean()) < 0.01 and res.std() == pytest.approx(0.02, rel=0.2)
 
 
-@pytest.mark.skipif(
-    not Path("data/fields/ks_t14slh_hls_series.parquet").exists(), reason="HLS series not on disk"
-)
+@pytest.mark.needs_data("data/fields/ks_t14slh_hls_series.parquet")
 def test_real_census_smoke():
     s = pd.read_parquet("data/fields/ks_t14slh_hls_series.parquet")
     c = synthetic.census(s)

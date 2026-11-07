@@ -56,6 +56,7 @@ def test_unknown_field():
         current_rotation("zzz", ALLOWED, _table())
 
 
+@pytest.mark.needs_data("data/labels/ks_t14slh.parquet")
 def test_every_kansas_field_has_current():
     """T6.0 acceptance on the real label table: every pilot field gets a Current option."""
     crops = load_crops()

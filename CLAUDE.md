@@ -35,6 +35,7 @@ Deliverables: (1) a public static web app (no login, offline from precomputed fi
 - Done = the task's acceptance test passes, tests are green, and the checkbox in `PLAN.md` is ticked with a one-line note.
 - Prefer the simplest method that passes its acceptance test. ML only where `PLAN.md` asks for it.
 - Keep functions pure where possible and seed every random process (`SEED = 20261114`).
+- Tests that read data/ must use the needs_data marker so CI stays green without local data. Usage: `@pytest.mark.needs_data("data/labels/ks_t14slh.parquet")` (defined in `tests/conftest.py`).
 - Communicate with the user in clear, simple English. Code, comments, and docs are in English.
 - At the end of each session, append a short entry to `DECISIONS.md`: what was done, what is blocked, and the next task ID.
 

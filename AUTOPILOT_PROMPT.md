@@ -30,6 +30,7 @@ When a phase's tasks are done, write the gate review to `docs/gates/gate-<N>.md`
 All rules in `CLAUDE.md` apply. In addition:
 
 - **Push** after a task when all tests pass and gitleaks is clean. One line per push in the handoff.
+- Tests that read data/ must use the needs_data marker so CI stays green without local data.
 - **No local process may outlive this run.** Long downloads must be server-side tasks (AppEEARS) whose IDs go into the handoff and are polled next run, or local downloads that finish within this run. Never rely on a background process surviving.
 - Keep each command's output short (use `python -u`, log to files under `logs/`, show only summaries).
 - Never use bypass permission modes, never edit `.claude/settings.json`, never change the loop script.
