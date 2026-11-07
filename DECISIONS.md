@@ -472,6 +472,10 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 
 ## Autopilot handoff
 
+**2026-11-07, autopilot run (Gate 5, T5.4 blocked).** Done: `docs/gates/gate-5.md` written. Gate 5 test FAIL (no Tier 1 contrast passes diagnostics; negative result, see T5.3). **T5.4 BLOCKED:** opening arXiv:2506.02384 was refused (`WebFetch https://arxiv.org/abs/2506.02384` and `curl https://export.arxiv.org/api/query?id_list=2506.02384` both need approval); rule 8 forbids numbers from memory. Not started (too large for a blind run): T6.9 UI (no corrections code in `app/src`; needs a TS port of `apply_corrections` and a browser check), T7.1 barley (needs a physics window for barley). In progress: nothing. Background: none. **Next:** user opens the paper or allows WebFetch for arxiv.org, then T5.4; then T6.9 UI, T7.1 barley. Risk: main JS chunk 1.77 MB.
+
+(Previous entry:)
+
 **2026-11-07, autopilot run (T5.3).** Done: `neighbours/diagnostics.py` + `scripts/t53_diagnostics.py` + `tests/test_neighbours_diagnostics.py` (241 tests pass, ruff clean); `dml.py` refactored (`fit_plr`, effects.csv unchanged). **Negative result:** 0 of 92 contrasts pass all four checks (placebo 6 fail/36 untested, negative control 5 fail/64 untested, overlap 32 fail, balance 92 fail because the crop two years back is structurally tied to the previous crop). No neighbour effect is shown as evidence; thresholds were fixed beforehand (A, UNVERIFIED), not tuned. See `results/neighbours/diagnostics.md`. T5.3 ticked. So the neighbour witness stays off: `scripts/t65_grade.py` re-run is pointless until a better design exists; T7.3 B3 (neighbour-only baseline) is also not meaningful. In progress: nothing. Background: none. **Next:** T5.4 (literature check, needs opening arXiv:2506.02384), then T6.9 UI part / Phase 7 (T7.1 barley, T7.3 tier table), Gate 5 file. Risk: main JS chunk 1.77 MB.
 
 (Previous entry:)
