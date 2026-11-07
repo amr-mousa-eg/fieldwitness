@@ -472,6 +472,10 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 
 ## Autopilot handoff
 
+**2026-11-07, autopilot run (no progress).** Re-tried `WebFetch https://arxiv.org/abs/2506.02384` for T5.4: still not permitted, so T5.4 stays BLOCKED (rule 8). Nothing coded, tree clean. T6.9 UI (TS port of `apply_corrections` + browser check) and T7.1 barley (needs a barley physics window) are too large to finish safely in the remaining budget of this run; they are the next tasks. Background: none. **Next:** user allows WebFetch for arxiv.org (or pastes the paper's method section) for T5.4; otherwise T6.9 UI, then T7.1 barley.
+
+(Previous entry:)
+
 **2026-11-07, autopilot run (Gate 5, T5.4 blocked).** Done: `docs/gates/gate-5.md` written. Gate 5 test FAIL (no Tier 1 contrast passes diagnostics; negative result, see T5.3). **T5.4 BLOCKED:** opening arXiv:2506.02384 was refused (`WebFetch https://arxiv.org/abs/2506.02384` and `curl https://export.arxiv.org/api/query?id_list=2506.02384` both need approval); rule 8 forbids numbers from memory. Not started (too large for a blind run): T6.9 UI (no corrections code in `app/src`; needs a TS port of `apply_corrections` and a browser check), T7.1 barley (needs a physics window for barley). In progress: nothing. Background: none. **Next:** user opens the paper or allows WebFetch for arxiv.org, then T5.4; then T6.9 UI, T7.1 barley. Risk: main JS chunk 1.77 MB.
 
 (Previous entry:)
