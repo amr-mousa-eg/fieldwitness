@@ -422,6 +422,10 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 
 ## Autopilot handoff
 
+**2026-11-07, autopilot run (T6.2 close).** Done: T6.2 ticked. `scripts/t62_run.py` → `results/rotate/evaluation.json` (200 fields × 61 candidates, metrics + `p_by_slot`; 185 posterior worlds tag D in-sample, 15 prior worlds tag A) and `t62_runtime.json` (max 18.3 s, median 8.9 s per field, limit 60 s: pass). 168 tests pass, ruff clean. In progress: nothing. Background: none. Next: T6.3 (Pareto filter + weighted score, regret matrix, seeded). Risk: Gate 6 may slip; T2.2 FAILED; WIMAS (T1.7/T4.6) still open for the user.
+
+(Previous entry:)
+
 **2026-11-07, autopilot run (T6.2 part 3).** Done: `scripts/t62_draws.py` → `results/rotate/posterior_draws.json`: 30 pooled ABC worlds per field (taw_mm, kc_scale, budget_mm; n_ref 3000, k 150 per season, seeded subsample). 185/200 fields posterior (tag D, in-sample), 15 winter-wheat-only fields use prior worlds (tag A, flagged `source: prior`). Ruff clean. T6.2 NOT ticked. Still to do: run `evaluate` per field from these draws with each field's POWER years (all 200 fields, check < 60 s each), write `p` per option into the output, then tick T6.2. Re-running T4.5 for the 15 null fields is not possible without modelling winter wheat (no calendar-year window); they keep null credibility and prior worlds (decision for the user if they want it changed). Background: none. Next: T6.2 per-field evaluation run, then T6.3. Risk: Gate 6 may slip; T2.2 FAILED.
 
 (Previous entry:)
