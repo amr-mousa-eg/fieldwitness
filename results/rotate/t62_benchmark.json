@@ -1,0 +1,17 @@
+{
+  "field_id": "7008ff6ba15fc8da1d2ebe4a739699117e7ae646",
+  "n_candidates": 61,
+  "n_worlds": 30,
+  "n_start_years": 21,
+  "seconds": 17.6,
+  "ryi_range": [
+    0.404,
+    0.687
+  ],
+  "water_use_mm_range": [
+    1205,
+    1538
+  ],
+  "draws": "prior (A), not posterior",
+  "tag": "D"
+}
