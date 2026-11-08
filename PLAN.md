@@ -475,6 +475,51 @@ React + Vite + TypeScript, MapLibre GL, a chart library (Recharts or Observable 
 - [ ] **T10.3 Freeze and tag.** Freeze `main`, tag `v1.0-spaceapps`, verify the deployed URL and repo in a private window (scheduled for 13 Nov after official rules review, with user approval).
 - [ ] **Deployment note.** (Informational: GitHub Pages deployed at https://amr-mousa-eg.github.io/fieldwitness/ via GitHub Actions on public repo).
 
+### Phase 11 — Polish & Submission Preparation (Target: 10–13 Nov)
+
+Ordered priority list (P0 → P1 → P2). Planning mode required per task. Standing permission: push to `main` without asking when pytest, ruff, pre-commit, npm test, and npm build pass.
+
+#### P0 — MUST BE DONE (target: 10 Nov)
+- [ ] **P0.1 Real basemap (T9.1 basemap part).** NASA imagery only (D1).
+  - (a) Check NASA GIBS official docs for a true-colour layer at ~30 m (Landsat/HLS), usable with MapLibre (WMTS/XYZ), its terms and exact required attribution. MODIS/VIIRS-only layers don't count.
+  - (b) If found: use it as the base layer with attribution shown on map. Offline/error: fall back to neutral background without breaking the app.
+  - (c) If not found: build a cloud-free summer true-colour composite of tile T14SLH from HLS (bands and scaling from HLS user guide), export compressed image or PMTiles into `packs/demo`, show as MapLibre raster layer. Estimate download first; name new dependencies and wait for OK.
+  - (d) Verify field visibility at region zoom (outlines + markers contrast) and alignment at field zoom on 3 fields visually.
+  - (e) Document in `DATA.md` and Methods page: source, resolution, date of imagery, attribution.
+- [ ] **P0.2 Readable field names.**
+  - (a) Show "Field N" (stable numbering, e.g. sorted by field_id or north→south, documented), area, and short hash ID in small text.
+  - (b) Field list: sortable by number, area, and grade; search box for "Field N".
+- [ ] **P0.3 Map legend.**
+  - (a) Explain marker/outline colours (from code) and the scale-flag symbol.
+  - (b) Visible in both themes, collapsible on mobile.
+- [ ] **P0.4 Light and dark mode (D2).**
+  - (a) All colours as CSS tokens (custom properties) for both themes; no hard-coded colours in components, charts, or map overlays.
+  - (b) Default from `prefers-color-scheme`; header toggle (Light / Dark / System) saved in localStorage (try/catch protected).
+  - (c) Recharts, map overlays, legend, grade badges, crop chips, banners, disclaimer switch cleanly; basemap stays legible.
+  - (d) WCAG AA contrast (4.5:1 text, 3:1 large/UI) in both themes, checking grade badges especially.
+  - (e) No theme flash on load (theme applied before first paint).
+  - (f) Desktop screenshots of every view in light and dark mode.
+- [ ] **P0.5 Honest statements visible in the app.**
+  - (a) Methods page & Advisor Console state plainly: hindcast skill is weak (actual numbers from results/), season detection missed target (78.3 % vs 90 %), neighbour witness off (0 of 32 matched contrasts passed all checks), grades top out at B.
+  - (b) Fixed disclaimer line on every view.
+- [ ] **P0.6 Live site check after deploying P0.**
+  - (a) Private browser window: all 200 fields load, no DEMO DATA banner, no console errors, offline reload works.
+  - (b) Mobile viewport (380 px): no sideways scroll, legend and toggle usable.
+  - (c) Report result with screenshots (desktop light, desktop dark, mobile).
+
+#### P1 — SHOULD BE DONE (target: 12 Nov)
+- [ ] **P1.7 Performance optimization.** Lazy-load map and chart code to reduce initial JS payload (baseline: 1.77 MB). Report before/after sizes without changing behavior.
+- [ ] **P1.8 First-visit guidance.** Short "How to read this" panel (3–4 sentences, dismissible, remembered in localStorage) on map view explaining fields, grades, disclaimer.
+- [ ] **P1.9 Consistency pass.** Align numbers, datasets, live URL, and limits across README, DATA.md, AI_USE.md, Methods page, and `docs/drafts/submission.md`.
+- [ ] **P1.10 Submission drafts (`docs/drafts/submission.md`).** Project summary, detailed description, NASA data used, other data, AI use. Mark length limits "to verify against the 2026 guide on 13 Nov". Keep claims grounded in results/.
+- [ ] **P1.11 Accessibility verification.** Keyboard navigation across all views (run `app/scripts/keyboard-check.mjs`), visible focus in both themes, accessible labels/alt text for map controls.
+- [ ] **P1.12 Final test-and-report.** Full test suites, live site check, update handoff documentation.
+
+#### P2 — ONLY IF EVERYTHING ABOVE IS DONE (AND NOT AFTER 12 NOV)
+- [ ] **P2.13 Nile Delta data-confidence map.** Census numbers only, no pipeline.
+- [ ] **P2.14 Toulouse through Phases 1–8.** Stop and report if not feasible by 12 Nov.
+- [ ] **P2.15 T4.6 WIMAS check.** Only when file is placed in `data/wimas/`.
+
 ### Stretch (only after all MVP boxes are ticked)
 
 - [ ] S1 Evidence Atlas view (aggregated effects + data-confidence map from the FTW 500 m confidence raster, field size, clear-obs counts).
