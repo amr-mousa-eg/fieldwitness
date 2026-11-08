@@ -13,6 +13,7 @@ You are running **unattended** inside a loop (`scripts/autopilot.ps1`). No human
 
 - Follow `PLAN.md` §6 (the pre-event schedule) in order. Work on the earliest unticked task whose inputs are ready. While waiting on background downloads, you may work ahead on any task whose inputs are already available (this generalises the logged Phase 3 exception); record each such exception in `DECISIONS.md`.
 - Do **one task per run**, or several small ones, then stop. Prefer finishing and committing one task over starting two.
+- **Never judge a task "too big for a run".** If a task does not fit one run, split it into subtasks that each fit one run, list them (in order, with their acceptance) in the handoff, and do the first one in the same run. The next run continues with the next subtask.
 - Pending items carried over from the user (do these first if not done):
   - Start Phase 3 physics (T3.1–T3.5) while HLS downloads run (logged exception: it needs only POWER, soil and crops.yaml).
   - Write the Phase 2 code (T2.1, T2.2, T2.5) and test it on the T0.3 AppEEARS sample; run it on pilot fields when their HLS results arrive.
@@ -70,8 +71,10 @@ A **failed acceptance test** is recorded as a negative result (in `results/` and
 **A blocked task does not stop the loop.** If a task is blocked (a permission is refused, an input is missing):
 
 1. Log the blocked task in the handoff: task ID, what is blocked, the exact refused command or missing input.
-2. Continue with the next task whose inputs are ready (current order: T6.9, Phase 7, Phase 5).
+2. Continue with the next task whose inputs are ready (current order: the subtask list in the handoff — T6.9, T7.1 barley, T7.4, then Phase 5 (T5.1–T5.3)).
 3. Write `BLOCKED.md` only if **no** task can proceed.
+
+**No-progress runs.** If a run ends with no progress (nothing coded, tested, downloaded or committed apart from the handoff), write `BLOCKED.md` (what was tried, the exact refused command or missing input, the question for the user) and stop. **Never write a "no progress" handoff entry**: the loop stops on `BLOCKED.md`, so a repeated no-progress run cannot happen.
 
 **Waiting.** Use `AUTOPILOT_WAIT` only to wait for server-side downloads (e.g. AppEEARS tasks), and only when nothing else has ready inputs. Write the number of minutes into the file (**at most `60`**) and end the run. The loop sleeps that long before the next run.
 
@@ -80,5 +83,5 @@ A **failed acceptance test** is recorded as a negative result (in `results/` and
 A run can be cut off at the turn cap at any moment, so update the handoff and commit after every finished task, not only at the end.
 
 1. Commit finished work (and push if green).
-2. Replace the `## Autopilot handoff` section at the end of `DECISIONS.md` with: date/time, what this run did, what is in progress, background task IDs and their status, the next task, and any risk the user should know. Commit it.
+2. Replace the `## Autopilot handoff` section at the end of `DECISIONS.md` with: date/time, what this run did, what is in progress, background task IDs and their status, the remaining subtask list, the next task, and any risk the user should know. Commit it. **The new entry replaces the previous one completely**: the section holds exactly one entry. Never keep "(Previous entry: …)" chains; history lives in git and in the dated `DECISIONS.md` log entries above the handoff.
 3. End with a 3-line summary.

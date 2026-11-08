@@ -39,6 +39,8 @@
       "WebSearch",
       "WebFetch(domain:nasa.gov)",
       "WebFetch(domain:*.nasa.gov)",
+      "WebFetch(domain:science.nasa.gov)",
+      "WebFetch(domain:arxiv.org)",
       "WebFetch(domain:fao.org)",
       "WebFetch(domain:*.fao.org)",
       "WebFetch(domain:isric.org)",
