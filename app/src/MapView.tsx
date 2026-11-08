@@ -157,6 +157,26 @@ function withValues(fc: GeoJSON.FeatureCollection, values: Record<string, number
   };
 }
 
+const fieldsCache = new Map<string, GeoJSON.FeatureCollection>();
+function getCachedFields(index: RegionIndex): GeoJSON.FeatureCollection {
+  let fc = fieldsCache.get(index.region_id);
+  if (!fc) {
+    fc = fieldsGeoJSON(index);
+    fieldsCache.set(index.region_id, fc);
+  }
+  return fc;
+}
+
+const pointsCache = new Map<string, GeoJSON.FeatureCollection>();
+function getCachedPoints(index: RegionIndex, fields: GeoJSON.FeatureCollection): GeoJSON.FeatureCollection {
+  let pts = pointsCache.get(index.region_id);
+  if (!pts) {
+    pts = fieldPoints(fields);
+    pointsCache.set(index.region_id, pts);
+  }
+  return pts;
+}
+
 export function MapView({ index, selectedId, onSelect, colouring = null, grid = null }: Props) {
   const { effective } = useTheme();
   const dark = effective === "dark";
@@ -168,116 +188,136 @@ export function MapView({ index, selectedId, onSelect, colouring = null, grid = 
   onSelectRef.current = onSelect;
   const selectedIdRef = useRef(selectedId);
   selectedIdRef.current = selectedId;
-  const fields = useMemo(() => fieldsGeoJSON(index), [index]);
+  const fields = useMemo(() => getCachedFields(index), [index]);
 
   // One map per region index.
   useEffect(() => {
-    const m = new MapLibreMap({
-      container: container.current!,
-      style: styleFor(index, dark),
-      bounds: index.bbox_lonlat,
-      fadeDuration: 0,
-      renderWorldCopies: false,
-      // extra bottom padding keeps fields clear of the attribution label
-      fitBoundsOptions: { padding: { top: 48, right: 64, bottom: 72, left: 48 }, maxZoom: 14 },
-      attributionControl: {
-        compact: true,
-        customAttribution: index.basemap ? t("map.attribution.hls") : t("map.attribution.none"),
-      },
-    });
-    m.addControl(new NavigationControl({ showCompass: false }), "top-right");
-    m.on("error", (e) => {
-      // Gracefully handle tile loading errors (e.g. offline fallback to neutral background)
-      const srcId = (e as unknown as { sourceId?: string })?.sourceId;
-      if (e?.error?.message?.includes("tile") || srcId === "basemap") {
-        return;
-      }
-    });
-    m.on("load", () => {
-      m.addSource("region", { type: "geojson", data: regionGeoJSON(index.bbox_lonlat) });
-      m.addSource("fields", { type: "geojson", data: fields });
-      // Regional grid (T9.11b) sits under the region outline and the fields.
-      m.addSource("grid", { type: "geojson", data: EMPTY });
-      m.addLayer({
-        id: "grid-fill",
-        type: "fill",
-        source: "grid",
-        layout: { visibility: "none" },
-        paint: { "fill-color": NO_VALUE, "fill-opacity": 0.6, "fill-outline-color": colours.regionLine },
-      });
-      m.addLayer({
-        id: "region-outline",
-        type: "line",
-        source: "region",
-        paint: { "line-color": colours.regionLine, "line-width": 1, "line-dasharray": [4, 3] },
-      });
-      m.addLayer({
-        id: "fields-fill",
-        type: "fill",
-        source: "fields",
-        paint: { "fill-color": colours.fieldFill, "fill-opacity": 0.55 },
-      });
-      m.addLayer({
-        id: "fields-line",
-        type: "line",
-        source: "fields",
-        paint: { "line-color": colours.fieldLine, "line-width": 1.5 },
-      });
-      m.addLayer({
-        id: "fields-selected",
-        type: "line",
-        source: "fields",
-        filter: ["==", ["get", "field_id"], ""],
-        paint: { "line-color": colours.selected, "line-width": 4 },
-      });
-      m.addSource("field-points", { type: "geojson", data: fieldPoints(fields) });
-      m.addLayer({
-        id: "fields-marker",
-        type: "circle",
-        source: "field-points",
-        maxzoom: MARKER_FADE[1],
-        paint: {
-          "circle-radius": 7,
-          "circle-color": colours.fieldFill,
-          "circle-stroke-color": colours.fieldLine,
-          "circle-stroke-width": 1.5,
-          "circle-opacity": fadeOut(),
-          "circle-stroke-opacity": fadeOut(),
+    let m: MapLibreMap | null = null;
+    let cancelled = false;
+
+    const rafId = requestAnimationFrame(() => {
+      if (cancelled || !container.current) return;
+      m = new MapLibreMap({
+        container: container.current,
+        style: styleFor(index, dark),
+        bounds: index.bbox_lonlat,
+        fadeDuration: 0,
+        renderWorldCopies: false,
+        // extra bottom padding keeps fields clear of the attribution label
+        fitBoundsOptions: { padding: { top: 48, right: 64, bottom: 72, left: 48 }, maxZoom: 14 },
+        attributionControl: {
+          compact: true,
+          customAttribution: index.basemap ? t("map.attribution.hls") : t("map.attribution.none"),
         },
       });
-      m.addLayer({
-        id: "fields-marker-selected",
-        type: "circle",
-        source: "field-points",
-        maxzoom: MARKER_FADE[1],
-        filter: ["==", ["get", "field_id"], ""],
-        paint: {
-          "circle-radius": 9,
-          "circle-color": colours.fieldFill,
-          "circle-stroke-color": colours.selected,
-          "circle-stroke-width": 3,
-          "circle-opacity": fadeOut(),
-          "circle-stroke-opacity": fadeOut(),
-        },
+      m.addControl(new NavigationControl({ showCompass: false }), "top-right");
+      m.on("error", (e) => {
+        // Gracefully handle tile loading errors (e.g. offline fallback to neutral background)
+        const srcId = (e as unknown as { sourceId?: string })?.sourceId;
+        if (e?.error?.message?.includes("tile") || srcId === "basemap") {
+          return;
+        }
       });
-      for (const layer of ["fields-fill", "fields-marker"]) {
-        m.on("click", layer, (e) => {
-          const id = e.features?.[0]?.properties?.field_id;
-          if (typeof id === "string") onSelectRef.current(id);
+      m.on("load", () => {
+        if (cancelled) return;
+        m!.addSource("region", { type: "geojson", data: regionGeoJSON(index.bbox_lonlat) });
+        m!.addSource("fields", { type: "geojson", data: fields });
+        m!.addLayer({
+          id: "region-outline",
+          type: "line",
+          source: "region",
+          paint: { "line-color": colours.regionLine, "line-width": 1, "line-dasharray": [4, 3] },
         });
-        m.on("mouseenter", layer, () => (m.getCanvas().style.cursor = "pointer"));
-        m.on("mouseleave", layer, () => (m.getCanvas().style.cursor = ""));
-      }
-      map.current = m;
-      // Marker for the screenshot driver: fields are drawn once the map first goes idle.
-      m.once("idle", () => container.current?.setAttribute("data-state", "ready"));
-      showSelected(m, selectedIdRef.current);
-      setReady(true);
+        m!.addLayer({
+          id: "fields-fill",
+          type: "fill",
+          source: "fields",
+          paint: { "fill-color": colours.fieldFill, "fill-opacity": 0.55 },
+        });
+        m!.addLayer({
+          id: "fields-line",
+          type: "line",
+          source: "fields",
+          paint: { "line-color": colours.fieldLine, "line-width": 1.5 },
+        });
+        m!.addLayer({
+          id: "fields-selected",
+          type: "line",
+          source: "fields",
+          filter: ["==", ["get", "field_id"], ""],
+          paint: { "line-color": colours.selected, "line-width": 4 },
+        });
+
+        map.current = m;
+
+        // Yield remaining layer compilation and interaction setup to keep main thread unblocked
+        requestAnimationFrame(() => {
+          if (cancelled || !map.current) return;
+          // Regional grid (T9.11b) sits under the region outline and the fields.
+          m!.addSource("grid", { type: "geojson", data: EMPTY });
+          m!.addLayer(
+            {
+              id: "grid-fill",
+              type: "fill",
+              source: "grid",
+              layout: { visibility: "none" },
+              paint: { "fill-color": NO_VALUE, "fill-opacity": 0.6, "fill-outline-color": colours.regionLine },
+            },
+            "region-outline",
+          );
+          m!.addSource("field-points", { type: "geojson", data: getCachedPoints(index, fields) });
+          m!.addLayer({
+            id: "fields-marker",
+            type: "circle",
+            source: "field-points",
+            maxzoom: MARKER_FADE[1],
+            paint: {
+              "circle-radius": 7,
+              "circle-color": colours.fieldFill,
+              "circle-stroke-color": colours.fieldLine,
+              "circle-stroke-width": 1.5,
+              "circle-opacity": fadeOut(),
+              "circle-stroke-opacity": fadeOut(),
+            },
+          });
+          m!.addLayer({
+            id: "fields-marker-selected",
+            type: "circle",
+            source: "field-points",
+            maxzoom: MARKER_FADE[1],
+            filter: ["==", ["get", "field_id"], ""],
+            paint: {
+              "circle-radius": 9,
+              "circle-color": colours.fieldFill,
+              "circle-stroke-color": colours.selected,
+              "circle-stroke-width": 3,
+              "circle-opacity": fadeOut(),
+              "circle-stroke-opacity": fadeOut(),
+            },
+          });
+          for (const layer of ["fields-fill", "fields-marker"]) {
+            m!.on("click", layer, (e) => {
+              const id = e.features?.[0]?.properties?.field_id;
+              if (typeof id === "string") onSelectRef.current(id);
+            });
+            m!.on("mouseenter", layer, () => (m!.getCanvas().style.cursor = "pointer"));
+            m!.on("mouseleave", layer, () => (m!.getCanvas().style.cursor = ""));
+          }
+          showSelected(m!, selectedIdRef.current);
+          setReady(true);
+        });
+
+        // Marker for the screenshot driver: fields are drawn once the map first goes idle.
+        m!.once("idle", () => container.current?.setAttribute("data-state", "ready"));
+      });
     });
+
     return () => {
+      cancelled = true;
+      cancelAnimationFrame(rafId);
       map.current = null;
       setReady(false);
-      m.remove();
+      m?.remove();
     };
   }, [index, fields]);
 

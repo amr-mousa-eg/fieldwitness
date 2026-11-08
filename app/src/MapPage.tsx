@@ -21,9 +21,13 @@ export function MapPage({ index }: { index: RegionIndex }) {
   useEffect(() => {
     setLayers(null);
     setChoice(NO_LAYERS);
-    loadLayers(index.region_id)
-      .then(setLayers)
-      .catch(() => setLayers(null)); // a region without layers.json still shows its fields
+    // Defer layers.json fetch slightly so it doesn't contend with initial map bundle & tiles
+    const timer = setTimeout(() => {
+      loadLayers(index.region_id)
+        .then(setLayers)
+        .catch(() => setLayers(null)); // a region without layers.json still shows its fields
+    }, 200);
+    return () => clearTimeout(timer);
   }, [index.region_id]);
 
   const colouring = useMemo(() => {
