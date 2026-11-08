@@ -1,4 +1,5 @@
 import { Fragment, useEffect, useMemo, useState } from "react";
+import { CorrectionPanel } from "./CorrectionPanel";
 import { CropChips } from "./CropChips";
 import { Explain, MetricLabel } from "./Explain";
 import { loadScenarios } from "./data";
@@ -439,6 +440,7 @@ export function FieldCard({ pack, regionId }: { pack: FieldPack; regionId: strin
         <PriorityPanel p={priorities} set={setPriorities} />
         <WhatIfPanel scenarios={scenarios} dt={dt} dp={dp} set={(a, b) => setWeather([a, b])} />
         <ConstraintPanel crops={crops} c={constraints} set={setConstraints} />
+        <CorrectionPanel key={fid} pack={pack} />
         <p className="muted">{t("card.store")}</p>
       </aside>
     </div>

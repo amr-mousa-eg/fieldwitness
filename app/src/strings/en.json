@@ -379,5 +379,21 @@
   "methods.repo": "Code, tests and results",
   "methods.repo.text": "The pipeline, tests, validation results and this app are public:",
   "skip.main": "Skip to main content",
-  "layers.cells": "Grid cells in {year}: from {lo} to {hi}."
+  "layers.cells": "Grid cells in {year}: from {lo} to {hi}.",
+  "corr.heading": "Correct this field's history",
+  "corr.intro": "Tell us what you know. Your entries are ground data from you (tag E, farmer-entered). They are saved in this browser only.",
+  "corr.crop": "Crop in {year}",
+  "corr.keep": "As labelled by satellite data",
+  "corr.sowing": "Sowing date in {year} (day of year, 1–366)",
+  "corr.irrigated": "Irrigation",
+  "corr.irrigated.keep": "Not corrected",
+  "corr.irrigated.yes": "Irrigated",
+  "corr.irrigated.no": "Rainfed",
+  "corr.reset": "Clear my corrections",
+  "corr.compare": "Current rotation: satellite version and your version",
+  "corr.satellite": "Satellite version (tag D)",
+  "corr.farmer": "Your version (tag E)",
+  "corr.year": "Season",
+  "corr.rerun": "Re-run needed: available in live mode. The numbers in the table still describe the satellite version.",
+  "corr.nostorage": "This browser blocks storage, so your corrections will not be kept after you close the page."
 }
