@@ -410,12 +410,12 @@ Final submission hardening completed for FieldWitness:
 - **T10.2 Red-Team Audit:**
   - Automated audit via `scripts/t10_red_team_audit.py`: 0 forbidden claim phrases (no yields in tonnes, no profit $, no soil carbon from space), all 200 Kansas packs verified with 0 untagged numbers, UI text verified English.
 - **T10.3 Code Freeze & Tag:**
-  - Git tag `v1.0-spaceapps` created on `main`.
+  - Scheduled for 13 Nov after official rules review, with user approval. (Tag `v1.0-spaceapps` was created prematurely during deployment; will not be touched or moved again until final freeze approval).
 
 ## Autopilot handoff
 
 **2026-11-08, Phase 10 & MVP Complete (Antigravity session 2).**
-- **State after Phase 10:** Repository clean on main. Full test suite passing (251 pytest tests, 58 npm app tests, build clean, pre-commit clean). MIT License, finalized README.md, DATA.md, AI_USE.md committed. Git tag `v1.0-spaceapps` set.
+- **State after Phase 10:** Repository clean on main. Full test suite passing (251 pytest tests, 58 npm app tests, build clean, pre-commit clean). MIT License, finalized README.md, DATA.md, AI_USE.md committed. Tag v1.0-spaceapps left untouched until 13 Nov approval.
 - **In progress:** Nothing.
 - **Background tasks:** None.
 - **Live Deployment:**

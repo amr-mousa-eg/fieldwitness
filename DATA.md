@@ -69,7 +69,7 @@ Only the row groups whose `bbox` statistics intersect the query box are read (se
   - Licence: **CC-BY 4.0** (ISRIC data policy v2024-1).
   - Citation: Poggio, L., de Sousa, L. M., Batjes, N. H., et al. (2021). SoilGrids 2.0: producing soil information for the globe with quantified spatial uncertainty. *SOIL*, 7(1), 217–240. https://doi.org/10.5194/soil-7-217-2021
 - **Kansas WIMAS** (Kansas Geological Survey / Kansas Department of Agriculture, Division of Water Resources): `https://geohydro.kgs.ku.edu/geohydro/wimas/`; requires accepting disclaimer; optional truth comparison.
-- **OpenET**: stretch S6 (2026-11-04), pending user license review; not accessed in MVP.
+- **OpenET**: not used; stretch S6 (2026-11-04), terms unread; not accessed in MVP.
 - **GBIF Backbone Taxonomy** via `https://api.gbif.org/v1/species/match`:
   - Citation: GBIF Secretariat (2023). GBIF Backbone Taxonomy. Checklist dataset https://doi.org/10.15468/39omei. CC-BY 4.0.
 - **USDA NRCS PLANTS Database** via `https://plantsservices.sc.egov.usda.gov/api/`:
