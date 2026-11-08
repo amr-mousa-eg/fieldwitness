@@ -648,7 +648,7 @@ Re-ran `t71_hindcast.py` (200 fields, 417 s), `t72_score.py`, `t72_export.py` wi
 
 ## Autopilot handoff
 
-**2026-11-08, autopilot run 5.** Done: T7.4a (size curve JSON + SVG in `results/hindcast/`). T7.1 (incl. barley prediction_only) was ticked in run 4; 247 tests green then, ruff clean. In progress: nothing. Background: none. Risk: T2.2 FAILED, Gate 5 FAILED (neighbour witness off), T7.1/T7.2 show weak skill and too-narrow intervals; maize/sorghum records changed slightly (cause unverified). Tip: Bash pipes, `cd &&` chains, `&&` chains and `git checkout <rev> -- file` are refused; use single commands (PowerShell for npm).
+**2026-11-08, autopilot run 6.** Done: T7.4b (`scripts/t74_degrade.py`; `t71_hindcast.py` takes a 4th arg = fraction of clear HLS dates kept in fitting seasons, seeded, records in `*_thin50/25.jsonl`). 247 tests green, ruff clean. In progress: nothing. Background: none. Risk: T2.2 FAILED, Gate 5 FAILED (neighbour witness off), T7.1/T7.2 show weak skill and too-narrow intervals; maize/sorghum records changed slightly (cause unverified). Tip: Bash pipes, `cd &&` chains, `&&` chains and `git checkout <rev> -- file` are refused; use single commands (PowerShell for npm).
 
 **Subtasks, in order. Do the first unticked one; each fits one run.**
 
@@ -665,7 +665,7 @@ T7.1 barley (and winter crops):
 
 T7.4 Ablation + degradation:
 8. [x] **T7.4a Skill vs field size.** (done: `scripts/t74_size_curve.py`; bins <10/10-30/30-60/≥60 ha fixed first, tag A. Canopy-integral forecast CRPS 19.8/15.3/16.8/17.8, 90 % coverage 0.29/0.39/0.26/0.31: no clear size trend, intervals too narrow in every bin; smallest bin has the worst CRPS. Reported as is.) Join `results/hindcast/ks_t14slh_records.jsonl` with field area / interior-pixel counts; CRPS and 50/90 % coverage per size bin (bins fixed before looking, tag A). Output `results/hindcast/ks_t14slh_size_curve.json` + `.svg`. Accept: the curve (the T7.4 acceptance).
-9. [ ] **T7.4b Degraded observations.** Thin clear HLS dates used in calibration to 50 % and 25 % (seeded, `SEED`); dev subset of 20 fields first, then once on all 200; same scoring. Accept: `results/hindcast/ks_t14slh_degradation.json`.
+9. [x] **T7.4b Degraded observations.** (done, all 200 fields directly (448 s each, so no 20-field dev run needed), 463 common seasons. Forecast CRPS sos/peak/canopy/cover days: 100 % 37.9/27.5/17.5/36.0; 50 % 38.1/27.5/17.5/36.0; 25 % 37.9/27.6/17.7/36.0. Essentially no degradation: calibration adds little skill, consistent with the weak skill in T7.1/T7.2, so this is not evidence of robustness. Reported as is. At 25 % two more seasons lose their own-crop fit (fewer than 10 dates).) Thin clear HLS dates used in calibration to 50 % and 25 % (seeded, `SEED`); dev subset of 20 fields first, then once on all 200; same scoring. Accept: `results/hindcast/ks_t14slh_degradation.json`.
 10. [ ] **T7.4c Ablation.** Without witness 2 = B2 (uncalibrated physics, already in the T7.3 results; reuse). Without witness 3 = the full model, because the neighbour witness is off since T5.3; say so. Write `results/hindcast/ablation.md`; tick T7.4.
 
 Phase 5 (T5.1–T5.3 ticked; Gate 5 FAILED: 0/92 contrasts pass diagnostics, because the previous crop fixes the one before it):
@@ -673,4 +673,4 @@ Phase 5 (T5.1–T5.3 ticked; Gate 5 FAILED: 0/92 contrasts pass diagnostics, bec
 12. [ ] **T5.xb Surrounding tiles** (T5.1 allows it). First estimate the HLS download size; over 1 GB → `BLOCKED.md` (rule 11).
 13. [ ] **T5.xc Re-grade.** Only if a contrast passes: re-run `scripts/t65_grade.py`, rebuild and validate the packs.
 
-**Next: T7.4b** (degraded observations).
+**Next: T7.4c** (ablation).

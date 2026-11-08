@@ -1,0 +1,195 @@
+{
+ "n_field_seasons": 463,
+ "tag": "D vs O",
+ "levels": {
+  "100": {
+   "fit_source": {
+    "own_crop_posterior": 377,
+    "prior": 25,
+    "other_crop_posterior": 61
+   },
+   "forecast_sos": {
+    "n": 463,
+    "crps": 37.863,
+    "covered50": 0.212,
+    "covered90": 0.376,
+    "mae_median": 42.077
+   },
+   "forecast_peak": {
+    "n": 463,
+    "crps": 27.478,
+    "covered50": 0.438,
+    "covered90": 0.654,
+    "mae_median": 34.031
+   },
+   "forecast_canopy_integral": {
+    "n": 463,
+    "crps": 17.539,
+    "covered50": 0.164,
+    "covered90": 0.309,
+    "mae_median": 20.345
+   },
+   "forecast_cover_days": {
+    "n": 463,
+    "crps": 36.002,
+    "covered50": 0.032,
+    "covered90": 0.069,
+    "mae_median": 37.364
+   },
+   "forced_sos": {
+    "n": 463,
+    "crps": 38.035,
+    "covered50": 0.212,
+    "covered90": 0.384,
+    "mae_median": 42.145
+   },
+   "forced_peak": {
+    "n": 463,
+    "crps": 34.591,
+    "covered50": 0.292,
+    "covered90": 0.492,
+    "mae_median": 39.213
+   },
+   "forced_canopy_integral": {
+    "n": 463,
+    "crps": 17.804,
+    "covered50": 0.104,
+    "covered90": 0.225,
+    "mae_median": 19.842
+   },
+   "forced_cover_days": {
+    "n": 463,
+    "crps": 36.132,
+    "covered50": 0.024,
+    "covered90": 0.065,
+    "mae_median": 37.479
+   }
+  },
+  "50": {
+   "fit_source": {
+    "own_crop_posterior": 377,
+    "prior": 25,
+    "other_crop_posterior": 61
+   },
+   "forecast_sos": {
+    "n": 463,
+    "crps": 38.05,
+    "covered50": 0.192,
+    "covered90": 0.363,
+    "mae_median": 42.22
+   },
+   "forecast_peak": {
+    "n": 463,
+    "crps": 27.469,
+    "covered50": 0.449,
+    "covered90": 0.637,
+    "mae_median": 33.715
+   },
+   "forecast_canopy_integral": {
+    "n": 463,
+    "crps": 17.548,
+    "covered50": 0.143,
+    "covered90": 0.313,
+    "mae_median": 20.364
+   },
+   "forecast_cover_days": {
+    "n": 463,
+    "crps": 35.97,
+    "covered50": 0.037,
+    "covered90": 0.076,
+    "mae_median": 37.34
+   },
+   "forced_sos": {
+    "n": 463,
+    "crps": 38.11,
+    "covered50": 0.199,
+    "covered90": 0.354,
+    "mae_median": 42.039
+   },
+   "forced_peak": {
+    "n": 463,
+    "crps": 34.101,
+    "covered50": 0.289,
+    "covered90": 0.503,
+    "mae_median": 39.08
+   },
+   "forced_canopy_integral": {
+    "n": 463,
+    "crps": 17.786,
+    "covered50": 0.112,
+    "covered90": 0.229,
+    "mae_median": 19.803
+   },
+   "forced_cover_days": {
+    "n": 463,
+    "crps": 36.073,
+    "covered50": 0.028,
+    "covered90": 0.073,
+    "mae_median": 37.443
+   }
+  },
+  "25": {
+   "fit_source": {
+    "own_crop_posterior": 375,
+    "prior": 26,
+    "other_crop_posterior": 62
+   },
+   "forecast_sos": {
+    "n": 463,
+    "crps": 37.94,
+    "covered50": 0.197,
+    "covered90": 0.374,
+    "mae_median": 41.941
+   },
+   "forecast_peak": {
+    "n": 463,
+    "crps": 27.559,
+    "covered50": 0.443,
+    "covered90": 0.631,
+    "mae_median": 33.875
+   },
+   "forecast_canopy_integral": {
+    "n": 463,
+    "crps": 17.656,
+    "covered50": 0.162,
+    "covered90": 0.309,
+    "mae_median": 20.564
+   },
+   "forecast_cover_days": {
+    "n": 463,
+    "crps": 35.962,
+    "covered50": 0.035,
+    "covered90": 0.073,
+    "mae_median": 37.321
+   },
+   "forced_sos": {
+    "n": 463,
+    "crps": 37.977,
+    "covered50": 0.212,
+    "covered90": 0.384,
+    "mae_median": 41.928
+   },
+   "forced_peak": {
+    "n": 463,
+    "crps": 33.888,
+    "covered50": 0.305,
+    "covered90": 0.505,
+    "mae_median": 39.1
+   },
+   "forced_canopy_integral": {
+    "n": 463,
+    "crps": 17.819,
+    "covered50": 0.117,
+    "covered90": 0.233,
+    "mae_median": 19.859
+   },
+   "forced_cover_days": {
+    "n": 463,
+    "crps": 36.101,
+    "covered50": 0.026,
+    "covered90": 0.067,
+    "mae_median": 37.464
+   }
+  }
+ }
+}

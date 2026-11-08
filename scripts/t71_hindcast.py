@@ -67,7 +67,20 @@ cfgs = {c: {**cfg0, "crop": c, "nominal_sow_doy": NOMINAL} for c in CROPS}
 by_field = {fid: g for fid, g in series.groupby("field_id")}
 OUT = Path("results/hindcast")
 OUT.mkdir(parents=True, exist_ok=True)
-REC = OUT / "ks_t14slh_records.jsonl"
+# T7.4b: 4th argument 0.5 keeps a seeded 50 % of the clear HLS dates in FITTING seasons only
+# (scoring still uses all dates); records go to a separate file.
+THIN = float(sys.argv[4]) if len(sys.argv) > 4 else 1.0
+REC = OUT / (
+    "ks_t14slh_records.jsonl" if THIN >= 1 else f"ks_t14slh_records_thin{round(THIN * 100)}.jsonl"
+)
+
+
+def thin(doy, nd, fid, year):
+    if THIN >= 1:
+        return doy, nd
+    r = np.random.default_rng([SEED, 74, int(year), sum(map(ord, str(fid)))])
+    keep = np.sort(r.choice(len(doy), size=max(1, round(THIN * len(doy))), replace=False))
+    return doy[keep], nd[keep]
 
 
 def weather(lon, lat, years):
@@ -146,7 +159,7 @@ for fid in pilot.index:
         wx_past = weather(lon, lat, list(range(2001, CUT.year + 1)))
         pools = {c: [] for c in CROPS}
         for rec in lf.itertuples():
-            doy, nd = obs_series(fid, rec.year)
+            doy, nd = thin(*obs_series(fid, rec.year), fid, rec.year)
             wxy = forward.season_weather(wx_past, rec.year, cfgs[rec.crop])
             if len(doy) < MIN_OBS or wxy is None or rec.year > CUT.year:
                 continue
