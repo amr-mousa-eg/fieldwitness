@@ -642,13 +642,13 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 
 ## Autopilot handoff
 
-**2026-11-08, autopilot run.** Done: T6.9a (`app/src/corrections.ts`, `app/tests/corrections.test.ts`; `npm --prefix app test` 51/51 green). `npm run typecheck` was refused by the permission layer (not run); T6.9c's `npm run build` runs `tsc --noEmit`, so check types there. In progress: nothing. Background: none. Risk: T2.2 FAILED, Gate 5 FAILED (neighbour witness off), T7.1/T7.2 show weak skill; all logged. Tip: Bash pipes and `cd &&` chains are refused; use single commands (PowerShell for npm).
+**2026-11-08, autopilot run.** Done: T6.9b (`app/src/correctionStore.ts` with injectable storage, key `fw.corrections.v1.<fieldId>`; `app/tests/correctionStore.test.ts`; 56/56 green); earlier T6.9a. `npm run typecheck` was refused by the permission layer (not run); T6.9c's `npm run build` runs `tsc --noEmit`, so check types there. In progress: nothing. Background: none. Risk: T2.2 FAILED, Gate 5 FAILED (neighbour witness off), T7.1/T7.2 show weak skill; all logged. Tip: Bash pipes and `cd &&` chains are refused; use single commands (PowerShell for npm).
 
 **Subtasks, in order. Do the first unticked one; each fits one run.**
 
 T6.9 Farmer corrections (backend done: `rotate/corrections.py`, `tests/test_corrections.py`):
 1. [x] **T6.9a TS port.** `app/src/corrections.ts` mirroring `apply_corrections`, `correction_key` and the `RERUN_NEEDED` text; `app/tests/corrections.test.ts` with the same cases as `tests/test_corrections.py`. Accept: `npm --prefix app test` green.
-2. [ ] **T6.9b Browser store.** Load/save corrections per field id in `localStorage`; every access in try/catch; the app works when storage is unavailable. Tests. Accept: tests green.
+2. [x] **T6.9b Browser store.** Load/save corrections per field id in `localStorage`; every access in try/catch; the app works when storage is unavailable. Tests. Accept: tests green.
 3. [ ] **T6.9c Field Card UI.** Form for crop per season, sowing date, irrigation yes/no. Current shows the farmer and satellite versions side by side; farmer values tagged E; physics corrections show "re-run needed: available in live mode". Accept: `npm --prefix app run build` and tests green.
 4. [ ] **T6.9d Acceptance.** Test on a real pack in `app/public/packs`: a corrected history changes the Current option's sequence and tags (E). Run the app once to confirm. Rebuild and validate packs only if a pack changes. Tick T6.9. No precomputed alternatives (no §3 slot; adding one is a schema change: ask).
 
@@ -667,4 +667,4 @@ Phase 5 (T5.1–T5.3 ticked; Gate 5 FAILED: 0/92 contrasts pass diagnostics, bec
 12. [ ] **T5.xb Surrounding tiles** (T5.1 allows it). First estimate the HLS download size; over 1 GB → `BLOCKED.md` (rule 11).
 13. [ ] **T5.xc Re-grade.** Only if a contrast passes: re-run `scripts/t65_grade.py`, rebuild and validate the packs.
 
-**Next: T6.9b.**
+**Next: T6.9c.**
