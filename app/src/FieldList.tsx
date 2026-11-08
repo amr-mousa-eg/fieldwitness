@@ -58,7 +58,7 @@ export function FieldList({
   }, [fieldsWithNum, search, sortBy, sortDir]);
 
   // Progressive batch rendering (TBT optimization): render initial 25 items on first paint,
-  // then stream remaining items across animation frames so no single task exceeds 50 ms.
+  // then load remaining items when idle so no main-thread tasks exceed 50 ms during startup.
   const [renderLimit, setRenderLimit] = useState(25);
 
   useEffect(() => {
@@ -66,12 +66,18 @@ export function FieldList({
   }, [search, sortBy, sortDir]);
 
   useEffect(() => {
-    if (renderLimit < filteredAndSorted.length) {
-      const id = requestAnimationFrame(() => {
-        setRenderLimit((prev) => Math.min(prev + 35, filteredAndSorted.length));
-      });
-      return () => cancelAnimationFrame(id);
-    }
+    if (renderLimit >= filteredAndSorted.length) return;
+    const schedule = typeof window !== "undefined" && "requestIdleCallback" in window
+      ? (cb: () => void) => window.requestIdleCallback(cb, { timeout: 1200 })
+      : (cb: () => void) => setTimeout(cb, 400);
+    const cancel = typeof window !== "undefined" && "cancelIdleCallback" in window
+      ? (id: number) => window.cancelIdleCallback(id)
+      : (id: number) => clearTimeout(id);
+
+    const timerId = schedule(() => {
+      setRenderLimit((prev) => Math.min(prev + 50, filteredAndSorted.length));
+    });
+    return () => cancel(timerId);
   }, [renderLimit, filteredAndSorted.length]);
 
   const visibleFields = useMemo(() => {
