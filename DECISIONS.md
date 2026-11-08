@@ -642,7 +642,7 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 
 ## Autopilot handoff
 
-**2026-11-08, autopilot run.** Done: T6.9c (CorrectionPanel in the Field Card: crop per season, sowing day, irrigation; satellite vs farmer table with tags D/E; "re-run needed" notice; clear button; `npm --prefix app run build` and 57 tests green). Earlier: T6.9a, T6.9b. Not yet run in a browser. Current years = last N story seasons (assumes the Current option covers them). In progress: nothing. Background: none. Risk: T2.2 FAILED, Gate 5 FAILED (neighbour witness off), T7.1/T7.2 show weak skill; all logged. Tip: Bash pipes and `cd &&` chains are refused; use single commands (PowerShell for npm).
+**2026-11-08, autopilot run.** Done: T6.9d (real-pack test in `app/tests/real-packs.test.ts`; 58 tests green; T6.9 ticked in PLAN.md). Earlier: T6.9a–c. Not run in a browser (unattended). Current years = last N story seasons (assumes the Current option covers them). In progress: nothing. Background: none. Risk: T2.2 FAILED, Gate 5 FAILED (neighbour witness off), T7.1/T7.2 show weak skill; all logged. Tip: Bash pipes and `cd &&` chains are refused; use single commands (PowerShell for npm).
 
 **Subtasks, in order. Do the first unticked one; each fits one run.**
 
@@ -650,7 +650,7 @@ T6.9 Farmer corrections (backend done: `rotate/corrections.py`, `tests/test_corr
 1. [x] **T6.9a TS port.** `app/src/corrections.ts` mirroring `apply_corrections`, `correction_key` and the `RERUN_NEEDED` text; `app/tests/corrections.test.ts` with the same cases as `tests/test_corrections.py`. Accept: `npm --prefix app test` green.
 2. [x] **T6.9b Browser store.** Load/save corrections per field id in `localStorage`; every access in try/catch; the app works when storage is unavailable. Tests. Accept: tests green.
 3. [x] **T6.9c Field Card UI.** (done: `app/src/CorrectionPanel.tsx`, strings `corr.*`, `app/tests/correctionPanel.test.ts`; build + 57 tests green) Form for crop per season, sowing date, irrigation yes/no. Current shows the farmer and satellite versions side by side; farmer values tagged E; physics corrections show "re-run needed: available in live mode". Accept: `npm --prefix app run build` and tests green.
-4. [ ] **T6.9d Acceptance.** Test on a real pack in `app/public/packs`: a corrected history changes the Current option's sequence and tags (E). Run the app once to confirm. Rebuild and validate packs only if a pack changes. Tick T6.9. No precomputed alternatives (no §3 slot; adding one is a schema change: ask).
+4. [x] **T6.9d Acceptance.** Test on a real pack in `app/public/packs`: a corrected history changes the Current option's sequence and tags (E). Run the app once to confirm. Rebuild and validate packs only if a pack changes. Tick T6.9. No precomputed alternatives (no §3 slot; adding one is a schema change: ask).
 
 T7.1 barley (and winter crops):
 5. [ ] **T7.1a Cross-year windows.** In `scripts/t71_hindcast.py`, place winter crops with `rotate/slots.py` (negative sowing day) instead of skipping them. Unit test with a synthetic winter season. Accept: test green; maize and sorghum records unchanged.
@@ -667,4 +667,4 @@ Phase 5 (T5.1–T5.3 ticked; Gate 5 FAILED: 0/92 contrasts pass diagnostics, bec
 12. [ ] **T5.xb Surrounding tiles** (T5.1 allows it). First estimate the HLS download size; over 1 GB → `BLOCKED.md` (rule 11).
 13. [ ] **T5.xc Re-grade.** Only if a contrast passes: re-run `scripts/t65_grade.py`, rebuild and validate the packs.
 
-**Next: T6.9d** (the real-pack test exists already; remaining: run the app once to confirm, tick T6.9 in PLAN.md).
+**Next: T7.1a** (cross-year windows for winter crops).

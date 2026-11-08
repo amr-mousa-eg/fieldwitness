@@ -7,6 +7,8 @@ import { backtestMetrics, backtestRows, ledgerModes, witnessRows } from "../src/
 import { modesOf, metricsOf } from "../src/hindcast";
 import { COLOUR_METRICS, fieldValues, gridGeoJSON } from "../src/mapLayers";
 import type { FieldPack, RegionHindcast, RegionIndex, RegionLayers, RegionList } from "../src/types";
+import { currentFromPack } from "../src/CorrectionPanel";
+import { applyCorrections, emptyCorrections } from "../src/corrections";
 import { wktToGeometry } from "../src/wkt";
 
 const DIR = join(import.meta.dirname, "../public/packs");
@@ -64,6 +66,33 @@ describe.skipIf(!has)("real packs in public/packs", () => {
       }
       for (const l of layers.layers) for (const y of l.grid.years) expect(() => gridGeoJSON(l, y)).not.toThrow();
       expect(untagged(h, "hindcast", []).concat(untagged(layers, "layers", [])).slice(0, 5)).toEqual([]);
+    });
+  }
+});
+
+describe.skipIf(!has)("T6.9d farmer corrections on real packs", () => {
+  const regions = has ? read<RegionList>("regions.json").regions : [];
+  for (const { region_id: r } of regions) {
+    it(`${r}: a corrected history changes the Current sequence and tags it E`, () => {
+      const index = read<RegionIndex>(`${r}/index.json`);
+      let tested = 0;
+      for (const f of index.fields) {
+        const pack = read<FieldPack>(`${r}/${f.field_id}.json`);
+        const cur = currentFromPack(pack);
+        if (!cur) continue;
+        const allowed = new Set(pack.options.flatMap((o) => o.sequence));
+        const year = cur.years[0];
+        const other = [...allowed].find((c) => c !== cur.sequence[0]);
+        if (!other) continue;
+        const res = applyCorrections(cur, { ...emptyCorrections(), cropByYear: { [year]: other } }, allowed);
+        expect(res.corrected.sequence[0]).toBe(other);
+        expect(res.corrected.sequence).not.toEqual(cur.sequence);
+        expect(res.sourceByYear[year]).toBe("farmer");
+        expect(res.needsRerun).toBe(true);
+        expect(res.notes.join(" ")).toContain("tag E");
+        tested++;
+      }
+      expect(tested).toBeGreaterThan(0);
     });
   }
 });
