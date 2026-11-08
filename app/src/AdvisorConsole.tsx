@@ -26,9 +26,10 @@ import {
 import { formatDate, formatTagged, harvestDayToDate } from "./format";
 import { cropName, metricName, optionName, t } from "./strings";
 import { TagBadge, TaggedValue } from "./tags";
+import { CHART_COLOURS } from "./theme";
 import type { FieldPack, LedgerEntry, Option, Tagged, WitnessResult } from "./types";
+import { useTheme } from "./useTheme";
 
-const CHART = { pred: "#3d6f8e", obs: "#8a6a1f" };
 const SEASON_DAY_UNIT = "day of harvest year";
 
 /** Season-date metrics print as calendar dates; everything else as a tagged number. */
@@ -159,6 +160,8 @@ function Hit({ v }: { v: boolean | null }) {
 
 /** Predicted vs observed seasons from a pack's ledger; also the scoreboard's story chart (T9.5). */
 export function Backtest({ pack, mode: fixedMode }: { pack: FieldPack; mode?: LedgerEntry["mode"] }) {
+  const { effective } = useTheme();
+  const chart = CHART_COLOURS[effective];
   const metrics = useMemo(() => backtestMetrics(pack.ledger), [pack.ledger]);
   const modes = useMemo(() => ledgerModes(pack.ledger), [pack.ledger]);
   const [metric, setMetric] = useState(metrics[0] ?? "");
@@ -208,11 +211,11 @@ export function Backtest({ pack, mode: fixedMode }: { pack: FieldPack; mode?: Le
       </div>
       <ul className="chart-key">
         <li>
-          <span className="key-dot" style={{ background: CHART.pred }} /> {t("advisor.predicted")}{" "}
+          <span className="key-dot" style={{ background: chart.pred }} /> {t("advisor.predicted")}{" "}
           <TagBadge tag={rows[0].predicted.tag} source={rows[0].predicted.source} />
         </li>
         <li>
-          <span className="key-diamond" style={{ background: CHART.obs }} /> {t("advisor.observed")}{" "}
+          <span className="key-diamond" style={{ background: chart.obs }} /> {t("advisor.observed")}{" "}
           <TagBadge tag={rows[0].observed.tag} source={rows[0].observed.source} />
         </li>
         <li className="muted">{t("advisor.backtest.unit", { unit: unitShort })}</li>
@@ -223,12 +226,12 @@ export function Backtest({ pack, mode: fixedMode }: { pack: FieldPack; mode?: Le
             <CartesianGrid strokeDasharray="2 4" vertical={false} />
             <XAxis dataKey="label" type="category" padding={{ left: 60, right: 60 }} />
             <YAxis width={48} domain={["auto", "auto"]} />
-            <ReferenceLine y={0} stroke={CHART.pred} />
+            <ReferenceLine y={0} stroke={chart.pred} />
             <Tooltip formatter={(v) => (Array.isArray(v) ? null : Number(v).toFixed(1))} />
-            <Scatter dataKey="pred" name={t("advisor.predicted")} fill={CHART.pred} isAnimationActive={false}>
-              <ErrorBar dataKey="err" direction="y" width={8} stroke={CHART.pred} />
+            <Scatter dataKey="pred" name={t("advisor.predicted")} fill={chart.pred} isAnimationActive={false}>
+              <ErrorBar dataKey="err" direction="y" width={8} stroke={chart.pred} />
             </Scatter>
-            <Scatter dataKey="obs" name={t("advisor.observed")} fill={CHART.obs} shape="diamond" isAnimationActive={false} />
+            <Scatter dataKey="obs" name={t("advisor.observed")} fill={chart.obs} shape="diamond" isAnimationActive={false} />
           </ComposedChart>
         </ResponsiveContainer>
       </div>
@@ -276,6 +279,20 @@ export function AdvisorConsole({ pack }: { pack: FieldPack }) {
   const alternatives = pack.options.filter((o) => o.option_id !== "current").sort((a, b) => a.rank - b.rank);
   return (
     <div className="advisor">
+      <section className="advisor-limits-callout" aria-label="Advisor caveats and limits">
+        <p className="fixed-line">{t("fixed.judgment")}</p>
+        <div className="callout-grid">
+          <div className="callout-item">
+            <strong>Hindcast skill:</strong> Weak on 2022–2024 seasons (90 % coverage is 35.0 % for canopy integral, 9.0 % for cover days; Spearman r = 0.264). Model uncertainty intervals are wide.
+          </div>
+          <div className="callout-item">
+            <strong>Neighbour witness:</strong> Inactive (0 of 32 matched contrasts passed diagnostic checks). Graded on physics + calibration only; <em>evidence grades top out at B</em>.
+          </div>
+          <div className="callout-item">
+            <strong>Season detection:</strong> Missed pre-registered accuracy target in Kansas (78.3 % match vs 90.0 % target).
+          </div>
+        </div>
+      </section>
       <section className="advisor-top" aria-labelledby="cred-h">
         <div>
           <h3 id="cred-h">{t("advisor.credibility")}</h3>

@@ -51,6 +51,14 @@ Only the row groups whose `bbox` statistics intersect the query box are read (se
   - DOIs: `HLSL30.002`: https://doi.org/10.5067/HLS/HLSL30.002 ; `HLSS30.002`: https://doi.org/10.5067/HLS/HLSS30.002
   - Citation: Claverie, M., Ju, J., Masek, J. G., et al. (2018). The Harmonized Landsat and Sentinel-2 (HLS) Product. *Remote Sensing of Environment*, 219, 145–161.
   - Licence: NASA Earth Science Data Policy (open and free for all users).
+- **NASA GIBS HLS True-Colour Basemap (T9.1 / P0.1)**:
+  - Source: NASA Global Imagery Browse Services (GIBS) / LP DAAC, part of NASA EOSDIS.
+  - Layer: `HLS_S30_Nadir_BRDF_Adjusted_Reflectance` (Sentinel-2 MSI true-colour RGB: Red B04, Green B03, Blue B02).
+  - Spatial resolution: ~30 m native resolution (WMTS `GoogleMapsCompatible_Level12`, ~29.8 m/pixel at 38°N).
+  - Date of imagery: 2023-07-04 (summer peak vegetation growth, 99.88% clear observation across Kansas tile T14SLH).
+  - Endpoint: `https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/HLS_S30_Nadir_BRDF_Adjusted_Reflectance/default/2023-07-04/GoogleMapsCompatible_Level12/{z}/{y}/{x}.png` (EPSG:3857). Offline/error behavior: falls back to neutral background.
+  - Required attribution: "Imagery: NASA GIBS / LP DAAC (HLS S30, 2023-07-04)".
+  - Licence: NASA Earth Science Data Policy (open and free for all users).
 - **ECOSTRESS** `ECO_L3T_JET` v003 — NASA LP DAAC (verified in CMR; access verified for future extensions).
 
 ## Crop parameters and statistics (T0.6)

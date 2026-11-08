@@ -13,7 +13,9 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import workerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?url";
 import { type Domain, RAMPS, rampExpression } from "./mapLayers";
 import { t } from "./strings";
+import { getMapColours } from "./theme";
 import type { RegionIndex } from "./types";
+import { useTheme } from "./useTheme";
 import { boundsOf, wktToGeometry } from "./wkt";
 
 setWorkerUrl(workerUrl);
@@ -21,38 +23,41 @@ setWorkerUrl(workerUrl);
 /** MapLibre does not re-export the style-spec type; take it from MapOptions. */
 type StyleSpecification = Exclude<MapOptions["style"], string | undefined>;
 
-// Read once when the module loads; a theme change takes effect on the next page load.
-const DARK = window.matchMedia?.("(prefers-color-scheme: dark)").matches ?? false;
-const COLOURS = {
-  background: DARK ? "#3b3d36" : "#d8d6cc", // neutral fallback when no HLS composite exists (T9.1)
-  regionLine: DARK ? "#8f8c7c" : "#7d7a6c",
-  fieldFill: "#c9a43a",
-  fieldLine: "#5b4813",
-  selected: DARK ? "#e4ebe8" : "#22313a", // matches --ink
-};
-
 type Bbox = [number, number, number, number];
 
 /** Inline style: background, optional HLS true-colour composite, no third-party tiles or fonts. */
-function styleFor(index: RegionIndex): StyleSpecification {
+function styleFor(index: RegionIndex, dark: boolean): StyleSpecification {
+  const colours = getMapColours(dark);
   const [w, s, e, n] = index.bbox_lonlat;
   const style: StyleSpecification = {
     version: 8,
     sources: {},
-    layers: [{ id: "background", type: "background", paint: { "background-color": COLOURS.background } }],
+    layers: [{ id: "background", type: "background", paint: { "background-color": colours.background } }],
   };
   if (index.basemap) {
-    style.sources.basemap = {
-      type: "image",
-      url: `${import.meta.env.BASE_URL}${index.basemap}`,
-      coordinates: [
-        [w, n],
-        [e, n],
-        [e, s],
-        [w, s],
-      ],
-    };
-    style.layers.push({ id: "basemap", type: "raster", source: "basemap" });
+    if (index.basemap.includes("{z}") || index.basemap.startsWith("http://") || index.basemap.startsWith("https://")) {
+      style.sources.basemap = {
+        type: "raster",
+        tiles: [index.basemap],
+        tileSize: 256,
+        minzoom: 0,
+        maxzoom: 12,
+        attribution: "NASA GIBS / LP DAAC (HLS S30, 2023-07-04)",
+      };
+      style.layers.push({ id: "basemap", type: "raster", source: "basemap" });
+    } else {
+      style.sources.basemap = {
+        type: "image",
+        url: `${import.meta.env.BASE_URL}${index.basemap}`,
+        coordinates: [
+          [w, n],
+          [e, n],
+          [e, s],
+          [w, s],
+        ],
+      };
+      style.layers.push({ id: "basemap", type: "raster", source: "basemap" });
+    }
   }
   return style;
 }
@@ -142,6 +147,9 @@ function withValues(fc: GeoJSON.FeatureCollection, values: Record<string, number
 }
 
 export function MapView({ index, selectedId, onSelect, colouring = null, grid = null }: Props) {
+  const { effective } = useTheme();
+  const dark = effective === "dark";
+  const colours = getMapColours(dark);
   const container = useRef<HTMLDivElement>(null);
   const map = useRef<MapLibreMap | null>(null);
   const [ready, setReady] = useState(false);
@@ -158,7 +166,7 @@ export function MapView({ index, selectedId, onSelect, colouring = null, grid = 
     );
     const m = new MapLibreMap({
       container: container.current!,
-      style: styleFor(index),
+      style: styleFor(index, dark),
       bounds: fieldBounds,
       // extra bottom padding keeps fields clear of the attribution label
       fitBoundsOptions: { padding: { top: 48, right: 64, bottom: 72, left: 48 }, maxZoom: 14 },
@@ -168,6 +176,13 @@ export function MapView({ index, selectedId, onSelect, colouring = null, grid = 
       },
     });
     m.addControl(new NavigationControl({ showCompass: false }), "top-right");
+    m.on("error", (e) => {
+      // Gracefully handle tile loading errors (e.g. offline fallback to neutral background)
+      const srcId = (e as unknown as { sourceId?: string })?.sourceId;
+      if (e?.error?.message?.includes("tile") || srcId === "basemap") {
+        return;
+      }
+    });
     m.on("load", () => {
       m.addSource("region", { type: "geojson", data: regionGeoJSON(index.bbox_lonlat) });
       m.addSource("fields", { type: "geojson", data: fields });
@@ -178,32 +193,32 @@ export function MapView({ index, selectedId, onSelect, colouring = null, grid = 
         type: "fill",
         source: "grid",
         layout: { visibility: "none" },
-        paint: { "fill-color": NO_VALUE, "fill-opacity": 0.6, "fill-outline-color": COLOURS.regionLine },
+        paint: { "fill-color": NO_VALUE, "fill-opacity": 0.6, "fill-outline-color": colours.regionLine },
       });
       m.addLayer({
         id: "region-outline",
         type: "line",
         source: "region",
-        paint: { "line-color": COLOURS.regionLine, "line-width": 1, "line-dasharray": [4, 3] },
+        paint: { "line-color": colours.regionLine, "line-width": 1, "line-dasharray": [4, 3] },
       });
       m.addLayer({
         id: "fields-fill",
         type: "fill",
         source: "fields",
-        paint: { "fill-color": COLOURS.fieldFill, "fill-opacity": 0.55 },
+        paint: { "fill-color": colours.fieldFill, "fill-opacity": 0.55 },
       });
       m.addLayer({
         id: "fields-line",
         type: "line",
         source: "fields",
-        paint: { "line-color": COLOURS.fieldLine, "line-width": 1.5 },
+        paint: { "line-color": colours.fieldLine, "line-width": 1.5 },
       });
       m.addLayer({
         id: "fields-selected",
         type: "line",
         source: "fields",
         filter: ["==", ["get", "field_id"], ""],
-        paint: { "line-color": COLOURS.selected, "line-width": 4 },
+        paint: { "line-color": colours.selected, "line-width": 4 },
       });
       m.addSource("field-points", { type: "geojson", data: fieldPoints(fields) });
       m.addLayer({
@@ -213,8 +228,8 @@ export function MapView({ index, selectedId, onSelect, colouring = null, grid = 
         maxzoom: MARKER_FADE[1],
         paint: {
           "circle-radius": 7,
-          "circle-color": COLOURS.fieldFill,
-          "circle-stroke-color": COLOURS.fieldLine,
+          "circle-color": colours.fieldFill,
+          "circle-stroke-color": colours.fieldLine,
           "circle-stroke-width": 1.5,
           "circle-opacity": fadeOut(),
           "circle-stroke-opacity": fadeOut(),
@@ -228,8 +243,8 @@ export function MapView({ index, selectedId, onSelect, colouring = null, grid = 
         filter: ["==", ["get", "field_id"], ""],
         paint: {
           "circle-radius": 9,
-          "circle-color": COLOURS.fieldFill,
-          "circle-stroke-color": COLOURS.selected,
+          "circle-color": colours.fieldFill,
+          "circle-stroke-color": colours.selected,
           "circle-stroke-width": 3,
           "circle-opacity": fadeOut(),
           "circle-stroke-opacity": fadeOut(),
@@ -256,6 +271,26 @@ export function MapView({ index, selectedId, onSelect, colouring = null, grid = 
     };
   }, [index, fields]);
 
+  // Update paint properties live when theme toggles.
+  useEffect(() => {
+    const m = map.current;
+    if (!ready || !m) return;
+    try {
+      m.setPaintProperty("background", "background-color", colours.background);
+      m.setPaintProperty("region-outline", "line-color", colours.regionLine);
+      m.setPaintProperty("fields-line", "line-color", colours.fieldLine);
+      m.setPaintProperty("fields-selected", "line-color", colours.selected);
+      m.setPaintProperty("fields-marker-selected", "circle-stroke-color", colours.selected);
+      if (!colouring) {
+        m.setPaintProperty("fields-fill", "fill-color", colours.fieldFill);
+        m.setPaintProperty("fields-marker", "circle-color", colours.fieldFill);
+        m.setPaintProperty("fields-marker", "circle-stroke-color", colours.fieldLine);
+      }
+    } catch {
+      // ignore during transitions
+    }
+  }, [ready, dark, colouring, colours]);
+
   useEffect(() => {
     if (map.current) showSelected(map.current, selectedId);
   }, [selectedId]);
@@ -268,7 +303,7 @@ export function MapView({ index, selectedId, onSelect, colouring = null, grid = 
     (m.getSource("fields") as GeoJSONSource).setData(coloured);
     (m.getSource("field-points") as GeoJSONSource).setData(fieldPoints(coloured));
     const colour = (
-      colouring ? rampExpression("cv", colouring.domain, RAMPS.sequential, NO_VALUE) : COLOURS.fieldFill
+      colouring ? rampExpression("cv", colouring.domain, RAMPS.sequential, NO_VALUE) : colours.fieldFill
     ) as ColourValue;
     m.setPaintProperty("fields-fill", "fill-color", colour);
     m.setPaintProperty("fields-fill", "fill-opacity", colouring ? 0.85 : 0.55);

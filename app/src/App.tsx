@@ -6,6 +6,7 @@ import { MethodsPage } from "./MethodsPage";
 import { cacheRegionForOffline, loadIndex, loadRegions } from "./data";
 import { PAGES, pageHref, useRoute } from "./route";
 import { Scoreboard } from "./Scoreboard";
+import { ThemeToggle } from "./ThemeToggle";
 import { t } from "./strings";
 import type { RegionIndex, RegionList } from "./types";
 
@@ -94,10 +95,11 @@ export function App() {
             ))}
           </nav>
         )}
+        <ThemeToggle />
       </header>
       {index && route.fieldId ? (
         <main id="main" tabIndex={-1} className="app-field">
-          <FieldPage regionId={index.region_id} fieldId={route.fieldId} tab={route.tab} />
+          <FieldPage index={index} regionId={index.region_id} fieldId={route.fieldId} tab={route.tab} />
         </main>
       ) : index && route.page === "scoreboard" ? (
         <main id="main" tabIndex={-1} className="app-field">

@@ -6,12 +6,23 @@ import { FieldStory } from "./FieldStory";
 import { ScaleFlags } from "./ScaleFlags";
 import { loadPack } from "./data";
 import { formatDate } from "./format";
+import { fieldNumber } from "./fields";
 import { type FieldTab, TABS, routeHref } from "./route";
 import { t } from "./strings";
 import { TagLegend } from "./tags";
-import type { FieldPack } from "./types";
+import type { FieldPack, RegionIndex } from "./types";
 
-export function FieldPage({ regionId, fieldId, tab }: { regionId: string; fieldId: string; tab: FieldTab }) {
+export function FieldPage({
+  regionId,
+  fieldId,
+  tab,
+  index,
+}: {
+  regionId: string;
+  fieldId: string;
+  tab: FieldTab;
+  index?: RegionIndex | null;
+}) {
   const [pack, setPack] = useState<FieldPack | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -31,7 +42,10 @@ export function FieldPage({ regionId, fieldId, tab }: { regionId: string; fieldI
       {pack && (
         <>
           <header className="field-head">
-            <h2>{t("field.heading", { id: fieldId.slice(0, 8) })}</h2>
+            <h2>
+              {index ? `Field ${fieldNumber(fieldId, index.fields)}` : t("field.heading", { id: fieldId.slice(0, 8) })}{" "}
+              <small className="field-id-hash">({fieldId.slice(0, 8)})</small>
+            </h2>
             <dl className="field-facts">
               <div>
                 <dt>{t("field.area")}</dt>

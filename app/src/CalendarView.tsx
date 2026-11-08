@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Line, LineChart, ResponsiveContainer, YAxis } from "recharts";
 import { CropChips } from "./CropChips";
+import { CHART_COLOURS } from "./theme";
+import { useTheme } from "./useTheme";
 import { HAZARDS, MONTHS, monthValue, shadeLevel, vulnerabilityFor } from "./calendar";
 import { loadCalendar, loadLayers } from "./data";
 import { formatTagged } from "./format";
@@ -141,13 +143,15 @@ function VulnerabilityCalendar({ cal, sequence }: { cal: FieldCalendar; sequence
 }
 
 function Sparkline({ layer }: { layer: RegionalLayer }) {
+  const { effective } = useTheme();
+  const chart = CHART_COLOURS[effective];
   const data = (layer.region_mean.x as number[]).map((x, i) => ({ x, y: layer.region_mean.values[i] }));
   return (
     <div className="spark" aria-hidden="true">
       <ResponsiveContainer width="100%" height={48}>
         <LineChart data={data} margin={{ top: 4, right: 4, bottom: 4, left: 4 }}>
           <YAxis hide domain={["auto", "auto"]} />
-          <Line dataKey="y" stroke="#56646b" strokeWidth={2} dot={false} isAnimationActive={false} connectNulls />
+          <Line dataKey="y" stroke={chart.line} strokeWidth={2} dot={false} isAnimationActive={false} connectNulls />
         </LineChart>
       </ResponsiveContainer>
     </div>

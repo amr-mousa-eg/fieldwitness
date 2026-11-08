@@ -17,7 +17,9 @@ import { loadSeries } from "./data";
 import { formatDate, harvestDayToDate } from "./format";
 import { cropName, t } from "./strings";
 import { TagBadge, TaggedValue } from "./tags";
+import { CHART_COLOURS } from "./theme";
 import type { FieldPack, FieldSeries, Season, Tagged, TaggedSeries } from "./types";
+import { useTheme } from "./useTheme";
 
 const DAY = 86_400_000;
 const CHART = { ndvi: "#3e7d3a", evi: "#6b5ea8", smooth: "#22313a", marks: "#8a6a1f" };
@@ -97,6 +99,8 @@ function Timeline({ story }: { story: Season[] }) {
 }
 
 function GreennessChart({ pack, series }: { pack: FieldPack; series: FieldSeries }) {
+  const { effective } = useTheme();
+  const chart = CHART_COLOURS[effective];
   const [focus, setFocus] = useState<string>("all");
   const [showEvi, setShowEvi] = useState(false);
   const ndvi = useMemo(() => points(series.ndvi), [series]);
@@ -188,26 +192,26 @@ function GreennessChart({ pack, series }: { pack: FieldPack; series: FieldSeries
               const sos = markTime(s, s.sos)!;
               const eos = markTime(s, s.eos)!;
               return [
-                <ReferenceLine key={`sos-${s.year}`} x={sos} stroke={CHART.marks} strokeDasharray="3 3" ifOverflow="hidden" />,
-                <ReferenceLine key={`eos-${s.year}`} x={eos} stroke={CHART.marks} strokeDasharray="3 3" ifOverflow="hidden" />,
+                <ReferenceLine key={`sos-${s.year}`} x={sos} stroke={chart.marks} strokeDasharray="3 3" ifOverflow="hidden" />,
+                <ReferenceLine key={`eos-${s.year}`} x={eos} stroke={chart.marks} strokeDasharray="3 3" ifOverflow="hidden" />,
               ];
             })}
             <Line
               data={smooth.filter(inView)}
               dataKey="y"
               name={t("story.series.smooth")}
-              stroke={CHART.smooth}
+              stroke={chart.smooth}
               strokeWidth={2}
               dot={false}
               isAnimationActive={false}
             />
-            <Scatter data={ndvi.filter(inView)} dataKey="y" name={t("story.series.ndvi")} fill={CHART.ndvi} isAnimationActive={false} />
+            <Scatter data={ndvi.filter(inView)} dataKey="y" name={t("story.series.ndvi")} fill={chart.ndvi} isAnimationActive={false} />
             {showEvi && (
               <Scatter
                 data={evi.filter(inView)}
                 dataKey="y"
                 name={t("story.series.evi")}
-                fill={CHART.evi}
+                fill={chart.evi}
                 shape="triangle"
                 isAnimationActive={false}
               />
@@ -222,7 +226,7 @@ function GreennessChart({ pack, series }: { pack: FieldPack; series: FieldSeries
                   y={nearestSmooth(peak).y}
                   r={6}
                   fill="none"
-                  stroke={CHART.marks}
+                  stroke={chart.marks}
                   strokeWidth={2}
                   ifOverflow="hidden"
                 />

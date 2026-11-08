@@ -602,3 +602,27 @@ We are at Gate <N>. Check every acceptance test of this phase against the actual
 - [x] **V11 App tests:** in app/: npm test -> 58 passed (13 test files).
 - [x] **V12 App build:** in app/: npm run build -> static build succeeded in 2.82s.
 - [x] **V13 Pack validator:** uv run python -m fieldwitness.cli validate-packs packs/ks_t14slh -> 0 problems.
+
+## 10. Phase 11 Polish & Submission Freeze (8–13 Nov 2026)
+
+### P0 — Must be done (target: 10 Nov)
+- [x] **P0.1 Real basemap (T9.1):** NASA GIBS HLS S30 true-colour layer (2023-07-04, 30m, EPSG:3857) integrated with official attribution; offline fallback to neutral background without breaking app; visual alignment verified on fields 7008ff6b, 52a7fe05, 20332278; DATA.md and Methods updated.
+- [x] **P0.2 Readable field names:** Stable 1-based numbering sorted lexicographically by `field_id` (`Field 1`–`Field 200`), area in ha, short hash ID; sortable by number, area, grade; search box matching "Field N" and hash.
+- [x] **P0.3 Map legend:** Visual legend explaining amber field outline/markers, selected highlight, tile boundary, grades B/C/D (A disabled), scale-flag symbols (● fine / ◌ coarse); visible in both themes, collapsible on phones (<48rem).
+- [x] **P0.4 Light and dark mode (D2):** Complete CSS tokens for light and dark; prefers-color-scheme default with header toggle (Light / Dark / System) saved in localStorage with try/catch fallback; pre-paint script to prevent theme flash; dynamic charts (Recharts) and map overlays; WCAG AA contrast (text >= 4.5:1, UI >= 3:1); screenshots of every view in light and dark captured.
+- [x] **P0.5 Honest statements visible in app:** Methods page and Advisor Console plainly state weak hindcast skill (canopy integral 90% coverage 35.0%, cover days 9.0%, r=0.264), season detection missed target (78.3% vs 90%), neighbour witness OFF (0/32 passed checks), grades capped at B; fixed disclaimer line on every view.
+- [ ] **P0.6 Live site check after deploying P0:** Verify live site in private window (all 200 fields load, no DEMO DATA banner, 0 console errors, offline reload works, 380px phone width).
+
+### P1 — Should be done (target: 12 Nov)
+- [ ] **P1.7 Performance (code splitting):** Lazy-load map and chart code to reduce initial JS payload (baseline: 1,785 kB minified).
+- [ ] **P1.8 First-visit guidance:** Dismissible, remembered "How to read this" guidance panel (3–4 sentences) on Map view explaining fields, grades, and disclaimer.
+- [ ] **P1.9 Consistency pass:** Verify alignment across README.md, DATA.md, AI_USE.md, Methods page, and docs/drafts/submission.md.
+- [ ] **P1.10 Submission drafts:** Author `docs/drafts/submission.md` with summary, detailed description, NASA data used, other data, AI use.
+- [ ] **P1.11 Accessibility audit:** Keyboard path verified (`keyboard-check.mjs`), visible focus in both themes, alt text/labels for map controls.
+- [ ] **P1.12 Final test-and-report:** Full suite execution and verification report.
+
+### P2 — Only if everything above is done, and not after 12 Nov
+- [ ] **P2.13 Nile Delta data-confidence map:** Census numbers only, no pipeline.
+- [ ] **P2.14 Toulouse through Phases 1–8:** Stop and report if it can't finish by 12 Nov.
+- [ ] **P2.15 T4.6 WIMAS check:** Only when file is provided in `data/wimas/`.
+

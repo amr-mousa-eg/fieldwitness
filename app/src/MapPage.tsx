@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { FieldList } from "./FieldList";
 import { type LayerChoice, LayerPanel, fieldColourDomain } from "./LayerPanel";
+import { MapLegend } from "./MapLegend";
 import { MapView } from "./MapView";
 import { loadLayers } from "./data";
 import { DIVERGING, RAMPS, fieldValues, gridDomain, gridGeoJSON } from "./mapLayers";
@@ -53,13 +54,16 @@ export function MapPage({ index }: { index: RegionIndex }) {
           valueLabel={choice.colourBy ? metricName(choice.colourBy) : ""}
         />
       </aside>
-      <MapView
-        index={index}
-        selectedId={null}
-        onSelect={(fid) => (window.location.hash = routeHref(index.region_id, fid))}
-        colouring={colouring}
-        grid={grid}
-      />
+      <div className="map-container">
+        <MapView
+          index={index}
+          selectedId={null}
+          onSelect={(fid) => (window.location.hash = routeHref(index.region_id, fid))}
+          colouring={colouring}
+          grid={grid}
+        />
+        <MapLegend />
+      </div>
     </main>
   );
 }
