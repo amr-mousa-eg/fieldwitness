@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { CropChips } from "./CropChips";
 import { getFieldNumberMap, gradeRank } from "./fields";
 import { routeHref } from "./route";
@@ -57,6 +57,27 @@ export function FieldList({
     });
   }, [fieldsWithNum, search, sortBy, sortDir]);
 
+  // Progressive batch rendering (TBT optimization): render initial 25 items on first paint,
+  // then stream remaining items across animation frames so no single task exceeds 50 ms.
+  const [renderLimit, setRenderLimit] = useState(25);
+
+  useEffect(() => {
+    setRenderLimit(25);
+  }, [search, sortBy, sortDir]);
+
+  useEffect(() => {
+    if (renderLimit < filteredAndSorted.length) {
+      const id = requestAnimationFrame(() => {
+        setRenderLimit((prev) => Math.min(prev + 35, filteredAndSorted.length));
+      });
+      return () => cancelAnimationFrame(id);
+    }
+  }, [renderLimit, filteredAndSorted.length]);
+
+  const visibleFields = useMemo(() => {
+    return filteredAndSorted.slice(0, renderLimit);
+  }, [filteredAndSorted, renderLimit]);
+
   return (
     <section className="field-list" aria-labelledby="fields-heading">
       <h2 id="fields-heading">{t("fields.heading")}</h2>
@@ -106,7 +127,7 @@ export function FieldList({
         <p className="muted field-no-matches">{t("fields.noMatches")}</p>
       ) : (
         <ul className="field-items-list">
-          {filteredAndSorted.map(({ field: f, num }) => (
+          {visibleFields.map(({ field: f, num }) => (
             <li key={f.field_id}>
               <a
                 className="field-item"

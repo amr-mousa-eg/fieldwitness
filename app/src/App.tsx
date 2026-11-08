@@ -1,7 +1,7 @@
 import { Suspense, lazy, useEffect, useRef, useState } from "react";
 import { DemoBanner } from "./DemoBanner";
 import { MapPage } from "./MapPage";
-import { cacheRegionForOffline, loadIndex, loadRegions } from "./data";
+import { loadIndex, loadRegions } from "./data";
 import { PAGES, pageHref, useRoute } from "./route";
 import { ThemeToggle } from "./ThemeToggle";
 import { t } from "./strings";
@@ -35,7 +35,6 @@ export function App() {
     loadIndex(regionId)
       .then((idx) => {
         setIndex(idx);
-        cacheRegionForOffline(idx);
       })
       .catch((e: Error) => setError(t("error.load", { what: "the region", message: e.message })));
   }, [regionId]);
@@ -116,8 +115,18 @@ export function App() {
         ) : (
           <main id="main" tabIndex={-1} className="app-main">
             <aside className="rail">
-              {error ? <p role="alert">{error}</p> : <p>{t("region.loading")}</p>}
+              {error ? (
+                <p role="alert">{error}</p>
+              ) : (
+                <div className="rail-loading-placeholder">
+                  <h2>{t("fields.heading")}</h2>
+                  <p className="muted">{t("region.loading")}</p>
+                </div>
+              )}
             </aside>
+            <div className="map-container">
+              <div className="map-loading" />
+            </div>
           </main>
         )}
       </Suspense>

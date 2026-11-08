@@ -1,0 +1,14 @@
+# FieldWitness
+> Crop-rotation decision support for agricultural fields, backed by three independent witnesses and NASA Earth observations.
+
+FieldWitness is a public, open-source decision support web application developed for the NASA Space Apps Challenge ("Field Shift: Adapting Farms with NASA Data"). It evaluates multi-season crop rotation alternatives for specific fields based on:
+1. FAO-56 dual crop coefficient root-zone water balance forced by NASA POWER daily surface meteorology.
+2. Field-specific historical calibration using 30 m NASA Harmonized Landsat Sentinel-2 (HLS) vegetation indices via Approximate Bayesian Computation.
+3. Natural experiment diagnostics evaluating neighboring field histories using Double Machine Learning.
+
+Every recommendation includes transparent A–D evidence grades, bare-soil and climate hazard vulnerability calendars, and what-if scenario testing.
+
+Live Application: https://amr-mousa-eg.github.io/fieldwitness/
+Repository: https://github.com/amr-mousa-eg/fieldwitness
+Documentation: DATA.md, README.md, DECISIONS.md
+License: MIT

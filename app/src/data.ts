@@ -25,29 +25,12 @@ async function get<T>(path: string): Promise<T> {
   return (await res.json()) as T;
 }
 
-/** Must match DATA_CACHE in public/sw.js. */
-const DATA_CACHE = "fw-data-v1";
-
 /**
- * Production only: store every file of this region in the service worker's data cache, so all
- * of its fields open offline after one visit (T9.1), not only the fields already viewed.
- * Missing files (e.g. a region without layers.json) are skipped.
+ * Data caching: packs are cached on-demand by the service worker when requested,
+ * rather than pre-fetching all 800+ files on startup.
  */
-export function cacheRegionForOffline(index: RegionIndex): void {
-  if (!import.meta.env.PROD || !("caches" in window)) return;
-  const r = index.region_id;
-  const paths = ["regions.json", `${r}/index.json`, `${r}/hindcast.json`, `${r}/layers.json`];
-  for (const f of index.fields) {
-    for (const part of ["", ".series", ".calendar", ".scenarios"]) paths.push(`${r}/${f.field_id}${part}.json`);
-  }
-  void caches.open(DATA_CACHE).then((c) =>
-    Promise.allSettled(
-      paths.map(async (p) => {
-        const res = await fetch(base + p);
-        if (isJson(res)) await c.put(base + p, res);
-      }),
-    ),
-  );
+export function cacheRegionForOffline(_index: RegionIndex): void {
+  // On-demand caching handled by service worker
 }
 
 export const loadRegions = () => get<RegionList>("regions.json");
