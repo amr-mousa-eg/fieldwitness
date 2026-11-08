@@ -16,7 +16,9 @@ Per pilot field, inside `as_of(2021-12-31)`:
      the same statistics as the observation (SOS, peak day, canopy integral, cover days).
 Scoring (outside the guard, by design): CRPS from samples, 50/90 % coverage, timing error of the
 median (days), observed = HLS of that year (tag O stats; canopy statistics tag D).
-Winter wheat, sunflower, barley, soybean are not modelled (window spans New Year / no verified
+Winter wheat (T7.1a) is placed with sowing day -78 (`rotate/slots.py`) and driven by previous +
+harvest-year weather; only the harvest-year HLS is used, and it draws from its own rng so the
+maize/sorghum draws are unchanged. Sunflower, barley, soybean are not modelled (no verified
 parameters), so those field-seasons are not scored. Fitting never reads HLS or labels after 2021.
 """
 
@@ -34,6 +36,7 @@ from fieldwitness.data import labels, power
 from fieldwitness.data.asof import as_of, forcing_weather
 from fieldwitness.infer import abc, forward, priors, synthetic
 from fieldwitness.physics.forcing import forcing
+from fieldwitness.rotate.slots import SOW_DAY
 
 n_ref = int(sys.argv[1]) if len(sys.argv) > 1 else 2000
 k = int(sys.argv[2]) if len(sys.argv) > 2 else 100
@@ -42,7 +45,7 @@ CUT = dt.date(2021, 12, 31)
 SCORE_YEARS = (2022, 2023, 2024)
 S = 200  # samples per prediction
 SEED = priors.SEED
-CROPS = ("maize", "sorghum")
+CROPS = ("maize", "sorghum", "winter_wheat")  # winter wheat (T7.1a): sown the previous autumn
 MIN_OBS = 10
 QS = (0.05, 0.25, 0.5, 0.75, 0.95)
 METRICS = ("sos", "peak", "canopy_integral", "cover_days")
@@ -59,7 +62,8 @@ series["doy"] = series["date"].dt.dayofyear
 pilot = pd.read_parquet("data/fields/ks_t14slh_pilot.parquet").set_index("field_id")
 noise = synthetic.census(series[series["year"] <= CUT.year])["noise_sd"]
 crop_p = {c: forward.crop_params(c, region) for c in CROPS}
-cfgs = {c: {**cfg0, "crop": c} for c in CROPS}
+NOMINAL = {**cfg0["nominal_sow_doy"], "winter_wheat": SOW_DAY["winter_wheat"]}  # A, UNVERIFIED
+cfgs = {c: {**cfg0, "crop": c, "nominal_sow_doy": NOMINAL} for c in CROPS}
 by_field = {fid: g for fid, g in series.groupby("field_id")}
 OUT = Path("results/hindcast")
 OUT.mkdir(parents=True, exist_ok=True)
@@ -121,6 +125,7 @@ def predict(pool, wx_list, doy, rng):
 
 CURRENT: dict = {}
 rng = np.random.default_rng(SEED + 71)
+rng_w = np.random.default_rng(SEED + 72)  # winter wheat only: maize/sorghum draws stay unchanged
 done = set()
 if REC.exists():
     done = {json.loads(line)["field_id"] for line in REC.read_text("utf-8").splitlines() if line}
@@ -142,17 +147,19 @@ for fid in pilot.index:
         pools = {c: [] for c in CROPS}
         for rec in lf.itertuples():
             doy, nd = obs_series(fid, rec.year)
-            if len(doy) < MIN_OBS or rec.year not in wx_past or rec.year > CUT.year:
+            wxy = forward.season_weather(wx_past, rec.year, cfgs[rec.crop])
+            if len(doy) < MIN_OBS or wxy is None or rec.year > CUT.year:
                 continue
             leak["max_fit_year"] = max(leak["max_fit_year"], int(rec.year))
             ref = abc.reference_table(
-                *wx_past[rec.year],
+                *wxy,
                 n_ref,
                 crop_p[rec.crop],
                 cfgs[rec.crop],
                 seed=SEED + 1000 + rec.year,
             )
-            p = abc.posterior(doy, nd, ref, noise, k, rng)
+            rg = rng_w if rec.crop == "winter_wheat" else rng
+            p = abc.posterior(doy, nd, ref, noise, k, rg)
             pools[rec.crop].append({key: v[p["idx"]] for key, v in ref["hidden"].items()})
         pooled = {
             c: {key: np.concatenate([q[key] for q in pools[c]]) for key in pools[c][0]}
@@ -163,10 +170,10 @@ for fid in pilot.index:
         targets = []
         with forcing_weather():
             for y in SCORE_YEARS:
-                targets.append((y, weather(lon, lat, [y]).get(y)))
+                targets.append((y, weather(lon, lat, [y - 1, y])))
     # observed labels: scoring channel, outside the guard
     lab_all = labels.read(region)
-    for y, wy in targets:
+    for y, wy_all in targets:
         row = lab_all[(lab_all["field_id"] == fid) & (lab_all["year"] == y)]
         if row.empty or row["crop"].iloc[0] not in CROPS:
             continue
@@ -176,14 +183,18 @@ for fid in pilot.index:
             continue
         if c in pooled:
             pool, src = pooled[c], "own_crop_posterior"
-        elif pooled:
-            other = next(iter(pooled.values()))
+        elif others := [
+            v for c2, v in pooled.items() if c == "winter_wheat" or c2 != "winter_wheat"
+        ]:  # a spring crop never borrows from winter wheat (keeps maize/sorghum records unchanged)
+            other = others[0]
             pool = {key: v for key, v in other.items()}
             pool["sow_offset_days"] = prior_all["sow_offset_days"]
             src = "other_crop_posterior"
         else:
             pool, src = prior_all, "prior"
         CURRENT.update(p=crop_p[c], cfg=cfgs[c])
+        rg = rng_w if c == "winter_wheat" else rng
+        wy = forward.season_weather(wy_all, y, cfgs[c])
         obs = stats(doy, nd[:, None])[0]
         entry = {
             "year": y,
@@ -193,12 +204,12 @@ for fid in pilot.index:
         }
         for mode in ("forecast", "forced"):
             if mode == "forecast":
-                wl = list(wx_past.values())
+                wl = [w2 for yy in wx_past if (w2 := forward.season_weather(wx_past, yy, cfgs[c]))]
             elif wy is not None:
                 wl = [wy]
             else:
                 continue
-            st, eta = predict(pool, wl, doy, rng)
+            st, eta = predict(pool, wl, doy, rg)
             m = {}
             for j, name in enumerate(METRICS):
                 x, o = st[:, j], float(obs[j])
