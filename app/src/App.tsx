@@ -10,6 +10,7 @@ import type { RegionIndex, RegionList } from "./types";
 const FieldPage = lazy(() => import("./FieldPage").then((m) => ({ default: m.FieldPage })));
 const Scoreboard = lazy(() => import("./Scoreboard").then((m) => ({ default: m.Scoreboard })));
 const MethodsPage = lazy(() => import("./MethodsPage").then((m) => ({ default: m.MethodsPage })));
+const AddFieldPage = lazy(() => import("./AddFieldPage").then((m) => ({ default: m.AddFieldPage })));
 
 /** Every page renders exactly one <main id="main" tabIndex={-1}>. */
 function focusMain(): void {
@@ -113,6 +114,10 @@ export function App() {
         ) : route.page === "methods" ? (
           <main id="main" tabIndex={-1} className="app-field">
             <MethodsPage />
+          </main>
+        ) : route.page === "add-field" ? (
+          <main id="main" tabIndex={-1} className="app-field">
+            <AddFieldPage index={index} regionId={regionId ?? "ks_t14slh"} />
           </main>
         ) : index ? (
           <MapPage index={index} />

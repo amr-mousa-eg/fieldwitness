@@ -516,8 +516,8 @@ Ordered priority list (P0 → P1 → P2). Planning mode required per task. Stand
 - [ ] **P1.12 Final test-and-report.** Full test suites, live site check, update handoff documentation.
 
 #### P2 — ONLY IF EVERYTHING ABOVE IS DONE (AND NOT AFTER 12 NOV)
-- [ ] **P2.13 Nile Delta data-confidence map.** Census numbers only, no pipeline.
-- [ ] **P2.14 Toulouse through Phases 1–8.** Stop and report if not feasible by 12 Nov.
+- [x] **P2.13 Add my field — version 0 (Kansas T14SLH).** Static, zero-server, device-only guided form with coverage check against true T14SLH UTM tile polygon, 2026/2025/2024 harvest-year history, inches/mm irrigation input, priority sliders, CSV template/upload, local storage (tag E), nearest analysed field distance matching with disclaimers, and coverage/roadmap documentation. (Replaces Nile Delta confidence map per user decision).
+- [ ] **P2.14 Toulouse through Phases 1–8.** Skipped per user instruction (scope Kansas only for submission).
 - [ ] **P2.15 T4.6 WIMAS check.** Only when file is placed in `data/wimas/`.
 
 ### Stretch (only after all MVP boxes are ticked)
@@ -625,7 +625,7 @@ We are at Gate <N>. Check every acceptance test of this phase against the actual
 
 
 ### P2 — Only if everything above is done, and not after 12 Nov
-- [ ] **P2.13 Nile Delta data-confidence map:** Census numbers only, no pipeline.
-- [ ] **P2.14 Toulouse through Phases 1–8:** Stop and report if it can't finish by 12 Nov.
+- [x] **P2.13 Add my field — version 0 (Kansas T14SLH).** Static, zero-server, device-only guided form with coverage check against true T14SLH UTM tile polygon, 2026/2025/2024 harvest-year history, inches/mm irrigation input, priority sliders, CSV template/upload, local storage (tag E), nearest analysed field distance matching with disclaimers, and coverage/roadmap documentation. (Replaces Nile Delta confidence map per user decision).
+- [ ] **P2.14 Toulouse through Phases 1–8.** Skipped per user instruction (scope Kansas only for submission).
 - [ ] **P2.15 T4.6 WIMAS check:** Only when file is provided in `data/wimas/`.
 

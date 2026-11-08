@@ -454,3 +454,13 @@ Final submission hardening completed for FieldWitness:
   - **Startup Scripting Optimization:** Used `index.bbox_lonlat` directly for map fitting rather than computing bounding boxes across 200 polygons; optimized `fieldPoints` centroid generation; configured `fadeDuration: 0` and `renderWorldCopies: false` on MapLibre.
   - **Scores Verified (Lighthouse Desktop):** Performance 88, TBT 120 ms, CLS 0.001, 0 console errors, Best Practices 100, Accessibility 100, SEO 100. Mobile verified at CLS 0, A11y 100, Best Practices 100, SEO 100.
 
+
+### 2026-11-09 — Phase 11 Polish: Add My Field (Version 0) Scope and Design
+
+- **Task replacement:** Per user instruction, replaced P2.13 Nile Delta data-confidence map with "Add my field — version 0" (static, client-side, zero-server, no new downloads, Kansas T14SLH tile only). P2.14 Toulouse skipped for submission scope; P2.15 WIMAS waiting for user file.
+- **Coverage boundary check:** Strict point-in-polygon containment against the true 4-corner UTM footprint of HLS tile T14SLH (WGS84 polygon: UL `[-101.303931, 38.826273]`, UR `[-100.039384, 38.844374]`, LR `[-100.025337, 37.854978]`, LL `[-101.272818, 37.837503]`), rejecting bounding-box false positives. Out-of-area locations display exact message: `"We apologize, but this location is not currently supported."` followed by supported area list.
+- **Dynamic harvest years:** Computed dynamically from date in November 2026 as 2026, 2025, and 2024 (harvest-year convention from PLAN.md T2.2).
+- **Irrigation input:** Choice of inches (Kansas farmer standard) or mm; converted and stored in mm.
+- **Soil test statement:** Explicitly labeled `"Saved for future analysis — not used in version 0"`.
+- **Nearest analysed field:** Computes Haversine distance to 200 pilot field centroids. Displays mandatory disclaimers (`"Nearest analysed field — your field is not analysed yet"`, `"This is the closest field we have analysed, measured by distance only. Its soil, slope, history and management may differ from yours."`, and if > 10 km: `"This field is far from yours; treat it as a general example only."`).
+- **Device storage only:** Saved to `localStorage` under `fw.custom_fields.v1` with try/catch, tag `E` ("farmer-entered"), schema version `1.0`. CSV template (`question,answer,help`) with UTF-8 BOM, and CSV upload with line-by-line validation accepting "unknown".

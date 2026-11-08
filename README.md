@@ -79,6 +79,17 @@ What this means:
   Matching two-year histories improved balance (T5.xa), but placebo/control checks failed; neighbour
   evidence remains off in grading.
 
+## Coverage and roadmap
+
+Before expanding coverage beyond the Kansas High Plains pilot (HLS tile T14SLH), FieldWitness tests three pre-registered validation gates:
+1. **Census and scale gate:** Field size and interior-pixel share (>= 4 interior 30 m pixels with a 15 m buffer) to ensure field observations are not dominated by boundary mix.
+2. **Season detection gate:** Accuracy target of 90 % against ground data. Kansas achieved 78.3 % on held-out test data (missing the target).
+3. **Hindcast skill gate:** Weak hindcast skill across fields (canopy integral 90 % interval coverage was 35.0 %, cover days 9.0 %, Spearman r = 0.264).
+
+Because Kansas missed the season detection target and shows weak hindcast skill, it is published strictly as a pilot with limits visible, not as a general product. Evidence grades are capped at B (Grade A disabled), neighbour evidence is inactive, and we make no yield hindcast claims.
+
+**Privacy & "Add my field" (Version 0):** Farm locations and management histories are sensitive. The "Add my field" feature operates entirely on the client side (zero server calls, static build). Coordinates, crop histories, and constraints stay strictly on your local device (in `localStorage`). A future server-side pipeline will store data only with explicit farmer consent.
+
 ## Run it
 
 Requirements:

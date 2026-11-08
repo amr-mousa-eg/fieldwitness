@@ -20,6 +20,9 @@ FORBIDDEN_PATTERNS = [
         "Forbidden: soil carbon from space",
     ),
     (r"\bAI\s+recommends\b", "Forbidden: AI making recommendations"),
+    (r"\bsimilar\s+soils\b", "Forbidden: claiming similar soils without soil test"),
+    (r"\byour\s+field(?:'s)?\s+analysis\b", "Forbidden: claiming your field's analysis"),
+    (r"\byield\s+(?:hindcast|forecast|prediction)\b", "Forbidden: yield hindcast/forecast claims"),
 ]
 
 APP_SRC = Path("app/src")
@@ -39,7 +42,14 @@ def audit() -> bool:
                 for line in lines:
                     if re.search(pattern, line, re.IGNORECASE):
                         low = line.lower()
-                        if "not" in low or "no " in low or "forbidden" in low:
+                        if (
+                            "not" in low
+                            or "no " in low
+                            or "forbidden" in low
+                            or "never" in low
+                            or "differ" in low
+                            or "without" in low
+                        ):
                             continue
                         print(f"FAILED: {path}: {line.strip()} ({desc})")
                         failed = True

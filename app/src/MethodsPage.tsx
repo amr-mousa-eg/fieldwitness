@@ -59,6 +59,17 @@ export function MethodsPage() {
         </ul>
       </section>
 
+      <section aria-labelledby="m-roadmap">
+        <h3 id="m-roadmap">{t("methods.roadmap")}</h3>
+        <p>{t("methods.roadmap.gates")}</p>
+        <ul>
+          {list("methods.roadmap.gate", 3).map((s, i) => (
+            <li key={i}>{s}</li>
+          ))}
+        </ul>
+        <p>{t("methods.roadmap.privacy")}</p>
+      </section>
+
       <section aria-labelledby="m-data">
         <h3 id="m-data">{t("methods.data")}</h3>
         <div className="table-wrap">
