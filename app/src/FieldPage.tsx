@@ -27,6 +27,10 @@ export function FieldPage({
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    document.getElementById("main")?.focus();
+  }, []);
+
+  useEffect(() => {
     setPack(null);
     setError(null);
     loadPack(regionId, fieldId)

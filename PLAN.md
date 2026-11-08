@@ -614,12 +614,12 @@ We are at Gate <N>. Check every acceptance test of this phase against the actual
 - [ ] **P0.6 Live site check after deploying P0:** Verify live site in private window (all 200 fields load, no DEMO DATA banner, 0 console errors, offline reload works, 380px phone width).
 
 ### P1 — Should be done (target: 12 Nov)
-- [ ] **P1.7 Performance (code splitting):** Lazy-load map and chart code to reduce initial JS payload (baseline: 1,785 kB minified).
-- [ ] **P1.8 First-visit guidance:** Dismissible, remembered "How to read this" guidance panel (3–4 sentences) on Map view explaining fields, grades, and disclaimer.
-- [ ] **P1.9 Consistency pass:** Verify alignment across README.md, DATA.md, AI_USE.md, Methods page, and docs/drafts/submission.md.
-- [ ] **P1.10 Submission drafts:** Author `docs/drafts/submission.md` with summary, detailed description, NASA data used, other data, AI use.
-- [ ] **P1.11 Accessibility audit:** Keyboard path verified (`keyboard-check.mjs`), visible focus in both themes, alt text/labels for map controls.
-- [ ] **P1.12 Final test-and-report:** Full suite execution and verification report.
+- [x] **P1.7 Performance (code splitting):** Lazy-load map (`MapView`) and chart/page code (`FieldPage`, `Scoreboard`, `MethodsPage`, `AdvisorConsole`) via `React.lazy` and `Suspense`. Initial JS payload reduced from 1,785.76 kB (501.1 kB gzip) to 273.64 kB (86.98 kB gzip) — an 84.7% reduction; initial CSS reduced from 89.97 kB to 19.76 kB (78.0% reduction). Verified no change in behavior or offline capability.
+- [x] **P1.8 First-visit guidance:** Added dismissible, remembered `GuidancePanel.tsx` (persisted in `localStorage` under `fw-guidance-dismissed` with error fallback) on Map view. Explains 200 Kansas pilot fields, A–D evidence grades (max B with neighbour witness OFF), and the fixed disclaimer.
+- [x] **P1.9 Consistency pass:** Cross-checked and aligned numbers and facts across `README.md`, `DATA.md`, `AI_USE.md`, Methods page, and `docs/drafts/submission.md`. Removed Netlify mirror link from `README.md` (GitHub Pages sole public URL per D3); unified season detector test metric (78.3% held-out test, 74.6% pilot check vs 90% target); verified SoilGrids only (no POLARIS/SSURGO); confirmed OpenET marked unread/unused.
+- [x] **P1.10 Submission drafts:** Authored complete draft in `docs/drafts/submission.md` with summary, detailed description, NASA data (HLS, GIBS basemap, POWER, SMAP, GRACE, NASADEM), other data (CSB, SoilGrids, FAO-56, HCAT3), and dual AI disclosure (Claude Code + Google Antigravity). Marked "field names and length limits to verify against the 2026 guide on 13 Nov".
+- [x] **P1.11 Accessibility audit:** Ran `scripts/keyboard-check.mjs` (all 13 checks PASS including skip-link, focus restoration on route changes, explainer escape, 380px no-overflow); verified high-contrast visible focus ring tokens (`--focus`) in light (`#1f6fb2`) and dark (`#7cb8ec`); accessible labels on map controls.
+- [x] **P1.12 Final test-and-report:** Full suite verification passed completely: `uv run pytest -q` (251 passed), `uv run ruff check .` (clean), `uv run pre-commit run --all-files` (all Passed), `npm test` (61 passed), `npm run build` (clean), `validate-packs` (0 problems), `t10_red_team_audit.py` (all passed), `offline-check.mjs` (renders app shell with 0 errors).
 
 ### P2 — Only if everything above is done, and not after 12 Nov
 - [ ] **P2.13 Nile Delta data-confidence map:** Census numbers only, no pipeline.

@@ -7,7 +7,7 @@ Farms with NASA Data".
 FieldWitness does not decide for the farmer. It shows evidence, says how strong that evidence is,
 and turns each recommendation into a prediction that next season's satellite data can check.
 
-- **Live application:** https://amr-mousa-eg.github.io/fieldwitness/ (Mirror: https://willowy-kleicha-452dbc.netlify.app)
+- **Live application:** https://amr-mousa-eg.github.io/fieldwitness/
 - **Region in this release:** Kansas, USA (HLS tile T14SLH), 200 pilot fields. Two further regions
   (France T31TCJ, Ukraine T36UVU) are planned in the multi-region architecture.
 - **Repository:** https://github.com/amr-mousa-eg/fieldwitness
@@ -72,7 +72,7 @@ What this means:
 
 ## Known issues & honest limits
 
-- The season detector missed its pre-registered target: 74.6 % against a 90 % target (T2.2,
+- The season detector missed its pre-registered target: 78.3 % on held-out test (74.6 % in pilot check) against a 90 % target (T2.2,
   `results/story/`).
 - Only maize and sorghum have calibrated physics. Winter wheat fields cannot get a credibility score.
 - Double ML neighbour effects failed covariate balance across differing rotation histories (T5.3).

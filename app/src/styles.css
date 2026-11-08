@@ -337,6 +337,79 @@ a {
 .flag-coarse {
   color: var(--muted);
 }
+/* ---------------------------------------------------------------- First-visit Guidance (P1.8) */
+.guidance-panel {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 10;
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  max-width: 23rem;
+  padding: 0.85rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+.guidance-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.guidance-header h3 {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+.guidance-close {
+  background: transparent;
+  border: none;
+  font-size: 1.25rem;
+  line-height: 1;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 0.1rem 0.3rem;
+  border-radius: 3px;
+}
+.guidance-close:hover {
+  color: var(--ink);
+}
+.guidance-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.guidance-body p {
+  margin: 0;
+  color: var(--ink);
+}
+.guidance-body .fixed-line {
+  margin-top: 0.2rem;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-style: italic;
+}
+.guidance-dismiss-btn {
+  align-self: flex-start;
+  margin-top: 0.2rem;
+  padding: 0.3rem 0.75rem;
+  background: var(--page);
+  color: var(--ink);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+.guidance-dismiss-btn:hover {
+  background: var(--rule);
+}
 .app-footer {
   padding: 0.75rem 1rem;
   border-top: 1px solid var(--rule);

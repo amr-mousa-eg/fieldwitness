@@ -1,13 +1,15 @@
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, lazy, useEffect, useMemo, useState } from "react";
 import { FieldList } from "./FieldList";
+import { GuidancePanel } from "./GuidancePanel";
 import { type LayerChoice, LayerPanel, fieldColourDomain } from "./LayerPanel";
 import { MapLegend } from "./MapLegend";
-import { MapView } from "./MapView";
 import { loadLayers } from "./data";
 import { DIVERGING, RAMPS, fieldValues, gridDomain, gridGeoJSON } from "./mapLayers";
 import { routeHref } from "./route";
 import { metricName } from "./strings";
 import type { RegionIndex, RegionLayers } from "./types";
+
+const MapView = lazy(() => import("./MapView").then((m) => ({ default: m.MapView })));
 
 const NO_LAYERS: LayerChoice = { colourBy: null, layerId: null, year: null };
 
@@ -55,13 +57,16 @@ export function MapPage({ index }: { index: RegionIndex }) {
         />
       </aside>
       <div className="map-container">
-        <MapView
-          index={index}
-          selectedId={null}
-          onSelect={(fid) => (window.location.hash = routeHref(index.region_id, fid))}
-          colouring={colouring}
-          grid={grid}
-        />
+        <GuidancePanel />
+        <Suspense fallback={<div className="map-loading" />}>
+          <MapView
+            index={index}
+            selectedId={null}
+            onSelect={(fid) => (window.location.hash = routeHref(index.region_id, fid))}
+            colouring={colouring}
+            grid={grid}
+          />
+        </Suspense>
         <MapLegend />
       </div>
     </main>

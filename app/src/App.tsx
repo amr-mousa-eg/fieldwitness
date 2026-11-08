@@ -1,14 +1,15 @@
-import { useEffect, useRef, useState } from "react";
+import { Suspense, lazy, useEffect, useRef, useState } from "react";
 import { DemoBanner } from "./DemoBanner";
-import { FieldPage } from "./FieldPage";
 import { MapPage } from "./MapPage";
-import { MethodsPage } from "./MethodsPage";
 import { cacheRegionForOffline, loadIndex, loadRegions } from "./data";
 import { PAGES, pageHref, useRoute } from "./route";
-import { Scoreboard } from "./Scoreboard";
 import { ThemeToggle } from "./ThemeToggle";
 import { t } from "./strings";
 import type { RegionIndex, RegionList } from "./types";
+
+const FieldPage = lazy(() => import("./FieldPage").then((m) => ({ default: m.FieldPage })));
+const Scoreboard = lazy(() => import("./Scoreboard").then((m) => ({ default: m.Scoreboard })));
+const MethodsPage = lazy(() => import("./MethodsPage").then((m) => ({ default: m.MethodsPage })));
 
 /** Every page renders exactly one <main id="main" tabIndex={-1}>. */
 function focusMain(): void {
@@ -97,27 +98,29 @@ export function App() {
         )}
         <ThemeToggle />
       </header>
-      {index && route.fieldId ? (
-        <main id="main" tabIndex={-1} className="app-field">
-          <FieldPage index={index} regionId={index.region_id} fieldId={route.fieldId} tab={route.tab} />
-        </main>
-      ) : index && route.page === "scoreboard" ? (
-        <main id="main" tabIndex={-1} className="app-field">
-          <Scoreboard index={index} />
-        </main>
-      ) : route.page === "methods" ? (
-        <main id="main" tabIndex={-1} className="app-field">
-          <MethodsPage />
-        </main>
-      ) : index ? (
-        <MapPage index={index} />
-      ) : (
-        <main id="main" tabIndex={-1} className="app-main">
-          <aside className="rail">
-            {error ? <p role="alert">{error}</p> : <p>{t("region.loading")}</p>}
-          </aside>
-        </main>
-      )}
+      <Suspense fallback={<main id="main" tabIndex={-1} className="app-field"><p>{t("region.loading")}</p></main>}>
+        {index && route.fieldId ? (
+          <main id="main" tabIndex={-1} className="app-field">
+            <FieldPage index={index} regionId={index.region_id} fieldId={route.fieldId} tab={route.tab} />
+          </main>
+        ) : index && route.page === "scoreboard" ? (
+          <main id="main" tabIndex={-1} className="app-field">
+            <Scoreboard index={index} />
+          </main>
+        ) : route.page === "methods" ? (
+          <main id="main" tabIndex={-1} className="app-field">
+            <MethodsPage />
+          </main>
+        ) : index ? (
+          <MapPage index={index} />
+        ) : (
+          <main id="main" tabIndex={-1} className="app-main">
+            <aside className="rail">
+              {error ? <p role="alert">{error}</p> : <p>{t("region.loading")}</p>}
+            </aside>
+          </main>
+        )}
+      </Suspense>
       <footer className="app-footer">{t("fixed.judgment")}</footer>
     </div>
   );
