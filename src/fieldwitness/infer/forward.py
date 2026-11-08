@@ -38,7 +38,8 @@ def crop_params(crop: str, region: str, path: Path | str | None = None) -> dict:
         "kc_mid": float(c["kc_mid"]["value"]),
         "kc_end": float(c["kc_end"]["value"]),
         "p": float(c["p"]["value"]),
-        "ky": float(c["ky"]["value"]),
+        # None when unverified (barley, T7.1c): such crops are prediction_only, no RYI.
+        "ky": None if c["ky"]["value"] is None else float(c["ky"]["value"]),
     }
 
 

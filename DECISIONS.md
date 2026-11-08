@@ -648,7 +648,7 @@ Re-ran `t71_hindcast.py` (200 fields, 417 s), `t72_score.py`, `t72_export.py` wi
 
 ## Autopilot handoff
 
-**2026-11-08, autopilot run 3.** Done: T7.1b (see log entry above; ticked in the subtask list, T7.1 itself stays open for barley). Records, score and export re-run; 244 tests green. In progress: nothing. Background: none. Risk: T2.2 FAILED, Gate 5 FAILED (neighbour witness off), T7.1/T7.2 show weak skill and too-narrow intervals; maize/sorghum records changed slightly (cause unverified). Tip: Bash pipes, `cd &&` chains, `&&` chains and `git checkout <rev> -- file` are refused; use single commands (PowerShell for npm).
+**2026-11-08, autopilot run 4.** Done: T7.1c. `forward.crop_params` returns `ky: None` when unverified (barley); `tests/test_barley_prediction_only.py` (3 tests; sowing days -78 winter / 105 spring are tag A, UNVERIFIED, set in the test only, not in `SOW_DAY`). T7.1 ticked in PLAN.md. 247 tests green, ruff clean. In progress: nothing. Background: none. Risk: T2.2 FAILED, Gate 5 FAILED (neighbour witness off), T7.1/T7.2 show weak skill and too-narrow intervals; maize/sorghum records changed slightly (cause unverified). Tip: Bash pipes, `cd &&` chains, `&&` chains and `git checkout <rev> -- file` are refused; use single commands (PowerShell for npm).
 
 **Subtasks, in order. Do the first unticked one; each fits one run.**
 
@@ -661,7 +661,7 @@ T6.9 Farmer corrections (backend done: `rotate/corrections.py`, `tests/test_corr
 T7.1 barley (and winter crops):
 5. [x] **T7.1a Cross-year windows.** (done: `forward.simulate` takes 730-day weather when the nominal sowing day is negative; `forward.season_weather`; `crop_params` resolves region-dependent `kc_ini`; `t71_hindcast.py` has winter_wheat with its own rng `SEED+72` and spring crops never borrow a winter-wheat pool; `tests/test_winter_forward.py`; 244 tests green. Script not re-run: finished fields are skipped, so the maize/sorghum records are untouched by construction; T7.1b re-runs.) In `scripts/t71_hindcast.py`, place winter crops with `rotate/slots.py` (negative sowing day) instead of skipping them. Unit test with a synthetic winter season. Accept: test green; maize and sorghum records unchanged.
 6. [x] **T7.1b Kansas winter wheat.** (done; maize/sorghum records not byte-identical, see log)  Re-run t71 + t72 with winter wheat (435 seasons in the field-season table); report as is. Accept: records and `results/hindcast/ks_t14slh.json` include winter wheat; schema-valid.
-7. [ ] **T7.1c Barley (prediction_only).** Predictions from Kc + stage lengths only, no RYI. Unit test on a synthetic field with the `fr_toulouse_t31tcj` / `ua_central_t36uvu` stage lengths. Kansas has no barley seasons and no Kansas barley stage lengths, so no Kansas run. Accept: test green; T7.1 note says barley runs when a Tier 2/3 region has fields (blocked input, not a stop).
+7. [x] **T7.1c Barley (prediction_only).** Predictions from Kc + stage lengths only, no RYI. Unit test on a synthetic field with the `fr_toulouse_t31tcj` / `ua_central_t36uvu` stage lengths. Kansas has no barley seasons and no Kansas barley stage lengths, so no Kansas run. Accept: test green; T7.1 note says barley runs when a Tier 2/3 region has fields (blocked input, not a stop).
 
 T7.4 Ablation + degradation:
 8. [ ] **T7.4a Skill vs field size.** Join `results/hindcast/ks_t14slh_records.jsonl` with field area / interior-pixel counts; CRPS and 50/90 % coverage per size bin (bins fixed before looking, tag A). Output `results/hindcast/ks_t14slh_size_curve.json` + `.svg`. Accept: the curve (the T7.4 acceptance).
@@ -673,4 +673,4 @@ Phase 5 (T5.1–T5.3 ticked; Gate 5 FAILED: 0/92 contrasts pass diagnostics, bec
 12. [ ] **T5.xb Surrounding tiles** (T5.1 allows it). First estimate the HLS download size; over 1 GB → `BLOCKED.md` (rule 11).
 13. [ ] **T5.xc Re-grade.** Only if a contrast passes: re-run `scripts/t65_grade.py`, rebuild and validate the packs.
 
-**Next: T7.1c** (barley prediction_only, synthetic-field unit test).
+**Next: T7.4a** (skill vs field size).
