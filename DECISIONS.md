@@ -370,19 +370,37 @@ Environment configured and verified:
 - Stale BLOCKED.md (Claude Code caveman tool output compression) removed; not applicable in Antigravity.
 - Claude Code autopilot loop paused; development continues in Google Antigravity with planning mode.
 
+### 2026-11-08 — T5.xa Matching-history neighbour design (Kansas pilot fields)
+
+Secondary analysis investigating whether conditioning on identical two-year history (`prev2_crop`) resolves the structural covariate balance failure identified in T5.3 (where 0/92 contrasts passed balance due to differing rotation histories, median weighted SMD 0.97).
+- **Implementation:** `src/fieldwitness/neighbours/matching.py` and `scripts/t5xa_matching.py`.
+- **Sample:** 6 matching-history pairs with >= 15 observations per arm on the Kansas pilot fields:
+  - `(maize, prev2=maize)`: maize vs sorghum (36 vs 17), maize vs winter_wheat (36 vs 41), sorghum vs winter_wheat (17 vs 41).
+  - `(maize, prev2=winter_wheat)`: maize vs sorghum (28 vs 17).
+  - `(winter_wheat, prev2=maize)`: fallow vs maize (48 vs 18).
+  - `(winter_wheat, prev2=winter_wheat)`: fallow vs maize (45 vs 34).
+- **Design & Learner:** DoubleML PLR with spatial block cross-fitting (GroupKFold on `block`, whole 10 km blocks held out together), nuisance learners = Random Forest (200 trees, min_samples_leaf=5). Confounders = numeric columns (soil, topography, climate, field size, year). `prev2` is identical across arms by construction (SMD = 0).
+- **Diagnostics applied:** Identical preregistered T5.3 thresholds: overlap [0.05, 0.95] with <= 10% outside, IPW weighted max |SMD| <= 0.25, placebo 95% CI covering 0, negative control 95% CI covering 0.
+- **Results:**
+  - 72 contrast rows evaluated across 4 outcomes and 3 strata (all, wet, dry); **32 fitted** (sample size >= 15 per arm and >= 5 blocks).
+  - **Overlap:** 32/32 pass (100.0%, vs 65.2% in T5.3).
+  - **Balance:** 8/32 pass (25.0%, vs 0/92 in T5.3; e.g. `maize` after `prev2=maize` treated `winter_wheat` vs ref `maize` achieved max weighted SMD = 0.184 <= 0.25).
+  - **Placebo (`next_crop`):** 7 pass, 5 fail, 20 untested (too few rows in future seasons).
+  - **Negative control (`outcome_lag2`):** 23 pass, 5 fail, 4 untested.
+  - **Shown as evidence:** **0** (all 8 balance-passing contrasts either fail placebo/negctrl or have untested checks).
+- **Consequence:** The T5.3 primary negative result remains firm: **neighbour witness stays OFF in grading**. T5.xa is documented as an honest secondary finding (`results/neighbours/matching_effects.csv`, `matching_diagnostics.csv`, `matching_diagnostics.md`).
+
 ## Autopilot handoff
 
-**2026-11-08, Migration complete (Antigravity session 1).**
-- **State after migration:** Repository clean on main. Standalone uv 0.13.7 managing Python 3.12.16 (103 packages installed, 247 pytest tests pass), Node v24.11.1 (58 app tests pass, build clean), gitleaks 8.30.1 active. Local data restored: 200 Kansas packs validated (0 problems), 30 HLS chunks in data/appeears/ks_t14slh, FAO-56 equation references in docs/refs/. Stale BLOCKED.md removed (caveman output compression issue does not apply in Antigravity).
+**2026-11-08, T5.xa complete (Antigravity session 2).**
+- **State after T5.xa:** Repository clean on main. Standalone uv 0.13.7 managing Python 3.12.16 (103 packages installed, 251 pytest tests pass), Node v24.11.1 (58 app tests pass, build clean), gitleaks 8.30.1 active. T5.xa matching-history analysis implemented (`src/fieldwitness/neighbours/matching.py`, `scripts/t5xa_matching.py`), 4 unit tests passing (`tests/test_neighbours_matching.py`). Results and diagnostics saved (`results/neighbours/matching_effects.csv`, `matching_diagnostics.csv`, `matching_diagnostics.md`). 0 contrasts shown as evidence; neighbour witness remains OFF in grading.
 - **In progress:** Nothing.
 - **Background tasks:** None.
 - **Open blockers:**
   - T4.6 (irrigation check): Waiting for manual Kansas WIMAS download by user.
-  - T5.x: Caveman blocker resolved; ready to resume.
 - **Next task, in order:**
-  1. **T5.xa Matching-history design:** Log design restricted to matching two-year histories in DECISIONS.md, then run T5.2 + T5.3 on it and report results (secondary analysis; T5.3 negative result stays).
-  2. **T5.xb Surrounding tiles:** Estimate HLS download size; stop if > 1 GB.
-  3. **T5.xc Re-grade:** Re-run scripts/t65_grade.py, rebuild and validate packs only if a contrast passes.
-  4. **T9.8 Deploy:** Demo deployment of ~40 Kansas fields to Netlify (requires user approval).
-  5. **Phase 10:** LICENSE, final README/AI_USE, red-team review, 13 Nov official rules check.
+  1. **T5.xb Surrounding tiles:** Estimate HLS download size; stop if > 1 GB.
+  2. **T5.xc Re-grade:** Re-run scripts/t65_grade.py, rebuild and validate packs only if a contrast passes.
+  3. **T9.8 Deploy:** Demo deployment of ~40 Kansas fields to Netlify (requires user approval).
+  4. **Phase 10:** LICENSE, final README/AI_USE, red-team review, 13 Nov official rules check.
 - **Project path note:** Repository is located at D:\NASA Project\NASA Project.
