@@ -447,3 +447,10 @@ Final submission hardening completed for FieldWitness:
   - **Cumulative Layout Shift (CLS):** Eliminated layout shifts completely (CLS dropped from 1.286 to 0.0000). Fixed 0-height collapse of `.map-loading` during lazy import; positioned mobile `.guidance-panel` as absolute overlay; pre-rendered map container structure during index load so the two-column grid is stable from frame 0.
   - **SEO & Discovery:** Added descriptive `<meta name="description">` to `index.html`, informative `<title>` containing "FieldWitness", standard `robots.txt` (`Allow: /`), and `llms.txt`.
   - **Verification:** 100% pass across all 13 keyboard accessibility tests, offline app shell reload verified with 0 console errors, 251 pytest tests passed, 61 vitest tests passed.
+- **P1.14 Desktop PageSpeed & Desktop CLS Resolution:**
+  - **Desktop Map Stability:** Replaced `:has()` pseudo-selector with a direct `.app--map` class on the root container, locking viewport height (`100%`, `100dvh`, `overflow: hidden`) from frame 0 to prevent the 200-field list from expanding the desktop grid to 16,444 px and re-triggering map resize / fitBounds thrashing.
+  - **Zero Header Shift:** Grouped region switch and theme toggle in `.header-actions` and pre-rendered `.app-nav` with default region fallback from frame 0, eliminating dynamic multi-line wrapping and preventing header height collapse/shift.
+  - **NASA GIBS Raster Constraints:** Added `minzoom: 10`, `maxzoom: 12`, and `bounds: [w, s, e, n]` to the MapLibre raster source in `MapView.tsx`, eliminating all out-of-bounds zoom 9 404 console errors. Added favicon links to `index.html`.
+  - **Startup Scripting Optimization:** Used `index.bbox_lonlat` directly for map fitting rather than computing bounding boxes across 200 polygons; optimized `fieldPoints` centroid generation; configured `fadeDuration: 0` and `renderWorldCopies: false` on MapLibre.
+  - **Scores Verified (Lighthouse Desktop):** Performance 88, TBT 120 ms, CLS 0.001, 0 console errors, Best Practices 100, Accessibility 100, SEO 100. Mobile verified at CLS 0, A11y 100, Best Practices 100, SEO 100.
+

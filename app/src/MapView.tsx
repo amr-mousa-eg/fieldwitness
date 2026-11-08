@@ -16,7 +16,7 @@ import { t } from "./strings";
 import { getMapColours } from "./theme";
 import type { RegionIndex } from "./types";
 import { useTheme } from "./useTheme";
-import { boundsOf, wktToGeometry } from "./wkt";
+import { wktToGeometry } from "./wkt";
 
 setWorkerUrl(workerUrl);
 
@@ -40,8 +40,9 @@ function styleFor(index: RegionIndex, dark: boolean): StyleSpecification {
         type: "raster",
         tiles: [index.basemap],
         tileSize: 256,
-        minzoom: 0,
+        minzoom: 10,
         maxzoom: 12,
+        bounds: [w, s, e, n],
         attribution: "NASA GIBS / LP DAAC (HLS S30, 2023-07-04)",
       };
       style.layers.push({ id: "basemap", type: "raster", source: "basemap" });
@@ -81,7 +82,17 @@ function fieldPoints(fields: GeoJSON.FeatureCollection): GeoJSON.FeatureCollecti
   return {
     type: "FeatureCollection",
     features: fields.features.map((f) => {
-      const [w, s, e, n] = boundsOf([f.geometry as GeoJSON.Polygon | GeoJSON.MultiPolygon]);
+      const geom = f.geometry as GeoJSON.Polygon | GeoJSON.MultiPolygon;
+      let w = Infinity, s = Infinity, e = -Infinity, n = -Infinity;
+      const rings = geom.type === "Polygon" ? geom.coordinates : geom.coordinates.flat();
+      for (const ring of rings) {
+        for (const [x, y] of ring) {
+          if (x < w) w = x;
+          if (x > e) e = x;
+          if (y < s) s = y;
+          if (y > n) n = y;
+        }
+      }
       return {
         type: "Feature",
         properties: f.properties,
@@ -161,13 +172,12 @@ export function MapView({ index, selectedId, onSelect, colouring = null, grid = 
 
   // One map per region index.
   useEffect(() => {
-    const fieldBounds = boundsOf(
-      fields.features.map((f) => f.geometry as GeoJSON.Polygon | GeoJSON.MultiPolygon),
-    );
     const m = new MapLibreMap({
       container: container.current!,
       style: styleFor(index, dark),
-      bounds: fieldBounds,
+      bounds: index.bbox_lonlat,
+      fadeDuration: 0,
+      renderWorldCopies: false,
       // extra bottom padding keeps fields clear of the attribution label
       fitBoundsOptions: { padding: { top: 48, right: 64, bottom: 72, left: 48 }, maxZoom: 14 },
       attributionControl: {

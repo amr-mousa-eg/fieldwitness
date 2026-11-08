@@ -48,7 +48,11 @@ export function MapPage({ index }: { index: RegionIndex }) {
   return (
     <main id="main" tabIndex={-1} className="app-main">
       <aside className="rail">
-        {layers && <LayerPanel layers={layers} choice={choice} set={setChoice} />}
+        {layers ? (
+          <LayerPanel layers={layers} choice={choice} set={setChoice} />
+        ) : (
+          <div className="layer-panel-placeholder" aria-hidden="true" />
+        )}
         <FieldList
           index={index}
           selectedId={null}

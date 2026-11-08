@@ -51,8 +51,10 @@ export function App() {
     lastPage.current = pageKey;
   }, [pageKey]);
 
+  const isMap = !route.fieldId && (route.page === "map" || !route.page);
+
   return (
-    <div className="app">
+    <div className={`app ${isMap ? "app--map" : "app--scroll"}`}>
       <a
         className="skip-link"
         href="#main"
@@ -67,35 +69,37 @@ export function App() {
       <header className="app-header">
         <h1>{t("app.title")}</h1>
         <p className="tagline">{t("app.tagline")}</p>
-        {regions && regionId && (
-          <label className="region-switch">
-            {t("region.label")}
-            <select
-              value={regionId}
-              onChange={(e) => (window.location.hash = pageHref(e.target.value, route.page))}
-            >
-              {regions.regions.map((r) => (
-                <option key={r.region_id} value={r.region_id}>
-                  {r.name}
-                </option>
-              ))}
-            </select>
-          </label>
-        )}
-        {regionId && (
-          <nav className="app-nav" aria-label={t("nav.label")}>
-            {PAGES.map((p) => (
-              <a
-                key={p}
-                href={pageHref(regionId, p)}
-                aria-current={!route.fieldId && route.page === p ? "page" : undefined}
+        <div className="header-actions">
+          {regions && regionId ? (
+            <label className="region-switch">
+              {t("region.label")}
+              <select
+                value={regionId}
+                onChange={(e) => (window.location.hash = pageHref(e.target.value, route.page))}
               >
-                {t(`nav.${p}`)}
-              </a>
-            ))}
-          </nav>
-        )}
-        <ThemeToggle />
+                {regions.regions.map((r) => (
+                  <option key={r.region_id} value={r.region_id}>
+                    {r.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+          ) : (
+            <div className="region-switch-placeholder" aria-hidden="true" />
+          )}
+          <ThemeToggle />
+        </div>
+        <nav className="app-nav" aria-label={t("nav.label")}>
+          {PAGES.map((p) => (
+            <a
+              key={p}
+              href={pageHref(regionId ?? "kansas", p)}
+              aria-current={!route.fieldId && route.page === p ? "page" : undefined}
+            >
+              {t(`nav.${p}`)}
+            </a>
+          ))}
+        </nav>
       </header>
       <Suspense fallback={<main id="main" tabIndex={-1} className="app-field"><p>{t("region.loading")}</p></main>}>
         {index && route.fieldId ? (

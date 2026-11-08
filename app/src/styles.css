@@ -119,8 +119,13 @@
 * {
   box-sizing: border-box;
 }
-body {
+html,
+body,
+#root {
+  height: 100%;
   margin: 0;
+}
+body {
   background: var(--page);
 }
 a {
@@ -144,9 +149,19 @@ a {
 
 /* ---- shell ---- */
 .app {
-  min-height: 100vh;
+  min-height: 100%;
   display: grid;
   grid-template-rows: auto auto 1fr auto;
+}
+.app--map {
+  height: 100%;
+  height: 100dvh;
+  overflow: hidden;
+}
+.app--map .app-main {
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
 }
 .demo-banner {
   position: sticky;
@@ -164,7 +179,7 @@ a {
   align-items: baseline;
   gap: 0.25rem 1.5rem;
   padding: 0.75rem 1rem;
-  min-height: 3.5rem;
+  min-height: 5.5rem;
   border-bottom: 1px solid var(--rule);
 }
 .app-header h1 {
@@ -178,11 +193,20 @@ a {
   margin: 0;
   color: var(--muted);
 }
-.region-switch {
+.header-actions {
   margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 2rem;
+}
+.region-switch,
+.region-switch-placeholder {
   display: flex;
   gap: 0.5rem;
   align-items: center;
+  min-height: 2rem;
+  min-width: 10rem;
 }
 .region-switch select {
   font: inherit;
@@ -225,28 +249,35 @@ a {
 .app-main {
   display: grid;
   grid-template-columns: minmax(18rem, 24rem) 1fr;
-  min-height: 0;
+  min-height: 28rem;
+  height: 100%;
+  overflow: hidden;
 }
 .rail {
   padding: 1rem;
   background: var(--panel);
   border-right: 1px solid var(--rule);
+  height: 100%;
   overflow-y: auto;
 }
 .map-container {
   position: relative;
-  min-height: 28rem;
   height: 100%;
+  min-height: 0;
+  overflow: hidden;
 }
 .map,
 .map-loading {
   width: 100%;
-  min-height: 28rem;
   height: 100%;
+  min-height: 0;
   background: var(--panel);
 }
 .rail-loading-placeholder {
   min-height: 20rem;
+}
+.layer-panel-placeholder {
+  min-height: 23.5rem;
 }
 .rail-loading-placeholder h2 {
   margin: 0 0 0.25rem;
@@ -426,15 +457,24 @@ a {
   border-top: 1px solid var(--rule);
   color: var(--muted);
   font-size: 0.9rem;
+  align-self: end;
 }
 @media (max-width: 48rem) {
+  .app--map {
+    height: auto;
+    overflow: visible;
+  }
   .app-main {
     grid-template-columns: 1fr;
+    height: auto;
+    min-height: 0;
+    overflow: visible;
   }
   .map-container {
     order: -1;
     height: 55vh;
     min-height: 18rem;
+    overflow: visible;
   }
   .map-legend {
     bottom: 0.5rem;
@@ -457,10 +497,20 @@ a {
     overflow-y: auto;
   }
   .rail {
+    height: auto;
+    overflow-y: visible;
     border-right: 0;
   }
-  .region-switch {
+  .header-actions {
     margin-left: 0;
+    flex-wrap: wrap;
+  }
+  .region-switch,
+  .region-switch-placeholder {
+    width: 100%;
+  }
+  .app-header {
+    min-height: auto;
   }
 }
 
