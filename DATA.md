@@ -48,7 +48,7 @@ Only the row groups whose `bbox` statistics intersect the query box are read (se
 ## Satellite data (T0.2, T0.3)
 
 - **Harmonized Landsat Sentinel-2 (HLS)**: Vegetation Indices `HLSL30_VI` v2.0 and `HLSS30_VI` v2.0; Surface Reflectance `HLSL30.020` and `HLSS30.020` (Fmask) — NASA LP DAAC, via earthaccess (CMR) and AppEEARS.
-  - DOIs: `HLSL30.020`: https://doi.org/10.5067/HLS/HLSL30.020 ; `HLSS30.020`: https://doi.org/10.5067/HLS/HLSS30.020
+  - DOIs: `HLSL30.002`: https://doi.org/10.5067/HLS/HLSL30.002 ; `HLSS30.002`: https://doi.org/10.5067/HLS/HLSS30.002
   - Citation: Claverie, M., Ju, J., Masek, J. G., et al. (2018). The Harmonized Landsat and Sentinel-2 (HLS) Product. *Remote Sensing of Environment*, 219, 145–161.
   - Licence: NASA Earth Science Data Policy (open and free for all users).
 - **ECOSTRESS** `ECO_L3T_JET` v003 — NASA LP DAAC (verified in CMR; access verified for future extensions).
@@ -82,6 +82,6 @@ Only the row groups whose `bbox` statistics intersect the query box are read (se
   - Citations: Watkins et al. (2015), *J. Geophys. Res. Solid Earth*, 120, 2648–2671; Wiese et al. (2016), *Water Resour. Res.*, 52, 7400–7416.
   - Licence: NASA Open Data Policy.
 - **SMAP L4** (`SPL4SMGP` v008, NSIDC via AppEEARS) — regional root-zone soil moisture context:
-  - DOI: https://doi.org/10.5067/LKBK278X5395
+  - DOI: https://doi.org/10.5067/T5RUATAQREF8
   - Citation: Reichle, R., De Lannoy, G., Koster, R. D., et al. (2018). SMAP L4 Global 3-hourly 9 km EASE-Grid Surface and Root-Zone Soil Moisture Geophysical Data, Version 8. NASA NSIDC DAAC.
   - Licence: NASA Open Data Policy.
