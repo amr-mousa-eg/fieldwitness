@@ -1,0 +1,201 @@
+{
+ "bins_ha": [
+  [
+   0,
+   10
+  ],
+  [
+   10,
+   30
+  ],
+  [
+   30,
+   60
+  ],
+  [
+   60,
+   null
+  ]
+ ],
+ "bins_note": "fixed before looking at results (tag A)",
+ "rows": [
+  {
+   "bin": "0-10 ha",
+   "mode": "forecast",
+   "metric": "canopy_integral",
+   "n": 115,
+   "n_fields_px_median": 20.0,
+   "crps": 19.825861825069964,
+   "crps_over_obs_mean": 0.4216129548803499,
+   "covered50": 0.14782608695652175,
+   "covered90": 0.28695652173913044
+  },
+  {
+   "bin": "0-10 ha",
+   "mode": "forecast",
+   "metric": "peak",
+   "n": 115,
+   "n_fields_px_median": 20.0,
+   "crps": 30.49513608695652,
+   "crps_over_obs_mean": 8.561372170579284,
+   "covered50": 0.46956521739130436,
+   "covered90": 0.6782608695652174
+  },
+  {
+   "bin": "0-10 ha",
+   "mode": "forced",
+   "metric": "canopy_integral",
+   "n": 115,
+   "n_fields_px_median": 20.0,
+   "crps": 20.079201524599693,
+   "crps_over_obs_mean": 0.4118363967945419,
+   "covered50": 0.09565217391304348,
+   "covered90": 0.20869565217391303
+  },
+  {
+   "bin": "0-10 ha",
+   "mode": "forced",
+   "metric": "peak",
+   "n": 115,
+   "n_fields_px_median": 20.0,
+   "crps": 36.81213695652173,
+   "crps_over_obs_mean": 10.755016499446716,
+   "covered50": 0.3130434782608696,
+   "covered90": 0.5391304347826087
+  },
+  {
+   "bin": "10-30 ha",
+   "mode": "forecast",
+   "metric": "canopy_integral",
+   "n": 95,
+   "n_fields_px_median": 207.0,
+   "crps": 15.292482478129882,
+   "crps_over_obs_mean": 0.3533045280125647,
+   "covered50": 0.24210526315789474,
+   "covered90": 0.3894736842105263
+  },
+  {
+   "bin": "10-30 ha",
+   "mode": "forecast",
+   "metric": "peak",
+   "n": 95,
+   "n_fields_px_median": 207.0,
+   "crps": 21.826870526315787,
+   "crps_over_obs_mean": 3.2519657870633547,
+   "covered50": 0.43157894736842106,
+   "covered90": 0.6526315789473685
+  },
+  {
+   "bin": "10-30 ha",
+   "mode": "forced",
+   "metric": "canopy_integral",
+   "n": 95,
+   "n_fields_px_median": 207.0,
+   "crps": 15.224572345701302,
+   "crps_over_obs_mean": 0.3369256356451173,
+   "covered50": 0.17894736842105263,
+   "covered90": 0.2736842105263158
+  },
+  {
+   "bin": "10-30 ha",
+   "mode": "forced",
+   "metric": "peak",
+   "n": 95,
+   "n_fields_px_median": 207.0,
+   "crps": 27.60235657894736,
+   "crps_over_obs_mean": 4.676524080394107,
+   "covered50": 0.3157894736842105,
+   "covered90": 0.4842105263157895
+  },
+  {
+   "bin": "30-60 ha",
+   "mode": "forecast",
+   "metric": "canopy_integral",
+   "n": 119,
+   "n_fields_px_median": 455.0,
+   "crps": 16.84221906929808,
+   "crps_over_obs_mean": 0.3562125874057805,
+   "covered50": 0.11764705882352941,
+   "covered90": 0.2605042016806723
+  },
+  {
+   "bin": "30-60 ha",
+   "mode": "forecast",
+   "metric": "peak",
+   "n": 119,
+   "n_fields_px_median": 455.0,
+   "crps": 29.08198445378152,
+   "crps_over_obs_mean": 1.8657665796028458,
+   "covered50": 0.3865546218487395,
+   "covered90": 0.6470588235294118
+  },
+  {
+   "bin": "30-60 ha",
+   "mode": "forced",
+   "metric": "canopy_integral",
+   "n": 119,
+   "n_fields_px_median": 455.0,
+   "crps": 17.625233535670954,
+   "crps_over_obs_mean": 0.356384986024699,
+   "covered50": 0.06722689075630252,
+   "covered90": 0.19327731092436976
+  },
+  {
+   "bin": "30-60 ha",
+   "mode": "forced",
+   "metric": "peak",
+   "n": 119,
+   "n_fields_px_median": 455.0,
+   "crps": 37.66022289915966,
+   "crps_over_obs_mean": 2.1826548401680683,
+   "covered50": 0.2773109243697479,
+   "covered90": 0.4789915966386555
+  },
+  {
+   "bin": "60-inf ha",
+   "mode": "forecast",
+   "metric": "canopy_integral",
+   "n": 134,
+   "n_fields_px_median": 960.0,
+   "crps": 17.786157278567785,
+   "crps_over_obs_mean": 0.4742912050077906,
+   "covered50": 0.16417910447761194,
+   "covered90": 0.31343283582089554
+  },
+  {
+   "bin": "60-inf ha",
+   "mode": "forecast",
+   "metric": "peak",
+   "n": 134,
+   "n_fields_px_median": 960.0,
+   "crps": 27.4706229477612,
+   "crps_over_obs_mean": 2.4990403202031466,
+   "covered50": 0.4626865671641791,
+   "covered90": 0.6417910447761194
+  },
+  {
+   "bin": "60-inf ha",
+   "mode": "forced",
+   "metric": "canopy_integral",
+   "n": 134,
+   "n_fields_px_median": 960.0,
+   "crps": 17.84052926069281,
+   "crps_over_obs_mean": 0.4561269317335871,
+   "covered50": 0.08955223880597014,
+   "covered90": 0.23134328358208955
+  },
+  {
+   "bin": "60-inf ha",
+   "mode": "forced",
+   "metric": "peak",
+   "n": 134,
+   "n_fields_px_median": 960.0,
+   "crps": 34.91517313432836,
+   "crps_over_obs_mean": 3.369077728666199,
+   "covered50": 0.26865671641791045,
+   "covered90": 0.4701492537313433
+  }
+ ],
+ "tag": "D (model) vs O (HLS); area E",
+ "caveats": "small n in some bins; crop mix differs by bin; no significance test"
+}

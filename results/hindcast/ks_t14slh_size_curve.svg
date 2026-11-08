@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="260" font-size="11">
+<text x="40" y="16">Canopy-integral CRPS (bars) and 90% coverage (dots) by field size</text>
+<rect x="48" y="56" width="84" height="164" fill="#4477aa"/>
+<circle cx="90" cy="168" r="5" fill="#cc6677"/>
+<text x="48" y="234">0-10 ha</text>
+<text x="48" y="247">n=115</text>
+<rect x="148" y="94" width="84" height="126" fill="#4477aa"/>
+<circle cx="190" cy="150" r="5" fill="#cc6677"/>
+<text x="148" y="234">10-30 ha</text>
+<text x="148" y="247">n=95</text>
+<rect x="248" y="81" width="84" height="139" fill="#4477aa"/>
+<circle cx="290" cy="173" r="5" fill="#cc6677"/>
+<text x="248" y="234">30-60 ha</text>
+<text x="248" y="247">n=119</text>
+<rect x="348" y="73" width="84" height="147" fill="#4477aa"/>
+<circle cx="390" cy="164" r="5" fill="#cc6677"/>
+<text x="348" y="234">60-inf ha</text>
+<text x="348" y="247">n=134</text>
+</svg>
