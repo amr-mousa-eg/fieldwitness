@@ -418,9 +418,11 @@ Final submission hardening completed for FieldWitness:
 - **State after Phase 10:** Repository clean on main. Full test suite passing (251 pytest tests, 58 npm app tests, build clean, pre-commit clean). MIT License, finalized README.md, DATA.md, AI_USE.md committed. Git tag `v1.0-spaceapps` set.
 - **In progress:** Nothing.
 - **Background tasks:** None.
+- **Live Deployment:**
+  - Live URL: https://willowy-kleicha-452dbc.netlify.app (Netlify Drop).
+  - All 200 Kansas pilot fields deployed with full offline service worker caching enabled.
 - **Open blockers:**
-  - T4.6 (irrigation check): Waiting for manual Kansas WIMAS download by user (optional truth check).
-  - T9.8 (Netlify / Pages live hosting): User chooses hosting route and makes repository public when ready.
+  - T4.6 (irrigation check): Waiting for manual Kansas WIMAS download by user (optional post-hackathon truth check).
 - **Submission Readiness:**
-  - Core challenge requirements fulfilled: HLS 30m satellite field histories, FAO-56 physics simulation, ABC past credibility, natural experiment diagnostics, honest hindcast scoring against baselines, and transparent offline-capable UI.
+  - Core challenge requirements fulfilled: Live web application deployed at https://willowy-kleicha-452dbc.netlify.app, HLS 30m satellite field histories, FAO-56 physics simulation, ABC past credibility, natural experiment diagnostics, honest hindcast scoring against baselines, and transparent offline-capable UI.
 - **Project path note:** Repository is located at D:\NASA Project\NASA Project.

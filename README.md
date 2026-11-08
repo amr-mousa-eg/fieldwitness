@@ -7,6 +7,7 @@ Farms with NASA Data".
 FieldWitness does not decide for the farmer. It shows evidence, says how strong that evidence is,
 and turns each recommendation into a prediction that next season's satellite data can check.
 
+- **Live application:** https://willowy-kleicha-452dbc.netlify.app
 - **Region in this release:** Kansas, USA (HLS tile T14SLH), 200 pilot fields. Two further regions
   (France T31TCJ, Ukraine T36UVU) are planned in the multi-region architecture.
 - **Repository:** https://github.com/amr-mousa-eg/fieldwitness
