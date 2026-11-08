@@ -20,7 +20,7 @@ This plan is ordered so that the end-to-end loop works early and gets better lat
 
 **Definition of done (MVP)**
 
-- [x] App deployed at a public URL (https://willowy-kleicha-452dbc.netlify.app); loads in a private browser window with no login; works with Wi-Fi off after first load.
+- [x] App deployed at a public URL (https://amr-mousa-eg.github.io/fieldwitness/); loads in a private browser window with no login; works with Wi-Fi off after first load.
 - [x] Five views work for every demo field: Map · Field story · Field Card · Advisor Console · Hindcast scoreboard (verified on all 200 Kansas fields).
 - [ ] Hindcast (cut-off 2021-12-31, scored on 2022–24) completed for ≥ 1 Tier 1 and ≥ 1 Tier 3 region, with baselines B0–B3, results in `results/hindcast/`.
 - [x] All tests green in CI; leakage tests pass; no untagged numbers in packs (251 pytest tests, 0 pack problems).
@@ -462,7 +462,7 @@ React + Vite + TypeScript, MapLibre GL, a chart library (Recharts or Observable 
 - [x] **T9.5 Hindcast scoreboard.** *(Done: commit 5436ee3, app/src/HindcastScoreboardView.tsx, app/tests/hindcast.test.ts.)* Per region: FieldWitness vs B0–B3 on CRPS, coverage, timing error; one field's predicted-vs-observed 2022–24 as the story chart.
 - [x] **T9.6 Methods & data page.** *(Done: commit 61ab7fa, app/src/MethodsView.tsx, app/tests/methods.test.ts.)* Datasets, licences, non-promises, limits, link to repo.
 - [x] **T9.7 Responsive + accessibility.** *(Done: commit e81efa4, app/src/index.css; 380 px viewport works, keyboard navigation, colour never carries meaning alone.)* 380 px viewport works; keyboard navigation; colour never carries meaning alone.
-- [x] **T9.8 Deploy.** *(Done 2026-11-08: Deployed to Netlify at https://willowy-kleicha-452dbc.netlify.app; static build with all 200 Kansas packs, service worker offline caching enabled, loads in a private window with no login.)*
+- [x] **T9.8 Deploy.** *(Done 2026-11-08: Deployed to GitHub Pages at https://amr-mousa-eg.github.io/fieldwitness/ [mirror: https://willowy-kleicha-452dbc.netlify.app]; static build with all 200 Kansas packs, service worker offline caching enabled, loads in a private window with no login.)*
 - [x] **T9.9 Calendar view.** *(Done: commit 6e5acc1, app/src/CalendarView.tsx, app/tests/calendar.test.ts.)* The bare-soil calendar (T2.5) and the vulnerability calendar (T3.6) for the current rotation, with a toggle to show an alternative's calendar: observed bare months from `FieldCalendar.bare_observed` (T2.5), an option's simulated bare months from `FieldCalendar.bare_by_option` (tag D, Q4). A regional context strip shows the GRACE trend, SMAP anomaly and slope, each scale-flagged.
 - [x] **T9.10 Explainers.** *(Done: commit 30c7aa7, app/src/Explainer.tsx, app/src/strings/en.json, app/tests/explainers.test.ts.)* A small "What is this?" next to evapotranspiration, soil moisture anomaly, NDVI, frost risk, water balance, Relative Yield Index, evidence grade and source tags, plus short explainers on nitrogen-fixing, cover, deep-rooting and drought-tolerant crops. Each explainer is two or three plain sentences with a cited source (FAO-56, NASA Earthdata pages, or the FAO crop chapters), kept in `app/src/strings/en.json`.
 - [x] **T9.11 Map layers.** *(Done: commit 03d8113, app/src/MapLayers.tsx, app/tests/mapLayers.test.ts.)* (a) Field colouring by erosion exposure, water-stress share or frost share (from T3.6 and T6.7). (b) Regional trend layers with a year slider: GRACE water storage, SMAP soil-moisture anomaly, and heat-wave days from POWER. Every layer shows its resolution and scale flag.
@@ -473,7 +473,7 @@ React + Vite + TypeScript, MapLibre GL, a chart library (Recharts or Observable 
 - [x] **T10.1 Documentation & licence.** *(Done 2026-11-08: MIT License committed; README.md finalized with overview, honest hindcast results, and run instructions; DATA.md updated with complete formal citations and DOIs; AI_USE.md updated with Claude Code and Google Antigravity disclosure.)*
 - [x] **T10.2 Red-team checklist.** *(Done 2026-11-08: `scripts/t10_red_team_audit.py` -> all checks passed; no forbidden claims, 0 untagged numbers in packs, English UI text, all external sources referenced.)*
 - [x] **T10.3 Freeze and tag.** *(Done 2026-11-08: tagged `v1.0-spaceapps` on `main`; full verification suite passes.)*
-- [ ] **Deployment note.** GitHub Pages from a private repository may need a paid GitHub plan (verify). Since pre-event code is allowed, either make the repo public when the first deploy happens, or deploy from Netlify/Vercel. Ask the user before making the repo public.
+- [x] **Deployment note.** GitHub Pages deployed via GitHub Actions on the public repository at https://amr-mousa-eg.github.io/fieldwitness/.
 
 ### Stretch (only after all MVP boxes are ticked)
 

@@ -419,10 +419,10 @@ Final submission hardening completed for FieldWitness:
 - **In progress:** Nothing.
 - **Background tasks:** None.
 - **Live Deployment:**
-  - Live URL: https://willowy-kleicha-452dbc.netlify.app (Netlify Drop).
+  - Live URL: https://amr-mousa-eg.github.io/fieldwitness/ (GitHub Pages; mirror: https://willowy-kleicha-452dbc.netlify.app).
   - All 200 Kansas pilot fields deployed with full offline service worker caching enabled.
 - **Open blockers:**
   - T4.6 (irrigation check): Waiting for manual Kansas WIMAS download by user (optional post-hackathon truth check).
 - **Submission Readiness:**
-  - Core challenge requirements fulfilled: Live web application deployed at https://willowy-kleicha-452dbc.netlify.app, HLS 30m satellite field histories, FAO-56 physics simulation, ABC past credibility, natural experiment diagnostics, honest hindcast scoring against baselines, and transparent offline-capable UI.
+  - Core challenge requirements fulfilled: Live web application deployed at https://amr-mousa-eg.github.io/fieldwitness/, HLS 30m satellite field histories, FAO-56 physics simulation, ABC past credibility, natural experiment diagnostics, honest hindcast scoring against baselines, and transparent offline-capable UI.
 - **Project path note:** Repository is located at D:\NASA Project\NASA Project.
