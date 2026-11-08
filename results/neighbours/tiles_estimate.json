@@ -1,0 +1,27 @@
+{
+  "base_tile": "14SLH",
+  "base_tile_fields": 200,
+  "base_tile_files": 330,
+  "base_tile_mb": 1255.9,
+  "base_tile_gb": 1.23,
+  "mb_per_field": 6.28,
+  "cap_gb": 1.0,
+  "surrounding_tile_count": 8,
+  "surrounding_tiles": [
+    "14SLJ",
+    "14SLG",
+    "14SKH",
+    "14SMH",
+    "14SKJ",
+    "14SMJ",
+    "14SKG",
+    "14SMG"
+  ],
+  "one_additional_tile_gb": 1.23,
+  "four_cardinal_tiles_gb": 4.91,
+  "full_ring_eight_tiles_gb": 9.81,
+  "exceeds_cap_single_tile": true,
+  "exceeds_cap_full_ring": true,
+  "action": "STOP",
+  "reason": "Even a single additional tile (~1.23 GB) exceeds the 1.0 GB download cap (CLAUDE.md rule 11). Full 8-tile ring would require ~9.8 GB."
+}

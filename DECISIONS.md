@@ -390,17 +390,28 @@ Secondary analysis investigating whether conditioning on identical two-year hist
   - **Shown as evidence:** **0** (all 8 balance-passing contrasts either fail placebo/negctrl or have untested checks).
 - **Consequence:** The T5.3 primary negative result remains firm: **neighbour witness stays OFF in grading**. T5.xa is documented as an honest secondary finding (`results/neighbours/matching_effects.csv`, `matching_diagnostics.csv`, `matching_diagnostics.md`).
 
+### 2026-11-08 — T5.xb Surrounding tiles HLS download estimation
+
+Estimated download volume required to expand Kansas field sample to adjacent MGRS 100 km tiles (T5.1 note: "enlarge to surrounding tiles if n is small"):
+- **Baseline (14SLH):** 200 fields, 30 AppEEARS chunks, 330 files, 1,255.9 MB (1.23 GB) on disk -> ~6.28 MB/field.
+- **Surrounding grid (8 tiles):** 14SLJ (N), 14SLG (S), 14SKH (W), 14SMH (E), 14SKJ (NW), 14SMJ (NE), 14SKG (SW), 14SMG (SE).
+- **Estimates:** 1 additional tile (200 fields) = 1.23 GB; 4 cardinal tiles (800 fields) = 4.91 GB; 8 full-ring tiles (1,600 fields) = 9.81 GB.
+- **Action:** STOP (CLAUDE.md Rule 11: 1 GB cap). Without user approval for a multi-GB download exception, tile enlargement cannot proceed.
+- **T5.xc consequence:** Re-grading (`scripts/t65_grade.py`) is conditioned on "only if a contrast passes". Because 0 contrasts passed in T5.3 and 0 in T5.xa, no contrast passed diagnostics; existing packs remain valid and consistent with neighbour witness = OFF.
+
 ## Autopilot handoff
 
-**2026-11-08, T5.xa complete (Antigravity session 2).**
-- **State after T5.xa:** Repository clean on main. Standalone uv 0.13.7 managing Python 3.12.16 (103 packages installed, 251 pytest tests pass), Node v24.11.1 (58 app tests pass, build clean), gitleaks 8.30.1 active. T5.xa matching-history analysis implemented (`src/fieldwitness/neighbours/matching.py`, `scripts/t5xa_matching.py`), 4 unit tests passing (`tests/test_neighbours_matching.py`). Results and diagnostics saved (`results/neighbours/matching_effects.csv`, `matching_diagnostics.csv`, `matching_diagnostics.md`). 0 contrasts shown as evidence; neighbour witness remains OFF in grading.
+**2026-11-08, Phase 5 Complete (Antigravity session 2).**
+- **State after Phase 5:** Repository clean on main. Standalone uv 0.13.7 managing Python 3.12.16 (103 packages installed, 251 pytest tests pass), Node v24.11.1 (58 app tests pass, build clean), gitleaks 8.30.1 active.
+  - T5.xa complete: matching-history design implemented (`src/fieldwitness/neighbours/matching.py`), 32 models fitted, overlap 100% pass, balance 25% pass (SMD <= 0.25), 0 shown as evidence due to placebo/negctrl failure.
+  - T5.xb complete: HLS download estimation for surrounding tiles documented (`scripts/t5xb_estimate_tiles.py` -> `results/neighbours/tiles_estimate.json`, `tiles_estimate.md`). Exceeds 1 GB cap (1.23 GB for 1 tile, 9.81 GB for 8 tiles); stopped per Rule 11.
+  - T5.xc complete: No contrast passed diagnostics, so re-grading is skipped as specified; packs remain valid with neighbour witness = OFF.
 - **In progress:** Nothing.
 - **Background tasks:** None.
 - **Open blockers:**
   - T4.6 (irrigation check): Waiting for manual Kansas WIMAS download by user.
+  - Surrounding tiles HLS download: Stopped at 1 GB cap; requires user approval if desired post-hackathon.
 - **Next task, in order:**
-  1. **T5.xb Surrounding tiles:** Estimate HLS download size; stop if > 1 GB.
-  2. **T5.xc Re-grade:** Re-run scripts/t65_grade.py, rebuild and validate packs only if a contrast passes.
-  3. **T9.8 Deploy:** Demo deployment of ~40 Kansas fields to Netlify (requires user approval).
-  4. **Phase 10:** LICENSE, final README/AI_USE, red-team review, 13 Nov official rules check.
+  1. **T9.8 Deploy:** Demo deployment of ~40 Kansas fields to Netlify (requires user approval).
+  2. **Phase 10:** LICENSE, final README/AI_USE, red-team review, 13 Nov official rules check.
 - **Project path note:** Repository is located at D:\NASA Project\NASA Project.
