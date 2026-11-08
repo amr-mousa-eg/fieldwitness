@@ -13,138 +13,139 @@
    "method": "fieldwitness",
    "mode": "forecast",
    "metric": "sos",
-   "n": 266,
+   "n": 463,
    "scores": {
-    "crps": 19.29910385338346,
-    "covered50": 0.3308270676691729,
-    "covered90": 0.5225563909774437,
-    "mae_median": 22.49624060150376
+    "crps": 37.86301717062636,
+    "covered50": 0.21166306695464362,
+    "covered90": 0.3758099352051836,
+    "mae_median": 42.076673866090715
    }
   },
   {
    "method": "fieldwitness",
    "mode": "forecast",
    "metric": "peak",
-   "n": 266,
+   "n": 463,
    "scores": {
-    "crps": 11.467647368421051,
-    "covered50": 0.5977443609022557,
-    "covered90": 0.8872180451127819,
-    "mae_median": 15.483082706766917
+    "crps": 27.477997786177106,
+    "covered50": 0.43844492440604754,
+    "covered90": 0.6544276457883369,
+    "mae_median": 34.03131749460043
    }
   },
   {
    "method": "fieldwitness",
    "mode": "forecast",
    "metric": "canopy_integral",
-   "n": 266,
+   "n": 463,
    "scores": {
-    "crps": 14.87050013167865,
-    "covered50": 0.17293233082706766,
-    "covered90": 0.34962406015037595,
-    "mae_median": 17.26223975738852,
-    "spearman": 0.26415126219194374
+    "crps": 17.53850775352039,
+    "covered50": 0.16414686825053995,
+    "covered90": 0.30885529157667385,
+    "mae_median": 20.345229285684994,
+    "spearman": 0.25453011843384643
    }
   },
   {
    "method": "fieldwitness",
    "mode": "forecast",
    "metric": "cover_days",
-   "n": 266,
+   "n": 463,
    "scores": {
-    "crps": 30.375241071428576,
-    "covered50": 0.04887218045112782,
-    "covered90": 0.09022556390977443,
-    "mae_median": 31.654135338345863
+    "crps": 36.00193110151187,
+    "covered50": 0.032397408207343416,
+    "covered90": 0.06911447084233262,
+    "mae_median": 37.36393088552916
    }
   },
   {
    "method": "fieldwitness",
    "mode": "forced",
    "metric": "sos",
-   "n": 266,
+   "n": 463,
    "scores": {
-    "crps": 19.053438345864663,
-    "covered50": 0.3082706766917293,
-    "covered90": 0.5451127819548872,
-    "mae_median": 22.043233082706767
+    "crps": 38.03460145788337,
+    "covered50": 0.21166306695464362,
+    "covered90": 0.38444924406047515,
+    "mae_median": 42.144708423326136
    }
   },
   {
    "method": "fieldwitness",
    "mode": "forced",
    "metric": "peak",
-   "n": 266,
+   "n": 463,
    "scores": {
-    "crps": 11.79387462406015,
-    "covered50": 0.48872180451127817,
-    "covered90": 0.7105263157894737,
-    "mae_median": 15.056390977443609
+    "crps": 34.591402483801296,
+    "covered50": 0.2915766738660907,
+    "covered90": 0.4924406047516199,
+    "mae_median": 39.21274298056156
    }
   },
   {
    "method": "fieldwitness",
    "mode": "forced",
    "metric": "canopy_integral",
-   "n": 266,
+   "n": 463,
    "scores": {
-    "crps": 14.736771414065013,
-    "covered50": 0.13533834586466165,
-    "covered90": 0.2894736842105263,
-    "mae_median": 16.768842071380085,
-    "spearman": 0.3137635769140258
+    "crps": 17.80448436252326,
+    "covered50": 0.10367170626349892,
+    "covered90": 0.22462203023758098,
+    "mae_median": 19.842341324537735,
+    "spearman": 0.2352552541515097
    }
   },
   {
    "method": "fieldwitness",
    "mode": "forced",
    "metric": "cover_days",
-   "n": 266,
+   "n": 463,
    "scores": {
-    "crps": 30.667387312030076,
-    "covered50": 0.03007518796992481,
-    "covered90": 0.07518796992481203,
-    "mae_median": 31.76127819548872
+    "crps": 36.13202073434125,
+    "covered50": 0.023758099352051837,
+    "covered90": 0.06479481641468683,
+    "mae_median": 37.47948164146868
    }
   }
  ],
  "story_field_id": "7008ff6ba15fc8da1d2ebe4a739699117e7ae646",
  "data_as_of": "2021-12-31",
  "extra": {
-  "n_field_seasons": 266,
+  "n_field_seasons": 463,
   "fit_source": {
-   "own_crop_posterior": 203,
-   "other_crop_posterior": 47,
-   "prior": 16
+   "own_crop_posterior": 377,
+   "other_crop_posterior": 61,
+   "prior": 25
   },
   "crop": {
+   "winter_wheat": 197,
    "sorghum": 142,
    "maize": 124
   },
   "spearman_by_year": {
    "forecast_2022": {
-    "n": 87,
-    "spearman": 0.391357439673398
+    "n": 134,
+    "spearman": 0.27828561239639626
    },
    "forecast_2023": {
-    "n": 68,
-    "spearman": 0.2715959842730084
+    "n": 129,
+    "spearman": -0.0714781857645289
    },
    "forecast_2024": {
-    "n": 111,
-    "spearman": 0.14172516672516672
+    "n": 200,
+    "spearman": 0.40276547017383385
    },
    "forced_2022": {
-    "n": 87,
-    "spearman": 0.3460669242545746
+    "n": 134,
+    "spearman": 0.27410351014810785
    },
    "forced_2023": {
-    "n": 68,
-    "spearman": 0.31076077413444286
+    "n": 129,
+    "spearman": -0.006814624329159214
    },
    "forced_2024": {
-    "n": 111,
-    "spearman": 0.15379080379080376
+    "n": 200,
+    "spearman": 0.39776074233922726
    }
   },
   "tag": "D (model) vs O (HLS) statistics; labels tag E",

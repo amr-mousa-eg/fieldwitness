@@ -640,9 +640,15 @@ Reference: `docs/schema_ext_proposal.md` on branch `app`, commit `dd97bf5` (FINA
 - **Run 2026-11-04 (later):** did nothing but check. Git clean. `uv` (bare and by full path) is refused with "requires approval" in this unattended run, so no tests or pipeline work is possible. Wrote `BLOCKED.md` again (allow-list `uv` + PATH). Next task unchanged: items 1–4 above.
 - **Risk:** the loop stops on `BLOCKED.md` until the user fixes PATH; the schedule (Gate 1 due 5 Nov) slips by that time. The local commit on `main` is unpushed and untested; do not push it before tests pass.
 
+### 2026-11-08 — T7.1b Kansas winter wheat hindcast (negative result kept)
+
+Re-ran `t71_hindcast.py` (200 fields, 417 s), `t72_score.py`, `t72_export.py` with winter wheat. 463 scored seasons: winter wheat 197 (2022: 47, 2023: 61, 2024: 89), maize+sorghum 266. Forecast CRPS (days / index units): sos 37.9, peak 27.5, canopy integral 17.5, cover days 36.0. 50 % coverage: sos 0.21, peak 0.44, canopy 0.16, cover days 0.03; 90 % coverage 0.38 / 0.65 / 0.31 / 0.07. Canopy-integral Spearman 0.255 (forecast), by year 0.28 / -0.07 / 0.40. Intervals are far too narrow: skill stays weak, reported as is. Packs validate (0 problems); no pack content changed.
+
+**Acceptance caveat (UNVERIFIED cause):** "maize and sorghum records unchanged" is NOT met. All 266 maize/sorghum seasons differ slightly from the pre-T7.1a records (e.g. sos quantiles shift by 1-4 days), even for field 0. Per-crop rngs and ABC seeds are unchanged by construction, so the likely cause is that the old records were written in resumed chunks (the `rng` restarts at each resume), or code drift between a228b03 and now. I could not test it: `git checkout 395b9bb -- <files>` needs approval. Old records kept in `logs/records_before_t71b.jsonl` (gitignored? check). To settle: run old code on field 0 in a worktree with `data/` linked. Maize/sorghum numbers in T7.2/T7.3 text may differ slightly from earlier entries.
+
 ## Autopilot handoff
 
-**2026-11-08, autopilot run 2.** Done: T7.1a (see subtask 5). Winter wheat uses only harvest-year HLS (the autumn part of the season is not observed in the stats). T6.9 finished earlier today (ticked). Not run in a browser. In progress: nothing. Background: none. Risk: T2.2 FAILED, Gate 5 FAILED (neighbour witness off), T7.1/T7.2 show weak skill; all logged. Tip: Bash pipes and `cd &&` chains are refused; use single commands (PowerShell for npm).
+**2026-11-08, autopilot run 3.** Done: T7.1b (see log entry above; ticked in the subtask list, T7.1 itself stays open for barley). Records, score and export re-run; 244 tests green. In progress: nothing. Background: none. Risk: T2.2 FAILED, Gate 5 FAILED (neighbour witness off), T7.1/T7.2 show weak skill and too-narrow intervals; maize/sorghum records changed slightly (cause unverified). Tip: Bash pipes, `cd &&` chains, `&&` chains and `git checkout <rev> -- file` are refused; use single commands (PowerShell for npm).
 
 **Subtasks, in order. Do the first unticked one; each fits one run.**
 
@@ -654,7 +660,7 @@ T6.9 Farmer corrections (backend done: `rotate/corrections.py`, `tests/test_corr
 
 T7.1 barley (and winter crops):
 5. [x] **T7.1a Cross-year windows.** (done: `forward.simulate` takes 730-day weather when the nominal sowing day is negative; `forward.season_weather`; `crop_params` resolves region-dependent `kc_ini`; `t71_hindcast.py` has winter_wheat with its own rng `SEED+72` and spring crops never borrow a winter-wheat pool; `tests/test_winter_forward.py`; 244 tests green. Script not re-run: finished fields are skipped, so the maize/sorghum records are untouched by construction; T7.1b re-runs.) In `scripts/t71_hindcast.py`, place winter crops with `rotate/slots.py` (negative sowing day) instead of skipping them. Unit test with a synthetic winter season. Accept: test green; maize and sorghum records unchanged.
-6. [ ] **T7.1b Kansas winter wheat.** Re-run t71 + t72 with winter wheat (435 seasons in the field-season table); report as is. Accept: records and `results/hindcast/ks_t14slh.json` include winter wheat; schema-valid.
+6. [x] **T7.1b Kansas winter wheat.** (done; maize/sorghum records not byte-identical, see log)  Re-run t71 + t72 with winter wheat (435 seasons in the field-season table); report as is. Accept: records and `results/hindcast/ks_t14slh.json` include winter wheat; schema-valid.
 7. [ ] **T7.1c Barley (prediction_only).** Predictions from Kc + stage lengths only, no RYI. Unit test on a synthetic field with the `fr_toulouse_t31tcj` / `ua_central_t36uvu` stage lengths. Kansas has no barley seasons and no Kansas barley stage lengths, so no Kansas run. Accept: test green; T7.1 note says barley runs when a Tier 2/3 region has fields (blocked input, not a stop).
 
 T7.4 Ablation + degradation:
@@ -667,4 +673,4 @@ Phase 5 (T5.1–T5.3 ticked; Gate 5 FAILED: 0/92 contrasts pass diagnostics, bec
 12. [ ] **T5.xb Surrounding tiles** (T5.1 allows it). First estimate the HLS download size; over 1 GB → `BLOCKED.md` (rule 11).
 13. [ ] **T5.xc Re-grade.** Only if a contrast passes: re-run `scripts/t65_grade.py`, rebuild and validate the packs.
 
-**Next: T7.1b** (Kansas winter wheat: delete `results/hindcast/ks_t14slh_records.jsonl` only after copying it aside to compare maize/sorghum records, then re-run t71 + t72; check maize/sorghum entries are identical, report any difference).
+**Next: T7.1c** (barley prediction_only, synthetic-field unit test).
