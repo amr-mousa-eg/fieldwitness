@@ -1,5 +1,7 @@
 # Autopilot run — FieldWitness
 
+> **Note (8 Nov 2026):** The unattended Claude Code loop (`scripts/autopilot.ps1`) is currently paused following migration to the new laptop. However, its working rules (§4–§7: one task at a time, commit after each task, handoff update, decision policy, and stop conditions) remain binding and apply to every AI coding environment.
+
 You are running **unattended** inside a loop (`scripts/autopilot.ps1`). No human will answer questions during this run. Each run is a fresh session: everything you need is in the files below. Work carefully, commit often, and always leave a clean handoff.
 
 ## 1. Start of every run
