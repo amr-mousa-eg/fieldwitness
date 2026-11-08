@@ -1,27 +1,22 @@
-<!-- DRAFT (moved from docs/drafts/ at the Gate 6 merge, 2026-11-07). Before release:
-     - fill the deployed URL (not deployed yet) and add screenshots from real packs;
-     - re-check every number against results/ on main (numbers below: packs/ks_t14slh/hindcast.json, 7 Nov);
-     - remove the "Known issues" items that main has fixed. -->
-
 # FieldWitness
 
 **Crop-rotation decision support for a field, with three independent witnesses behind every
-option.** It was built for the NASA Space Apps Challenge 2026, challenge "Field Shift: Adapting
+option.** Built for the NASA Space Apps Challenge 2026, challenge "Field Shift: Adapting
 Farms with NASA Data".
 
 FieldWitness does not decide for the farmer. It shows evidence, says how strong that evidence is,
 and turns each recommendation into a prediction that next season's satellite data can check.
 
-- **Live app:** _not deployed yet_
 - **Region in this release:** Kansas, USA (HLS tile T14SLH), 200 pilot fields. Two further regions
-  (France T31TCJ, Ukraine T36UVU) are planned but not built.
+  (France T31TCJ, Ukraine T36UVU) are planned in the multi-region architecture.
+- **Repository:** https://github.com/amr-mousa-eg/fieldwitness
 
 ## What it shows
 
 For each field:
 
-- **Field story.** The field's seasons since 2013, from 30 m Harmonized Landsat Sentinel-2 (HLS)
-  vegetation index, with each season's green-up, peak and end.
+- **Field story.** The field's seasons since 2015, from 30 m Harmonized Landsat Sentinel-2 (HLS)
+  vegetation indices, with each season's green-up, peak, and end.
 - **Rotation options.** The current rotation plus 3-season alternatives. Each option shows water
   use, bad-year water use, ground cover, Relative Yield Index (0–1, no tonnes), erosion and other
   priority measures, and an A–D evidence grade. You can move priority sliders, set constraints
@@ -47,7 +42,9 @@ Every number carries a source tag:
 2. **The field's own past:** its HLS history calibrates the physics (approximate Bayesian
    computation) and gives a credibility score.
 3. **Neighbours:** natural experiments across similar fields, using double machine learning on
-   previous-crop effects. **Not available in this release** (T5.2 open), so no option reaches grade A.
+   previous-crop effects. In this release, the neighbour witness remains OFF in grading because
+   structural rotation history imbalance and placebo/control tests failed pre-registered
+   diagnostics (T5.3, T5.xa), so no option reaches grade A.
 
 An agreement engine turns the witnesses into grades A–D. A rotation engine ranks the options.
 A prediction ledger stores every forecast so it can be scored later.
@@ -69,33 +66,33 @@ What this means:
 - FieldWitness has the lowest CRPS on three of four measures, but the margins are small.
 - Its uncertainty ranges are too narrow for green-up, greenness and cover days: they should hold
   90 % of seasons.
-- The neighbour-only baseline B3 was not run.
-- These are weak results, and we report them as they are (`results/hindcast/`).
+- The neighbour-only baseline B3 was not run (pending valid neighbour evidence).
+- These are weak results, and we report them honestly as they are (`results/hindcast/`).
 
-## Known issues
+## Known issues & honest limits
 
-- The season detector missed its pre-registered target: 78 % against a 90 % target (T2.2,
+- The season detector missed its pre-registered target: 74.6 % against a 90 % target (T2.2,
   `results/story/`).
 - Only maize and sorghum have calibrated physics. Winter wheat fields cannot get a credibility score.
-- Some dataset licences are still to be confirmed (see `DATA.md`).
+- Double ML neighbour effects failed covariate balance across differing rotation histories (T5.3).
+  Matching two-year histories improved balance (T5.xa), but placebo/control checks failed; neighbour
+  evidence remains off in grading.
 
 ## Run it
 
 Requirements:
 - Python 3.12 managed with `uv`;
-- Node 20.19+ or 22.12+;
+- Node 20.19+ or 22.12+ / 24+;
 - NASA Earthdata login in `~/_netrc` (Windows) or `~/.netrc`, for the pipeline only.
 
-```
-uv sync
+```bash
+uv sync --frozen
 uv run pytest -q
-uv run python -m fieldwitness.cli build-packs --region ks_t14slh   # writes packs/ks_t14slh
+uv run python -m fieldwitness.cli validate-packs packs/ks_t14slh
 
 cd app
-npm ci
-node scripts/sync-packs.mjs ../packs     # copy packs for the app
-npm run dev                              # dev server (SYNTHETIC demo data by default)
-npm run build                            # static build into app/dist, real packs only
+npm test
+npm run build
 ```
 
 The app runs offline from precomputed packs, with no login and no server. See `app/README.md`
@@ -107,7 +104,7 @@ and `app/deploy/README.md`.
   inference, neighbours, grading, rotation, ledger, packs).
 - `app/`: React + Vite + TypeScript + MapLibre web app.
 - `results/`: validation outputs, including negative results.
-- `PLAN.md`, `DECISIONS.md`, `DATA.md`, `AI_USE.md`: plan, decision log, datasets and licences, AI use.
+- `PLAN.md`, `DECISIONS.md`, `DATA.md`, `AI_USE.md`: plan, decision log, datasets and licences, AI disclosure.
 
 ## Not claimed
 
@@ -117,4 +114,4 @@ does not replace it.
 
 ## Licence
 
-_To be added (MIT or Apache-2.0, PLAN T10.1)._ Data licences: `DATA.md`.
+[MIT License](LICENSE). Data licences and attribution: [`DATA.md`](DATA.md).

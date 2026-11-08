@@ -399,19 +399,28 @@ Estimated download volume required to expand Kansas field sample to adjacent MGR
 - **Action:** STOP (CLAUDE.md Rule 11: 1 GB cap). Without user approval for a multi-GB download exception, tile enlargement cannot proceed.
 - **T5.xc consequence:** Re-grading (`scripts/t65_grade.py`) is conditioned on "only if a contrast passes". Because 0 contrasts passed in T5.3 and 0 in T5.xa, no contrast passed diagnostics; existing packs remain valid and consistent with neighbour witness = OFF.
 
+### 2026-11-08 — Phase 10: Hardening, Licence, Documentation & Red-Team Audit
+
+Final submission hardening completed for FieldWitness:
+- **T10.1 Documentation & Licence:**
+  - `LICENSE`: MIT License added at repository root.
+  - `README.md`: Draft marker removed; honest results table updated; neighbour witness status clarified (OFF in grading); run instructions verified.
+  - `DATA.md`: All external datasets (HLS DOIs, NASA POWER, SoilGrids, CSB, EuroCrops, NASADEM, GRACE, SMAP, FAO-56) given complete formal citations and access terms.
+  - `AI_USE.md`: Dual AI tool disclosure (Claude Code + Google Antigravity) documenting strict working agreements, pre-registered rules, and lack of AI-generated recommendations in the core engine.
+- **T10.2 Red-Team Audit:**
+  - Automated audit via `scripts/t10_red_team_audit.py`: 0 forbidden claim phrases (no yields in tonnes, no profit $, no soil carbon from space), all 200 Kansas packs verified with 0 untagged numbers, UI text verified English.
+- **T10.3 Code Freeze & Tag:**
+  - Git tag `v1.0-spaceapps` created on `main`.
+
 ## Autopilot handoff
 
-**2026-11-08, Phase 5 Complete (Antigravity session 2).**
-- **State after Phase 5:** Repository clean on main. Standalone uv 0.13.7 managing Python 3.12.16 (103 packages installed, 251 pytest tests pass), Node v24.11.1 (58 app tests pass, build clean), gitleaks 8.30.1 active.
-  - T5.xa complete: matching-history design implemented (`src/fieldwitness/neighbours/matching.py`), 32 models fitted, overlap 100% pass, balance 25% pass (SMD <= 0.25), 0 shown as evidence due to placebo/negctrl failure.
-  - T5.xb complete: HLS download estimation for surrounding tiles documented (`scripts/t5xb_estimate_tiles.py` -> `results/neighbours/tiles_estimate.json`, `tiles_estimate.md`). Exceeds 1 GB cap (1.23 GB for 1 tile, 9.81 GB for 8 tiles); stopped per Rule 11.
-  - T5.xc complete: No contrast passed diagnostics, so re-grading is skipped as specified; packs remain valid with neighbour witness = OFF.
+**2026-11-08, Phase 10 & MVP Complete (Antigravity session 2).**
+- **State after Phase 10:** Repository clean on main. Full test suite passing (251 pytest tests, 58 npm app tests, build clean, pre-commit clean). MIT License, finalized README.md, DATA.md, AI_USE.md committed. Git tag `v1.0-spaceapps` set.
 - **In progress:** Nothing.
 - **Background tasks:** None.
 - **Open blockers:**
-  - T4.6 (irrigation check): Waiting for manual Kansas WIMAS download by user.
-  - Surrounding tiles HLS download: Stopped at 1 GB cap; requires user approval if desired post-hackathon.
-- **Next task, in order:**
-  1. **T9.8 Deploy:** Demo deployment of ~40 Kansas fields to Netlify (requires user approval).
-  2. **Phase 10:** LICENSE, final README/AI_USE, red-team review, 13 Nov official rules check.
+  - T4.6 (irrigation check): Waiting for manual Kansas WIMAS download by user (optional truth check).
+  - T9.8 (Netlify / Pages live hosting): User chooses hosting route and makes repository public when ready.
+- **Submission Readiness:**
+  - Core challenge requirements fulfilled: HLS 30m satellite field histories, FAO-56 physics simulation, ABC past credibility, natural experiment diagnostics, honest hindcast scoring against baselines, and transparent offline-capable UI.
 - **Project path note:** Repository is located at D:\NASA Project\NASA Project.

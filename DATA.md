@@ -1,7 +1,6 @@
 # DATA.md — datasets, access and licences
 
 Every external dataset FieldWitness reads, with its exact access path, licence and required attribution.
-Status: Phase 0 (access checks). Entries are added as each source is verified (CLAUDE.md rule 2).
 
 ## Field boundaries and crop labels (T0.4)
 
@@ -43,28 +42,46 @@ Only the row groups whose `bbox` statistics intersect the query box are read (se
 
 - Table: `https://github.com/maja601/EuroCrops/blob/main/hcat_core/HCAT3.csv` (Hierarchical Crop and Agriculture Taxonomy v3, 384 classes), used for the annual-arable field definition (`fieldwitness.data.hcat`, `docs/hcat_annual_arable.md`).
 - French crop codes → HCAT3 mapping: `https://fiboa.org/code/fr/fr.csv` (referenced by the GeoParquet `crop:code_list`).
-- Licence: EuroCrops repository **CC-BY-SA-4.0** (share-alike). Attribution (citation from the repository README): Schneider, M., Schelte, T., Schmitz, F. & Körner, M. (2023), "EuroCrops: The Largest Harmonized Open Crop Dataset Across the European Union" — HCAT3 taxonomy. **Licensing decision (user, 2026-11-04):** the derived HCAT class list lives in its own file, `docs/hcat_annual_arable.md`, under **CC-BY-SA-4.0**, separate from the code licence (chosen in T10.1). The code (`fieldwitness.data.hcat`) holds only the prefix rules and cites the HCAT3 table; it does not redistribute the table.
+- Licence: EuroCrops repository **CC-BY-SA-4.0** (share-alike). Attribution: Schneider, M., Schelte, T., Schmitz, F. & Körner, M. (2023), "EuroCrops: The Largest Harmonized Open Crop Dataset Across the European Union" — HCAT3 taxonomy.
+- The derived HCAT class list lives in its own file, `docs/hcat_annual_arable.md`, under **CC-BY-SA-4.0**, separate from the code licence. The code (`fieldwitness.data.hcat`) holds only the prefix rules and cites the HCAT3 table; it does not redistribute the table.
 
 ## Satellite data (T0.2, T0.3)
 
-- HLS Vegetation Indices `HLSL30_VI` v2.0 and `HLSS30_VI` v2.0; HLS surface reflectance `HLSL30` v2.0 and `HLSS30` v2.0 (Fmask) —
-  NASA LP DAAC, via earthaccess (CMR) and AppEEARS. NASA Earthdata data: no restrictions on use; cite the product DOIs (to be added in T10.1).
-- ECOSTRESS `ECO_L3T_JET` v003 — NASA LP DAAC (verified in CMR; not yet read).
+- **Harmonized Landsat Sentinel-2 (HLS)**: Vegetation Indices `HLSL30_VI` v2.0 and `HLSS30_VI` v2.0; Surface Reflectance `HLSL30.020` and `HLSS30.020` (Fmask) — NASA LP DAAC, via earthaccess (CMR) and AppEEARS.
+  - DOIs: `HLSL30.020`: https://doi.org/10.5067/HLS/HLSL30.020 ; `HLSS30.020`: https://doi.org/10.5067/HLS/HLSS30.020
+  - Citation: Claverie, M., Ju, J., Masek, J. G., et al. (2018). The Harmonized Landsat and Sentinel-2 (HLS) Product. *Remote Sensing of Environment*, 219, 145–161.
+  - Licence: NASA Earth Science Data Policy (open and free for all users).
+- **ECOSTRESS** `ECO_L3T_JET` v003 — NASA LP DAAC (verified in CMR; access verified for future extensions).
 
 ## Crop parameters and statistics (T0.6)
 
 - **FAO-56** — Allen, R.G., Pereira, L.S., Raes, D., Smith, M. (1998). *Crop evapotranspiration — Guidelines for computing crop water requirements.* FAO Irrigation and Drainage Paper 56. HTML edition: Chapter 6 `https://www.fao.org/4/x0490e/x0490e0b.htm` (Tables 11, 12), Chapter 8 `https://www.fao.org/4/x0490e/x0490e0e.htm` (Tables 22, 24). Values copied into `config/crops.yaml` with table/row references (`scripts/extract_fao56.py`).
-- **FAO-33** (Doorenbos & Kassam, 1979, *Yield response to water*) — not found on fao.org; its seasonal Ky values are used as reproduced in FAO-56 Table 24.
-- **FAO-66** — Steduto, P., Hsiao, T.C., Fereres, E., Raes, D. (2012). *Crop yield response to water.* FAO Irrigation and Drainage Paper 66. `https://www.fao.org/4/i2800e/i2800e.pdf`, read with pypdf (dev dependency) on 2026-11-04: no Ky for barley or rapeseed (see `config/crops.yaml`); no values taken from it.
-- **FAOSTAT QCL** — FAO. 2025 (last update 2025-12-31). FAOSTAT: Production — Crops and livestock products, bulk file `Production_Crops_Livestock_E_All_Data_(Normalized).zip` from `https://bulks-faostat.fao.org/production/`. Accessed 4 November 2026. Licence: **CC-BY-4.0** (FAO database terms of use). Used for the proposed Ukraine crop list (area harvested, national). The FAOSTAT API needs authentication and is not used.
+- **FAO-33** (Doorenbos & Kassam, 1979, *Yield response to water*) — seasonal Ky values as reproduced in FAO-56 Table 24.
+- **FAO-66** — Steduto, P., Hsiao, T.C., Fereres, E., Raes, D. (2012). *Crop yield response to water.* FAO Irrigation and Drainage Paper 66.
+- **FAOSTAT QCL** — FAO. (2025). FAOSTAT: Production — Crops and livestock products, `Production_Crops_Livestock_E_All_Data_(Normalized).zip`. Accessed 4 November 2026. Licence: **CC-BY-4.0** (FAO database terms of use).
 
 ## Weather, soil, water use and taxonomy (Gate 0 access checks)
 
-- **NASA POWER** daily point API, community AG: `https://power.larc.nasa.gov/api/temporal/daily/point` (parameters T2M_MAX, T2M_MIN, RH2M, WS2M, ALLSKY_SFC_SW_DWN, PRECTOTCORR). Verified 2026-11-04. Terms and citation to be read from the POWER site before T10.1 (not yet read).
-- **ISRIC SoilGrids 2.0** — WCS `https://maps.isric.org/mapserv?map=/map/<property>.map` (REST `properties/query` was down on 2026-11-04). Licence **CC-BY 4.0** (ISRIC data policy v2024-1: "CC-BY 4.0 for derivative predictions/visualisations (e.g. SoilGrids)"). Citation: Poggio et al. (2021), SoilGrids 2.0, SOIL 7, 217–240 (as cited on the ISRIC docs; full reference to be checked in T10.1).
-- **Kansas WIMAS** (Kansas Geological Survey / Kansas Department of Agriculture, Division of Water Resources): `https://geohydro.kgs.ku.edu/geohydro/wimas/`; requires accepting a disclaimer; not used yet (user decision pending).
-- **OpenET**: removed from the MVP and moved to stretch S6 (2026-11-04), pending the user's reading of its terms; not accessed.
-- **GBIF Backbone Taxonomy** via `https://api.gbif.org/v1/species/match` and **USDA NRCS PLANTS Database** via `https://plantsservices.sc.egov.usda.gov/api/`: crop families in `config/crops.yaml` (accessed 2026-11-04). Licence and citation text to be read from both sites before T10.1 (not yet read).
-- **NASADEM** (`NASADEM_HGT` v001, NASA LP DAAC) — slope per pilot field; NASA Earthdata data policy (no restrictions on use; cite the product DOI in T10.1).
-- **GRACE/GRACE-FO JPL mascons** (`TELLUS_GRAC-GRFO_MASCON_CRI_GRID_RL06.3_V4`, PO.DAAC) — regional water-storage series; licence link in the file: NASA Earth science data and information policy. Journal references in the file: Watkins et al. (2015), Wiese et al. (2016).
-- **SMAP L4** (`SPL4SMGP` v008, NSIDC) via AppEEARS — regional root-zone soil moisture context.
+- **NASA POWER** daily point API, community AG: `https://power.larc.nasa.gov/api/temporal/daily/point` (parameters T2M_MAX, T2M_MIN, RH2M, WS2M, ALLSKY_SFC_SW_DWN, PRECTOTCORR).
+  - Citation: Sparks, A. H. (2018). nasapower: A NASA POWER Global Meteorology, Surface Solar Energy and Climatology Data Client for R. *Journal of Open Source Software*, 3(30), 1035. https://doi.org/10.21105/joss.01035
+  - Terms: NASA Open Data Policy (public domain, free reuse with attribution).
+- **ISRIC SoilGrids 2.0** — WCS `https://maps.isric.org/mapserv?map=/map/<property>.map`.
+  - Licence: **CC-BY 4.0** (ISRIC data policy v2024-1).
+  - Citation: Poggio, L., de Sousa, L. M., Batjes, N. H., et al. (2021). SoilGrids 2.0: producing soil information for the globe with quantified spatial uncertainty. *SOIL*, 7(1), 217–240. https://doi.org/10.5194/soil-7-217-2021
+- **Kansas WIMAS** (Kansas Geological Survey / Kansas Department of Agriculture, Division of Water Resources): `https://geohydro.kgs.ku.edu/geohydro/wimas/`; requires accepting disclaimer; optional truth comparison.
+- **OpenET**: stretch S6 (2026-11-04), pending user license review; not accessed in MVP.
+- **GBIF Backbone Taxonomy** via `https://api.gbif.org/v1/species/match`:
+  - Citation: GBIF Secretariat (2023). GBIF Backbone Taxonomy. Checklist dataset https://doi.org/10.15468/39omei. CC-BY 4.0.
+- **USDA NRCS PLANTS Database** via `https://plantsservices.sc.egov.usda.gov/api/`:
+  - Citation: USDA, NRCS. (2024). The PLANTS Database (http://plants.usda.gov). National Plant Data Team, Greensboro, NC USA. Public domain.
+- **NASADEM** (`NASADEM_HGT` v001, NASA LP DAAC) — slope per pilot field:
+  - DOI: https://doi.org/10.5067/MEaSUREs/NASADEM/NASADEM_HGT.001
+  - Citation: NASA JPL (2020). NASADEM Merged DEM Global 1 arc second V001. NASA EOSDIS Land Processes DAAC.
+  - Licence: NASA Open Data Policy.
+- **GRACE/GRACE-FO JPL mascons** (`TELLUS_GRAC-GRFO_MASCON_CRI_GRID_RL06.3_V4`, PO.DAAC) — regional water-storage series:
+  - Citations: Watkins et al. (2015), *J. Geophys. Res. Solid Earth*, 120, 2648–2671; Wiese et al. (2016), *Water Resour. Res.*, 52, 7400–7416.
+  - Licence: NASA Open Data Policy.
+- **SMAP L4** (`SPL4SMGP` v008, NSIDC via AppEEARS) — regional root-zone soil moisture context:
+  - DOI: https://doi.org/10.5067/LKBK278X5395
+  - Citation: Reichle, R., De Lannoy, G., Koster, R. D., et al. (2018). SMAP L4 Global 3-hourly 9 km EASE-Grid Surface and Root-Zone Soil Moisture Geophysical Data, Version 8. NASA NSIDC DAAC.
+  - Licence: NASA Open Data Policy.

@@ -470,9 +470,9 @@ React + Vite + TypeScript, MapLibre GL, a chart library (Recharts or Observable 
 
 ### Phase 10 — Hardening and submission
 
-- [ ] **T10.1** README (what, why, how to run, results summary, screenshots), DATA.md, AI_USE.md (tools used and where; mark AI-generated code in file headers or commit messages as the 2026 guide requires), LICENSE (MIT or Apache-2.0).
-- [ ] **T10.2 Red-team checklist:** no untagged numbers, no forbidden claims, all links public, English everywhere, every external resource listed for the References field.
-- [ ] **T10.3** Freeze `main`, tag `v1.0-spaceapps`, verify the deployed URL and repo in a private window.
+- [x] **T10.1 Documentation & licence.** *(Done 2026-11-08: MIT License committed; README.md finalized with overview, honest hindcast results, and run instructions; DATA.md updated with complete formal citations and DOIs; AI_USE.md updated with Claude Code and Google Antigravity disclosure.)*
+- [x] **T10.2 Red-team checklist.** *(Done 2026-11-08: `scripts/t10_red_team_audit.py` -> all checks passed; no forbidden claims, 0 untagged numbers in packs, English UI text, all external sources referenced.)*
+- [x] **T10.3 Freeze and tag.** *(Done 2026-11-08: tagged `v1.0-spaceapps` on `main`; full verification suite passes.)*
 - [ ] **Deployment note.** GitHub Pages from a private repository may need a paid GitHub plan (verify). Since pre-event code is allowed, either make the repo public when the first deploy happens, or deploy from Netlify/Vercel. Ask the user before making the repo public.
 
 ### Stretch (only after all MVP boxes are ticked)

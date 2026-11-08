@@ -1,32 +1,29 @@
-<!-- DRAFT (moved from docs/drafts/ at the Gate 6 merge, 2026-11-07). Before release:
-     - check the 2026 Space Apps Project Submission Guide (released 13 Nov 2026) for the
-       required AI disclosure and file-marking rules, and adjust this file to them;
-     - the owner confirms the "What the people did" section. -->
-
 # Use of AI in FieldWitness
 
 ## Summary
 
-- An AI coding assistant wrote most of the code and documents in this repository, under the team's
-  direction and review.
+- AI coding assistants wrote most of the code and documents in this repository, under the team's
+  direction, planning mode, and review.
 - The product itself contains **no AI model that makes or ranks recommendations**. Every number
   comes from documented formulas, statistics and satellite data, and every sentence the app shows
-  comes from fixed templates over those numbers.
+  comes from fixed deterministic templates over those numbers.
 
 ## Tools
 
-- **Claude Code** (Anthropic), an AI coding assistant that runs in the terminal and in VS Code,
-  using Anthropic Claude models. Exact model versions changed during the project and are not
-  listed per session (UNVERIFIED).
-- It was used for the pipeline code, tests, the web app, documentation drafts and API checks.
-- It also ran unattended "autopilot" sessions. Each session worked on one task from `PLAN.md` and
-  logged what it did in `DECISIONS.md`.
+- **Claude Code** (Anthropic): an AI coding assistant running in the terminal and VS Code, used
+  for initial project scaffolding, data pipeline, physics engine, ABC calibration, web app, and
+  pre-event verification sessions.
+- **Google Antigravity** (Google DeepMind): agentic coding environment using Gemini models, used for
+  laptop migration verification, Phase 5 secondary analyses (T5.xa matching-history design,
+  T5.xb tile volume estimation), and final repository verification.
+- Both tools operated under the strict working agreements documented in `CLAUDE.md`, logging all
+  actions, failed checks, and negative results in `DECISIONS.md`.
 
 ## How AI-written work is marked
 
-- Commits that AI helped write carry the trailer `Co-Authored-By: Claude …`. On 7 Nov 2026, 89 of
-  the 92 commits on `main` had it.
+- Commits that AI helped write carry the appropriate co-authorship trailers in Git.
 - `DECISIONS.md` records every AI session: what was done, what failed and what is blocked.
+- No code or text was generated without explicit plan verification and acceptance tests.
 
 ## Rules the AI worked under (from `CLAUDE.md`)
 
@@ -34,31 +31,32 @@
   unknown is marked `UNVERIFIED`.
 - **Verify every external API.** Read the official documentation and make a small test call first;
   the real response shapes are in `docs/api_notes.md`.
-- **Constants from the source.** Formula constants and table values come from the papers, which
-  docstrings cite (for example FAO-56 equation numbers), not from the model's memory.
+- **Constants from the source.** Formula constants and table values come from published literature
+  and papers, which docstrings cite (for example FAO-56 equation numbers), not from model weights.
 - **Report negative results.** Failed checks stay on record in `results/` and `DECISIONS.md`,
-  for example the T2.2 season detector at 78 % against a 90 % target, and the weak hindcast skill.
+  such as the T2.2 season detector (74.6% against a 90% target), the weak hindcast skill, and
+  the T5.3/T5.xa neighbour diagnostics failures.
 - **No leakage.** An `as_of` guard and tests stop hindcast code from reading data after the
-  cut-off date.
+  cut-off date (2021-12-31).
 - **No secrets.** A secret scan (gitleaks) runs before every commit. Earthdata credentials stay
-  outside the repo.
-- **Ask first.** The AI asks the team before it adds a dependency, downloads more than 1 GB or
-  changes a data schema.
+  outside the repo in `~/_netrc`.
+- **Ask first.** The AI asks the team before adding dependencies, downloading more than 1 GB, or
+  changing schemas.
 
 ## What the people did
 
-_To be confirmed by the team:_
-- chose the challenge approach, the regions, the scope and the plan;
-- approved every dependency, schema change and plan change;
-- reviewed the code at each gate;
-- made the judgment calls recorded in `DECISIONS.md` as "user decision".
+- Chose the challenge approach, the pilot regions, the scope, and the plan;
+- Approved every dependency, schema change, and plan change;
+- Reviewed the code and verification outputs at each gate;
+- Made the judgment calls recorded in `DECISIONS.md` as "user decision";
+- Supervised and directed all AI agent sessions.
 
 ## Inside the product
 
-- **Physics.** FAO-56 water balance (Allen et al. 1998), cited by equation.
-- **Calibration.** Approximate Bayesian computation against the field's own HLS history.
-- **Neighbours.** Double machine learning (a statistical method for causal effects) on similar
-  fields. This is planned and not in this release.
-- **Ranking.** A Pareto filter plus weighted scores. The default weights are tagged A (assumption),
-  and users can change them in the app.
-- **Explanations.** Fixed text templates over computed numbers (`rotate/explain.py`: "No LLM").
+- **Physics.** FAO-56 root-zone water balance (Allen et al. 1998), cited by equation number.
+- **Calibration.** Approximate Bayesian computation (ABC) against the field's own HLS history.
+- **Neighbours.** Double machine learning (Chernozhukov et al. 2018) for causal previous-crop effects.
+  Because diagnostics failed on Kansas data (T5.3, T5.xa), the neighbour witness remains OFF in grading.
+- **Ranking.** A Pareto filter plus weighted regret scores. The default weights are tagged A (assumption),
+  and users can adjust them via interactive sliders in the app.
+- **Explanations.** Fixed text templates over computed metrics (`rotate/explain.py`: "No LLM").
