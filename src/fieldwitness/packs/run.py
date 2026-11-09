@@ -19,6 +19,7 @@ from fieldwitness.data import power
 from fieldwitness.data.context import grace_file
 from fieldwitness.packs import build as B
 from fieldwitness.packs import extras as X
+from fieldwitness.packs import sim3d as sim3d_mod
 from fieldwitness.physics.forcing import forcing
 from fieldwitness.rotate.current import all_current
 from fieldwitness.rotate.evaluate import evaluate
@@ -165,6 +166,21 @@ def build_region(region_id: str, out_root: Path = Path("packs"), limit: int | No
             as_of,
         )
         _write(out / f"{fid}.calendar.json", cal, problems)
+        top_alts = sorted(opts[1:], key=lambda o: o.rank)[:3]
+        sim3d_data = sim3d_mod.build_field_sim3d(
+            fid,
+            tuple(cur.sequence),
+            top_alts,
+            wx,
+            float(r["lat"]),
+            float(elev or 0.0),
+            float(np.median(pd_[fid]["taw_mm"])),
+            float(np.median(pd_[fid]["kc_scale"])),
+            float(np.median(pd_[fid]["budget_mm"])),
+            region_id=region_id,
+            start_year=2022,
+        )
+        _write(out / f"{fid}.sim3d.json", sim3d_data, problems)
         eros = opts[0].metrics.get("erosion_exposure")
         if eros is not None and eros.value is not None:
             colour["erosion_exposure"][fid] = eros

@@ -3,6 +3,7 @@ import type {
   FieldPack,
   FieldScenarios,
   FieldSeries,
+  FieldSim3D,
   RegionHindcast,
   RegionIndex,
   RegionLayers,
@@ -44,3 +45,5 @@ export const loadCalendar = (region: string, fid: string) =>
   get<FieldCalendar>(`${region}/${fid}.calendar.json`);
 export const loadScenarios = (region: string, fid: string) =>
   get<FieldScenarios>(`${region}/${fid}.scenarios.json`);
+export const loadSim3D = (region: string, fid: string) =>
+  get<FieldSim3D>(`${region}/${fid}.sim3d.json`);

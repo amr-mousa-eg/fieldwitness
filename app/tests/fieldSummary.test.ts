@@ -155,6 +155,7 @@ describe("sentence verification across all real Kansas pilot packs", () => {
         !f.includes(".series.") &&
         !f.includes(".calendar.") &&
         !f.includes(".scenarios.") &&
+        !f.includes(".sim3d.") &&
         !["index.json", "layers.json", "hindcast.json"].includes(f)
     );
     expect(files.length).toBe(200);

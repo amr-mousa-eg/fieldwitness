@@ -2147,3 +2147,388 @@ table.mini {
   color: var(--muted);
 }
 
+/* ---------------------------------------------------------------- Field in 3D Tab */
+.sim3d-view {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.sim3d-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.sim3d-banner-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.sim3d-honesty-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--surface-raised, rgba(245, 158, 11, 0.12));
+  color: var(--ink);
+  border: 1px solid var(--rule);
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+.sim3d-weather-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(2, 132, 199, 0.12);
+  color: var(--ink);
+  border: 1px solid rgba(2, 132, 199, 0.3);
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+.sim3d-subtitle {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.sim3d-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+}
+
+.sim3d-control-group {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+}
+
+.sim3d-select {
+  padding: 0.35rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid var(--rule);
+  background: var(--page);
+  color: var(--ink);
+  font-size: 0.85rem;
+  cursor: pointer;
+  min-height: 36px;
+}
+
+.sim3d-select:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 1px;
+}
+
+.sim3d-view-mode-toggle {
+  display: flex;
+  gap: 0.25rem;
+  background: var(--page);
+  padding: 0.15rem;
+  border-radius: 6px;
+  border: 1px solid var(--rule);
+}
+
+.sim3d-toggle-btn {
+  padding: 0.3rem 0.65rem;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 500;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  min-height: 32px;
+}
+
+.sim3d-toggle-btn.active {
+  background: var(--panel);
+  color: var(--ink);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.sim3d-alt-notice {
+  padding: 0.45rem 0.75rem;
+  background: rgba(0, 0, 0, 0.03);
+  border-left: 3px solid var(--muted);
+  border-radius: 0 4px 4px 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.sim3d-alt-notice p {
+  margin: 0;
+}
+
+.sim3d-stage {
+  display: grid;
+  gap: 1rem;
+  width: 100%;
+}
+
+.stage-side-by-side {
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
+
+.stage-single {
+  grid-template-columns: 1fr;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.sim3d-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.sim3d-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 0.85rem;
+  border-bottom: 1px solid var(--rule);
+  background: var(--panel);
+}
+
+.sim3d-card-header h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-family: var(--display);
+}
+
+.sim3d-seq-tag {
+  font-size: 0.78rem;
+  color: var(--muted);
+  background: var(--page);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid var(--rule);
+}
+
+.sim3d-canvas-wrap {
+  width: 100%;
+  height: 360px;
+  position: relative;
+  background: radial-gradient(circle at 50% 30%, rgba(2, 132, 199, 0.08) 0%, rgba(15, 23, 42, 0.15) 100%);
+  cursor: grab;
+}
+
+.sim3d-canvas-wrap:active {
+  cursor: grabbing;
+}
+
+.sim3d-canvas-container {
+  width: 100%;
+  height: 100%;
+  outline: none;
+}
+.sim3d-canvas-container:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -2px;
+}
+
+.sim3d-metric-strip {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem 0.75rem;
+  padding: 0.75rem 0.85rem;
+  border-top: 1px solid var(--rule);
+  background: var(--panel);
+}
+
+.sim3d-metric-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  font-size: 0.82rem;
+}
+
+.sim3d-metric-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.sim3d-metric-val {
+  font-size: 0.88rem;
+  color: var(--ink);
+}
+
+.sim3d-toggle-bar {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+}
+
+.sim3d-toggle-pill {
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  border: 1px solid var(--rule);
+  background: var(--panel);
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  min-height: 40px;
+}
+
+.sim3d-toggle-pill.active {
+  background: var(--ink);
+  color: var(--panel);
+  border-color: var(--ink);
+}
+
+.sim3d-timeline-tray {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.85rem 1rem;
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  margin-top: 0.5rem;
+}
+
+.sim3d-playback-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.sim3d-play-btn {
+  padding: 0.45rem 0.9rem;
+  border-radius: 6px;
+  border: 1px solid var(--rule);
+  background: var(--ink);
+  color: var(--panel);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sim3d-step-btn {
+  padding: 0.45rem 0.7rem;
+  border-radius: 6px;
+  border: 1px solid var(--rule);
+  background: var(--panel);
+  color: var(--ink);
+  font-size: 0.85rem;
+  cursor: pointer;
+  min-height: 40px;
+  min-width: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sim3d-scrubber-track {
+  flex: 1;
+  min-width: 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.sim3d-slider {
+  width: 100%;
+  accent-color: #f59e0b;
+  cursor: pointer;
+  height: 24px;
+}
+
+.sim3d-scrubber-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+.sim3d-week-display {
+  font-size: 0.95rem;
+  font-family: var(--display);
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.sim3d-fallback-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.sim3d-fallback-banner {
+  padding: 0.5rem 0.75rem;
+  background: rgba(245, 158, 11, 0.1);
+  border-left: 3px solid #f59e0b;
+  border-radius: 0 4px 4px 0;
+  font-size: 0.85rem;
+}
+.sim3d-fallback-banner p {
+  margin: 0;
+}
+
+.sim3d-loading-state,
+.sim3d-error-state {
+  padding: 2rem;
+  text-align: center;
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+@media (max-width: 640px) {
+  .sim3d-stage {
+    grid-template-columns: 1fr;
+  }
+  .sim3d-canvas-wrap {
+    height: 280px;
+  }
+  .sim3d-metric-strip {
+    grid-template-columns: 1fr;
+  }
+  .sim3d-playback-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .sim3d-scrubber-track {
+    width: 100%;
+  }
+  .sim3d-week-display {
+    text-align: center;
+  }
+}
+
+

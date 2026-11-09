@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Suspense, lazy, useEffect, useState } from "react";
 import { AdvisorConsole } from "./AdvisorConsole";
 import { CalendarView } from "./CalendarView";
 import { FieldCard } from "./FieldCard";
@@ -11,6 +11,8 @@ import { type FieldTab, TABS, routeHref } from "./route";
 import { t } from "./strings";
 import { TagLegend } from "./tags";
 import type { FieldPack, RegionIndex } from "./types";
+
+const Field3DView = lazy(() => import("./Field3DView"));
 
 export function FieldPage({
   regionId,
@@ -80,6 +82,11 @@ export function FieldPage({
           {tab === "options" && <FieldCard pack={pack} regionId={regionId} />}
           {tab === "calendar" && <CalendarView pack={pack} regionId={regionId} />}
           {tab === "advisor" && <AdvisorConsole pack={pack} />}
+          {tab === "sim3d" && (
+            <Suspense fallback={<div className="sim3d-loading-state">{t("sim3d.loading")}</div>}>
+              <Field3DView pack={pack} regionId={regionId} />
+            </Suspense>
+          )}
           <div className="field-aside">
             <ScaleFlags flags={pack.field.scale_flags} />
             <TagLegend />

@@ -89,6 +89,18 @@ export interface FieldSeries {
   data_as_of: string;
 }
 
+export interface FieldSim3D {
+  schema_version: string;
+  field_id: string;
+  weather_year: number;
+  weather_label: string;
+  tag: Tag;
+  source: string;
+  weeks: Sim3DWeek[];
+  current: Sim3DOption;
+  alternatives: Sim3DOption[];
+}
+
 export interface FieldSummary {
   field_id: string;
   geometry_wkt: string;
@@ -208,6 +220,35 @@ export interface Season {
   cover_days: Tagged;
   bare_days: Tagged;
   clear_obs: number;
+}
+
+export interface Sim3DOption {
+  option_id: string;
+  sequence: string[];
+  rank: number;
+  label: string;
+  crops: string[];
+  stages: string[];
+  root_depth_m: number[];
+  scenarios: Record<string, Sim3DScenario>;
+}
+
+export interface Sim3DScenario {
+  soil_water_mm: number[];
+  taw_mm: number[];
+  canopy_cover: number[];
+  ks: number[];
+  rain_mm: number[];
+  irrigation_mm: number[];
+}
+
+export interface Sim3DWeek {
+  week: number;
+  year: number;
+  week_in_year: number;
+  week_start: string;
+  month: number;
+  label: string;
 }
 
 export interface Tagged {

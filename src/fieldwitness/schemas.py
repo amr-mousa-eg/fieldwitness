@@ -146,6 +146,18 @@ EXEMPT_FIELDS = frozenset(
         # (ext) bookkeeping counts
         "years_with_data",
         "clear_frac",
+        # (ext) 3D simulation weekly arrays and metadata sharing tag D
+        "soil_water_mm",
+        "taw_mm",
+        "canopy_cover",
+        "ks",
+        "rain_mm",
+        "irrigation_mm",
+        "root_depth_m",
+        "weather_year",
+        "week",
+        "week_in_year",
+        "month",
     }
 )
 
@@ -264,6 +276,50 @@ class FieldScenarios(BaseModel):
                 if fixed := SEQUENCE_ONLY_METRICS & m.keys():
                     raise ValueError(f"{s.scenario_id}/{oid}: weather-independent {sorted(fixed)}")
         return self
+
+
+# --- <field_id>.sim3d.json --------------------------------------------------------------------
+
+
+class Sim3DScenario(BaseModel):
+    soil_water_mm: list[float]  # available root-zone water (TAW - Dr), mm
+    taw_mm: list[float]  # total available water, mm
+    canopy_cover: list[float]  # canopy proxy (Kc / Kc_max), 0..1
+    ks: list[float]  # FAO-56 water stress coefficient, 0..1
+    rain_mm: list[float]  # weekly rain, mm
+    irrigation_mm: list[float]  # weekly irrigation, mm
+
+
+class Sim3DOption(BaseModel):
+    option_id: str
+    sequence: list[str]
+    rank: int  # 0 for Current, 1..3 for default top alternatives
+    label: str  # human-readable label
+    crops: list[str]  # crop name for each week (156 items)
+    stages: list[str]  # growth stage for each week: "initial", "dev", "mid", "late", "fallow"
+    root_depth_m: list[float]  # root depth in meters (156 items)
+    scenarios: dict[str, Sim3DScenario]  # 12 scenarios
+
+
+class Sim3DWeek(BaseModel):
+    week: int  # 0..155
+    year: int  # 2022, 2023, 2024
+    week_in_year: int  # 1..52
+    week_start: str  # YYYY-MM-DD
+    month: int  # 1..12
+    label: str  # e.g. "Week 42 (Oct 2024)"
+
+
+class FieldSim3D(BaseModel):
+    schema_version: str = "1.0"
+    field_id: str
+    weather_year: int  # real past year with median growing-season rain
+    weather_label: str  # e.g. "Weather of 2013 (median-rain year)"
+    tag: Tag = "D"
+    source: str = "FAO-56 daily water balance on median-rain weather year"
+    weeks: list[Sim3DWeek]
+    current: Sim3DOption
+    alternatives: list[Sim3DOption]  # top 3 alternatives under default ranking
 
 
 # --- packs/<region>/layers.json ----------------------------------------------------------------

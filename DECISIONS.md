@@ -494,4 +494,13 @@ Written and committed before executing the evaluation script or inspecting resul
 - **Real units & thresholds (tag A):** Water use and bad-year water in mm, bare soil in months (derived from cover days), grade. Differences below threshold (25 mm water, 25 mm bad-year water, 1 month bare soil) stated as "about the same" (thresholds in `config/field_summary.yaml`, tag A). Trade-offs shown both ways ("uses 40 mm less water, but has 1 more bare-soil month").
 - **Scientific integrity & red-team audit:** 0 yield, profit, or certainty words; ends with evidence grade ("evidence: grade X"); all numbers source-tagged (tag D for derived values, tag A for thresholds). Red-team audit updated with certainty pattern checks. Verified on all 200 Kansas pilot fields without NaN/undefined or forbidden words.
 
+### 2026-11-09 — Phase 11 Polish: Field in 3D View and Baseline Weather Selection
+
+- **Baseline weather year selection rule:** For the 3D simulation baseline weather, the benchmark year is chosen as the historical year (2001–2021) whose growing-season rainfall (April 1 to September 30) is closest to the median at the field's location. The view is clearly labeled with the selected year (e.g. "Weather of 2013 (median-rain year)"). The what-if weather scenarios (12 temperature and rainfall perturbations) apply to this same benchmark year.
+- **Data storage & options scope:** To prevent bundle bloat on initial page loads and field card opens, 3D simulation time series are stored in dedicated lazy-loaded per-field files (`<field_id>.sim3d.json`, ~250 KB uncompressed, ~35–50 KB gzipped, tag D). Each file contains:
+  - 156-week calendar (3 rotation years x 52 weeks) with week index, year (2022–2024), week start date, and label.
+  - Weekly arrays for the Current option and top 3 candidate alternatives under default ranking: available root-zone soil water (mm), total available water (mm), canopy proxy (Kc / Kc_max), FAO-56 water stress coefficient Ks (0–1), weekly rain (mm), weekly net irrigation (mm), crop name, crop growth stage, and root depth (m).
+- **Matching active Field Card alternative:** In the 3D view, if the user's top-ranked alternative under active priority sliders is among the 3 precomputed alternatives, it is displayed side-by-side with Current. If not, the default top alternative is shown with an honest one-line notice: "Top option under default priorities (<name>) — your top-ranked option is not in the precomputed 3D simulation."
+
+
 

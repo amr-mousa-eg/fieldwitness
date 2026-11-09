@@ -46,7 +46,7 @@ describe.skipIf(!has)("real packs in public/packs", () => {
             expect(new Set(keys).size).toBe(keys.length); // one row per season (React keys)
           }
         }
-        for (const part of ["", ".series", ".calendar", ".scenarios"]) {
+        for (const part of ["", ".series", ".calendar", ".scenarios", ".sim3d"]) {
           const p = `${r}/${f.field_id}${part}.json`;
           untagged(read(p), p, bad);
         }
