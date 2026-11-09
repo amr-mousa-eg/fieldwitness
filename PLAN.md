@@ -667,11 +667,10 @@ We are at Gate <N>. Check every acceptance test of this phase against the actual
   - Place on Methods page and reuse in tour step 1 if it fits.
   - Every box matches what code really does (verified against `PLAN.md`; no boxes for things that don't exist).
 
-- [ ] **Item 10: "What we got wrong" section (Methods page and README).**
-  - Factual, dated list: what happened, how caught, what changed.
-  - Only record items documented in repository (`DECISIONS.md`, `results/`, git history) with file/commit citations.
-  - Candidates to check and include if record supports: season detection missed target (78.3% fresh test vs 90%); neighbour witness failed all four diagnostics; ranking rewarded fallow until metric changed; rank-order bug in packs (`ce69ebf`) and mis-tracked T6.8 numbers; broken DOIs in `DATA.md`; invented datasets (POLARIS/SSURGO) removed; circularity trap avoided in grade-validity test; PageSpeed regression & fixes.
-  - Neutral tone, no excuses, no self-congratulation.
+- [x] **Item 10: "What we got wrong" section (Methods page and README).**
+  - Factual, dated list documented on the Methods page and README citing repository files, commits, and decision entries.
+  - Covers: season detection missed target (78.3% vs 90%); neighbour witness failed all diagnostics (0/32 passed); ranking rewarded fallow until metric changed; rank-order bug in packs (`ce69ebf`) and mis-tracked T6.8 numbers; broken DOIs in `DATA.md`; invented datasets (POLARIS/SSURGO) removed; circularity trap avoided in grade-validity test; reconciled grade counts between pages; performance regression measured and fixed.
+  - Neutral tone with specific file/commit citations. Tested in `methods.test.ts`.
 
 #### Roadmap (Not Built in this Version — Post-Freeze Roadmap)
 - **Item 5: Arabic interface (i18n / RTL).** Post-freeze roadmap.

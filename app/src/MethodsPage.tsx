@@ -62,6 +62,15 @@ export function MethodsPage() {
 
       <DiagnosisSection />
 
+      <section aria-labelledby="m-wrong">
+        <h3 id="m-wrong">{t("methods.wrong.heading")}</h3>
+        <ul>
+          {list("methods.wrong", 9).map((s, i) => (
+            <li key={i}>{s}</li>
+          ))}
+        </ul>
+      </section>
+
       <section aria-labelledby="m-roadmap">
         <h3 id="m-roadmap">{t("methods.roadmap")}</h3>
         <p>{t("methods.roadmap.gates")}</p>

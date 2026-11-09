@@ -560,4 +560,4 @@ Written and committed before executing the diagnostic analysis or inspecting res
    - Formal calibration of winter wheat phenology stage lengths is deferred to a separate decision entry, strictly constrained within published FAO-56 ranges, validated on dev/test split, and will be tackled only if time remains after completing Priority MUST items (Items 1, 7, 9, 10, 5).
 
 ## Handoff
-next: Task 2 (ITEM 10 "What we got wrong" section on Methods page and README)
+next: Task 3 (ITEM 9 Methods diagram with source-verified boxes and theme tokens)
