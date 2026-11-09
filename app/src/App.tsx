@@ -1,6 +1,7 @@
 import { Suspense, lazy, useEffect, useRef, useState } from "react";
 import { DemoBanner } from "./DemoBanner";
 import { MapPage } from "./MapPage";
+import { TourGuide } from "./TourGuide";
 import { loadIndex, loadRegions } from "./data";
 import { PAGES, pageHref, useRoute } from "./route";
 import { ThemeToggle } from "./ThemeToggle";
@@ -22,6 +23,7 @@ export function App() {
   const [regions, setRegions] = useState<RegionList | null>(null);
   const [index, setIndex] = useState<RegionIndex | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [isTourOpen, setIsTourOpen] = useState(false);
   const regionId = route.regionId ?? regions?.regions[0]?.region_id ?? null;
 
   useEffect(() => {
@@ -88,6 +90,14 @@ export function App() {
           ) : (
             <div className="region-switch-placeholder" aria-hidden="true" />
           )}
+          <button
+            type="button"
+            className="tour-btn"
+            onClick={() => setIsTourOpen(true)}
+            aria-label={t("tour.launch")}
+          >
+            {t("tour.launch")}
+          </button>
           <ThemeToggle />
         </div>
         <nav className="app-nav" aria-label={t("nav.label")}>
@@ -140,6 +150,7 @@ export function App() {
         )}
       </Suspense>
       <footer className="app-footer">{t("fixed.judgment")}</footer>
+      <TourGuide isOpen={isTourOpen} onClose={() => setIsTourOpen(false)} />
     </div>
   );
 }
