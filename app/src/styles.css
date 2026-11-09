@@ -2315,5 +2315,103 @@ table.mini {
   outline-offset: 2px;
 }
 
+/* Methods diagram (Item 9) */
+.methods-diagram-wrap {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+}
+
+.methods-diagram-svg {
+  width: 100%;
+  max-width: 840px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.diagram-col-header {
+  font-size: 13px;
+  font-weight: 700;
+  fill: var(--ink);
+  letter-spacing: 0.02em;
+}
+
+.diagram-box-source {
+  fill: var(--panel);
+  stroke: var(--rule);
+  stroke-width: 1;
+}
+
+.diagram-box-main {
+  fill: var(--panel);
+  stroke: var(--rule);
+  stroke-width: 1.5;
+}
+
+.diagram-box-active {
+  fill: var(--panel);
+  stroke: var(--focus);
+  stroke-width: 1.5;
+}
+
+.diagram-box-off {
+  fill: var(--panel);
+  stroke: var(--warn, #b35900);
+  stroke-dasharray: 4 2;
+  stroke-width: 1.5;
+}
+
+.diagram-box-hindcast {
+  fill: var(--panel);
+  stroke: var(--rule);
+  stroke-width: 1.5;
+}
+
+.diagram-box-title {
+  font-size: 12px;
+  font-weight: 600;
+  fill: var(--ink);
+}
+
+.diagram-box-sub {
+  font-size: 10px;
+  fill: var(--muted);
+}
+
+.diagram-tag-active {
+  font-size: 9.5px;
+  font-weight: 600;
+  fill: var(--focus);
+}
+
+.diagram-tag-off {
+  font-size: 9.5px;
+  font-weight: 600;
+  fill: var(--warn, #b35900);
+}
+
+.diagram-caption {
+  font-size: 0.82rem;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 0.8rem;
+  line-height: 1.4;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
 
 

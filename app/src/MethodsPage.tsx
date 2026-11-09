@@ -1,4 +1,5 @@
 import { DiagnosisSection } from "./DiagnosisSection";
+import { MethodsDiagram } from "./MethodsDiagram";
 import { IS_DEMO_DATA } from "./data";
 import { EXPLAINERS, explainer } from "./explainers";
 import { type StringKey, t } from "./strings";
@@ -32,6 +33,8 @@ export function MethodsPage() {
       <h2 id="methods-h">{t("methods.heading")}</h2>
       <p className="fixed-line">{t("fixed.judgment")}</p>
       {IS_DEMO_DATA && <p className="notice">{t("methods.demo")}</p>}
+
+      <MethodsDiagram />
 
       <section aria-labelledby="m-how">
         <h3 id="m-how">{t("methods.how")}</h3>

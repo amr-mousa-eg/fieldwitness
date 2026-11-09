@@ -661,11 +661,11 @@ We are at Gate <N>. Check every acceptance test of this phase against the actual
   - Deterministic sentence: "Ranked first mainly because \"[criterion]\" scored higher ([share]% of the score difference vs [next])" when dominant share ≥ 40%; otherwise "Several criteria contribute similarly to this option's top ranking over [next]".
   - Zero forbidden words verified across all 200 packs. Updates live as priority sliders move; light and dark themes; mobile responsive.
 
-- [ ] **Item 9: Methods diagram.**
-  - One clear SVG (no external image, themed with CSS variables, readable in both themes and at 390 px, with text alternative).
-  - Flow: data sources (HLS, POWER, SMAP, GRACE, NASADEM, GIBS basemap, SoilGrids, CSB labels) → field story → the three witnesses (physics, own history, neighbours — show neighbour witness as OFF with reason) → agreement/grade → rotation options → hindcast check.
-  - Place on Methods page and reuse in tour step 1 if it fits.
-  - Every box matches what code really does (verified against `PLAN.md`; no boxes for things that don't exist).
+- [x] **Item 9: Methods diagram.**
+  - Implemented in `MethodsDiagram.tsx` and mounted on Methods page.
+  - Responsive SVG (`viewBox="0 0 840 510"`) using theme tokens (`var(--panel)`, `var(--rule)`, `var(--ink)`, `var(--muted)`, `var(--focus)`), readable in light/dark and down to 390 px mobile.
+  - Complete flow: 8 data sources (HLS, POWER, SMAP, GRACE, NASADEM, GIBS, SoilGrids, CSB) → field story (78.3% match) → 3 witnesses (Witness 3 labelled "OFF: no neighbour contrast passed the diagnostic checks (0 of 32)") → agreement engine (capped at B) → rotation ranking → hindcast check (honest words: weak skill, underdispersed CIs, beats B1/B2 overall).
+  - Accessible: `role="img"`, `<title>`, `<desc>`, `<figcaption>`, and screen-reader semantic `<ol className="sr-only">` fallback. Box labels checked against source list in `methodsDiagram.test.ts`. Zero forbidden words.
 
 - [x] **Item 10: "What we got wrong" section (Methods page and README).**
   - Factual, dated list documented on the Methods page and README citing repository files, commits, and decision entries.
