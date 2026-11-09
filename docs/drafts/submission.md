@@ -34,11 +34,14 @@ Every recommendation is saved as an empirical prediction that next season's sate
 *(Field names and length limits to verify against the 2026 guide on 13 Nov)*
 
 ### What it does
-A farmer or advisor selects a field from the map or searchable list. The interface provides four synchronized views:
+A farmer or advisor selects a field from the map or searchable list. The interface provides synchronized views:
 - **Field Story:** Satellite vegetation history at 30 m resolution since 2013, tracking green-up, peak canopy, senescence, and historical harvest years.
-- **Rotation Options:** Compares the field's current rotation against 3-season alternatives. Users can adjust priority sliders (water conservation, soil cover, drought resilience, erosion risk, nitrogen fixation, organic matter), apply operational constraints (banned crops, irrigation status, water caps, marketable crops), and simulate weather what-if scenarios (temperature and rainfall shifts applied to historical weather).
+- **Rotation Options & "Why this ranking?" explainer:** Compares the field's current rotation against 3-season alternatives. Users can adjust priority sliders (water conservation, soil cover, drought resilience, erosion risk, nitrogen fixation, organic matter), apply operational constraints (banned crops, irrigation status, water caps, marketable crops), and simulate weather what-if scenarios (temperature and rainfall shifts applied to historical weather). A transparent score contribution table and bar chart explains why the top-ranked option ranks first over the next-best alternative.
 - **Calendar View:** Shows observed and simulated bare-soil months to target cover crop placement, alongside seasonal vulnerability windows when crops face elevated heat stress, frost risk, water deficit, or extreme precipitation.
-- **Advisor Console & Scoreboard:** Reports the calibration credibility score for the field, identifies which measurement would most reduce decision uncertainty, computes the minimum parameter shift needed to flip the top recommendation, and evaluates hindcast accuracy against empirical baselines.
+- **Field in 3D:** Interactive procedural 3D root-zone soil water balance, crop canopy progression, and water-stress visualization (Ks) driven by FAO-56 simulation over median weather and what-ifs, with a 2D canvas fallback.
+- **Advisor Console & Scoreboard:** Reports the calibration credibility score for the field, identifies which measurement would most reduce decision uncertainty, computes the minimum parameter shift needed to flip the top recommendation, and evaluates hindcast accuracy against empirical baselines, diagnostic breakdowns, and pre-registered grade-validity tests.
+- **Add My Field (Version 0):** Zero-server client-side field digitizer and rotation evaluator running entirely in the farmer's browser using local storage without server uploads.
+- **Guided Tour:** 7-step interactive walkthrough introducing the field card, priority weights, what-ifs, 3D simulation, and methods.
 
 Overlays include field-scale slope erosion exposure, regional GRACE/GRACE-FO water storage trends, and SMAP soil moisture anomalies (clearly flagged as coarse regional context). Every recommendation explains why it was suggested, its supporting evidence, benefits, data gaps, and risks requiring local review.
 
@@ -57,6 +60,8 @@ Overlays include field-scale slope erosion exposure, regional GRACE/GRACE-FO wat
   - FieldWitness achieved lower CRPS on green-up date (19.3 vs 20.7), peak date (11.5 vs 12.7), and season greenness total (14.9 vs 15.1), but by modest margins.
   - Baseline B0 outperformed FieldWitness on ground cover days (25.3 vs 30.4).
   - 90% uncertainty intervals were under-dispersed (holding 52% of green-up dates, 35% of greenness totals, and 9% of cover days). These limitations are transparently published in the app and documentation.
+  - **Grade Validity Check:** Pre-registered test could not show that evidence grades predict forecasting accuracy (n = 463 field-seasons: grade-B CRPS 17.0 vs grade-D 24.0, difference 95% CI [-3.3, 14.3]; grade D had only 25 field-seasons; verdict: not shown).
+  - **Hindcast Diagnostic Breakdown:** FieldWitness forecast-mode canopy integral CRPS beats B1 (diff +1.23 [0.48, 1.99]) and B2 (+1.35 [0.74, 1.90]) overall and for maize, but does not strictly beat baselines for sorghum (+0.77 [-0.10, 1.64], 95% CI spans 0). Winter wheat has no baseline run (existing baseline code is single-calendar year only) and exhibits a peak timing error about 36 days late (untested explanation: uncalibrated phenology prior stage lengths).
 - **Negative Results Preserved:** The season detection algorithm missed its pre-registered 90% accuracy target (achieving 78.3% on held-out test data, 74.6% in pilot checks). Rather than tuning post-hoc, this failure is published openly in the UI and methods documentation.
 - **No Overclaiming:** No yield predictions in tonnes, no speculative profit calculations, no claims of "measuring soil carbon from orbit", and no opaque AI decision-making.
 

@@ -15,7 +15,10 @@
   pre-event verification sessions.
 - **Google Antigravity** (Google DeepMind): agentic coding environment using Gemini models, used for
   laptop migration verification, Phase 5 secondary analyses (T5.xa matching-history design,
-  T5.xb tile volume estimation), and final repository verification.
+  T5.xb tile volume estimation), and Phase 10–12 engineering (UI accessibility, performance code-splitting,
+  light/dark theme tokens, interactive 3D root-zone simulation with 2D fallback, 7-step guided tour,
+  "Add my field" client-side digitizer v0, "Why this ranking?" score contribution explainer,
+  hindcast diagnostic breakdown, and pre-registered grade-validity evaluation).
 - Both tools operated under the strict working agreements documented in `CLAUDE.md`, logging all
   actions, failed checks, and negative results in `DECISIONS.md`.
 

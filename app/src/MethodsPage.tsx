@@ -54,7 +54,7 @@ export function MethodsPage() {
       <section aria-labelledby="m-limits">
         <h3 id="m-limits">{t("methods.limits")}</h3>
         <ul>
-          {list("methods.limits", 7).map((s, i) => (
+          {list("methods.limits", 8).map((s, i) => (
             <li key={i}>{s}</li>
           ))}
         </ul>

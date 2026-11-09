@@ -23,13 +23,23 @@ For each field:
   priority measures, and an A–D evidence grade. You can move priority sliders, set constraints
   ("crops I can't plant", irrigation, water cap) and run weather what-ifs (temperature and rainfall
   shifts on past weather; not climate projections).
+- **"Why this ranking?" explainer.** Full score contribution breakdown comparing the top-ranked option
+  against the next-best alternative under the user's active priority weights, with deterministic plain-language
+  attribution.
 - **Calendar.** Months when the field is bare (observed, and simulated per option), and months when
   each crop is vulnerable to heat, frost, water stress and extreme rain.
+- **Field in 3D.** Interactive 3D soil water balance and crop canopy simulation over median historical
+  weather and what-if scenarios, visualizing root-zone water depletion, canopy cover, and water stress (Ks)
+  with a 2D canvas fallback.
 - **Advisor console.** Credibility of the physics for this field, what to measure next, the
   smallest change that would flip the top option, and a back-test of past predictions.
 - **Map layers and scoreboard.** Fields coloured by erosion, water stress or frost share. Regional
   GRACE water-storage and SMAP soil-moisture layers. A hindcast scoreboard against simpler
-  baselines.
+  baselines, including diagnostic breakdowns and grade-validity checks.
+- **Add my field (v0).** Client-side zero-server field digitizer and rotation evaluator running locally in
+  browser storage.
+- **Guided tour.** 7-step interactive walkthrough introducing the field card, priority weights,
+  what-ifs, 3D simulation, and scientific methods.
 
 Every number carries a source tag:
 - **O:** observed by satellite;
@@ -79,7 +89,7 @@ What this means:
   Matching two-year histories improved balance (T5.xa), but placebo/control checks failed; neighbour
   evidence remains off in grading.
 - Evidence grade validity: We could not show that evidence grades predict accuracy (n = 463 field-seasons): grade-B fields had lower average error than grade-D (CRPS 17.0 vs 24.0), but the difference is within the uncertainty (95% CI of the difference −3.3 to 14.3). Grade D had only 25 field-seasons. Pre-registered verdict: not shown.
-- Hindcast skill diagnosis (pre-registered in `DECISIONS.md`, commit `e021f3e`, `results/hindcast/diagnosis.md`): FieldWitness forecast-mode canopy integral CRPS beats B1 (diff +1.23, 95% CI [0.48, 1.99]) and B2 (diff +1.35, 95% CI [0.74, 1.90]) overall and for maize, but does not strictly beat baselines for sorghum (diff +0.77 [-0.10, 1.64], 95% CI spans 0). Winter wheat exhibits a severe timing error (absolute error 58.9 d [52.2, 66.3] d; median offset +36.0 d) due to uncalibrated phenology stage lengths.
+- Hindcast skill diagnosis (pre-registered in `DECISIONS.md`, commit `e021f3e`, `results/hindcast/diagnosis.md`): FieldWitness forecast-mode canopy integral CRPS beats B1 (diff +1.23, 95% CI [0.48, 1.99]) and B2 (diff +1.35, 95% CI [0.74, 1.90]) overall and for maize, but does not strictly beat baselines for sorghum (diff +0.77 [-0.10, 1.64], 95% CI spans 0). Winter wheat has no baseline run (existing baseline code handles single-calendar years only) and exhibits a peak timing error about 36 days late (absolute error 58.9 d [52.2, 66.3] d; signed median offset +36.0 d; proposed explanation, not tested: uncalibrated phenology prior stage lengths).
 
 ## Coverage and roadmap
 

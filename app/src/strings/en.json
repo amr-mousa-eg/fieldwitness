@@ -392,6 +392,7 @@
   "methods.limits.5": "Hindcast predictive skill is weak: on 2022–2024 seasons (cut-off 2021-12-31), 90 % interval coverage is only 35.0 % for canopy integral (Spearman r = 0.264) and 9.0 % for cover days. Uncertainty intervals are underconfident and should be read with caution.",
   "methods.limits.6": "Grading thresholds are team choices, marked as assumptions (A), and every change is logged in DECISIONS.md.",
   "methods.limits.7": "We could not show that evidence grades predict accuracy (n = 463 field-seasons): grade-B fields had lower average error than grade-D (CRPS 17.0 vs 24.0), but the difference is within the uncertainty (95% CI of the difference −3.3 to 14.3). Grade D had only 25 field-seasons.",
+  "methods.limits.8": "Baseline comparisons exclude winter wheat (no baseline run) and fallow (not scored). FieldWitness beats baselines B1 and B2 overall and for maize, but does not strictly beat baselines for sorghum (95% CI spans 0). Winter wheat displays a peak timing offset of about 36 days late (proposed explanation, not tested: phenology prior stage lengths require calibration).",
   "methods.roadmap": "Coverage and roadmap",
   "methods.roadmap.gates": "Before expanding to new areas, FieldWitness tests three strict validation gates:",
   "methods.roadmap.gate.1": "1. Census & scale gate: Field size and interior-pixel share (>= 4 interior 30 m pixels with a 15 m buffer) to prevent mixed-boundary pixel pollution.",
