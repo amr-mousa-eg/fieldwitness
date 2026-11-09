@@ -2,7 +2,9 @@ import { Fragment, useEffect, useMemo, useState } from "react";
 import { CorrectionPanel } from "./CorrectionPanel";
 import { CropChips } from "./CropChips";
 import { Explain, MetricLabel } from "./Explain";
+import { FieldSummaryPanel } from "./FieldSummaryPanel";
 import { loadScenarios } from "./data";
+import { generateFieldSummary } from "./fieldSummary";
 import { formatDelta, formatTagged } from "./format";
 import {
   type Constraints,
@@ -332,6 +334,10 @@ export function FieldCard({ pack, regionId }: { pack: FieldPack; regionId: strin
   const dropped = rows.filter((r) => !r.kept);
   const current = rows.find((r) => r.option.option_id === "current");
   const crops = useMemo(() => [...new Set(pack.options.flatMap((o) => o.sequence))].sort(), [pack.options]);
+  const summary = useMemo(
+    () => generateFieldSummary(pack, priorities, constraints, scenario),
+    [pack, priorities, constraints, scenario],
+  );
 
   return (
     <div className="card-layout">
@@ -340,6 +346,7 @@ export function FieldCard({ pack, regionId }: { pack: FieldPack; regionId: strin
         <p className="muted">
           {t("card.intro")} {t(isDefault(priorities) ? "card.ranking.default" : "card.ranking.mine")}
         </p>
+        <FieldSummaryPanel summary={summary} />
         {scenario && (
           <p className="notice" role="status">
             {t("whatif.active", { temp: signed(dt, "temp"), rain: signed(dp, "rain") })}

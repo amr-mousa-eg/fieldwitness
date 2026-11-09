@@ -23,6 +23,9 @@ FORBIDDEN_PATTERNS = [
     (r"\bsimilar\s+soils\b", "Forbidden: claiming similar soils without soil test"),
     (r"\byour\s+field(?:'s)?\s+analysis\b", "Forbidden: claiming your field's analysis"),
     (r"\byield\s+(?:hindcast|forecast|prediction)\b", "Forbidden: yield hindcast/forecast claims"),
+    (r"\bguarantee[ds]?\b", "Forbidden: guarantee claims"),
+    (r"\bproven\s+to\b", "Forbidden: claiming proven outcomes"),
+    (r"\bcertainty\b", "Forbidden: certainty claims"),
 ]
 
 APP_SRC = Path("app/src")

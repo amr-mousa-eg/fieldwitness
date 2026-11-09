@@ -2073,3 +2073,77 @@ table.mini {
 .delete-item-btn:hover {
   color: var(--grade-d);
 }
+
+/* --- Field Summary & Mini Comparison Chart (Item 2) --- */
+.field-summary-card {
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-left: 4px solid var(--focus);
+  border-radius: 4px;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+.field-summary-title {
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+  font-family: var(--display);
+  color: var(--ink);
+  letter-spacing: 0.02em;
+}
+.field-summary-sentence {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--ink);
+  margin: 0 0 1rem 0;
+}
+.field-summary-sentence .tagged-inline {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.2rem;
+}
+.summary-comparison-wrap {
+  overflow-x: auto;
+  border-top: 1px solid var(--rule);
+  padding-top: 0.75rem;
+}
+.summary-comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+.summary-comparison-table th,
+.summary-comparison-table td {
+  padding: 0.4rem 0.6rem;
+  text-align: left;
+  border-bottom: 1px solid var(--rule);
+}
+.summary-comparison-table th[scope="col"] {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+.summary-col-title {
+  display: block;
+  font-weight: 600;
+  color: var(--ink);
+}
+.summary-col-sub {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--muted);
+  font-weight: normal;
+  text-transform: none;
+}
+.summary-comparison-table .diff-pro {
+  color: var(--grade-a);
+  font-weight: 600;
+}
+.summary-comparison-table .diff-con {
+  color: var(--grade-d);
+  font-weight: 600;
+}
+.summary-comparison-table .diff-same {
+  color: var(--muted);
+}
+

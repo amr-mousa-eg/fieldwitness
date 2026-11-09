@@ -78,6 +78,7 @@ What this means:
 - Double ML neighbour effects failed covariate balance across differing rotation histories (T5.3).
   Matching two-year histories improved balance (T5.xa), but placebo/control checks failed; neighbour
   evidence remains off in grading.
+- Evidence grade validity: We could not show that evidence grades predict accuracy (n = 463 field-seasons): grade-B fields had lower average error than grade-D (CRPS 17.0 vs 24.0), but the difference is within the uncertainty (95% CI of the difference −3.3 to 14.3). Grade D had only 25 field-seasons. Pre-registered verdict: not shown.
 
 ## Coverage and roadmap
 

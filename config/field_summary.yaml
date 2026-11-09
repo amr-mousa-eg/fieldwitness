@@ -1,0 +1,8 @@
+# Field summary comparison thresholds (tag A, UNVERIFIED: team choice).
+# Used on the Field Card to decide when a metric difference is "about the same".
+thresholds:
+  water_use_mm: 25.0       # mm per rotation; differences below this are "about the same"
+  bad_year_water_mm: 25.0  # mm per rotation; differences below this are "about the same"
+  bare_soil_months: 1.0    # months per rotation; differences below this are "about the same"
+rotation_days: 1095        # 3 years x 365 days
+days_per_month: 30.4375
