@@ -82,6 +82,12 @@ export function MethodsPage() {
             <li key={i}>{s}</li>
           ))}
         </ul>
+        <p>{t("methods.roadmap.future_intro")}</p>
+        <ul>
+          {list("methods.roadmap.future", 5).map((s, i) => (
+            <li key={i}>{s}</li>
+          ))}
+        </ul>
         <p>{t("methods.roadmap.privacy")}</p>
       </section>
 

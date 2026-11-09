@@ -30,4 +30,12 @@ describe("Methods & data page (T9.6)", () => {
       "FieldWitness helps you explore options. It does not replace your judgment or local agricultural advice.",
     );
   });
+
+  it("includes all post-freeze roadmap items on Methods page", () => {
+    expect(strings["methods.roadmap.future.1"]).toContain("Arabic");
+    expect(strings["methods.roadmap.future.2"]).toContain("Compare two fields");
+    expect(strings["methods.roadmap.future.3"]).toMatch(/SMAP.*GPM/);
+    expect(strings["methods.roadmap.future.4"]).toMatch(/ECOSTRESS.*WIMAS/);
+    expect(strings["methods.roadmap.future.5"]).toContain("tile-by-tile");
+  });
 });

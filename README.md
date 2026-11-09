@@ -114,6 +114,15 @@ Before expanding coverage beyond the Kansas High Plains pilot (HLS tile T14SLH),
 
 Because Kansas missed the season detection target and shows weak hindcast skill, it is published strictly as a pilot with limits visible, not as a general product. Evidence grades are capped at B (Grade A disabled), neighbour evidence is inactive, and we make no yield hindcast claims.
 
+### Post-freeze roadmap
+
+Items scheduled for subsequent milestones following the code freeze:
+- **Arabic interface (i18n / RTL):** Full right-to-left layout and localized agricultural terminology for regional usability.
+- **Compare two fields side by side:** Direct side-by-side comparison of rotation rankings, water requirements, and evidence grades across separate parcels.
+- **Independent soil water and rainfall cross-checks:** Cross-validation of modeled root-zone soil water and precipitation against NASA SMAP L4 soil moisture and GPM IMERG precipitation data.
+- **Evapotranspiration and irrigation checks:** Cross-checking simulated crop evapotranspiration against NASA ECOSTRESS thermal data and irrigation diversion records against the Kansas WIMAS database.
+- **Expanding coverage tile-by-tile:** Rolling out to further agricultural regions tile-by-tile, requiring every new tile to satisfy the census, season-detection, and hindcast gates before publication.
+
 **Privacy & "Add my field" (Version 0):** Farm locations and management histories are sensitive. The "Add my field" feature operates entirely on the client side (zero server calls, static build). Coordinates, crop histories, and constraints stay strictly on your local device (in `localStorage`). A future server-side pipeline will store data only with explicit farmer consent.
 
 ## Run it
