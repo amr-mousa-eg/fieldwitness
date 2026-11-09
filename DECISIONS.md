@@ -479,3 +479,11 @@ Written and committed before executing the evaluation script or inspecting resul
 5. **Sample Size Floor:** Report n field-seasons per grade group. Any group with n < 20 field-seasons is explicitly reported as "too few to judge" rather than drawing unsupported conclusions.
 6. **Spatial Block Bootstrap:** Statistical inference uses 1,000 spatial block bootstrap resamples blocking by the 10 km spatial grid cells defined in T1.4, with a fixed random seed (42), yielding 95% percentile bootstrap confidence intervals.
 7. **Transparent Reporting & Invariance:** Results will be saved to `results/hindcast/grade_validity.json` and `results/hindcast/grade_validity.md`, and surfaced on the Scoreboard and Methods pages exactly as found ("Grades did / did not predict accuracy in our test, n = ..."). Model evidence grades, algorithms, and thresholds will not be altered based on the outcome of this test.
+
+### 2026-11-09 — Grade Validity Check Results (Kansas Pilot)
+
+- **Completed & Verified:** Evaluated cut-off credibility and Current-option evidence grades strictly under `as_of(2021-12-31)`. Total scored sample: 463 field-seasons across 200 Kansas pilot fields (Grade B: n = 170, Grade C: n = 268, Grade D: n = 25; all n >= 20, 0 groups marked 'too few to judge').
+- **Primary Pre-registered Test Outcome:** Mean forecast-mode canopy integral CRPS was 16.96 for Grade B (95% CI [15.07, 18.95]) vs 24.02 for Grade D (95% CI [14.04, 31.25]), difference (D − B) = 7.07. The 1,000 spatial block bootstrap 95% CI [-3.28, 14.32] crosses zero, failing the strict significance criterion. Primary test verdict: **DID NOT PASS** ("Grades did not predict accuracy in our test, n = 463").
+- **Secondary / Exploratory Metrics:** Peak timing absolute error: Grade B = 29.15 d, Grade C = 37.09 d, Grade D = 34.38 d. 90% canopy interval coverage: Grade B = 32.4%, Grade C = 30.6%, Grade D = 24.0%. Continuous credibility rank correlation: Spearman rho = -0.0334 (p = 0.497) vs CRPS, rho = -0.0823 (p = 0.093) vs peak timing error.
+- **Reporting & Invariance:** Result surfaced prominently on `Scoreboard.tsx` and in `MethodsPage.tsx` under scientific integrity limits. Exactly 0 changes made to evidence grades, algorithms, or thresholds. Results exported to `results/hindcast/grade_validity.json` and `.md`.
+

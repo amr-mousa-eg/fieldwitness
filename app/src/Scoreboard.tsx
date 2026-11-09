@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Backtest } from "./AdvisorConsole";
 import { loadHindcast, loadPack } from "./data";
 import { formatDate } from "./format";
+import { GRADE_VALIDITY } from "./gradeValidity";
 import { type ScoreKey, bestMethods, methodsNotRun, metricsOf, modesOf, rowsFor, scoreKeysOf } from "./hindcast";
 import { routeHref } from "./route";
 import { metricName, t } from "./strings";
@@ -64,6 +65,76 @@ function ScoreTable({ rows, metric }: { rows: HindcastRow[]; metric: string }) {
   );
 }
 
+function GradeValiditySection() {
+  const g = GRADE_VALIDITY.grades;
+  return (
+    <section className="score-block grade-validity" aria-labelledby="score-gv">
+      <h4 id="score-gv">{t("score.gradeValidity.heading")}</h4>
+      <p className="muted">{t("score.gradeValidity.intro")}</p>
+
+      <div className="notice" style={{ marginTop: "0.5rem", marginBottom: "0.75rem" }}>
+        <strong>{t("score.gradeValidity.verdict")}</strong>
+        <p style={{ marginTop: "0.25rem", marginBottom: 0 }}>
+          {t("score.gradeValidity.verdictDetail")}
+        </p>
+      </div>
+
+      <div className="table-wrap">
+        <table className="scores">
+          <thead>
+            <tr>
+              <th scope="col">{t("score.gradeValidity.thGrade")}</th>
+              <th scope="col">{t("score.gradeValidity.thN")}</th>
+              <th scope="col">{t("score.gradeValidity.thCrps")}</th>
+              <th scope="col">{t("score.gradeValidity.thTiming")}</th>
+              <th scope="col">{t("score.gradeValidity.thCoverage")}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">
+                <span className="method-name">Grade B</span>
+                <span className="method-desc">{t("score.gradeValidity.bDesc")}</span>
+              </th>
+              <td>{g.B.n}</td>
+              <td>{g.B.forecast_ci_crps_mean.toFixed(2)} [{g.B.forecast_ci_crps_ci95[0].toFixed(2)}, {g.B.forecast_ci_crps_ci95[1].toFixed(2)}]</td>
+              <td>{g.B.forecast_peak_abs_err_mean.toFixed(1)} d</td>
+              <td>{Math.round(g.B.forecast_ci_covered90_share * 100)} %</td>
+            </tr>
+            <tr>
+              <th scope="row">
+                <span className="method-name">Grade C</span>
+                <span className="method-desc">{t("score.gradeValidity.cDesc")}</span>
+              </th>
+              <td>{g.C.n}</td>
+              <td>{g.C.forecast_ci_crps_mean.toFixed(2)} [{g.C.forecast_ci_crps_ci95[0].toFixed(2)}, {g.C.forecast_ci_crps_ci95[1].toFixed(2)}]</td>
+              <td>{g.C.forecast_peak_abs_err_mean.toFixed(1)} d</td>
+              <td>{Math.round(g.C.forecast_ci_covered90_share * 100)} %</td>
+            </tr>
+            <tr>
+              <th scope="row">
+                <span className="method-name">Grade D</span>
+                <span className="method-desc">{t("score.gradeValidity.dDesc")}</span>
+              </th>
+              <td>{g.D.n}</td>
+              <td>{g.D.forecast_ci_crps_mean.toFixed(2)} [{g.D.forecast_ci_crps_ci95[0].toFixed(2)}, {g.D.forecast_ci_crps_ci95[1].toFixed(2)}]</td>
+              <td>{g.D.forecast_peak_abs_err_mean.toFixed(1)} d</td>
+              <td>{Math.round(g.D.forecast_ci_covered90_share * 100)} %</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p className="muted" style={{ fontSize: "0.85rem", marginTop: "0.5rem" }}>
+        {t("score.gradeValidity.primaryRule")}
+      </p>
+      <p className="muted" style={{ fontSize: "0.85rem", marginTop: "0.25rem" }}>
+        {t("score.gradeValidity.credNote")}
+      </p>
+    </section>
+  );
+}
+
 export function Scoreboard({ index }: { index: RegionIndex }) {
   const [h, setH] = useState<RegionHindcast | null>(null);
   const [story, setStory] = useState<FieldPack | null>(null);
@@ -121,6 +192,7 @@ export function Scoreboard({ index }: { index: RegionIndex }) {
       {metricsOf(h, mode).map((m) => (
         <ScoreTable key={m} metric={m} rows={rowsFor(h, mode, m)} />
       ))}
+      {region === "ks_t14slh" && <GradeValiditySection />}
       <div className="score-story">
         {story ? <Backtest pack={story} mode={mode} /> : <p>{t("field.loading")}</p>}
         <p>

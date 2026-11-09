@@ -629,3 +629,9 @@ We are at Gate <N>. Check every acceptance test of this phase against the actual
 - [ ] **P2.14 Toulouse through Phases 1–8.** Skipped per user instruction (scope Kansas only for submission).
 - [ ] **P2.15 T4.6 WIMAS check:** Only when file is provided in `data/wimas/`.
 
+### Pre-freeze Polish Improvements (9–13 Nov 2026)
+- [x] **P2.16 Grade validity check (analysis, no model changes).** Pre-registered in `DECISIONS.md` before execution; evaluated strictly under cut-off `as_of(2021-12-31)`; Current-option grades evaluated on 2022–2024 hindcast (n=463, B=170, C=268, D=25; all n >= 20). Primary test (forecast canopy integral CRPS Grade B vs D: B=16.96, D=24.02, difference +7.07, 10 km spatial block bootstrap 95% CI [-3.28, 14.32]) did not reach significance (CI spans 0). Negative result documented on Scoreboard ("Grades did not predict accuracy in our test, n = 463") and Methods page. 0 model changes made. Results in `results/hindcast/grade_validity.*`.
+- [ ] **P2.17 Plain-language summary on Field Card.** One sentence per field generated only from pack numbers (Current vs top option: bare-soil months, water use, bad-year risk, grade) + side-by-side comparison chart. Every number source-tagged; tests for template.
+- [ ] **P2.18 Guided tour.** "Take the tour" button, 5–6 steps (story -> options -> evidence -> hindcast -> add my field), keyboard accessible, dismissible, both themes.
+- [ ] **P2.19 Printable field report.** Print stylesheet producing one A4 page per field (story, three options, explanations, disclaimer).
+
