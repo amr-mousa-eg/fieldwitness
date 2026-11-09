@@ -130,14 +130,15 @@ export function explainTopRanking(
 ): RankingExplanation | null {
   if (allRankedKept.length === 0) return null;
 
-  const topRow = allRankedKept[0];
-  const nextRow = allRankedKept.length > 1 ? allRankedKept[1] : undefined;
-
   const rows = allRankedKept.map((r) => ({ option: r.option, metrics: r.metrics }));
-  const topBreakdown = computeOptionBreakdown(topRow, rows, p);
-  const nextBreakdown = nextRow ? computeOptionBreakdown(nextRow, rows, p) : undefined;
+  const breakdowns = allRankedKept.map((r) => computeOptionBreakdown(r, rows, p));
+  // Order options strictly by preference score under the evaluated priority weights
+  breakdowns.sort((a, b) => b.totalScore - a.totalScore);
 
-  if (!nextBreakdown || !nextRow) {
+  const topBreakdown = breakdowns[0];
+  const nextBreakdown = breakdowns.length > 1 ? breakdowns[1] : undefined;
+
+  if (!nextBreakdown) {
     return {
       top: topBreakdown,
       scoreDiff: 0,
@@ -146,7 +147,7 @@ export function explainTopRanking(
   }
 
   const scoreDiff = Math.max(0, topBreakdown.totalScore - nextBreakdown.totalScore);
-  const nextName = optionName(nextRow.option);
+  const nextName = optionName(nextBreakdown.option);
 
   if (scoreDiff < 0.001) {
     return {
