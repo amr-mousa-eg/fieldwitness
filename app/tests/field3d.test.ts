@@ -9,7 +9,7 @@ const hasPublicPacks = existsSync(PUBLIC_DIR);
 const hasDemoPacks = existsSync(DEMO_DIR);
 
 describe.skipIf(!hasPublicPacks)("Field 3D simulation packs (public/packs/ks_t14slh)", () => {
-  const files = readdirSync(PUBLIC_DIR).filter((f) => f.endsWith(".sim3d.json"));
+  const files = hasPublicPacks ? readdirSync(PUBLIC_DIR).filter((f) => f.endsWith(".sim3d.json")) : [];
 
   it("found 200 .sim3d.json files in public packs", () => {
     expect(files.length).toBe(200);
@@ -94,7 +94,7 @@ describe.skipIf(!hasPublicPacks)("Field 3D simulation packs (public/packs/ks_t14
 
 describe.skipIf(!hasDemoPacks)("Demo packs deployment (packs/demo/ks_t14slh)", () => {
   it("packs/demo has all 200 .sim3d.json files deployed", () => {
-    const demoFiles = readdirSync(DEMO_DIR).filter((f) => f.endsWith(".sim3d.json"));
+    const demoFiles = hasDemoPacks ? readdirSync(DEMO_DIR).filter((f) => f.endsWith(".sim3d.json")) : [];
     expect(demoFiles.length).toBe(200);
   });
 });

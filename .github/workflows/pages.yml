@@ -32,8 +32,8 @@ jobs:
           cache: npm
           cache-dependency-path: app/package-lock.json
       - run: npm ci
-      - run: npm test
       - run: node scripts/sync-packs.mjs "../${{ inputs.packs || 'packs/demo' }}"
+      - run: npm test
       - run: npm run build
         env:
           VITE_BASE: /${{ github.event.repository.name }}/
