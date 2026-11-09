@@ -79,6 +79,7 @@ What this means:
   Matching two-year histories improved balance (T5.xa), but placebo/control checks failed; neighbour
   evidence remains off in grading.
 - Evidence grade validity: We could not show that evidence grades predict accuracy (n = 463 field-seasons): grade-B fields had lower average error than grade-D (CRPS 17.0 vs 24.0), but the difference is within the uncertainty (95% CI of the difference −3.3 to 14.3). Grade D had only 25 field-seasons. Pre-registered verdict: not shown.
+- Hindcast skill diagnosis (pre-registered in `DECISIONS.md`, commit `e021f3e`, `results/hindcast/diagnosis.md`): FieldWitness forecast-mode canopy integral CRPS beats B1 (diff +1.23, 95% CI [0.48, 1.99]) and B2 (diff +1.35, 95% CI [0.74, 1.90]) overall and for maize, but does not strictly beat baselines for sorghum (diff +0.77 [-0.10, 1.64], 95% CI spans 0). Winter wheat exhibits a severe timing error (absolute error 58.9 d [52.2, 66.3] d; median offset +36.0 d) due to uncalibrated phenology stage lengths.
 
 ## Coverage and roadmap
 

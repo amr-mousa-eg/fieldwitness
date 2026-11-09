@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Backtest } from "./AdvisorConsole";
+import { DiagnosisSection } from "./DiagnosisSection";
 import { loadHindcast, loadPack } from "./data";
 import { formatDate } from "./format";
 import { GRADE_VALIDITY } from "./gradeValidity";
@@ -192,7 +193,12 @@ export function Scoreboard({ index }: { index: RegionIndex }) {
       {metricsOf(h, mode).map((m) => (
         <ScoreTable key={m} metric={m} rows={rowsFor(h, mode, m)} />
       ))}
-      {region === "ks_t14slh" && <GradeValiditySection />}
+      {region === "ks_t14slh" && (
+        <>
+          <GradeValiditySection />
+          <DiagnosisSection />
+        </>
+      )}
       <div className="score-story">
         {story ? <Backtest pack={story} mode={mode} /> : <p>{t("field.loading")}</p>}
         <p>

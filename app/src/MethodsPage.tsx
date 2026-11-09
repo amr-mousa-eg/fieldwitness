@@ -1,3 +1,4 @@
+import { DiagnosisSection } from "./DiagnosisSection";
 import { IS_DEMO_DATA } from "./data";
 import { EXPLAINERS, explainer } from "./explainers";
 import { type StringKey, t } from "./strings";
@@ -58,6 +59,8 @@ export function MethodsPage() {
           ))}
         </ul>
       </section>
+
+      <DiagnosisSection />
 
       <section aria-labelledby="m-roadmap">
         <h3 id="m-roadmap">{t("methods.roadmap")}</h3>

@@ -648,15 +648,11 @@ We are at Gate <N>. Check every acceptance test of this phase against the actual
 ### Tasks
 
 #### MUST (Core Evidence & Usability)
-- [ ] **Item 1: Diagnose why hindcast skill is weak (science, no new data).**
-  - Pre-register in `DECISIONS.md` BEFORE running: breakdown dimensions and metrics (no dimensions added afterwards).
-  - Break down forecast-mode hindcast errors (CRPS of canopy integral, absolute timing error of the peak, 90% interval coverage) by: crop (maize, sorghum, winter wheat, fallow), season year (2022, 2023, 2024), field size class (<10 ha, 10–50, >50), irrigated vs rainfed proxy if available, evidence grade, and number of clear HLS observations in the season.
-  - Same spatial block bootstrap (10 km blocks, 1,000 resamples, fixed seed); report n per cell; any cell with n < 20 is "too few to judge".
-  - Compare against baselines per cell: where does FieldWitness beat B0–B2, where does it lose?
-  - Plain-language findings: "Skill is better for X and weaker for Y, because Z (evidence)". Only claim cause when results support it; otherwise "cause not established".
-  - If a cause is clearly fixable (e.g. data-handling bug), fix ONLY via a new decision entry, re-run hindcast, and report before/after honestly. Never tune thresholds.
-  - Output: `results/hindcast/diagnosis.json` + `.md`; "Where it works and where it doesn't" section on Scoreboard and Methods pages.
-  - Acceptance: pre-registration committed before results; table with n and CIs; page section live; tests for aggregation code.
+- [x] **Item 1: Diagnose why hindcast skill is weak (science, no new data).**
+  - Pre-registered in `DECISIONS.md` (commit `e021f3e`) BEFORE running. Evaluated 463 field-seasons across 200 Kansas pilot fields (years 2022–2024) under cut-off `as_of(2021-12-31)`.
+  - Spatial block bootstrap (10 km blocks, 1,000 resamples, seed 42); n per cell reported; n < 20 reported as "too few to judge".
+  - Primary test: FieldWitness forecast-mode canopy integral CRPS beats B1 (diff +1.23 [0.48, 1.99]) and B2 (diff +1.35 [0.74, 1.90]) overall and for maize, but CI spans 0 for sorghum (diff +0.77 [-0.10, 1.64]). Winter wheat timing reveals severe offset (+36 d signed median error, abs error 58.9 d [52.2, 66.3] d) due to uncalibrated phenology prior stage lengths.
+  - Output: `results/hindcast/diagnosis.json`, `results/hindcast/diagnosis.md`, live exploratory section mounted on Scoreboard and Methods pages (`DiagnosisSection.tsx`), unit tests passing (`diagnosis.test.ts`).
 
 - [ ] **Item 7: "Why this ranking?" explainer (Field Card).**
   - For top-ranked option under user's current slider weights: show breakdown of score (weight × normalised value → contribution bar chart, with numbers and units), plus next-best option contributions side by side, and one sentence: "Ranked first mainly because …".
