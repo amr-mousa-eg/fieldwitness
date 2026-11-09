@@ -33,7 +33,7 @@ export function DiagnosisSection() {
         </h4>
         <p className="muted" style={{ fontSize: "0.82rem", margin: "0 0 0.6rem 0" }}>
           Target: forecast-mode canopy-integral CRPS. Success rule: the 95% spatial block bootstrap CI of the paired
-          difference strictly excludes 0 in FieldWitness&apos;s favour.
+          difference strictly excludes 0 in FieldWitness&apos;s favour. Overall comparison excludes winter wheat (no baseline run) and fallow (not scored).
         </p>
 
         <div className="table-wrap">

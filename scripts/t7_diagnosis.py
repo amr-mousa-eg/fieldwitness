@@ -313,12 +313,17 @@ def run_diagnosis() -> dict[str, Any]:
                 )
                 continue
 
+            fw_crps, fw_crps_ci, _, _, _ = block_bootstrap(sub, "fw_ci_crps")
             has_b1 = sub["b1_ci_crps"].notna().any()
-            fw_crps, fw_crps_ci, d_b1, d_b1_ci, _ = block_bootstrap(
-                sub, "fw_ci_crps", "b1_ci_crps" if has_b1 else None
+            _, _, d_b1, d_b1_ci, _ = (
+                block_bootstrap(sub, "fw_ci_crps", "b1_ci_crps")
+                if has_b1
+                else (None, None, None, None, 0)
             )
-            _, _, d_b2, d_b2_ci, _ = block_bootstrap(
-                sub, "fw_ci_crps", "b2_ci_crps" if has_b1 else None
+            _, _, d_b2, d_b2_ci, _ = (
+                block_bootstrap(sub, "fw_ci_crps", "b2_ci_crps")
+                if has_b1
+                else (None, None, None, None, 0)
             )
             fw_peak, fw_peak_ci, _, _, _ = block_bootstrap(sub, "fw_peak_abs_err")
             fw_cov, fw_cov_ci, _, _, _ = block_bootstrap(sub, "fw_ci_covered90")
@@ -382,9 +387,9 @@ def run_diagnosis() -> dict[str, Any]:
         f"median signed timing error +36.0 d)."
     )
     ww_anomaly_cause = (
-        "Predicted peak DOY is systematically ~36 days later than observed heading "
-        "in Kansas (late May vs July model peak). Phenology prior stage lengths for "
-        "winter wheat require calibration (proposed as a separate decision)."
+        "Proposed explanation (not tested): Predicted peak DOY is systematically ~36 days "
+        "later than observed heading in Kansas (late May vs July model peak). Phenology prior "
+        "stage lengths for winter wheat require calibration (proposed as a separate decision)."
     )
     year_finding = (
         "Skill is higher in 2024 (CRPS 16.47, 95% CI [14.26, 18.90]) than in 2023 "

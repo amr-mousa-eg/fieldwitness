@@ -654,11 +654,12 @@ We are at Gate <N>. Check every acceptance test of this phase against the actual
   - Primary test: FieldWitness forecast-mode canopy integral CRPS beats B1 (diff +1.23 [0.48, 1.99]) and B2 (diff +1.35 [0.74, 1.90]) overall and for maize, but CI spans 0 for sorghum (diff +0.77 [-0.10, 1.64]). Winter wheat timing reveals severe offset (+36 d signed median error, abs error 58.9 d [52.2, 66.3] d) due to uncalibrated phenology prior stage lengths.
   - Output: `results/hindcast/diagnosis.json`, `results/hindcast/diagnosis.md`, live exploratory section mounted on Scoreboard and Methods pages (`DiagnosisSection.tsx`), unit tests passing (`diagnosis.test.ts`).
 
-- [ ] **Item 7: "Why this ranking?" explainer (Field Card).**
-  - For top-ranked option under user's current slider weights: show breakdown of score (weight × normalised value → contribution bar chart, with numbers and units), plus next-best option contributions side by side, and one sentence: "Ranked first mainly because …".
-  - Must reproduce existing ranking exactly (same code path as `rank.ts`); test that sum of contributions equals ranking score for all 200 packs.
-  - Updates live as sliders move; keyboard accessible; both themes; source tags on every number.
-  - Plain-language caption: what a "normalised value" means. No claims beyond the model.
+- [x] **Item 7: "Why this ranking?" explainer (Field Card).**
+  - Implemented in `RankingExplainerSection.tsx`, `rankingExplainer.ts`, and `rankingExplainerConfig.ts` with dominant contribution threshold `0.40` in `config/ranking.yaml` (tag A).
+  - Exact mathematical breakdown of score: weight × normalised value = contribution; sum of contributions equals ranking score verified on all 200 real Kansas packs and all alternative options.
+  - Side-by-side comparison with next-best option (#1 vs #2), relative score impact, raw tagged values, normalised value bars, and accessible table (`aria-labelledby`).
+  - Deterministic sentence: "Ranked first mainly because \"[criterion]\" scored higher ([share]% of the score difference vs [next])" when dominant share ≥ 40%; otherwise "Several criteria contribute similarly to this option's top ranking over [next]".
+  - Zero forbidden words verified across all 200 packs. Updates live as priority sliders move; light and dark themes; mobile responsive.
 
 - [ ] **Item 9: Methods diagram.**
   - One clear SVG (no external image, themed with CSS variables, readable in both themes and at 390 px, with text alternative).

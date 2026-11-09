@@ -2147,6 +2147,147 @@ table.mini {
   color: var(--muted);
 }
 
+/* --- Ranking Explainer (Item 7) --- */
+.ranking-explainer-card {
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-left: 4px solid var(--focus);
+  border-radius: 4px;
+  padding: 1rem;
+  margin: 1.25rem 0;
+}
+.ranking-explainer-title {
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+  font-family: var(--display);
+  color: var(--ink);
+  letter-spacing: 0.02em;
+}
+.ranking-explainer-sentence {
+  font-size: 0.98rem;
+  line-height: 1.5;
+  color: var(--ink);
+  margin: 0 0 1rem 0;
+  padding: 0.6rem 0.8rem;
+  background: var(--page);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+}
+.ranking-explainer-table-wrap {
+  overflow-x: auto;
+  margin-bottom: 0.75rem;
+}
+.ranking-explainer-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+.ranking-explainer-table th,
+.ranking-explainer-table td {
+  padding: 0.5rem 0.6rem;
+  text-align: left;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: top;
+}
+.ranking-explainer-table th[scope="col"] {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+.explainer-col-name {
+  display: block;
+  font-weight: 600;
+  color: var(--ink);
+}
+.explainer-badge-top {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--grade-a);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.explainer-badge-next {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.criterion-label {
+  display: block;
+  font-weight: 600;
+  color: var(--ink);
+}
+.dominant-tag {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+  background: var(--page);
+  border: 1px solid var(--rule);
+  color: var(--focus);
+  margin-top: 0.2rem;
+}
+.weight-pill {
+  display: inline-block;
+  font-weight: 600;
+  font-size: 0.82rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 3px;
+  background: var(--page);
+  border: 1px solid var(--rule);
+}
+.bar-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+.contribution-bar {
+  height: 8px;
+  border-radius: 2px;
+  background: var(--focus);
+  min-width: 2px;
+  transition: width 0.2s ease;
+}
+.contribution-bar.bar-next {
+  background: var(--muted);
+  opacity: 0.7;
+}
+.bar-val {
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.raw-metrics-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+.raw-metric-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.row-dominant {
+  background: rgba(31, 111, 178, 0.05);
+}
+.explainer-total-row {
+  border-top: 2px solid var(--rule);
+  font-weight: 700;
+}
+.ranking-explainer-caption {
+  font-size: 0.8rem;
+  line-height: 1.4;
+  margin: 0.5rem 0 0 0;
+}
+
 /* Guided Tour Launch Button */
 .tour-btn {
   background: var(--panel);

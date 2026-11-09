@@ -197,10 +197,10 @@
       {
         "category": "2022",
         "n": 134,
-        "fw_crps_mean": 15.27684144597941,
+        "fw_crps_mean": 18.461319008613597,
         "fw_crps_ci95": [
-          12.927693721299299,
-          17.598923397891877
+          16.391363414068397,
+          20.507919620390087
         ],
         "fw_peak_err_mean": 37.66417910447761,
         "fw_peak_err_ci95": [
@@ -226,10 +226,10 @@
       {
         "category": "2023",
         "n": 129,
-        "fw_crps_mean": 12.372337100078223,
+        "fw_crps_mean": 18.239047293546776,
         "fw_crps_ci95": [
-          9.210164259940635,
-          16.08014439623796
+          15.71085411008707,
+          20.940855775505415
         ],
         "fw_peak_err_mean": 29.8953488372093,
         "fw_peak_err_ci95": [
@@ -255,10 +255,10 @@
       {
         "category": "2024",
         "n": 200,
-        "fw_crps_mean": 16.068829447569595,
+        "fw_crps_mean": 16.46837620929092,
         "fw_crps_ci95": [
-          13.25819842428454,
-          19.15984479460378
+          14.26352512392851,
+          18.89652074521881
         ],
         "fw_peak_err_mean": 34.265,
         "fw_peak_err_ci95": [
@@ -286,10 +286,10 @@
       {
         "category": "<10 ha",
         "n": 115,
-        "fw_crps_mean": 16.881698661849292,
+        "fw_crps_mean": 19.825861825069964,
         "fw_crps_ci95": [
-          13.133007244034484,
-          21.185023704869003
+          16.256630116652595,
+          23.477047118013584
         ],
         "fw_peak_err_mean": 36.70434782608696,
         "fw_peak_err_ci95": [
@@ -315,10 +315,10 @@
       {
         "category": "10-50 ha",
         "n": 176,
-        "fw_crps_mean": 14.204016326154992,
+        "fw_crps_mean": 16.272819457587214,
         "fw_crps_ci95": [
-          11.71390570094257,
-          16.769194310450754
+          14.199423180888765,
+          18.525696040708155
         ],
         "fw_peak_err_mean": 33.33522727272727,
         "fw_peak_err_ci95": [
@@ -344,10 +344,10 @@
       {
         "category": ">50 ha",
         "n": 172,
-        "fw_crps_mean": 14.166987122450982,
+        "fw_crps_mean": 17.304295089892697,
         "fw_crps_ci95": [
-          11.988909219995708,
-          16.377982744218254
+          15.5323391132995,
+          19.394214268807133
         ],
         "fw_peak_err_mean": 32.95639534883721,
         "fw_peak_err_ci95": [
@@ -375,10 +375,10 @@
       {
         "category": "B",
         "n": 170,
-        "fw_crps_mean": 14.76387394629684,
+        "fw_crps_mean": 16.958511762877947,
         "fw_crps_ci95": [
-          12.355340159195169,
-          17.123442223267986
+          15.042004547003865,
+          18.980746555398582
         ],
         "fw_peak_err_mean": 29.152941176470588,
         "fw_peak_err_ci95": [
@@ -404,10 +404,10 @@
       {
         "category": "C",
         "n": 268,
-        "fw_crps_mean": 14.395151362842409,
+        "fw_crps_mean": 17.30139507712526,
         "fw_crps_ci95": [
-          12.469201665359368,
-          16.518959506681302
+          15.369438828711157,
+          19.463926265899516
         ],
         "fw_peak_err_mean": 37.093283582089555,
         "fw_peak_err_ci95": [
@@ -433,10 +433,10 @@
       {
         "category": "D",
         "n": 25,
-        "fw_crps_mean": 19.968141623754445,
+        "fw_crps_mean": 24.02432838084474,
         "fw_crps_ci95": [
-          10.196011644142441,
-          29.200082847734674
+          15.947679923317276,
+          30.405302270815373
         ],
         "fw_peak_err_mean": 34.38,
         "fw_peak_err_ci95": [
@@ -474,10 +474,10 @@
       {
         "category": ">=20",
         "n": 463,
-        "fw_crps_mean": 14.864827809344938,
+        "fw_crps_mean": 17.53850775352039,
         "fw_crps_ci95": [
-          13.200655527134453,
-          16.709675472326524
+          15.926264138589161,
+          19.143053612567318
         ],
         "fw_peak_err_mean": 34.03131749460043,
         "fw_peak_err_ci95": [
@@ -511,7 +511,7 @@
     {
       "dimension": "crop_timing_anomaly",
       "finding": "Winter wheat displays a severe timing error (peak timing absolute error 58.9 d, 95% CI [52.2, 66.3] d; median signed timing error +36.0 d).",
-      "cause": "Predicted peak DOY is systematically ~36 days later than observed heading in Kansas (late May vs July model peak). Phenology prior stage lengths for winter wheat require calibration (proposed as a separate decision)."
+      "cause": "Proposed explanation (not tested): Predicted peak DOY is systematically ~36 days later than observed heading in Kansas (late May vs July model peak). Phenology prior stage lengths for winter wheat require calibration (proposed as a separate decision)."
     },
     {
       "dimension": "year",

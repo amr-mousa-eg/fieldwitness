@@ -3,6 +3,7 @@ import { CorrectionPanel } from "./CorrectionPanel";
 import { CropChips } from "./CropChips";
 import { Explain, MetricLabel } from "./Explain";
 import { FieldSummaryPanel } from "./FieldSummaryPanel";
+import { RankingExplainerSection } from "./RankingExplainerSection";
 import { loadScenarios } from "./data";
 import { generateFieldSummary } from "./fieldSummary";
 import { formatDelta, formatTagged } from "./format";
@@ -424,6 +425,7 @@ export function FieldCard({ pack, regionId }: { pack: FieldPack; regionId: strin
             </tbody>
           </table>
         </div>
+        <RankingExplainerSection ranked={rows} priorities={priorities} />
         {dropped.length > 0 && (
           <details className="dropped">
             <summary>{t("card.excluded", { n: dropped.length })}</summary>

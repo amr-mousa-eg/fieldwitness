@@ -537,6 +537,29 @@ Written and committed before executing the diagnostic analysis or inspecting res
    - Displayed section on Scoreboard and Methods pages must be titled plainly: **"Where it works and where it doesn't (exploratory)"**.
    - Results exported to `results/hindcast/diagnosis.json` and `results/hindcast/diagnosis.md`.
 
+## 2026-11-09 — Grade Validity and Diagnosis Reconciliation & Baseline Scope
+
+1. **Reconciliation of Grade Sample Sizes and CRPS:**
+   - Evaluated row counts across all 463 Kansas field-seasons (2022–2024) under cut-off `as_of(2021-12-31)`:
+     - Grade B: $n = 170$
+     - Grade C: $n = 268$
+     - Grade D: $n = 25$
+     - Total: $170 + 268 + 25 = 463$.
+   - Both `results/hindcast/grade_validity.json` and `results/hindcast/diagnosis.json` use this exact definition and row set.
+   - In the initial diagnostic aggregation, `block_bootstrap` for exploratory groups filtered to rows where `b1_ci_crps.notna()`, which inadvertently evaluated Grade B CRPS over only the 97 maize and sorghum field-seasons (CRPS 14.76), dropping the 73 winter wheat seasons.
+   - Fixed `scripts/t7_diagnosis.py` so that FieldWitness metric bootstrapping (`fw_ci_crps`) evaluates all $n$ seasons in the cell regardless of baseline availability, while paired baseline differences (`diff_vs_b1`, `diff_vs_b2`) are evaluated over the paired subset.
+   - Reconciled raw numbers for Grade B: CRPS 16.96, 95% CI [15.04, 18.98]; Grade C: CRPS 17.30, 95% CI [15.37, 19.46]; Grade D: CRPS 24.02, 95% CI [15.95, 30.41]. These match `results/hindcast/grade_validity.json` (B: 16.96, C: 17.30, D: 24.02).
+
+2. **Omission of Winter Wheat in Baselines B1 & B2:**
+   - Baseline models B1 (FAO table engine) and B2 (prior physics) were generated in T7.3 exclusively for maize and sorghum ($n = 266$).
+   - Reason for omission: `scripts/t73_baselines.py` is configured for single-calendar-year weather forcing (`Jan 1 – Dec 31`), whereas winter wheat is sown autumn Year $t-1$ and harvested summer Year $t$, requiring two-year cross-calendar weather forcing. Winter wheat cannot be evaluated with the existing baseline script without code modifications for cross-calendar weather handling.
+   - Transparent UI notice added to Scoreboard and Methods pages: *"Overall comparison excludes winter wheat (no baseline run) and fallow (not scored)."*
+
+3. **Winter Wheat Phenology Calibration Deferred:**
+   - The diagnostic finding of a severe winter wheat timing error (peak timing absolute error 58.9 d [52.2, 66.3] d; signed median offset +36.0 d) is labelled with proposed explanation (not tested): observed Kansas heading DOY ~140–155 vs uncalibrated model peak in July.
+   - Formal calibration of winter wheat phenology stage lengths is deferred to a separate decision entry, strictly constrained within published FAO-56 ranges, validated on dev/test split, and will be tackled only if time remains after completing Priority MUST items (Items 1, 7, 9, 10, 5).
+
+
 
 
 

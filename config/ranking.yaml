@@ -32,3 +32,8 @@ presets:
     water_use_mm: 0.05
     irrigation_mm: 0.05
     cvar10_water_mm: 0.25
+
+# Ranking explainer settings (tag A, UNVERIFIED: team choices).
+explainer:
+  dominant_contribution_share: 0.40  # Criterion contributes >= 40% of score difference vs next-best option
+

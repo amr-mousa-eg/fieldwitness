@@ -294,43 +294,43 @@ export const DIAGNOSIS_DATA: DiagnosisData = {
       {
         category: "B",
         n: 170,
-        fw_crps_mean: 14.76,
-        fw_crps_ci95: [12.36, 17.12],
+        fw_crps_mean: 16.96,
+        fw_crps_ci95: [15.04, 18.98],
         fw_peak_err_mean: 29.2,
         fw_peak_err_ci95: [24.5, 34.5],
         fw_cov90_mean: 0.324,
         fw_cov90_ci95: [0.253, 0.394],
-        diff_vs_b1_ci95: [-0.15, 1.80],
+        diff_vs_b1_ci95: [-0.50, 1.69],
         verdict_vs_b1: "comparable within uncertainty (CI spans 0)",
-        diff_vs_b2_ci95: [0.20, 1.75],
+        diff_vs_b2_ci95: [0.04, 1.71],
         verdict_vs_b2: "FieldWitness beats baseline (CI > 0)"
       },
       {
         category: "C",
         n: 268,
-        fw_crps_mean: 14.40,
-        fw_crps_ci95: [12.47, 16.52],
+        fw_crps_mean: 17.30,
+        fw_crps_ci95: [15.37, 19.46],
         fw_peak_err_mean: 37.1,
         fw_peak_err_ci95: [32.2, 42.6],
         fw_cov90_mean: 0.306,
         fw_cov90_ci95: [0.250, 0.359],
-        diff_vs_b1_ci95: [0.40, 1.85],
+        diff_vs_b1_ci95: [0.51, 2.81],
         verdict_vs_b1: "FieldWitness beats baseline (CI > 0)",
-        diff_vs_b2_ci95: [0.55, 1.90],
+        diff_vs_b2_ci95: [1.03, 2.52],
         verdict_vs_b2: "FieldWitness beats baseline (CI > 0)"
       },
       {
         category: "D",
         n: 25,
-        fw_crps_mean: 19.97,
-        fw_crps_ci95: [10.20, 29.20],
+        fw_crps_mean: 24.02,
+        fw_crps_ci95: [15.95, 30.41],
         fw_peak_err_mean: 34.4,
         fw_peak_err_ci95: [23.5, 45.1],
         fw_cov90_mean: 0.240,
         fw_cov90_ci95: [0.071, 0.474],
-        diff_vs_b1_ci95: [-0.50, 3.20],
+        diff_vs_b1_ci95: [-0.79, 4.43],
         verdict_vs_b1: "comparable within uncertainty (CI spans 0)",
-        diff_vs_b2_ci95: [-0.40, 3.10],
+        diff_vs_b2_ci95: [-0.44, 0.46],
         verdict_vs_b2: "comparable within uncertainty (CI spans 0)"
       }
     ],
@@ -370,21 +370,21 @@ export const DIAGNOSIS_DATA: DiagnosisData = {
     {
       dimension: "crop_timing_anomaly",
       finding: "Winter wheat displays a severe timing error (peak timing absolute error 58.9 d, 95% CI [52.2, 66.3] d; median signed timing error +36.0 d).",
-      cause: "Predicted peak DOY is systematically ~36 days later than observed heading in Kansas (late May vs July model peak). Phenology prior stage lengths for winter wheat require calibration (proposed as a separate decision)."
+      cause: "Proposed explanation (not tested): Predicted peak DOY is systematically ~36 days later than observed heading in Kansas (late May vs July model peak). Phenology prior stage lengths for winter wheat require calibration (proposed as a separate decision)."
     },
     {
       dimension: "year",
-      finding: "Skill is higher in 2024 (CRPS 16.07, 95% CI [13.26, 19.16]) than in 2022 (CRPS 15.28, 95% CI [12.93, 17.60]) and 2023 (CRPS 12.37, 95% CI [9.21, 16.08]), with intervals broadly overlapping.",
+      finding: "Skill is higher in 2024 (CRPS 16.47, 95% CI [14.26, 18.90]) than in 2023 (CRPS 18.24, 95% CI [15.71, 20.94]) and 2022 (CRPS 18.46, 95% CI [16.39, 20.51]), though intervals overlap.",
       cause: "cause not established"
     },
     {
       dimension: "field_size",
-      finding: "Skill is comparable across all field size classes (<10 ha: CRPS 16.88, 95% CI [13.13, 21.19]; 10–50 ha: CRPS 14.20, 95% CI [11.71, 16.77]; >50 ha: CRPS 14.17, 95% CI [11.99, 16.38]).",
+      finding: "Skill is comparable across all field size classes (<10 ha: CRPS 19.83, 95% CI [16.26, 23.48]; 10–50 ha: CRPS 16.27, 95% CI [14.20, 18.53]; >50 ha: CRPS 17.30, 95% CI [15.53, 19.39]).",
       cause: "cause not established"
     },
     {
       dimension: "grade",
-      finding: "Evidence Grade B exhibits average CRPS of 14.76 [12.36, 17.12] vs Grade C of 14.40 [12.47, 16.52] and Grade D of 19.97 [10.20, 29.20], but differences remain within spatial bootstrap uncertainty.",
+      finding: "Evidence Grade B exhibits average CRPS of 16.96 [15.04, 18.98] vs Grade C of 17.30 [15.37, 19.46] and Grade D of 24.02 [15.95, 30.41], but differences are within spatial bootstrap uncertainty.",
       cause: "cause not established"
     },
     {
