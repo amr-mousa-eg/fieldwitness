@@ -672,10 +672,16 @@ We are at Gate <N>. Check every acceptance test of this phase against the actual
   - Covers: season detection missed target (78.3% vs 90%); neighbour witness failed all diagnostics (0/32 passed); ranking rewarded fallow until metric changed; rank-order bug in packs (`ce69ebf`) and mis-tracked T6.8 numbers; broken DOIs in `DATA.md`; invented datasets (POLARIS/SSURGO) removed; circularity trap avoided in grade-validity test; reconciled grade counts between pages; performance regression measured and fixed.
   - Neutral tone with specific file/commit citations. Tested in `methods.test.ts`.
 
+- [x] **Item 8: Explainers in 3D view and glossary.**
+  - Added short "What is this?" notes (2–3 plain sentences each) for root-zone soil water, available water capacity, water stress (Ks), canopy proxy, evapotranspiration, fallow & bare soil directly inside the Field-in-3D view (`Field3DView.tsx`) and metric strips.
+  - Cites verified FAO-56 (Chapters 1, 6, 8) and NASA pages; URLs tested and confirmed returning HTTP 200.
+  - Canopy proxy strictly documented as $K_c / K_{c,\max}$ from the FAO-56 dual crop coefficient model (not a direct photo measurement; zero yield/profit claims).
+  - Technical glossary on Methods page (`#glossary`) covers all technical terms (3D terms, evidence grade, source tags O/D/E/A, hindcast, CRPS, credibility, witness, bare-soil months, bad-year water). Every 3D note links to its glossary anchor (`#glossary-${id}`).
+  - Unit tests passing in `sim3dExplainers.test.ts` and `explainers.test.ts`. Zero new dependencies, no schema changes.
+
 #### Roadmap (Not Built in this Version — Post-Freeze Roadmap)
 - **Item 5: Arabic interface (i18n / RTL).** Post-freeze roadmap.
 - **Item 3: Check soil water and rain against independent data (SMAP / GPM).** Post-freeze roadmap.
-- **Item 8: Explainers in 3D view and glossary.** Post-freeze roadmap.
 - **Item 6: Compare two fields side by side.** Post-freeze roadmap.
 - **Item 2: Compare water use with NASA-derived evapotranspiration (ECOSTRESS).** Post-freeze roadmap.
 - **Item 4: WIMAS irrigation check (waits for user-provided data).** Post-freeze roadmap.

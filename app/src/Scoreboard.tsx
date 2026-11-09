@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Backtest } from "./AdvisorConsole";
 import { DiagnosisSection } from "./DiagnosisSection";
+import { Explain } from "./Explain";
 import { loadHindcast, loadPack } from "./data";
 import { formatDate } from "./format";
 import { GRADE_VALIDITY } from "./gradeValidity";
@@ -86,7 +87,9 @@ function GradeValiditySection() {
             <tr>
               <th scope="col">{t("score.gradeValidity.thGrade")}</th>
               <th scope="col">{t("score.gradeValidity.thN")}</th>
-              <th scope="col">{t("score.gradeValidity.thCrps")}</th>
+              <th scope="col">
+                {t("score.gradeValidity.thCrps")} <Explain id="crps" />
+              </th>
               <th scope="col">{t("score.gradeValidity.thTiming")}</th>
               <th scope="col">{t("score.gradeValidity.thCoverage")}</th>
             </tr>
@@ -164,7 +167,9 @@ export function Scoreboard({ index }: { index: RegionIndex }) {
 
   return (
     <article className="scoreboard" aria-labelledby="score-h">
-      <h2 id="score-h">{t("score.heading", { region: index.name })}</h2>
+      <h2 id="score-h">
+        {t("score.heading", { region: index.name })} <Explain id="hindcast" />
+      </h2>
       <p>
         {t("score.intro", {
           cutoff: date(h.cutoff),

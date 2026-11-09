@@ -1,4 +1,5 @@
 import { DiagnosisSection } from "./DiagnosisSection";
+import { Explain } from "./Explain";
 import { MethodsDiagram } from "./MethodsDiagram";
 import { IS_DEMO_DATA } from "./data";
 import { EXPLAINERS, explainer } from "./explainers";
@@ -37,7 +38,9 @@ export function MethodsPage() {
       <MethodsDiagram />
 
       <section aria-labelledby="m-how">
-        <h3 id="m-how">{t("methods.how")}</h3>
+        <h3 id="m-how">
+          {t("methods.how")} <Explain id="witness" /> <Explain id="credibility" />
+        </h3>
         <ol>
           {list("methods.how", 5).map((s, i) => (
             <li key={i}>{s}</li>
@@ -116,13 +119,13 @@ export function MethodsPage() {
         <p className="muted">{t("methods.data.note")}</p>
       </section>
 
-      <section aria-labelledby="m-terms">
+      <section aria-labelledby="m-terms" id="glossary">
         <h3 id="m-terms">{t("methods.terms")}</h3>
         <dl className="glossary">
           {EXPLAINERS.map((id) => {
             const e = explainer(id);
             return (
-              <div key={id}>
+              <div key={id} id={`glossary-${id}`} className="glossary-entry">
                 <dt>{e.title}</dt>
                 <dd>
                   {e.body}{" "}

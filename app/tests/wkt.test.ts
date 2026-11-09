@@ -51,6 +51,7 @@ describe("hash routes", () => {
 
   it("round-trips region pages, which are never field ids", () => {
     expect(parseHash(pageHref("ks", "scoreboard"))).toMatchObject({ regionId: "ks", page: "scoreboard", fieldId: null });
+    expect(parseHash("#/ks/glossary")).toMatchObject({ regionId: "ks", page: "methods", fieldId: null });
     expect(pageHref("ks", "map")).toBe("#/ks");
   });
 });

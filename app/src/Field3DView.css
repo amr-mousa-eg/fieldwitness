@@ -427,3 +427,108 @@
     text-align: center;
   }
 }
+
+/* ---------------------------------------------------------------- Simulation Guide (Item 8) */
+.sim3d-guide {
+  margin-top: 2rem;
+  padding: 1.25rem;
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+}
+
+.sim3d-guide-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 0.75rem;
+}
+
+.sim3d-guide-title-wrap h3 {
+  font-family: var(--display);
+  font-size: 1.15rem;
+  margin: 0 0 0.25rem;
+  color: var(--ink);
+}
+
+.sim3d-guide-intro {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.sim3d-glossary-jump-btn {
+  font-size: 0.85rem;
+  color: var(--focus);
+  text-decoration: underline;
+  white-space: nowrap;
+}
+
+.sim3d-guide-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.sim3d-guide-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0.85rem;
+  background: var(--shade);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+}
+
+.sim3d-guide-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.35rem;
+}
+
+.sim3d-guide-card-title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.sim3d-guide-glossary-link {
+  font-size: 0.75rem;
+  color: var(--focus);
+  text-decoration: none;
+  border: 1px solid var(--rule);
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+  background: var(--panel);
+}
+
+.sim3d-guide-glossary-link:hover {
+  text-decoration: underline;
+}
+
+.sim3d-guide-card-body {
+  font-size: 0.85rem;
+  line-height: 1.45;
+  margin: 0 0 0.5rem;
+  color: var(--ink);
+}
+
+.sim3d-guide-card-foot {
+  font-size: 0.75rem;
+  color: var(--muted);
+  border-top: 1px dashed var(--rule);
+  padding-top: 0.35rem;
+}
+
+.sim3d-guide-source a {
+  color: var(--muted);
+  text-decoration: underline;
+}

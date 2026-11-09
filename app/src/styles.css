@@ -1386,6 +1386,14 @@ table.mini {
   font-size: 0.8rem;
   color: var(--muted);
 }
+.explain-glossary {
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+}
+.explain-glossary a {
+  color: var(--focus);
+  text-decoration: underline;
+}
 
 /* ---------------------------------------------------------------- T9.11 Map layers */
 .layer-panel {
@@ -1468,6 +1476,12 @@ table.mini {
 }
 .glossary div {
   margin: 0 0 0.6rem;
+}
+.glossary-entry:target {
+  background: var(--shade);
+  border-left: 3px solid var(--focus);
+  padding-left: 0.5rem;
+  border-radius: 2px;
 }
 .glossary dt {
   font-weight: 700;

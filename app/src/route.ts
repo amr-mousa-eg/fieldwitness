@@ -25,8 +25,10 @@ export function parseHash(hash: string): Route {
     return { regionId: null, page: "add-field", fieldId: null, tab: "story" };
   }
   const [regionId = null, second = null, tab = "story"] = parts;
-  const page = PAGES.includes(second as RegionPage) ? (second as RegionPage) : "map";
-  const fieldId = second !== null && !PAGES.includes(second as RegionPage) ? second : null;
+  const rawSecond = second !== null ? second.split(/[?#]/)[0] : null;
+  const normSecond = rawSecond === "glossary" ? "methods" : rawSecond;
+  const page = PAGES.includes(normSecond as RegionPage) ? (normSecond as RegionPage) : "map";
+  const fieldId = normSecond !== null && !PAGES.includes(normSecond as RegionPage) ? normSecond : null;
   return { regionId, page, fieldId, tab: TABS.includes(tab as FieldTab) ? (tab as FieldTab) : "story" };
 }
 
