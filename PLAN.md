@@ -673,37 +673,11 @@ We are at Gate <N>. Check every acceptance test of this phase against the actual
   - Candidates to check and include if record supports: season detection missed target (78.3% fresh test vs 90%); neighbour witness failed all four diagnostics; ranking rewarded fallow until metric changed; rank-order bug in packs (`ce69ebf`) and mis-tracked T6.8 numbers; broken DOIs in `DATA.md`; invented datasets (POLARIS/SSURGO) removed; circularity trap avoided in grade-validity test; PageSpeed regression & fixes.
   - Neutral tone, no excuses, no self-congratulation.
 
-- [ ] **Item 5: Arabic interface (MUST; start after 1, 7, 9, 10 are text-complete).**
-  - i18n: all UI strings in locale files (`en`, `ar`) with language switch in header; remember choice; default from browser language.
-  - Full RTL layout: CSS logical properties; mirrored header, lists, sliders, tabs, tour, legend; map keeps orientation; charts/numbers stay LTR where needed with bidi isolation; single numeral style (Western digits).
-  - Translation: clear Modern Standard Arabic suitable for farmers; technical names (HLS, FAO-56, NASA POWER) in Latin script. Honesty statements (limits, disclaimer, "not shown", "not a forecast") keep identical meaning; test listing key strings in both languages.
-  - Marked as "machine-assisted draft — reviewed by a native speaker: NO" in `docs/` and Methods page. Provide `docs/i18n_review_ar.md` with side-by-side strings for reviewer.
-  - Fonts: system Arabic font stack or properly licensed webfont. No layout breaks on 390 px; keyboard and screen-reader labels translated.
-  - Includes 3D view, tour, Add-my-field form, CSV template headers, error messages, tooltips.
-  - Tests: all keys exist in both locales; no missing-key fallbacks; RTL screenshots in light/dark, desktop/phone.
-
-#### SHOULD (Validation & Usability Depth)
-- [ ] **Item 3: Check soil water and rain against independent data.**
-  - Verify SMAP product, version, and access from official docs (SMAP L4 root-zone soil moisture already used for context; check cache).
-  - Compare simulated root-zone soil water (fraction of capacity) with SMAP root-zone soil moisture for pilot fields and hindcast years: correlation of seasonal anomalies and weekly values; state scale mismatch (9 km vs field) plainly; anomalies/ranks only.
-  - Rain: compare NASA POWER rain with GPM IMERG for same cells if accessible without new credentials or large downloads (<= 1 GB). If ground stations reachable from official open source, name it; if not, "no ground check possible".
-  - Report plainly, positive or negative: output `results/validation/soil_rain_check.*` and section on Methods page. Tag E for external data.
-
-- [ ] **Item 8: Explainers in 3D view and glossary.**
-  - "What is this?" notes in 3D view for: root-zone soil water, available water capacity, water stress (Ks), canopy proxy, evapotranspiration, fallow, bare soil. 2–3 plain sentences each citing FAO-56 or NASA pages (verified links).
-  - Add glossary page or panel listing all app terms, linked from explainers. English and Arabic.
-
-- [ ] **Item 6: Compare two fields.**
-  - "Compare" view: choose any two fields (search by "Field N"), side by side: area, observed rotation, current-option metrics, top option under current priorities, grade, calendar summary, hindcast error.
-  - Reuses existing components; shareable URL; vertical stack on mobile.
-  - Clear note: "Different fields have different soils and histories; differences are not recommendations."
-
-#### COULD (External Checks & WIMAS)
-- [ ] **Item 2: Compare water use with NASA-derived evapotranspiration.**
-  - Candidate: ECOSTRESS ET (`ECO_L3T_JET v002`, in data inventory). Estimate download size and overpass count for pilot fields/years before downloading; user approval required if > 1 GB. (Do NOT access OpenET).
-  - Compare seasonal ET (simulated crop water use) with ECOSTRESS where clear overpasses exist; report bias, correlation, n; state sparse sampling. If impossible within limits, note in `DECISIONS.md` and drop.
-
-- [ ] **Item 4: WIMAS irrigation check (waits for user file).**
-  - Author `docs/wimas_request.md` with click-by-click instructions for user to accept disclaimer and download T14SLH data into `data/wimas/`. (Do NOT accept disclaimer on user's behalf).
-  - When file exists: run T4.6 comparing posterior irrigation/water use with reported annual volumes; state field-to-well linking uncertainty. Skip until user confirms file exists.
+#### Roadmap (Not Built in this Version — Post-Freeze Roadmap)
+- **Item 5: Arabic interface (i18n / RTL).** Post-freeze roadmap.
+- **Item 3: Check soil water and rain against independent data (SMAP / GPM).** Post-freeze roadmap.
+- **Item 8: Explainers in 3D view and glossary.** Post-freeze roadmap.
+- **Item 6: Compare two fields side by side.** Post-freeze roadmap.
+- **Item 2: Compare water use with NASA-derived evapotranspiration (ECOSTRESS).** Post-freeze roadmap.
+- **Item 4: WIMAS irrigation check (waits for user-provided data).** Post-freeze roadmap.
 

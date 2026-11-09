@@ -559,7 +559,5 @@ Written and committed before executing the diagnostic analysis or inspecting res
    - The diagnostic finding of a severe winter wheat timing error (peak timing absolute error 58.9 d [52.2, 66.3] d; signed median offset +36.0 d) is labelled with proposed explanation (not tested): observed Kansas heading DOY ~140–155 vs uncalibrated model peak in July.
    - Formal calibration of winter wheat phenology stage lengths is deferred to a separate decision entry, strictly constrained within published FAO-56 ranges, validated on dev/test split, and will be tackled only if time remains after completing Priority MUST items (Items 1, 7, 9, 10, 5).
 
-
-
-
-
+## Handoff
+next: Task 1 (Consistency pass across README, submission, AI_USE, DATA, Methods)
