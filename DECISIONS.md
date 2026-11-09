@@ -464,3 +464,18 @@ Final submission hardening completed for FieldWitness:
 - **Soil test statement:** Explicitly labeled `"Saved for future analysis — not used in version 0"`.
 - **Nearest analysed field:** Computes Haversine distance to 200 pilot field centroids. Displays mandatory disclaimers (`"Nearest analysed field — your field is not analysed yet"`, `"This is the closest field we have analysed, measured by distance only. Its soil, slope, history and management may differ from yours."`, and if > 10 km: `"This field is far from yours; treat it as a general example only."`).
 - **Device storage only:** Saved to `localStorage` under `fw.custom_fields.v1` with try/catch, tag `E` ("farmer-entered"), schema version `1.0`. CSV template (`question,answer,help`) with UTF-8 BOM, and CSV upload with line-by-line validation accepting "unknown".
+### 2026-11-09 — Pre-registration: Grade & Credibility Validity Check
+
+Written and committed before executing the evaluation script or inspecting results, to guard against confirmation bias.
+
+1. **Protocol & Scope:** Evaluate empirical predictive validity of FieldWitness evidence grades (B, C, D) and continuous physics credibility scores on the Kansas pilot fields (HLS tile T14SLH).
+2. **No Circularity (as_of 2021-12-31):** Evidence grades and credibility scores must be computed strictly as they were at the hindcast cut-off date (31 Dec 2021), using only pre-2022 HLS observations and weather under the `as_of(2021-12-31)` guard. No observations or outcomes from the scored seasons (2022–2024) enter the credibility scores or grades.
+3. **Which Grade:** Grades belong to rotation options. The analysis evaluates the evidence grade of the field's Current option (the crop sequence actually observed in the scored 2022–2024 seasons).
+4. **Primary Pre-registered Test:**
+   - **Hypothesis:** Options with higher evidence grade (Grade B) exhibit lower prediction error than options with lower evidence grade (Grade D, or lowest grade present).
+   - **Primary Metric:** Mean forecast-mode Continuous Ranked Probability Score (CRPS) of the canopy integral.
+   - **Decision Rule:** Success is declared if and only if Grade B's mean CRPS is strictly lower than Grade D's mean CRPS, and the 95% spatially blocked bootstrap confidence interval of the difference (CRPS_D - CRPS_B) strictly excludes 0.
+   - **Exploratory / Secondary Metrics:** All other comparisons (peak DOY timing absolute error, SOS timing absolute error, 90% interval coverage, Grade C performance, Spearman rank correlation rho between continuous credibility score and error/coverage, and forced-mode runs) are secondary and explicitly exploratory.
+5. **Sample Size Floor:** Report n field-seasons per grade group. Any group with n < 20 field-seasons is explicitly reported as "too few to judge" rather than drawing unsupported conclusions.
+6. **Spatial Block Bootstrap:** Statistical inference uses 1,000 spatial block bootstrap resamples blocking by the 10 km spatial grid cells defined in T1.4, with a fixed random seed (42), yielding 95% percentile bootstrap confidence intervals.
+7. **Transparent Reporting & Invariance:** Results will be saved to `results/hindcast/grade_validity.json` and `results/hindcast/grade_validity.md`, and surfaced on the Scoreboard and Methods pages exactly as found ("Grades did / did not predict accuracy in our test, n = ..."). Model evidence grades, algorithms, and thresholds will not be altered based on the outcome of this test.
