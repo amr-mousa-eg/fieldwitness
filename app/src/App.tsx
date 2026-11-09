@@ -1,7 +1,6 @@
 import { Suspense, lazy, useEffect, useRef, useState } from "react";
 import { DemoBanner } from "./DemoBanner";
 import { MapPage } from "./MapPage";
-import { TourGuide } from "./TourGuide";
 import { loadIndex, loadRegions } from "./data";
 import { PAGES, pageHref, useRoute } from "./route";
 import { ThemeToggle } from "./ThemeToggle";
@@ -12,6 +11,7 @@ const FieldPage = lazy(() => import("./FieldPage").then((m) => ({ default: m.Fie
 const Scoreboard = lazy(() => import("./Scoreboard").then((m) => ({ default: m.Scoreboard })));
 const MethodsPage = lazy(() => import("./MethodsPage").then((m) => ({ default: m.MethodsPage })));
 const AddFieldPage = lazy(() => import("./AddFieldPage").then((m) => ({ default: m.AddFieldPage })));
+const TourGuide = lazy(() => import("./TourGuide").then((m) => ({ default: m.TourGuide })));
 
 /** Every page renders exactly one <main id="main" tabIndex={-1}>. */
 function focusMain(): void {
@@ -150,7 +150,11 @@ export function App() {
         )}
       </Suspense>
       <footer className="app-footer">{t("fixed.judgment")}</footer>
-      <TourGuide isOpen={isTourOpen} onClose={() => setIsTourOpen(false)} />
+      {isTourOpen && (
+        <Suspense fallback={null}>
+          <TourGuide isOpen={isTourOpen} onClose={() => setIsTourOpen(false)} />
+        </Suspense>
+      )}
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import "./TourGuide.css";
 import { t } from "./strings";
 
 export interface TourGuideProps {

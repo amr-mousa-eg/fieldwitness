@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import "./Field3DView.css";
 import {
   CartesianGrid,
   Legend,
@@ -178,6 +179,9 @@ export default function Field3DView({
           </span>
           <span className="sim3d-weather-pill">
             <span aria-hidden="true">🌦️</span> {sim3d.weather_label} <TagBadge tag="D" />
+          </span>
+          <span className="sim3d-disclaimer-pill">
+            {t("sim3d.disclaimer")}
           </span>
         </div>
         <p className="sim3d-subtitle">

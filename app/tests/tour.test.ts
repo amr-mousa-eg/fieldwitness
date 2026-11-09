@@ -49,6 +49,11 @@ describe("Guided Tour Configuration and Honest Copy", () => {
     // Step 1 explicitly states Grade B ceiling in Kansas
     const step1 = en["tour.step1.body"];
     expect(step1).toContain("Grade B at best");
+
+    // Step 2 explicitly treats E as a source tag, not an evidence grade
+    const step2 = en["tour.step2.body"];
+    expect(step2).not.toMatch(/grade\s+e/i);
+    expect(step2).toContain("source tag [E]");
   });
 
   it("handles missing target selectors gracefully without crashing", () => {

@@ -300,29 +300,42 @@ export function Field3DScene({
       }
 
       if (cropName !== "fallow" && canopy > 0.05) {
-        // Hologram amber crop: height reflects canopy, opacity reflects stress & density
+        // Translucent amber crop: darker in light theme, brighter in dark theme
         const cropHeight = Math.max(0.1, canopy * 1.1);
-        const cropOpacity = Math.max(0.2, Math.min(0.9, ks * (0.35 + 0.65 * canopy)));
-        const amberColor = isDark ? 0xf59e0b : 0xd97706;
+
+        // Healthy amber vs pale stressed amber (same hue, fading opacity and paleness towards same hue)
+        const healthyColor = new THREE.Color(isDark ? 0xf59e0b : 0xb45309);
+        const paleStressedColor = new THREE.Color(isDark ? 0xfef08a : 0xfde68a);
+        const foliageColor = paleStressedColor.clone().lerp(healthyColor, Math.max(0, Math.min(1, ks)));
+
+        // Opacity fades with water stress (ks) and scales with canopy development
+        const baseOpacity = isDark ? 0.85 : 0.75;
+        const cropOpacity = Math.max(
+          0.2,
+          Math.min(0.92, (0.28 + 0.72 * ks) * baseOpacity * (0.35 + 0.65 * Math.min(1, canopy * 1.5)))
+        );
 
         const stalkMat = new THREE.MeshStandardMaterial({
-          color: amberColor,
+          color: foliageColor,
           transparent: true,
           opacity: cropOpacity,
-          roughness: 0.4,
+          roughness: 0.35,
+          metalness: 0.05,
         });
 
         const leafMat = new THREE.MeshStandardMaterial({
-          color: amberColor,
+          color: foliageColor,
           transparent: true,
           opacity: cropOpacity * 0.85,
           side: THREE.DoubleSide,
+          roughness: 0.3,
         });
 
         const headMat = new THREE.MeshStandardMaterial({
-          color: isDark ? 0xfbbf24 : 0xb45309,
+          color: isDark ? 0xfbbf24 : 0x92400e,
           transparent: true,
           opacity: cropOpacity,
+          roughness: 0.4,
         });
 
         const offsets = [-0.65, 0, 0.65];
