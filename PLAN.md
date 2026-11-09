@@ -632,6 +632,81 @@ We are at Gate <N>. Check every acceptance test of this phase against the actual
 ### Pre-freeze Polish Improvements (9–13 Nov 2026)
 - [x] **P2.16 Grade validity check (analysis, no model changes).** Pre-registered in `DECISIONS.md` before execution; evaluated strictly under cut-off `as_of(2021-12-31)`; Current-option grades evaluated on 2022–2024 hindcast (n=463, B=170, C=268, D=25; all n >= 20). Primary test (forecast canopy integral CRPS Grade B vs D: B=16.96, D=24.02, difference +7.07, 10 km spatial block bootstrap 95% CI [-3.28, 14.32]) did not reach significance (CI spans 0). Negative result documented on Scoreboard ("Grades did not predict accuracy in our test, n = 463") and Methods page. 0 model changes made. Results in `results/hindcast/grade_validity.*`.
 - [x] **P2.17 Plain-language summary on Field Card.** One sentence per field generated only from pack numbers (Current vs top alternative: bare-soil months, water use, bad-year water, grade) + side-by-side comparison chart. Updates dynamically when sliders move; handles "current is best", tie cases, and trade-offs both ways; real units; source tags; forbidden words checked in red team audit. Verified on all 200 Kansas pilot fields.
-- [ ] **P2.18 Guided tour.** "Take the tour" button, 5–6 steps (story -> options -> evidence -> hindcast -> add my field), keyboard accessible, dismissible, both themes.
+- [x] **P2.18 Guided tour & Field in 3D.** "Take the tour" button, 7 steps (field story -> history/source tag [E] -> options & trade-offs -> crop calendar -> hindcast check -> Field in 3D -> add my field), keyboard accessible (Escape / arrow keys), robust to missing selectors, both themes. Field in 3D view with Three.js procedural scene (translucent amber crops, water stress fading, 156-week scrubber, fallback 2D toggle, "Simulated with the weather of 2007; not a forecast" header disclaimer). Fully code-split via `React.lazy` and isolated CSS bundles (`TourGuide.css`, `Field3DView.css`); 0 bytes loaded on map page.
 - [ ] **P2.19 Printable field report.** Print stylesheet producing one A4 page per field (story, three options, explanations, disclaimer).
+
+---
+
+## 11. Phase 12 — Evidence and clarity (Deadline: 12 Nov 2026 EOD; 13 Nov is freeze)
+
+### Order and Cut Line
+- **MUST**: Item 1, Item 7, Item 9, Item 10, Item 5
+- **SHOULD**: Item 3, Item 8, Item 6
+- **COULD**: Item 2, Item 4
+*Rule*: If time runs short, drop from the bottom of the list first.
+
+### Tasks
+
+#### MUST (Core Evidence & Usability)
+- [ ] **Item 1: Diagnose why hindcast skill is weak (science, no new data).**
+  - Pre-register in `DECISIONS.md` BEFORE running: breakdown dimensions and metrics (no dimensions added afterwards).
+  - Break down forecast-mode hindcast errors (CRPS of canopy integral, absolute timing error of the peak, 90% interval coverage) by: crop (maize, sorghum, winter wheat, fallow), season year (2022, 2023, 2024), field size class (<10 ha, 10–50, >50), irrigated vs rainfed proxy if available, evidence grade, and number of clear HLS observations in the season.
+  - Same spatial block bootstrap (10 km blocks, 1,000 resamples, fixed seed); report n per cell; any cell with n < 20 is "too few to judge".
+  - Compare against baselines per cell: where does FieldWitness beat B0–B2, where does it lose?
+  - Plain-language findings: "Skill is better for X and weaker for Y, because Z (evidence)". Only claim cause when results support it; otherwise "cause not established".
+  - If a cause is clearly fixable (e.g. data-handling bug), fix ONLY via a new decision entry, re-run hindcast, and report before/after honestly. Never tune thresholds.
+  - Output: `results/hindcast/diagnosis.json` + `.md`; "Where it works and where it doesn't" section on Scoreboard and Methods pages.
+  - Acceptance: pre-registration committed before results; table with n and CIs; page section live; tests for aggregation code.
+
+- [ ] **Item 7: "Why this ranking?" explainer (Field Card).**
+  - For top-ranked option under user's current slider weights: show breakdown of score (weight × normalised value → contribution bar chart, with numbers and units), plus next-best option contributions side by side, and one sentence: "Ranked first mainly because …".
+  - Must reproduce existing ranking exactly (same code path as `rank.ts`); test that sum of contributions equals ranking score for all 200 packs.
+  - Updates live as sliders move; keyboard accessible; both themes; source tags on every number.
+  - Plain-language caption: what a "normalised value" means. No claims beyond the model.
+
+- [ ] **Item 9: Methods diagram.**
+  - One clear SVG (no external image, themed with CSS variables, readable in both themes and at 390 px, with text alternative).
+  - Flow: data sources (HLS, POWER, SMAP, GRACE, NASADEM, GIBS basemap, SoilGrids, CSB labels) → field story → the three witnesses (physics, own history, neighbours — show neighbour witness as OFF with reason) → agreement/grade → rotation options → hindcast check.
+  - Place on Methods page and reuse in tour step 1 if it fits.
+  - Every box matches what code really does (verified against `PLAN.md`; no boxes for things that don't exist).
+
+- [ ] **Item 10: "What we got wrong" section (Methods page and README).**
+  - Factual, dated list: what happened, how caught, what changed.
+  - Only record items documented in repository (`DECISIONS.md`, `results/`, git history) with file/commit citations.
+  - Candidates to check and include if record supports: season detection missed target (78.3% fresh test vs 90%); neighbour witness failed all four diagnostics; ranking rewarded fallow until metric changed; rank-order bug in packs (`ce69ebf`) and mis-tracked T6.8 numbers; broken DOIs in `DATA.md`; invented datasets (POLARIS/SSURGO) removed; circularity trap avoided in grade-validity test; PageSpeed regression & fixes.
+  - Neutral tone, no excuses, no self-congratulation.
+
+- [ ] **Item 5: Arabic interface (MUST; start after 1, 7, 9, 10 are text-complete).**
+  - i18n: all UI strings in locale files (`en`, `ar`) with language switch in header; remember choice; default from browser language.
+  - Full RTL layout: CSS logical properties; mirrored header, lists, sliders, tabs, tour, legend; map keeps orientation; charts/numbers stay LTR where needed with bidi isolation; single numeral style (Western digits).
+  - Translation: clear Modern Standard Arabic suitable for farmers; technical names (HLS, FAO-56, NASA POWER) in Latin script. Honesty statements (limits, disclaimer, "not shown", "not a forecast") keep identical meaning; test listing key strings in both languages.
+  - Marked as "machine-assisted draft — reviewed by a native speaker: NO" in `docs/` and Methods page. Provide `docs/i18n_review_ar.md` with side-by-side strings for reviewer.
+  - Fonts: system Arabic font stack or properly licensed webfont. No layout breaks on 390 px; keyboard and screen-reader labels translated.
+  - Includes 3D view, tour, Add-my-field form, CSV template headers, error messages, tooltips.
+  - Tests: all keys exist in both locales; no missing-key fallbacks; RTL screenshots in light/dark, desktop/phone.
+
+#### SHOULD (Validation & Usability Depth)
+- [ ] **Item 3: Check soil water and rain against independent data.**
+  - Verify SMAP product, version, and access from official docs (SMAP L4 root-zone soil moisture already used for context; check cache).
+  - Compare simulated root-zone soil water (fraction of capacity) with SMAP root-zone soil moisture for pilot fields and hindcast years: correlation of seasonal anomalies and weekly values; state scale mismatch (9 km vs field) plainly; anomalies/ranks only.
+  - Rain: compare NASA POWER rain with GPM IMERG for same cells if accessible without new credentials or large downloads (<= 1 GB). If ground stations reachable from official open source, name it; if not, "no ground check possible".
+  - Report plainly, positive or negative: output `results/validation/soil_rain_check.*` and section on Methods page. Tag E for external data.
+
+- [ ] **Item 8: Explainers in 3D view and glossary.**
+  - "What is this?" notes in 3D view for: root-zone soil water, available water capacity, water stress (Ks), canopy proxy, evapotranspiration, fallow, bare soil. 2–3 plain sentences each citing FAO-56 or NASA pages (verified links).
+  - Add glossary page or panel listing all app terms, linked from explainers. English and Arabic.
+
+- [ ] **Item 6: Compare two fields.**
+  - "Compare" view: choose any two fields (search by "Field N"), side by side: area, observed rotation, current-option metrics, top option under current priorities, grade, calendar summary, hindcast error.
+  - Reuses existing components; shareable URL; vertical stack on mobile.
+  - Clear note: "Different fields have different soils and histories; differences are not recommendations."
+
+#### COULD (External Checks & WIMAS)
+- [ ] **Item 2: Compare water use with NASA-derived evapotranspiration.**
+  - Candidate: ECOSTRESS ET (`ECO_L3T_JET v002`, in data inventory). Estimate download size and overpass count for pilot fields/years before downloading; user approval required if > 1 GB. (Do NOT access OpenET).
+  - Compare seasonal ET (simulated crop water use) with ECOSTRESS where clear overpasses exist; report bias, correlation, n; state sparse sampling. If impossible within limits, note in `DECISIONS.md` and drop.
+
+- [ ] **Item 4: WIMAS irrigation check (waits for user file).**
+  - Author `docs/wimas_request.md` with click-by-click instructions for user to accept disclaimer and download T14SLH data into `data/wimas/`. (Do NOT accept disclaimer on user's behalf).
+  - When file exists: run T4.6 comparing posterior irrigation/water use with reported annual volumes; state field-to-well linking uncertainty. Skip until user confirms file exists.
 

@@ -502,5 +502,41 @@ Written and committed before executing the evaluation script or inspecting resul
   - Weekly arrays for the Current option and top 3 candidate alternatives under default ranking: available root-zone soil water (mm), total available water (mm), canopy proxy (Kc / Kc_max), FAO-56 water stress coefficient Ks (0–1), weekly rain (mm), weekly net irrigation (mm), crop name, crop growth stage, and root depth (m).
 - **Matching active Field Card alternative:** In the 3D view, if the user's top-ranked alternative under active priority sliders is among the 3 precomputed alternatives, it is displayed side-by-side with Current. If not, the default top alternative is shown with an honest one-line notice: "Top option under default priorities (<name>) — your top-ranked option is not in the precomputed 3D simulation."
 
+### 2026-11-09 — Mobile Performance Profiling & Root Cause Audit
+
+- **Profiled on live URL:** Conducted Lighthouse mobile audit (4x CPU throttling) with script bootup time and long-task inspection on `https://amr-mousa-eg.github.io/fieldwitness/`.
+- **Finding:** The primary contributor to mobile Total Blocking Time (TBT ~3,800–4,400 ms) is `MapView` (`MapView-*.js`: 4,204.2 ms total CPU, 4,025.4 ms script evaluation), driven by MapLibre GL JS engine initialization, WebGL context creation, GeoJSON parsing of 200 field boundaries, layer styling, and raster basemap tile source setup. The app uses MapLibre (not Leaflet), and pack files are not loaded during initial map paint.
+- **Decision:** Mobile score of 66–67 accepted as-is; no speculative or high-risk tuning during pre-freeze window. P2.19 printable field report remains unticked and deferred unless time permits after Phase 12.
+
+### 2026-11-09 — Pre-registration: Diagnostic Breakdown of Hindcast Skill (Phase 12, Item 1)
+
+Written and committed before executing the diagnostic analysis or inspecting results, to guard against post-hoc rationalization.
+
+1. **Objective:** Diagnose where FieldWitness forecast-mode hindcast predictions succeed and where they fail across the 463 evaluated field-seasons in Kansas (tile T14SLH, years 2022–2024, evaluated against HLS observations).
+2. **Breakdown Dimensions (fixed now; zero dimension added afterwards):**
+   - **Crop:** Maize, sorghum, winter wheat. (Fallow has $n=0$ in the hindcast scoring records and is reported as $n < 20$ / "too few to judge / not modelled in hindcast").
+   - **Season Year:** 2022, 2023, 2024.
+   - **Field Size Class:** $<10\text{ ha}$, $10\text{–}50\text{ ha}$, $>50\text{ ha}$.
+   - **Evidence Grade:** Cut-off version evaluated under `as_of(2021-12-31)` (Grades B, C, D).
+   - **Clear HLS Observations in Season:** Bins fixed now: $<10$, $10\text{–}19$, $\ge 20$.
+   - **Irrigated vs. Rainfed Proxy:** Checked data inventory (`data/fields/ks_t14slh_pilot.parquet`, `data/labels/ks_t14slh.parquet`, CSB layers, and pending `data/wimas/`). No field-level irrigation flag exists in the dataset. Per pre-registration protocol, this dimension is **dropped** rather than guessed or fabricated.
+3. **No Circularity:** Grade and credibility scores are strictly evaluated as of the hindcast cut-off date (`as_of 2021-12-31`). Zero 2022–2024 data enters the grades or continuous credibility metrics.
+4. **Primary Pre-registered Question:**
+   - **Question:** Does FieldWitness beat baseline B1 (FAO-56 table engine) and baseline B2 (uncalibrated physics prior) on forecast-mode canopy-integral CRPS overall, and within each individual crop (maize, sorghum, winter wheat)?
+   - **Success Criterion per Cell:** The 95% spatial block bootstrap confidence interval of the paired difference ($\text{CRPS}_{\text{Baseline}} - \text{CRPS}_{\text{FieldWitness}}$) strictly excludes 0 in FieldWitness's favour.
+5. **Multiple Comparisons & Causal Claim Standard:**
+   - All other metrics (peak DOY timing absolute error $|err|$, 90% interval coverage, SOS timing error, forced-mode runs, and breakdowns across year/size/grade/HLS bins) are explicitly designated **exploratory**.
+   - Causal statements ("Skill is better for X and weaker for Y, because Z") may ONLY be made if directly supported by empirical results. In the absence of direct empirical proof, the mandatory default wording is: **"cause not established"**.
+6. **Sample Size Rule:**
+   - Report $n$ field-seasons for every cell.
+   - Any cell with $n < 20$ is strictly reported as **"too few to judge"** (the count $n$ is displayed, but any ranking or superiority claim is suppressed).
+7. **Data Anomalies & Invariance:**
+   - If an analysis cell reveals a clear data-handling or modeling defect (e.g. systematic phase lag in phenology), it must be documented neutrally and proposed as an independent decision entry; it must NOT be fixed inside this diagnostic run.
+   - Evidence grades, thresholds, and model parameters will NOT be tuned to improve diagnostic metrics.
+8. **UI Presentation:**
+   - Displayed section on Scoreboard and Methods pages must be titled plainly: **"Where it works and where it doesn't (exploratory)"**.
+   - Results exported to `results/hindcast/diagnosis.json` and `results/hindcast/diagnosis.md`.
+
+
 
 
