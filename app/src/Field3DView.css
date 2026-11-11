@@ -623,3 +623,10 @@
     height: 300px;
   }
 }
+
+/* Hidden 3D panes stay mounted (their WebGL scene is kept and paused off screen). */
+.sim3d-pane[hidden],
+.sim3d-stage[hidden],
+.sim3d-card[hidden] {
+  display: none !important;
+}

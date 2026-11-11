@@ -9,6 +9,7 @@ import * as THREE from "three";
 import type { FrameStats } from "./Field3DScene";
 import { plantBody, plantHead, weedRosette } from "./field3d/geometry";
 import { type PlotWeek, plotWeek, weekLook } from "./field3d/farm";
+import { ThemeBinder } from "./field3d/themed";
 import {
   FPS_MIN_FRAMES,
   FPS_SAMPLE_MS,
@@ -64,7 +65,9 @@ function plantColours(isDark: boolean) {
 export function FarmScene({ plots, weekIndex, month, isDark, quality, reducedMotion, onFrameStats }: FarmSceneProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const apiRef = useRef<{ update: () => void } | null>(null);
+  const apiRef = useRef<{ update: () => void; theme: (dark: boolean) => void } | null>(null);
+  const darkRef = useRef(isDark);
+  darkRef.current = isDark;
   const latest = useRef({ plots, weekIndex, month });
   latest.current = { plots, weekIndex, month };
   const statsCb = useRef(onFrameStats);
@@ -91,9 +94,16 @@ export function FarmScene({ plots, weekIndex, month, isDark, quality, reducedMot
       disposables.push(x);
       return x;
     };
-    const col = plantColours(isDark);
+    // Theme is applied live (ThemeBinder): no rebuild, same WebGL context, on Light / Dark / Auto.
+    const T = new ThemeBinder(darkRef.current);
+    const col = plantColours(T.dark);
+    T.on((d) => {
+      const fresh = plantColours(d);
+      for (const k of ["healthy", "pale", "ripe", "cover", "soilDry", "soilWet", "neutral"] as const) col[k].copy(fresh[k]);
+      for (const k of CROPS) col.head[k].copy(fresh.head[k]);
+    });
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(isDark ? 0x1d3a55 : 0x9fd3f2);
+    scene.background = new THREE.Color(0x9fd3f2); // set per week by weekLook
 
     // --- Isometric orthographic camera (fits both plots; wider screens show more scenery) ---
     const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 60);
@@ -115,8 +125,16 @@ export function FarmScene({ plots, weekIndex, month, isDark, quality, reducedMot
     };
     fit();
 
-    scene.add(new THREE.HemisphereLight(isDark ? 0x9cc3e6 : 0xeaf6ff, isDark ? 0x2a3a22 : 0x6b8f4a, isDark ? 0.9 : 1.1));
-    const sun = new THREE.DirectionalLight(isDark ? 0xf3e3c3 : 0xfff2d8, isDark ? 1.0 : 1.5);
+    const hemi = new THREE.HemisphereLight();
+    scene.add(hemi);
+    const sun = new THREE.DirectionalLight();
+    T.on((d) => {
+      hemi.color.setHex(d ? 0x9cc3e6 : 0xeaf6ff);
+      hemi.groundColor.setHex(d ? 0x2a3a22 : 0x6b8f4a);
+      hemi.intensity = d ? 0.9 : 1.1;
+      sun.color.setHex(d ? 0xf3e3c3 : 0xfff2d8);
+      sun.intensity = d ? 1.0 : 1.5;
+    });
     sun.position.set(4, 8, 3);
     if (shadows) {
       sun.castShadow = true;
@@ -130,7 +148,7 @@ export function FarmScene({ plots, weekIndex, month, isDark, quality, reducedMot
     }
     scene.add(sun);
 
-    const flat = (color: number) => keep(new THREE.MeshLambertMaterial({ color, flatShading: true }));
+    const flat = (light: number, dark: number) => T.color(keep(new THREE.MeshLambertMaterial({ flatShading: true })), light, dark);
 
     // --- Scenery (not data): grass, paths, fences, trees, barn, pond ---
     const grassMat = keep(new THREE.MeshLambertMaterial({ color: 0x7fb55a }));
@@ -139,7 +157,7 @@ export function FarmScene({ plots, weekIndex, month, isDark, quality, reducedMot
     ground.receiveShadow = shadows;
     scene.add(ground);
 
-    const pathMat = flat(isDark ? 0x8a7458 : 0xc9b08a);
+    const pathMat = flat(0xc9b08a, 0x8a7458);
     const addBox = (w: number, h: number, d: number, x: number, y: number, z: number, mat: THREE.Material, parent: THREE.Object3D = scene) => {
       const m = new THREE.Mesh(keep(new THREE.BoxGeometry(w, h, d)), mat);
       m.position.set(x, y, z);
@@ -152,7 +170,7 @@ export function FarmScene({ plots, weekIndex, month, isDark, quality, reducedMot
     addBox(AREA.x * 2, 0.02, 0.55, 0, 0.012, PLOT_HALF + 1.95, pathMat);
 
     // fences: instanced posts + rails around each plot
-    const fenceMat = flat(isDark ? 0xb08a5f : 0x9c7448);
+    const fenceMat = flat(0x9c7448, 0xb08a5f);
     const postGeo = keep(new THREE.BoxGeometry(0.06, 0.32, 0.06));
     const fh = PLOT_HALF + 0.12;
     const postPos: [number, number][] = [];
@@ -178,8 +196,8 @@ export function FarmScene({ plots, weekIndex, month, isDark, quality, reducedMot
     }
 
     // trees: low-poly crowns on trunks
-    const trunkMat = flat(isDark ? 0x7a5a3c : 0x6e4f33);
-    const crownMats = [flat(isDark ? 0x4c8a3c : 0x3f7d36), flat(isDark ? 0x5f9c45 : 0x4f8f3a)];
+    const trunkMat = flat(0x6e4f33, 0x7a5a3c);
+    const crownMats = [flat(0x3f7d36, 0x4c8a3c), flat(0x4f8f3a, 0x5f9c45)];
     const trunkGeo = keep(new THREE.CylinderGeometry(0.06, 0.08, 0.45, 5));
     const crownGeo = keep(new THREE.IcosahedronGeometry(0.42, 0));
     const treeRnd = seededRandom(SEED + 3);
@@ -200,8 +218,8 @@ export function FarmScene({ plots, weekIndex, month, isDark, quality, reducedMot
     const barn = new THREE.Group();
     barn.position.set(-2.4, 0, -2.6);
     barn.rotation.y = 0;
-    addBox(1.3, 0.85, 1.0, 0, 0.425, 0, flat(isDark ? 0x9b5a48 : 0xa4553f), barn);
-    const roofMat = flat(isDark ? 0x5d6b75 : 0x51606b);
+    addBox(1.3, 0.85, 1.0, 0, 0.425, 0, flat(0xa4553f, 0x9b5a48), barn);
+    const roofMat = flat(0x51606b, 0x5d6b75);
     for (const side of [-1, 1]) {
       const r = addBox(1.42, 0.05, 0.62, 0, 1.03, side * 0.26, roofMat, barn);
       r.rotation.x = side * 0.62;
@@ -209,22 +227,22 @@ export function FarmScene({ plots, weekIndex, month, isDark, quality, reducedMot
     const gable = new THREE.Shape([new THREE.Vector2(-0.5, 0), new THREE.Vector2(0.5, 0), new THREE.Vector2(0, 0.4)]);
     const gableGeo = keep(new THREE.ShapeGeometry(gable));
     for (const side of [-1, 1]) {
-      const g = new THREE.Mesh(gableGeo, flat(isDark ? 0x9b5a48 : 0xa4553f));
+      const g = new THREE.Mesh(gableGeo, flat(0xa4553f, 0x9b5a48));
       g.position.set(side * 0.651, 0.85, 0);
       g.rotation.y = (side * Math.PI) / 2;
       barn.add(g);
     }
-    addBox(0.02, 0.5, 0.42, 0.66, 0.25, 0, flat(isDark ? 0xe8e2d6 : 0xf3efe6), barn);
+    addBox(0.02, 0.5, 0.42, 0.66, 0.25, 0, flat(0xf3efe6, 0xe8e2d6), barn);
     barn.traverse((o) => (o.castShadow = shadows));
     scene.add(barn);
 
     // pond with a ring of stones
-    const pond = new THREE.Mesh(keep(new THREE.CircleGeometry(0.85, 9)), flat(isDark ? 0x2f6f99 : 0x4aa3d6));
+    const pond = new THREE.Mesh(keep(new THREE.CircleGeometry(0.85, 9)), flat(0x4aa3d6, 0x2f6f99));
     pond.rotation.x = -Math.PI / 2;
     pond.position.set(3.7, 0.015, 0.9);
     pond.scale.set(1.25, 1, 1);
     scene.add(pond);
-    const stones = new THREE.InstancedMesh(keep(new THREE.DodecahedronGeometry(0.09, 0)), flat(isDark ? 0x8c9399 : 0xa9b0b5), 14);
+    const stones = new THREE.InstancedMesh(keep(new THREE.DodecahedronGeometry(0.09, 0)), flat(0xa9b0b5, 0x8c9399), 14);
     for (let i = 0; i < 14; i++) {
       const a = (i / 14) * Math.PI * 2;
       pm.makeTranslation(3.7 + Math.cos(a) * 1.08, 0.04, 0.9 + Math.sin(a) * 0.88);
@@ -250,8 +268,11 @@ export function FarmScene({ plots, weekIndex, month, isDark, quality, reducedMot
       soil.receiveShadow = shadows;
       // furrows: thin darker strips (scenery detail on the bed)
       const furrowMat = keep(new THREE.MeshLambertMaterial({ color: col.soilWet, transparent: true, opacity: 0.35 }));
+      T.on(() => furrowMat.color.copy(col.soilWet));
       for (let r = 0; r < 6; r++) addBox(2 * PLANT_HALF, 0.004, 0.05, 0, 0.102, -PLANT_HALF + ((r + 0.5) * 2 * PLANT_HALF) / 6, furrowMat, g);
-      const neutral = addBox(2 * PLOT_HALF, 0.03, 2 * PLOT_HALF, 0, 0.115, 0, keep(new THREE.MeshLambertMaterial({ color: col.neutral })), g);
+      const neutralMat = keep(new THREE.MeshLambertMaterial({ color: col.neutral }));
+      T.on(() => neutralMat.color.copy(col.neutral));
+      const neutral = addBox(2 * PLOT_HALF, 0.03, 2 * PLOT_HALF, 0, 0.115, 0, neutralMat, g);
       neutral.visible = false;
 
       const bodyMat = keep(new THREE.MeshLambertMaterial({ side: THREE.DoubleSide, flatShading: true }));
@@ -286,7 +307,9 @@ export function FarmScene({ plots, weekIndex, month, isDark, quality, reducedMot
         return s;
       };
       const coverN = quality.name === "high" ? 64 : 30;
-      const cover = new THREE.InstancedMesh(keep(weedRosette()), keep(new THREE.MeshLambertMaterial({ color: col.cover, side: THREE.DoubleSide })), coverN);
+      const coverMat = keep(new THREE.MeshLambertMaterial({ color: col.cover, side: THREE.DoubleSide }));
+      T.on(() => coverMat.color.copy(col.cover));
+      const cover = new THREE.InstancedMesh(keep(weedRosette()), coverMat, coverN);
       const cRnd = seededRandom(seed + 9);
       const coverBase = Array.from({ length: coverN }, () => ({ x: (cRnd() * 2 - 1) * PLANT_HALF, z: (cRnd() * 2 - 1) * PLANT_HALF, yaw: cRnd() * 6.28 }));
       cover.visible = false;
@@ -294,8 +317,8 @@ export function FarmScene({ plots, weekIndex, month, isDark, quality, reducedMot
 
       // sprinkler: a post and a ring of spray droplets (animated); shown only when irrigation > 0
       const spray = new THREE.Group();
-      addBox(0.04, 0.5, 0.04, 0, 0.35, 0, flat(0x6b7680), spray);
-      const dropMat = keep(new THREE.MeshBasicMaterial({ color: isDark ? 0xbae6fd : 0x38a6d9, transparent: true, opacity: 0.8 }));
+      addBox(0.04, 0.5, 0.04, 0, 0.35, 0, flat(0x6b7680, 0x6b7680), spray);
+      const dropMat = T.color(keep(new THREE.MeshBasicMaterial({ transparent: true, opacity: 0.8 })), 0x38a6d9, 0xbae6fd);
       const dropGeo = keep(new THREE.SphereGeometry(0.03, 5, 3));
       for (let i = 0; i < 18; i++) {
         const a = (i / 18) * Math.PI * 2;
@@ -351,7 +374,7 @@ export function FarmScene({ plots, weekIndex, month, isDark, quality, reducedMot
     // --- Rain over the whole farm (count from the week's rain, same weather for both plots) ---
     const rain = new THREE.InstancedMesh(
       keep(new THREE.CylinderGeometry(0.008, 0.008, 0.16, 3)),
-      keep(new THREE.MeshBasicMaterial({ color: isDark ? 0xbae6fd : 0x4f8fc0, transparent: true, opacity: 0.6 })),
+      T.color(keep(new THREE.MeshBasicMaterial({ transparent: true, opacity: 0.6 })), 0x4f8fc0, 0xbae6fd),
       quality.maxRainDrops,
     );
     rain.count = 0;
@@ -372,7 +395,7 @@ export function FarmScene({ plots, weekIndex, month, isDark, quality, reducedMot
     let dirty = true;
     const update = () => {
       const { plots: pl, weekIndex: w, month: m } = latest.current;
-      const look = weekLook(pl[0].scenario.rain_mm, w, m, isDark, quality.maxRainDrops);
+      const look = weekLook(pl[0].scenario.rain_mm, w, m, T.dark, quality.maxRainDrops);
       (scene.background as THREE.Color).setHex(look.sky);
       grassMat.color.setHex(look.grass);
       pl.forEach((p, i) => plotApis[i].update(plotWeek(p.option, p.scenario, w)));
@@ -381,7 +404,13 @@ export function FarmScene({ plots, weekIndex, month, isDark, quality, reducedMot
       renderer.shadowMap.needsUpdate = true;
       dirty = true;
     };
-    apiRef.current = { update };
+    apiRef.current = {
+      update,
+      theme: (d) => {
+        T.apply(d);
+        update(); // re-colour plants, soil and sky from the current week
+      },
+    };
     update();
 
     // --- Render loop: fps sampling (2D fallback), motion only when allowed, paused off screen ---
@@ -468,7 +497,11 @@ export function FarmScene({ plots, weekIndex, month, isDark, quality, reducedMot
       sun.shadow.map?.dispose();
       renderer.dispose();
     };
-  }, [isDark, quality, reducedMotion]);
+  }, [quality, reducedMotion]);
+
+  useEffect(() => {
+    apiRef.current?.theme(isDark);
+  }, [isDark]);
 
   useEffect(() => {
     apiRef.current?.update();
