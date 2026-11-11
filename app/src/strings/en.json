@@ -593,6 +593,7 @@
   "sim3d.alternative": "Top alternative",
   "sim3d.fallbackTitle": "2D Simulation Trajectory",
   "sim3d.fallbackNotice": "WebGL is unavailable or reduced-motion is preferred. Showing 2D simulation charts.",
+  "sim3d.slowFallback": "The 3D view ran slowly on this device (about {fps} frames per second), so we switched to the 2D charts. Press \"3D View\" to try it again.",
   "sim3d.defaultNotice": "Showing top option under default priorities ({name}) — your top-ranked option is not in the precomputed 3D simulation.",
   "sim3d.disclaimer": "Simulated with the weather of {year}; not a forecast.",
   "tour.launch": "Take the tour",

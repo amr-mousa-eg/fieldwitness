@@ -685,6 +685,12 @@ We are at Gate <N>. Check every acceptance test of this phase against the actual
   - F3 3D weather year: disclaimer reads `weather_year` from the pack (was hard-coded 2007); no other hard-coded 2007 in app, README or Methods. `field3d.test.ts` checks all 200 packs.
   - F4 map: GIBS MODIS Terra Corrected Reflectance (Level9, 2023-08-15, cloud-free over the pilot; layer and template from GIBS GetCapabilities) below zoom 10, HLS from zoom 10. First view shows imagery; dark ring on field points; one credit line; offline fallback unchanged (offline check passes).
 
+- [x] **3D realism (11 Nov, user-approved, lowest merge priority).**
+  - Field in 3D (`Field3DScene.tsx`, `field3d/growth.ts`, `field3d/geometry.ts`): layered blue-glass soil block (topsoil/subsoil/substratum, illustrative, with a fine grain), water body with a gently moving surface and a clear fill line at soil water / TAW, instanced procedural maize (stalk, leaves, tassel, ear), wheat (tiller clumps, ears) and sorghum (panicle); fallow shows bare soil and sparse weeds. No downloaded models.
+  - Plant height = highest canopy proxy reached so far in the season; heads from the mid stage; amber colour and Ks paling unchanged. Rain drops ∝ weekly `rain_mm`, drip lines only when `irrigation_mm` > 0 (both are in every pack). Soft sun with shadows (shadow map redrawn only on week change). Reduced motion: no water or rain movement.
+  - Phones (< 640 px or ≤ 4 cores): pixel ratio ≤ 1.25, fewer plants (≤ 420 instances), off-screen canvases paused. Automatic 2D fallback once if the median frame rate over the first ~2 s (≥ 20 frames, after 0.5 s warm-up) is below 28 fps; the user can switch back. Fixed a pre-existing CSS bug (canvas container never got full height, which cut the scene on phones).
+  - Evidence: `field3dGrowth.test.ts`; initial bundle 297.75 → 297.91 kB (+0.16 kB: the one new fallback sentence), 3D chunk 569.87 → 589.54 kB (lazy). Headless software WebGL, phone 390 px, 4× CPU throttle: steady median 30 fps (old scene 20); fallback fired in 2 of 5 runs.
+
 #### Roadmap (Not Built in this Version — Post-Freeze Roadmap)
 - **Item 5: Arabic interface (i18n / RTL).** Post-freeze roadmap.
 - **Item 3: Check soil water and rain against independent data (SMAP / GPM).** Post-freeze roadmap.

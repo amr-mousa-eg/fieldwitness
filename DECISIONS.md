@@ -559,7 +559,15 @@ Written and committed before executing the diagnostic analysis or inspecting res
    - The diagnostic finding of a severe winter wheat timing error (peak timing absolute error 58.9 d [52.2, 66.3] d; signed median offset +36.0 d) is labelled with proposed explanation (not tested): observed Kansas heading DOY ~140–155 vs uncalibrated model peak in July.
    - Formal calibration of winter wheat phenology stage lengths is deferred to a separate decision entry, strictly constrained within published FAO-56 ranges, validated on dev/test split, and will be tackled only if time remains after completing Priority MUST items (Items 1, 7, 9, 10, 5).
 
+## 2026-11-11 — Field in 3D: realism pass
+
+1. **Procedural only.** All plants, roots, soil strata and weather marks are built in code (`app/src/field3d/geometry.ts`). No downloaded models, so nothing to credit in `DATA.md`.
+2. **Everything drawn comes from the pack.** Water fill = `soil_water_mm / taw_mm`; plant height = highest `canopy_cover` so far in the season (height does not shrink in the late stage); heads from stage `mid`; colour and opacity use the existing Ks formula; roots scale with `root_depth_m`; rain drops ∝ `rain_mm`; drip lines only when `irrigation_mm` > 0. Both weather series exist in all 200 packs (checked in `field3dGrowth.test.ts`). Soil strata depths and plant sizes are display choices (no numbers shown); strata are not SoilGrids horizons.
+3. **Fallback cut-off is 28 fps, not 30.** Browsers draw on vsync steps; a device steadily drawing every other 60 Hz frame measures 29.9–30.0, which is 30 fps, not poor. With a strict < 30 the headless phone run flipped to 2D in 4 of 5 runs while its steady state was a flat 30 fps. The sample also needs ≥ 20 frames after a 0.5 s warm-up so one shader-compile stall cannot decide alone.
+4. **Measurements are headless software WebGL (SwiftShader), no GPU.** Phone 390 px, 4× CPU throttle: new steady median 30 fps (avg ~27), old scene 20 fps (avg ~13); fallback fired in 2 of 5 runs. Desktop 1280 px with two scenes: ~12 fps (old ~30), so the fallback fires there; a real GPU was not measured. Headless Chrome reports `prefers-reduced-motion: reduce` and 4 cores, so runs emulated `no-preference`.
+5. **Negative/side findings:** the CSS rule for the canvas container targeted a class the component never used, so the canvas was shorter than its frame (scene cut at the bottom on phones). Fixed. Initial bundle grew by 0.16 kB (one new sentence in `en.json`).
+
 ## Handoff
-2026-11-11: fixes F1–F4 (tour button contrast, phone overflow, 3D weather year from pack, MODIS low-zoom backdrop) done on branch `fix/phase12-ui-polish`; see PLAN.md Phase 12.
-Checks: vitest 130 passed / 1 skipped, build, keyboard, offline and new overflow check (360/390 px) all green; Python untouched (CI runs pytest).
-Next: user reviews screenshots; freeze after 12 Nov EOD; tag `v1.0-spaceapps` waits for 13 Nov approval.
+2026-11-11: 3D realism pass on branch `claude/field3d-realism-f326e2` (procedural layered soil, water fill line, instanced crops, rain/irrigation from pack data, phone caps, fps fallback); see PLAN.md Phase 12.
+Checks: vitest 140 passed / 1 skipped, typecheck, build, keyboard and overflow (360/390 px) green; Python untouched.
+Next: try the 3D view on a real phone; freeze after 12 Nov EOD; tag `v1.0-spaceapps` waits for 13 Nov approval.

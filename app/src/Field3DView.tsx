@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import "./Field3DView.css";
 import {
   CartesianGrid,
@@ -11,7 +11,8 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { Field3DScene } from "./Field3DScene";
+import { Field3DScene, type FrameStats } from "./Field3DScene";
+import { MIN_MEDIAN_FPS, pickQuality } from "./field3d/growth";
 import { Explain } from "./Explain";
 import { SIM3D_EXPLAINERS, explainer } from "./explainers";
 import { loadSim3D } from "./data";
@@ -102,6 +103,23 @@ export default function Field3DView({
     if (!isWebGLAvailable() || prefersReducedMotion()) {
       setUseFallback(true);
     }
+  }, []);
+
+  // Phones and low-core devices get fewer instances and a capped pixel ratio.
+  const quality = useMemo(
+    () => pickQuality(window.innerWidth, typeof navigator !== "undefined" ? navigator.hardwareConcurrency : undefined),
+    [],
+  );
+  const reducedMotion = useMemo(() => prefersReducedMotion(), []);
+
+  // Switch to the 2D view once if the first ~2 s of 3D ran too slowly (median below MIN_MEDIAN_FPS).
+  const [slowFps, setSlowFps] = useState<number | null>(null);
+  const autoFallbackDone = useRef(false);
+  const handleFrameStats = useCallback((s: FrameStats) => {
+    if (autoFallbackDone.current || !(s.median < MIN_MEDIAN_FPS)) return;
+    autoFallbackDone.current = true;
+    setSlowFps(Math.floor(s.median));
+    setUseFallback(true);
   }, []);
 
   useEffect(() => {
@@ -295,6 +313,9 @@ export default function Field3DView({
                   scenario={curScen}
                   weekIndex={week}
                   isDark={isDark}
+                  quality={quality}
+                  reducedMotion={reducedMotion}
+                  onFrameStats={handleFrameStats}
                   onHoverData={setCurrentMetrics}
                 />
               </div>
@@ -400,6 +421,9 @@ export default function Field3DView({
                   scenario={altScen}
                   weekIndex={week}
                   isDark={isDark}
+                  quality={quality}
+                  reducedMotion={reducedMotion}
+                  onFrameStats={handleFrameStats}
                   onHoverData={setAltMetrics}
                 />
               </div>
@@ -491,7 +515,8 @@ export default function Field3DView({
         <div className="sim3d-fallback-section" role="region" aria-label="2D Simulation Fallback Chart">
           <div className="sim3d-fallback-banner">
             <p>
-              <strong>{t("sim3d.fallbackTitle")}:</strong> {t("sim3d.fallbackNotice")}
+              <strong>{t("sim3d.fallbackTitle")}:</strong>{" "}
+              {slowFps !== null ? t("sim3d.slowFallback", { fps: slowFps }) : t("sim3d.fallbackNotice")}
             </p>
           </div>
           <div style={{ width: "100%", height: 320 }}>
