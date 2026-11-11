@@ -685,6 +685,12 @@ We are at Gate <N>. Check every acceptance test of this phase against the actual
   - F3 3D weather year: disclaimer reads `weather_year` from the pack (was hard-coded 2007); no other hard-coded 2007 in app, README or Methods. `field3d.test.ts` checks all 200 packs.
   - F4 map: GIBS MODIS Terra Corrected Reflectance (Level9, 2023-08-15, cloud-free over the pilot; layer and template from GIBS GetCapabilities) below zoom 10, HLS from zoom 10. First view shows imagery; dark ring on field points; one credit line; offline fallback unchanged (offline check passes).
 
+- [x] **Soil check: independent soil check vs USDA SSURGO (11 Nov, read-only).**
+  - `scripts/check_ssurgo.py` + `src/fieldwitness/data/ssurgo.py` (SDA POST REST, one point per request, cached in `data/ssurgo/`); unit test `tests/test_ssurgo.py` reproduces NRCS `aws0100wta` (21.44 cm) from horizons. API shape in `docs/api_notes.md`; citation/terms in `DATA.md`.
+  - Finding: the pipeline never derives TAW from SoilGrids; every field starts from `taw_base_mm` = 150 mm (A) × ABC `taw_scale`. Compared that TAW (posterior median) with SSURGO AWS over 0–135 cm (FAO-56 maize root depth mean), component-percent weighted.
+  - Result (negative): n = 198/200; simulation median 142 mm vs SSURGO 282 mm; bias −119 mm (median −128), MAE 122 mm; Pearson −0.09, Spearman −0.12. 0–100 cm: bias −49 mm. SoilGrids vs SSURGO texture: sand r 0.65 (bias −0.7 pts), clay r 0.32 (bias +6.0 pts). 2 fields unmatched (profile ends at 91–102 cm).
+  - Outputs `results/validation/soil_ssurgo_check.{json,csv,md,png}`; Methods section "Independent soil check (USDA SSURGO)" (tag E); SoilGrids "use" row corrected (it is not a water-balance input). No simulation input, pack or result changed.
+
 #### Roadmap (Not Built in this Version — Post-Freeze Roadmap)
 - **Item 5: Arabic interface (i18n / RTL).** Post-freeze roadmap.
 - **Item 3: Check soil water and rain against independent data (SMAP / GPM).** Post-freeze roadmap.

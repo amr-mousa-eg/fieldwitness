@@ -76,6 +76,9 @@ Only the row groups whose `bbox` statistics intersect the query box are read (se
 - **ISRIC SoilGrids 2.0** — WCS `https://maps.isric.org/mapserv?map=/map/<property>.map`.
   - Licence: **CC-BY 4.0** (ISRIC data policy v2024-1).
   - Citation: Poggio, L., de Sousa, L. M., Batjes, N. H., et al. (2021). SoilGrids 2.0: producing soil information for the globe with quantified spatial uncertainty. *SOIL*, 7(1), 217–240. https://doi.org/10.5194/soil-7-217-2021
+- **USDA-NRCS SSURGO** via Soil Data Access (SDA), `POST https://sdmdataaccess.sc.egov.usda.gov/tabular/post.rest` — **independent soil check only** (Phase 12, `scripts/check_ssurgo.py`); never a simulation input. Tables `mapunit`, `component` (`comppct_r`), `chorizon` (`hzdept_r`, `hzdepb_r`, `awc_r`, `claytotal_r`, `sandtotal_r`) at each pilot field centroid; tag E. Shapes in `docs/api_notes.md`.
+  - Citation (SDA Citation page): Soil Survey Staff, Natural Resources Conservation Service, United States Department of Agriculture. Soil Survey Geographic (SSURGO) Database. Available online at https://sdmdataaccess.sc.egov.usda.gov. Accessed 11/11/2026.
+  - Terms: no data licence is stated on the SDA pages; the site disclaimer is the standard USDA computer-system use notice. Public-domain status UNVERIFIED (official NRCS page not reachable on 2026-11-11). Requests were sequential, one point each, cached.
 - **Kansas WIMAS** (Kansas Geological Survey / Kansas Department of Agriculture, Division of Water Resources): `https://geohydro.kgs.ku.edu/geohydro/wimas/`; requires accepting disclaimer; optional truth comparison.
 - **OpenET**: not used; stretch S6 (2026-11-04), terms unread; not accessed in MVP.
 - **GBIF Backbone Taxonomy** via `https://api.gbif.org/v1/species/match`:
