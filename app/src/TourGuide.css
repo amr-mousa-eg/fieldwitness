@@ -139,23 +139,36 @@
   font-weight: 600;
   border-radius: 4px;
   cursor: pointer;
-  border: 1px solid var(--rule);
+  border: 2px solid var(--muted);
   transition: all 0.15s ease;
+  max-width: 100%;
 }
 
+.tour-nav-btn:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* Back: outlined secondary button (text --ink, border --muted on --panel). */
 .tour-prev-btn {
-  background: var(--page);
+  background: var(--panel);
   color: var(--ink);
+  border-color: var(--muted);
 }
 
+.tour-prev-btn:hover:not(:disabled) {
+  background: var(--page);
+}
+
+/* Step 1 has nothing to go back to: hide the button but keep its space. */
 .tour-prev-btn:disabled {
-  opacity: 0.35;
-  cursor: not-allowed;
+  visibility: hidden;
 }
 
+/* Next: filled primary button (text --on-accent on --accent). */
 .tour-next-btn {
   background: var(--accent);
-  color: #ffffff;
+  color: var(--on-accent);
   border-color: var(--accent);
 }
 

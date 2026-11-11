@@ -1,7 +1,16 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { COLOUR_METRICS, domainOf, fieldValues, gridDomain, gridGeoJSON, rampExpression } from "../src/mapLayers";
+import {
+  BASEMAP_HANDOVER_ZOOM,
+  COLOUR_METRICS,
+  GIBS_BACKDROP_URL,
+  domainOf,
+  fieldValues,
+  gridDomain,
+  gridGeoJSON,
+  rampExpression,
+} from "../src/mapLayers";
 import type { RegionIndex, RegionLayers } from "../src/types";
 
 const DIR = join(import.meta.dirname, "../fixtures/ks_demo_synthetic");
@@ -44,5 +53,25 @@ describe("map layers (T9.11)", () => {
     const e = rampExpression("v", [0, 10], ["#000", "#888", "#fff"], "#f00") as unknown[];
     expect(e[2]).toBe("#f00");
     expect(e[3]).toEqual(["interpolate", ["linear"], ["get", "v"], 0, "#000", 5, "#888", 10, "#fff"]);
+  });
+});
+
+describe("low-zoom NASA backdrop (MODIS) hands over to HLS at zoom 10", () => {
+  const mapView = readFileSync(join(import.meta.dirname, "../src/MapView.tsx"), "utf8");
+
+  it("uses the GIBS MODIS Terra true-colour Level9 template with a fixed date", () => {
+    expect(GIBS_BACKDROP_URL).toBe(
+      "https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/MODIS_Terra_CorrectedReflectance_TrueColor/default/2023-08-15/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpeg",
+    );
+    // credit line names GIBS (acknowledgement asked by the GIBS API docs) and both layers with dates
+    const credit = JSON.parse(readFileSync(join(import.meta.dirname, "../src/strings/en.json"), "utf8"))["map.attribution.hls"];
+    for (const s of ["NASA GIBS", "MODIS Terra", "2023-08-15", "HLS", "2023-07-04"]) expect(credit).toContain(s);
+    expect(BASEMAP_HANDOVER_ZOOM).toBe(10);
+  });
+
+  it("backdrop layer stops and HLS source starts at the handover zoom; backdrop draws first", () => {
+    expect(mapView).toContain('{ id: "backdrop", type: "raster", source: "backdrop", maxzoom: BASEMAP_HANDOVER_ZOOM }');
+    expect(mapView).toMatch(/minzoom: BASEMAP_HANDOVER_ZOOM,\s*maxzoom: 12/);
+    expect(mapView.indexOf('id: "backdrop"')).toBeLessThan(mapView.indexOf('{ id: "basemap"'));
   });
 });

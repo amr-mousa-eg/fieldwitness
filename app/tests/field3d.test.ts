@@ -1,6 +1,7 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
+import { t } from "../src/strings";
 import type { FieldSim3D } from "../src/types";
 
 const PUBLIC_DIR = join(import.meta.dirname, "../public/packs/ks_t14slh");
@@ -96,5 +97,29 @@ describe.skipIf(!hasDemoPacks)("Demo packs deployment (packs/demo/ks_t14slh)", (
   it("packs/demo has all 200 .sim3d.json files deployed", () => {
     const demoFiles = hasDemoPacks ? readdirSync(DEMO_DIR).filter((f) => f.endsWith(".sim3d.json")) : [];
     expect(demoFiles.length).toBe(200);
+  });
+});
+
+// Weather year shown in the 3D view comes from the pack, never from hard-coded copy.
+describe("3D weather year: one year, read from the pack", () => {
+  const field3dCode = readFileSync(join(import.meta.dirname, "../src/Field3DView.tsx"), "utf8");
+
+  it("UI copy has no hard-coded weather year", () => {
+    const en = readFileSync(join(import.meta.dirname, "../src/strings/en.json"), "utf8");
+    expect(en).not.toMatch(/weather of (19|20)\d\d/);
+    expect(JSON.parse(en)["sim3d.disclaimer"]).toContain("{year}");
+    expect(field3dCode).toContain('t("sim3d.disclaimer", { year: sim3d.weather_year })');
+  });
+
+  it.skipIf(!hasPublicPacks)("every pack: label year and disclaimer year are the pack's weather_year", () => {
+    const files = readdirSync(PUBLIC_DIR).filter((f) => f.endsWith(".sim3d.json"));
+    expect(files.length).toBeGreaterThan(0);
+    for (const f of files) {
+      const sim = JSON.parse(readFileSync(join(PUBLIC_DIR, f), "utf8")) as FieldSim3D;
+      const year = String(sim.weather_year);
+      expect(sim.weather_label.match(/\b(19|20)\d\d\b/g), f).toEqual([year]);
+      const disclaimer = t("sim3d.disclaimer", { year: sim.weather_year });
+      expect(disclaimer.match(/\b(19|20)\d\d\b/g), f).toEqual([year]);
+    }
   });
 });

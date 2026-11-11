@@ -81,6 +81,8 @@
   align-items: center;
   gap: 0.4rem;
   font-size: 0.85rem;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .sim3d-select {
@@ -92,6 +94,8 @@
   font-size: 0.85rem;
   cursor: pointer;
   min-height: 36px;
+  max-width: 100%;
+  text-overflow: ellipsis;
 }
 
 .sim3d-select:focus-visible {
@@ -407,6 +411,22 @@
 }
 
 @media (max-width: 640px) {
+  /* Phone: controls stack, each select takes the full toolbar width. */
+  .sim3d-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .sim3d-control-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .sim3d-select {
+    width: 100%;
+  }
+  .sim3d-view-mode-toggle {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
   .sim3d-stage {
     grid-template-columns: 1fr;
   }

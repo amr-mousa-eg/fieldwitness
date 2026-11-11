@@ -63,6 +63,8 @@ export function getMapColours(dark: boolean) {
     regionLine: dark ? "#8f8c7c" : "#7d7a6c",
     fieldFill: "#c9a43a",
     fieldLine: dark ? "#f0cf65" : "#5b4813",
+    // Dark ring around the amber point keeps it readable on satellite imagery in both themes.
+    markerLine: "#14181a",
     selected: dark ? "#ffffff" : "#22313a",
   };
 }

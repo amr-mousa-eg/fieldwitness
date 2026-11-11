@@ -679,6 +679,12 @@ We are at Gate <N>. Check every acceptance test of this phase against the actual
   - Technical glossary on Methods page (`#glossary`) covers all technical terms (3D terms, evidence grade, source tags O/D/E/A, hindcast, CRPS, credibility, witness, bare-soil months, bad-year water). Every 3D note links to its glossary anchor (`#glossary-${id}`).
   - Unit tests passing in `sim3dExplainers.test.ts` and `explainers.test.ts`. Zero new dependencies, no schema changes.
 
+- [x] **Fixes F1–F4 (11 Nov, user-reported, before freeze).**
+  - F1 tour buttons: `--accent` was never defined, so Next showed white text on no fill. Added `--accent`/`--on-accent` to every theme block; Next is filled, Back outlined (`--muted` border), Back hidden on step 1. `tourContrast.test.ts` computes WCAG ratios from the tokens (text ≥ 4.5:1, borders ≥ 3:1, light and dark).
+  - F2 phone overflow: field tabs wrap, controls `max-width: 100%`, 3D controls stack, long tagged values wrap. `app/scripts/overflow-check.mjs` checks every route at 360 and 390 px against the device width: all pass.
+  - F3 3D weather year: disclaimer reads `weather_year` from the pack (was hard-coded 2007); no other hard-coded 2007 in app, README or Methods. `field3d.test.ts` checks all 200 packs.
+  - F4 map: GIBS MODIS Terra Corrected Reflectance (Level9, 2023-08-15, cloud-free over the pilot; layer and template from GIBS GetCapabilities) below zoom 10, HLS from zoom 10. First view shows imagery; dark ring on field points; one credit line; offline fallback unchanged (offline check passes).
+
 #### Roadmap (Not Built in this Version — Post-Freeze Roadmap)
 - **Item 5: Arabic interface (i18n / RTL).** Post-freeze roadmap.
 - **Item 3: Check soil water and rain against independent data (SMAP / GPM).** Post-freeze roadmap.

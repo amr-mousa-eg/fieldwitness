@@ -42,7 +42,7 @@ Deliverables: (1) a public static web app (no login, offline from precomputed fi
 ## Environment
 
 - Hardware: 16 GB+ RAM, CPU execution (do not assume CUDA).
-- OS: Windows. Project path: `D:\NASA Project\NASA Project`. Quote paths in every command when spaces occur.
+- OS: Windows. Project path: `D:\NASA Project-v2`. Quote paths in every command when spaces occur.
 - Python 3.12 (pinned in `.python-version`), managed with `uv`. Node LTS (20+) for the app.
 - Earthdata credentials: `%USERPROFILE%\_netrc` (underscore, no extension), entry `machine urs.earthdata.nasa.gov`. Never read or print it.
 - These rules apply to every AI coding environment used on this project.
