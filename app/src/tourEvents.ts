@@ -13,6 +13,8 @@ export type TourAction =
   | "why-ranking"
   | "sim-play"
   | "sim-drought"
+  | "builder-place"
+  | "builder-grow"
   | "limits"
   | `preset:${string}`;
 

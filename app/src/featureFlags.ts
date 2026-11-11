@@ -1,27 +1,32 @@
-/**
- * Rotation Builder (Level B) is off unless the URL has `?builder=1` (before the #) or the build
- * sets VITE_ROTATION_BUILDER=1. Off by default until it is approved for release.
- */
-export function builderEnabled(): boolean {
-  if (import.meta.env.VITE_ROTATION_BUILDER === "1") return true;
+function param(name: string): string | null {
   try {
-    return new URLSearchParams(window.location.search).get("builder") === "1";
+    return new URLSearchParams(window.location.search).get(name);
   } catch {
-    return false;
+    return null;
   }
 }
 
 /**
- * Farm view of Field in 3D (isometric farm, two plots): on with `?farm=1`, off with `?farm=0`,
- * otherwise on exactly when the Rotation Builder is on. The Soil X-ray toggle is the glass view.
+ * Rotation Builder: on for everybody. Kill switch: `?builder=0` in the URL (before the #) or
+ * VITE_ROTATION_BUILDER=0 at build time.
+ */
+export function builderEnabled(): boolean {
+  if (import.meta.env.VITE_ROTATION_BUILDER === "0") return false;
+  return param("builder") !== "0";
+}
+
+/** Old links with `?builder=1` open the builder panel straight away. */
+export function builderOpenAtStart(): boolean {
+  return param("builder") === "1";
+}
+
+/**
+ * Farm view of Field in 3D: on wherever the builder is on. `?farm=0` is its own kill switch
+ * (the glass "Soil X-ray" view is then the only view); `?farm=1` forces it on.
  */
 export function farmEnabled(): boolean {
-  try {
-    const v = new URLSearchParams(window.location.search).get("farm");
-    if (v === "1") return true;
-    if (v === "0") return false;
-  } catch {
-    // no window: fall through
-  }
+  const v = param("farm");
+  if (v === "0") return false;
+  if (v === "1") return true;
   return builderEnabled();
 }

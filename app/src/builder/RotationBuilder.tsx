@@ -11,6 +11,7 @@ import { compareToCurrent, computeBareSoilMonths, type SummaryToken } from "../f
 import { cropName, t } from "../strings";
 import { type BuilderKey, bt } from "./strings";
 import { TagBadge } from "../tags";
+import { emitTour } from "../tourEvents";
 import type { FieldPack, FieldSim3DInputs, Option, Sim3DOption, Tagged } from "../types";
 import { N_SEASONS, type Placed, type RuleContext, cardState, isComplete, legalSequences, optionFor } from "./rules";
 
@@ -106,6 +107,7 @@ export default function RotationBuilder({
     if (!cardState(placed, at, crop, ctx).ok) return;
     const next = placed.map((c, i) => (i === at ? crop : c));
     setPlaced(next);
+    emitTour("builder-place");
     setGrown(null);
     const empty = next.findIndex((c) => c === null);
     setSlot(empty >= 0 ? empty : at);
@@ -149,6 +151,7 @@ export default function RotationBuilder({
     const ranked = optionFor(pack, seq);
     onGrow(simulateOption(inp, seq, ["normal", "dry", "hot"], { option_id: "builder", label, rank: ranked?.rank ?? -1 }));
     setGrown(seq);
+    emitTour("builder-grow");
   };
 
   const current = pack.options.find((o) => o.option_id === "current") ?? null;
