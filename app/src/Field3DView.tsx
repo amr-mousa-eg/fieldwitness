@@ -13,8 +13,11 @@ import {
 } from "recharts";
 import { Field3DScene, type FrameStats } from "./Field3DScene";
 import { bt } from "./builder/strings";
-import { builderEnabled } from "./featureFlags";
-import { MIN_MEDIAN_FPS, historyOnlyKey, pickQuality } from "./field3d/growth";
+import { FarmScene } from "./FarmScene";
+import { builderEnabled, farmEnabled } from "./featureFlags";
+import { weekTelemetry } from "./field3d/farm";
+import { FARM_TEXT } from "./field3d/farmText";
+import { MIN_MEDIAN_FPS, type QualityTier, historyOnlyKey, pickQuality } from "./field3d/growth";
 import { isHistoryOnly } from "./seasons";
 import { Explain } from "./Explain";
 import { SIM3D_EXPLAINERS, explainer } from "./explainers";
@@ -22,7 +25,7 @@ import { loadSim3D } from "./data";
 import { cropName, t } from "./strings";
 import { TagBadge } from "./tags";
 import { CHART_COLOURS } from "./theme";
-import type { FieldPack, FieldSim3D, Sim3DOption } from "./types";
+import type { FieldPack, FieldSim3D, Sim3DOption, Sim3DScenario } from "./types";
 import { emitTour } from "./tourEvents";
 import { useTheme } from "./useTheme";
 
@@ -77,6 +80,8 @@ interface HoverMetric {
   rootDepth: number;
   /** History-only season key (e.g. perennial_forage) owning this week: nothing is simulated. */
   historyOnly: string | null;
+  /** Cover-crop week (farm view mapping, `field3d/farm.ts`); the glass view does not set it. */
+  cover?: boolean;
 }
 
 /** Weekly telemetry under one 3D scene. History-only weeks show "not simulated", never values. */
@@ -92,13 +97,19 @@ function MetricStrip({ m, source }: { m: HoverMetric | null; source: string }) {
         data-tooltip="Crop type and phenological growth stage from FAO-56 dual crop coefficient model [D]"
       >
         <span className="sim3d-metric-label">
-          Crop & Stage {!hist && m?.crop === "fallow" && <Explain id="fallow_bare_soil" />}
+          Crop & Stage {!hist && !m?.cover && m?.crop === "fallow" && <Explain id="fallow_bare_soil" />}
         </span>
         <span className="sim3d-metric-val">
           {hist ? (
             t("season.historyOnly", { crop: cropName(hist) })
           ) : m?.crop === "fallow" ? (
-            "Bare fallow [D]"
+            m.cover ? (
+              <>
+                cover crop {d}
+              </>
+            ) : (
+              "Bare fallow [D]"
+            )
           ) : (
             <>
               {m?.crop.replace(/_/g, " ")} ({m?.stage}) {d}
@@ -166,6 +177,66 @@ function MetricStrip({ m, source }: { m: HoverMetric | null; source: string }) {
   );
 }
 
+/** Farm view block: plot labels, the farm canvas, the scenery note and both metric strips. */
+function FarmStage({
+  current,
+  other,
+  otherLabel,
+  week,
+  month,
+  isDark,
+  quality,
+  reducedMotion,
+  onFrameStats,
+  source,
+}: {
+  current: { option: Sim3DOption; scenario: Sim3DScenario };
+  other: { option: Sim3DOption; scenario: Sim3DScenario };
+  otherLabel: string;
+  week: number;
+  month: number;
+  isDark: boolean;
+  quality: QualityTier;
+  reducedMotion: boolean;
+  onFrameStats: (s: FrameStats) => void;
+  source: string;
+}) {
+  const plots = useMemo(() => [current, other] as [typeof current, typeof other], [current, other]);
+  const m = plots.map((p) => weekTelemetry(p.option, p.scenario, week));
+  const labels = [FARM_TEXT.current, otherLabel];
+  return (
+    <section className="farm-stage" aria-label={FARM_TEXT.label}>
+      <div className="farm-labels">
+        {plots.map((p, i) => (
+          <div key={i} className="farm-label">
+            <strong>{labels[i]}</strong>
+            <span className="sim3d-seq-tag">{p.option.sequence.map((c) => cropName(c)).join(" → ")}</span>
+            {m[i].historyOnly && <span className="farm-ns">{FARM_TEXT.notSimulated}</span>}
+          </div>
+        ))}
+      </div>
+      <FarmScene
+        plots={plots}
+        weekIndex={week}
+        month={month}
+        isDark={isDark}
+        quality={quality}
+        reducedMotion={reducedMotion}
+        onFrameStats={onFrameStats}
+      />
+      <p className="farm-scenery-note">{FARM_TEXT.scenery}</p>
+      <div className="farm-strips">
+        {plots.map((_, i) => (
+          <div key={i} className="farm-strip">
+            <h4>{labels[i]}</h4>
+            <MetricStrip m={m[i]} source={source} />
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 export default function Field3DView({
   pack,
   regionId,
@@ -188,6 +259,10 @@ export default function Field3DView({
   const [toggleActive, setToggleActive] = useState<"current" | "alt">("current");
   const [selectedAltIdx, setSelectedAltIdx] = useState<number>(0);
   const showBuilder = useMemo(builderEnabled, []);
+  // Farm view (isometric farm with two plots) is the default where it is enabled; the Soil X-ray
+  // toggle switches back to the glass soil view.
+  const farmAvailable = useMemo(farmEnabled, []);
+  const [farmMode, setFarmMode] = useState<boolean>(farmAvailable);
   // Rotation Builder result (simulated in the browser); replaces the alternative while set
   const [builtOption, setBuiltOption] = useState<Sim3DOption | null>(null);
 
@@ -372,11 +447,26 @@ export default function Field3DView({
         </div>
 
         <div className="sim3d-control-group sim3d-view-mode-toggle">
+          {farmAvailable && (
+            <button
+              type="button"
+              className={`sim3d-toggle-btn ${!farmMode && !useFallback ? "active" : ""}`}
+              onClick={() => {
+                setUseFallback(false);
+                setFarmMode((f) => !f);
+              }}
+              aria-pressed={!farmMode && !useFallback}
+              title={FARM_TEXT.xrayTitle}
+            >
+              {FARM_TEXT.xray}
+            </button>
+          )}
           <button
             type="button"
-            className={`sim3d-toggle-btn ${viewMode === "side-by-side" && !useFallback ? "active" : ""}`}
+            className={`sim3d-toggle-btn ${viewMode === "side-by-side" && !useFallback && !farmMode ? "active" : ""}`}
             onClick={() => {
               setUseFallback(false);
+              setFarmMode(false);
               setViewMode("side-by-side");
             }}
             aria-pressed={viewMode === "side-by-side" && !useFallback}
@@ -388,6 +478,7 @@ export default function Field3DView({
             className={`sim3d-toggle-btn ${viewMode === "toggle" && !useFallback ? "active" : ""}`}
             onClick={() => {
               setUseFallback(false);
+              setFarmMode(false);
               setViewMode("toggle");
             }}
             aria-pressed={viewMode === "toggle"}
@@ -415,8 +506,22 @@ export default function Field3DView({
         </div>
       )}
 
-      {/* Main Interactive Stage */}
-      {!useFallback ? (
+      {/* Farm view: one isometric farm, two plots (same field, same weeks and weather) */}
+      {!useFallback && farmMode && activeAlternative && altScen ? (
+        <FarmStage
+          current={{ option: sim3d.current, scenario: curScen }}
+          other={{ option: activeAlternative, scenario: altScen }}
+          otherLabel={activeAlternative.label}
+          week={week}
+          month={activeWeekInfo.month}
+          isDark={isDark}
+          quality={quality}
+          reducedMotion={reducedMotion}
+          onFrameStats={handleFrameStats}
+          source={sim3d.source}
+        />
+      ) : /* Main Interactive Stage */
+      !useFallback ? (
         <div className={`sim3d-stage ${viewMode === "side-by-side" ? "stage-side-by-side" : "stage-single"}`}>
           {/* Current Rotation Block */}
           {(viewMode === "side-by-side" || toggleActive === "current") && (

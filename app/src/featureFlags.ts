@@ -10,3 +10,18 @@ export function builderEnabled(): boolean {
     return false;
   }
 }
+
+/**
+ * Farm view of Field in 3D (isometric farm, two plots): on with `?farm=1`, off with `?farm=0`,
+ * otherwise on exactly when the Rotation Builder is on. The Soil X-ray toggle is the glass view.
+ */
+export function farmEnabled(): boolean {
+  try {
+    const v = new URLSearchParams(window.location.search).get("farm");
+    if (v === "1") return true;
+    if (v === "0") return false;
+  } catch {
+    // no window: fall through
+  }
+  return builderEnabled();
+}
