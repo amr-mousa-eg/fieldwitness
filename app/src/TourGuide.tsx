@@ -1,289 +1,231 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import "./TourGuide.css";
-import { t } from "./strings";
+import { type StringKey, t } from "./strings";
+import {
+  TOUR_STEPS,
+  browserStorage,
+  clearProgress,
+  emptyProgress,
+  findTargets,
+  goToStep,
+  isStepDone,
+  loadProgress,
+  recordAction,
+  restoreHash,
+  saveProgress,
+  stepEntryHash,
+  type TourProgress,
+} from "./tour";
+import { onTourAction } from "./tourEvents";
+
+export { DEMO_FIELD_ID, DEMO_REGION_ID, TOUR_STEPS } from "./tour";
 
 export interface TourGuideProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-export const DEMO_FIELD_ID = "0d5615b52572c5c2eeac7fdfef8cdda167050a22";
-export const DEMO_REGION_ID = "ks_t14slh";
+/** Attribute that outlines the real control of the current step (styled in TourGuide.css). */
+const MARK = "data-tour-target";
+const POLL_MS = 400;
 
-export interface TourStepDef {
-  key: string;
-  route: string;
-  targetSelector?: string;
-  badge: string;
+function clearMarks(): void {
+  document.querySelectorAll(`[${MARK}]`).forEach((el) => el.removeAttribute(MARK));
 }
 
-export const TOUR_STEPS: TourStepDef[] = [
-  {
-    key: "step1",
-    route: `(#/${DEMO_REGION_ID}/map)`.replace(/[()]/g, ""),
-    targetSelector: ".map-container",
-    badge: "Kansas T14SLH [B]",
-  },
-  {
-    key: "step2",
-    route: `(#/${DEMO_REGION_ID}/${DEMO_FIELD_ID}/story)`.replace(/[()]/g, ""),
-    targetSelector: ".field-story",
-    badge: "Field #12 • Grade B",
-  },
-  {
-    key: "step3",
-    route: `(#/${DEMO_REGION_ID}/${DEMO_FIELD_ID}/options)`.replace(/[()]/g, ""),
-    targetSelector: ".options",
-    badge: "Field Card",
-  },
-  {
-    key: "step4",
-    route: `(#/${DEMO_REGION_ID}/${DEMO_FIELD_ID}/calendar)`.replace(/[()]/g, ""),
-    targetSelector: ".calendar-section",
-    badge: "Calendar [B/D]",
-  },
-  {
-    key: "step5",
-    route: `(#/${DEMO_REGION_ID}/${DEMO_FIELD_ID}/advisor)`.replace(/[()]/g, ""),
-    targetSelector: ".advisor-console",
-    badge: "Advisor Console [D]",
-  },
-  {
-    key: "step6",
-    route: `(#/${DEMO_REGION_ID}/${DEMO_FIELD_ID}/sim3d)`.replace(/[()]/g, ""),
-    targetSelector: ".sim3d-stage",
-    badge: "Simulation 3D [D]",
-  },
-  {
-    key: "step7",
-    route: "#/add-field",
-    targetSelector: ".addfield-page",
-    badge: "Offline & Private",
-  },
-];
-
+/**
+ * "Try it" tour: a small card docked at the bottom (a bottom sheet on phones). No overlay and no
+ * focus trap: the app stays usable. Each step outlines the real control, listens for the action
+ * (tourEvents.ts) and shows a tick. Next always works; Skip and Escape return to the page the
+ * tour started on. Progress is kept in localStorage.
+ */
 export function TourGuide({ isOpen, onClose }: TourGuideProps) {
-  const [currentStep, setCurrentStep] = useState(0);
-  const [spotlightRect, setSpotlightRect] = useState<DOMRect | null>(null);
-  const savedRouteRef = useRef<string>("");
-  const dialogRef = useRef<HTMLDivElement | null>(null);
-  const nextBtnRef = useRef<HTMLButtonElement | null>(null);
+  const [progress, setProgress] = useState<TourProgress>(() => loadProgress(browserStorage()));
+  const [hasTarget, setHasTarget] = useState(true);
+  const startHash = useRef<string>(typeof window !== "undefined" ? window.location.hash || "#/" : "#/");
+  const cardRef = useRef<HTMLElement | null>(null);
+  const scrolledStep = useRef<number>(-1);
 
-  // When tour opens, record current route so Skip/Escape can restore it exactly
+  const step = TOUR_STEPS[progress.step];
+  const done = isStepDone(step, progress.done);
+  const isFirst = progress.step === 0;
+  const isLast = progress.step === TOUR_STEPS.length - 1;
+
+  // Listen for real actions while the tour is open.
   useEffect(() => {
-    if (isOpen) {
-      savedRouteRef.current = window.location.hash || "#/";
-      setCurrentStep(0);
-    }
+    if (!isOpen) return;
+    return onTourAction(window, (a) => setProgress((p) => recordAction(p, a)));
   }, [isOpen]);
 
-  // Navigate to step route and find target selector
+  // Remember progress (every change).
+  useEffect(() => {
+    if (isOpen) saveProgress(browserStorage(), progress);
+  }, [isOpen, progress]);
+
+  // Entering a step that happens on a field page: open the demo field if no field is open.
   useEffect(() => {
     if (!isOpen) return;
-    const step = TOUR_STEPS[currentStep];
-    if (step && window.location.hash !== step.route) {
-      window.location.hash = step.route;
-    }
+    const to = stepEntryHash(step, window.location.hash);
+    if (to) window.location.hash = to;
+  }, [isOpen, step]);
 
-    // Attempt to locate spotlight target without fragile dependency
-    const updateTargetRect = () => {
-      if (!step?.targetSelector) {
-        setSpotlightRect(null);
-        return;
-      }
-      try {
-        const el = document.querySelector(step.targetSelector);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          if (rect.width > 0 && rect.height > 0) {
-            setSpotlightRect(rect);
-            return;
-          }
+  // Outline the step's control; re-check as the user moves around (pages load lazily).
+  useEffect(() => {
+    if (!isOpen) return;
+    const mark = () => {
+      const { els, primary } = findTargets(document, step);
+      document.querySelectorAll(`[${MARK}]`).forEach((el) => {
+        if (!els.includes(el)) el.removeAttribute(MARK);
+      });
+      els.forEach((el) => el.setAttribute(MARK, ""));
+      setHasTarget(els.length > 0);
+      if (primary && step.scroll && scrolledStep.current !== progress.step) {
+        scrolledStep.current = progress.step;
+        const r = els[0].getBoundingClientRect();
+        const cardTop = cardRef.current?.getBoundingClientRect().top ?? window.innerHeight;
+        if (r.top < 0 || r.bottom > cardTop) {
+          const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+          els[0].scrollIntoView({ block: "center", behavior: reduce ? "auto" : "smooth" });
         }
-      } catch {
-        // Ignore any selector query errors
       }
-      // If target missing or hidden, gracefully skip spotlight
-      setSpotlightRect(null);
     };
-
-    updateTargetRect();
-    // Re-check shortly after route transition to allow DOM render
-    const t1 = setTimeout(updateTargetRect, 250);
-    const t2 = setTimeout(updateTargetRect, 600);
-    window.addEventListener("resize", updateTargetRect);
-    window.addEventListener("scroll", updateTargetRect);
-
+    mark();
+    const timer = window.setInterval(mark, POLL_MS);
+    window.addEventListener("hashchange", mark);
     return () => {
-      clearTimeout(t1);
-      clearTimeout(t2);
-      window.removeEventListener("resize", updateTargetRect);
-      window.removeEventListener("scroll", updateTargetRect);
+      window.clearInterval(timer);
+      window.removeEventListener("hashchange", mark);
+      clearMarks();
     };
-  }, [isOpen, currentStep]);
+  }, [isOpen, step, progress.step]);
 
-  // Focus trap inside dialog and initial focus
-  useEffect(() => {
-    if (isOpen) {
-      const focusTimer = setTimeout(() => {
-        if (nextBtnRef.current) {
-          nextBtnRef.current.focus();
-        } else if (dialogRef.current) {
-          dialogRef.current.focus();
-        }
-      }, 100);
-      return () => clearTimeout(focusTimer);
-    }
-  }, [isOpen, currentStep]);
-
-  // Keyboard navigation & trap
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        e.preventDefault();
-        handleClose(true);
-      } else if (e.key === "ArrowRight") {
-        e.preventDefault();
-        handleNext();
-      } else if (e.key === "ArrowLeft") {
-        e.preventDefault();
-        handlePrev();
-      } else if (e.key === "Tab") {
-        // Focus trap inside dialog
-        if (!dialogRef.current) return;
-        const focusable = dialogRef.current.querySelectorAll<HTMLElement>(
-          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-        );
-        if (focusable.length === 0) return;
-        const first = focusable[0];
-        const last = focusable[focusable.length - 1];
-
-        if (e.shiftKey) {
-          if (document.activeElement === first) {
-            e.preventDefault();
-            last.focus();
-          }
-        } else {
-          if (document.activeElement === last) {
-            e.preventDefault();
-            first.focus();
-          }
-        }
-      }
+  // Leave room under the page for the card, so the end of every page can scroll above it.
+  useLayoutEffect(() => {
+    const card = cardRef.current;
+    if (!isOpen || !card) return;
+    const root = document.documentElement;
+    const set = () => root.style.setProperty("--tour-pad", `${Math.ceil(card.getBoundingClientRect().height) + 16}px`);
+    set();
+    root.classList.add("tour-open");
+    const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(set) : null;
+    ro?.observe(card);
+    return () => {
+      ro?.disconnect();
+      root.classList.remove("tour-open");
+      root.style.removeProperty("--tour-pad");
     };
+  }, [isOpen]);
 
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, currentStep]);
+  // Move focus to the card once when it opens (not on every step: the user is working the page).
+  useEffect(() => {
+    if (isOpen) cardRef.current?.focus();
+  }, [isOpen]);
 
-  if (!isOpen) return null;
+  const skip = useCallback(() => {
+    clearMarks();
+    restoreHash(window.location, startHash.current);
+    onClose();
+  }, [onClose]);
 
-  const stepDef = TOUR_STEPS[currentStep];
-  const isFirst = currentStep === 0;
-  const isLast = currentStep === TOUR_STEPS.length - 1;
-
-  const handleNext = () => {
-    if (isLast) {
-      handleClose(false);
-    } else {
-      setCurrentStep((c) => Math.min(c + 1, TOUR_STEPS.length - 1));
-    }
-  };
-
-  const handlePrev = () => {
-    setCurrentStep((c) => Math.max(c - 1, 0));
-  };
-
-  const handleClose = (restoreRoute: boolean) => {
-    if (restoreRoute && savedRouteRef.current) {
-      window.location.hash = savedRouteRef.current;
-    }
+  const finish = () => {
+    clearMarks();
+    clearProgress(browserStorage());
     onClose();
   };
 
+  // Escape closes the tour like Skip (unless another control already used the key).
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && !e.defaultPrevented) skip();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [isOpen, skip]);
+
+  if (!isOpen) return null;
+
+  const status = done ? t("tour.done") : hasTarget ? t("tour.todo") : t("tour.noTarget");
+
   return (
-    <div className="tour-overlay" role="presentation">
-      {/* Visual spotlight cutout if target exists */}
-      {spotlightRect && (
-        <div
-          className="tour-spotlight"
-          style={{
-            top: `${Math.max(0, spotlightRect.top - 8)}px`,
-            left: `${Math.max(0, spotlightRect.left - 8)}px`,
-            width: `${spotlightRect.width + 16}px`,
-            height: `${spotlightRect.height + 16}px`,
-          }}
-          aria-hidden="true"
-        />
-      )}
+    <aside
+      ref={cardRef}
+      className="tour-card"
+      aria-labelledby="tour-card-title"
+      tabIndex={-1}
+    >
+      <header className="tour-header">
+        <span className="tour-step-counter">
+          {t("tour.step", { current: progress.step + 1, total: TOUR_STEPS.length })}
+        </span>
+        <div className="tour-progress" aria-hidden="true">
+          {TOUR_STEPS.map((s, i) => (
+            <span
+              key={s.key}
+              className={`tour-dot${i === progress.step ? " is-current" : ""}${isStepDone(s, progress.done) ? " is-done" : ""}`}
+            />
+          ))}
+        </div>
+        <button type="button" className="tour-close-btn" onClick={skip} aria-label={t("tour.close")}>
+          ✕
+        </button>
+      </header>
 
-      {/* Main Tour Dialog Modal */}
-      <div
-        ref={dialogRef}
-        className="tour-dialog"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="tour-dialog-title"
-        aria-describedby="tour-dialog-body"
-        tabIndex={-1}
-      >
-        <header className="tour-header">
-          <div className="tour-step-badge">
-            <span className="tour-step-counter">
-              {t("tour.step", { current: currentStep + 1, total: TOUR_STEPS.length })}
-            </span>
-            <span className="tour-tag-badge">{stepDef.badge}</span>
-          </div>
-          <button
-            type="button"
-            className="tour-close-btn"
-            onClick={() => handleClose(true)}
-            aria-label={t("tour.close")}
-            title="Exit tour and restore previous view (Escape)"
-          >
-            ✕
+      <h2 id="tour-card-title" className="tour-title">
+        {t(`tour.${step.key}.title` as StringKey)}
+      </h2>
+      <p className="tour-body">{t(`tour.${step.key}.body` as StringKey)}</p>
+
+      <ul className="tour-checks">
+        {step.requires.map((a) => {
+          const ok = progress.done.includes(a);
+          return (
+            <li key={a} className={ok ? "is-done" : undefined}>
+              <span className="tour-tick" aria-hidden="true">
+                {ok ? "✓" : ""}
+              </span>
+              {t(`tour.check.${a}` as StringKey)}
+              <span className="sr-only">{ok ? " (done)" : " (not done yet)"}</span>
+            </li>
+          );
+        })}
+      </ul>
+      <p className={`tour-status${done ? " is-done" : ""}`} role="status">
+        {status}
+      </p>
+
+      <footer className="tour-footer">
+        <div className="tour-aux-btns">
+          <button type="button" className="tour-skip-btn" onClick={skip}>
+            {t("tour.skip")}
           </button>
-        </header>
-
-        <main className="tour-content">
-          <h3 id="tour-dialog-title" className="tour-title">
-            {t(`tour.${stepDef.key}.title` as any)}
-          </h3>
-          <p id="tour-dialog-body" className="tour-body">
-            {t(`tour.${stepDef.key}.body` as any)}
-          </p>
-        </main>
-
-        <footer className="tour-footer">
           <button
             type="button"
             className="tour-skip-btn"
-            onClick={() => handleClose(true)}
+            onClick={() => setProgress(emptyProgress())}
+            disabled={isFirst && progress.done.length === 0}
           >
-            {t("tour.skip")}
+            {t("tour.restart")}
           </button>
-          <div className="tour-nav-btns">
-            <button
-              type="button"
-              className="tour-nav-btn tour-prev-btn"
-              onClick={handlePrev}
-              disabled={isFirst}
-            >
-              {t("tour.back")}
-            </button>
-            <button
-              ref={nextBtnRef}
-              type="button"
-              className="tour-nav-btn tour-next-btn"
-              onClick={handleNext}
-            >
-              {isLast ? t("tour.finish") : t("tour.next")}
-            </button>
-          </div>
-        </footer>
-      </div>
-    </div>
+        </div>
+        <div className="tour-nav-btns">
+          <button
+            type="button"
+            className="tour-nav-btn tour-prev-btn"
+            onClick={() => setProgress((p) => goToStep(p, p.step - 1))}
+            disabled={isFirst}
+          >
+            {t("tour.back")}
+          </button>
+          <button
+            type="button"
+            className="tour-nav-btn tour-next-btn"
+            onClick={() => (isLast ? finish() : setProgress((p) => goToStep(p, p.step + 1)))}
+          >
+            {isLast ? t("tour.finish") : t("tour.next")}
+          </button>
+        </div>
+      </footer>
+    </aside>
   );
 }
