@@ -204,6 +204,67 @@ def _compute_option_metadata(
     return weekly_crops, weekly_stages, weekly_roots, kc, p, crop, reset, canopy
 
 
+def simulate_weekly(
+    seqs: list[tuple[str, ...]],
+    rain_t: np.ndarray,
+    eto_t: np.ndarray,
+    taw_mm: float,
+    kc_scale: float,
+    budget_mm: float,
+    region_id: str,
+) -> dict[str, Any]:
+    """Weekly 3D series (unrounded) for several sequences and weather cases. Output tag D.
+
+    rain_t, eto_t: (1460, n_scen) mm/day, the median weather year tiled 4x
+    (`precompute_scenario_weather`). Days 0-364 are spin-up; weeks cover days 365..1456.
+    Water balance FAO-56 Eq. 82-85 (`waterbal.run`); Kc curve FAO-56 Fig. 34 (`rotate.slots`).
+    Returns metas [(crops, stages, roots)] and arrays soil_water_mm, ks, irrigation_mm, rain_mm
+    (156, n_opt, n_scen) and canopy_cover (156, n_opt). The browser port
+    (app/src/field3d/physics.ts) must reproduce this function (parity test).
+    """
+    n_opt, n_scen = len(seqs), rain_t.shape[1]
+    kc_all = np.zeros((T_DAYS, n_opt, 1))
+    p_all = np.zeros((T_DAYS, n_opt, 1))
+    crop_all = np.zeros((T_DAYS, n_opt, 1), bool)
+    reset_all = np.zeros((T_DAYS, n_opt, 1), bool)
+    canopy_all = np.zeros((T_DAYS, n_opt))
+    metas = []
+    for o, seq in enumerate(seqs):
+        w_crops, w_stages, w_roots, kc, p, crop, reset, canopy = _compute_option_metadata(
+            seq, region_id
+        )
+        kc_all[:, o, 0] = kc
+        p_all[:, o, 0] = p
+        crop_all[:, o, 0] = crop
+        reset_all[:, o, 0] = reset
+        canopy_all[:, o] = canopy
+        metas.append((w_crops, w_stages, w_roots))
+    shape = (T_DAYS, n_opt, n_scen)
+    rain = np.broadcast_to(rain_t[:, None, :], shape)
+    etc = kc_all * kc_scale * eto_t[:, None, :]
+    wb = waterbal.run(
+        rain,
+        etc,
+        taw_mm,
+        np.broadcast_to(p_all, shape),
+        waterbal.fixed_seasonal_mm(budget_mm),
+        dr0=0.0,
+        irr_mask=np.broadcast_to(crop_all, shape),
+        budget_reset=np.broadcast_to(reset_all, shape),
+    )
+    # rotation days 365..1456 (1092 = 156 weeks x 7) as weekly slices (156, 7, n_opt, n_scen)
+    span = slice(365, 365 + N_WEEKS * 7)
+    wk = (N_WEEKS, 7, n_opt, n_scen)
+    return {
+        "metas": metas,
+        "soil_water_mm": np.maximum(0.0, taw_mm - wb["dr"][span].reshape(wk)).mean(axis=1),
+        "ks": wb["ks"][span].reshape(wk).mean(axis=1),
+        "irrigation_mm": wb["irr"][span].reshape(wk).sum(axis=1),
+        "rain_mm": rain[span].reshape(wk).sum(axis=1),
+        "canopy_cover": canopy_all[span].reshape(N_WEEKS, 7, n_opt).mean(axis=1),
+    }
+
+
 def build_field_sim3d(
     fid: str,
     cur_seq: tuple[str, ...],
@@ -230,7 +291,6 @@ def build_field_sim3d(
         scen_weather = precompute_scenario_weather(weather_med, lat, elev)
 
     sids, rain_12, eto_12 = scen_weather
-    n_scen = len(sids)
 
     # Prepare options
     opt_specs = [(cur_seq, 0, "Current rotation", "current")]
@@ -248,60 +308,18 @@ def build_field_sim3d(
         oid = B.oid(seq)
         opt_specs.append((seq, rank, label, oid))
 
-    n_opt = len(opt_specs)
-
-    # Layout arrays for all options
-    kc_all = np.zeros((T_DAYS, n_opt, 1))
-    p_all = np.zeros((T_DAYS, n_opt, 1))
-    crop_all = np.zeros((T_DAYS, n_opt, 1), bool)
-    reset_all = np.zeros((T_DAYS, n_opt, 1), bool)
-    canopy_all = np.zeros((T_DAYS, n_opt))
-    opt_metas = []
-
-    for o, (seq, _, _, _) in enumerate(opt_specs):
-        w_crops, w_stages, w_roots, kc, p, crop, reset, canopy = _compute_option_metadata(
-            seq, region_id
-        )
-        kc_all[:, o, 0] = kc
-        p_all[:, o, 0] = p
-        crop_all[:, o, 0] = crop
-        reset_all[:, o, 0] = reset
-        canopy_all[:, o] = canopy
-        opt_metas.append((w_crops, w_stages, w_roots))
-
-    # Broadcast to (T, n_opt, n_scen)
-    rain = np.broadcast_to(rain_12, (T_DAYS, n_opt, n_scen))
-    etc = kc_all * kc_scale * eto_12
-    p_arr = np.broadcast_to(p_all, (T_DAYS, n_opt, n_scen))
-    crop_mask = np.broadcast_to(crop_all, (T_DAYS, n_opt, n_scen))
-    reset_mask = np.broadcast_to(reset_all, (T_DAYS, n_opt, n_scen))
-
-    policy = waterbal.fixed_seasonal_mm(budget_mm)
-
-    wb = waterbal.run(
-        rain,
-        etc,
+    sim = simulate_weekly(
+        [seq for seq, _, _, _ in opt_specs],
+        rain_12[:, 0, :],
+        eto_12[:, 0, :],
         taw_mm,
-        p_arr,
-        policy,
-        dr0=0.0,
-        irr_mask=crop_mask,
-        budget_reset=reset_mask,
+        kc_scale,
+        budget_mm,
+        region_id,
     )
-
-    # Reshape rotation days (365 to 1457 = 1092 days = 156 weeks * 7) into weekly slices
-    # Shape: (156, 7, n_opt, n_scen)
-    wb_dr_span = wb["dr"][365:1457].reshape(N_WEEKS, 7, n_opt, n_scen)
-    wb_ks_span = wb["ks"][365:1457].reshape(N_WEEKS, 7, n_opt, n_scen)
-    wb_irr_span = wb["irr"][365:1457].reshape(N_WEEKS, 7, n_opt, n_scen)
-    rain_span = rain[365:1457].reshape(N_WEEKS, 7, n_opt, n_scen)
-    canopy_span = canopy_all[365:1457].reshape(N_WEEKS, 7, n_opt)
-
-    sw_weekly = np.maximum(0.0, taw_mm - wb_dr_span).mean(axis=1)  # (156, n_opt, n_scen)
-    ks_weekly = wb_ks_span.mean(axis=1)  # (156, n_opt, n_scen)
-    irr_weekly = wb_irr_span.sum(axis=1)  # (156, n_opt, n_scen)
-    rain_weekly = rain_span.sum(axis=1)  # (156, n_opt, n_scen)
-    canopy_weekly = canopy_span.mean(axis=1)  # (156, n_opt)
+    opt_metas = sim["metas"]
+    sw_weekly, ks_weekly, irr_weekly = sim["soil_water_mm"], sim["ks"], sim["irrigation_mm"]
+    rain_weekly, canopy_weekly = sim["rain_mm"], sim["canopy_cover"]
 
     # Build Sim3DOption models
     sim_options: list[Sim3DOption] = []

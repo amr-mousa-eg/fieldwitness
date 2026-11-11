@@ -184,7 +184,6 @@ export function generateFieldSummary(
   // Fallback if no alternative options exist or only current
   const targetOption = topAlt ?? current;
   const metrics = buildMetricComparisons(current, targetOption);
-  const evidenceGrade = targetOption.grade;
 
   if (isCurrentBest || !topAlt) {
     const text = `Your current rotation ranks best for the priorities you set (evidence: grade ${current.grade}).`;
@@ -204,7 +203,28 @@ export function generateFieldSummary(
     };
   }
 
-  // Generate clauses for top alternative vs current
+  return {
+    isCurrentBest: false,
+    currentOption: current,
+    topAlternative: topAlt,
+    ...compareToCurrent(current, topAlt),
+  };
+}
+
+/**
+ * The Field Card sentence for any option against Current: "Switching to <option> uses 40 mm less
+ * water, but has 1 more bare-soil month (evidence: grade B)." Used by the Field Card (top
+ * alternative) and the Rotation Builder (the user's rotation).
+ */
+export function compareToCurrent(
+  current: Option,
+  target: Option,
+): Pick<ComparisonSummary, "sentence" | "tokens" | "evidenceGrade" | "metrics"> {
+  const metrics = buildMetricComparisons(current, target);
+  const evidenceGrade = target.grade;
+  const topAlt = target;
+
+  // Generate clauses for the option vs current
   const clauses: Clause[] = [];
 
   // 1. Water use clause
@@ -269,15 +289,7 @@ export function generateFieldSummary(
       { kind: "text", text: "has about the same water use, bad-year water and bare soil as your current rotation" },
       ...endTokens,
     ];
-    return {
-      isCurrentBest: false,
-      currentOption: current,
-      topAlternative: topAlt,
-      sentence: text,
-      tokens,
-      evidenceGrade,
-      metrics,
-    };
+    return { sentence: text, tokens, evidenceGrade, metrics };
   }
 
   const pros = clauses.filter((c) => c.isPro);
@@ -315,13 +327,5 @@ export function generateFieldSummary(
   const sentence = `${startText}${sentenceBodyText} (evidence: grade ${evidenceGrade}).`;
   const tokens = [...startTokens, ...bodyTokens, ...endTokens];
 
-  return {
-    isCurrentBest: false,
-    currentOption: current,
-    topAlternative: topAlt,
-    sentence,
-    tokens,
-    evidenceGrade,
-    metrics,
-  };
+  return { sentence, tokens, evidenceGrade, metrics };
 }

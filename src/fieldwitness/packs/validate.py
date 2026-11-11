@@ -16,6 +16,7 @@ from fieldwitness.schemas import (
     FieldScenarios,
     FieldSeries,
     FieldSim3D,
+    FieldSim3DInputs,
     RegionHindcast,
     RegionIndex,
     RegionLayers,
@@ -35,6 +36,7 @@ _BY_SUFFIX = {
     ".calendar.json": FieldCalendar,
     ".scenarios.json": FieldScenarios,
     ".sim3d.json": FieldSim3D,
+    ".sim3d_inputs.json": FieldSim3DInputs,
 }
 
 

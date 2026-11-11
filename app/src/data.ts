@@ -4,6 +4,7 @@ import type {
   FieldScenarios,
   FieldSeries,
   FieldSim3D,
+  FieldSim3DInputs,
   RegionHindcast,
   RegionIndex,
   RegionLayers,
@@ -47,3 +48,5 @@ export const loadScenarios = (region: string, fid: string) =>
   get<FieldScenarios>(`${region}/${fid}.scenarios.json`);
 export const loadSim3D = (region: string, fid: string) =>
   get<FieldSim3D>(`${region}/${fid}.sim3d.json`);
+export const loadSim3DInputs = (region: string, fid: string) =>
+  get<FieldSim3DInputs>(`${region}/${fid}.sim3d_inputs.json`);
