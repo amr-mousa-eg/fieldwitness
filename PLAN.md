@@ -661,11 +661,11 @@ We are at Gate <N>. Check every acceptance test of this phase against the actual
   - Deterministic sentence: "Ranked first mainly because \"[criterion]\" scored higher ([share]% of the score difference vs [next])" when dominant share ≥ 40%; otherwise "Several criteria contribute similarly to this option's top ranking over [next]".
   - Zero forbidden words verified across all 200 packs. Updates live as priority sliders move; light and dark themes; mobile responsive.
 
-- [x] **Item 9: Methods diagram.**
-  - Implemented in `MethodsDiagram.tsx` and mounted on Methods page.
-  - Responsive SVG (`viewBox="0 0 840 510"`) using theme tokens (`var(--panel)`, `var(--rule)`, `var(--ink)`, `var(--muted)`, `var(--focus)`), readable in light/dark and down to 390 px mobile.
-  - Complete flow: 8 data sources (HLS, POWER, SMAP, GRACE, NASADEM, GIBS, SoilGrids, CSB) → field story (78.3% match) → 3 witnesses (Witness 3 labelled "OFF: no neighbour contrast passed the diagnostic checks (0 of 32)") → agreement engine (capped at B) → rotation ranking → hindcast check (honest words: weak skill, underdispersed CIs, beats B1/B2 overall).
-  - Accessible: `role="img"`, `<title>`, `<desc>`, `<figcaption>`, and screen-reader semantic `<ol className="sr-only">` fallback. Box labels checked against source list in `methodsDiagram.test.ts`. Zero forbidden words.
+- [x] **Item 9: Methods diagram.** (redesigned 11 Nov 2026 after user feedback: old SVG was hard to read)
+  - `MethodsDiagram.tsx`: four numbered stages in order: 1 What we observe (one Data box listing HLS, GIBS basemap, POWER, SMAP, GRACE, NASADEM, SoilGrids, CSB) → 2 What we model (field story 78.3% vs 90% target; Witness 1 and 2 ON; Witness 3 OFF "0 of 32") → 3 What we check (evidence grade capped at B; hindcast: weak skill, underdispersed CIs, beats B1/B2 overall and for maize) → 4 What you get (rotation options). No new claims; every line comes from the Methods page text.
+  - HTML grid, not SVG: left to right on desktop, a separate vertical layout below 52rem at full text size (≥ 14 px). Witness 3 OFF = dashed border + hatched band + "OFF" badge (not colour alone). Theme tokens only.
+  - Every box is a real link (`#/<region>/methods#<id>`) to its section or `#glossary-…` entry, with a visible focus ring; `MethodsPage` now scrolls to and focuses that target (this also fixes the "Open in glossary" links). The diagram is an ordered list of links inside a `<figure>` with caption, so no separate sr-only copy.
+  - `methodsDiagram.test.ts`: sources checked against `DATASETS`; 4 stages in order; OFF marker; every box target exists on the page; phone layout and minimum text size; no hard-coded colours; no forbidden words. Overflow check passes at 360/390 px.
 
 - [x] **Item 10: "What we got wrong" section (Methods page and README).**
   - Factual, dated list documented on the Methods page and README citing repository files, commits, and decision entries.
