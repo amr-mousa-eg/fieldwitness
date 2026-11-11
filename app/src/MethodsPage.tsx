@@ -5,7 +5,7 @@ import { MethodsDiagram } from "./MethodsDiagram";
 import { IS_DEMO_DATA } from "./data";
 import { EXPLAINERS, explainer } from "./explainers";
 import { type StringKey, t } from "./strings";
-import { TagLegend } from "./tags";
+import { TagBadge, TagLegend } from "./tags";
 
 /** Datasets as listed in DATA.md; text in strings/en.json (methods.ds.<id>.*). */
 export const DATASETS = [
@@ -15,6 +15,7 @@ export const DATASETS = [
   "grace",
   "nasadem",
   "soilgrids",
+  "ssurgo",
   "csb",
   "ftw",
   "rpg",
@@ -99,6 +100,19 @@ export function MethodsPage() {
       </section>
 
       <DiagnosisSection />
+
+      <section aria-labelledby="m-soil">
+        <h3 id="m-soil">
+          {t("methods.soil.heading")} <TagBadge tag="E" source={t("methods.soil.source")} />
+        </h3>
+        <p>{t("methods.soil.intro")}</p>
+        <ul>
+          {list("methods.soil", 4).map((s, i) => (
+            <li key={i}>{s}</li>
+          ))}
+        </ul>
+        <p className="muted">{t("methods.soil.source")}</p>
+      </section>
 
       <section aria-labelledby="m-wrong">
         <h3 id="m-wrong">{t("methods.wrong.heading")}</h3>

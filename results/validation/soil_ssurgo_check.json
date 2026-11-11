@@ -1,0 +1,99 @@
+{
+  "check": "Independent soil check vs USDA SSURGO (Soil Data Access), Phase 12",
+  "tags": {
+    "ssurgo": "E",
+    "soilgrids": "E",
+    "sim_taw_posterior": "D",
+    "taw_base": "A"
+  },
+  "root_zone_cm": 135.0,
+  "root_zone_source": "mean of FAO-56 Table 22 maize root depth range (config/crops.yaml)",
+  "point": "field centroid (representative point if outside the polygon)",
+  "ssurgo_weighting": "component-percent weighted over components with complete awc_r",
+  "conversion": "AWS_mm = 10 * sum(awc_r [cm/cm] * horizon thickness inside root zone [cm])",
+  "difference_sign": "pipeline/SoilGrids minus SSURGO",
+  "n_fields": 200,
+  "n_ssurgo_ok": 198,
+  "no_match": {
+    "no awc_r over the full root zone (profile too shallow or null awc_r)": [
+      "189e236596fa05b85f1c19fe582083601b59b353",
+      "71b9fde5a3ad92f14651b86b82ecff517e1d8cce"
+    ]
+  },
+  "ssurgo_aws_mm_summary": {
+    "mean": 266.1,
+    "std": 36.1,
+    "min": 100.1,
+    "10%": 229.5,
+    "50%": 282.1,
+    "90%": 295.3,
+    "max": 300.6
+  },
+  "sim_taw_vs_ssurgo_aws": {
+    "all_fields": {
+      "n": 198,
+      "pearson_r": -0.087,
+      "spearman_rho": -0.118,
+      "bias_mean": -119.26,
+      "bias_median": -128.44,
+      "mae": 121.58,
+      "units": "mm"
+    },
+    "posterior_fields_only": {
+      "n": 184,
+      "pearson_r": -0.117,
+      "spearman_rho": -0.125,
+      "bias_mean": -119.38,
+      "bias_median": -128.71,
+      "mae": 121.84,
+      "units": "mm"
+    },
+    "sensitivity_dominant_component": {
+      "n": 198,
+      "pearson_r": -0.085,
+      "spearman_rho": -0.113,
+      "bias_mean": -118.83,
+      "bias_median": -129.0,
+      "mae": 121.7,
+      "units": "mm"
+    },
+    "sensitivity_zr_100cm": {
+      "n": 198,
+      "pearson_r": -0.098,
+      "spearman_rho": -0.104,
+      "bias_mean": -48.91,
+      "bias_median": -55.79,
+      "mae": 56.17,
+      "units": "mm"
+    }
+  },
+  "taw_base_150mm_vs_ssurgo_aws": {
+    "n": 198,
+    "pearson_r": null,
+    "spearman_rho": null,
+    "bias_mean": -116.06,
+    "bias_median": -132.12,
+    "mae": 117.85,
+    "units": "mm"
+  },
+  "soilgrids_vs_ssurgo_texture": {
+    "clay": {
+      "n": 198,
+      "pearson_r": 0.324,
+      "spearman_rho": 0.206,
+      "bias_mean": 5.98,
+      "bias_median": 5.25,
+      "mae": 6.31,
+      "units": "% (weight, < 2 mm)"
+    },
+    "sand": {
+      "n": 198,
+      "pearson_r": 0.647,
+      "spearman_rho": 0.346,
+      "bias_mean": -0.66,
+      "bias_median": 1.27,
+      "mae": 7.24,
+      "units": "% (weight, < 2 mm)"
+    }
+  }
+}
