@@ -4,6 +4,7 @@ import { CropChips } from "./CropChips";
 import { Explain, MetricLabel } from "./Explain";
 import { FieldSummaryPanel } from "./FieldSummaryPanel";
 import { RankingExplainerSection } from "./RankingExplainerSection";
+import { emitTour } from "./tourEvents";
 import { loadScenarios } from "./data";
 import { generateFieldSummary } from "./fieldSummary";
 import { formatDelta, formatTagged } from "./format";
@@ -159,7 +160,7 @@ function Detail({ row, current }: { row: Ranked; current: Ranked | undefined }) 
 
 function PriorityPanel({ p, set }: { p: Priorities; set: (p: Priorities) => void }) {
   return (
-    <fieldset className="panel">
+    <fieldset className="panel priority-panel">
       <legend>{t("prio.heading")}</legend>
       {PRIORITY_KEYS.map((k) => (
         <label key={k} className="slider">
@@ -171,7 +172,10 @@ function PriorityPanel({ p, set }: { p: Priorities; set: (p: Priorities) => void
             step={1}
             value={p[k]}
             aria-valuetext={t(`prio.level.${p[k]}` as "prio.level.0")}
-            onChange={(e) => set({ ...p, [k]: Number(e.target.value) })}
+            onChange={(e) => {
+              set({ ...p, [k]: Number(e.target.value) });
+              emitTour("priority");
+            }}
           />
           <output>{t(`prio.level.${p[k]}` as "prio.level.0")}</output>
         </label>

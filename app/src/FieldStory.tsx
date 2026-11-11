@@ -13,6 +13,7 @@ import {
 } from "recharts";
 import { CropChips } from "./CropChips";
 import { Explain } from "./Explain";
+import { emitTour } from "./tourEvents";
 import { loadSeries } from "./data";
 import { formatDate, harvestDayToDate } from "./format";
 import { cropName, t } from "./strings";
@@ -140,7 +141,14 @@ function GreennessChart({ pack, series }: { pack: FieldPack; series: FieldSeries
       <div className="chart-controls">
         <label>
           {t("story.chart.show")}{" "}
-          <select value={focus} onChange={(e) => setFocus(e.target.value)}>
+          <select
+            className="chart-season-select"
+            value={focus}
+            onChange={(e) => {
+              setFocus(e.target.value);
+              if (e.target.value !== "all") emitTour("season");
+            }}
+          >
             <option value="all">{t("story.chart.all")}</option>
             {seasons.map((s) => (
               <option key={`${s.year}-${s.index}`} value={`${s.year}-${s.index}`}>
