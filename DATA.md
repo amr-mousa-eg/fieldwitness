@@ -99,4 +99,4 @@ Only the row groups whose `bbox` statistics intersect the query box are read (se
 
 ## Derived app inputs: 3D replay (Rotation Builder)
 
-`packs/<region>/<field_id>.sim3d_inputs.json` holds no new data source: the median-rain year's NASA POWER rain and FAO-56 ETo (as used by the Field in 3D pack), posterior medians from `results/rotate/posterior_draws.json`, and crop parameters from `config/crops.yaml`. Regenerate with `python -m fieldwitness.packs.sim3d_inputs ks_t14slh`. No downloaded 3D models are used (all geometry is procedural).
+`packs/<region>/<field_id>.sim3d_inputs.json` holds no new data source: the median-rain year's NASA POWER rain and FAO-56 ETo (as used by the Field in 3D pack), posterior medians from `results/rotate/posterior_draws.json`, and crop parameters from `config/crops.yaml`. Regenerate with `python -m fieldwitness.packs.sim3d_inputs ks_t14slh`. No downloaded 3D models are used: the glass view and the Farm view (plots, crops, barn, trees, pond, fences, paths) are all procedural geometry, so there is no third-party model licence to credit.
