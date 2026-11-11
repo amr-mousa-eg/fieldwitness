@@ -20,6 +20,7 @@ import { t } from "./strings";
 import { TagBadge } from "./tags";
 import { CHART_COLOURS } from "./theme";
 import type { FieldPack, FieldSim3D, Sim3DOption } from "./types";
+import { emitTour } from "./tourEvents";
 import { useTheme } from "./useTheme";
 
 function isWebGLAvailable(): boolean {
@@ -219,7 +220,10 @@ export default function Field3DView({
             id="sim3d-scenario-select"
             className="sim3d-select"
             value={scenarioId}
-            onChange={(e) => setScenarioId(e.target.value)}
+            onChange={(e) => {
+              setScenarioId(e.target.value);
+              if (e.target.value.endsWith("_p-20")) emitTour("sim-drought");
+            }}
           >
             {Object.keys(sim3d.current.scenarios).map((sid) => (
               <option key={sid} value={sid}>
@@ -576,7 +580,10 @@ export default function Field3DView({
           <button
             type="button"
             className="sim3d-play-btn"
-            onClick={() => setIsPlaying(!isPlaying)}
+            onClick={() => {
+              if (!isPlaying) emitTour("sim-play");
+              setIsPlaying(!isPlaying);
+            }}
             aria-label={isPlaying ? t("sim3d.pause") : t("sim3d.play")}
           >
             {isPlaying ? "⏸ Pause" : "▶ Play"}

@@ -568,6 +568,6 @@ Written and committed before executing the diagnostic analysis or inspecting res
 5. **Negative/side findings:** the CSS rule for the canvas container targeted a class the component never used, so the canvas was shorter than its frame (scene cut at the bottom on phones). Fixed. Initial bundle grew by 0.16 kB (one new sentence in `en.json`).
 
 ## Handoff
-2026-11-11: 3D realism pass on branch `claude/field3d-realism-f326e2` (procedural layered soil, water fill line, instanced crops, rain/irrigation from pack data, phone caps, fps fallback); see PLAN.md Phase 12.
-Checks: vitest 140 passed / 1 skipped, typecheck, build, keyboard and overflow (360/390 px) green; Python untouched.
-Next: try the 3D view on a real phone; freeze after 12 Nov EOD; tag `v1.0-spaceapps` waits for 13 Nov approval.
+2026-11-11: Methods diagram redesigned and try-it tour rebuilt (see their PLAN.md entries); then 3D realism pass (branch `claude/field3d-realism-f326e2`: procedural layered soil, water fill line, instanced crops, rain/irrigation from pack data, phone caps, fps fallback).
+Checks after merging main into the 3D branch: vitest 163 passed / 1 skipped, typecheck, build, keyboard and overflow (360/390 px) green; pytest 249 passed / 7 skipped, ruff green. Known, not fixed: timing test `test_runtime_all_candidates_one_field` can exceed 60 s under load; React duplicate-key warning `fallow` from CorrectionPanel (predates both).
+Next: user tries the 3D view on a real phone and reviews tour screenshots; freeze after 12 Nov EOD; tag `v1.0-spaceapps` waits for 13 Nov approval.
