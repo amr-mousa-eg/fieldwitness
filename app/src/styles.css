@@ -5,6 +5,8 @@
   --muted: #56646b;
   --rule: #c9d1cd;
   --focus: #1f6fb2;
+  --accent: #1f5f7e;
+  --on-accent: #ffffff;
   --demo-bg: #8a1c1c;
   --demo-fg: #ffffff;
   /* crop chips: colour supports the text label, never replaces it */
@@ -43,6 +45,8 @@
     --muted: #a2b0b6;
     --rule: #34424a;
     --focus: #7cb8ec;
+    --accent: #64b5f6;
+    --on-accent: #151c20;
     --crop-wheat: #6e5d22;
     --crop-sorghum: #6b3f2c;
     --crop-maize: #55622a;
@@ -70,6 +74,8 @@
   --muted: #a2b0b6;
   --rule: #34424a;
   --focus: #7cb8ec;
+  --accent: #64b5f6;
+  --on-accent: #151c20;
   --crop-wheat: #6e5d22;
   --crop-sorghum: #6b3f2c;
   --crop-maize: #55622a;
@@ -96,6 +102,8 @@
   --muted: #56646b;
   --rule: #c9d1cd;
   --focus: #1f6fb2;
+  --accent: #1f5f7e;
+  --on-accent: #ffffff;
   --crop-wheat: #e7cf7e;
   --crop-sorghum: #d9a184;
   --crop-maize: #c9d98a;
@@ -118,6 +126,18 @@
 
 * {
   box-sizing: border-box;
+}
+/* Form controls never grow wider than their container (long option text on phones). */
+select,
+input,
+textarea,
+button {
+  max-width: 100%;
+}
+@media (max-width: 30rem) {
+  .tabs a {
+    padding: 0.45rem 0.6rem;
+  }
 }
 html,
 body,
@@ -477,7 +497,7 @@ a {
     overflow: visible;
   }
   .map-legend {
-    bottom: 0.5rem;
+    bottom: 3.25rem; /* above the imagery credit (up to two lines on phones) */
     left: 0.5rem;
     max-width: calc(100% - 1rem);
   }
@@ -716,12 +736,14 @@ a {
 }
 .tabs {
   display: flex;
+  flex-wrap: wrap; /* phones: tabs wrap to a second row instead of widening the page */
   gap: 0.25rem;
   border-bottom: 2px solid var(--rule);
   margin-bottom: 1rem;
 }
 .tabs a {
   padding: 0.45rem 1rem;
+  white-space: nowrap;
   text-decoration: none;
   font-family: var(--display);
   font-weight: 600;
@@ -796,8 +818,9 @@ a {
     color: #f0a08f;
   }
 }
+/* Long values may wrap (a nowrap value widened the page on phones); the tag itself stays whole. */
 .tagged {
-  white-space: nowrap;
+  overflow-wrap: anywhere;
 }
 
 /* ---- field story ---- */
@@ -2320,7 +2343,7 @@ table.mini {
 
 .tour-btn:hover {
   background: var(--accent);
-  color: white;
+  color: var(--on-accent);
   border-color: var(--accent);
 }
 

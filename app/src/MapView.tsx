@@ -11,7 +11,13 @@ import "maplibre-gl/dist/maplibre-gl.css";
 // MapLibre 6 finds its worker next to its own module; once bundled that file is not there,
 // so hand it the bundled worker URL (same origin, cached by the service worker).
 import workerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?url";
-import { type Domain, RAMPS, rampExpression } from "./mapLayers";
+import {
+  BASEMAP_HANDOVER_ZOOM,
+  type Domain,
+  GIBS_BACKDROP_URL,
+  RAMPS,
+  rampExpression,
+} from "./mapLayers";
 import { t } from "./strings";
 import { getMapColours } from "./theme";
 import type { RegionIndex } from "./types";
@@ -25,7 +31,7 @@ type StyleSpecification = Exclude<MapOptions["style"], string | undefined>;
 
 type Bbox = [number, number, number, number];
 
-/** Inline style: background, optional HLS true-colour composite, no third-party tiles or fonts. */
+/** Inline style: background, optional NASA imagery (MODIS backdrop + HLS 30 m), no third-party tiles or fonts. */
 function styleFor(index: RegionIndex, dark: boolean): StyleSpecification {
   const colours = getMapColours(dark);
   const [w, s, e, n] = index.bbox_lonlat;
@@ -36,14 +42,23 @@ function styleFor(index: RegionIndex, dark: boolean): StyleSpecification {
   };
   if (index.basemap) {
     if (index.basemap.includes("{z}") || index.basemap.startsWith("http://") || index.basemap.startsWith("https://")) {
+      // One credit line for both layers: customAttribution (map.attribution.hls).
+      // Coarse NASA backdrop below zoom 10, where the 30 m HLS layer has no tiles. If it fails
+      // (offline), the neutral background shows through, as before.
+      style.sources.backdrop = {
+        type: "raster",
+        tiles: [GIBS_BACKDROP_URL],
+        tileSize: 256,
+        maxzoom: 9,
+      };
+      style.layers.push({ id: "backdrop", type: "raster", source: "backdrop", maxzoom: BASEMAP_HANDOVER_ZOOM });
       style.sources.basemap = {
         type: "raster",
         tiles: [index.basemap],
         tileSize: 256,
-        minzoom: 10,
+        minzoom: BASEMAP_HANDOVER_ZOOM,
         maxzoom: 12,
         bounds: [w, s, e, n],
-        attribution: "NASA GIBS / LP DAAC (HLS S30, 2023-07-04)",
       };
       style.layers.push({ id: "basemap", type: "raster", source: "basemap" });
     } else {
@@ -214,7 +229,7 @@ export function MapView({ index, selectedId, onSelect, colouring = null, grid = 
       m.on("error", (e) => {
         // Gracefully handle tile loading errors (e.g. offline fallback to neutral background)
         const srcId = (e as unknown as { sourceId?: string })?.sourceId;
-        if (e?.error?.message?.includes("tile") || srcId === "basemap") {
+        if (e?.error?.message?.includes("tile") || srcId === "basemap" || srcId === "backdrop") {
           return;
         }
       });
@@ -274,8 +289,8 @@ export function MapView({ index, selectedId, onSelect, colouring = null, grid = 
             paint: {
               "circle-radius": 7,
               "circle-color": colours.fieldFill,
-              "circle-stroke-color": colours.fieldLine,
-              "circle-stroke-width": 1.5,
+              "circle-stroke-color": colours.markerLine,
+              "circle-stroke-width": 2,
               "circle-opacity": fadeOut(),
               "circle-stroke-opacity": fadeOut(),
             },
@@ -334,7 +349,7 @@ export function MapView({ index, selectedId, onSelect, colouring = null, grid = 
       if (!colouring) {
         m.setPaintProperty("fields-fill", "fill-color", colours.fieldFill);
         m.setPaintProperty("fields-marker", "circle-color", colours.fieldFill);
-        m.setPaintProperty("fields-marker", "circle-stroke-color", colours.fieldLine);
+        m.setPaintProperty("fields-marker", "circle-stroke-color", colours.markerLine);
       }
     } catch {
       // ignore during transitions

@@ -71,7 +71,7 @@ for (let i = 0; i < 100 && !found; i++) {
   found = r.result?.result?.value === true;
 }
 if (found && action) await send("Runtime.evaluate", { expression: action });
-await sleep(300);
+await sleep(Number(process.env.WAIT ?? 300)); // WAIT=<ms> gives slow actions (route changes) time to settle
 const shot = await send("Page.captureScreenshot", { format: "png" });
 writeFileSync(out, Buffer.from(shot.result.data, "base64"));
 console.log(found ? `ready: ${selector}` : `TIMEOUT waiting for ${selector}`);

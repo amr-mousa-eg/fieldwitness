@@ -560,6 +560,6 @@ Written and committed before executing the diagnostic analysis or inspecting res
    - Formal calibration of winter wheat phenology stage lengths is deferred to a separate decision entry, strictly constrained within published FAO-56 ranges, validated on dev/test split, and will be tackled only if time remains after completing Priority MUST items (Items 1, 7, 9, 10, 5).
 
 ## Handoff
-Item 8 (3D explainers & glossary) complete with unit tests and verified citations.
-All approved Phase 12 items (Items 1, 7, 9, 10, 8) are complete and verified.
-Codebase is frozen and ready for evaluation.
+2026-11-11: fixes F1–F4 (tour button contrast, phone overflow, 3D weather year from pack, MODIS low-zoom backdrop) done on branch `fix/phase12-ui-polish`; see PLAN.md Phase 12.
+Checks: vitest 130 passed / 1 skipped, build, keyboard, offline and new overflow check (360/390 px) all green; Python untouched (CI runs pytest).
+Next: user reviews screenshots; freeze after 12 Nov EOD; tag `v1.0-spaceapps` waits for 13 Nov approval.

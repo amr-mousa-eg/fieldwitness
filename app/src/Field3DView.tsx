@@ -183,7 +183,7 @@ export default function Field3DView({
             <span aria-hidden="true">🌦️</span> {sim3d.weather_label} <TagBadge tag="D" />
           </span>
           <span className="sim3d-disclaimer-pill">
-            {t("sim3d.disclaimer")}
+            {t("sim3d.disclaimer", { year: sim3d.weather_year })}
           </span>
         </div>
         <p className="sim3d-subtitle">
