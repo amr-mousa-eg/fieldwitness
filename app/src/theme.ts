@@ -1,6 +1,13 @@
 export type ThemeChoice = "system" | "light" | "dark";
 
+/** Event fired on `window` whenever the Light / Dark / Auto choice changes (shared by all views). */
+export const THEME_EVENT = "fw:theme";
+
+// The choice made in this tab, also when localStorage is blocked (then it lasts until reload).
+let memoryChoice: ThemeChoice | null = null;
+
 export function getStoredTheme(): ThemeChoice {
+  if (memoryChoice) return memoryChoice;
   try {
     const val = localStorage.getItem("fw-theme");
     if (val === "light" || val === "dark") return val;
@@ -11,17 +18,43 @@ export function getStoredTheme(): ThemeChoice {
 }
 
 export function setStoredTheme(choice: ThemeChoice): void {
+  memoryChoice = choice;
   try {
-    if (choice === "system") {
-      localStorage.removeItem("fw-theme");
-      document.documentElement.removeAttribute("data-theme");
-    } else {
-      localStorage.setItem("fw-theme", choice);
-      document.documentElement.setAttribute("data-theme", choice);
-    }
+    if (choice === "system") localStorage.removeItem("fw-theme");
+    else localStorage.setItem("fw-theme", choice);
   } catch {
-    // blocked or unavailable
+    // blocked or unavailable: the in-memory choice still applies
   }
+  try {
+    if (choice === "system") document.documentElement.removeAttribute("data-theme");
+    else document.documentElement.setAttribute("data-theme", choice);
+  } catch {
+    // no document (tests)
+  }
+  if (typeof window !== "undefined") window.dispatchEvent(new Event(THEME_EVENT));
+}
+
+/**
+ * Call `cb` when the effective theme may have changed: a choice in any component, a choice in
+ * another tab (storage event) or the system light/dark setting. Returns the unsubscribe function.
+ */
+export function subscribeTheme(cb: () => void): () => void {
+  if (typeof window === "undefined") return () => {};
+  const media = window.matchMedia?.("(prefers-color-scheme: dark)");
+  const onStorage = (e: StorageEvent) => {
+    if (e.key === "fw-theme") {
+      memoryChoice = null;
+      cb();
+    }
+  };
+  window.addEventListener(THEME_EVENT, cb);
+  window.addEventListener("storage", onStorage);
+  media?.addEventListener?.("change", cb);
+  return () => {
+    window.removeEventListener(THEME_EVENT, cb);
+    window.removeEventListener("storage", onStorage);
+    media?.removeEventListener?.("change", cb);
+  };
 }
 
 export function getEffectiveTheme(choice: ThemeChoice = getStoredTheme()): "light" | "dark" {

@@ -263,6 +263,8 @@ export default function Field3DView({
   // toggle switches back to the glass soil view.
   const farmAvailable = useMemo(farmEnabled, []);
   const [farmMode, setFarmMode] = useState<boolean>(farmAvailable);
+  // Which 3D panes have been shown: they are mounted on first show and then kept (only hidden).
+  const visited = useRef({ farm: false, glass: false });
   // Rotation Builder result (simulated in the browser); replaces the alternative while set
   const [builtOption, setBuiltOption] = useState<Sim3DOption | null>(null);
 
@@ -377,6 +379,10 @@ export default function Field3DView({
   const curScen = sim3d.current.scenarios[scenarioId] ?? sim3d.current.scenarios["t+0_p+0"];
   const altScen = activeAlternative?.scenarios[scenarioId] ?? activeAlternative?.scenarios["t+0_p+0"];
   const activeWeekInfo = sim3d.weeks[week] ?? sim3d.weeks[0];
+  if (!useFallback) {
+    if (farmMode && farmAvailable) visited.current.farm = true;
+    else visited.current.glass = true;
+  }
 
   return (
     <section className="sim3d-view" aria-label="Field in 3D Simulation View">
@@ -506,26 +512,32 @@ export default function Field3DView({
         </div>
       )}
 
-      {/* Farm view: one isometric farm, two plots (same field, same weeks and weather) */}
-      {!useFallback && farmMode && activeAlternative && altScen ? (
-        <FarmStage
-          current={{ option: sim3d.current, scenario: curScen }}
-          other={{ option: activeAlternative, scenario: altScen }}
-          otherLabel={activeAlternative.label}
-          week={week}
-          month={activeWeekInfo.month}
-          isDark={isDark}
-          quality={quality}
-          reducedMotion={reducedMotion}
-          onFrameStats={handleFrameStats}
-          source={sim3d.source}
-        />
-      ) : /* Main Interactive Stage */
-      !useFallback ? (
-        <div className={`sim3d-stage ${viewMode === "side-by-side" ? "stage-side-by-side" : "stage-single"}`}>
+      {/* View panes stay mounted once shown and are only hidden: switching Farm / Soil X-ray,
+          Side by side / Toggle or 3D / 2D reuses each scene's renderer, geometries and materials. */}
+      {visited.current.farm && activeAlternative && altScen && (
+        <div className="sim3d-pane" hidden={useFallback || !farmMode}>
+          <FarmStage
+            current={{ option: sim3d.current, scenario: curScen }}
+            other={{ option: activeAlternative, scenario: altScen }}
+            otherLabel={activeAlternative.label}
+            week={week}
+            month={activeWeekInfo.month}
+            isDark={isDark}
+            quality={quality}
+            reducedMotion={reducedMotion}
+            onFrameStats={handleFrameStats}
+            source={sim3d.source}
+          />
+        </div>
+      )}
+      {visited.current.glass && (
+        <div
+          className={`sim3d-stage ${viewMode === "side-by-side" ? "stage-side-by-side" : "stage-single"}`}
+          hidden={useFallback || farmMode}
+        >
           {/* Current Rotation Block */}
-          {(viewMode === "side-by-side" || toggleActive === "current") && (
-            <div className="sim3d-card">
+          {(
+            <div className="sim3d-card" hidden={viewMode === "toggle" && toggleActive !== "current"}>
               <header className="sim3d-card-header">
                 <h3>Current Rotation</h3>
                 <span className="sim3d-seq-tag">
@@ -555,8 +567,8 @@ export default function Field3DView({
           )}
 
           {/* Alternative Rotation Block */}
-          {activeAlternative && altScen && (viewMode === "side-by-side" || toggleActive === "alt") && (
-            <div className="sim3d-card">
+          {activeAlternative && altScen && (
+            <div className="sim3d-card" hidden={viewMode === "toggle" && toggleActive !== "alt"}>
               <header className="sim3d-card-header">
                 <h3>{activeAlternative.label}</h3>
                 <span className="sim3d-seq-tag">
@@ -585,7 +597,8 @@ export default function Field3DView({
             </div>
           )}
         </div>
-      ) : (
+      )}
+      {useFallback && (
         /* Accessible 2D Fallback Chart */
         <div className="sim3d-fallback-section" role="region" aria-label="2D Simulation Fallback Chart">
           <div className="sim3d-fallback-banner">

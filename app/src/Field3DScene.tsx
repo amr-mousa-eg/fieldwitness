@@ -20,6 +20,7 @@ import {
   waterFillFraction,
 } from "./field3d/growth";
 import { frameGeometry, grainTexture, plantBody, plantHead, rootTemplate, weedRosette } from "./field3d/geometry";
+import { ThemeBinder } from "./field3d/themed";
 
 export interface FrameStats {
   median: number;
@@ -75,6 +76,8 @@ interface PlantSet {
 
 interface SceneApi {
   update: (s: WeekState) => void;
+  /** Re-apply theme colours in place (no rebuild) and redraw the current week. */
+  theme: (dark: boolean) => void;
 }
 
 export function Field3DScene({
@@ -91,6 +94,8 @@ export function Field3DScene({
   const containerRef = useRef<HTMLDivElement | null>(null);
   const apiRef = useRef<SceneApi | null>(null);
   const latest = useRef<WeekState>({ option, scenario, weekIndex });
+  const darkRef = useRef(isDark);
+  darkRef.current = isDark;
   latest.current = { option, scenario, weekIndex };
   const statsCb = useRef(onFrameStats);
   statsCb.current = onFrameStats;
@@ -119,6 +124,8 @@ export function Field3DScene({
       return x;
     };
 
+    // Theme is applied live (ThemeBinder): no rebuild, same WebGL context, on Light / Dark / Auto.
+    const T = new ThemeBinder(darkRef.current);
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(38, canvas.clientWidth / Math.max(1, canvas.clientHeight), 0.1, 50);
     camera.position.set(3.4, 3.2, 4.2);
@@ -126,9 +133,10 @@ export function Field3DScene({
     camera.lookAt(target);
 
     // --- Soft sun, sky fill, and the existing blue under-light ---
-    scene.add(new THREE.HemisphereLight(isDark ? 0x93c5fd : 0xe0f2fe, isDark ? 0x1e1b2e : 0x4a3f35, isDark ? 0.75 : 0.95));
-    scene.add(new THREE.AmbientLight(0xffffff, isDark ? 0.35 : 0.35));
-    const sun = new THREE.DirectionalLight(isDark ? 0xfde7c7 : 0xfff1d6, isDark ? 1.2 : 1.6);
+    const hemi = new THREE.HemisphereLight();
+    scene.add(hemi);
+    scene.add(new THREE.AmbientLight(0xffffff, 0.35));
+    const sun = new THREE.DirectionalLight();
     sun.position.set(3.2, 6.5, 2.2);
     sun.castShadow = true;
     sun.shadow.mapSize.set(quality.shadowMapSize, quality.shadowMapSize);
@@ -141,7 +149,15 @@ export function Field3DScene({
     sc.near = 1;
     sc.far = 14;
     scene.add(sun);
-    const bluePoint = new THREE.PointLight(0x0284c7, isDark ? 1.5 : 0.8, 10);
+    const bluePoint = new THREE.PointLight(0x0284c7, 1, 10);
+    T.on((d) => {
+      hemi.color.setHex(d ? 0x93c5fd : 0xe0f2fe);
+      hemi.groundColor.setHex(d ? 0x1e1b2e : 0x4a3f35);
+      hemi.intensity = d ? 0.75 : 0.95;
+      sun.color.setHex(d ? 0xfde7c7 : 0xfff1d6);
+      sun.intensity = d ? 1.2 : 1.6;
+      bluePoint.intensity = d ? 1.5 : 0.8;
+    });
     bluePoint.position.set(0, -1.0, 0);
     scene.add(bluePoint);
 
@@ -157,17 +173,15 @@ export function Field3DScene({
         map.offset.set(i * 0.37, i * 0.21);
         map.needsUpdate = true;
       }
-      const mat = keep(
-        new THREE.MeshStandardMaterial({
-          color: isDark ? st.dark : st.light,
+      const mat = T.opacity(T.color(keep(new THREE.MeshStandardMaterial({
+          
           map,
           transparent: true,
-          opacity: isDark ? st.opacity[1] : st.opacity[0],
+          
           roughness: 0.18,
           metalness: 0.05,
           depthWrite: false,
-        }),
-      );
+        })), st.light, st.dark), st.opacity[0], st.opacity[1]);
       const mesh = new THREE.Mesh(geo, mat);
       mesh.position.y = st.bottom + h / 2;
       mesh.renderOrder = 5;
@@ -175,13 +189,11 @@ export function Field3DScene({
       scene.add(mesh);
       const edges = new THREE.LineSegments(
         keep(new THREE.EdgesGeometry(geo)),
-        keep(
-          new THREE.LineBasicMaterial({
-            color: isDark ? 0x38bdf8 : 0x0284c7,
+        T.color(keep(new THREE.LineBasicMaterial({
+            
             transparent: true,
             opacity: i === 0 ? 0.65 : 0.35,
-          }),
-        ),
+          })), 0x0284c7, 0x38bdf8),
       );
       edges.position.y = mesh.position.y;
       edges.renderOrder = 6;
@@ -196,16 +208,14 @@ export function Field3DScene({
       surfaceMap.repeat.set(4, 4);
       surfaceMap.needsUpdate = true;
     }
-    const surfaceMat = keep(
-      new THREE.MeshStandardMaterial({
-        color: isDark ? 0x5b5470 : 0x8a7f86,
+    const surfaceMat = T.opacity(T.color(keep(new THREE.MeshStandardMaterial({
+        
         map: surfaceMap,
         transparent: true,
-        opacity: isDark ? 0.5 : 0.45,
+        
         roughness: 0.9,
         depthWrite: false,
-      }),
-    );
+      })), 0x8a7f86, 0x5b5470), 0.45, 0.5);
     const surface = new THREE.Mesh(surfaceGeo, surfaceMat);
     surface.position.y = 0.002;
     surface.receiveShadow = true;
@@ -218,16 +228,14 @@ export function Field3DScene({
     waterBodyGeo.translate(0, 0.5, 0);
     const waterBody = new THREE.Mesh(
       waterBodyGeo,
-      keep(
-        new THREE.MeshStandardMaterial({
-          color: isDark ? 0x0ea5e9 : 0x0284c7,
+      T.opacity(T.color(keep(new THREE.MeshStandardMaterial({
+          
           transparent: true,
-          opacity: isDark ? 0.42 : 0.38,
+          
           roughness: 0.2,
           metalness: 0.1,
           depthWrite: false,
-        }),
-      ),
+        })), 0x0284c7, 0x0ea5e9), 0.38, 0.42),
     );
     waterBody.position.y = -SOIL_DEPTH;
     waterBody.renderOrder = 2;
@@ -238,9 +246,8 @@ export function Field3DScene({
     waterSurfGeo.rotateX(-Math.PI / 2);
     const waterSurf = new THREE.Mesh(
       waterSurfGeo,
-      keep(
-        new THREE.MeshStandardMaterial({
-          color: isDark ? 0x7dd3fc : 0x38bdf8,
+      T.color(keep(new THREE.MeshStandardMaterial({
+          
           transparent: true,
           opacity: 0.7,
           roughness: 0.08,
@@ -248,8 +255,7 @@ export function Field3DScene({
           side: THREE.DoubleSide,
           forceSinglePass: true,
           depthWrite: false,
-        }),
-      ),
+        })), 0x38bdf8, 0x7dd3fc),
     );
     waterSurf.renderOrder = 3;
     scene.add(waterSurf);
@@ -259,13 +265,13 @@ export function Field3DScene({
 
     const fillLine = new THREE.Mesh(
       keep(frameGeometry(SOIL_WIDTH + 0.02, 0.018)),
-      keep(new THREE.MeshBasicMaterial({ color: isDark ? 0x7dd3fc : 0x0369a1, transparent: true, opacity: 0.95 })),
+      T.color(keep(new THREE.MeshBasicMaterial({  transparent: true, opacity: 0.95 })), 0x0369a1, 0x7dd3fc),
     );
     fillLine.renderOrder = 7;
     scene.add(fillLine);
 
     // --- Roots: one template per crop, replicated on a small grid, scaled to root depth ---
-    const rootMat = keep(new THREE.LineBasicMaterial({ color: isDark ? 0xf8fafc : 0xffffff, transparent: true, opacity: 0.6 }));
+    const rootMat = T.color(keep(new THREE.LineBasicMaterial({  transparent: true, opacity: 0.6 })), 0xffffff, 0xf8fafc);
     const rootMeshes = new Map<CropKind, THREE.LineSegments>();
     const rootsFor = (kind: Exclude<CropKind, "fallow">) => {
       let m = rootMeshes.get(kind);
@@ -301,10 +307,16 @@ export function Field3DScene({
     // Lambert + single pass: plants are the most numerous surfaces, so they get the cheapest shading.
     const bodyMat = keep(new THREE.MeshLambertMaterial({ transparent: true, side: THREE.DoubleSide, forceSinglePass: true }));
     const headMat = keep(new THREE.MeshLambertMaterial({ transparent: true }));
-    const healthy = new THREE.Color(isDark ? 0xf59e0b : 0xb45309);
-    const pale = new THREE.Color(isDark ? 0xfef08a : 0xfde68a);
-    const headBase = new THREE.Color(isDark ? 0xfbbf24 : 0x92400e);
-    const headRipe = new THREE.Color(isDark ? 0xfde68a : 0xa16207);
+    const healthy = new THREE.Color();
+    const pale = new THREE.Color();
+    const headBase = new THREE.Color();
+    const headRipe = new THREE.Color();
+    T.on((d) => {
+      healthy.setHex(d ? 0xf59e0b : 0xb45309);
+      pale.setHex(d ? 0xfef08a : 0xfde68a);
+      headBase.setHex(d ? 0xfbbf24 : 0x92400e);
+      headRipe.setHex(d ? 0xfde68a : 0xa16207);
+    });
 
     const plantSets = new Map<CropKind, PlantSet>();
     const plantsFor = (kind: Exclude<CropKind, "fallow">): PlantSet => {
@@ -348,7 +360,7 @@ export function Field3DScene({
     // Neutral placeholder for history-only seasons (not simulated): a flat grey slab, no crop.
     const placeholder = new THREE.Mesh(
       keep(new THREE.BoxGeometry(FIELD_HALF * 2, 0.03, FIELD_HALF * 2)),
-      keep(new THREE.MeshLambertMaterial({ color: isDark ? 0x9aa0a6 : 0x8a8f94, transparent: true, opacity: 0.55 })),
+      T.color(keep(new THREE.MeshLambertMaterial({  transparent: true, opacity: 0.55 })), 0x8a8f94, 0x9aa0a6),
     );
     placeholder.position.y = 0.016;
     placeholder.visible = false;
@@ -358,15 +370,13 @@ export function Field3DScene({
     const weedRnd = seededRandom(SEED + 7);
     const weeds = new THREE.InstancedMesh(
       keep(weedRosette()),
-      keep(
-        new THREE.MeshLambertMaterial({
-          color: isDark ? 0xa3a86b : 0x7c7a3a,
+      T.color(keep(new THREE.MeshLambertMaterial({
+          
           transparent: true,
           opacity: 0.7,
           side: THREE.DoubleSide,
           forceSinglePass: true,
-        }),
-      ),
+        })), 0x7c7a3a, 0xa3a86b),
       quality.weeds,
     );
     {
@@ -392,7 +402,7 @@ export function Field3DScene({
     const dropGeo = keep(new THREE.CylinderGeometry(0.004, 0.004, 0.08, 3));
     const rain = new THREE.InstancedMesh(
       dropGeo,
-      keep(new THREE.MeshBasicMaterial({ color: isDark ? 0xbae6fd : 0x0284c7, transparent: true, opacity: 0.65 })),
+      T.color(keep(new THREE.MeshBasicMaterial({  transparent: true, opacity: 0.65 })), 0x0284c7, 0xbae6fd),
       quality.maxRainDrops,
     );
     rain.renderOrder = 9;
@@ -421,11 +431,9 @@ export function Field3DScene({
       const lines = quality.name === "high" ? 6 : 4;
       const tubeGeo = keep(new THREE.CylinderGeometry(0.013, 0.013, FIELD_HALF * 2, 6));
       tubeGeo.rotateZ(Math.PI / 2);
-      const tubeMat = keep(new THREE.MeshStandardMaterial({ color: isDark ? 0x67e8f9 : 0x0891b2, roughness: 0.4 }));
+      const tubeMat = T.color(keep(new THREE.MeshStandardMaterial({  roughness: 0.4 })), 0x0891b2, 0x67e8f9);
       const emitterGeo = keep(new THREE.SphereGeometry(0.022, 6, 4));
-      const emitterMat = keep(
-        new THREE.MeshStandardMaterial({ color: isDark ? 0xa5f3fc : 0x22d3ee, transparent: true, opacity: 0.85 }),
-      );
+      const emitterMat = T.color(keep(new THREE.MeshStandardMaterial({  transparent: true, opacity: 0.85 })), 0x22d3ee, 0xa5f3fc);
       const perLine = quality.name === "high" ? 9 : 6;
       const emitters = new THREE.InstancedMesh(emitterGeo, emitterMat, lines * perLine);
       const m = new THREE.Matrix4();
@@ -512,7 +520,7 @@ export function Field3DScene({
         // Colour and opacity exactly as before: amber, paling and fading with water stress (Ks).
         const k01 = Math.max(0, Math.min(1, ks));
         bodyMat.color.copy(pale).lerp(healthy, k01);
-        const baseOpacity = isDark ? 0.85 : 0.75;
+        const baseOpacity = T.dark ? 0.85 : 0.75;
         const opacity = Math.max(
           0.2,
           Math.min(0.92, (0.28 + 0.72 * k01) * baseOpacity * (0.35 + 0.65 * Math.min(1, canopy * 1.5))),
@@ -545,7 +553,13 @@ export function Field3DScene({
     renderer.shadowMap.needsUpdate = true;
     renderer.render(scene, camera);
 
-    apiRef.current = { update };
+    apiRef.current = {
+      update,
+      theme: (d) => {
+        T.apply(d);
+        update(latest.current);
+      },
+    };
     update(latest.current);
 
     // --- Orbit by drag (same as before) ---
@@ -697,7 +711,11 @@ export function Field3DScene({
       sun.shadow.map?.dispose();
       renderer.dispose();
     };
-  }, [isDark, quality, reducedMotion]);
+  }, [quality, reducedMotion]);
+
+  useEffect(() => {
+    apiRef.current?.theme(isDark);
+  }, [isDark]);
 
   // Per-week update and telemetry for the metric strip.
   useEffect(() => {

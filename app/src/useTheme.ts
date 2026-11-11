@@ -1,26 +1,12 @@
-import { useEffect, useState } from "react";
-import { type ThemeChoice, getEffectiveTheme, getStoredTheme, setStoredTheme } from "./theme";
+import { useSyncExternalStore } from "react";
+import { type ThemeChoice, getEffectiveTheme, getStoredTheme, setStoredTheme, subscribeTheme } from "./theme";
 
+/**
+ * The Light / Dark / Auto choice and the effective theme, shared by every component: a change in
+ * the toggle (or the system setting) re-renders all users at once, without a reload.
+ */
 export function useTheme() {
-  const [choice, setChoiceState] = useState<ThemeChoice>(() => getStoredTheme());
-  const [effective, setEffective] = useState<"light" | "dark">(() => getEffectiveTheme(choice));
-
-  const setChoice = (newChoice: ThemeChoice) => {
-    setChoiceState(newChoice);
-    setStoredTheme(newChoice);
-    setEffective(getEffectiveTheme(newChoice));
-  };
-
-  useEffect(() => {
-    const media = window.matchMedia?.("(prefers-color-scheme: dark)");
-    const handler = () => {
-      if (getStoredTheme() === "system") {
-        setEffective(getEffectiveTheme("system"));
-      }
-    };
-    media?.addEventListener?.("change", handler);
-    return () => media?.removeEventListener?.("change", handler);
-  }, []);
-
-  return { choice, effective, setChoice };
+  const choice = useSyncExternalStore<ThemeChoice>(subscribeTheme, getStoredTheme, () => "system");
+  const effective = useSyncExternalStore<"light" | "dark">(subscribeTheme, () => getEffectiveTheme(), () => "light");
+  return { choice, effective, setChoice: setStoredTheme };
 }
