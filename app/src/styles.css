@@ -2352,90 +2352,176 @@ table.mini {
   outline-offset: 2px;
 }
 
-/* Methods diagram (Item 9) */
-.methods-diagram-wrap {
-  margin: 1.5rem 0;
+/* Methods diagram (Item 9, redesigned 11 Nov): four numbered stages. Desktop reads left to
+   right; phones get a vertical layout at full text size (no scaling). Boxes are links. */
+.mdia {
+  margin: 1rem 0;
   padding: 1rem;
   background: var(--panel);
   border: 1px solid var(--rule);
   border-radius: 8px;
 }
-
-.methods-diagram-svg {
-  width: 100%;
-  max-width: 840px;
-  height: auto;
-  display: block;
-  margin: 0 auto;
-}
-
-.diagram-col-header {
-  font-size: 13px;
-  font-weight: 700;
-  fill: var(--ink);
-  letter-spacing: 0.02em;
-}
-
-.diagram-box-source {
-  fill: var(--panel);
-  stroke: var(--rule);
-  stroke-width: 1;
-}
-
-.diagram-box-main {
-  fill: var(--panel);
-  stroke: var(--rule);
-  stroke-width: 1.5;
-}
-
-.diagram-box-active {
-  fill: var(--panel);
-  stroke: var(--focus);
-  stroke-width: 1.5;
-}
-
-.diagram-box-off {
-  fill: var(--panel);
-  stroke: var(--warn, #b35900);
-  stroke-dasharray: 4 2;
-  stroke-width: 1.5;
-}
-
-.diagram-box-hindcast {
-  fill: var(--panel);
-  stroke: var(--rule);
-  stroke-width: 1.5;
-}
-
-.diagram-box-title {
-  font-size: 12px;
-  font-weight: 600;
-  fill: var(--ink);
-}
-
-.diagram-box-sub {
-  font-size: 10px;
-  fill: var(--muted);
-}
-
-.diagram-tag-active {
-  font-size: 9.5px;
-  font-weight: 600;
-  fill: var(--focus);
-}
-
-.diagram-tag-off {
-  font-size: 9.5px;
-  font-weight: 600;
-  fill: var(--warn, #b35900);
-}
-
-.diagram-caption {
-  font-size: 0.82rem;
+.mdia-caption {
+  margin: 0 0 0.9rem;
   color: var(--muted);
-  text-align: center;
-  margin-top: 0.8rem;
+  font-size: 0.95rem;
   line-height: 1.4;
+}
+.mdia-stages {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: 2.25rem;
+}
+.methods .mdia-stages > li {
+  margin: 0;
+}
+.mdia-stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 0;
+}
+.mdia-stage-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  font-family: var(--display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+.mdia-step {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 1rem;
+  font-weight: 700;
+}
+.mdia-boxes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  flex: 1;
+}
+.mdia-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.6rem 0.7rem;
+  border: 2px solid var(--rule);
+  border-radius: 6px;
+  background: var(--page);
+  color: var(--ink);
+  font-size: 0.9rem;
+  line-height: 1.35;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+.mdia-box:hover {
+  border-color: var(--accent);
+}
+.mdia-box:hover .mdia-box-label {
+  text-decoration: underline;
+}
+.mdia-box:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+.mdia-box-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.25rem 0.5rem;
+}
+.mdia-box-label {
+  font-size: 1rem;
+  font-weight: 700;
+}
+.mdia-sources {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+.methods .mdia-sources li {
+  margin: 0.1rem 0;
+}
+.mdia-status {
+  padding: 0 0.4rem;
+  border: 2px solid currentColor;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+.mdia-status--on {
+  color: var(--accent);
+}
+.mdia-status--off {
+  color: var(--ink);
+  border-style: dashed;
+  background: var(--panel);
+}
+/* Witness OFF: dashed border + hatched band + the word OFF, so it never relies on colour alone.
+   The hatch stays in a band on the left so the text sits on a plain background. */
+.mdia-box--off {
+  border-style: dashed;
+  border-color: var(--muted);
+  padding-left: 1.6rem;
+  background:
+    linear-gradient(var(--page), var(--page)) right / calc(100% - 0.9rem) 100% no-repeat,
+    repeating-linear-gradient(135deg, var(--page) 0 4px, var(--muted) 4px 6px);
+}
+.mdia-arrow {
+  position: absolute;
+  top: 50%;
+  right: -1.6rem;
+  width: 1rem;
+  height: 3px;
+  background: var(--muted);
+}
+.mdia-arrow::after {
+  content: "";
+  position: absolute;
+  right: -0.6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  border-style: solid;
+  border-width: 7px 0 7px 10px;
+  border-color: transparent transparent transparent var(--muted);
+}
+@media (max-width: 52rem) {
+  .mdia-stages {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 2.5rem;
+  }
+  .mdia-arrow {
+    top: auto;
+    right: auto;
+    left: 50%;
+    bottom: -1.6rem;
+    width: 3px;
+    height: 1rem;
+    transform: translateX(-50%);
+  }
+  .mdia-arrow::after {
+    right: auto;
+    top: auto;
+    left: 50%;
+    bottom: -0.6rem;
+    transform: translateX(-50%);
+    border-width: 10px 7px 0 7px;
+    border-color: var(--muted) transparent transparent transparent;
+  }
 }
 
 .sr-only {
