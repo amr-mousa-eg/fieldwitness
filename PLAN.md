@@ -692,6 +692,12 @@ We are at Gate <N>. Check every acceptance test of this phase against the actual
   - Phones (< 640 px or ≤ 4 cores): pixel ratio ≤ 1.25, fewer plants (≤ 420 instances), off-screen canvases paused. Automatic 2D fallback once if the median frame rate over the first ~2 s (≥ 20 frames, after 0.5 s warm-up) is below 28 fps; the user can switch back. Fixed a pre-existing CSS bug (canvas container never got full height, which cut the scene on phones).
   - Evidence: `field3dGrowth.test.ts`; initial bundle 297.75 → 297.91 kB (+0.16 kB: the one new fallback sentence), 3D chunk 569.87 → 589.54 kB (lazy). Headless software WebGL, phone 390 px, 4× CPU throttle: steady median 30 fps (old scene 20); fallback fired in 2 of 5 runs.
 
+- [x] **Soil check: independent soil check vs USDA SSURGO (11 Nov, read-only).**
+  - `scripts/check_ssurgo.py` + `src/fieldwitness/data/ssurgo.py` (SDA POST REST, one point per request, cached in `data/ssurgo/`); unit test `tests/test_ssurgo.py` reproduces NRCS `aws0100wta` (21.44 cm) from horizons. API shape in `docs/api_notes.md`; citation/terms in `DATA.md`.
+  - Finding: the pipeline never derives TAW from SoilGrids; every field starts from `taw_base_mm` = 150 mm (A) × ABC `taw_scale`. Compared that TAW (posterior median) with SSURGO AWS over 0–135 cm (FAO-56 maize root depth mean), component-percent weighted.
+  - Result (negative): n = 198/200; simulation median 142 mm vs SSURGO 282 mm; bias −119 mm (median −128), MAE 122 mm; Pearson −0.09, Spearman −0.12. 0–100 cm: bias −49 mm. SoilGrids vs SSURGO texture: sand r 0.65 (bias −0.7 pts), clay r 0.32 (bias +6.0 pts). 2 fields unmatched (profile ends at 91–102 cm).
+  - Outputs `results/validation/soil_ssurgo_check.{json,csv,md,png}`; Methods section "Independent soil check (USDA SSURGO)" (tag E); SoilGrids "use" row corrected (it is not a water-balance input). No simulation input, pack or result changed.
+
 #### Roadmap (Not Built in this Version — Post-Freeze Roadmap)
 - **Item 5: Arabic interface (i18n / RTL).** Post-freeze roadmap.
 - **Item 3: Check soil water and rain against independent data (SMAP / GPM).** Post-freeze roadmap.

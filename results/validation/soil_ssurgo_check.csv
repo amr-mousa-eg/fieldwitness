@@ -1,0 +1,201 @@
+field_id,lon,lat,ssurgo_status,mukey,muname,dominant_component,dominant_pct,ssurgo_aws_mm,ssurgo_aws_dominant_mm,ssurgo_aws_100cm_mm,ssurgo_clay_pct,ssurgo_sand_pct,sim_taw_median_mm,sim_taw_source,sg_clay_pct,sg_sand_pct
+7008ff6ba15fc8da1d2ebe4a739699117e7ae646,-101.11,38.39,ok,2668648,"Ulysses silt loam, 1 to 3 percent slopes",Ulysses,90.0,300.59,302.2,223.94,24.48,19.25,145.82,posterior,31.24,15.07
+1ce6e474f605025b83af3a0ff5b71442ec09a337,-101.16,38.75,ok,2668647,"Ulysses silt loam, 1 to 3 percent slopes",Ulysses,90.0,300.59,302.2,223.94,24.48,19.25,101.8,posterior,31.3,15.72
+ec4d5af741404a7ed6d72c79d89d1ddce9130a70,-101.01,38.34,ok,1151993,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,99.46,posterior,34.13,13.42
+be4c1c64e8f7337c4774f54913abd98770784b42,-100.83,37.99,ok,2509172,"Beeler silt loam, 0 to 1 percent slopes",Beeler,80.0,212.85,203.8,154.81,24.64,14.28,123.36,posterior,28.03,24.3
+7706df5305c6dca77fa440e5cb5996467a7f3de5,-100.5,37.97,ok,2745867,"Uly silt loam, 1 to 3 percent slopes",Uly,90.0,295.3,297.0,218.64,20.75,13.27,135.48,posterior,33.36,21.05
+6a1f0e3ae0e8020f38420298bb266d135f2c140b,-100.19,38.31,ok,2605927,"Harney silt loam, 0 to 1 percent slopes",Harney,97.0,262.3,262.4,192.23,30.12,5.49,130.46,prior,33.19,12.29
+be05f229de6c07f1f2244e618d03f1acb5b6e1d0,-100.59,38.56,ok,2605924,"Harney silt loam, 0 to 1 percent slopes",Harney,97.0,262.3,262.4,192.23,30.12,5.49,171.32,prior,34.35,16.79
+f9e6babeb08decb617a77676fd6d738b7c5af592,-100.28,38.02,ok,1152338,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,155.48,posterior,36.42,14.11
+a5c7fbe011385083f16d9d1580fb81cf26dd1fda,-100.85,38.25,ok,1152338,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,143.26,posterior,35.69,16.13
+70bdb6e29892c13b2e16a229937f65cc0b4c1894,-100.92,38.79,ok,2668837,"Ulysses silt loam, 0 to 1 percent slopes",Ulysses,99.0,291.27,292.0,214.38,27.25,19.32,136.51,posterior,30.03,20.88
+04e13c7da490f533af49ccb12879229bd173afb7,-100.82,38.58,ok,2668648,"Ulysses silt loam, 1 to 3 percent slopes",Ulysses,90.0,300.59,302.2,223.94,24.48,19.25,172.36,posterior,35.11,12.74
+0d5615b52572c5c2eeac7fdfef8cdda167050a22,-100.25,38.82,ok,1150678,"Keith silt loam, 0 to 1 percent slopes",Keith,95.0,282.0,283.5,208.83,19.97,12.02,189.68,posterior,32.71,14.41
+4bf9f45c9cf8ecf337eaa33ebb5504ab99024019,-100.86,38.66,ok,1151993,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,112.28,posterior,37.15,15.2
+5007e150251b78684ebb4d9d1f33df4bcb10a3a9,-101.1,38.51,ok,1151993,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,148.23,posterior,26.64,16.01
+71b9fde5a3ad92f14651b86b82ecff517e1d8cce,-101.12,37.95,no awc_r over the full root zone (profile too shallow or null awc_r),1152268,"Las clay loam, moderately deep, occasionally flooded",,,,,144.8,,,155.24,prior,21.66,53.01
+c065551579366653f4ca61b848f5f7649d247777,-100.97,38.24,ok,1152338,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,188.44,posterior,34.21,17.06
+f09fe4661937262ac79e5a623c1a1caa942766fa,-100.25,37.97,ok,1380593,"Richfield silt loam, 1 to 3 percent slopes",Richfield,90.0,241.61,235.8,177.31,30.71,17.21,158.89,posterior,36.94,11.76
+db5f2aa61ebe1e3056ebd6ada9243913ea558665,-100.05,38.29,ok,2605927,"Harney silt loam, 0 to 1 percent slopes",Harney,97.0,262.3,262.4,192.23,30.12,5.49,116.78,posterior,30.54,12.72
+bde1fabf714a23c5967df3d2406c7e2226086fef,-100.66,38.23,ok,1152346,"Satanta loam, 0 to 1 percent slopes",Satanta,94.0,262.75,264.1,192.15,21.04,40.78,170.6,posterior,34.21,20.14
+a25bf567883e5b4b9a3b1bf45c76171187b4aebe,-100.75,38.12,ok,1152338,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,128.02,posterior,34.24,21.25
+df9e200b312949e1081db1f8a403ccbdf258d74a,-100.88,38.46,ok,1151980,"Limon clay, occasionally flooded",Limon,99.0,186.2,186.0,136.99,47.64,23.07,182.26,posterior,36.4,13.38
+876389dfe3eaf47d39f2d6d3e314c66a55f0d875,-100.24,38.41,ok,1152061,"Bridgeport silt loam, rarely flooded",Bridgeport,95.0,282.47,284.2,212.47,22.92,11.44,178.18,posterior,33.88,17.44
+aa700a67784b0170ca07cd3e471b77ef646a1b57,-101.14,38.61,ok,1151951,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,198.88,posterior,34.42,15.29
+53ebf3f3e4ed4b76f25a724cea586cfa77d8c8ea,-100.38,38.19,ok,1152339,"Richfield silt loam, 1 to 3 percent slopes",Richfield,90.0,241.61,235.8,177.31,30.71,17.21,196.12,posterior,35.57,14.41
+65f920b5ea21b70fc8068812459378a44310a346,-100.19,37.92,ok,1152421,"Penden silty clay loam, 3 to 7 percent slopes",Penden,85.0,250.68,245.9,189.71,28.17,26.9,119.92,posterior,36.75,9.35
+11aae63d9b0ec64eb02439c4b1a5948c64b78874,-101.22,38.29,ok,1151951,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,105.34,posterior,29.23,16.48
+60fed7ceafc6dbf735578cf44f0d5249b98fb346,-100.47,37.9,ok,1380603,"Spearville silty clay loam, 0 to 1 percent slopes",Spearville,85.0,258.84,259.7,185.87,32.36,6.2,203.95,posterior,32.2,19.44
+0e23af1482cc130e6c2211daa4b5b37a34258f89,-100.31,38.64,ok,1152038,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,101.47,posterior,33.24,13.03
+e1fed992118d4e12bf4744b99ca1236ebedaab7e,-101.21,38.04,ok,2668645,"Ulysses silt loam, 1 to 3 percent slopes",Ulysses,90.0,300.59,302.2,223.94,24.48,19.25,175.58,prior,34.32,20.39
+6b4963de71bd2049cb38189ce1a1e0ec032fed73,-101.15,38.08,ok,1152281,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,229.54,posterior,32.69,23.76
+b7bc5e582a288141a0c05f5b168f1d0b3d70a099,-100.31,38.04,ok,2605915,"Harney silt loam, 0 to 1 percent slopes",Harney,97.0,262.3,262.4,192.23,30.12,5.49,99.43,posterior,33.93,16.2
+fee515613b3a8d90ab21e99d1ff2cbd7a0547ca5,-100.6,38.11,ok,2668892,"Buffalo Park-Ulysses silt loams, 1 to 3 percent slopes, eroded",Buffalo Park,55.0,268.42,278.6,198.59,23.79,16.58,172.0,posterior,33.93,23.46
+3f0c53f2b1286a1a179ad2404c4d38f2fe8eeaea,-100.68,38.15,ok,1152338,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,156.17,posterior,32.78,24.37
+c41b7f43c966b9f42fd27236c6e0bf9e005ed07a,-100.6,38.33,ok,2733415,"Richfield-Ulysses silt loams, 1 to 3 percent slopes",Richfield,65.0,266.31,261.9,196.31,27.05,14.62,123.27,posterior,33.84,22.21
+a3837ffcc070d71313f2866d64d38159b7de7246,-101.02,37.93,ok,1152366,"Valent-Vona loamy fine sands, 3 to 15 percent slopes",Valent,65.0,109.59,95.5,83.9,6.52,87.19,166.98,posterior,20.21,54.69
+61e20a1d4e2604fcd9bf9ca434fa0f5964dbe8f2,-100.75,38.06,ok,2668639,"Ulysses silt loam, 1 to 3 percent slopes",Ulysses,90.0,300.59,302.2,223.94,24.48,19.25,179.17,posterior,29.38,24.37
+4903f043e2205a0a2d9e3b85f8b4f623ac558208,-100.03,38.47,ok,2745875,"Uly silt loam, 1 to 3 percent slopes",Uly,90.0,295.3,297.0,218.64,20.75,13.27,113.45,prior,31.42,13.09
+fe63a19525bacb421c3919bbc97ff74107e6898b,-100.41,38.26,ok,2605915,"Harney silt loam, 0 to 1 percent slopes",Harney,97.0,262.3,262.4,192.23,30.12,5.49,171.88,prior,34.31,18.62
+0650f2937860abd03894b3730b0e7440d8186c3e,-100.46,38.37,ok,2605924,"Harney silt loam, 0 to 1 percent slopes",Harney,97.0,262.3,262.4,192.23,30.12,5.49,170.96,posterior,31.42,16.63
+4cf51ab1d5d1dd0aaa65525cd81788c2ec0305b5,-100.36,38.48,ok,2733415,"Richfield-Ulysses silt loams, 1 to 3 percent slopes",Richfield,65.0,266.31,261.9,196.31,27.05,14.62,194.43,posterior,36.43,11.62
+4c94dfaaec6630a4f59387da77bf55f440a5e170,-100.66,38.33,ok,2668900,"Buffalo Park-Ulysses silt loams, 1 to 3 percent slopes, eroded",Buffalo Park,55.0,268.42,278.6,198.59,23.79,16.58,148.58,posterior,32.32,23.21
+7fbd13d528bb5f9d3a6795f28c3700f3dcfc3d09,-100.19,38.69,ok,2605954,"Harney silt loam, 1 to 3 percent slopes",Harney,97.0,261.94,261.7,191.94,29.95,5.43,134.37,posterior,33.24,16.46
+18bd71b52d1ad4e9ced104f247c018f8419442a3,-100.06,38.82,ok,2668654,"Ulysses silt loam, 1 to 3 percent slopes",Ulysses,90.0,300.59,302.2,223.94,24.48,19.25,118.52,posterior,28.47,22.87
+07069cd08a053f9e048a3e12daa12bbac58dd14f,-100.21,38.56,ok,2605954,"Harney silt loam, 1 to 3 percent slopes",Harney,97.0,261.94,261.7,191.94,29.95,5.43,159.5,posterior,34.03,11.71
+f2cce773675d4f5a3ecbe8756cdb9c2f89025053,-100.27,37.89,ok,1380603,"Spearville silty clay loam, 0 to 1 percent slopes",Spearville,85.0,258.84,259.7,185.87,32.36,6.2,144.9,posterior,36.8,8.97
+6cadd5247a41492fa0a4f736768817c691b8c8d6,-100.96,38.62,ok,1151993,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,137.79,posterior,32.41,17.66
+59e443e882acedfccaf014e2f6fb4bb57e2ca492,-100.06,37.93,ok,2605921,"Harney silt loam, 0 to 1 percent slopes",Harney,97.0,262.3,262.4,192.23,30.12,5.49,191.08,posterior,35.54,8.32
+e6d044ae381f972e141476bf6e824529b2c026c0,-101.09,38.67,ok,1151993,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,116.7,posterior,33.15,15.19
+fb55c559285e7628e870caa89661027ddceefdee,-101.1,38.13,ok,2668829,"Ulysses silt loam, 0 to 1 percent slopes",Ulysses,99.0,291.27,292.0,214.38,27.25,19.32,104.57,posterior,27.92,25.49
+5d43037ee0ab2a22a3e9a7ce2b76fd745991cef8,-100.55,38.68,ok,1152039,"Richfield silt loam, 1 to 3 percent slopes",Richfield,90.0,241.61,235.8,177.31,30.71,17.21,115.04,posterior,30.82,19.42
+52a7fe052fd657d44c274f13da235a449d71e56d,-100.07,38.62,ok,2745875,"Uly silt loam, 1 to 3 percent slopes",Uly,90.0,295.3,297.0,218.64,20.75,13.27,138.77,posterior,35.57,11.94
+5cd227a000cb149d8b1f85fe99d753df3ef60230,-100.14,38.04,ok,1152392,"Richfield silt loam, 1 to 3 percent slopes",Richfield,90.0,241.61,235.8,177.31,30.71,17.21,126.74,posterior,35.97,9.61
+6dc6b8daf2a9c5ab7053406238cdb0ff20e7434e,-101.07,38.31,ok,1151993,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,145.7,posterior,29.25,17.9
+b940044cd3e8fa0b33d62897ba63180ef4c2c1ea,-100.53,38.57,ok,1152038,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,96.44,posterior,36.04,13.11
+dec17d10eab45e939e4604662cf7e3356e3926ef,-100.74,38.4,ok,2668839,"Ulysses silt loam, 0 to 1 percent slopes",Ulysses,99.0,291.27,292.0,214.38,27.25,19.32,129.79,posterior,31.53,19.79
+4498e967e7a9b5a88d93a931514f8f89945f7864,-101.27,38.65,ok,1151951,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,133.16,posterior,29.44,20.84
+c6942a04b7abbbefa6690a53914eb65fa18a785e,-100.79,38.21,ok,1152323,"Manter fine sandy loam, 1 to 3 percent slopes",Manter,99.0,181.24,182.1,129.42,15.11,60.15,168.18,posterior,30.1,24.97
+875afc1506983244479fa16bac3c13a72c2f3ef3,-100.42,38.61,ok,2605924,"Harney silt loam, 0 to 1 percent slopes",Harney,97.0,262.3,262.4,192.23,30.12,5.49,172.42,prior,33.35,14.33
+f8acc54b093c4d31885f2d41d68c2e96bd1908cf,-100.57,38.46,ok,2733415,"Richfield-Ulysses silt loams, 1 to 3 percent slopes",Richfield,65.0,266.31,261.9,196.31,27.05,14.62,130.79,posterior,33.11,18.93
+02cced77704c6b4a72bfdb5e0462c450800b7ae3,-100.69,38.79,ok,1150668,"Elkader silt loam, 3 to 6 percent slopes",Elkader,100.0,229.5,229.5,170.0,25.15,9.34,118.86,posterior,28.04,22.66
+e21cf42fdb444b7b4414fcce6fb40d0844c3707a,-100.45,37.95,ok,1380592,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,194.44,posterior,33.44,15.4
+c27812de2f00e10444012353b748fbe2b55c2a66,-101.03,38.79,ok,2668837,"Ulysses silt loam, 0 to 1 percent slopes",Ulysses,99.0,291.27,292.0,214.38,27.25,19.32,133.88,prior,30.73,21.06
+a0cc8a14d33b93de6d9983a68630cee0e01cffd8,-100.95,37.97,ok,1152316,"Las-Las Animas complex, occasionally flooded",Las,55.0,152.93,153.2,137.77,12.83,67.94,138.62,posterior,28.3,23.83
+86b22de6eaf1e62334f66d4e79659d64613ebd66,-100.09,38.18,ok,1152408,"Harney silty clay loam, 1 to 3 percent slopes, eroded",Harney,85.0,269.08,265.8,192.08,29.82,6.62,152.55,prior,34.62,15.26
+42970ffc4fe03b491ae38e65e63c9c9406db6fe2,-100.48,38.56,ok,1152038,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,151.06,posterior,35.67,11.91
+c7f16a2fa58922a802504f307de157bbc304109c,-101.09,37.84,ok,1152362,"Valent fine sand, 5 to 20 percent slopes",Valent,85.0,100.06,94.5,74.16,4.47,92.19,179.25,posterior,30.03,38.37
+3c91a5fdf970db8f293953b4d96b33f2ad58398d,-100.78,38.52,ok,1151993,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,100.62,posterior,33.65,15.5
+1c41850d9d252c0e35a43df9186c8f7e5fd470a6,-100.64,38.09,ok,1152342,"Richfield-Spearville complex, 0 to 1 percent slopes",Richfield,70.0,279.24,281.7,202.28,29.92,17.49,165.02,posterior,36.56,21.16
+35978df5cb091ab7ef9dd71b6e88c0e3bb59e554,-100.2,38.29,ok,2733030,"Uly silt loam, 3 to 6 percent slopes",Uly,90.0,291.92,297.0,216.14,21.01,14.3,141.21,prior,35.24,11.91
+2f1d72e5dfababdfe19e7381d5fcb264ca66b8f6,-100.71,38.73,ok,2668640,"Ulysses silt loam, 1 to 3 percent slopes",Ulysses,90.0,300.59,302.2,223.94,24.48,19.25,114.43,posterior,31.12,21.22
+53ecebc95447f051eeb8abb04a13a4f260d95700,-100.55,37.89,ok,1380592,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,235.44,posterior,29.26,23.57
+82710dc438ad70da4e867ccd364bd1bde9e3ee88,-100.18,38.16,ok,1152398,"Bridgeport silt loam, rarely flooded",Bridgeport,95.0,282.47,284.2,212.47,22.92,11.44,126.74,posterior,36.14,14.91
+d1ab6572425db6e0d0aecc28bae6dd80062aa755,-101.18,38.02,ok,1152286,"Ulysses and Richfield soils, silted, 0 to 1 percent slopes",Ulysses,65.0,246.23,249.6,179.66,27.11,11.98,140.3,prior,31.73,27.07
+8f94ad95505dc756dc453aed38f2adaf429708ae,-100.8,38.74,ok,2668640,"Ulysses silt loam, 1 to 3 percent slopes",Ulysses,90.0,300.59,302.2,223.94,24.48,19.25,123.22,posterior,32.07,18.84
+de3a8ba3a6bc62a6a22af3e7ab08035856886138,-100.61,37.91,ok,1380603,"Spearville silty clay loam, 0 to 1 percent slopes",Spearville,85.0,258.84,259.7,185.87,32.36,6.2,224.96,posterior,27.26,24.95
+b051e21865b6e22760dd4c2327fe1ac0f68f7d8c,-100.05,38.31,ok,2605954,"Harney silt loam, 1 to 3 percent slopes",Harney,97.0,261.94,261.7,191.94,29.95,5.43,111.76,posterior,31.56,11.8
+dc0fb3c5c41c5093a2971a4ff175ee0a39873ba1,-100.73,37.88,ok,1152366,"Valent-Vona loamy fine sands, 3 to 15 percent slopes",Valent,65.0,109.59,95.5,83.9,6.52,87.19,113.78,prior,29.67,31.18
+ebe3b8f95a165e279c775f5511c6c313e3c73ba7,-101.02,38.07,ok,2668829,"Ulysses silt loam, 0 to 1 percent slopes",Ulysses,99.0,291.27,292.0,214.38,27.25,19.32,139.54,posterior,30.88,32.18
+199d05c80a94d32fb8088a15d9231d8e9ec05464,-100.12,38.71,ok,2745889,"Holdrege silt loam, 1 to 3 percent slopes, plains and breaks",Holdrege,94.0,283.45,286.2,210.25,24.22,10.76,141.4,posterior,36.89,13.32
+a962e86120248a44853e8b3a0fa694e97c62ab27,-100.11,38.53,ok,1152079,"Hord silty clay loam, rarely flooded",Hord,90.0,282.24,283.5,208.76,29.78,12.43,164.6,prior,31.35,15.15
+e6e90fc1736338957f599334c392c18bc7136b39,-100.91,38.57,ok,1151993,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,128.36,posterior,34.73,17.93
+05ecf98f9da9a300dfa515c79bbc73943964e773,-100.6,38.81,ok,1150667,"Elkader silt loam, 1 to 3 percent slopes",Elkader,98.0,229.5,229.5,170.0,25.15,9.34,120.27,posterior,31.25,20.79
+376c3b96bfa4e44cbc8a713fd1ad07f9b73c8d0c,-100.13,38.07,ok,2605947,"Harney silt loam, 1 to 3 percent slopes",Harney,97.0,261.94,261.7,191.94,29.95,5.43,141.34,prior,34.22,10.1
+d6626453cd661f0a8ec240fc670406305dbc2806,-100.33,38.44,ok,1152038,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,117.38,posterior,32.41,16.51
+e1485212358a5adbb410fc03aeb846b92c8db3a7,-101.18,38.4,ok,2668846,"Ulysses silt loam, 0 to 1 percent slopes",Ulysses,99.0,291.27,292.0,214.38,27.25,19.32,134.93,posterior,32.11,16.42
+43955b19f18890d1f1d5d97aeb45b14e19ff78a5,-101.16,37.84,ok,2509182,"Satanta-Vona complex, 0 to 3 percent slopes",Satanta,50.0,178.14,183.1,135.44,15.67,60.01,141.58,posterior,27.14,37.04
+8efc1154359e74046cc4d74500e3f319a935bbbf,-100.63,37.96,ok,1380595,"Richfield-Spearville complex, 0 to 1 percent slopes",Richfield,70.0,279.24,281.7,202.28,29.92,17.49,128.08,posterior,33.0,19.09
+e02afe8a556730876a06034420b908316c1c6b8b,-100.4,38.77,ok,2668640,"Ulysses silt loam, 1 to 3 percent slopes",Ulysses,90.0,300.59,302.2,223.94,24.48,19.25,129.44,prior,33.82,14.9
+b19fc2ff1df981dedaec3416e184fb597f5726de,-100.6,38.16,ok,1152338,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,133.32,posterior,31.29,24.42
+faddc34ec6c8396a24361910fe463760a7d8567b,-100.62,38.62,ok,1152038,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,154.68,posterior,32.6,15.87
+78433ded5a56eb2f8beb82cdee2aa66f3ef8c2ee,-100.07,38.36,ok,2605927,"Harney silt loam, 0 to 1 percent slopes",Harney,97.0,262.3,262.4,192.23,30.12,5.49,154.26,posterior,35.97,12.92
+7bf8c222f93f4d44a763d9bc84d5e90b4c921d06,-101.14,38.27,ok,1151951,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,108.3,posterior,33.0,16.94
+905e1f18bfd01edcc9f457e66691b2901cf4f198,-100.23,38.53,ok,2605927,"Harney silt loam, 0 to 1 percent slopes",Harney,97.0,262.3,262.4,192.23,30.12,5.49,208.99,posterior,32.19,11.34
+7c0e7d2c4900d8f73aea221357209360edc6854a,-100.12,38.74,ok,1150887,"Wakeen-Nibson silt loams, 3 to 7 percent slopes",Armo,6.0,221.28,203.7,166.35,27.98,33.54,128.22,posterior,33.54,13.63
+e9dfa617c4d2e1a487553c08d5a287176af20b08,-100.6,38.17,ok,1152339,"Richfield silt loam, 1 to 3 percent slopes",Richfield,90.0,241.61,235.8,177.31,30.71,17.21,152.12,posterior,31.31,24.41
+895821eef59c36fe078ad6e04802a6668d1d861e,-100.85,38.15,ok,2668829,"Ulysses silt loam, 0 to 1 percent slopes",Ulysses,99.0,291.27,292.0,214.38,27.25,19.32,144.1,posterior,32.7,21.63
+3a199ac21bfabe18eaf4150d414a3c2de7cde971,-100.24,38.45,ok,2745875,"Uly silt loam, 1 to 3 percent slopes",Uly,90.0,295.3,297.0,218.64,20.75,13.27,116.9,posterior,33.99,16.5
+9399b1c9728025fbcebfe0bb3321292fa27d5eab,-100.81,38.2,ok,1152338,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,143.86,posterior,34.07,19.93
+daf1719f844e1626d113fd2035a9fe402a564b69,-100.2,38.63,ok,2605954,"Harney silt loam, 1 to 3 percent slopes",Harney,97.0,261.94,261.7,191.94,29.95,5.43,144.89,posterior,38.58,10.89
+9784877b54b9f75b467f2ddccbbf1bd8bc805b67,-100.05,38.45,ok,2605927,"Harney silt loam, 0 to 1 percent slopes",Harney,97.0,262.3,262.4,192.23,30.12,5.49,159.86,posterior,36.53,12.18
+20332278fb19e0674dc98c42df02b96b10f067a8,-101.26,38.69,ok,1151951,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,159.76,posterior,33.83,17.56
+d4314fd894ec239e107ffc6182074848bf38312f,-100.53,38.71,ok,1150678,"Keith silt loam, 0 to 1 percent slopes",Keith,95.0,282.0,283.5,208.83,19.97,12.02,108.23,posterior,33.74,21.96
+786a117c2aad3d6381404381341bd54d93f96355,-100.2,38.73,ok,2668830,"Ulysses silt loam, 0 to 1 percent slopes",Ulysses,99.0,291.27,292.0,214.38,27.25,19.32,180.01,posterior,36.46,14.8
+db8b9842246cdaf879002686fd81afae220fcc78,-100.31,38.71,ok,2668640,"Ulysses silt loam, 1 to 3 percent slopes",Ulysses,90.0,300.59,302.2,223.94,24.48,19.25,171.94,posterior,31.74,15.93
+86c681013b56a193d1fe0d70b0cd0ce412525fa0,-101.03,38.12,ok,2768075,"Richfield and Ulysses complexes, bench leveled",Richfield,51.0,268.07,261.9,198.07,25.98,13.34,213.76,posterior,37.94,19.23
+d282ffdc86417199b2fa0cf0f369bcb3a66e1466,-100.58,37.99,ok,1380595,"Richfield-Spearville complex, 0 to 1 percent slopes",Richfield,70.0,279.24,281.7,202.28,29.92,17.49,120.08,posterior,35.2,19.17
+530d8211fc51a15fd9d273b9a1c05e6cc84728a9,-100.84,38.01,ok,2509172,"Beeler silt loam, 0 to 1 percent slopes",Beeler,80.0,212.85,203.8,154.81,24.64,14.28,208.54,posterior,31.81,16.43
+68779621e9facfeaa24723e8a415d6dc6eb37a82,-101.13,38.0,ok,1152286,"Ulysses and Richfield soils, silted, 0 to 1 percent slopes",Ulysses,65.0,246.23,249.6,179.66,27.11,11.98,172.98,posterior,28.75,26.36
+bd97fb12fd57099291b3d5c0ee2ae955a9134b61,-100.16,38.27,ok,2605927,"Harney silt loam, 0 to 1 percent slopes",Harney,97.0,262.3,262.4,192.23,30.12,5.49,180.82,posterior,31.1,10.92
+7865a55ac5f0a05df4495692604e690c054ef1fc,-101.21,38.52,ok,1151951,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,173.7,posterior,27.16,15.72
+6f9ee58f4458584904d4535afb2cfda8d6743ab8,-100.39,38.57,ok,1152038,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,165.58,posterior,34.9,12.91
+9f647b75f822a70ea157acfcdf6158e957a44a9d,-100.84,38.45,ok,1151993,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,137.78,posterior,33.64,20.75
+364032c21c59252ea7bc434dece5aa40056cf7c0,-100.8,38.38,ok,1151993,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,141.15,posterior,24.28,28.67
+100d40f8977d49cb51836b45afb90c5854f3807b,-100.96,38.46,ok,2668839,"Ulysses silt loam, 0 to 1 percent slopes",Ulysses,99.0,291.27,292.0,214.38,27.25,19.32,117.45,posterior,34.5,11.62
+8d4341cacc1d1338d43b81552e621a7397c76a62,-101.0,38.56,ok,2668839,"Ulysses silt loam, 0 to 1 percent slopes",Ulysses,99.0,291.27,292.0,214.38,27.25,19.32,133.49,posterior,31.67,15.04
+0aa8b9234d54dcf896741987942859413b6f1aa5,-100.09,38.14,ok,2605921,"Harney silt loam, 0 to 1 percent slopes",Harney,97.0,262.3,262.4,192.23,30.12,5.49,152.47,posterior,31.23,10.28
+b6d16cd97ce61e33b8cb53e42da8e32689c63f6b,-100.47,38.22,ok,1152338,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,159.8,posterior,32.7,19.46
+189e236596fa05b85f1c19fe582083601b59b353,-101.22,37.9,no awc_r over the full root zone (profile too shallow or null awc_r),1152268,"Las clay loam, moderately deep, occasionally flooded",,,,,144.8,,,172.27,posterior,29.54,33.92
+49f6772d07985a6f7d6e8072954f47d61fcc4f55,-100.07,38.64,ok,2605954,"Harney silt loam, 1 to 3 percent slopes",Harney,97.0,261.94,261.7,191.94,29.95,5.43,130.16,posterior,35.97,9.25
+0fac7e424995fdde952086673dc2af3fde818010,-100.69,38.72,ok,2668640,"Ulysses silt loam, 1 to 3 percent slopes",Ulysses,90.0,300.59,302.2,223.94,24.48,19.25,152.06,posterior,33.72,19.76
+b92fecfd2d4a4d3de1dfbc9ed1a37fe5b01ee928,-100.85,37.84,ok,2768074,"Otero-Ulysses complex, 0 to 5 percent slopes",Otero,60.0,212.58,172.9,155.88,16.7,43.28,142.62,posterior,30.15,36.04
+c531ab7b07aaba4b82fad3cc87d038cdf3136a54,-100.92,38.35,ok,1151993,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,138.43,posterior,36.65,14.03
+240fa53927d596d52790d19668e14589534072f2,-101.05,38.35,ok,1151976,"Goshen silt loam, rarely flooded",Goshen,98.0,236.62,236.3,176.56,24.84,9.58,171.84,posterior,31.97,17.53
+ed68b58111c37a959b7a3e554cacd5b86759be42,-100.64,38.46,ok,2668646,"Ulysses silt loam, 1 to 3 percent slopes",Ulysses,90.0,300.59,302.2,223.94,24.48,19.25,145.82,posterior,35.12,19.83
+e6ec681d2fd86aab04df91b15e7215b481833ad6,-100.3,38.76,ok,2668640,"Ulysses silt loam, 1 to 3 percent slopes",Ulysses,90.0,300.59,302.2,223.94,24.48,19.25,166.36,posterior,32.41,23.22
+479957fc7b403f03e9d802c07e8b284a850dacd3,-100.87,38.21,ok,2768074,"Otero-Ulysses complex, 0 to 5 percent slopes",Otero,60.0,212.58,172.9,155.88,16.7,43.28,167.69,posterior,35.83,23.34
+490d1ccb85346a98067fcb1f0875e48083bfd2f8,-100.54,38.23,ok,1152339,"Richfield silt loam, 1 to 3 percent slopes",Richfield,90.0,241.61,235.8,177.31,30.71,17.21,127.74,posterior,30.36,23.69
+58e79c28ce1ee65ddef9c80737d789d1f3bb2ae1,-100.63,38.52,ok,1152038,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,124.19,posterior,33.95,15.66
+9c9ee9a057bea7043d7eb5bffaca322cb2ec329a,-100.79,38.53,ok,1703765,"Kuma silt loam, 0 to 1 percent slopes",Kuma,99.0,256.69,256.8,186.66,23.26,11.18,177.5,posterior,36.99,14.76
+635b6de04312850a00d634745e74f97c9b12509b,-101.25,38.07,ok,1152263,"Goshen silt loam, rarely flooded",Goshen,98.0,236.62,236.3,176.56,24.84,9.58,129.2,posterior,28.51,15.87
+3aa4a62c47732c64cd60ce1a6f6f406245cba99c,-100.24,38.35,ok,2605927,"Harney silt loam, 0 to 1 percent slopes",Harney,97.0,262.3,262.4,192.23,30.12,5.49,137.26,posterior,33.64,11.31
+f300b264b3c4c645d8aa7731b7239d3068309597,-100.52,38.13,ok,1152303,"Bridgeport silt loam, occasionally flooded",Bridgeport,97.0,289.62,290.0,212.73,19.97,18.22,144.24,posterior,36.02,20.98
+b48e13edd44dd716c6ec11fd314265b201c99560,-100.96,38.04,ok,1152338,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,207.8,posterior,32.01,21.63
+c5edda3a59c71783407fa1c4220bcdf8c76568ae,-100.46,38.42,ok,2733415,"Richfield-Ulysses silt loams, 1 to 3 percent slopes",Richfield,65.0,266.31,261.9,196.31,27.05,14.62,131.5,posterior,34.01,14.87
+24213b903106fd72ab109470862d366bf02c0928,-100.81,38.59,ok,2668904,"Buffalo Park-Ulysses silt loams, 1 to 3 percent slopes, eroded",Buffalo Park,55.0,268.42,278.6,198.59,23.79,16.58,114.67,posterior,35.72,8.63
+96dc5aab3636bbd6f201cde44611b4af3af2f803,-100.29,38.42,ok,1152038,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,151.69,posterior,31.47,16.28
+d745010999e3b0fff4f751ad78c0fe4bae7b276f,-101.08,38.58,ok,1151993,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,163.14,posterior,32.31,13.07
+c0b7e60adc673cf780cce9ce7a6986e310cc5382,-100.8,38.77,ok,2668738,"Ulysses silt loam, 3 to 6 percent slopes",Ulysses,75.0,191.86,175.4,151.51,25.26,14.67,96.72,posterior,31.59,21.58
+83a98187c0f13a626f5dd1027fa5c81f33c43f12,-100.79,38.38,ok,1151984,"Manter fine sandy loam, 3 to 5 percent slopes",Manter,99.0,165.31,164.5,123.0,11.84,57.6,121.73,posterior,25.19,32.32
+10a1086c58e6d4f32e31c7c7c43448bb69201666,-100.92,38.59,ok,1151974,"Colby silt loam, 6 to 15 percent slopes",Colby,88.0,279.99,280.2,209.96,21.27,10.03,187.33,posterior,37.72,12.72
+1d5b5b594e6c54d7c4ddd27b72e0f527bf7162b7,-100.37,38.36,ok,2605924,"Harney silt loam, 0 to 1 percent slopes",Harney,97.0,262.3,262.4,192.23,30.12,5.49,190.94,posterior,35.45,18.79
+71303789d34cd15e07cc609505ab024bb96dcfd4,-100.41,38.08,ok,1152348,"Spearville silty clay loam, 0 to 1 percent slopes",Spearville,85.0,258.84,259.7,185.87,32.36,6.2,164.1,posterior,33.17,20.81
+aa4ad7fcef55ad9e9c24a90426f3214471472cd8,-101.23,38.29,ok,1151951,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,119.08,posterior,29.71,15.1
+8a79e7d53e6265800428aab023deb918b6341f21,-101.17,38.52,ok,1151951,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,116.97,posterior,29.82,14.13
+d35b7816c3e36e5c196b4f7062b25f067eb07b29,-100.14,38.57,ok,2496167,"Roxbury silt loam, rarely flooded",Roxbury,79.0,285.04,294.1,211.74,24.21,15.41,104.05,posterior,33.53,12.93
+ea1625dff31d189aa5b4d1b805683fa5526d9159,-101.09,38.3,ok,1151993,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,92.79,posterior,29.49,14.66
+aa7e0e311edac276dec2ceb1ac9fa3ea3aa8f59c,-100.44,38.29,ok,2605924,"Harney silt loam, 0 to 1 percent slopes",Harney,97.0,262.3,262.4,192.23,30.12,5.49,141.12,posterior,35.65,16.22
+5644739d8e3ac4979df87ed536448ea6651e33d2,-100.34,38.09,ok,1152303,"Bridgeport silt loam, occasionally flooded",Bridgeport,97.0,289.62,290.0,212.73,19.97,18.22,149.46,posterior,31.89,17.51
+f865f8982977ecb13746c804b9f96b086003553d,-100.93,37.85,ok,1152366,"Valent-Vona loamy fine sands, 3 to 15 percent slopes",Valent,65.0,109.59,95.5,83.9,6.52,87.19,165.59,posterior,29.31,37.76
+3ba5d597e69167f2a27dfd13c68b3c9a2fc713c6,-100.37,38.81,ok,1150678,"Keith silt loam, 0 to 1 percent slopes",Keith,95.0,282.0,283.5,208.83,19.97,12.02,117.36,posterior,31.63,14.39
+a6f8fbe357539ecbf3798964048295e83097b82d,-100.7,38.83,ok,2668640,"Ulysses silt loam, 1 to 3 percent slopes",Ulysses,90.0,300.59,302.2,223.94,24.48,19.25,143.89,posterior,27.76,20.72
+3454cbd8bc213c15805a1d31da009668ff59bc9e,-100.12,38.46,ok,2605927,"Harney silt loam, 0 to 1 percent slopes",Harney,97.0,262.3,262.4,192.23,30.12,5.49,133.62,posterior,30.83,13.97
+da438bc7b421460080a0eff51b3c16db41d8eec5,-100.71,38.69,ok,2668904,"Buffalo Park-Ulysses silt loams, 1 to 3 percent slopes, eroded",Buffalo Park,55.0,268.42,278.6,198.59,23.79,16.58,124.17,posterior,32.31,23.01
+e202b5664876c0808f86e018b040ec4fac69a1f9,-100.24,38.55,ok,2496167,"Roxbury silt loam, rarely flooded",Roxbury,79.0,285.04,294.1,211.74,24.21,15.41,144.42,posterior,30.77,13.01
+72e4ed0bd7f51ca59348e36b7a7caa892024a0d4,-100.2,37.87,ok,2605916,"Harney silt loam, 0 to 1 percent slopes",Harney,97.0,262.3,262.4,192.23,30.12,5.49,125.12,posterior,40.86,6.53
+925a4f8329ad4bccc172215cafa0c7019945046c,-101.0,38.24,ok,1152338,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,150.66,posterior,34.57,18.4
+9a5bd695c8670424a7a65c29e9aae5b25921dd1a,-100.04,38.66,ok,2605954,"Harney silt loam, 1 to 3 percent slopes",Harney,97.0,261.94,261.7,191.94,29.95,5.43,136.83,posterior,32.8,11.54
+4da67b6118bf018e60a71259e2411c9c932bf960,-101.1,38.55,ok,1151993,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,183.1,posterior,29.31,15.69
+2e29208638ee43dbdf537fb7bc8fd57733f35b41,-101.19,38.72,ok,1150518,"Goshen silt loam, rarely flooded",Goshen,98.0,236.62,236.3,176.56,24.84,9.58,113.72,posterior,31.69,16.49
+814fdaf97d79e37cc7d8060fe97ee9294ecf2e7d,-100.34,38.55,ok,1152039,"Richfield silt loam, 1 to 3 percent slopes",Richfield,90.0,241.61,235.8,177.31,30.71,17.21,184.54,posterior,35.25,11.59
+d11fd9d2d1007f1503dbe0fa67f5af8630d070f9,-100.08,38.02,ok,1152428,"Spearville silty clay loam, 0 to 1 percent slopes",Spearville,85.0,258.84,259.7,185.87,32.36,6.2,142.4,posterior,33.58,7.81
+290d2e24b3b6122ce4ec3a086b50b981d386222a,-100.23,38.82,ok,2668640,"Ulysses silt loam, 1 to 3 percent slopes",Ulysses,90.0,300.59,302.2,223.94,24.48,19.25,148.51,posterior,29.33,20.73
+0c55fbd7be97dc07594bd77e3430e976d7d7eadc,-100.62,37.92,ok,1380603,"Spearville silty clay loam, 0 to 1 percent slopes",Spearville,85.0,258.84,259.7,185.87,32.36,6.2,160.0,posterior,30.47,26.26
+acc388cde861e2bb3f52052c7704422c4f0e5698,-100.1,38.22,ok,1152437,"Hord silty clay loam, rarely flooded",Hord,90.0,282.24,283.5,208.76,29.78,12.43,149.06,posterior,29.74,13.64
+c945502188e5a74716646ec3a9cc04a7d5421a0e,-100.92,38.41,ok,2668839,"Ulysses silt loam, 0 to 1 percent slopes",Ulysses,99.0,291.27,292.0,214.38,27.25,19.32,130.35,posterior,34.59,13.47
+bd5ea7903fa160a316466daf9c6aec8d2bb02d39,-100.64,37.99,ok,1380595,"Richfield-Spearville complex, 0 to 1 percent slopes",Richfield,70.0,279.24,281.7,202.28,29.92,17.49,130.74,posterior,35.14,17.94
+92ab7c28dc61a826b8145085af6f26847728ae55,-100.83,38.33,ok,1703767,"Keith-Kuma silt loams, 0 to 1 percent slopes",Keith,75.0,285.3,285.3,211.8,26.26,13.6,115.07,posterior,30.02,20.18
+13c9aa108f76fa30771be67f759e8b2a7f7e4ec0,-101.1,38.66,ok,1151993,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,212.1,posterior,29.99,11.47
+cdadeb6564815ef8deb626784c7109a4c0141e9e,-100.68,38.56,ok,1152039,"Richfield silt loam, 1 to 3 percent slopes",Richfield,90.0,241.61,235.8,177.31,30.71,17.21,120.55,posterior,39.3,7.91
+d993613144e6e75b8de17a452205a396167c7d45,-100.24,37.98,ok,1380603,"Spearville silty clay loam, 0 to 1 percent slopes",Spearville,85.0,258.84,259.7,185.87,32.36,6.2,172.97,posterior,33.33,12.1
+b80503bc89a169d8f8388e0779e67e159f058fcf,-100.25,38.21,ok,1152339,"Richfield silt loam, 1 to 3 percent slopes",Richfield,90.0,241.61,235.8,177.31,30.71,17.21,144.44,posterior,34.45,14.13
+ba8e47010bd2cf8a36b5ac8dda51273c38721f72,-101.06,38.44,ok,1151993,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,121.08,posterior,34.21,14.44
+5a7a0f5fb6b738d6a972f14ef76f18b58188c177,-101.08,38.36,ok,2668648,"Ulysses silt loam, 1 to 3 percent slopes",Ulysses,90.0,300.59,302.2,223.94,24.48,19.25,132.94,posterior,28.74,14.82
+8f036436f1926668e98386c028832dc0ef4a5378,-100.4,38.32,ok,1152039,"Richfield silt loam, 1 to 3 percent slopes",Richfield,90.0,241.61,235.8,177.31,30.71,17.21,103.0,posterior,32.31,19.79
+4b4da0dc696fedea0e910c211b959aec20b7442f,-100.64,38.27,ok,1152029,"Ness silty clay loam, 0 to 1 percent slopes, occasionally ponded",Ness,80.0,248.75,245.8,176.74,38.32,7.03,136.19,posterior,35.48,21.36
+19614de2684e8fd84a10f9e510ae828736927d76,-100.33,38.69,ok,2733394,"Buffalo Park-Ulysses silt loams, 3 to 6 percent slopes, eroded",Buffalo Park,65.0,264.35,268.3,195.26,21.98,18.73,135.6,posterior,31.03,18.83
+52b855bab4eeee0e18c494bbee983ec37dc01b36,-100.09,38.72,ok,2745889,"Holdrege silt loam, 1 to 3 percent slopes, plains and breaks",Holdrege,94.0,283.45,286.2,210.25,24.22,10.76,148.41,posterior,35.68,14.83
+1231336358a1e11061fa1a6aeb5201fb547a24b9,-100.37,38.59,ok,2605924,"Harney silt loam, 0 to 1 percent slopes",Harney,97.0,262.3,262.4,192.23,30.12,5.49,135.78,posterior,32.81,14.52
+6ba7f6593ef9e2dc09cbbf30b3b4325e5f4ac5d1,-100.49,37.9,ok,1380603,"Spearville silty clay loam, 0 to 1 percent slopes",Spearville,85.0,258.84,259.7,185.87,32.36,6.2,141.27,posterior,30.84,18.11
+1fe9a708d8484a8d64638522a5b30b520d1b5cf3,-100.33,38.16,ok,1152339,"Richfield silt loam, 1 to 3 percent slopes",Richfield,90.0,241.61,235.8,177.31,30.71,17.21,140.21,posterior,33.01,16.14
+77a934247a706dff9d8574059e22b84e7a95ff6f,-100.09,38.11,ok,2605921,"Harney silt loam, 0 to 1 percent slopes",Harney,97.0,262.3,262.4,192.23,30.12,5.49,173.49,posterior,33.33,10.76
+4d89c333e7f0eefcabc4993a446b1eed3a2f2e95,-100.26,37.98,ok,1380603,"Spearville silty clay loam, 0 to 1 percent slopes",Spearville,85.0,258.84,259.7,185.87,32.36,6.2,158.38,posterior,35.66,12.99
+f52acb45e8b5b82b5964e8682826435a925e8692,-101.05,38.45,ok,1151993,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,116.13,posterior,33.2,13.74
+ce244a1b7c1aa288698d345721ec17741f2777a0,-100.77,38.73,ok,2605805,"Buffalo Park-Ulysses silt loams, 3 to 6 percent slopes, eroded",Buffalo Park,65.0,264.35,268.3,195.26,21.98,18.73,127.55,posterior,26.25,12.37
+8f610d76f179486063f84cc30981abd983365d66,-100.69,38.12,ok,1152338,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,142.43,posterior,32.83,22.28
+f30e4e4d033a432232391184984fca9f02ee24b5,-100.53,38.28,ok,1152029,"Ness silty clay loam, 0 to 1 percent slopes, occasionally ponded",Ness,80.0,248.75,245.8,176.74,38.32,7.03,114.38,posterior,36.71,18.34
+f9e135796e8243385aae5793ccc5b97fd9c0e5d1,-100.87,38.5,ok,1151993,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,152.74,posterior,32.54,18.91
+90d2b4b975f20d3c1f54961f71501979f2d99233,-100.05,38.39,ok,1152103,"Uly-Corinth complex, 1 to 3 percent slopes",Uly,65.0,285.98,297.0,211.64,27.28,14.76,120.8,posterior,32.6,13.2
+efc10a42fd5df1a643af3778f5ff5985f92f70eb,-100.98,38.01,ok,1152301,"Bridgeport clay loam, rarely flooded",Bridgeport,92.0,225.26,229.5,169.68,27.19,27.68,195.62,posterior,33.35,26.75
+0d0dca4303fc4160a3e62f48a89809495e20f2db,-100.55,38.1,ok,2668639,"Ulysses silt loam, 1 to 3 percent slopes",Ulysses,90.0,300.59,302.2,223.94,24.48,19.25,149.86,posterior,32.39,18.95
+8cade17879c0924726f6e36ae38ce149904dce4e,-100.46,38.12,ok,1152346,"Satanta loam, 0 to 1 percent slopes",Satanta,94.0,262.75,264.1,192.15,21.04,40.78,137.12,posterior,33.5,16.36
+4e84988f9474ddf714e7e11b29d9f80932018c64,-100.4,38.68,ok,2668836,"Ulysses silt loam, 0 to 1 percent slopes",Ulysses,99.0,291.27,292.0,214.38,27.25,19.32,127.2,posterior,28.09,15.09
+a80d3a3238be1ff94c4357ad25722af2faf397ac,-100.37,37.98,ok,1380592,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,171.56,posterior,37.2,15.07
+3a9ea46fc0390bbd459c7d60b91f5fbf428d7d22,-101.26,37.96,ok,1152253,"Bridgeport clay loam, saline, rarely flooded",Bridgeport,92.0,225.26,229.5,169.68,29.12,34.25,158.5,posterior,30.52,19.5
+03c35905c7b53a3f456b98f88a0c47acd7209cbb,-100.33,38.42,ok,1152038,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,114.94,posterior,35.47,13.97
+474345acff3ccb0ac2fe4fcf94cebf1019903923,-100.29,38.28,ok,1152019,"Grigston silt loam, rarely flooded",Grigston,100.0,282.3,282.3,212.3,25.99,8.26,150.07,posterior,36.51,14.71
+5a6232376078efae40e5fda26684ab19c7bb6c77,-100.63,38.62,ok,1152038,"Richfield silt loam, 0 to 1 percent slopes",Richfield,93.0,284.94,285.4,208.01,28.83,19.41,210.51,posterior,35.56,15.76
+36d838d85e96ad2538320b1ce0b5668a8f44101d,-100.86,38.08,ok,2509172,"Beeler silt loam, 0 to 1 percent slopes",Beeler,80.0,212.85,203.8,154.81,24.64,14.28,162.48,posterior,35.05,25.12
+58303d3d4cf73b34fae90ab0f1aaeb749fd2efe2,-100.72,38.07,ok,2668639,"Ulysses silt loam, 1 to 3 percent slopes",Ulysses,90.0,300.59,302.2,223.94,24.48,19.25,174.8,posterior,34.37,21.27
+d7aa55ae1684d1529bf9a022920d35651f57466f,-100.71,37.88,ok,1152310,"Las Animas sandy loam, occasionally flooded",Las Animas,89.0,143.93,142.4,119.43,8.19,77.18,176.86,posterior,33.17,28.55
