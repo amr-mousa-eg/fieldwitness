@@ -205,12 +205,14 @@
   cursor: grabbing;
 }
 
-.sim3d-canvas-container {
+.sim3d-canvas-container,
+.field-3d-canvas-container {
   width: 100%;
   height: 100%;
   outline: none;
 }
-.sim3d-canvas-container:focus-visible {
+.sim3d-canvas-container:focus-visible,
+.field-3d-canvas-container:focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: -2px;
 }
