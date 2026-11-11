@@ -4,6 +4,7 @@ import { getFieldNumberMap, gradeRank } from "./fields";
 import { routeHref } from "./route";
 import { t } from "./strings";
 import { TaggedValue } from "./tags";
+import { emitTour } from "./tourEvents";
 import type { RegionIndex, Tagged } from "./types";
 
 type SortKey = "number" | "area" | "grade";
@@ -138,6 +139,7 @@ export function FieldList({
               <a
                 className="field-item"
                 href={routeHref(index.region_id, f.field_id)}
+                onClick={() => emitTour("field")}
                 aria-current={f.field_id === selectedId ? "true" : undefined}
               >
                 <span className="field-item-head">

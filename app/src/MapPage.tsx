@@ -6,6 +6,7 @@ import { MapLegend } from "./MapLegend";
 import { loadLayers } from "./data";
 import { DIVERGING, RAMPS, fieldValues, gridDomain, gridGeoJSON } from "./mapLayers";
 import { routeHref } from "./route";
+import { emitTour } from "./tourEvents";
 import { metricName } from "./strings";
 import type { RegionIndex, RegionLayers } from "./types";
 
@@ -70,7 +71,10 @@ export function MapPage({ index }: { index: RegionIndex }) {
           <MapView
             index={index}
             selectedId={null}
-            onSelect={(fid) => (window.location.hash = routeHref(index.region_id, fid))}
+            onSelect={(fid) => {
+              emitTour("field");
+              window.location.hash = routeHref(index.region_id, fid);
+            }}
             colouring={colouring}
             grid={grid}
           />

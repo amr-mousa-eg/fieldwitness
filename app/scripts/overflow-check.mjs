@@ -14,7 +14,7 @@ if (!base) {
 }
 const WIDTHS = [360, 390];
 const REGION = "ks_t14slh";
-const FIELD = "0d5615b52572c5c2eeac7fdfef8cdda167050a22"; // tour demo field (src/TourGuide.tsx)
+const FIELD = "0d5615b52572c5c2eeac7fdfef8cdda167050a22"; // tour demo field (src/tour.ts)
 const ROUTES = [
   `#/${REGION}/map`,
   `#/${REGION}/scoreboard`,
@@ -109,7 +109,7 @@ const MEASURE = (vw) => `(() => {
     out.push(el.tagName.toLowerCase() + (cls ? "." + cls : "") + " right=" + Math.round(r.right));
     if (out.length >= 8) break;
   }
-  return { vw, doc, out, at: location.hash.slice(0, 40) + (document.querySelector(".tour-dialog") ? " [tour]" : "") + (document.querySelector(".sim3d-select") ? " [sim3d]" : "") };
+  return { vw, doc, out, at: location.hash.slice(0, 40) + (document.querySelector(".tour-card") ? " [tour]" : "") + (document.querySelector(".sim3d-select") ? " [sim3d]" : "") };
 })()`;
 
 await send("Runtime.enable");

@@ -59,6 +59,7 @@ export function Explain({ id }: { id: ExplainerId }) {
       ref={root}
       onKeyDown={(ev) => {
         if (ev.key === "Escape" && open) {
+          ev.preventDefault(); // handled here: the tour card must not also close
           setPos(null);
           button.current?.focus();
         }
