@@ -14,6 +14,7 @@ import {
   seasonGrowth,
   seededRandom,
   showIrrigation,
+  historyOnlyKey,
   toCropKind,
   plantsPerSide,
   waterFillFraction,
@@ -46,6 +47,7 @@ export interface Field3DSceneProps {
     rain: number;
     irrigation: number;
     rootDepth: number;
+    historyOnly: string | null;
   } | null) => void;
 }
 
@@ -343,6 +345,15 @@ export function Field3DScene({
       return set;
     };
 
+    // Neutral placeholder for history-only seasons (not simulated): a flat grey slab, no crop.
+    const placeholder = new THREE.Mesh(
+      keep(new THREE.BoxGeometry(FIELD_HALF * 2, 0.03, FIELD_HALF * 2)),
+      keep(new THREE.MeshLambertMaterial({ color: isDark ? 0x9aa0a6 : 0x8a8f94, transparent: true, opacity: 0.55 })),
+    );
+    placeholder.position.y = 0.016;
+    placeholder.visible = false;
+    scene.add(placeholder);
+
     // Sparse weeds for fallow weeks.
     const weedRnd = seededRandom(SEED + 7);
     const weeds = new THREE.InstancedMesh(
@@ -446,7 +457,12 @@ export function Field3DScene({
 
     const update = ({ option: opt, scenario: scen, weekIndex: wi }: WeekState) => {
       const w = Math.max(0, Math.min(wi, scen.soil_water_mm.length - 1));
-      const kind = toCropKind(opt.crops[w]);
+      // History-only season (e.g. perennial forage): not simulated, so no crop, no weeds (bare-soil
+      // claim), no roots, no water level, no irrigation; only the neutral placeholder and the rain.
+      const hist = historyOnlyKey(opt.sequence, opt.crops, w) !== null;
+      placeholder.visible = hist;
+      waterBody.visible = waterSurf.visible = fillLine.visible = !hist;
+      const kind = hist ? "fallow" : toCropKind(opt.crops[w]);
       const stage = opt.stages[w] ?? "fallow";
       const canopy = scen.canopy_cover[w] ?? 0;
       const ks = scen.ks[w] ?? 1;
@@ -472,7 +488,7 @@ export function Field3DScene({
       for (const [k, set] of plantSets) {
         if (k !== kind) set.body.visible = set.head.visible = false;
       }
-      weeds.visible = kind === "fallow";
+      weeds.visible = kind === "fallow" && !hist;
       if (kind !== "fallow") {
         const growth = seasonGrowth(opt.crops, opt.stages, scen.canopy_cover, w);
         const set = plantsFor(kind);
@@ -509,7 +525,7 @@ export function Field3DScene({
       // Weather.
       rain.count = rainDropCount(scen.rain_mm[w] ?? 0, quality.maxRainDrops);
       placeDrops();
-      irrigation.visible = showIrrigation(scen.irrigation_mm[w] ?? 0);
+      irrigation.visible = !hist && showIrrigation(scen.irrigation_mm[w] ?? 0);
 
       renderer.shadowMap.needsUpdate = true;
       dirty = true;
@@ -699,6 +715,7 @@ export function Field3DScene({
       rain: scenario.rain_mm[w] ?? 0,
       irrigation: scenario.irrigation_mm[w] ?? 0,
       rootDepth: option.root_depth_m[w] ?? 0,
+      historyOnly: historyOnlyKey(option.sequence, option.crops, w),
     });
   }, [weekIndex, scenario, option, onHoverData]);
 

@@ -93,7 +93,7 @@ function BareCalendar({ cal, optionId, label }: { cal: FieldCalendar; optionId: 
 }
 
 function VulnerabilityCalendar({ cal, sequence }: { cal: FieldCalendar; sequence: string[] }) {
-  const { found, missing } = vulnerabilityFor(cal, { sequence });
+  const { found, missing, historyOnly } = vulnerabilityFor(cal, { sequence });
   return (
     <section aria-labelledby="vuln-h">
       <h3 id="vuln-h">{t("cal.vuln")}</h3>
@@ -134,6 +134,11 @@ function VulnerabilityCalendar({ cal, sequence }: { cal: FieldCalendar; sequence
             </ul>
           </details>
         </div>
+      ))}
+      {historyOnly.map((c) => (
+        <p key={c} className="muted">
+          {t("season.historyOnly", { crop: cropName(c) })}
+        </p>
       ))}
       {missing.length > 0 && (
         <p className="muted">{t("cal.vuln.missing", { crops: missing.map(cropName).join(", ") })}</p>
