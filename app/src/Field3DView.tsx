@@ -12,11 +12,12 @@ import {
   YAxis,
 } from "recharts";
 import { Field3DScene, type FrameStats } from "./Field3DScene";
-import { MIN_MEDIAN_FPS, pickQuality } from "./field3d/growth";
+import { MIN_MEDIAN_FPS, historyOnlyKey, pickQuality } from "./field3d/growth";
+import { isHistoryOnly } from "./seasons";
 import { Explain } from "./Explain";
 import { SIM3D_EXPLAINERS, explainer } from "./explainers";
 import { loadSim3D } from "./data";
-import { t } from "./strings";
+import { cropName, t } from "./strings";
 import { TagBadge } from "./tags";
 import { CHART_COLOURS } from "./theme";
 import type { FieldPack, FieldSim3D, Sim3DOption } from "./types";
@@ -69,6 +70,95 @@ interface HoverMetric {
   rain: number;
   irrigation: number;
   rootDepth: number;
+  /** History-only season key (e.g. perennial_forage) owning this week: nothing is simulated. */
+  historyOnly: string | null;
+}
+
+/** Weekly telemetry under one 3D scene. History-only weeks show "not simulated", never values. */
+function MetricStrip({ m, source }: { m: HoverMetric | null; source: string }) {
+  const hist = m?.historyOnly ?? null;
+  const ns = <span className="muted">{t("season.notSimulated")}</span>;
+  const d = <TagBadge tag="D" source={source} />;
+  return (
+    <div className="sim3d-metric-strip">
+      <div
+        className="sim3d-metric-item"
+        title="Crop type and phenological growth stage from FAO-56 dual crop coefficient model [D]"
+        data-tooltip="Crop type and phenological growth stage from FAO-56 dual crop coefficient model [D]"
+      >
+        <span className="sim3d-metric-label">
+          Crop & Stage {!hist && m?.crop === "fallow" && <Explain id="fallow_bare_soil" />}
+        </span>
+        <span className="sim3d-metric-val">
+          {hist ? (
+            t("season.historyOnly", { crop: cropName(hist) })
+          ) : m?.crop === "fallow" ? (
+            "Bare fallow [D]"
+          ) : (
+            <>
+              {m?.crop.replace(/_/g, " ")} ({m?.stage}) {d}
+            </>
+          )}
+        </span>
+      </div>
+      <div
+        className="sim3d-metric-item"
+        title="Root-zone soil water / total available water capacity in root zone (mm) [D]"
+        data-tooltip="Root-zone soil water / total available water capacity in root zone (mm) [D]"
+      >
+        <span className="sim3d-metric-label">
+          Available Soil Water <Explain id="root_zone_soil_water" /> <Explain id="available_water_capacity" />
+        </span>
+        <span className="sim3d-metric-val">
+          {hist ? ns : (
+            <>
+              <strong>{m?.soilWater.toFixed(1)}</strong> of {m?.taw.toFixed(0)} mm {d}
+            </>
+          )}
+        </span>
+      </div>
+      <div
+        className="sim3d-metric-item"
+        title="Canopy proxy (Kc / Kc max) from FAO-56 dual crop coefficient model (0.00–1.00) [D]"
+        data-tooltip="Canopy proxy (Kc / Kc max) from FAO-56 dual crop coefficient model (0.00–1.00) [D]"
+      >
+        <span className="sim3d-metric-label">
+          Canopy Proxy (Kc/Kc max) <Explain id="canopy_proxy" />
+        </span>
+        <span className="sim3d-metric-val">{hist ? ns : <>{m?.canopyCover.toFixed(2)} {d}</>}</span>
+      </div>
+      <div
+        className="sim3d-metric-item"
+        title="FAO-56 water stress coefficient (0.00 = severe stress, 1.00 = no stress) [D]"
+        data-tooltip="FAO-56 water stress coefficient (0.00 = severe stress, 1.00 = no stress) [D]"
+      >
+        <span className="sim3d-metric-label">
+          Water Stress (Ks) <Explain id="water_stress_ks" />
+        </span>
+        <span className="sim3d-metric-val">{hist ? ns : <>{m?.ks.toFixed(2)} {d}</>}</span>
+      </div>
+      <div
+        className="sim3d-metric-item"
+        title="Effective root-zone depth (m) [D]"
+        data-tooltip="Effective root-zone depth (m) [D]"
+      >
+        <span className="sim3d-metric-label">Root Depth</span>
+        <span className="sim3d-metric-val">{hist ? ns : <>{m?.rootDepth.toFixed(2)} m {d}</>}</span>
+      </div>
+      <div
+        className="sim3d-metric-item"
+        title="Weekly precipitation and net irrigation applied (mm) [D]"
+        data-tooltip="Weekly precipitation and net irrigation applied (mm) [D]"
+      >
+        <span className="sim3d-metric-label">
+          Rain / Irrigation <Explain id="evapotranspiration" />
+        </span>
+        <span className="sim3d-metric-val">
+          {m?.rain.toFixed(1)} mm / {hist ? ns : <>{m?.irrigation.toFixed(1)} mm</>} {d}
+        </span>
+      </div>
+    </div>
+  );
 }
 
 export default function Field3DView({
@@ -159,11 +249,13 @@ export default function Field3DView({
     const altScen = activeAlternative.scenarios[scenarioId] ?? activeAlternative.scenarios["t+0_p+0"];
     if (!curScen || !altScen) return [];
 
+    // History-only weeks (e.g. perennial forage) are not simulated: a gap in the line, not a value.
+    const sim = (o: Sim3DOption, i: number) => historyOnlyKey(o.sequence, o.crops, i) === null;
     return sim3d.weeks.map((wk, i) => ({
       week: wk.label,
       weekNum: i,
-      curSoilWater: curScen.soil_water_mm[i],
-      altSoilWater: altScen.soil_water_mm[i],
+      curSoilWater: sim(sim3d.current, i) ? curScen.soil_water_mm[i] : null,
+      altSoilWater: sim(activeAlternative, i) ? altScen.soil_water_mm[i] : null,
       taw: curScen.taw_mm[i],
       curCanopy: Math.round((curScen.canopy_cover[i] ?? 0) * 100),
       altCanopy: Math.round((altScen.canopy_cover[i] ?? 0) * 100),
@@ -325,84 +417,7 @@ export default function Field3DView({
               </div>
 
               {/* Weekly Telemetry Metrics */}
-              <div className="sim3d-metric-strip">
-                <div
-                  className="sim3d-metric-item"
-                  title="Crop type and phenological growth stage from FAO-56 dual crop coefficient model [D]"
-                  data-tooltip="Crop type and phenological growth stage from FAO-56 dual crop coefficient model [D]"
-                >
-                  <span className="sim3d-metric-label">
-                    Crop & Stage {currentMetrics?.crop === "fallow" && <Explain id="fallow_bare_soil" />}
-                  </span>
-                  <span className="sim3d-metric-val">
-                    {currentMetrics?.crop === "fallow" ? (
-                      "Bare fallow [D]"
-                    ) : (
-                      <>
-                        {currentMetrics?.crop.replace(/_/g, " ")} ({currentMetrics?.stage}) <TagBadge tag="D" source={sim3d.source} />
-                      </>
-                    )}
-                  </span>
-                </div>
-                <div
-                  className="sim3d-metric-item"
-                  title="Root-zone soil water / total available water capacity in root zone (mm) [D]"
-                  data-tooltip="Root-zone soil water / total available water capacity in root zone (mm) [D]"
-                >
-                  <span className="sim3d-metric-label">
-                    Available Soil Water <Explain id="root_zone_soil_water" /> <Explain id="available_water_capacity" />
-                  </span>
-                  <span className="sim3d-metric-val">
-                    <strong>{currentMetrics?.soilWater.toFixed(1)}</strong> of {currentMetrics?.taw.toFixed(0)} mm <TagBadge tag="D" source={sim3d.source} />
-                  </span>
-                </div>
-                <div
-                  className="sim3d-metric-item"
-                  title="Canopy proxy (Kc / Kc max) from FAO-56 dual crop coefficient model (0.00–1.00) [D]"
-                  data-tooltip="Canopy proxy (Kc / Kc max) from FAO-56 dual crop coefficient model (0.00–1.00) [D]"
-                >
-                  <span className="sim3d-metric-label">
-                    Canopy Proxy (Kc/Kc max) <Explain id="canopy_proxy" />
-                  </span>
-                  <span className="sim3d-metric-val">
-                    {currentMetrics?.canopyCover.toFixed(2)} <TagBadge tag="D" source={sim3d.source} />
-                  </span>
-                </div>
-                <div
-                  className="sim3d-metric-item"
-                  title="FAO-56 water stress coefficient (0.00 = severe stress, 1.00 = no stress) [D]"
-                  data-tooltip="FAO-56 water stress coefficient (0.00 = severe stress, 1.00 = no stress) [D]"
-                >
-                  <span className="sim3d-metric-label">
-                    Water Stress (Ks) <Explain id="water_stress_ks" />
-                  </span>
-                  <span className="sim3d-metric-val">
-                    {currentMetrics?.ks.toFixed(2)} <TagBadge tag="D" source={sim3d.source} />
-                  </span>
-                </div>
-                <div
-                  className="sim3d-metric-item"
-                  title="Effective root-zone depth (m) [D]"
-                  data-tooltip="Effective root-zone depth (m) [D]"
-                >
-                  <span className="sim3d-metric-label">Root Depth</span>
-                  <span className="sim3d-metric-val">
-                    {currentMetrics?.rootDepth.toFixed(2)} m <TagBadge tag="D" source={sim3d.source} />
-                  </span>
-                </div>
-                <div
-                  className="sim3d-metric-item"
-                  title="Weekly precipitation and net irrigation applied (mm) [D]"
-                  data-tooltip="Weekly precipitation and net irrigation applied (mm) [D]"
-                >
-                  <span className="sim3d-metric-label">
-                    Rain / Irrigation <Explain id="evapotranspiration" />
-                  </span>
-                  <span className="sim3d-metric-val">
-                    {currentMetrics?.rain.toFixed(1)} mm / {currentMetrics?.irrigation.toFixed(1)} mm <TagBadge tag="D" source={sim3d.source} />
-                  </span>
-                </div>
-              </div>
+              <MetricStrip m={currentMetrics} source={sim3d.source} />
             </div>
           )}
 
@@ -433,84 +448,7 @@ export default function Field3DView({
               </div>
 
               {/* Weekly Telemetry Metrics */}
-              <div className="sim3d-metric-strip">
-                <div
-                  className="sim3d-metric-item"
-                  title="Crop type and phenological growth stage from FAO-56 dual crop coefficient model [D]"
-                  data-tooltip="Crop type and phenological growth stage from FAO-56 dual crop coefficient model [D]"
-                >
-                  <span className="sim3d-metric-label">
-                    Crop & Stage {altMetrics?.crop === "fallow" && <Explain id="fallow_bare_soil" />}
-                  </span>
-                  <span className="sim3d-metric-val">
-                    {altMetrics?.crop === "fallow" ? (
-                      "Bare fallow [D]"
-                    ) : (
-                      <>
-                        {altMetrics?.crop.replace(/_/g, " ")} ({altMetrics?.stage}) <TagBadge tag="D" source={sim3d.source} />
-                      </>
-                    )}
-                  </span>
-                </div>
-                <div
-                  className="sim3d-metric-item"
-                  title="Root-zone soil water / total available water capacity in root zone (mm) [D]"
-                  data-tooltip="Root-zone soil water / total available water capacity in root zone (mm) [D]"
-                >
-                  <span className="sim3d-metric-label">
-                    Available Soil Water <Explain id="root_zone_soil_water" /> <Explain id="available_water_capacity" />
-                  </span>
-                  <span className="sim3d-metric-val">
-                    <strong>{altMetrics?.soilWater.toFixed(1)}</strong> of {altMetrics?.taw.toFixed(0)} mm <TagBadge tag="D" source={sim3d.source} />
-                  </span>
-                </div>
-                <div
-                  className="sim3d-metric-item"
-                  title="Canopy proxy (Kc / Kc max) from FAO-56 dual crop coefficient model (0.00–1.00) [D]"
-                  data-tooltip="Canopy proxy (Kc / Kc max) from FAO-56 dual crop coefficient model (0.00–1.00) [D]"
-                >
-                  <span className="sim3d-metric-label">
-                    Canopy Proxy (Kc/Kc max) <Explain id="canopy_proxy" />
-                  </span>
-                  <span className="sim3d-metric-val">
-                    {altMetrics?.canopyCover.toFixed(2)} <TagBadge tag="D" source={sim3d.source} />
-                  </span>
-                </div>
-                <div
-                  className="sim3d-metric-item"
-                  title="FAO-56 water stress coefficient (0.00 = severe stress, 1.00 = no stress) [D]"
-                  data-tooltip="FAO-56 water stress coefficient (0.00 = severe stress, 1.00 = no stress) [D]"
-                >
-                  <span className="sim3d-metric-label">
-                    Water Stress (Ks) <Explain id="water_stress_ks" />
-                  </span>
-                  <span className="sim3d-metric-val">
-                    {altMetrics?.ks.toFixed(2)} <TagBadge tag="D" source={sim3d.source} />
-                  </span>
-                </div>
-                <div
-                  className="sim3d-metric-item"
-                  title="Effective root-zone depth (m) [D]"
-                  data-tooltip="Effective root-zone depth (m) [D]"
-                >
-                  <span className="sim3d-metric-label">Root Depth</span>
-                  <span className="sim3d-metric-val">
-                    {altMetrics?.rootDepth.toFixed(2)} m <TagBadge tag="D" source={sim3d.source} />
-                  </span>
-                </div>
-                <div
-                  className="sim3d-metric-item"
-                  title="Weekly precipitation and net irrigation applied (mm) [D]"
-                  data-tooltip="Weekly precipitation and net irrigation applied (mm) [D]"
-                >
-                  <span className="sim3d-metric-label">
-                    Rain / Irrigation <Explain id="evapotranspiration" />
-                  </span>
-                  <span className="sim3d-metric-val">
-                    {altMetrics?.rain.toFixed(1)} mm / {altMetrics?.irrigation.toFixed(1)} mm <TagBadge tag="D" source={sim3d.source} />
-                  </span>
-                </div>
-              </div>
+              <MetricStrip m={altMetrics} source={sim3d.source} />
             </div>
           )}
         </div>
@@ -551,6 +489,11 @@ export default function Field3DView({
               </LineChart>
             </ResponsiveContainer>
           </div>
+          {[...new Set(sim3d.current.sequence.filter(isHistoryOnly))].map((c) => (
+            <p key={c} className="muted">
+              {t("sim3d.current")}: {t("season.historyOnly", { crop: cropName(c) })}
+            </p>
+          ))}
         </div>
       )}
 

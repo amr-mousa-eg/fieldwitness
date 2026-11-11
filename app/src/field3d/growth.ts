@@ -3,6 +3,8 @@
 // .sim3d.json pack (canopy proxy, Ks, soil water, TAW, rain, irrigation, root depth, crop, stage).
 // Visual sizes (plant heights in scene units, counts) are display choices, never shown as numbers.
 
+import { isHistoryOnly } from "../seasons";
+
 export type CropKind = "maize" | "winter_wheat" | "sorghum" | "fallow";
 
 export interface QualityTier {
@@ -62,6 +64,17 @@ export function plantsPerSide(crop: CropKind, tier: QualityTier): number {
 
 export function toCropKind(crop: string | undefined): CropKind {
   return crop === "maize" || crop === "winter_wheat" || crop === "sorghum" ? crop : "fallow";
+}
+
+/**
+ * History-only season key owning week `w`, or null. A week belongs to the season of its 52-week
+ * year; weeks where the pack draws a crop (e.g. winter wheat sown in autumn for the next season)
+ * keep that crop.
+ */
+export function historyOnlyKey(sequence: readonly string[], crops: readonly string[], w: number): string | null {
+  const key = sequence[Math.min(sequence.length - 1, Math.floor(w / 52))];
+  if (!key || !isHistoryOnly(key)) return null;
+  return toCropKind(crops[w]) === "fallow" ? key : null;
 }
 
 /**

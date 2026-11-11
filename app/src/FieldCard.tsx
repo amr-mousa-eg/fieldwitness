@@ -21,6 +21,7 @@ import {
   isDefault,
   rankOptions,
 } from "./rank";
+import { isHistoryOnly } from "./seasons";
 import { cropName, metricName, optionName, t } from "./strings";
 import { TaggedValue } from "./tags";
 import type { FieldPack, FieldScenarios, Tagged } from "./types";
@@ -338,7 +339,11 @@ export function FieldCard({ pack, regionId }: { pack: FieldPack; regionId: strin
   const kept = rows.filter((r) => r.kept);
   const dropped = rows.filter((r) => !r.kept);
   const current = rows.find((r) => r.option.option_id === "current");
-  const crops = useMemo(() => [...new Set(pack.options.flatMap((o) => o.sequence))].sort(), [pack.options]);
+  // history-only states (perennial forage, ...) are not rotation options, so they get no constraint row
+  const crops = useMemo(
+    () => [...new Set(pack.options.flatMap((o) => o.sequence))].filter((c) => !isHistoryOnly(c)).sort(),
+    [pack.options],
+  );
   const summary = useMemo(
     () => generateFieldSummary(pack, priorities, constraints, scenario),
     [pack, priorities, constraints, scenario],
