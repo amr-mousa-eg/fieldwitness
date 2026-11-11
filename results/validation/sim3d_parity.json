@@ -1,0 +1,28 @@
+{
+  "what": "Parity of app/src/field3d/physics.ts with fieldwitness.packs.sim3d.simulate_weekly",
+  "fields": 20,
+  "rotations_per_field": 36,
+  "weather_cases": [
+    "normal",
+    "dry",
+    "hot"
+  ],
+  "option_runs": 2160,
+  "tolerance": {
+    "soil_water_mm": 0.05,
+    "rain_mm": 0.05,
+    "irrigation_mm": 0.05,
+    "ks": 0.005,
+    "canopy_cover": 0.005,
+    "crops_stages_roots": "exact"
+  },
+  "max_abs_difference": {
+    "soil_water_mm": 0.0000057037236729229335,
+    "rain_mm": 0,
+    "irrigation_mm": 0.0000057037236729229335,
+    "ks": 5.505229117019894e-8,
+    "canopy_cover": 7.774538390847852e-8
+  },
+  "passed": true,
+  "tag": "D"
+}

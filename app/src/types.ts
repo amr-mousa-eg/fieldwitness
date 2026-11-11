@@ -101,6 +101,17 @@ export interface FieldSim3D {
   alternatives: Sim3DOption[];
 }
 
+export interface FieldSim3DInputs {
+  schema_version: string;
+  field_id: string;
+  region_id: string;
+  weather_year: number;
+  weather: Sim3DInputWeather;
+  params: Sim3DInputParams;
+  slots: Sim3DInputSlots;
+  note: string;
+}
+
 export interface FieldSummary {
   field_id: string;
   geometry_wkt: string;
@@ -220,6 +231,51 @@ export interface Season {
   cover_days: Tagged;
   bare_days: Tagged;
   clear_obs: number;
+}
+
+export interface Sim3DInputDay {
+  rain_mm: number[];
+  eto_mm: number[];
+}
+
+export interface Sim3DInputParams {
+  taw_mm: number;
+  kc_scale: number;
+  budget_mm: number;
+  tag: Tag;
+  source: string;
+}
+
+export interface Sim3DInputSlot {
+  kind: "crop" | "cover" | "fallow";
+  kc: number[];
+  sow_day: number | null;
+  kc_mid: number;
+  p: number;
+  stages_days: number[];
+  zr_max_m: number;
+  family: string | null;
+}
+
+export interface Sim3DInputSlots {
+  crops: Record<string, Sim3DInputSlot>;
+  kc_fallow: number;
+  p_fallow: number;
+  cover_frac: number;
+  zr_ini_m: number;
+  max_family_run: number;
+  tag: Tag;
+  source: string;
+}
+
+export interface Sim3DInputWeather {
+  cases: Record<string, string>;
+  days: number;
+  tiles: number;
+  series: Record<string, Sim3DInputDay>;
+  unit: string;
+  tag: Tag;
+  source: string;
 }
 
 export interface Sim3DOption {

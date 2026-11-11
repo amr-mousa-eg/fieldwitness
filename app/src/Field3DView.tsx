@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import "./Field3DView.css";
 import {
   CartesianGrid,
@@ -12,6 +12,8 @@ import {
   YAxis,
 } from "recharts";
 import { Field3DScene, type FrameStats } from "./Field3DScene";
+import { bt } from "./builder/strings";
+import { builderEnabled } from "./featureFlags";
 import { MIN_MEDIAN_FPS, historyOnlyKey, pickQuality } from "./field3d/growth";
 import { isHistoryOnly } from "./seasons";
 import { Explain } from "./Explain";
@@ -23,6 +25,9 @@ import { CHART_COLOURS } from "./theme";
 import type { FieldPack, FieldSim3D, Sim3DOption } from "./types";
 import { emitTour } from "./tourEvents";
 import { useTheme } from "./useTheme";
+
+// Lazy: the builder (and its physics port) loads only when the feature flag is on.
+const RotationBuilder = lazy(() => import("./builder/RotationBuilder"));
 
 function isWebGLAvailable(): boolean {
   try {
@@ -182,6 +187,9 @@ export default function Field3DView({
   const [viewMode, setViewMode] = useState<"side-by-side" | "toggle">("side-by-side");
   const [toggleActive, setToggleActive] = useState<"current" | "alt">("current");
   const [selectedAltIdx, setSelectedAltIdx] = useState<number>(0);
+  const showBuilder = useMemo(builderEnabled, []);
+  // Rotation Builder result (simulated in the browser); replaces the alternative while set
+  const [builtOption, setBuiltOption] = useState<Sim3DOption | null>(null);
 
   // Hover telemetry
   const [currentMetrics, setCurrentMetrics] = useState<HoverMetric | null>(null);
@@ -238,9 +246,22 @@ export default function Field3DView({
 
   // Selected alternative option
   const activeAlternative: Sim3DOption | null = useMemo(() => {
+    if (builtOption) return builtOption;
     if (!sim3d || sim3d.alternatives.length === 0) return null;
     return sim3d.alternatives[selectedAltIdx] ?? sim3d.alternatives[0];
-  }, [sim3d, selectedAltIdx]);
+  }, [sim3d, selectedAltIdx, builtOption]);
+
+  // A built rotation is simulated for normal / dry / hot only: keep the weather on one of those.
+  const scenarioIds = builtOption ? Object.keys(builtOption.scenarios) : Object.keys(sim3d?.current.scenarios ?? {});
+  useEffect(() => {
+    if (builtOption && !(scenarioId in builtOption.scenarios)) setScenarioId("t+0_p+0");
+  }, [builtOption, scenarioId]);
+  const handleGrow = useCallback((o: Sim3DOption) => {
+    setBuiltOption(o);
+    setWeek(0);
+    setIsPlaying(true);
+  }, []);
+  const handleClear = useCallback(() => setBuiltOption(null), []);
 
   // Prepare chart data for 2D fallback or analytical comparison
   const fallbackChartData = useMemo(() => {
@@ -302,6 +323,12 @@ export default function Field3DView({
         </p>
       </header>
 
+      {showBuilder && (
+        <Suspense fallback={<p className="muted">{bt("builder.loading")}</p>}>
+          <RotationBuilder pack={pack} regionId={regionId} onGrow={handleGrow} onClear={handleClear} />
+        </Suspense>
+      )}
+
       {/* Control Toolbar */}
       <nav className="sim3d-toolbar" aria-label="Simulation Controls">
         <div className="sim3d-control-group">
@@ -317,7 +344,7 @@ export default function Field3DView({
               if (e.target.value.endsWith("_p-20")) emitTour("sim-drought");
             }}
           >
-            {Object.keys(sim3d.current.scenarios).map((sid) => (
+            {scenarioIds.map((sid) => (
               <option key={sid} value={sid}>
                 {SCENARIO_LABELS[sid] ?? sid}
               </option>
@@ -333,6 +360,7 @@ export default function Field3DView({
             id="sim3d-alt-select"
             className="sim3d-select"
             value={selectedAltIdx}
+            disabled={!!builtOption}
             onChange={(e) => setSelectedAltIdx(Number(e.target.value))}
           >
             {sim3d.alternatives.map((alt, idx) => (
@@ -382,7 +410,7 @@ export default function Field3DView({
       {activeAlternative && (
         <div className="sim3d-alt-notice" role="note">
           <p>
-            {t("sim3d.defaultNotice", { name: activeAlternative.label })}
+            {builtOption ? bt("sim3d.builderNotice") : t("sim3d.defaultNotice", { name: activeAlternative.label })}
           </p>
         </div>
       )}

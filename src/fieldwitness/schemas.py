@@ -322,6 +322,65 @@ class FieldSim3D(BaseModel):
     alternatives: list[Sim3DOption]  # top 3 alternatives under default ranking
 
 
+# --- packs/<region>/<field_id>.sim3d_inputs.json (Rotation Builder, Level B; user-approved
+# 2026-11-11). Inputs of the in-browser 3D replay; each block carries one tag and source, so the
+# blocks are tagged containers (see TAGGED_CONTAINERS).
+class Sim3DInputDay(BaseModel):
+    rain_mm: list[float]  # 365 daily values of the median-rain year
+    eto_mm: list[float]
+
+
+class Sim3DInputWeather(BaseModel):
+    cases: dict[str, str]  # normal / dry / hot -> T6.8 what-if id
+    days: int
+    tiles: int
+    series: dict[str, Sim3DInputDay]
+    unit: str
+    tag: Tag
+    source: str
+
+
+class Sim3DInputParams(BaseModel):
+    taw_mm: float
+    kc_scale: float
+    budget_mm: float
+    tag: Tag
+    source: str
+
+
+class Sim3DInputSlot(BaseModel):
+    kind: Literal["crop", "cover", "fallow"]
+    kc: list[float]
+    sow_day: int | None
+    kc_mid: float
+    p: float
+    stages_days: list[int]
+    zr_max_m: float
+    family: str | None
+
+
+class Sim3DInputSlots(BaseModel):
+    crops: dict[str, Sim3DInputSlot]
+    kc_fallow: float
+    p_fallow: float
+    cover_frac: float
+    zr_ini_m: float
+    max_family_run: int
+    tag: Tag
+    source: str
+
+
+class FieldSim3DInputs(BaseModel):
+    schema_version: str = "1.0"
+    field_id: str
+    region_id: str
+    weather_year: int
+    weather: Sim3DInputWeather
+    params: Sim3DInputParams
+    slots: Sim3DInputSlots
+    note: str
+
+
 # --- packs/<region>/layers.json ----------------------------------------------------------------
 
 
@@ -421,7 +480,14 @@ class RegionHindcast(BaseModel):
 # Tag validator
 # ---------------------------------------------------------------------------------------------
 
-TAGGED_CONTAINERS = (Tagged, TaggedSeries, TaggedGrid)
+TAGGED_CONTAINERS = (
+    Tagged,
+    TaggedSeries,
+    TaggedGrid,
+    Sim3DInputWeather,
+    Sim3DInputParams,
+    Sim3DInputSlots,
+)
 
 
 def check_tagged(obj: object, path: str = "$") -> list[str]:
