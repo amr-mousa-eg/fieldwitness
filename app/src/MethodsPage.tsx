@@ -114,6 +114,16 @@ export function MethodsPage() {
         <p className="muted">{t("methods.soil.source")}</p>
       </section>
 
+      <section aria-labelledby="m-builder">
+        <h3 id="m-builder">{t("methods.builder.heading")}</h3>
+        <p>{t("methods.builder.intro")}</p>
+        <ul>
+          {list("methods.builder", 4).map((s, i) => (
+            <li key={i}>{s}</li>
+          ))}
+        </ul>
+      </section>
+
       <section aria-labelledby="m-wrong">
         <h3 id="m-wrong">{t("methods.wrong.heading")}</h3>
         <ul>

@@ -58,6 +58,14 @@ export const TOUR_STEPS: TourStep[] = [
     scroll: true,
   },
   {
+    key: "builder",
+    requires: ["builder-place", "builder-grow"],
+    ordered: true,
+    needsField: true,
+    targets: [".builder-cards, .builder-open-btn", '.tabs a[href$="/sim3d"]'],
+    scroll: true,
+  },
+  {
     key: "limits",
     requires: ["limits"],
     targets: [".grade-validity-verdict", '.app-nav a[href$="/scoreboard"]'],

@@ -630,3 +630,25 @@
 .sim3d-card[hidden] {
   display: none !important;
 }
+
+/* "Build your own rotation" launcher */
+.builder-launch {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0 0 0.75rem;
+}
+.builder-open-btn {
+  padding: 0.55rem 1.2rem;
+  border: 2px solid var(--accent);
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 700;
+  cursor: pointer;
+}
+.builder-open-btn[aria-expanded="true"] {
+  background: var(--panel);
+  color: var(--ink);
+}

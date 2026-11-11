@@ -1,3 +1,4 @@
+import builderStrings from "../src/builder/strings.json";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
@@ -50,14 +51,15 @@ function memoryStorage(): Storage & { data: Map<string, string> } {
 }
 
 describe("try-it tour: steps", () => {
-  it("has the 7 steps in the agreed order", () => {
-    expect(TOUR_STEPS.map((s) => s.key)).toEqual(["field", "season", "priority", "why", "sim3d", "limits", "addfield"]);
+  it("has the 8 steps in the agreed order", () => {
+    expect(TOUR_STEPS.map((s) => s.key)).toEqual(["field", "season", "priority", "why", "sim3d", "builder", "limits", "addfield"]);
     expect(TOUR_STEPS.map((s) => s.requires)).toEqual([
       ["field"],
       ["season"],
       ["priority"],
       ["why-ranking"],
       ["sim-play", "sim-drought"],
+      ["builder-place", "builder-grow"],
       ["limits"],
       ["preset:cairo-demo", "preset:garden-city"],
     ]);
@@ -101,6 +103,7 @@ describe("try-it tour: each action ticks its step", () => {
     ["priority", ["priority"]],
     ["why", ["why-ranking"]],
     ["sim3d", ["sim-play", "sim-drought"]],
+    ["builder", ["builder-place", "builder-grow"]],
     ["limits", ["limits"]],
     ["addfield", ["preset:cairo-demo", "preset:garden-city"]],
   ];
@@ -261,6 +264,9 @@ describe("try-it tour: honest copy", () => {
     expect(str("tour.sim3d.body")).toContain("not a photo");
     expect(str("sim3d.honesty")).toContain("not a photo");
     expect(str("sim3d.disclaimer")).toContain("not a forecast");
+    // builder step repeats the builder's own statement
+    expect(str("tour.builder.body")).toContain("Only rotations this field was ranked on can be built");
+    expect(builderStrings["builder.intro"]).toContain("Only rotations this field was ranked on can be built");
     const verdict = "could not show that evidence grades predict accuracy (n = 463 field-seasons)";
     expect(str("tour.limits.body")).toContain(verdict);
     expect(str("score.gradeValidity.verdict")).toContain(verdict);

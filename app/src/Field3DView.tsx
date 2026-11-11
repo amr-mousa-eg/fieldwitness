@@ -14,7 +14,7 @@ import {
 import { Field3DScene, type FrameStats } from "./Field3DScene";
 import { bt } from "./builder/strings";
 import { FarmScene } from "./FarmScene";
-import { builderEnabled, farmEnabled } from "./featureFlags";
+import { builderEnabled, builderOpenAtStart, farmEnabled } from "./featureFlags";
 import { weekTelemetry } from "./field3d/farm";
 import { FARM_TEXT } from "./field3d/farmText";
 import { MIN_MEDIAN_FPS, type QualityTier, historyOnlyKey, pickQuality } from "./field3d/growth";
@@ -259,6 +259,8 @@ export default function Field3DView({
   const [toggleActive, setToggleActive] = useState<"current" | "alt">("current");
   const [selectedAltIdx, setSelectedAltIdx] = useState<number>(0);
   const showBuilder = useMemo(builderEnabled, []);
+  // The builder panel opens from the "Build your own rotation" button (lazy: its code loads then).
+  const [builderOpen, setBuilderOpen] = useState<boolean>(builderOpenAtStart);
   // Farm view (isometric farm with two plots) is the default where it is enabled; the Soil X-ray
   // toggle switches back to the glass soil view.
   const farmAvailable = useMemo(farmEnabled, []);
@@ -405,9 +407,28 @@ export default function Field3DView({
       </header>
 
       {showBuilder && (
-        <Suspense fallback={<p className="muted">{bt("builder.loading")}</p>}>
-          <RotationBuilder pack={pack} regionId={regionId} onGrow={handleGrow} onClear={handleClear} />
-        </Suspense>
+        <div className="builder-launch">
+          <button
+            type="button"
+            className="builder-open-btn"
+            aria-expanded={builderOpen}
+            aria-controls="builder-panel"
+            onClick={() => {
+              if (builderOpen) handleClear();
+              setBuilderOpen(!builderOpen);
+            }}
+          >
+            {builderOpen ? bt("builder.close") : bt("builder.open")}
+          </button>
+          <span className="muted">{bt("builder.openHint")}</span>
+        </div>
+      )}
+      {showBuilder && builderOpen && (
+        <div id="builder-panel">
+          <Suspense fallback={<p className="muted">{bt("builder.loading")}</p>}>
+            <RotationBuilder pack={pack} regionId={regionId} onGrow={handleGrow} onClear={handleClear} />
+          </Suspense>
+        </div>
       )}
 
       {/* Control Toolbar */}

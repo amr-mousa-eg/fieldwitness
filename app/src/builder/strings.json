@@ -30,5 +30,8 @@
   "builder.row.current": "Current: {seq}",
   "builder.row.top": "Top-ranked: {seq}",
   "builder.provenance": "Table values come from the field's ranking (3 seasons, all weather years). The 3D replay is simulated in your browser with the same FAO-56 water balance as the 3D packs (parity-tested) for one median-rain year.",
-  "sim3d.builderNotice": "Showing your rotation, simulated in your browser (same model as the 3D packs, parity-tested). Weather: normal, dry (−20 % rain) or hot (+2 °C) only."
+  "sim3d.builderNotice": "Showing your rotation, simulated in your browser (same model as the 3D packs, parity-tested). Weather: normal, dry (−20 % rain) or hot (+2 °C) only.",
+  "builder.open": "Build your own rotation",
+  "builder.close": "Hide the rotation builder",
+  "builder.openHint": "Put a crop in each of three seasons and watch it grow next to your current rotation."
 }

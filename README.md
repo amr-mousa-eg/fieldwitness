@@ -30,7 +30,17 @@ For each field:
   each crop is vulnerable to heat, frost, water stress and extreme rain.
 - **Field in 3D.** Interactive 3D soil water balance and crop canopy simulation over median historical
   weather and what-if scenarios, visualizing root-zone water depletion, canopy cover, and water stress (Ks)
-  with a 2D canvas fallback.
+  with a 2D canvas fallback. "Illustration of simulated values — not a photo."
+- **Rotation Builder.** In Field in 3D, press "Build your own rotation": put a crop in each of three
+  seasons (tap, drag or keyboard) and press Grow. Only the field's 36 ranked rotations can be built; a
+  disabled card says which rule it breaks. The table (water use, bad-year water, bare-soil months,
+  evidence grade, all tagged) comes from the ranking in the pack; the 3D replay re-runs the same FAO-56
+  water balance in the browser (parity-tested: 20 fields x 36 rotations x 3 weathers, max difference
+  0.0000057 mm, `results/validation/sim3d_parity.json`).
+- **Farm view.** An illustrated isometric farm with two fenced plots, the current rotation and yours,
+  on the same field, weeks and weather. Plants, bare soil, sprinklers, rain and sky follow the weekly
+  simulated values; the barn, trees, pond, fences and paths are labelled "Scenery, not data". Soil X-ray
+  switches to the glass soil view. Kill switches: `?builder=0`, `?farm=0`.
 - **Advisor console.** Credibility of the physics for this field, what to measure next, the
   smallest change that would flip the top option, and a back-test of past predictions.
 - **Map layers and scoreboard.** Fields coloured by erosion, water stress or frost share. Regional
@@ -38,8 +48,8 @@ For each field:
   baselines, including diagnostic breakdowns and grade-validity checks.
 - **Add my field (v0).** Client-side zero-server field digitizer and rotation evaluator running locally in
   browser storage.
-- **Guided tour.** 7-step interactive walkthrough introducing the field card, priority weights,
-  what-ifs, 3D simulation, and scientific methods.
+- **Guided tour.** 8-step "try it" walkthrough: field card, season, priority weights, ranking
+  explainer, 3D simulation, building a rotation, limits, and adding a field.
 
 Every number carries a source tag:
 - **O:** observed by satellite;
@@ -81,6 +91,11 @@ What this means:
 - These are weak results, and we report them honestly as they are (`results/hindcast/`).
 
 ## Known issues & honest limits
+
+- Rotation Builder and Farm view: the 3D replay is one median-rain weather year (normal, dry -20 % rain
+  or hot +2 °C), not a forecast; history-only seasons (e.g. perennial forage) show "not simulated";
+  cover-crop weeks are recognised from the canopy proxy; frame rates were measured with headless
+  software rendering, not on real phones or GPUs.
 
 - The season detector missed its pre-registered target: 78.3 % on held-out test (74.6 % in pilot check) against a 90 % target (T2.2,
   `results/story/`).
