@@ -9,6 +9,7 @@ import { type ScoreKey, bestMethods, methodsNotRun, metricsOf, modesOf, rowsFor,
 import { routeHref } from "./route";
 import { metricName, t } from "./strings";
 import { TagLegend } from "./tags";
+import { useTourSeen } from "./tourEvents";
 import type { FieldPack, HindcastRow, RegionHindcast, RegionIndex } from "./types";
 
 const date = (iso: string) => formatDate(new Date(`${iso}T00:00:00Z`));
@@ -69,12 +70,17 @@ function ScoreTable({ rows, metric }: { rows: HindcastRow[]; metric: string }) {
 
 function GradeValiditySection() {
   const g = GRADE_VALIDITY.grades;
+  const verdictRef = useTourSeen("limits");
   return (
     <section className="score-block grade-validity" aria-labelledby="score-gv">
       <h4 id="score-gv">{t("score.gradeValidity.heading")}</h4>
       <p className="muted">{t("score.gradeValidity.intro")}</p>
 
-      <div className="notice" style={{ marginTop: "0.5rem", marginBottom: "0.75rem" }}>
+      <div
+        ref={verdictRef}
+        className="notice grade-validity-verdict"
+        style={{ marginTop: "0.5rem", marginBottom: "0.75rem" }}
+      >
         <strong>{t("score.gradeValidity.verdict")}</strong>
         <p style={{ marginTop: "0.25rem", marginBottom: 0 }}>
           {t("score.gradeValidity.verdictDetail")}

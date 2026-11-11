@@ -3,6 +3,7 @@ import { type Priorities, type Ranked } from "./rank";
 import { explainTopRanking, type RankingExplanation } from "./rankingExplainer";
 import { optionName, t } from "./strings";
 import { TagBadge } from "./tags";
+import { useTourSeen } from "./tourEvents";
 import type { Tag } from "./types";
 
 export function RankingExplainerSection({
@@ -12,6 +13,7 @@ export function RankingExplainerSection({
   ranked: Ranked[];
   priorities: Priorities;
 }) {
+  const seenRef = useTourSeen("why-ranking");
   const kept = useMemo(() => ranked.filter((r) => r.kept), [ranked]);
   const explanation: RankingExplanation | null = useMemo(
     () => explainTopRanking(kept, priorities),
@@ -23,7 +25,7 @@ export function RankingExplainerSection({
   const { top, next, sentence, dominantPriority } = explanation;
 
   return (
-    <section className="ranking-explainer-card" aria-labelledby="ranking-explainer-h">
+    <section ref={seenRef} className="ranking-explainer-card" aria-labelledby="ranking-explainer-h">
       <h4 id="ranking-explainer-h" className="ranking-explainer-title">
         {t("rankExplainer.heading")}
       </h4>

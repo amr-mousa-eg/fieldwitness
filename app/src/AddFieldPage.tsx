@@ -27,6 +27,7 @@ import {
 import { DEFAULT_PRIORITIES, isDefault, type PriorityKey, PRIORITY_KEYS } from "./rank";
 import { routeHref } from "./route";
 import { t } from "./strings";
+import { emitTour } from "./tourEvents";
 import type { RegionIndex } from "./types";
 
 interface AddFieldPageProps {
@@ -272,7 +273,10 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
               key={preset.id}
               type="button"
               className="preset-btn"
-              onClick={() => handleApplyPreset(preset.latitude, preset.longitude)}
+              onClick={() => {
+                handleApplyPreset(preset.latitude, preset.longitude);
+                emitTour(`preset:${preset.id}`);
+              }}
             >
               {preset.label}
             </button>

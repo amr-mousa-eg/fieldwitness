@@ -685,6 +685,8 @@ We are at Gate <N>. Check every acceptance test of this phase against the actual
   - F3 3D weather year: disclaimer reads `weather_year` from the pack (was hard-coded 2007); no other hard-coded 2007 in app, README or Methods. `field3d.test.ts` checks all 200 packs.
   - F4 map: GIBS MODIS Terra Corrected Reflectance (Level9, 2023-08-15, cloud-free over the pilot; layer and template from GIBS GetCapabilities) below zoom 10, HLS from zoom 10. First view shows imagery; dark ring on field points; one credit line; offline fallback unchanged (offline check passes).
 
+- [x] **Try-it tour (11 Nov, user-approved plan).** Rebuilt the guided tour as a "try it" tour: compact card docked at the bottom (bottom sheet on phones), no overlay or focus trap, outline on the real control. 7 steps tick on real app events (`src/tourEvents.ts`, `fw:tour`): open a field (map/list), choose a season in Field story, move a priority slider, find "Why this ranking?", press Play + a −20 % rain scenario in Field in 3D, find the Scoreboard grade-validity verdict, press Cairo then Garden City in Add my field. Next always works; Skip/Escape restore the start page; progress in localStorage (try/catch). Missing target = text only. Text reuses existing claims only (tested). Cairo preset (Tahrir Square, 30.0444 N 31.2357 E) shows the existing "not supported" message. `tests/tour.test.ts` (25 tests) + `tourContrast.test.ts` green.
+
 #### Roadmap (Not Built in this Version — Post-Freeze Roadmap)
 - **Item 5: Arabic interface (i18n / RTL).** Post-freeze roadmap.
 - **Item 3: Check soil water and rain against independent data (SMAP / GPM).** Post-freeze roadmap.
