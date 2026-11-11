@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { DiagnosisSection } from "./DiagnosisSection";
 import { Explain } from "./Explain";
 import { MethodsDiagram } from "./MethodsDiagram";
@@ -28,7 +29,38 @@ const REPO_URL = "https://github.com/amr-mousa-eg/fieldwitness";
 const list = (prefix: string, n: number) =>
   Array.from({ length: n }, (_, i) => t(`${prefix}.${i + 1}` as StringKey));
 
+/**
+ * Links such as #/kansas/methods#glossary-hindcast carry a second "#" inside the hash route, so
+ * the browser cannot scroll to the target by itself. Scroll there and move keyboard focus to it
+ * on load and whenever the hash changes (diagram boxes, "Open in glossary" links).
+ */
+function useAnchorJump(): void {
+  useEffect(() => {
+    let timer = 0;
+    const jump = () => {
+      const hash = window.location.hash;
+      const at = hash.indexOf("#", 1);
+      if (at < 0) return;
+      const el = document.getElementById(decodeURIComponent(hash.slice(at + 1)));
+      if (!el) return;
+      // after App moves focus to <main> on a page change
+      timer = window.setTimeout(() => {
+        if (!el.hasAttribute("tabindex")) el.setAttribute("tabindex", "-1");
+        el.focus({ preventScroll: true });
+        el.scrollIntoView({ block: "start" });
+      }, 0);
+    };
+    jump();
+    window.addEventListener("hashchange", jump);
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener("hashchange", jump);
+    };
+  }, []);
+}
+
 export function MethodsPage() {
+  useAnchorJump();
   return (
     <article className="methods" aria-labelledby="methods-h">
       <h2 id="methods-h">{t("methods.heading")}</h2>

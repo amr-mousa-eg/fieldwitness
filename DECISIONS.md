@@ -560,6 +560,6 @@ Written and committed before executing the diagnostic analysis or inspecting res
    - Formal calibration of winter wheat phenology stage lengths is deferred to a separate decision entry, strictly constrained within published FAO-56 ranges, validated on dev/test split, and will be tackled only if time remains after completing Priority MUST items (Items 1, 7, 9, 10, 5).
 
 ## Handoff
-2026-11-11: try-it tour rebuilt (bottom card, 7 steps ticked by real `fw:tour` app events, Skip restores start page, progress in localStorage); branch `claude/try-it-tour-bc2305`; see PLAN.md Phase 12.
-Checks: vitest 149 passed / 1 skipped, typecheck, build, keyboard and overflow (360/390 px) green; pytest + ruff green. Known, not fixed: React duplicate-key warning `fallow` on the Options tab (predates this change).
+2026-11-11: Methods diagram redesigned (Item 9, branch `claude/methods-diagram-721d67`) and try-it tour rebuilt (bottom card, 7 steps ticked by real `fw:tour` app events, Skip restores start page; branch `claude/try-it-tour-bc2305`); see PLAN.md Phase 12.
+Checks after merging both: vitest 153 passed / 1 skipped, typecheck, build, keyboard and overflow (360/390 px) green; ruff green; pytest 248 passed / 7 skipped, but the timing test `test_runtime_all_candidates_one_field` failed once under load (99 s > 60 s limit) and passed alone (8/8 in 22 s). Known, not fixed: React duplicate-key warning `fallow` from CorrectionPanel crop options (predates the tour).
 Next: user reviews tour screenshots; freeze after 12 Nov EOD; tag `v1.0-spaceapps` waits for 13 Nov approval.
