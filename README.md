@@ -138,6 +138,12 @@ Items scheduled for subsequent milestones following the code freeze:
 - **Evapotranspiration and irrigation checks:** Cross-checking simulated crop evapotranspiration against NASA ECOSTRESS thermal data and irrigation diversion records against the Kansas WIMAS database.
 - **Expanding coverage tile-by-tile:** Rolling out to further agricultural regions tile-by-tile, requiring every new tile to satisfy the census, season-detection, and hindcast gates before publication.
 
+### Future work (not implemented)
+
+Planned research directions, not part of the current results. Nothing below exists in the pipeline or the app; the code folders hold docstring-only stubs that raise `NotImplementedError`.
+- **Physics-informed water balance (`src/fieldwitness/experimental/neural_physics/`):** a neural network trained on SMAP L4 and ECOSTRESS data with a Richards-equation penalty. Not built: it needs training time, a new dependency and its own validation.
+- **Amortised calibration (`src/fieldwitness/experimental/neural_infer/`):** neural posterior estimation (the `sbi` library, a masked autoregressive flow, an active-learning loop) as a possible replacement for ABC rejection at regional scale. A research direction, not a decision.
+
 **Privacy & "Add my field" (Version 0):** Farm locations and management histories are sensitive. The "Add my field" feature operates entirely on the client side (zero server calls, static build). Coordinates, crop histories, and constraints stay strictly on your local device (in `localStorage`). A future server-side pipeline will store data only with explicit farmer consent.
 
 ## Run it
