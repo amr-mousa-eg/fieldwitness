@@ -1,0 +1,82 @@
+{
+ "preregistration": "DECISIONS.md 2026-11-12 (commit c28cf32)",
+ "training": {
+  "seasons": [
+   2019,
+   2020,
+   2021
+  ],
+  "rows": 428,
+  "fields": 189,
+  "rows_by_crop": {
+   "winter_wheat": 167,
+   "sorghum": 134,
+   "maize": 127
+  },
+  "fields_by_crop": {
+   "maize": 84,
+   "sorghum": 107,
+   "winter_wheat": 145
+  },
+  "rows_by_year": {
+   "2019": 148,
+   "2020": 131,
+   "2021": 149
+  },
+  "mean_crps_ci": 11.736979444043257,
+  "source_files_sha256": {
+   "pseudo_cut2018.jsonl": "e9e398cf7be7fc948c48abfa2741897790bc7f0a8670a19ff99170569f460f74",
+   "pseudo_cut2019.jsonl": "14a46f564f572411417ce672654c5ad136fefdea23e8cb2f44a5c21c96a23eca",
+   "pseudo_cut2020.jsonl": "41d12455e1153c92584415dac6630bf30be3bea611820034b3be9d9058a2ba7e",
+   "pseudo_cut2021.jsonl": "9619c53a724e143f000eaef2ec092813058d2503dfe6b66683c8d75cedca6001"
+  },
+  "source": "copied from the local checkout of branch experiment/conformal (PR #14), results/hindcast/conformal/"
+ },
+ "cv": [
+  {
+   "model": "null",
+   "loss": 1.201415665373117,
+   "se": 0.06480499442269014,
+   "cv_spearman": -0.5132221545278799
+  },
+  {
+   "model": "crop",
+   "loss": 1.0831669007619573,
+   "se": 0.06106013648522218,
+   "cv_spearman": 0.04421427409572683
+  },
+  {
+   "model": "grade",
+   "loss": 1.2040289456924373,
+   "se": 0.06487582876852249,
+   "cv_spearman": -0.18905717235689753
+  },
+  {
+   "model": "credibility",
+   "loss": 1.1871587405696271,
+   "se": 0.06450156117945749,
+   "cv_spearman": 0.04661099768752025
+  },
+  {
+   "model": "gbm",
+   "loss": 1.135560808865284,
+   "se": 0.06616632035434498,
+   "cv_spearman": 0.26667449296528506
+  }
+ ],
+ "chosen_model": "crop",
+ "rule": "simplest of null < crop < grade < credibility < gbm with CV loss <= best + SE(best)",
+ "tier_bounds_log_scaled_crps": [
+  -2.5839494820832405,
+  -1.8585748484281903,
+  -1.7882303519619656
+ ],
+ "tiers": "R1 <= b1 < R2 <= b2 < R3 <= b3 < R4 (predicted y); relative reliability, not evidence grades",
+ "n_distinct_train_predictions": 3,
+ "train_tier_counts": {
+  "R1": 134,
+  "R2": 127,
+  "R3": 167
+ },
+ "tag": "D"
+}
