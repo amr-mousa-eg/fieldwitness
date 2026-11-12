@@ -8,6 +8,8 @@
  * - "about the same" when differences are within stated thresholds (config/field_summary.yaml, tag A).
  * - Trade-offs shown both ways ("...uses 40 mm less water, but has 1 more bare-soil month").
  * - If Current ranks best: "Your current rotation ranks best for the priorities you set (evidence: grade X)."
+ * - If Current has no simulated values (a history-only season, `seasons.ts`), it is shown as
+ *   "not simulated", never as 0, and never called best.
  * - No yield, profit, or certainty words; ends with evidence grade: "(evidence: grade X)".
  * - Every number source-tagged (tag D for derived model metrics, tag A for thresholds).
  */
@@ -47,6 +49,8 @@ export interface MetricComparisonItem {
 
 export interface ComparisonSummary {
   isCurrentBest: boolean;
+  /** Current has a history-only season, so it has no simulated metrics to compare. */
+  currentNotSimulated: boolean;
   currentOption: Option;
   topAlternative: Option | null;
   sentence: string;
@@ -185,6 +189,28 @@ export function generateFieldSummary(
   const targetOption = topAlt ?? current;
   const metrics = buildMetricComparisons(current, targetOption);
 
+  // No simulated value for Current (a history-only season, `seasons.ts`): never show it as 0.
+  if (current.metrics.water_use_mm?.value == null) {
+    const lead = "Your current rotation has a season that is not simulated, so it cannot be compared";
+    const tokens: SummaryToken[] = topAlt
+      ? [
+          { kind: "text", text: `${lead}. The top simulated option is ${optionName(topAlt)} (evidence: ` },
+          { kind: "grade", grade: topAlt.grade },
+          { kind: "text", text: ")." },
+        ]
+      : [{ kind: "text", text: `${lead}.` }];
+    return {
+      isCurrentBest: false,
+      currentNotSimulated: true,
+      currentOption: current,
+      topAlternative: topAlt,
+      sentence: tokens.map((tk) => (tk.kind === "text" ? tk.text : tk.kind === "grade" ? `grade ${tk.grade}` : "")).join(""),
+      tokens,
+      evidenceGrade: targetOption.grade,
+      metrics,
+    };
+  }
+
   if (isCurrentBest || !topAlt) {
     const text = `Your current rotation ranks best for the priorities you set (evidence: grade ${current.grade}).`;
     const tokens: SummaryToken[] = [
@@ -194,6 +220,7 @@ export function generateFieldSummary(
     ];
     return {
       isCurrentBest: true,
+      currentNotSimulated: false,
       currentOption: current,
       topAlternative: topAlt,
       sentence: text,
@@ -205,6 +232,7 @@ export function generateFieldSummary(
 
   return {
     isCurrentBest: false,
+    currentNotSimulated: false,
     currentOption: current,
     topAlternative: topAlt,
     ...compareToCurrent(current, topAlt),
