@@ -1,0 +1,2270 @@
+{
+ "pre_registration": "DECISIONS.md 2026-11-12 (commit 6f62874)",
+ "sanity": {
+  "calendar_records_vs_published": {
+   "n": 200,
+   "n_reference": 200,
+   "n_identical": 200,
+   "all": true
+  },
+  "calendar_baselines_vs_published": {
+   "n": 266,
+   "n_reference": 266,
+   "n_identical": 266,
+   "all": true
+  },
+  "curve_reruns": {
+   "calendar": {
+    "mode": "calendar",
+    "records_identical_to_experiment_2": true,
+    "n_predictions": 926
+   },
+   "gdd": {
+    "mode": "gdd",
+    "records_identical_to_experiment_2": true,
+    "n_predictions": 926
+   }
+  },
+  "source_files": [
+   "results/hindcast/gdd/records_calendar.jsonl",
+   "results/hindcast/gdd/records_gdd.jsonl",
+   "results/hindcast/gdd/baselines_calendar.jsonl",
+   "results/hindcast/gdd/baselines_gdd.jsonl",
+   "results/hindcast/ks_t14slh_records.jsonl",
+   "results/hindcast/ks_t14slh_baselines.jsonl",
+   "results/hindcast/gdd_before_after/curves_calendar.npz",
+   "results/hindcast/gdd_before_after/curves_gdd.npz",
+   "results/hindcast/gdd_before_after/rerun_check_calendar.json",
+   "results/hindcast/gdd_before_after/rerun_check_gdd.json",
+   "data/fields/ks_t14slh_pilot.parquet (blocks, field area; local, not in git)",
+   "data/fields/ks_t14slh_hls_series.parquet (observed NDVI points; local, not in git)"
+  ]
+ },
+ "summary_table": [
+  {
+   "run": "forecast",
+   "crop": "maize",
+   "method": "FieldWitness",
+   "mode": "calendar",
+   "n": 124,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": 17.67922403834742,
+    "ci_low": 15.22393989054034,
+    "ci_high": 20.375413835413035,
+    "n": 124
+   },
+   "peak_abs_err": {
+    "value": 14.919354838709678,
+    "ci_low": 12.299858870967743,
+    "ci_high": 18.20697623877137,
+    "n": 124
+   },
+   "peak_signed_err": {
+    "value": -6.0,
+    "ci_low": -9.5,
+    "ci_high": 0.0,
+    "n": 124
+   },
+   "ci_cov90": {
+    "value": 0.27419354838709675,
+    "ci_low": 0.1981981981981982,
+    "ci_high": 0.3511778876235765,
+    "n": 124
+   },
+   "peak_cov90": {
+    "value": 0.9274193548387096,
+    "ci_low": 0.8827760858050847,
+    "ci_high": 0.9699248120300752,
+    "n": 124
+   }
+  },
+  {
+   "run": "forecast",
+   "crop": "maize",
+   "method": "FieldWitness",
+   "mode": "gdd",
+   "n": 124,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": 18.112445272378395,
+    "ci_low": 14.88765352898065,
+    "ci_high": 21.79058917329745,
+    "n": 124
+   },
+   "peak_abs_err": {
+    "value": 12.75,
+    "ci_low": 10.498965517241379,
+    "ci_high": 15.392599206349207,
+    "n": 124
+   },
+   "peak_signed_err": {
+    "value": 0.0,
+    "ci_low": -3.0,
+    "ci_high": 2.0,
+    "n": 124
+   },
+   "ci_cov90": {
+    "value": 0.2903225806451613,
+    "ci_low": 0.21487603305785125,
+    "ci_high": 0.36754385964912284,
+    "n": 124
+   },
+   "peak_cov90": {
+    "value": 0.7419354838709677,
+    "ci_low": 0.672127868852459,
+    "ci_high": 0.8125127032520325,
+    "n": 124
+   }
+  },
+  {
+   "run": "forecast",
+   "crop": "maize",
+   "method": "FieldWitness",
+   "mode": "gdd - calendar",
+   "n": 124,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": 0.43322123403098445,
+    "ci_low": -2.727651348481313,
+    "ci_high": 3.669308594190063,
+    "n": 124
+   },
+   "peak_abs_err": {
+    "value": -2.1693548387096775,
+    "ci_low": -3.5727452956989247,
+    "ci_high": -0.8164527859590074,
+    "n": 124
+   },
+   "peak_signed_err": {
+    "value": 4.895161290322581,
+    "ci_low": 3.749364406779661,
+    "ci_high": 6.179936691810345,
+    "n": 124
+   },
+   "ci_cov90": {
+    "value": 0.016129032258064516,
+    "ci_low": -0.10002100840336135,
+    "ci_high": 0.13802049446974618,
+    "n": 124
+   },
+   "peak_cov90": {
+    "value": -0.18548387096774194,
+    "ci_low": -0.24806347263507605,
+    "ci_high": -0.12293048429483171,
+    "n": 124
+   }
+  },
+  {
+   "run": "forecast",
+   "crop": "maize",
+   "method": "B0",
+   "mode": "calendar",
+   "n": 124,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": 15.712965926710009,
+    "ci_low": 13.123197570705583,
+    "ci_high": 18.969030964644734,
+    "n": 124
+   },
+   "peak_abs_err": {
+    "value": 17.379032258064516,
+    "ci_low": 13.884146341463415,
+    "ci_high": 21.579095883073155,
+    "n": 124
+   },
+   "peak_signed_err": {
+    "value": 6.25,
+    "ci_low": 2.0,
+    "ci_high": 9.5,
+    "n": 124
+   },
+   "ci_cov90": {
+    "value": 0.33064516129032256,
+    "ci_low": 0.24241832386363638,
+    "ci_high": 0.424025,
+    "n": 124
+   },
+   "peak_cov90": {
+    "value": 0.4032258064516129,
+    "ci_low": 0.30251612272816103,
+    "ci_high": 0.49238738738738735,
+    "n": 124
+   }
+  },
+  {
+   "run": "forecast",
+   "crop": "maize",
+   "method": "B0",
+   "mode": "gdd",
+   "n": 124,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": 15.712965926710009,
+    "ci_low": 13.123197570705583,
+    "ci_high": 18.969030964644734,
+    "n": 124
+   },
+   "peak_abs_err": {
+    "value": 17.379032258064516,
+    "ci_low": 13.884146341463415,
+    "ci_high": 21.579095883073155,
+    "n": 124
+   },
+   "peak_signed_err": {
+    "value": 6.25,
+    "ci_low": 2.0,
+    "ci_high": 9.5,
+    "n": 124
+   },
+   "ci_cov90": {
+    "value": 0.33064516129032256,
+    "ci_low": 0.24241832386363638,
+    "ci_high": 0.424025,
+    "n": 124
+   },
+   "peak_cov90": {
+    "value": 0.4032258064516129,
+    "ci_low": 0.30251612272816103,
+    "ci_high": 0.49238738738738735,
+    "n": 124
+   }
+  },
+  {
+   "run": "forecast",
+   "crop": "maize",
+   "method": "B1",
+   "mode": "calendar",
+   "n": 124,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": 19.44546982876459,
+    "ci_low": 17.003743376745124,
+    "ci_high": 22.209828465742827,
+    "n": 124
+   },
+   "peak_abs_err": {
+    "value": 28.592741935483872,
+    "ci_low": 25.582424812030077,
+    "ci_high": 32.06654312188168,
+    "n": 124
+   },
+   "peak_signed_err": {
+    "value": -26.5,
+    "ci_low": -31.0,
+    "ci_high": -23.0,
+    "n": 124
+   },
+   "ci_cov90": {
+    "value": 0.20161290322580644,
+    "ci_low": 0.1277957019414207,
+    "ci_high": 0.28574197120708744,
+    "n": 124
+   },
+   "peak_cov90": {
+    "value": 0.9193548387096774,
+    "ci_low": 0.8666666666666667,
+    "ci_high": 0.9642936156763591,
+    "n": 124
+   }
+  },
+  {
+   "run": "forecast",
+   "crop": "maize",
+   "method": "B1",
+   "mode": "gdd",
+   "n": 124,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": 19.990838234463293,
+    "ci_low": 16.38867208993962,
+    "ci_high": 24.147995130598787,
+    "n": 124
+   },
+   "peak_abs_err": {
+    "value": 16.06451612903226,
+    "ci_low": 13.484620098039215,
+    "ci_high": 19.321145833333333,
+    "n": 124
+   },
+   "peak_signed_err": {
+    "value": -10.5,
+    "ci_low": -15.0,
+    "ci_high": -8.0,
+    "n": 124
+   },
+   "ci_cov90": {
+    "value": 0.25806451612903225,
+    "ci_low": 0.1874766791044776,
+    "ci_high": 0.3388464770976327,
+    "n": 124
+   },
+   "peak_cov90": {
+    "value": 0.7661290322580645,
+    "ci_low": 0.6893859816653934,
+    "ci_high": 0.8412698412698413,
+    "n": 124
+   }
+  },
+  {
+   "run": "forecast",
+   "crop": "maize",
+   "method": "B2",
+   "mode": "calendar",
+   "n": 124,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": 19.709607454275552,
+    "ci_low": 17.171306684535377,
+    "ci_high": 22.355112399844636,
+    "n": 124
+   },
+   "peak_abs_err": {
+    "value": 20.677419354838708,
+    "ci_low": 17.53081357758621,
+    "ci_high": 24.264567069997398,
+    "n": 124
+   },
+   "peak_signed_err": {
+    "value": -18.0,
+    "ci_low": -23.0,
+    "ci_high": -13.0,
+    "n": 124
+   },
+   "ci_cov90": {
+    "value": 0.28225806451612906,
+    "ci_low": 0.2053514194139194,
+    "ci_high": 0.358974358974359,
+    "n": 124
+   },
+   "peak_cov90": {
+    "value": 0.9193548387096774,
+    "ci_low": 0.8692213114754098,
+    "ci_high": 0.9649153478100847,
+    "n": 124
+   }
+  },
+  {
+   "run": "forecast",
+   "crop": "maize",
+   "method": "B2",
+   "mode": "gdd",
+   "n": 124,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": 18.328252706822706,
+    "ci_low": 15.05095385481772,
+    "ci_high": 22.137648578268468,
+    "n": 124
+   },
+   "peak_abs_err": {
+    "value": 14.528225806451612,
+    "ci_low": 11.917187720536345,
+    "ci_high": 17.654299568965516,
+    "n": 124
+   },
+   "peak_signed_err": {
+    "value": -7.0,
+    "ci_low": -13.0,
+    "ci_high": -3.0,
+    "n": 124
+   },
+   "ci_cov90": {
+    "value": 0.28225806451612906,
+    "ci_low": 0.21008403361344538,
+    "ci_high": 0.358349358974359,
+    "n": 124
+   },
+   "peak_cov90": {
+    "value": 0.8145161290322581,
+    "ci_low": 0.7416594827586207,
+    "ci_high": 0.8869565217391304,
+    "n": 124
+   }
+  },
+  {
+   "run": "forecast",
+   "crop": "sorghum",
+   "method": "FieldWitness",
+   "mode": "calendar",
+   "n": 142,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": 12.407186031906154,
+    "ci_low": 10.008648983397416,
+    "ci_high": 14.732532581571705,
+    "n": 142
+   },
+   "peak_abs_err": {
+    "value": 16.154929577464788,
+    "ci_low": 13.538012295081968,
+    "ci_high": 18.69279513888889,
+    "n": 142
+   },
+   "peak_signed_err": {
+    "value": 2.0,
+    "ci_low": 0.0,
+    "ci_high": 5.0,
+    "n": 142
+   },
+   "ci_cov90": {
+    "value": 0.43661971830985913,
+    "ci_low": 0.3550609004008634,
+    "ci_high": 0.532881711828817,
+    "n": 142
+   },
+   "peak_cov90": {
+    "value": 0.8450704225352113,
+    "ci_low": 0.7898550724637681,
+    "ci_high": 0.8987464429398488,
+    "n": 142
+   }
+  },
+  {
+   "run": "forecast",
+   "crop": "sorghum",
+   "method": "FieldWitness",
+   "mode": "gdd",
+   "n": 142,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": 19.15088325966327,
+    "ci_low": 15.831365898772543,
+    "ci_high": 22.555542868253013,
+    "n": 142
+   },
+   "peak_abs_err": {
+    "value": 15.971830985915492,
+    "ci_low": 13.434144880174292,
+    "ci_high": 18.5168947746884,
+    "n": 142
+   },
+   "peak_signed_err": {
+    "value": -1.0,
+    "ci_low": -7.0,
+    "ci_high": 0.0,
+    "n": 142
+   },
+   "ci_cov90": {
+    "value": 0.19014084507042253,
+    "ci_low": 0.1294902853227622,
+    "ci_high": 0.2500425170068027,
+    "n": 142
+   },
+   "peak_cov90": {
+    "value": 0.676056338028169,
+    "ci_low": 0.5895080893243706,
+    "ci_high": 0.7541270205204631,
+    "n": 142
+   }
+  },
+  {
+   "run": "forecast",
+   "crop": "sorghum",
+   "method": "FieldWitness",
+   "mode": "gdd - calendar",
+   "n": 142,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": 6.7436972277571146,
+    "ci_low": 4.134747006816072,
+    "ci_high": 9.419048790399174,
+    "n": 142
+   },
+   "peak_abs_err": {
+    "value": -0.18309859154929578,
+    "ci_low": -1.4276158983761131,
+    "ci_high": 1.2072852316602314,
+    "n": 142
+   },
+   "peak_signed_err": {
+    "value": -4.809859154929577,
+    "ci_low": -5.893940383922135,
+    "ci_high": -3.6431906960227276,
+    "n": 142
+   },
+   "ci_cov90": {
+    "value": -0.24647887323943662,
+    "ci_low": -0.381294964028777,
+    "ci_high": -0.12587296809151116,
+    "n": 142
+   },
+   "peak_cov90": {
+    "value": -0.16901408450704225,
+    "ci_low": -0.23972602739726026,
+    "ci_high": -0.1111111111111111,
+    "n": 142
+   }
+  },
+  {
+   "run": "forecast",
+   "crop": "sorghum",
+   "method": "B0",
+   "mode": "calendar",
+   "n": 142,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": 14.614029429792145,
+    "ci_low": 12.044072303102288,
+    "ci_high": 17.204358707800225,
+    "n": 142
+   },
+   "peak_abs_err": {
+    "value": 18.422535211267604,
+    "ci_low": 14.773561103462882,
+    "ci_high": 22.648792652724268,
+    "n": 142
+   },
+   "peak_signed_err": {
+    "value": -1.5,
+    "ci_low": -4.5,
+    "ci_high": 3.5,
+    "n": 142
+   },
+   "ci_cov90": {
+    "value": 0.323943661971831,
+    "ci_low": 0.2465753424657534,
+    "ci_high": 0.4083362676056338,
+    "n": 142
+   },
+   "peak_cov90": {
+    "value": 0.4295774647887324,
+    "ci_low": 0.3377001581496491,
+    "ci_high": 0.5275034680076295,
+    "n": 142
+   }
+  },
+  {
+   "run": "forecast",
+   "crop": "sorghum",
+   "method": "B0",
+   "mode": "gdd",
+   "n": 142,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": 14.614029429792145,
+    "ci_low": 12.044072303102288,
+    "ci_high": 17.204358707800225,
+    "n": 142
+   },
+   "peak_abs_err": {
+    "value": 18.422535211267604,
+    "ci_low": 14.773561103462882,
+    "ci_high": 22.648792652724268,
+    "n": 142
+   },
+   "peak_signed_err": {
+    "value": -1.5,
+    "ci_low": -4.5,
+    "ci_high": 3.5,
+    "n": 142
+   },
+   "ci_cov90": {
+    "value": 0.323943661971831,
+    "ci_low": 0.2465753424657534,
+    "ci_high": 0.4083362676056338,
+    "n": 142
+   },
+   "peak_cov90": {
+    "value": 0.4295774647887324,
+    "ci_low": 0.3377001581496491,
+    "ci_high": 0.5275034680076295,
+    "n": 142
+   }
+  },
+  {
+   "run": "forecast",
+   "crop": "sorghum",
+   "method": "B1",
+   "mode": "calendar",
+   "n": 142,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": 13.174980109871997,
+    "ci_low": 10.605628760208408,
+    "ci_high": 15.659886392575839,
+    "n": 142
+   },
+   "peak_abs_err": {
+    "value": 15.433098591549296,
+    "ci_low": 12.948812618738126,
+    "ci_high": 17.912940132282852,
+    "n": 142
+   },
+   "peak_signed_err": {
+    "value": -7.5,
+    "ci_low": -12.0,
+    "ci_high": -2.0,
+    "n": 142
+   },
+   "ci_cov90": {
+    "value": 0.3732394366197183,
+    "ci_low": 0.295743295388771,
+    "ci_high": 0.45578481392557024,
+    "n": 142
+   },
+   "peak_cov90": {
+    "value": 0.7887323943661971,
+    "ci_low": 0.7266654676258993,
+    "ci_high": 0.8472222222222222,
+    "n": 142
+   }
+  },
+  {
+   "run": "forecast",
+   "crop": "sorghum",
+   "method": "B1",
+   "mode": "gdd",
+   "n": 142,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": 20.95136397337423,
+    "ci_low": 17.51974536699028,
+    "ci_high": 24.389111862621526,
+    "n": 142
+   },
+   "peak_abs_err": {
+    "value": 18.190140845070424,
+    "ci_low": 15.316921561812073,
+    "ci_high": 21.175720541401272,
+    "n": 142
+   },
+   "peak_signed_err": {
+    "value": -15.5,
+    "ci_low": -17.0,
+    "ci_high": -10.0,
+    "n": 142
+   },
+   "ci_cov90": {
+    "value": 0.18309859154929578,
+    "ci_low": 0.12056071028635418,
+    "ci_high": 0.2429008221993833,
+    "n": 142
+   },
+   "peak_cov90": {
+    "value": 0.39436619718309857,
+    "ci_low": 0.3049645390070922,
+    "ci_high": 0.48178856610983195,
+    "n": 142
+   }
+  },
+  {
+   "run": "forecast",
+   "crop": "sorghum",
+   "method": "B2",
+   "mode": "calendar",
+   "n": 142,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": 13.16493853287538,
+    "ci_low": 11.002164090773155,
+    "ci_high": 15.303678997439304,
+    "n": 142
+   },
+   "peak_abs_err": {
+    "value": 14.47887323943662,
+    "ci_low": 12.106947916666668,
+    "ci_high": 17.00015923566879,
+    "n": 142
+   },
+   "peak_signed_err": {
+    "value": 0.0,
+    "ci_low": -5.0,
+    "ci_high": 2.0,
+    "n": 142
+   },
+   "ci_cov90": {
+    "value": 0.43661971830985913,
+    "ci_low": 0.35459561252808247,
+    "ci_high": 0.5217471227621483,
+    "n": 142
+   },
+   "peak_cov90": {
+    "value": 0.9154929577464789,
+    "ci_low": 0.8704801376290272,
+    "ci_high": 0.9583405172413794,
+    "n": 142
+   }
+  },
+  {
+   "run": "forecast",
+   "crop": "sorghum",
+   "method": "B2",
+   "mode": "gdd",
+   "n": 142,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": 19.593475367867676,
+    "ci_low": 16.302741628078415,
+    "ci_high": 22.937268337150265,
+    "n": 142
+   },
+   "peak_abs_err": {
+    "value": 17.095070422535212,
+    "ci_low": 14.39679901541096,
+    "ci_high": 19.898670026292724,
+    "n": 142
+   },
+   "peak_signed_err": {
+    "value": -13.5,
+    "ci_low": -16.0,
+    "ci_high": -8.0,
+    "n": 142
+   },
+   "ci_cov90": {
+    "value": 0.19014084507042253,
+    "ci_low": 0.12585227272727273,
+    "ci_high": 0.2532467532467532,
+    "n": 142
+   },
+   "peak_cov90": {
+    "value": 0.7464788732394366,
+    "ci_low": 0.6713262764632628,
+    "ci_high": 0.8175829238329237,
+    "n": 142
+   }
+  },
+  {
+   "run": "forecast",
+   "crop": "winter_wheat",
+   "method": "FieldWitness",
+   "mode": "calendar",
+   "n": 197,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": 21.14865427712785,
+    "ci_low": 18.780516212475995,
+    "ci_high": 23.424728283545853,
+    "n": 197
+   },
+   "peak_abs_err": {
+    "value": 58.94670050761421,
+    "ci_low": 52.173646044357916,
+    "ci_high": 66.28486158376963,
+    "n": 197
+   },
+   "peak_signed_err": {
+    "value": 36.0,
+    "ci_low": 31.0,
+    "ci_high": 42.0,
+    "n": 197
+   },
+   "ci_cov90": {
+    "value": 0.23857868020304568,
+    "ci_low": 0.18403426218660393,
+    "ci_high": 0.2990696278511404,
+    "n": 197
+   },
+   "peak_cov90": {
+    "value": 0.34517766497461927,
+    "ci_low": 0.275,
+    "ci_high": 0.4205607476635514,
+    "n": 197
+   }
+  },
+  {
+   "run": "forecast",
+   "crop": "winter_wheat",
+   "method": "FieldWitness",
+   "mode": "gdd",
+   "n": 197,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": 21.48412433169902,
+    "ci_low": 18.941023682778614,
+    "ci_high": 24.167664394182808,
+    "n": 197
+   },
+   "peak_abs_err": {
+    "value": 49.357868020304565,
+    "ci_low": 41.80135026044736,
+    "ci_high": 57.03626678254615,
+    "n": 197
+   },
+   "peak_signed_err": {
+    "value": 8.0,
+    "ci_low": 1.0,
+    "ci_high": 10.0,
+    "n": 197
+   },
+   "ci_cov90": {
+    "value": 0.27918781725888325,
+    "ci_low": 0.21738581466842335,
+    "ci_high": 0.34147946084724007,
+    "n": 197
+   },
+   "peak_cov90": {
+    "value": 0.38578680203045684,
+    "ci_low": 0.3184023066485753,
+    "ci_high": 0.4585372591294974,
+    "n": 197
+   }
+  },
+  {
+   "run": "forecast",
+   "crop": "winter_wheat",
+   "method": "FieldWitness",
+   "mode": "gdd - calendar",
+   "n": 197,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": 0.3354700545711749,
+    "ci_low": -2.6227116527078294,
+    "ci_high": 3.550232871609137,
+    "n": 197
+   },
+   "peak_abs_err": {
+    "value": -9.588832487309645,
+    "ci_low": -13.9218765456202,
+    "ci_high": -5.57076983277041,
+    "n": 197
+   },
+   "peak_signed_err": {
+    "value": -33.045685279187815,
+    "ci_low": -34.95059054128763,
+    "ci_high": -30.96680194805195,
+    "n": 197
+   },
+   "ci_cov90": {
+    "value": 0.04060913705583756,
+    "ci_low": -0.05689002754274087,
+    "ci_high": 0.13659712764640336,
+    "n": 197
+   },
+   "peak_cov90": {
+    "value": 0.04060913705583756,
+    "ci_low": -0.05350719663713518,
+    "ci_high": 0.14010771641206424,
+    "n": 197
+   }
+  },
+  {
+   "run": "forecast",
+   "crop": "winter_wheat",
+   "method": "B0",
+   "mode": "-",
+   "note": "no baseline"
+  },
+  {
+   "run": "forecast",
+   "crop": "winter_wheat",
+   "method": "B1",
+   "mode": "-",
+   "note": "no baseline"
+  },
+  {
+   "run": "forecast",
+   "crop": "winter_wheat",
+   "method": "B2",
+   "mode": "-",
+   "note": "no baseline"
+  },
+  {
+   "run": "forced",
+   "crop": "maize",
+   "method": "FieldWitness",
+   "mode": "calendar",
+   "n": 124,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": 17.790226452889854,
+    "ci_low": 15.462318284115701,
+    "ci_high": 20.497737334253117,
+    "n": 124
+   },
+   "peak_abs_err": {
+    "value": 13.161290322580646,
+    "ci_low": 10.221719858156028,
+    "ci_high": 16.703540127480803,
+    "n": 124
+   },
+   "peak_signed_err": {
+    "value": -1.5,
+    "ci_low": -8.0,
+    "ci_high": 0.0,
+    "n": 124
+   },
+   "ci_cov90": {
+    "value": 0.20967741935483872,
+    "ci_low": 0.13384514435695538,
+    "ci_high": 0.28,
+    "n": 124
+   },
+   "peak_cov90": {
+    "value": 0.6774193548387096,
+    "ci_low": 0.587288469106651,
+    "ci_high": 0.7633692973492817,
+    "n": 124
+   }
+  },
+  {
+   "run": "forced",
+   "crop": "maize",
+   "method": "FieldWitness",
+   "mode": "gdd",
+   "n": 124,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": 18.631509751516788,
+    "ci_low": 15.362732357576345,
+    "ci_high": 22.395666442007816,
+    "n": 124
+   },
+   "peak_abs_err": {
+    "value": 12.149193548387096,
+    "ci_low": 9.775656262918563,
+    "ci_high": 15.240050459436109,
+    "n": 124
+   },
+   "peak_signed_err": {
+    "value": 0.0,
+    "ci_low": -2.5,
+    "ci_high": 0.0,
+    "n": 124
+   },
+   "ci_cov90": {
+    "value": 0.1935483870967742,
+    "ci_low": 0.12900194033470774,
+    "ci_high": 0.26666666666666666,
+    "n": 124
+   },
+   "peak_cov90": {
+    "value": 0.6612903225806451,
+    "ci_low": 0.5862068965517241,
+    "ci_high": 0.7384701492537313,
+    "n": 124
+   }
+  },
+  {
+   "run": "forced",
+   "crop": "maize",
+   "method": "FieldWitness",
+   "mode": "gdd - calendar",
+   "n": 124,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": 0.8412832986269396,
+    "ci_low": -2.1864759574146992,
+    "ci_high": 4.030454901708034,
+    "n": 124
+   },
+   "peak_abs_err": {
+    "value": -1.0120967741935485,
+    "ci_low": -2.289940476190476,
+    "ci_high": 0.23192224720466673,
+    "n": 124
+   },
+   "peak_signed_err": {
+    "value": 3.0524193548387095,
+    "ci_low": 1.7804502655721874,
+    "ci_high": 4.202098749119098,
+    "n": 124
+   },
+   "ci_cov90": {
+    "value": -0.016129032258064516,
+    "ci_low": -0.13333333333333333,
+    "ci_high": 0.10619469026548672,
+    "n": 124
+   },
+   "peak_cov90": {
+    "value": -0.016129032258064516,
+    "ci_low": -0.10173190745224645,
+    "ci_high": 0.07319331526648597,
+    "n": 124
+   }
+  },
+  {
+   "run": "forced",
+   "crop": "maize",
+   "method": "B0",
+   "mode": "-",
+   "note": "no baseline (baselines use past weather)"
+  },
+  {
+   "run": "forced",
+   "crop": "maize",
+   "method": "B1",
+   "mode": "-",
+   "note": "no baseline (baselines use past weather)"
+  },
+  {
+   "run": "forced",
+   "crop": "maize",
+   "method": "B2",
+   "mode": "-",
+   "note": "no baseline (baselines use past weather)"
+  },
+  {
+   "run": "forced",
+   "crop": "sorghum",
+   "method": "FieldWitness",
+   "mode": "calendar",
+   "n": 142,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": 12.158653580360351,
+    "ci_low": 9.842992289872527,
+    "ci_high": 14.543778599780735,
+    "n": 142
+   },
+   "peak_abs_err": {
+    "value": 16.820422535211268,
+    "ci_low": 13.793419785360484,
+    "ci_high": 19.880961635431547,
+    "n": 142
+   },
+   "peak_signed_err": {
+    "value": -2.0,
+    "ci_low": -8.0,
+    "ci_high": 0.0,
+    "n": 142
+   },
+   "ci_cov90": {
+    "value": 0.352112676056338,
+    "ci_low": 0.2657267115600449,
+    "ci_high": 0.44533076663669063,
+    "n": 142
+   },
+   "peak_cov90": {
+    "value": 0.7183098591549296,
+    "ci_low": 0.6338028169014085,
+    "ci_high": 0.8039624183006536,
+    "n": 142
+   }
+  },
+  {
+   "run": "forced",
+   "crop": "sorghum",
+   "method": "FieldWitness",
+   "mode": "gdd",
+   "n": 142,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": 20.572405831014276,
+    "ci_low": 17.162084600719712,
+    "ci_high": 23.985564241909927,
+    "n": 142
+   },
+   "peak_abs_err": {
+    "value": 16.369718309859156,
+    "ci_low": 13.686111111111112,
+    "ci_high": 19.038287970430105,
+    "n": 142
+   },
+   "peak_signed_err": {
+    "value": -4.5,
+    "ci_low": -9.0,
+    "ci_high": 0.0,
+    "n": 142
+   },
+   "ci_cov90": {
+    "value": 0.1267605633802817,
+    "ci_low": 0.06991258741258742,
+    "ci_high": 0.18706160071942446,
+    "n": 142
+   },
+   "peak_cov90": {
+    "value": 0.5774647887323944,
+    "ci_low": 0.48992946171757296,
+    "ci_high": 0.6580811571940605,
+    "n": 142
+   }
+  },
+  {
+   "run": "forced",
+   "crop": "sorghum",
+   "method": "FieldWitness",
+   "mode": "gdd - calendar",
+   "n": 142,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": 8.413752250653925,
+    "ci_low": 5.756463468825972,
+    "ci_high": 10.888415303364162,
+    "n": 142
+   },
+   "peak_abs_err": {
+    "value": -0.4507042253521127,
+    "ci_low": -1.9104393115942029,
+    "ci_high": 1.1351562499999994,
+    "n": 142
+   },
+   "peak_signed_err": {
+    "value": -1.2394366197183098,
+    "ci_low": -2.7734930069930073,
+    "ci_high": 0.46726559150030933,
+    "n": 142
+   },
+   "ci_cov90": {
+    "value": -0.22535211267605634,
+    "ci_low": -0.34537859074442573,
+    "ci_high": -0.11035095856524431,
+    "n": 142
+   },
+   "peak_cov90": {
+    "value": -0.14084507042253522,
+    "ci_low": -0.21019433465085638,
+    "ci_high": -0.07292844659196057,
+    "n": 142
+   }
+  },
+  {
+   "run": "forced",
+   "crop": "sorghum",
+   "method": "B0",
+   "mode": "-",
+   "note": "no baseline (baselines use past weather)"
+  },
+  {
+   "run": "forced",
+   "crop": "sorghum",
+   "method": "B1",
+   "mode": "-",
+   "note": "no baseline (baselines use past weather)"
+  },
+  {
+   "run": "forced",
+   "crop": "sorghum",
+   "method": "B2",
+   "mode": "-",
+   "note": "no baseline (baselines use past weather)"
+  },
+  {
+   "run": "forced",
+   "crop": "winter_wheat",
+   "method": "FieldWitness",
+   "mode": "calendar",
+   "n": 197,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": 21.883042493800794,
+    "ci_low": 19.606580189443466,
+    "ci_high": 24.208386944611146,
+    "n": 197
+   },
+   "peak_abs_err": {
+    "value": 71.751269035533,
+    "ci_low": 63.92672248803828,
+    "ci_high": 80.58491332611051,
+    "n": 197
+   },
+   "peak_signed_err": {
+    "value": 56.0,
+    "ci_low": 39.5,
+    "ci_high": 65.0,
+    "n": 197
+   },
+   "ci_cov90": {
+    "value": 0.14213197969543148,
+    "ci_low": 0.09595959595959595,
+    "ci_high": 0.194875,
+    "n": 197
+   },
+   "peak_cov90": {
+    "value": 0.2131979695431472,
+    "ci_low": 0.15760869565217392,
+    "ci_high": 0.26770126639529623,
+    "n": 197
+   }
+  },
+  {
+   "run": "forced",
+   "crop": "winter_wheat",
+   "method": "FieldWitness",
+   "mode": "gdd",
+   "n": 197,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": 22.87079832639098,
+    "ci_low": 20.352106483411116,
+    "ci_high": 25.67519728048699,
+    "n": 197
+   },
+   "peak_abs_err": {
+    "value": 44.38578680203046,
+    "ci_low": 37.2928664921466,
+    "ci_high": 51.9505051380463,
+    "n": 197
+   },
+   "peak_signed_err": {
+    "value": 0.0,
+    "ci_low": -2.0,
+    "ci_high": 5.0,
+    "n": 197
+   },
+   "ci_cov90": {
+    "value": 0.20812182741116753,
+    "ci_low": 0.1457104271356784,
+    "ci_high": 0.2692441860465116,
+    "n": 197
+   },
+   "peak_cov90": {
+    "value": 0.3604060913705584,
+    "ci_low": 0.2956928152492669,
+    "ci_high": 0.4307868020304569,
+    "n": 197
+   }
+  },
+  {
+   "run": "forced",
+   "crop": "winter_wheat",
+   "method": "FieldWitness",
+   "mode": "gdd - calendar",
+   "n": 197,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": 0.987755832590183,
+    "ci_low": -2.024502838266402,
+    "ci_high": 4.242912358163057,
+    "n": 197
+   },
+   "peak_abs_err": {
+    "value": -27.365482233502537,
+    "ci_low": -33.61061737924538,
+    "ci_high": -21.23544645526106,
+    "n": 197
+   },
+   "peak_signed_err": {
+    "value": -50.69543147208122,
+    "ci_low": -54.06811522048364,
+    "ci_high": -47.81861522911051,
+    "n": 197
+   },
+   "ci_cov90": {
+    "value": 0.06598984771573604,
+    "ci_low": -0.026455026455026454,
+    "ci_high": 0.15,
+    "n": 197
+   },
+   "peak_cov90": {
+    "value": 0.14720812182741116,
+    "ci_low": 0.059340126962913464,
+    "ci_high": 0.23656621392190152,
+    "n": 197
+   }
+  },
+  {
+   "run": "forced",
+   "crop": "winter_wheat",
+   "method": "B0",
+   "mode": "-",
+   "note": "no baseline (baselines use past weather)"
+  },
+  {
+   "run": "forced",
+   "crop": "winter_wheat",
+   "method": "B1",
+   "mode": "-",
+   "note": "no baseline (baselines use past weather)"
+  },
+  {
+   "run": "forced",
+   "crop": "winter_wheat",
+   "method": "B2",
+   "mode": "-",
+   "note": "no baseline (baselines use past weather)"
+  }
+ ],
+ "fieldwitness_vs_baselines_forecast_canopy_crps": {
+  "maize": {
+   "calendar": {
+    "B0": {
+     "value": -1.9662581116374092,
+     "ci_low": -3.925467660024198,
+     "ci_high": 0.04931939573746925,
+     "n": 124,
+     "fieldwitness_beats": false,
+     "baseline_beats": false
+    },
+    "B1": {
+     "value": 1.7662457904171778,
+     "ci_low": 0.7258269439250857,
+     "ci_high": 2.8938916549348876,
+     "n": 124,
+     "fieldwitness_beats": true,
+     "baseline_beats": false
+    },
+    "B2": {
+     "value": 2.0303834159281355,
+     "ci_low": 1.172212469768868,
+     "ci_high": 2.8747806129694142,
+     "n": 124,
+     "fieldwitness_beats": true,
+     "baseline_beats": false
+    }
+   },
+   "gdd": {
+    "B0": {
+     "value": -2.399479345668393,
+     "ci_low": -5.229227317601909,
+     "ci_high": 0.23561738993954234,
+     "n": 124,
+     "fieldwitness_beats": false,
+     "baseline_beats": false
+    },
+    "B1": {
+     "value": 1.8783929620848943,
+     "ci_low": 0.8887279692575449,
+     "ci_high": 2.828800348320783,
+     "n": 124,
+     "fieldwitness_beats": true,
+     "baseline_beats": false
+    },
+    "B2": {
+     "value": 0.21580743444430733,
+     "ci_low": -0.2609564724191152,
+     "ci_high": 0.6599857840160617,
+     "n": 124,
+     "fieldwitness_beats": false,
+     "baseline_beats": false
+    }
+   },
+   "fieldwitness_beats_in_both_modes": {
+    "B0": false,
+    "B1": true,
+    "B2": false
+   }
+  },
+  "sorghum": {
+   "calendar": {
+    "B0": {
+     "value": 2.2068433978859927,
+     "ci_low": 0.983366818579918,
+     "ci_high": 3.4636942845966296,
+     "n": 142,
+     "fieldwitness_beats": true,
+     "baseline_beats": false
+    },
+    "B1": {
+     "value": 0.7677940779658454,
+     "ci_low": -0.09719348368861742,
+     "ci_high": 1.637105322733048,
+     "n": 142,
+     "fieldwitness_beats": false,
+     "baseline_beats": false
+    },
+    "B2": {
+     "value": 0.757752500969228,
+     "ci_low": -0.05532035524673264,
+     "ci_high": 1.5283701373347736,
+     "n": 142,
+     "fieldwitness_beats": false,
+     "baseline_beats": false
+    }
+   },
+   "gdd": {
+    "B0": {
+     "value": -4.536853829871122,
+     "ci_low": -7.307328932374363,
+     "ci_high": -1.829376746594544,
+     "n": 142,
+     "fieldwitness_beats": false,
+     "baseline_beats": true
+    },
+    "B1": {
+     "value": 1.8004807137109657,
+     "ci_low": 1.4632548916449666,
+     "ci_high": 2.1025217679495705,
+     "n": 142,
+     "fieldwitness_beats": true,
+     "baseline_beats": false
+    },
+    "B2": {
+     "value": 0.44259210820440764,
+     "ci_low": 0.20357471506972766,
+     "ci_high": 0.6476178225283781,
+     "n": 142,
+     "fieldwitness_beats": true,
+     "baseline_beats": false
+    }
+   },
+   "fieldwitness_beats_in_both_modes": {
+    "B0": false,
+    "B1": false,
+    "B2": false
+   }
+  },
+  "winter_wheat": "no baseline"
+ },
+ "per_field_counts": {
+  "maize": {
+   "fields": 88,
+   "timing": {
+    "within noise": 48,
+    "improved": 29,
+    "worse": 11
+   },
+   "crps": {
+    "improved": 42,
+    "worse": 39,
+    "within noise": 7
+   },
+   "crps_band": 1.767922403834742
+  },
+  "sorghum": {
+   "fields": 112,
+   "timing": {
+    "within noise": 68,
+    "worse": 22,
+    "improved": 22
+   },
+   "crps": {
+    "worse": 76,
+    "improved": 33,
+    "within noise": 3
+   },
+   "crps_band": 1.2407186031906154
+  },
+  "winter_wheat": {
+   "fields": 160,
+   "timing": {
+    "improved": 95,
+    "worse": 50,
+    "within noise": 15
+   },
+   "crps": {
+    "improved": 77,
+    "worse": 72,
+    "within noise": 11
+   },
+   "crps_band": 2.114865427712785
+  }
+ },
+ "noise_bands": {
+  "timing_days": 5.0,
+  "crps_share_of_calendar_mean": 0.1
+ },
+ "by_year_difference": [
+  {
+   "run": "forecast",
+   "crop": "maize",
+   "year": 2022,
+   "n": 36,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": -1.0006538360626054,
+    "ci_low": -5.850190478346654,
+    "ci_high": 4.177351852093749,
+    "n": 36
+   },
+   "peak_abs_err": {
+    "value": -3.9722222222222223,
+    "ci_low": -6.574816176470588,
+    "ci_high": -1.2959362934362948,
+    "n": 36
+   },
+   "peak_signed_err": {
+    "value": 6.916666666666667,
+    "ci_low": 5.202702702702703,
+    "ci_high": 8.809317226890755,
+    "n": 36
+   },
+   "ci_cov90": {
+    "value": -0.16666666666666666,
+    "ci_low": -0.3611742424242424,
+    "ci_high": 0.05559523809523806,
+    "n": 36
+   },
+   "peak_cov90": {
+    "value": -0.16666666666666666,
+    "ci_low": -0.30303030303030304,
+    "ci_high": -0.05555555555555555,
+    "n": 36
+   }
+  },
+  {
+   "run": "forecast",
+   "crop": "maize",
+   "year": 2023,
+   "n": 34,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": 1.2591771081877432,
+    "ci_low": -4.162481317895491,
+    "ci_high": 6.569214422045961,
+    "n": 34
+   },
+   "peak_abs_err": {
+    "value": -1.6764705882352942,
+    "ci_low": -3.4063210227272727,
+    "ci_high": -0.028676470588235962,
+    "n": 34
+   },
+   "peak_signed_err": {
+    "value": 1.1764705882352942,
+    "ci_low": -1.0003676470588234,
+    "ci_high": 3.4469683499288752,
+    "n": 34
+   },
+   "ci_cov90": {
+    "value": 0.029411764705882353,
+    "ci_low": -0.2857142857142857,
+    "ci_high": 0.34285714285714286,
+    "n": 34
+   },
+   "peak_cov90": {
+    "value": -0.20588235294117646,
+    "ci_low": -0.34285714285714286,
+    "ci_high": -0.08823529411764706,
+    "n": 34
+   }
+  },
+  {
+   "run": "forecast",
+   "crop": "maize",
+   "year": 2024,
+   "n": 54,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": 0.8690916562909736,
+    "ci_low": -3.8968312947590737,
+    "ci_high": 5.397594044218801,
+    "n": 54
+   },
+   "peak_abs_err": {
+    "value": -1.2777777777777777,
+    "ci_low": -3.8520833333333333,
+    "ci_high": 1.028009259259259,
+    "n": 54
+   },
+   "peak_signed_err": {
+    "value": 5.888888888888889,
+    "ci_low": 3.730324074074074,
+    "ci_high": 8.159027777777775,
+    "n": 54
+   },
+   "ci_cov90": {
+    "value": 0.12962962962962962,
+    "ci_low": -0.05555555555555555,
+    "ci_high": 0.3148148148148148,
+    "n": 54
+   },
+   "peak_cov90": {
+    "value": -0.18518518518518517,
+    "ci_low": -0.2962962962962963,
+    "ci_high": -0.07361111111111153,
+    "n": 54
+   }
+  },
+  {
+   "run": "forecast",
+   "crop": "sorghum",
+   "year": 2022,
+   "n": 51,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": -1.0910245290588638,
+    "ci_low": -5.3341618320326205,
+    "ci_high": 3.3049698344375202,
+    "n": 51
+   },
+   "peak_abs_err": {
+    "value": -0.27450980392156865,
+    "ci_low": -2.216044117647059,
+    "ci_high": 1.671130952380951,
+    "n": 51
+   },
+   "peak_signed_err": {
+    "value": -3.9215686274509802,
+    "ci_low": -5.555666666666666,
+    "ci_high": -2.303466386554622,
+    "n": 51
+   },
+   "ci_cov90": {
+    "value": -0.0196078431372549,
+    "ci_low": -0.2601326530612245,
+    "ci_high": 0.19607843137254902,
+    "n": 51
+   },
+   "peak_cov90": {
+    "value": -0.13725490196078433,
+    "ci_low": -0.23529411764705882,
+    "ci_high": -0.057692307692307696,
+    "n": 51
+   }
+  },
+  {
+   "run": "forecast",
+   "crop": "sorghum",
+   "year": 2023,
+   "n": 34,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": 9.259395272272705,
+    "ci_low": 4.964336111050602,
+    "ci_high": 13.450564622587759,
+    "n": 34
+   },
+   "peak_abs_err": {
+    "value": -0.4117647058823529,
+    "ci_low": -2.868304367201426,
+    "ci_high": 1.9446533613445363,
+    "n": 34
+   },
+   "peak_signed_err": {
+    "value": -5.235294117647059,
+    "ci_low": -7.250189393939394,
+    "ci_high": -3.3786038961038964,
+    "n": 34
+   },
+   "ci_cov90": {
+    "value": -0.4117647058823529,
+    "ci_low": -0.6176470588235294,
+    "ci_high": -0.19412878787878818,
+    "n": 34
+   },
+   "peak_cov90": {
+    "value": -0.11764705882352941,
+    "ci_low": -0.23529411764705882,
+    "ci_high": -0.027777777777777776,
+    "n": 34
+   }
+  },
+  {
+   "run": "forecast",
+   "crop": "sorghum",
+   "year": 2024,
+   "n": 57,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": 12.253119615197198,
+    "ci_low": 9.233838410731856,
+    "ci_high": 15.050320373589075,
+    "n": 57
+   },
+   "peak_abs_err": {
+    "value": 0.03508771929824561,
+    "ci_low": -1.9739035087719297,
+    "ci_high": 2.0,
+    "n": 57
+   },
+   "peak_signed_err": {
+    "value": -5.350877192982456,
+    "ci_low": -6.991885964912281,
+    "ci_high": -3.7361842105263166,
+    "n": 57
+   },
+   "ci_cov90": {
+    "value": -0.3508771929824561,
+    "ci_low": -0.5263157894736842,
+    "ci_high": -0.17543859649122806,
+    "n": 57
+   },
+   "peak_cov90": {
+    "value": -0.22807017543859648,
+    "ci_low": -0.3508771929824561,
+    "ci_high": -0.12280701754385964,
+    "n": 57
+   }
+  },
+  {
+   "run": "forecast",
+   "crop": "winter_wheat",
+   "year": 2022,
+   "n": 47,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": -12.274460612684273,
+    "ci_low": -17.736895928463316,
+    "ci_high": -6.368740525249363,
+    "n": 47
+   },
+   "peak_abs_err": {
+    "value": -25.925531914893618,
+    "ci_low": -32.78933712121212,
+    "ci_high": -18.276944444444446,
+    "n": 47
+   },
+   "peak_signed_err": {
+    "value": -36.03191489361702,
+    "ci_low": -39.86491319444445,
+    "ci_high": -32.62727420755536,
+    "n": 47
+   },
+   "ci_cov90": {
+    "value": 0.2553191489361702,
+    "ci_low": 0.0425531914893617,
+    "ci_high": 0.454594861660079,
+    "n": 47
+   },
+   "peak_cov90": {
+    "value": 0.1702127659574468,
+    "ci_low": 0.021739130434782608,
+    "ci_high": 0.3269230769230769,
+    "n": 47
+   }
+  },
+  {
+   "run": "forecast",
+   "crop": "winter_wheat",
+   "year": 2023,
+   "n": 61,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": -13.0400198817753,
+    "ci_low": -18.144549539885297,
+    "ci_high": -7.318213040675789,
+    "n": 61
+   },
+   "peak_abs_err": {
+    "value": 21.31967213114754,
+    "ci_low": 16.58573123382226,
+    "ci_high": 25.609765625,
+    "n": 61
+   },
+   "peak_signed_err": {
+    "value": -33.82786885245902,
+    "ci_low": -37.38483606557377,
+    "ci_high": -30.833266129032257,
+    "n": 61
+   },
+   "ci_cov90": {
+    "value": 0.2786885245901639,
+    "ci_low": 0.09520089285714285,
+    "ci_high": 0.4656217345872517,
+    "n": 61
+   },
+   "peak_cov90": {
+    "value": -0.5409836065573771,
+    "ci_low": -0.6721382136800452,
+    "ci_high": -0.41069233021077284,
+    "n": 61
+   }
+  },
+  {
+   "run": "forecast",
+   "crop": "winter_wheat",
+   "year": 2024,
+   "n": 89,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": 16.162117554325565,
+    "ci_low": 11.786967950885694,
+    "ci_high": 20.27657407357408,
+    "n": 89
+   },
+   "peak_abs_err": {
+    "value": -22.146067415730336,
+    "ci_low": -26.877247191011236,
+    "ci_high": -17.19564606741573,
+    "n": 89
+   },
+   "peak_signed_err": {
+    "value": -30.93258426966292,
+    "ci_low": -33.539466292134826,
+    "ci_high": -28.313342696629213,
+    "n": 89
+   },
+   "ci_cov90": {
+    "value": -0.23595505617977527,
+    "ci_low": -0.3707865168539326,
+    "ci_high": -0.10112359550561797,
+    "n": 89
+   },
+   "peak_cov90": {
+    "value": 0.3707865168539326,
+    "ci_low": 0.24719101123595505,
+    "ci_high": 0.4943820224719101,
+    "n": 89
+   }
+  },
+  {
+   "run": "forced",
+   "crop": "maize",
+   "year": 2022,
+   "n": 36,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": 0.9125369460381658,
+    "ci_low": -4.040696471217748,
+    "ci_high": 5.523604014526442,
+    "n": 36
+   },
+   "peak_abs_err": {
+    "value": 0.1111111111111111,
+    "ci_low": -0.861204954954955,
+    "ci_high": 1.1804054054054045,
+    "n": 36
+   },
+   "peak_signed_err": {
+    "value": -1.2222222222222223,
+    "ci_low": -3.5280968468468465,
+    "ci_high": 0.5558558558558556,
+    "n": 36
+   },
+   "ci_cov90": {
+    "value": -0.16666666666666666,
+    "ci_low": -0.3659178433889602,
+    "ci_high": 0.058823529411764705,
+    "n": 36
+   },
+   "peak_cov90": {
+    "value": 0.0,
+    "ci_low": -0.07321646341463414,
+    "ci_high": 0.08339285714285709,
+    "n": 36
+   }
+  },
+  {
+   "run": "forced",
+   "crop": "maize",
+   "year": 2023,
+   "n": 34,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": -0.5560084604753606,
+    "ci_low": -5.975441030046865,
+    "ci_high": 5.155049839696087,
+    "n": 34
+   },
+   "peak_abs_err": {
+    "value": -2.411764705882353,
+    "ci_low": -5.216891891891891,
+    "ci_high": 0.13636363636363635,
+    "n": 34
+   },
+   "peak_signed_err": {
+    "value": 6.764705882352941,
+    "ci_low": 4.741709956709957,
+    "ci_high": 9.132831996434938,
+    "n": 34
+   },
+   "ci_cov90": {
+    "value": 0.0,
+    "ci_low": -0.24341216216216216,
+    "ci_high": 0.24242424242424243,
+    "n": 34
+   },
+   "peak_cov90": {
+    "value": -0.17647058823529413,
+    "ci_low": -0.3333333333333333,
+    "ci_high": -0.03122632575757578,
+    "n": 34
+   }
+  },
+  {
+   "run": "forced",
+   "crop": "maize",
+   "year": 2024,
+   "n": 54,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": 1.6735571597875702,
+    "ci_low": -2.7179719150297164,
+    "ci_high": 5.839661710932624,
+    "n": 54
+   },
+   "peak_abs_err": {
+    "value": -0.8796296296296297,
+    "ci_low": -2.9444444444444446,
+    "ci_high": 1.1578703703703699,
+    "n": 54
+   },
+   "peak_signed_err": {
+    "value": 3.564814814814815,
+    "ci_low": 1.3886574074074074,
+    "ci_high": 5.592592592592593,
+    "n": 54
+   },
+   "ci_cov90": {
+    "value": 0.07407407407407407,
+    "ci_low": -0.09259259259259259,
+    "ci_high": 0.2222222222222222,
+    "n": 54
+   },
+   "peak_cov90": {
+    "value": 0.07407407407407407,
+    "ci_low": -0.05555555555555555,
+    "ci_high": 0.2222222222222222,
+    "n": 54
+   }
+  },
+  {
+   "run": "forced",
+   "crop": "sorghum",
+   "year": 2022,
+   "n": 51,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": 1.8766047223619293,
+    "ci_low": -2.0338679624902047,
+    "ci_high": 6.0051310201772745,
+    "n": 51
+   },
+   "peak_abs_err": {
+    "value": 1.303921568627451,
+    "ci_low": -0.4489795918367347,
+    "ci_high": 3.197517857142856,
+    "n": 51
+   },
+   "peak_signed_err": {
+    "value": -1.7156862745098038,
+    "ci_low": -3.615441176470588,
+    "ci_high": 0.020633253301320324,
+    "n": 51
+   },
+   "ci_cov90": {
+    "value": -0.058823529411764705,
+    "ci_low": -0.26,
+    "ci_high": 0.12006122448979586,
+    "n": 51
+   },
+   "peak_cov90": {
+    "value": -0.0784313725490196,
+    "ci_low": -0.18524305555555554,
+    "ci_high": 0.0196078431372549,
+    "n": 51
+   }
+  },
+  {
+   "run": "forced",
+   "crop": "sorghum",
+   "year": 2023,
+   "n": 34,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": 10.157042732260766,
+    "ci_low": 5.633105950487569,
+    "ci_high": 14.39150015595675,
+    "n": 34
+   },
+   "peak_abs_err": {
+    "value": -1.5441176470588236,
+    "ci_low": -4.372748917748917,
+    "ci_high": 1.257532467532467,
+    "n": 34
+   },
+   "peak_signed_err": {
+    "value": 0.6029411764705882,
+    "ci_low": -2.4863636363636363,
+    "ci_high": 3.6576260504201676,
+    "n": 34
+   },
+   "ci_cov90": {
+    "value": -0.3235294117647059,
+    "ci_low": -0.5,
+    "ci_high": -0.14705882352941177,
+    "n": 34
+   },
+   "peak_cov90": {
+    "value": -0.11764705882352941,
+    "ci_low": -0.2571428571428571,
+    "ci_high": 0.0,
+    "n": 34
+   }
+  },
+  {
+   "run": "forced",
+   "crop": "sorghum",
+   "year": 2024,
+   "n": 57,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": 13.222921506237416,
+    "ci_low": 10.437151093741578,
+    "ci_high": 15.816789068196798,
+    "n": 57
+   },
+   "peak_abs_err": {
+    "value": -1.368421052631579,
+    "ci_low": -3.824780701754386,
+    "ci_high": 1.0175438596491229,
+    "n": 57
+   },
+   "peak_signed_err": {
+    "value": -1.912280701754386,
+    "ci_low": -4.562280701754386,
+    "ci_high": 0.6403508771929824,
+    "n": 57
+   },
+   "ci_cov90": {
+    "value": -0.3157894736842105,
+    "ci_low": -0.45657894736842103,
+    "ci_high": -0.15789473684210525,
+    "n": 57
+   },
+   "peak_cov90": {
+    "value": -0.21052631578947367,
+    "ci_low": -0.3333333333333333,
+    "ci_high": -0.10526315789473684,
+    "n": 57
+   }
+  },
+  {
+   "run": "forced",
+   "crop": "winter_wheat",
+   "year": 2022,
+   "n": 47,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": -6.186536696603836,
+    "ci_low": -12.230356987454169,
+    "ci_high": -0.31608083469366766,
+    "n": 47
+   },
+   "peak_abs_err": {
+    "value": -62.09574468085106,
+    "ci_low": -72.8916961577351,
+    "ci_high": -48.80054347826087,
+    "n": 47
+   },
+   "peak_signed_err": {
+    "value": -77.58510638297872,
+    "ci_low": -80.31603260869565,
+    "ci_high": -75.04148936170213,
+    "n": 47
+   },
+   "ci_cov90": {
+    "value": 0.23404255319148937,
+    "ci_low": 0.0425531914893617,
+    "ci_high": 0.44680851063829785,
+    "n": 47
+   },
+   "peak_cov90": {
+    "value": 0.2127659574468085,
+    "ci_low": 0.09297040169133193,
+    "ci_high": 0.3333333333333333,
+    "n": 47
+   }
+  },
+  {
+   "run": "forced",
+   "crop": "winter_wheat",
+   "year": 2023,
+   "n": 61,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": -15.294293765183966,
+    "ci_low": -21.300150544282246,
+    "ci_high": -8.841855094541668,
+    "n": 61
+   },
+   "peak_abs_err": {
+    "value": 14.180327868852459,
+    "ci_low": 9.29244252873563,
+    "ci_high": 19.46084161309176,
+    "n": 61
+   },
+   "peak_signed_err": {
+    "value": -27.75409836065574,
+    "ci_low": -31.85473354231975,
+    "ci_high": -24.014803340517243,
+    "n": 61
+   },
+   "ci_cov90": {
+    "value": 0.18032786885245902,
+    "ci_low": 0.034468147282291056,
+    "ci_high": 0.3282552083333332,
+    "n": 61
+   },
+   "peak_cov90": {
+    "value": -0.4262295081967213,
+    "ci_low": -0.5737704918032787,
+    "ci_high": -0.2832675438596492,
+    "n": 61
+   }
+  },
+  {
+   "run": "forced",
+   "crop": "winter_wheat",
+   "year": 2024,
+   "n": 89,
+   "too_few_to_judge": false,
+   "ci_crps": {
+    "value": 15.936034195919872,
+    "ci_low": 12.124439087834302,
+    "ci_high": 19.509347171469365,
+    "n": 89
+   },
+   "peak_abs_err": {
+    "value": -37.5,
+    "ci_low": -44.87851123595506,
+    "ci_high": -29.50491573033708,
+    "n": 89
+   },
+   "peak_signed_err": {
+    "value": -52.21910112359551,
+    "ci_low": -55.53932584269663,
+    "ci_high": -49.02794943820225,
+    "n": 89
+   },
+   "ci_cov90": {
+    "value": -0.10112359550561797,
+    "ci_low": -0.20224719101123595,
+    "ci_high": 0.0002808988764042389,
+    "n": 89
+   },
+   "peak_cov90": {
+    "value": 0.5056179775280899,
+    "ci_low": 0.39325842696629215,
+    "ci_high": 0.6179775280898876,
+    "n": 89
+   }
+  }
+ ],
+ "winter_wheat_timing_split": {
+  "year": {
+   "2022": {
+    "n": 47,
+    "too_few_to_judge": false,
+    "d_peak_abs_err": {
+     "value": -25.925531914893618,
+     "ci_low": -32.78933712121212,
+     "ci_high": -18.276944444444446,
+     "n": 47
+    }
+   },
+   "2023": {
+    "n": 61,
+    "too_few_to_judge": false,
+    "d_peak_abs_err": {
+     "value": 21.31967213114754,
+     "ci_low": 16.58573123382226,
+     "ci_high": 25.609765625,
+     "n": 61
+    }
+   },
+   "2024": {
+    "n": 89,
+    "too_few_to_judge": false,
+    "d_peak_abs_err": {
+     "value": -22.146067415730336,
+     "ci_low": -26.877247191011236,
+     "ci_high": -17.19564606741573,
+     "n": 89
+    }
+   }
+  },
+  "size_class": {
+   "10-50 ha": {
+    "n": 75,
+    "too_few_to_judge": false,
+    "d_peak_abs_err": {
+     "value": -7.733333333333333,
+     "ci_low": -14.709816869599372,
+     "ci_high": -0.9768855042016816,
+     "n": 75
+    }
+   },
+   "<10 ha": {
+    "n": 48,
+    "too_few_to_judge": false,
+    "d_peak_abs_err": {
+     "value": -8.53125,
+     "ci_low": -17.714444444444446,
+     "ci_high": 1.0788349056603743,
+     "n": 48
+    }
+   },
+   ">50 ha": {
+    "n": 74,
+    "too_few_to_judge": false,
+    "d_peak_abs_err": {
+     "value": -12.155405405405405,
+     "ci_low": -18.486614827856027,
+     "ci_high": -6.2709566210045695,
+     "n": 74
+    }
+   }
+  },
+  "hls_bin": {
+   ">=20": {
+    "n": 197,
+    "too_few_to_judge": false,
+    "d_peak_abs_err": {
+     "value": -9.588832487309645,
+     "ci_low": -13.9218765456202,
+     "ci_high": -5.57076983277041,
+     "n": 197
+    }
+   }
+  }
+ },
+ "example_fields_random_seed42": {
+  "winter_wheat": [
+   "a80d3a3238be1ff94c4357ad25722af2faf397ac",
+   "1c41850d9d252c0e35a43df9186c8f7e5fd470a6",
+   "c41b7f43c966b9f42fd27236c6e0bf9e005ed07a"
+  ],
+  "maize": [
+   "13c9aa108f76fa30771be67f759e8b2a7f7e4ec0",
+   "ce244a1b7c1aa288698d345721ec17741f2777a0"
+  ],
+  "sorghum": [
+   "b7bc5e582a288141a0c05f5b168f1d0b3d70a099",
+   "11aae63d9b0ec64eb02439c4b1a5948c64b78874",
+   "d11fd9d2d1007f1503dbe0fa67f5af8630d070f9"
+  ]
+ },
+ "after_the_fact_fields": {
+  "maize": {
+   "largest_decrease": [
+    "4b4da0dc696fedea0e910c211b959aec20b7442f",
+    "77a934247a706dff9d8574059e22b84e7a95ff6f",
+    "5a7a0f5fb6b738d6a972f14ef76f18b58188c177"
+   ],
+   "largest_increase": [
+    "aa7e0e311edac276dec2ceb1ac9fa3ea3aa8f59c",
+    "90d2b4b975f20d3c1f54961f71501979f2d99233",
+    "474345acff3ccb0ac2fe4fcf94cebf1019903923"
+   ]
+  },
+  "sorghum": {
+   "largest_decrease": [
+    "100d40f8977d49cb51836b45afb90c5854f3807b",
+    "10a1086c58e6d4f32e31c7c7c43448bb69201666",
+    "9784877b54b9f75b467f2ddccbbf1bd8bc805b67"
+   ],
+   "largest_increase": [
+    "b7bc5e582a288141a0c05f5b168f1d0b3d70a099",
+    "814fdaf97d79e37cc7d8060fe97ee9294ecf2e7d",
+    "7c0e7d2c4900d8f73aea221357209360edc6854a"
+   ]
+  },
+  "winter_wheat": {
+   "largest_decrease": [
+    "5d43037ee0ab2a22a3e9a7ce2b76fd745991cef8",
+    "58e79c28ce1ee65ddef9c80737d789d1f3bb2ae1",
+    "53ecebc95447f051eeb8abb04a13a4f260d95700"
+   ],
+   "largest_increase": [
+    "474345acff3ccb0ac2fe4fcf94cebf1019903923",
+    "43955b19f18890d1f1d5d97aeb45b14e19ff78a5",
+    "5a6232376078efae40e5fda26684ab19c7bb6c77"
+   ]
+  }
+ },
+ "figures": {
+  "examples": [
+   "results\\hindcast\\gdd_before_after\\figures\\example_winter_wheat_a80d3a32.png",
+   "results\\hindcast\\gdd_before_after\\figures\\example_winter_wheat_1c41850d.png",
+   "results\\hindcast\\gdd_before_after\\figures\\example_winter_wheat_c41b7f43.png",
+   "results\\hindcast\\gdd_before_after\\figures\\example_maize_13c9aa10.png",
+   "results\\hindcast\\gdd_before_after\\figures\\example_maize_ce244a1b.png",
+   "results\\hindcast\\gdd_before_after\\figures\\example_sorghum_b7bc5e58.png",
+   "results\\hindcast\\gdd_before_after\\figures\\example_sorghum_11aae63d.png",
+   "results\\hindcast\\gdd_before_after\\figures\\example_sorghum_d11fd9d2.png"
+  ],
+  "after_the_fact": [
+   "results\\hindcast\\gdd_before_after\\figures\\after_the_fact_maize_largest_decrease_4b4da0dc.png",
+   "results\\hindcast\\gdd_before_after\\figures\\after_the_fact_maize_largest_decrease_77a93424.png",
+   "results\\hindcast\\gdd_before_after\\figures\\after_the_fact_maize_largest_decrease_5a7a0f5f.png",
+   "results\\hindcast\\gdd_before_after\\figures\\after_the_fact_maize_largest_increase_aa7e0e31.png",
+   "results\\hindcast\\gdd_before_after\\figures\\after_the_fact_maize_largest_increase_90d2b4b9.png",
+   "results\\hindcast\\gdd_before_after\\figures\\after_the_fact_maize_largest_increase_474345ac.png",
+   "results\\hindcast\\gdd_before_after\\figures\\after_the_fact_sorghum_largest_decrease_100d40f8.png",
+   "results\\hindcast\\gdd_before_after\\figures\\after_the_fact_sorghum_largest_decrease_10a1086c.png",
+   "results\\hindcast\\gdd_before_after\\figures\\after_the_fact_sorghum_largest_decrease_9784877b.png",
+   "results\\hindcast\\gdd_before_after\\figures\\after_the_fact_sorghum_largest_increase_b7bc5e58.png",
+   "results\\hindcast\\gdd_before_after\\figures\\after_the_fact_sorghum_largest_increase_814fdaf9.png",
+   "results\\hindcast\\gdd_before_after\\figures\\after_the_fact_sorghum_largest_increase_7c0e7d2c.png",
+   "results\\hindcast\\gdd_before_after\\figures\\after_the_fact_winter_wheat_largest_decrease_5d43037e.png",
+   "results\\hindcast\\gdd_before_after\\figures\\after_the_fact_winter_wheat_largest_decrease_58e79c28.png",
+   "results\\hindcast\\gdd_before_after\\figures\\after_the_fact_winter_wheat_largest_decrease_53ecebc9.png",
+   "results\\hindcast\\gdd_before_after\\figures\\after_the_fact_winter_wheat_largest_increase_474345ac.png",
+   "results\\hindcast\\gdd_before_after\\figures\\after_the_fact_winter_wheat_largest_increase_43955b19.png",
+   "results\\hindcast\\gdd_before_after\\figures\\after_the_fact_winter_wheat_largest_increase_5a623237.png"
+  ]
+ }
+}

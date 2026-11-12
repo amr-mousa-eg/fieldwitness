@@ -1,0 +1,25 @@
+{
+ "question": "Can a clean 2025 forecast-mode test of calendar vs gdd be run from local data?",
+ "answer": "No. Stopped before any download (as instructed).",
+ "local_hls": {
+  "file": "data/fields/ks_t14slh_hls_series.parquet",
+  "first_date": "2015-09-02",
+  "last_date": "2024-12-31",
+  "rows_2025": 0
+ },
+ "local_crop_labels": {
+  "file": "data/labels/ks_t14slh.parquet",
+  "last_year": 2024,
+  "note": "Scoring is conditional on the observed crop label of the scored season, so a 2025 test also needs a 2025 field crop label. No 2025 label source has been checked; whether a 2025 CSB release exists is UNVERIFIED."
+ },
+ "download_estimate_hls_2025": {
+  "method": "Same route as T1.5: 3 AppEEARS point tasks (<= 1,000 points each, 2,325 points) for one calendar year. Estimate by analogy with the bundles already on disk for full years.",
+  "on_disk_mb_by_year": {"2021": 158, "2022": 181, "2023": 176, "2024": 177},
+  "estimate_mb": "about 175-185 MB (tag A, analogy; exact size only from the AppEEARS bundle listing after processing)",
+  "under_1_gb_cap": true,
+  "time": "AppEEARS processing time per point task was not recorded in DECISIONS.md for T1.5; the T0.3 area test task took about 22.5 min. Total time is therefore UNVERIFIED (queue-dependent).",
+  "credentials": "Needs an Earthdata login through _netrc (CLAUDE.md rule 12 exception)."
+ },
+ "not_needed": "NASA POWER 2025 weather is not used by forecast mode (it draws past years <= 2021).",
+ "tag": "O (dates on disk), A (size estimate)"
+}
