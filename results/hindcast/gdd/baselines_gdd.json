@@ -1,0 +1,162 @@
+{
+ "region_id": "ks_t14slh",
+ "cutoff": "2021-12-31",
+ "mode": "forecast",
+ "n_field_seasons": 266,
+ "b3": "NOT RUN: neighbour effects (T5.2) do not exist; dependency decision open",
+ "b0_sources": {
+  "own_field_past": 203,
+  "region_crop_pool": 63
+ },
+ "caveats": "same field-seasons and statistics as the fieldwitness forecast; B0 intervals come from few past seasons (coverage unreliable); B1/B2 add HLS noise like fieldwitness; tags: model D, observed O/D, labels E",
+ "table": [
+  {
+   "method": "fieldwitness",
+   "metric": "sos",
+   "n": 266,
+   "crps": 18.332256672932328,
+   "covered50": 0.23684210526315788,
+   "covered90": 0.5413533834586466,
+   "mae_median": 20.953007518796994
+  },
+  {
+   "method": "fieldwitness",
+   "metric": "peak",
+   "n": 266,
+   "crps": 11.077879135338348,
+   "covered50": 0.43609022556390975,
+   "covered90": 0.706766917293233,
+   "mae_median": 14.469924812030076
+  },
+  {
+   "method": "fieldwitness",
+   "metric": "canopy_integral",
+   "n": 266,
+   "crps": 18.666799385891373,
+   "covered50": 0.09398496240601503,
+   "covered90": 0.23684210526315788,
+   "mae_median": 20.733891843899436,
+   "spearman": 0.04248911351954792
+  },
+  {
+   "method": "fieldwitness",
+   "metric": "cover_days",
+   "n": 266,
+   "crps": 55.04774285714286,
+   "covered50": 0.02631578947368421,
+   "covered90": 0.06390977443609022,
+   "mae_median": 57.41353383458647
+  },
+  {
+   "method": "B0",
+   "metric": "sos",
+   "n": 266,
+   "crps": 20.669723486831,
+   "covered50": 0.21052631578947367,
+   "covered90": 0.37593984962406013,
+   "mae_median": 23.353383458646615
+  },
+  {
+   "method": "B0",
+   "metric": "peak",
+   "n": 266,
+   "crps": 15.050011916828188,
+   "covered50": 0.23684210526315788,
+   "covered90": 0.41729323308270677,
+   "mae_median": 17.93609022556391
+  },
+  {
+   "method": "B0",
+   "metric": "canopy_integral",
+   "n": 266,
+   "crps": 15.126315616325284,
+   "covered50": 0.16917293233082706,
+   "covered90": 0.32706766917293234,
+   "mae_median": 17.217834951754384,
+   "spearman": 0.3288627785956301
+  },
+  {
+   "method": "B0",
+   "metric": "cover_days",
+   "n": 266,
+   "crps": 25.29560680354477,
+   "covered50": 0.17669172932330826,
+   "covered90": 0.31954887218045114,
+   "mae_median": 29.208646616541355
+  },
+  {
+   "method": "B1",
+   "metric": "sos",
+   "n": 266,
+   "crps": 20.663884492481202,
+   "covered50": 0.12781954887218044,
+   "covered90": 0.2819548872180451,
+   "mae_median": 22.30639097744361
+  },
+  {
+   "method": "B1",
+   "metric": "peak",
+   "n": 266,
+   "crps": 13.568579887218046,
+   "covered50": 0.32706766917293234,
+   "covered90": 0.5676691729323309,
+   "mae_median": 17.19924812030075
+  },
+  {
+   "method": "B1",
+   "metric": "canopy_integral",
+   "n": 266,
+   "crps": 20.50360009508492,
+   "covered50": 0.07518796992481203,
+   "covered90": 0.21804511278195488,
+   "mae_median": 22.765789768417616,
+   "spearman": -0.12098506105198291
+  },
+  {
+   "method": "B1",
+   "metric": "cover_days",
+   "n": 266,
+   "crps": 55.61717236842106,
+   "covered50": 0.02631578947368421,
+   "covered90": 0.05639097744360902,
+   "mae_median": 57.62218045112782
+  },
+  {
+   "method": "B2",
+   "metric": "sos",
+   "n": 266,
+   "crps": 18.77910385338346,
+   "covered50": 0.3308270676691729,
+   "covered90": 0.5864661654135338,
+   "mae_median": 22.039473684210527
+  },
+  {
+   "method": "B2",
+   "metric": "peak",
+   "n": 266,
+   "crps": 11.899439285714287,
+   "covered50": 0.41353383458646614,
+   "covered90": 0.7781954887218046,
+   "mae_median": 15.898496240601503
+  },
+  {
+   "method": "B2",
+   "metric": "canopy_integral",
+   "n": 266,
+   "crps": 19.003672322869267,
+   "covered50": 0.10902255639097744,
+   "covered90": 0.23308270676691728,
+   "mae_median": 21.282189575206747,
+   "spearman": -0.10118369038523439
+  },
+  {
+   "method": "B2",
+   "metric": "cover_days",
+   "n": 266,
+   "crps": 55.03169398496241,
+   "covered50": 0.018796992481203006,
+   "covered90": 0.07518796992481203,
+   "mae_median": 57.340225563909776
+  }
+ ]
+}
