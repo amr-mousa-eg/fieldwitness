@@ -83,6 +83,38 @@ class KcIniByRegion(_Strict):
     choice: str
 
 
+class GddPhenology(_Strict):
+    """Thermal-time phenology (Experiment 2, DECISIONS.md 2026-11-12). Values in degrees F.
+
+    Limits and stage GDDs are read from the cited extension source (tag E); which source stage
+    ends which FAO-56 stage is a team mapping approved by the user (tag A, `mapping_choice`).
+    """
+
+    source: str
+    where: str
+    method: Literal["mf3740_method2", "mesonet_uncapped"]
+    count_start: Literal["planting", "jan1_harvest_year"]
+    t_base_f: float
+    t_upper_f: float | None = None
+    stage_end_gdd_f: list[float]
+    stage_names: list[str]
+    mapping_choice: str
+    tag: str
+
+    @model_validator(mode="after")
+    def _shape(self):
+        g = self.stage_end_gdd_f
+        if (
+            len(g) != 4
+            or len(self.stage_names) != 4
+            or any(b <= a for a, b in zip(g[:-1], g[1:], strict=True))
+        ):
+            raise ValueError("stage_end_gdd_f must be 4 increasing values with 4 stage names")
+        if (self.method == "mf3740_method2") != (self.t_upper_f is not None):
+            raise ValueError("method 2 needs t_upper_f; the uncapped method must not have one")
+        return self
+
+
 class Crop(_Strict):
     name: str
     mvp_role: MvpRole
@@ -98,6 +130,7 @@ class Crop(_Strict):
     ky: Param | None = None
     stage_lengths_days: dict[str, Param]
     family: FamilyParam | None = None
+    gdd_phenology: GddPhenology | None = None
 
     @model_validator(mode="after")
     def _stages(self):
@@ -126,6 +159,8 @@ class CropsFile(_Strict):
                     raise ValueError(f"{key}: unknown source {p.ref.source}")
             if crop.family and crop.family.ref and crop.family.ref.source not in self.sources:
                 raise ValueError(f"{key}: unknown family source {crop.family.ref.source}")
+            if crop.gdd_phenology and crop.gdd_phenology.source not in self.sources:
+                raise ValueError(f"{key}: unknown GDD source {crop.gdd_phenology.source}")
         return self
 
 

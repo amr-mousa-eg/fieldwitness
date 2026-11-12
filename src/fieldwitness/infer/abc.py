@@ -44,12 +44,20 @@ def summary_stats(doy, ndvi, days: int = 365) -> np.ndarray:
     ).astype(float)
 
 
-def reference_table(rain, eto, n: int, crop: dict, cfg: dict, seed: int, prior_cfg=None) -> dict:
-    """n prior draws simulated under one year's weather. Returns hidden (dict) and ndvi (365, n)."""
+def reference_table(
+    rain, eto, n: int, crop: dict, cfg: dict, seed: int, prior_cfg=None, tmax=None, tmin=None
+) -> dict:
+    """n prior draws simulated under one year's weather. Returns hidden (dict) and ndvi (365, n).
+
+    tmax/tmin (deg C) are needed only when cfg["phenology_mode"] == "gdd" (Experiment 2).
+    """
     from fieldwitness.infer import forward, priors
 
     hidden = priors.sample(n, seed=seed, cfg=prior_cfg)
-    return {"hidden": hidden, "ndvi": forward.simulate(rain, eto, hidden, crop, cfg)["ndvi"]}
+    return {
+        "hidden": hidden,
+        "ndvi": forward.simulate(rain, eto, hidden, crop, cfg, tmax, tmin)["ndvi"],
+    }
 
 
 def posterior(
