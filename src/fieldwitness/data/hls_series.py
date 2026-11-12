@@ -171,6 +171,43 @@ def submit_region(region_id: str, grid: dict) -> dict:
     return reg
 
 
+def year_registry_path(region_id: str, year: int) -> Path:
+    """Registry of the extra-year tasks (Experiment 3); the T1.5 registry is never written."""
+    return OUT / f"{region_id}_tasks_{year}.json"
+
+
+def year_root(region_id: str, year: int) -> Path:
+    """Download folder of the extra-year bundles, apart from the T1.5 folder."""
+    return OUT / f"{region_id}_{year}"
+
+
+def submit_year(region_id: str, year: int) -> dict:
+    """Submit one calendar year for the SAME sampled points as T1.5 (read from the saved points
+    file, never recomputed) and the same chunks, products and layers (Experiment 3, user
+    approval 2026-11-12). Task IDs go to `year_registry_path`, written after each submit."""
+    coords = json.loads((OUT / f"{region_id}_points.json").read_text(encoding="utf-8"))
+    chunks = chunk_by_field(coords)
+    reg_path = year_registry_path(region_id, year)
+    reg = json.loads(reg_path.read_text(encoding="utf-8")) if reg_path.exists() else {}
+    reg.setdefault("tasks", {})
+    reg.update(n_points=len(coords), n_chunks=len(chunks), max_points_per_field=MAX_POINTS)
+    start, end = f"01-01-{year}", f"12-31-{year}"
+    s = ae.login()
+    try:
+        for k, chunk in enumerate(chunks):
+            name = f"{year}_c{k}"
+            if name in reg["tasks"]:
+                continue
+            body = point_task(f"fieldwitness-X3-{region_id}-{name}", chunk, start, end)
+            tid = ae.submit(s, body)
+            reg["tasks"][name] = {"task_id": tid, "start": start, "end": end, "n": len(chunk)}
+            ae.save_registry(reg_path, reg)
+            print("submitted", name, tid, flush=True)
+    finally:
+        print("logout HTTP", ae.logout(s), flush=True)
+    return reg
+
+
 def download_cap(region_id: str, task_ids) -> float:
     """Byte cap for downloading `task_ids`: 1 GB (CLAUDE.md rule 11), unless every ID is in the
     user-approved exception for this region (APPROVED_OVER_CAP)."""
@@ -185,12 +222,20 @@ def projected_bytes(sizes: dict[str, int], n_tasks: int) -> float:
     return sum(sizes.values()) + sum(sizes.values()) / len(sizes) * (n_tasks - len(sizes))
 
 
-def wait_and_download(region_id: str, poll_s: int = 120, once: bool = False) -> None:
+def wait_and_download(
+    region_id: str,
+    poll_s: int = 120,
+    once: bool = False,
+    registry: Path | None = None,
+    root: Path | None = None,
+) -> None:
     """Wait for all tasks and download them. Each pass lists every finished bundle first and
     stops before downloading anything if the projected total of all tasks exceeds the cap
     (`download_cap`). With `once`, make a single pass (download what is done, report the rest)
-    and return, so no process outlives an unattended run."""
-    reg = json.loads(registry_path(region_id).read_text(encoding="utf-8"))
+    and return, so no process outlives an unattended run. `registry` / `root` default to the
+    T1.5 registry and folder (Experiment 3 passes the extra-year ones)."""
+    reg = json.loads((registry or registry_path(region_id)).read_text(encoding="utf-8"))
+    root = root or OUT / region_id
     ids = {v["task_id"]: k for k, v in reg["tasks"].items()}
     cap = download_cap(region_id, ids)
     s = ae.login()
@@ -221,7 +266,7 @@ def wait_and_download(region_id: str, poll_s: int = 120, once: bool = False) -> 
                 )
                 return
             for tid, files in done.items():
-                ae.download(s, tid, files, OUT / region_id / ids[tid])
+                ae.download(s, tid, files, root / ids[tid])
                 print(
                     f"downloaded {ids[tid]}: {len(files)} files, {sizes[tid] / 1e6:.1f} MB",
                     flush=True,
