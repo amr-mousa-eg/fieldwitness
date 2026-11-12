@@ -19,7 +19,35 @@ FieldWitness is a website that helps a farmer or farm advisor think about crop r
 
 ## Contents
 
-<!-- TOC -->
+- [The 60-second version](#the-60-second-version)
+- [How to read this document](#how-to-read-this-document)
+- [Mini glossary](#mini-glossary)
+- [Timeline](#timeline)
+- [Stage 0 — Reading the challenge and choosing the idea](#stage-0--reading-the-challenge-and-choosing-the-idea)
+- [Stage 1 — Setting up the project and the way of working](#stage-1--setting-up-the-project-and-the-way-of-working)
+- [Stage 2 — Getting access to the data](#stage-2--getting-access-to-the-data)
+- [Stage 3 — Choosing where to work, and taking crop settings from FAO-56](#stage-3--choosing-where-to-work-and-taking-crop-settings-from-fao-56)
+- [Stage 4 — Fields and their histories](#stage-4--fields-and-their-histories)
+- [Stage 5 — The field story: seasons and bare soil](#stage-5--the-field-story-seasons-and-bare-soil)
+- [Stage 6 — The physics model: a water ledger for the soil](#stage-6--the-physics-model-a-water-ledger-for-the-soil)
+- [Stage 7 — Calibration: letting each field's own history tune the model](#stage-7--calibration-letting-each-fields-own-history-tune-the-model)
+- [Stage 8 — The rotation engine](#stage-8--the-rotation-engine)
+- [Stage 9 — The neighbour evidence (switched off)](#stage-9--the-neighbour-evidence-switched-off)
+- [Stage 10 — Packing the results into one data file per field](#stage-10--packing-the-results-into-one-data-file-per-field)
+- [Stage 11 — Building the website](#stage-11--building-the-website)
+- [Stage 12 — Testing the model against the past](#stage-12--testing-the-model-against-the-past)
+- [Stage 13 — Putting it online](#stage-13--putting-it-online)
+- [Stage 14 — Moving to a new computer and a second AI assistant](#stage-14--moving-to-a-new-computer-and-a-second-ai-assistant)
+- [Stage 15 — Polish](#stage-15--polish)
+- [Stage 16 — Speed fixes](#stage-16--speed-fixes)
+- [Stage 17 — Features added late](#stage-17--features-added-late)
+- [Stage 18 — The final state](#stage-18--the-final-state)
+- [The way of working](#the-way-of-working)
+- [How the website works today, as a visitor sees it](#how-the-website-works-today-as-a-visitor-sees-it)
+- [What it can and cannot tell you](#what-it-can-and-cannot-tell-you)
+- [Questions a judge might ask](#questions-a-judge-might-ask)
+- [What comes next](#what-comes-next)
+- [Where the facts in this document come from](#where-the-facts-in-this-document-come-from)
 
 ## How to read this document
 
@@ -117,7 +145,7 @@ Each stage has the same parts: the goal, the steps, the reasoning, an everyday c
 **The goal in one sentence:** Prove, with one small real request each, that every data source the plan needs actually works.
 
 **What we did, step by step:**
-1. NASA login: Claude Code logged in to NASA's data service, searched for the satellite pictures of the Kansas tile, and found one for 4 Jul 2023. It also found that the cloud-and-shadow mask lives in a different NASA product than the greenness values, so two products must be read together.
+1. NASA login: Claude Code logged in to NASA's data service, searched for the satellite pictures of the Kansas tile (a fixed square of the satellite map grid), and found one for 4 Jul 2023. It also found that the cloud-and-shadow mask lives in a different NASA product than the greenness values, so two products must be read together.
 2. Satellite archive depth: for 2016 to 2024 every year had pictures, but 2016 and 2017 had fewer (65 and 83 scenes against roughly 160 to 205 in later years). This was recorded as a data limit.
 3. AppEEARS, a NASA service that cuts out the data for chosen places: a test request finished in about 22.5 minutes and returned 17 files, all verified by checksum.
 4. Field boundary and crop datasets: boxes were read from three sources. The U.S. Crop Sequence Boundaries (CSB) gave 20,190 field polygons in the Kansas box. French field data gave 6,198 in a test box in the Beauce. A global field-boundary set gave 15,529 in a Punjab test box. A size cap of 200 megabytes per query stopped an over-large Kansas read, and the user chose to skip it because CSB was the Kansas source anyway.
@@ -207,7 +235,7 @@ Each stage has the same parts: the goal, the steps, the reasoning, an everyday c
 **What we did, step by step:**
 1. Reference evapotranspiration (ET, the water a standard grass surface would lose to the air each day) was computed from NASA POWER weather with the FAO-56 formula. The tests reproduce the FAO-56 guide's own worked example.
 2. A crop coefficient curve was added. It scales the reference ET to each crop's growth stage, following the guide's figure and two climate-adjustment equations.
-3. The soil water balance was written as a daily ledger following FAO-56 equations 82 to 85. Rain and irrigation add water. Crop use, evaporation and deep drainage subtract it. A stress factor reduces crop use as soil dries. Automatic property tests check that water is conserved every day and that values stay within their limits.
+3. The soil water balance was written as a daily ledger following FAO-56 equations 82 to 85. Rain and irrigation add water. Crop use, evaporation and deep drainage subtract it. A stress factor reduces crop use as soil dries. Automatic tests with many random inputs check that water is conserved every day and that values stay within their limits.
 4. Season outputs: water use, irrigation, a 0-to-1 Relative Yield Index (how much water shortage held a crop back, not tonnes), a canopy proxy to compare with the satellite, and the number of days with ground cover.
 5. A rotation simulation carries soil water from one season and fallow period into the next. A vulnerability calendar counts, for each crop, how often heat, frost, water stress or extreme rain hit its sensitive stages.
 
@@ -274,8 +302,8 @@ Each stage has the same parts: the goal, the steps, the reasoning, an everyday c
 
 **What we did, step by step:**
 1. A table of 1,400 field-seasons (1,040 with measured outcomes) was assembled.
-2. The user approved two new software packages (scikit-learn and doubleml). The method is double machine learning, a way to estimate the effect of a choice while adjusting for other differences between fields. Test folds kept whole 10-kilometre blocks together.
-3. Before running, four pass-or-fail checks with fixed thresholds were set: overlap (do the compared groups look alike?), balance, a placebo test (an effect that should be zero), and a negative control.
+2. The user approved two new software packages (scikit-learn and doubleml). The method is double machine learning, a way to estimate the effect of a choice while adjusting for other differences between fields. When the method was tested, whole 10-kilometre blocks of fields were held out together, so that nearby fields could not leak into the test.
+3. Before running, four pass-or-fail checks with fixed thresholds were set: overlap (do the compared groups look alike?), balance, a placebo test (an effect that should be zero), and a negative control (an outcome the choice cannot affect).
 4. A literature check on 8 Nov compared the signs of the results with a published paper's table: 2 agreed, 1 disagreed and 13 were inconclusive. The check is descriptive only.
 5. A second design matched fields with the same two-year history. A third idea, adding more satellite tiles, was costed and stopped by the 1-gigabyte rule.
 
@@ -362,3 +390,256 @@ FieldWitness leads on three of four measures, by small margins. Its ranges are t
 **What went wrong or surprised us:** The weak skill was found on the first run, logged, and kept as it was, with no tuning. Winter wheat has no baseline, because the baseline code handled single-calendar years only.
 
 **Where to look:** results/hindcast/, scripts/t73_baselines.py, PLAN.md (Phase 7), commits a228b03, dc744b9, 1e24f1e, 61fdf2a, 7dfa295, 2296e09, d54f122.
+
+## Stage 13 — Putting it online
+
+**Dates:** 7 to 9 Nov 2026.  
+**The goal in one sentence:** Publish the website at a public address that anyone can open without logging in.
+
+**What we did, step by step:**
+1. On 7 Nov a short guide compared two free hosts, GitHub Pages and Netlify. It noted that the code repository was still private then, and that GitHub Pages needs a public repository on the free plan. It measured the load: 803 files, 85.7 megabytes raw and 7.7 megabytes compressed for a first visit. Nothing was published yet.
+2. On 8 Nov the records show a live Netlify copy, and a GitHub Pages set-up was added: an automatic workflow plus the demo field packs stored in the repository.
+3. A separate commit was made to trigger the Pages build.
+4. During the polish pass the Netlify link was removed from the README, so that GitHub Pages is the single public address.
+5. On 9 Nov the automatic checks were made more resilient: the secret scanner's download got a fallback, and tests that need local-only data got a safe guard.
+
+**Why we did it this way:** A site made only of static files needs no server, no database and no login, and it can work offline. That also keeps farmers' data on their own device.
+
+**Analogy:** Printing a complete booklet that each reader can take home, instead of running a help desk.
+
+**What came out of it:** The live site is at https://amr-mousa-eg.github.io/fieldwitness/. It loads in a private browser window with no login and keeps working with the network switched off after the first load.
+
+**What went wrong or surprised us:** The records don't say who ran the first deployment or how the Netlify copy was made, why the Pages build needed a second trigger, or when the repository became public.
+
+**Where to look:** app/deploy/README.md, .github/workflows/pages.yml, DECISIONS.md ("Autopilot handoff" of 8 Nov), commits e885221, 90c6af7, 9f81a89, 05f9a5f, dff337b.
+
+## Stage 14 — Moving to a new computer and a second AI assistant
+
+**Dates:** 8 Nov 2026.  
+**The goal in one sentence:** Continue the project on a second laptop with a different AI coding tool, without losing anything.
+
+**What we did, step by step:**
+1. A migration plan was written on 8 Nov. At first it was only a plan. It labelled each fact as reported, to be verified, or unknown.
+2. The code was copied by a clean download from GitHub. Files that Git does not store were carried over separately: about 1.57 gigabytes of data (927 files), the 200 packs (804 files at that time), reference pages of the FAO-56 guide, and logs.
+3. The software environment was rebuilt: Python 3.12.16 with 103 packages, the secret scanner and Node for the website.
+4. Everything was checked: 247 Python tests passed, 58 website tests passed, the site built, the code checks and secret scan passed, and the pack validator found 0 problems in all 200 packs.
+5. The unattended Claude Code loop was paused. Work continued in Google Antigravity, an AI coding tool that uses Google's Gemini models, in planning mode.
+
+**Why we did it this way:** A clean copy plus checks proves that the project does not depend on one machine's hidden state.
+
+**Analogy:** Moving house, then switching every light on to check that nothing was left behind.
+
+**What came out of it:** A working project on the second laptop, with the same test results. This is "milestone M1" in the plan. The AI use statement says Antigravity then did the laptop verification, the second round of neighbour analyses, and the engineering of Phases 10 to 12.
+
+**What went wrong or surprised us:** A stale blocking note left by the Claude Code loop was removed. The records don't say why the move was needed.
+
+**Where to look:** docs/MIGRATION_PLAN.md, DECISIONS.md ("Migration to second laptop"), AI_USE.md, commit 037beb6.
+
+## Stage 15 — Polish
+
+**Dates:** 8 Nov 2026.  
+**The goal in one sentence:** Make the site readable, trustworthy and pleasant before the freeze.
+
+**What we did, step by step:**
+1. A to-do list with priority levels (P0 to P2) was written (commit 2820910).
+2. A real satellite basemap was added: NASA's true-colour 30-metre image from 4 Jul 2023, with the required credit line. If the image cannot load, the map falls back to a plain background. The team checked by eye that field outlines line up with the picture on three fields.
+3. Fields got readable names: Field 1 to Field 200, with search and sorting by number, area or grade.
+4. A map legend explains marker colours, the disabled grade A, and fine versus coarse data.
+5. Light, dark and automatic colour modes were added. The choice is saved in the browser, and there is no flash on loading.
+6. The weak results were stated plainly in the app: weak hindcast skill, the season detector's miss, the neighbour witness being off, and grades stopping at B.
+7. A short first-visit guide, a consistency pass across README, DATA, AI use and Methods, and drafts of the submission text followed. The keyboard-accessibility check passed all 13 tests.
+
+**Why we did it this way:** The plan said that a judge or farmer opening the site cold should understand it in a minute, and that limits belong on the page, not hidden in a file.
+
+**Analogy:** Tidying and labelling a shop before opening day.
+
+**What came out of it:** All P0 and P1 tasks were done. At that point 251 Python tests and 61 website tests passed.
+
+**What went wrong or surprised us:** Two planned items were not done: a data-confidence map for the Nile Delta was replaced by "Add my field", and the Toulouse region was skipped. A printable field report was deferred.
+
+**Where to look:** PLAN.md (Phase 11), DECISIONS.md ("Phase 11 Polish"), commits 2820910, da1a8ab, ce2a214.
+
+## Stage 16 — Speed fixes
+
+**Dates:** 8 to 9 Nov 2026.  
+**The goal in one sentence:** Find out why the site was slow, fix the real causes, and measure again.
+
+**What we did, step by step:**
+1. The starting code was lazy-loaded: the map and the charts are fetched only when needed. The starting bundle fell from 1,785.76 kilobytes to 273.64 kilobytes, a cut of 84.7%.
+2. The site no longer downloads all field data at the start. The service worker, the small program that stores pages for offline use, now caches on demand. First-load requests fell from 838 to 38, and the transferred data from 29.7 megabytes to 1.25 megabytes.
+3. Layout jumps were removed (a score for how much the page jumps around while loading fell from 1.286 to about 0), and map tile errors outside the data area were stopped.
+4. On desktop the performance test then scored 88, with accessibility, best practices and search visibility all at 100.
+5. On 9 Nov, adding the 3D view and the tour dropped the desktop score from 88 to 31 (the main content took 9.7 seconds to appear). Tracing showed code being loaded too early. Moving it into separate, later-loaded pieces fixed it (commit 0662f39).
+6. A mobile test found that most blocking time comes from starting the map engine. The mobile score of 66 to 67 was accepted as it was, with no risky changes before the freeze.
+
+**Why we did it this way:** The team measured first and did not guess. Farmers may have slow phones and networks.
+
+**Analogy:** Packing a suitcase: take what you need for day one and mail the rest.
+
+**What came out of it:** A much smaller starting load and clean desktop scores.
+
+**What went wrong or surprised us:** The slowdown on 9 Nov was caused by the team's own new features, and was caught by measuring. The mobile result is only a partial fix.
+
+**Where to look:** DECISIONS.md ("P1.13", "P1.14", "Mobile Performance Profiling"), commits bbe53fe, ad66fae, 0662f39.
+
+## Stage 17 — Features added late
+
+**Dates:** 9 to 11 Nov 2026.  
+**The goal in one sentence:** Add the things that make the evidence clearer and the site easier to try, without changing any result.
+
+**What we did, step by step:**
+1. **Add my field (9 Nov).** A page where anyone can enter a field. It works only in the browser, and the answers stay on the device. It checks whether the point is inside the real Kansas tile and, if not, says "We apologize, but this location is not currently supported." Inside the tile it shows only the nearest analysed field, with warnings that the field is not analysed yet.
+2. **Plain-language summary (9 Nov).** A one-sentence comparison of the current rotation with the top option, for example "uses 40 mm less water, but has 1 more bare-soil month". Differences below set thresholds are called "about the same".
+3. **Grade-validity check (9 Nov).** The test was written down before it was run. Results are in Stage 18.
+4. **3D view (9 to 10 Nov).** A procedural 3D soil block with a weekly water level, for the current and a top alternative rotation. It uses a typical-rain historical year for each field. It is labelled "Illustration of simulated values — not a photo". "What is this?" notes and a glossary followed.
+5. **Guided tour (9 Nov).** First as a seven-step tour. It was rebuilt on 11 Nov as a "try it" tour where each step ticks when the visitor does the real action.
+6. **Hindcast diagnosis (9 Nov).** A second pre-registered analysis (rules written down before it was run) asked where the forecasts work and fail.
+7. **"Why this ranking?" and "What we got wrong" (9 Nov).** The first shows how each priority adds to the ranking score. The second lists dated mistakes. A methods diagram was added and, on 11 Nov, redesigned into four numbered stages because the first drawing was hard to read.
+8. **Fixes (11 Nov).** The tour's "Next" button was invisible in light mode because a colour was never defined. Pages scrolled sideways on phones. A hard-coded weather year (2007) contradicted the year in the data. The map showed imagery only after zooming, so a coarser NASA picture now fills the gap.
+9. **Soil check (11 Nov).** A read-only comparison with the USDA SSURGO soil survey.
+10. **Rotation Builder, farm view and fixes (11 Nov).** See below.
+
+**The Rotation Builder.** A visitor places a crop in each of three seasons, then presses Grow. Only the field's 36 ranked rotations can be built, and a disabled crop card says which rule it breaks. The numbers in the result table come from the field pack. The 3D replay is the same water ledger re-run in the browser. To prove it matches, 20 fields times 36 rotations times 3 weather cases (2,160 runs) were compared with the Python model. The largest difference was 0.0000057 millimetres, against a limit of 0.05. A new data file per field (19 kilobytes each) was approved by the user.
+
+**The farm view.** An illustrated farm with two fenced plots side by side, the current rotation and the visitor's, on the same field and weather. The barn, trees, pond and fences are labelled "Scenery, not data". A "Soil X-ray" button switches back to the glass soil view.
+
+**Why we did it this way:** The challenge invites explanations and scenarios. A visitor learns most by trying. Each late feature was held to the same rules: no points, no yield or profit words, a source tag on every number, and a clear "illustration" label.
+
+**Analogy:** After building the engine, adding a dashboard so a driver can see what the engine is doing.
+
+**What came out of it:** The features listed above, all live by 11 Nov. Evidence results were unchanged.
+
+**What went wrong or surprised us:**
+- The soil check was negative. The model's soil water capacity (median 142 mm) was far below the survey's (282 mm), and the field-to-field correlation was about zero (Pearson −0.09, 198 of 200 fields matched). The same check showed a wrong line on the Methods page that said SoilGrids feeds the water balance. The page was corrected. The model's configuration comment is flagged but unchanged.
+- A perennial-forage season in a field's history was drawn as "Bare fallow". It now reads "Perennial forage (history only; not simulated)".
+- Switching 3D views was slow, and dark mode applied to the 3D scene only after a reload. Because each part of the site kept its own copy of the theme choice, the scenes rebuilt on every switch. A shared theme store fixed it, and views are now built once and hidden or shown. On a simulated phone, the click-to-picture time fell from between 170 and 1,207 ms to between 42 and 85 ms.
+- On 11 Nov the builder and farm view were switched on for everybody, with `?builder=0` and `?farm=0` as kill switches. The decision log dates the toggle fix 12 Nov while the commit is dated 11 Nov; the commit date is used here.
+
+**Who did the work:** The AI use statement lists Antigravity for much of the 9 to 10 Nov engineering. The commits dated 11 Nov carry Claude Opus 5.5 trailers. The three 8 and 9 Nov commits I checked carry no AI trailer. The AI use statement was written before the 11 Nov work and does not mention it.
+
+**Where to look:** PLAN.md (Phase 12), DECISIONS.md (entries of 9, 11 and 12 Nov), results/hindcast/, results/validation/, app/src/builder/, app/src/FarmScene.tsx, commits 73131da, 1ccba79, 29df4a5, dc6ad14, e021f3e, b166c99, 4c4a566, d5a486a, bc9ba40, 6c8faad, aefa104, 5e426ca, a3524f9.
+
+## Stage 18 — The final state
+
+**Dates:** As of 11 Nov 2026 (the last recorded change, commit a3524f9).  
+**The goal in one sentence:** Describe plainly what exists now.
+
+**What we did, step by step:**
+1. The code line is stable on GitHub and the public site is updated automatically from it.
+2. The data covers one region: Kansas, tile T14SLH, 200 fields. A tile is a fixed square of the satellite map grid, about 100 kilometres across. France and Ukraine are planned only.
+3. The demo data folder holds 1,203 files: six per field (field pack, greenness series, calendar, what-ifs and two 3D files) plus three region files.
+4. The automatic checks cover 274 Python tests and 190 website tests (one more is skipped), plus secret scanning, the pack validator, keyboard checks, a sideways-scroll check on every page at 360 and 390 pixels, and an offline check.
+5. The plan calls for a code freeze after the end of 12 Nov. The 13 Nov day is for reviewing the official rules. The release tag was created early by mistake and is to be left alone until the user approves.
+
+**Why we did it this way:** The freeze protects the live site from last-minute risk.
+
+**Analogy:** A finished exhibit: labelled, tested, with the unfinished corners marked.
+
+**What came out of it:** A working public site and an open repository with the pipeline, the tests, the negative results and the decision log. The results are honest and mixed.
+
+**What went wrong or surprised us:** See the section "What it can and cannot tell you" for the open limits.
+
+**Where to look:** README.md, PLAN.md (section 1 and Phase 12), DECISIONS.md ("Handoff").
+
+## The way of working
+
+**Two AI tools, under people's direction.** AI coding assistants wrote most of the code and documents. The records name two: Claude Code (Anthropic) and Google Antigravity (Google). The people chose the approach, regions and scope, approved every new software package, plan change and data-layout change, reviewed each gate, and made the calls logged as "user decision". Claude trailers appear on most commits (158 lines for Sonnet 5.5 and 69 for Opus 5.5). The product itself has no AI model that ranks or writes recommendations: sentences come from fixed templates over computed numbers.
+
+**Five files hold the process.** CLAUDE.md has the rules. PLAN.md is the plan and the source of truth, with tick marks and short notes. DECISIONS.md is a dated log of decisions, failures and handoffs. DATA.md lists every dataset, access path and licence. AI_USE.md describes AI use. The cycle is: plan, build, check, record, hand off. At the end of a session the assistant writes what was done, what is blocked, and the next task.
+
+**Gates.** Each phase ended in a gate. Written reviews exist for Gate 1 (data, passed), Gate 5 (neighbours, failed) and Gate 6 (packs, passed with caveats).
+
+**Rules set before looking at results ("pre-registration").** Three tests had their pass rules written and committed first: the season detector (90% target), the grade-validity check and the hindcast diagnosis. After each, the grades and thresholds were not changed.
+
+**Automatic checks.** A leakage guard and tests stop forecasts from seeing later data. A validator rejects untagged numbers and oversize files. A "red-team" audit script found 0 forbidden claims (yield in tonnes, profit, soil carbon from space) and 0 untagged numbers across 200 packs. A secret scan runs on every commit and in the cloud. The website is checked with keyboard, contrast, sideways-scroll and offline tests.
+
+**The unattended loop.** From 4 Nov, a script started Claude Code again and again without a person at the keyboard, with a list of allowed and forbidden commands, a turn cap and, from 4 Nov, a cheaper model to save usage. It had teething problems. The first run was blocked because file edits were allowed but running tests and saving changes were not. A prompt file went missing (the records say it is unknown who or what deleted it). A text-encoding bug garbled special characters. One stop was the account's five-hour usage limit. The most visible problem was a blocked task (the paper check, T5.4, and package installs): the loop kept writing near-identical "still blocked" notes, 106 handoff commits in total (83 on 7 Nov, 22 on 8 Nov). On 8 Nov the rules were changed: split big tasks, and stop with a blocking note when no progress is possible. The loop was later paused (Stage 14).
+
+**How mistakes were caught.** Examples from the records: a crop filter prefix bug (checked against the official table), broken DOIs (link check), the rank-order bug (fixed in commit ce69ebf), a circular grade test (caught while writing the pre-registration), grade counts that differed between pages (97 against 170, reconciled), the 9 Nov speed drop (measured), a hard-coded weather year (a contradiction a user noticed), an invisible button (a user report), and a wrong Methods line about SoilGrids (found during the soil check). The method each time: measure, write it down, fix, add a test.
+
+## How the website works today, as a visitor sees it
+
+The address is https://amr-mousa-eg.github.io/fieldwitness/. No login is needed. After the first visit it also works without a network connection. A fixed line on the pages says that the tool supports a farmer's judgment and does not replace it.
+
+**The map and the field list.** The first screen is a map of Kansas with 200 field outlines drawn over a real NASA satellite picture. A short panel called "How to read this" explains what the site is and that grades stop at B. A legend explains the marker colours. A list beside the map names the fields Field 1 to Field 200 and can be searched and sorted by number, area or grade. A "Map layers" box colours the fields by erosion exposure, water-stress share or frost share, and can show coarse regional layers of water storage and soil moisture over the years.
+
+**The field page.** Choosing a field opens a page with its number, size, how many satellite pixels fit inside it, and where its boundary came from. It has five tabs.
+
+- **Field story.** The field's greenness curve as seen by satellites, season by season, and the crop recorded for each year. A selector lets the visitor look at one season.
+- **Options (the Field Card).** A one-sentence comparison of the current rotation with the top-ranked alternative, then a table of all options with water use, bad-year water, bare soil, a Relative Yield Index and an evidence grade. Sliders under "What matters most to you?" change the ranking at once. The visitor can also say which crops they cannot grow or cannot sell, set a water limit, pick a weather what-if (hotter or drier), or correct the crop history. Those answers stay in the browser. Every option has a short explanation: why, evidence, benefits, gaps and risks for local review. "Why this ranking?" shows how each priority contributed to the score.
+- **Calendar.** Which months this field is usually bare, and when each crop is most exposed to heat, frost, water stress and heavy rain on bare soil. Coarse regional water-storage and soil-moisture context sits beside it, labelled as not about this field.
+- **Advisor console.** How believable the physics is for this field (the credibility score), which measurement would most reduce the uncertainty, the smallest change that would flip the top option, and a record of past predictions.
+- **Field in 3D.** A 3D picture of soil water week by week over three years, for the current rotation and an alternative. A "Build your own rotation" button opens the builder: place crops, press Grow, and see the result table with the current and the top-ranked rotation. The default view is an illustrated isometric farm with two plots, and a "Soil X-ray" button switches to a glass soil block. Weather can be changed (normal, drier, hotter). "What is this?" notes explain the terms. If the 3D view runs slowly, the page switches to plain 2D charts. The page says "Illustration of simulated values — not a photo", and the farm scenery is labelled "Scenery, not data".
+
+**The scoreboard.** The hindcast results against the baselines, the grade-validity verdict, a section titled "Where it works and where it doesn't (exploratory)", and the note that winter wheat has no baseline.
+
+**Methods and data.** How FieldWitness works, what it does not do, the limits, the independent soil check, the rotation builder, "What we got wrong", the roadmap, the datasets and licences, a diagram of the four stages (what we observe, model, check, and what you get) and a glossary. Boxes in the diagram link to the sections.
+
+**Add my field.** A visitor can describe a field. If it lies outside the Kansas tile, the page apologises. Inside, it shows the nearest analysed field and warns that the visitor's own field is not analysed. Data stays on the device.
+
+**The tour.** A "Take the tour" button starts an eight-step "try it" tour. Each step ticks when the visitor really does the action: open a field, choose a season, move a priority slider, find "Why this ranking?", play the 3D view with a drier scenario, build a rotation, find the grade verdict, and try the Cairo and Garden City presets in Add my field.
+
+**Light, dark and automatic mode.** A switch in the header changes the colours. The choice is remembered and applies at once to the map, the charts and the 3D scenes.
+
+## What it can and cannot tell you
+
+**It can** show, for 200 Kansas fields, how a field's greenness has behaved since 2015, when it is usually bare, which three-season rotations were evaluated, how they compare on water use, bad-year water, bare soil and a relative index, and how strong the evidence for each is.
+
+**It cannot** (the project's own wording):
+- Predict yield in tonnes. It shows a Relative Yield Index only.
+- Measure soil fertility from space, or forecast prices or profit.
+- Let a language model make the decision. The ranking is computed from numbers.
+- Treat the weather what-ifs as climate forecasts. They are tests on past weather.
+- Say anything about fields outside the pilot. Only one Kansas tile is covered.
+
+**Known weaknesses, as recorded:**
+- The season detector reached 78.3% against a 90% target.
+- The neighbour evidence failed its checks and is switched off, so no option can be graded A.
+- The forecast skill is weak. The 90% ranges are too narrow, and the field's own past average ordered fields better than the model did.
+- The grades could not be shown to predict accuracy (n = 463 field-seasons, grade B 16.96 and grade D 24.02 on the CRPS score, difference 7.07, 95% interval from −3.28 to 14.32, which includes zero). Grade D had only 25 field-seasons.
+- Compared with two baselines, FieldWitness is better overall and for maize, but not for sorghum, where the interval includes zero. Winter wheat peaks about 36 days late in the model, and has no baseline.
+- The model's soil water capacity does not match the independent soil survey: median 142 mm against 282 mm, with no correlation across fields.
+- The weather what-ifs change the top-ranked option in 10% to 59.5% of fields.
+- The default ranking weights, bare-soil threshold, grade thresholds and many model settings are team assumptions (tag A).
+- The 3D replay uses one typical-rain weather year, not a forecast. Frame rates were measured with software rendering, not on real phones or graphics cards.
+
+## Questions a judge might ask
+
+1. **Does FieldWitness tell a farmer what to plant?** No. It shows ranked options with evidence and says how strong the evidence is. A fixed line on the pages says it supports, and does not replace, the farmer's judgment.
+2. **Does it predict yield?** No. It uses a Relative Yield Index from 0 to 1 and never gives tonnes, prices or profit.
+3. **How good are the forecasts?** Mixed. It beats the simple baselines on three of four measures on 266 maize and sorghum seasons, by small margins. It is worse on ground cover days, and its uncertainty ranges are too narrow. The site shows all of this.
+4. **Why is there no grade A?** Grade A needs the neighbour witness. It was tried, failed its own pre-set checks (0 of 92 comparisons passed), and was switched off.
+5. **Do the grades mean something?** We could not show that. The pre-registered test did not pass, so the site says so.
+6. **Where does it work?** On 200 fields in one Kansas satellite tile. Other regions (France, Ukraine) are planned but not built.
+7. **Is AI making the recommendations?** No. AI assistants wrote much of the code. The ranking comes from formulas, and the explanations come from fixed templates over computed numbers.
+8. **How do you stop the forecasts from seeing the future?** A guard blocks any reading of data dated after the cut-off (31 Dec 2021), and tests check every reader. One exception is accepted and recorded: field boundaries come from recent map editions, geometry only, with no later crop labels or outcomes.
+9. **Which results were disappointing, and did you publish them?** The season detector (78.3%), the neighbour evidence, the weak forecast skill, the grade check, the sorghum and winter-wheat results, and the soil capacity mismatch. All are on the site or in the repository.
+10. **What happens to a farmer's data?** The site has no server. Field details typed into Add my field and corrections to a field stay in the browser on the device.
+
+## What comes next
+
+These items are recorded in the repository.
+- **Roadmap on the site and in the README:** an Arabic interface; comparing two fields side by side; independent cross-checks of soil water and rainfall with NASA SMAP and GPM IMERG data; evapotranspiration and irrigation checks with ECOSTRESS and the Kansas WIMAS records; expanding region by region, where each new tile must first pass the census, season-detection and hindcast gates.
+- **Follow-ups in the decision log:** calibrate winter wheat's growth stages within the published FAO-56 ranges; set each field's soil water capacity prior from soil data and re-run the hindcast, and fix the wording in the priors file; try the 3D view on a real phone.
+- **Process:** the code freeze after 12 Nov, the review of the official rules on 13 Nov, and the user's approval before the release tag `v1.0-spaceapps` is touched.
+
+## Where the facts in this document come from
+
+README.md, PLAN.md, DECISIONS.md, DATA.md, AI_USE.md, CLAUDE.md; the git history (276 commits, 4 to 11 Nov 2026); docs/gates (gate-1, gate-5, gate-6), docs/api_notes.md, docs/census, docs/MIGRATION_PLAN.md, docs/official_challenge.md, docs/drafts/submission.md, app/deploy/README.md; results folders (story, inference, rotate, neighbours, hindcast, validation, labels, pilot_fields); the config folder; and a recount of the files, packs and tests. Longer lists are in the appendix: [how_we_built_appendix.md](how_we_built_appendix.md).
+
+**Where two records disagreed, and which was trusted:**
+- The README and the submission draft describe baseline B1 as a "regional mean". The baseline script and the plan describe B1 as the FAO table method with default dates and soil. The script was trusted.
+- The README says the neighbour witness failed "0 of 32" comparisons and the gate review says "0 of 92". Both are in the result files (matched design and first design), so both are quoted.
+- The README's hindcast table covers 266 maize and sorghum seasons; the grade and diagnosis pages cover 463 seasons including winter wheat. Both are stated each time.
+- The decision log dates the theme fix 12 Nov, the commit says 11 Nov. The commit date is used.
+- A rank correlation of 0.26 is quoted in some places and 0.25 in the 463-season file. The README's figure is used for the 266-season set.
+
+**Things the records don't say:**
+- When the work started before 4 Nov, who wrote plan version 1.0, and why this idea was chosen over others.
+- Which existing tools and papers were reviewed beforehand.
+- Who ran the first deployment, how the Netlify copy was made, why the Pages build needed a second trigger, and when the repository became public.
+- Why the move to a second laptop and a second AI tool was needed.
+- Who or what deleted the autopilot prompt file.
+- How many people were on the team, and who did which task apart from the AI tools named.
+- How the site performs on real phones and real graphics cards.
+- The Kansas water-use check (WIMAS) was never done, because the records were never obtained.
