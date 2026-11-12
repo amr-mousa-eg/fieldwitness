@@ -1,0 +1,1557 @@
+{
+ "cutoff": "2021-12-31",
+ "fields": {
+  "7008ff6ba15fc8da1d2ebe4a739699117e7ae646": {
+   "credibility": 0.0,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 35.83,
+   "n_seasons": 1,
+   "crop": "sorghum"
+  },
+  "1ce6e474f605025b83af3a0ff5b71442ec09a337": {
+   "credibility": 0.5833,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 8.33,
+   "n_seasons": 1,
+   "crop": "maize"
+  },
+  "ec4d5af741404a7ed6d72c79d89d1ddce9130a70": {
+   "credibility": 0.7333,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 5.33,
+   "n_seasons": 1,
+   "crop": "maize"
+  },
+  "be4c1c64e8f7337c4774f54913abd98770784b42": {
+   "credibility": 0.65,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 7.0,
+   "n_seasons": 1,
+   "crop": "maize"
+  },
+  "7706df5305c6dca77fa440e5cb5996467a7f3de5": {
+   "credibility": 0.0,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 26.0,
+   "n_seasons": 1,
+   "crop": "sorghum"
+  },
+  "6a1f0e3ae0e8020f38420298bb266d135f2c140b": {
+   "credibility": null,
+   "mode": "not_assessable",
+   "n_seasons": 0,
+   "crop": null
+  },
+  "be05f229de6c07f1f2244e618d03f1acb5b6e1d0": {
+   "credibility": null,
+   "mode": "not_assessable",
+   "n_seasons": 0,
+   "crop": null
+  },
+  "f9e6babeb08decb617a77676fd6d738b7c5af592": {
+   "credibility": 0.6667,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 6.67,
+   "n_seasons": 1,
+   "crop": "sorghum"
+  },
+  "a5c7fbe011385083f16d9d1580fb81cf26dd1fda": {
+   "credibility": 0.25,
+   "mode": "full",
+   "spearman": 0.5,
+   "median_timing_error_days": 28.5,
+   "n_seasons": 3,
+   "crop": "maize"
+  },
+  "70bdb6e29892c13b2e16a229937f65cc0b4c1894": {
+   "credibility": 0.5,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 10.0,
+   "n_seasons": 1,
+   "crop": "sorghum"
+  },
+  "04e13c7da490f533af49ccb12879229bd173afb7": {
+   "credibility": 0.7125,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 5.75,
+   "n_seasons": 2,
+   "crop": "sorghum"
+  },
+  "0d5615b52572c5c2eeac7fdfef8cdda167050a22": {
+   "credibility": 0.6958,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 6.08,
+   "n_seasons": 2,
+   "crop": "sorghum"
+  },
+  "4bf9f45c9cf8ecf337eaa33ebb5504ab99024019": {
+   "credibility": 0.7,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 6.0,
+   "n_seasons": 1,
+   "crop": "sorghum"
+  },
+  "5007e150251b78684ebb4d9d1f33df4bcb10a3a9": {
+   "credibility": 0.3125,
+   "mode": "full",
+   "spearman": 0.5,
+   "median_timing_error_days": 17.5,
+   "n_seasons": 5,
+   "crop": "sorghum"
+  },
+  "71b9fde5a3ad92f14651b86b82ecff517e1d8cce": {
+   "credibility": null,
+   "mode": "not_assessable",
+   "n_seasons": 0,
+   "crop": null
+  },
+  "c065551579366653f4ca61b848f5f7649d247777": {
+   "credibility": 0.0,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 49.33,
+   "n_seasons": 1,
+   "crop": "sorghum"
+  },
+  "f09fe4661937262ac79e5a623c1a1caa942766fa": {
+   "credibility": 0.0,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 44.17,
+   "n_seasons": 1,
+   "crop": "sorghum"
+  },
+  "db5f2aa61ebe1e3056ebd6ada9243913ea558665": {
+   "credibility": 0.5583,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 8.83,
+   "n_seasons": 1,
+   "crop": "sorghum"
+  },
+  "bde1fabf714a23c5967df3d2406c7e2226086fef": {
+   "credibility": 0.75,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 5.0,
+   "n_seasons": 1,
+   "crop": "sorghum"
+  },
+  "a25bf567883e5b4b9a3b1bf45c76171187b4aebe": {
+   "credibility": 0.575,
+   "mode": "full",
+   "spearman": 1.0,
+   "median_timing_error_days": 17.0,
+   "n_seasons": 3,
+   "crop": "maize"
+  },
+  "df9e200b312949e1081db1f8a403ccbdf258d74a": {
+   "credibility": 0.5,
+   "mode": "full",
+   "spearman": 1.0,
+   "median_timing_error_days": 71.5,
+   "n_seasons": 3,
+   "crop": "maize"
+  },
+  "876389dfe3eaf47d39f2d6d3e314c66a55f0d875": {
+   "credibility": 0.0,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 24.5,
+   "n_seasons": 2,
+   "crop": "sorghum"
+  },
+  "aa700a67784b0170ca07cd3e471b77ef646a1b57": {
+   "credibility": 0.8708,
+   "mode": "full",
+   "spearman": 1.0,
+   "median_timing_error_days": 5.17,
+   "n_seasons": 3,
+   "crop": "maize"
+  },
+  "53ebf3f3e4ed4b76f25a724cea586cfa77d8c8ea": {
+   "credibility": 0.7667,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 4.67,
+   "n_seasons": 1,
+   "crop": "sorghum"
+  },
+  "65f920b5ea21b70fc8068812459378a44310a346": {
+   "credibility": 0.6542,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 6.92,
+   "n_seasons": 2,
+   "crop": "sorghum"
+  },
+  "11aae63d9b0ec64eb02439c4b1a5948c64b78874": {
+   "credibility": 0.0,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 73.5,
+   "n_seasons": 1,
+   "crop": "maize"
+  },
+  "60fed7ceafc6dbf735578cf44f0d5249b98fb346": {
+   "credibility": 0.7167,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 5.67,
+   "n_seasons": 1,
+   "crop": "sorghum"
+  },
+  "0e23af1482cc130e6c2211daa4b5b37a34258f89": {
+   "credibility": 0.4333,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 11.33,
+   "n_seasons": 1,
+   "crop": "maize"
+  },
+  "e1fed992118d4e12bf4744b99ca1236ebedaab7e": {
+   "credibility": null,
+   "mode": "not_assessable",
+   "n_seasons": 0,
+   "crop": null
+  },
+  "6b4963de71bd2049cb38189ce1a1e0ec032fed73": {
+   "credibility": 0.6333,
+   "mode": "full",
+   "spearman": 0.5,
+   "median_timing_error_days": 4.67,
+   "n_seasons": 3,
+   "crop": "maize"
+  },
+  "b7bc5e582a288141a0c05f5b168f1d0b3d70a099": {
+   "credibility": 0.0,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 43.33,
+   "n_seasons": 1,
+   "crop": "sorghum"
+  },
+  "fee515613b3a8d90ab21e99d1ff2cbd7a0547ca5": {
+   "credibility": 0.775,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 4.5,
+   "n_seasons": 1,
+   "crop": "sorghum"
+  },
+  "3f0c53f2b1286a1a179ad2404c4d38f2fe8eeaea": {
+   "credibility": null,
+   "mode": "not_assessable",
+   "n_seasons": 0,
+   "crop": null
+  },
+  "c41b7f43c966b9f42fd27236c6e0bf9e005ed07a": {
+   "credibility": 0.4667,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 10.67,
+   "n_seasons": 2,
+   "crop": "maize"
+  },
+  "a3837ffcc070d71313f2866d64d38159b7de7246": {
+   "credibility": 0.3125,
+   "mode": "full",
+   "spearman": 0.1,
+   "median_timing_error_days": 9.5,
+   "n_seasons": 5,
+   "crop": "maize"
+  },
+  "61e20a1d4e2604fcd9bf9ca434fa0f5964dbe8f2": {
+   "credibility": 0.9,
+   "mode": "full",
+   "spearman": 1.0,
+   "median_timing_error_days": 4.0,
+   "n_seasons": 3,
+   "crop": "maize"
+  },
+  "4903f043e2205a0a2d9e3b85f8b4f623ac558208": {
+   "credibility": null,
+   "mode": "not_assessable",
+   "n_seasons": 0,
+   "crop": null
+  },
+  "fe63a19525bacb421c3919bbc97ff74107e6898b": {
+   "credibility": null,
+   "mode": "not_assessable",
+   "n_seasons": 0,
+   "crop": null
+  },
+  "0650f2937860abd03894b3730b0e7440d8186c3e": {
+   "credibility": 0.9167,
+   "mode": "full",
+   "spearman": 1.0,
+   "median_timing_error_days": 3.33,
+   "n_seasons": 3,
+   "crop": "sorghum"
+  },
+  "4cf51ab1d5d1dd0aaa65525cd81788c2ec0305b5": {
+   "credibility": 0.0,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 75.33,
+   "n_seasons": 1,
+   "crop": "sorghum"
+  },
+  "4c94dfaaec6630a4f59387da77bf55f440a5e170": {
+   "credibility": 0.6708,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 6.58,
+   "n_seasons": 2,
+   "crop": "sorghum"
+  },
+  "7fbd13d528bb5f9d3a6795f28c3700f3dcfc3d09": {
+   "credibility": 0.4583,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 10.83,
+   "n_seasons": 1,
+   "crop": "sorghum"
+  },
+  "18bd71b52d1ad4e9ced104f247c018f8419442a3": {
+   "credibility": 0.6,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 8.0,
+   "n_seasons": 2,
+   "crop": "maize"
+  },
+  "07069cd08a053f9e048a3e12daa12bbac58dd14f": {
+   "credibility": 0.6,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 8.0,
+   "n_seasons": 1,
+   "crop": "sorghum"
+  },
+  "f2cce773675d4f5a3ecbe8756cdb9c2f89025053": {
+   "credibility": 0.7,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 6.0,
+   "n_seasons": 1,
+   "crop": "sorghum"
+  },
+  "6cadd5247a41492fa0a4f736768817c691b8c8d6": {
+   "credibility": 0.7917,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 4.17,
+   "n_seasons": 1,
+   "crop": "maize"
+  },
+  "59e443e882acedfccaf014e2f6fb4bb57e2ca492": {
+   "credibility": 0.7,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 6.0,
+   "n_seasons": 1,
+   "crop": "maize"
+  },
+  "e6d044ae381f972e141476bf6e824529b2c026c0": {
+   "credibility": 0.55,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 9.0,
+   "n_seasons": 1,
+   "crop": "maize"
+  },
+  "fb55c559285e7628e870caa89661027ddceefdee": {
+   "credibility": 0.6833,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 6.33,
+   "n_seasons": 1,
+   "crop": "maize"
+  },
+  "5d43037ee0ab2a22a3e9a7ce2b76fd745991cef8": {
+   "credibility": 0.0,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 44.67,
+   "n_seasons": 1,
+   "crop": "sorghum"
+  },
+  "52a7fe052fd657d44c274f13da235a449d71e56d": {
+   "credibility": 0.45,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 11.0,
+   "n_seasons": 1,
+   "crop": "sorghum"
+  },
+  "5cd227a000cb149d8b1f85fe99d753df3ef60230": {
+   "credibility": 0.0208,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 19.58,
+   "n_seasons": 2,
+   "crop": "sorghum"
+  },
+  "6dc6b8daf2a9c5ab7053406238cdb0ff20e7434e": {
+   "credibility": 0.025,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 19.5,
+   "n_seasons": 2,
+   "crop": "maize"
+  },
+  "b940044cd3e8fa0b33d62897ba63180ef4c2c1ea": {
+   "credibility": 0.3125,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 13.75,
+   "n_seasons": 2,
+   "crop": "maize"
+  },
+  "dec17d10eab45e939e4604662cf7e3356e3926ef": {
+   "credibility": 0.6083,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 7.83,
+   "n_seasons": 1,
+   "crop": "sorghum"
+  },
+  "4498e967e7a9b5a88d93a931514f8f89945f7864": {
+   "credibility": 0.775,
+   "mode": "full",
+   "spearman": 1.0,
+   "median_timing_error_days": 9.0,
+   "n_seasons": 3,
+   "crop": "maize"
+  },
+  "c6942a04b7abbbefa6690a53914eb65fa18a785e": {
+   "credibility": 0.1375,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 17.25,
+   "n_seasons": 2,
+   "crop": "maize"
+  },
+  "875afc1506983244479fa16bac3c13a72c2f3ef3": {
+   "credibility": null,
+   "mode": "not_assessable",
+   "n_seasons": 0,
+   "crop": null
+  },
+  "f8acc54b093c4d31885f2d41d68c2e96bd1908cf": {
+   "credibility": 0.3667,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 12.67,
+   "n_seasons": 2,
+   "crop": "sorghum"
+  },
+  "02cced77704c6b4a72bfdb5e0462c450800b7ae3": {
+   "credibility": 0.6458,
+   "mode": "full",
+   "spearman": 1.0,
+   "median_timing_error_days": 14.17,
+   "n_seasons": 3,
+   "crop": "maize"
+  },
+  "e21cf42fdb444b7b4414fcce6fb40d0844c3707a": {
+   "credibility": 0.3667,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 12.67,
+   "n_seasons": 1,
+   "crop": "maize"
+  },
+  "c27812de2f00e10444012353b748fbe2b55c2a66": {
+   "credibility": null,
+   "mode": "not_assessable",
+   "n_seasons": 0,
+   "crop": null
+  },
+  "a0cc8a14d33b93de6d9983a68630cee0e01cffd8": {
+   "credibility": 0.6333,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 7.33,
+   "n_seasons": 2,
+   "crop": "maize"
+  },
+  "86b22de6eaf1e62334f66d4e79659d64613ebd66": {
+   "credibility": null,
+   "mode": "not_assessable",
+   "n_seasons": 0,
+   "crop": null
+  },
+  "42970ffc4fe03b491ae38e65e63c9c9406db6fe2": {
+   "credibility": 0.8125,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 3.75,
+   "n_seasons": 2,
+   "crop": "maize"
+  },
+  "c7f16a2fa58922a802504f307de157bbc304109c": {
+   "credibility": null,
+   "mode": "not_assessable",
+   "n_seasons": 0,
+   "crop": null
+  },
+  "3c91a5fdf970db8f293953b4d96b33f2ad58398d": {
+   "credibility": 0.55,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 9.0,
+   "n_seasons": 1,
+   "crop": "maize"
+  },
+  "1c41850d9d252c0e35a43df9186c8f7e5fd470a6": {
+   "credibility": 0.6583,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 6.83,
+   "n_seasons": 1,
+   "crop": "sorghum"
+  },
+  "35978df5cb091ab7ef9dd71b6e88c0e3bb59e554": {
+   "credibility": null,
+   "mode": "not_assessable",
+   "n_seasons": 0,
+   "crop": null
+  },
+  "2f1d72e5dfababdfe19e7381d5fcb264ca66b8f6": {
+   "credibility": 0.35,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 13.0,
+   "n_seasons": 1,
+   "crop": "maize"
+  },
+  "53ecebc95447f051eeb8abb04a13a4f260d95700": {
+   "credibility": 0.0542,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 18.92,
+   "n_seasons": 2,
+   "crop": "maize"
+  },
+  "82710dc438ad70da4e867ccd364bd1bde9e3ee88": {
+   "credibility": 0.7333,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 5.33,
+   "n_seasons": 1,
+   "crop": "sorghum"
+  },
+  "d1ab6572425db6e0d0aecc28bae6dd80062aa755": {
+   "credibility": null,
+   "mode": "not_assessable",
+   "n_seasons": 0,
+   "crop": null
+  },
+  "8f94ad95505dc756dc453aed38f2adaf429708ae": {
+   "credibility": 0.275,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 14.5,
+   "n_seasons": 1,
+   "crop": "maize"
+  },
+  "de3a8ba3a6bc62a6a22af3e7ab08035856886138": {
+   "credibility": 0.6583,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 6.83,
+   "n_seasons": 1,
+   "crop": "sorghum"
+  },
+  "b051e21865b6e22760dd4c2327fe1ac0f68f7d8c": {
+   "credibility": 0.0,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 25.5,
+   "n_seasons": 2,
+   "crop": "sorghum"
+  },
+  "dc0fb3c5c41c5093a2971a4ff175ee0a39873ba1": {
+   "credibility": null,
+   "mode": "not_assessable",
+   "n_seasons": 0,
+   "crop": null
+  },
+  "ebe3b8f95a165e279c775f5511c6c313e3c73ba7": {
+   "credibility": 0.9,
+   "mode": "full",
+   "spearman": 1.0,
+   "median_timing_error_days": 4.0,
+   "n_seasons": 3,
+   "crop": "maize"
+  },
+  "199d05c80a94d32fb8088a15d9231d8e9ec05464": {
+   "credibility": 0.5208,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 9.58,
+   "n_seasons": 2,
+   "crop": "sorghum"
+  },
+  "a962e86120248a44853e8b3a0fa694e97c62ab27": {
+   "credibility": null,
+   "mode": "not_assessable",
+   "n_seasons": 0,
+   "crop": null
+  },
+  "e6e90fc1736338957f599334c392c18bc7136b39": {
+   "credibility": 0.5333,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 9.33,
+   "n_seasons": 1,
+   "crop": "maize"
+  },
+  "05ecf98f9da9a300dfa515c79bbc73943964e773": {
+   "credibility": 0.675,
+   "mode": "full",
+   "spearman": 1.0,
+   "median_timing_error_days": 13.0,
+   "n_seasons": 4,
+   "crop": "maize"
+  },
+  "376c3b96bfa4e44cbc8a713fd1ad07f9b73c8d0c": {
+   "credibility": null,
+   "mode": "not_assessable",
+   "n_seasons": 0,
+   "crop": null
+  },
+  "d6626453cd661f0a8ec240fc670406305dbc2806": {
+   "credibility": 0.3167,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 13.67,
+   "n_seasons": 1,
+   "crop": "maize"
+  },
+  "e1485212358a5adbb410fc03aeb846b92c8db3a7": {
+   "credibility": null,
+   "mode": "not_assessable",
+   "n_seasons": 0,
+   "crop": null
+  },
+  "43955b19f18890d1f1d5d97aeb45b14e19ff78a5": {
+   "credibility": 0.5083,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 9.83,
+   "n_seasons": 2,
+   "crop": "maize"
+  },
+  "8efc1154359e74046cc4d74500e3f319a935bbbf": {
+   "credibility": 0.15,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 17.0,
+   "n_seasons": 1,
+   "crop": "maize"
+  },
+  "e02afe8a556730876a06034420b908316c1c6b8b": {
+   "credibility": null,
+   "mode": "not_assessable",
+   "n_seasons": 0,
+   "crop": null
+  },
+  "b19fc2ff1df981dedaec3416e184fb597f5726de": {
+   "credibility": 0.8583,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 2.83,
+   "n_seasons": 1,
+   "crop": "sorghum"
+  },
+  "faddc34ec6c8396a24361910fe463760a7d8567b": {
+   "credibility": 0.4792,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 10.42,
+   "n_seasons": 2,
+   "crop": "sorghum"
+  },
+  "78433ded5a56eb2f8beb82cdee2aa66f3ef8c2ee": {
+   "credibility": 0.9583,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 0.83,
+   "n_seasons": 1,
+   "crop": "sorghum"
+  },
+  "7bf8c222f93f4d44a763d9bc84d5e90b4c921d06": {
+   "credibility": 0.4833,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 10.33,
+   "n_seasons": 2,
+   "crop": "sorghum"
+  },
+  "905e1f18bfd01edcc9f457e66691b2901cf4f198": {
+   "credibility": 0.7208,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 5.58,
+   "n_seasons": 2,
+   "crop": "sorghum"
+  },
+  "7c0e7d2c4900d8f73aea221357209360edc6854a": {
+   "credibility": 0.7625,
+   "mode": "full",
+   "spearman": 1.0,
+   "median_timing_error_days": 9.5,
+   "n_seasons": 3,
+   "crop": "sorghum"
+  },
+  "e9dfa617c4d2e1a487553c08d5a287176af20b08": {
+   "credibility": 0.475,
+   "mode": "full",
+   "spearman": 0.5,
+   "median_timing_error_days": 11.0,
+   "n_seasons": 3,
+   "crop": "sorghum"
+  },
+  "895821eef59c36fe078ad6e04802a6668d1d861e": {
+   "credibility": 0.0,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 23.42,
+   "n_seasons": 2,
+   "crop": "maize"
+  },
+  "3a199ac21bfabe18eaf4150d414a3c2de7cde971": {
+   "credibility": 0.0,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 23.33,
+   "n_seasons": 2,
+   "crop": "sorghum"
+  },
+  "9399b1c9728025fbcebfe0bb3321292fa27d5eab": {
+   "credibility": 0.0,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 40.5,
+   "n_seasons": 1,
+   "crop": "maize"
+  },
+  "daf1719f844e1626d113fd2035a9fe402a564b69": {
+   "credibility": 0.3583,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 12.83,
+   "n_seasons": 1,
+   "crop": "sorghum"
+  },
+  "9784877b54b9f75b467f2ddccbbf1bd8bc805b67": {
+   "credibility": null,
+   "mode": "not_assessable",
+   "n_seasons": 0,
+   "crop": null
+  },
+  "20332278fb19e0674dc98c42df02b96b10f067a8": {
+   "credibility": 0.375,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 12.5,
+   "n_seasons": 2,
+   "crop": "maize"
+  },
+  "d4314fd894ec239e107ffc6182074848bf38312f": {
+   "credibility": null,
+   "mode": "not_assessable",
+   "n_seasons": 0,
+   "crop": null
+  },
+  "786a117c2aad3d6381404381341bd54d93f96355": {
+   "credibility": null,
+   "mode": "not_assessable",
+   "n_seasons": 0,
+   "crop": null
+  },
+  "db8b9842246cdaf879002686fd81afae220fcc78": {
+   "credibility": 0.4708,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 10.58,
+   "n_seasons": 2,
+   "crop": "sorghum"
+  },
+  "86c681013b56a193d1fe0d70b0cd0ce412525fa0": {
+   "credibility": 0.4917,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 10.17,
+   "n_seasons": 2,
+   "crop": "sorghum"
+  },
+  "d282ffdc86417199b2fa0cf0f369bcb3a66e1466": {
+   "credibility": 0.1417,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 17.17,
+   "n_seasons": 2,
+   "crop": "sorghum"
+  },
+  "530d8211fc51a15fd9d273b9a1c05e6cc84728a9": {
+   "credibility": 0.0,
+   "mode": "full",
+   "spearman": -0.5,
+   "median_timing_error_days": 81.67,
+   "n_seasons": 3,
+   "crop": "sorghum"
+  },
+  "68779621e9facfeaa24723e8a415d6dc6eb37a82": {
+   "credibility": 0.6354,
+   "mode": "full",
+   "spearman": 0.8,
+   "median_timing_error_days": 10.58,
+   "n_seasons": 4,
+   "crop": "maize"
+  },
+  "bd97fb12fd57099291b3d5c0ee2ae955a9134b61": {
+   "credibility": 0.7875,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 4.25,
+   "n_seasons": 2,
+   "crop": "sorghum"
+  },
+  "7865a55ac5f0a05df4495692604e690c054ef1fc": {
+   "credibility": 0.5417,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 9.17,
+   "n_seasons": 1,
+   "crop": "sorghum"
+  },
+  "6f9ee58f4458584904d4535afb2cfda8d6743ab8": {
+   "credibility": 0.6875,
+   "mode": "full",
+   "spearman": 1.0,
+   "median_timing_error_days": 12.5,
+   "n_seasons": 3,
+   "crop": "maize"
+  },
+  "9f647b75f822a70ea157acfcdf6158e957a44a9d": {
+   "credibility": 0.6333,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 7.33,
+   "n_seasons": 2,
+   "crop": "sorghum"
+  },
+  "364032c21c59252ea7bc434dece5aa40056cf7c0": {
+   "credibility": 0.7833,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 4.33,
+   "n_seasons": 2,
+   "crop": "sorghum"
+  },
+  "100d40f8977d49cb51836b45afb90c5854f3807b": {
+   "credibility": 0.0,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 25.33,
+   "n_seasons": 1,
+   "crop": "maize"
+  },
+  "8d4341cacc1d1338d43b81552e621a7397c76a62": {
+   "credibility": 0.3417,
+   "mode": "full",
+   "spearman": 0.5,
+   "median_timing_error_days": 16.33,
+   "n_seasons": 3,
+   "crop": "maize"
+  },
+  "0aa8b9234d54dcf896741987942859413b6f1aa5": {
+   "credibility": 0.6583,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 6.83,
+   "n_seasons": 2,
+   "crop": "sorghum"
+  },
+  "b6d16cd97ce61e33b8cb53e42da8e32689c63f6b": {
+   "credibility": 0.7604,
+   "mode": "full",
+   "spearman": 1.0,
+   "median_timing_error_days": 9.58,
+   "n_seasons": 4,
+   "crop": "sorghum"
+  },
+  "189e236596fa05b85f1c19fe582083601b59b353": {
+   "credibility": null,
+   "mode": "not_assessable",
+   "n_seasons": 0,
+   "crop": null
+  },
+  "49f6772d07985a6f7d6e8072954f47d61fcc4f55": {
+   "credibility": 0.35,
+   "mode": "full",
+   "spearman": -0.6,
+   "median_timing_error_days": 6.0,
+   "n_seasons": 4,
+   "crop": "sorghum"
+  },
+  "0fac7e424995fdde952086673dc2af3fde818010": {
+   "credibility": 0.7208,
+   "mode": "full",
+   "spearman": 1.0,
+   "median_timing_error_days": 11.17,
+   "n_seasons": 3,
+   "crop": "sorghum"
+  },
+  "b92fecfd2d4a4d3de1dfbc9ed1a37fe5b01ee928": {
+   "credibility": 0.7,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 6.0,
+   "n_seasons": 2,
+   "crop": "maize"
+  },
+  "c531ab7b07aaba4b82fad3cc87d038cdf3136a54": {
+   "credibility": 0.0833,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 18.33,
+   "n_seasons": 2,
+   "crop": "sorghum"
+  },
+  "240fa53927d596d52790d19668e14589534072f2": {
+   "credibility": 0.6875,
+   "mode": "full",
+   "spearman": 1.0,
+   "median_timing_error_days": 12.5,
+   "n_seasons": 3,
+   "crop": "maize"
+  },
+  "ed68b58111c37a959b7a3e554cacd5b86759be42": {
+   "credibility": 0.7333,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 5.33,
+   "n_seasons": 2,
+   "crop": "sorghum"
+  },
+  "e6ec681d2fd86aab04df91b15e7215b481833ad6": {
+   "credibility": 0.5792,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 8.42,
+   "n_seasons": 2,
+   "crop": "maize"
+  },
+  "479957fc7b403f03e9d802c07e8b284a850dacd3": {
+   "credibility": 0.2292,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 15.42,
+   "n_seasons": 2,
+   "crop": "maize"
+  },
+  "490d1ccb85346a98067fcb1f0875e48083bfd2f8": {
+   "credibility": 0.8958,
+   "mode": "full",
+   "spearman": 1.0,
+   "median_timing_error_days": 4.17,
+   "n_seasons": 3,
+   "crop": "sorghum"
+  },
+  "58e79c28ce1ee65ddef9c80737d789d1f3bb2ae1": {
+   "credibility": 0.0,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 24.67,
+   "n_seasons": 1,
+   "crop": "maize"
+  },
+  "9c9ee9a057bea7043d7eb5bffaca322cb2ec329a": {
+   "credibility": 0.7667,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 4.67,
+   "n_seasons": 2,
+   "crop": "sorghum"
+  },
+  "635b6de04312850a00d634745e74f97c9b12509b": {
+   "credibility": 0.6208,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 7.58,
+   "n_seasons": 2,
+   "crop": "sorghum"
+  },
+  "3aa4a62c47732c64cd60ce1a6f6f406245cba99c": {
+   "credibility": 0.25,
+   "mode": "full",
+   "spearman": 0.5,
+   "median_timing_error_days": 40.67,
+   "n_seasons": 3,
+   "crop": "sorghum"
+  },
+  "f300b264b3c4c645d8aa7731b7239d3068309597": {
+   "credibility": 0.4833,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 10.33,
+   "n_seasons": 2,
+   "crop": "sorghum"
+  },
+  "b48e13edd44dd716c6ec11fd314265b201c99560": {
+   "credibility": 0.5875,
+   "mode": "full",
+   "spearman": 0.5,
+   "median_timing_error_days": 6.5,
+   "n_seasons": 3,
+   "crop": "maize"
+  },
+  "c5edda3a59c71783407fa1c4220bcdf8c76568ae": {
+   "credibility": 0.8458,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 3.08,
+   "n_seasons": 2,
+   "crop": "sorghum"
+  },
+  "24213b903106fd72ab109470862d366bf02c0928": {
+   "credibility": 0.5,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 10.0,
+   "n_seasons": 2,
+   "crop": "sorghum"
+  },
+  "96dc5aab3636bbd6f201cde44611b4af3af2f803": {
+   "credibility": 0.5458,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 9.08,
+   "n_seasons": 2,
+   "crop": "sorghum"
+  },
+  "d745010999e3b0fff4f751ad78c0fe4bae7b276f": {
+   "credibility": 0.0,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 56.67,
+   "n_seasons": 2,
+   "crop": "maize"
+  },
+  "c0b7e60adc673cf780cce9ce7a6986e310cc5382": {
+   "credibility": 0.3667,
+   "mode": "full",
+   "spearman": 0.5,
+   "median_timing_error_days": 15.33,
+   "n_seasons": 3,
+   "crop": "maize"
+  },
+  "83a98187c0f13a626f5dd1027fa5c81f33c43f12": {
+   "credibility": 0.4875,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 10.25,
+   "n_seasons": 2,
+   "crop": "sorghum"
+  },
+  "10a1086c58e6d4f32e31c7c7c43448bb69201666": {
+   "credibility": 0.8833,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 2.33,
+   "n_seasons": 1,
+   "crop": "maize"
+  },
+  "1d5b5b594e6c54d7c4ddd27b72e0f527bf7162b7": {
+   "credibility": 0.7,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 6.0,
+   "n_seasons": 1,
+   "crop": "sorghum"
+  },
+  "71303789d34cd15e07cc609505ab024bb96dcfd4": {
+   "credibility": 0.6292,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 7.42,
+   "n_seasons": 2,
+   "crop": "sorghum"
+  },
+  "aa4ad7fcef55ad9e9c24a90426f3214471472cd8": {
+   "credibility": 0.15,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 17.0,
+   "n_seasons": 2,
+   "crop": "maize"
+  },
+  "8a79e7d53e6265800428aab023deb918b6341f21": {
+   "credibility": 0.2583,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 14.83,
+   "n_seasons": 2,
+   "crop": "maize"
+  },
+  "d35b7816c3e36e5c196b4f7062b25f067eb07b29": {
+   "credibility": 0.5583,
+   "mode": "full",
+   "spearman": 0.7,
+   "median_timing_error_days": 11.67,
+   "n_seasons": 5,
+   "crop": "sorghum"
+  },
+  "ea1625dff31d189aa5b4d1b805683fa5526d9159": {
+   "credibility": 0.6083,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 7.83,
+   "n_seasons": 1,
+   "crop": "maize"
+  },
+  "aa7e0e311edac276dec2ceb1ac9fa3ea3aa8f59c": {
+   "credibility": 0.7417,
+   "mode": "full",
+   "spearman": 1.0,
+   "median_timing_error_days": 10.33,
+   "n_seasons": 3,
+   "crop": "sorghum"
+  },
+  "5644739d8e3ac4979df87ed536448ea6651e33d2": {
+   "credibility": 0.2167,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 15.67,
+   "n_seasons": 2,
+   "crop": "sorghum"
+  },
+  "f865f8982977ecb13746c804b9f96b086003553d": {
+   "credibility": 0.4042,
+   "mode": "full",
+   "spearman": 0.5,
+   "median_timing_error_days": 13.83,
+   "n_seasons": 3,
+   "crop": "maize"
+  },
+  "3ba5d597e69167f2a27dfd13c68b3c9a2fc713c6": {
+   "credibility": 0.5,
+   "mode": "full",
+   "spearman": 0.5,
+   "median_timing_error_days": 10.0,
+   "n_seasons": 3,
+   "crop": "maize"
+  },
+  "a6f8fbe357539ecbf3798964048295e83097b82d": {
+   "credibility": 0.3167,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 13.67,
+   "n_seasons": 1,
+   "crop": "maize"
+  },
+  "3454cbd8bc213c15805a1d31da009668ff59bc9e": {
+   "credibility": 0.6146,
+   "mode": "full",
+   "spearman": 0.6,
+   "median_timing_error_days": 7.42,
+   "n_seasons": 4,
+   "crop": "sorghum"
+  },
+  "da438bc7b421460080a0eff51b3c16db41d8eec5": {
+   "credibility": 0.0,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 25.58,
+   "n_seasons": 2,
+   "crop": "sorghum"
+  },
+  "e202b5664876c0808f86e018b040ec4fac69a1f9": {
+   "credibility": 0.7229,
+   "mode": "full",
+   "spearman": 1.0,
+   "median_timing_error_days": 11.08,
+   "n_seasons": 4,
+   "crop": "maize"
+  },
+  "72e4ed0bd7f51ca59348e36b7a7caa892024a0d4": {
+   "credibility": 0.6417,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 7.17,
+   "n_seasons": 2,
+   "crop": "sorghum"
+  },
+  "925a4f8329ad4bccc172215cafa0c7019945046c": {
+   "credibility": 0.85,
+   "mode": "full",
+   "spearman": 1.0,
+   "median_timing_error_days": 6.0,
+   "n_seasons": 3,
+   "crop": "sorghum"
+  },
+  "9a5bd695c8670424a7a65c29e9aae5b25921dd1a": {
+   "credibility": 0.5375,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 9.25,
+   "n_seasons": 2,
+   "crop": "sorghum"
+  },
+  "4da67b6118bf018e60a71259e2411c9c932bf960": {
+   "credibility": 0.5667,
+   "mode": "full",
+   "spearman": 0.5,
+   "median_timing_error_days": 7.33,
+   "n_seasons": 3,
+   "crop": "maize"
+  },
+  "2e29208638ee43dbdf537fb7bc8fd57733f35b41": {
+   "credibility": 0.3,
+   "mode": "full",
+   "spearman": 0.2,
+   "median_timing_error_days": 12.0,
+   "n_seasons": 4,
+   "crop": "maize"
+  },
+  "814fdaf97d79e37cc7d8060fe97ee9294ecf2e7d": {
+   "credibility": 0.5417,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 9.17,
+   "n_seasons": 2,
+   "crop": "maize"
+  },
+  "d11fd9d2d1007f1503dbe0fa67f5af8630d070f9": {
+   "credibility": 0.6333,
+   "mode": "full",
+   "spearman": 0.5,
+   "median_timing_error_days": 4.67,
+   "n_seasons": 3,
+   "crop": "sorghum"
+  },
+  "290d2e24b3b6122ce4ec3a086b50b981d386222a": {
+   "credibility": 0.675,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 6.5,
+   "n_seasons": 2,
+   "crop": "sorghum"
+  },
+  "0c55fbd7be97dc07594bd77e3430e976d7d7eadc": {
+   "credibility": null,
+   "mode": "not_assessable",
+   "n_seasons": 0,
+   "crop": null
+  },
+  "acc388cde861e2bb3f52052c7704422c4f0e5698": {
+   "credibility": 0.0083,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 19.83,
+   "n_seasons": 2,
+   "crop": "maize"
+  },
+  "c945502188e5a74716646ec3a9cc04a7d5421a0e": {
+   "credibility": 0.3625,
+   "mode": "full",
+   "spearman": 0.5,
+   "median_timing_error_days": 15.5,
+   "n_seasons": 3,
+   "crop": "maize"
+  },
+  "bd5ea7903fa160a316466daf9c6aec8d2bb02d39": {
+   "credibility": 0.325,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 13.5,
+   "n_seasons": 1,
+   "crop": "sorghum"
+  },
+  "92ab7c28dc61a826b8145085af6f26847728ae55": {
+   "credibility": 0.2667,
+   "mode": "full",
+   "spearman": -0.5,
+   "median_timing_error_days": 9.33,
+   "n_seasons": 3,
+   "crop": "sorghum"
+  },
+  "13c9aa108f76fa30771be67f759e8b2a7f7e4ec0": {
+   "credibility": 0.6042,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 7.92,
+   "n_seasons": 2,
+   "crop": "maize"
+  },
+  "cdadeb6564815ef8deb626784c7109a4c0141e9e": {
+   "credibility": 0.7292,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 5.42,
+   "n_seasons": 2,
+   "crop": "sorghum"
+  },
+  "d993613144e6e75b8de17a452205a396167c7d45": {
+   "credibility": null,
+   "mode": "not_assessable",
+   "n_seasons": 0,
+   "crop": null
+  },
+  "b80503bc89a169d8f8388e0779e67e159f058fcf": {
+   "credibility": 0.8,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 4.0,
+   "n_seasons": 2,
+   "crop": "sorghum"
+  },
+  "ba8e47010bd2cf8a36b5ac8dda51273c38721f72": {
+   "credibility": 0.4833,
+   "mode": "full",
+   "spearman": 0.4,
+   "median_timing_error_days": 8.67,
+   "n_seasons": 5,
+   "crop": "maize"
+  },
+  "5a7a0f5fb6b738d6a972f14ef76f18b58188c177": {
+   "credibility": 0.55,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 9.0,
+   "n_seasons": 2,
+   "crop": "sorghum"
+  },
+  "8f036436f1926668e98386c028832dc0ef4a5378": {
+   "credibility": 0.0,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 22.25,
+   "n_seasons": 2,
+   "crop": "sorghum"
+  },
+  "4b4da0dc696fedea0e910c211b959aec20b7442f": {
+   "credibility": 0.0,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 100.33,
+   "n_seasons": 1,
+   "crop": "maize"
+  },
+  "19614de2684e8fd84a10f9e510ae828736927d76": {
+   "credibility": 0.6333,
+   "mode": "full",
+   "spearman": 0.5,
+   "median_timing_error_days": 4.67,
+   "n_seasons": 3,
+   "crop": "maize"
+  },
+  "52b855bab4eeee0e18c494bbee983ec37dc01b36": {
+   "credibility": 0.55,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 9.0,
+   "n_seasons": 2,
+   "crop": "sorghum"
+  },
+  "1231336358a1e11061fa1a6aeb5201fb547a24b9": {
+   "credibility": 0.2,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 16.0,
+   "n_seasons": 2,
+   "crop": "maize"
+  },
+  "6ba7f6593ef9e2dc09cbbf30b3b4325e5f4ac5d1": {
+   "credibility": 0.875,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 2.5,
+   "n_seasons": 1,
+   "crop": "maize"
+  },
+  "1fe9a708d8484a8d64638522a5b30b520d1b5cf3": {
+   "credibility": 0.3083,
+   "mode": "full",
+   "spearman": 0.5,
+   "median_timing_error_days": 17.67,
+   "n_seasons": 3,
+   "crop": "maize"
+  },
+  "77a934247a706dff9d8574059e22b84e7a95ff6f": {
+   "credibility": 0.0,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 45.33,
+   "n_seasons": 2,
+   "crop": "maize"
+  },
+  "4d89c333e7f0eefcabc4993a446b1eed3a2f2e95": {
+   "credibility": 0.3958,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 12.08,
+   "n_seasons": 2,
+   "crop": "sorghum"
+  },
+  "f52acb45e8b5b82b5964e8682826435a925e8692": {
+   "credibility": 0.5333,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 9.33,
+   "n_seasons": 1,
+   "crop": "maize"
+  },
+  "ce244a1b7c1aa288698d345721ec17741f2777a0": {
+   "credibility": 0.6104,
+   "mode": "full",
+   "spearman": 0.8,
+   "median_timing_error_days": 11.58,
+   "n_seasons": 4,
+   "crop": "maize"
+  },
+  "8f610d76f179486063f84cc30981abd983365d66": {
+   "credibility": 0.3583,
+   "mode": "full",
+   "spearman": 0.4,
+   "median_timing_error_days": 13.67,
+   "n_seasons": 4,
+   "crop": "maize"
+  },
+  "f30e4e4d033a432232391184984fca9f02ee24b5": {
+   "credibility": 0.5458,
+   "mode": "full",
+   "spearman": 0.5,
+   "median_timing_error_days": 8.17,
+   "n_seasons": 3,
+   "crop": "sorghum"
+  },
+  "f9e135796e8243385aae5793ccc5b97fd9c0e5d1": {
+   "credibility": 0.6083,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 7.83,
+   "n_seasons": 2,
+   "crop": "maize"
+  },
+  "90d2b4b975f20d3c1f54961f71501979f2d99233": {
+   "credibility": 0.0667,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 18.67,
+   "n_seasons": 1,
+   "crop": "maize"
+  },
+  "efc10a42fd5df1a643af3778f5ff5985f92f70eb": {
+   "credibility": 0.7167,
+   "mode": "full",
+   "spearman": 1.0,
+   "median_timing_error_days": 11.33,
+   "n_seasons": 3,
+   "crop": "maize"
+  },
+  "0d0dca4303fc4160a3e62f48a89809495e20f2db": {
+   "credibility": 0.3917,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 12.17,
+   "n_seasons": 1,
+   "crop": "maize"
+  },
+  "8cade17879c0924726f6e36ae38ce149904dce4e": {
+   "credibility": 0.0667,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 18.67,
+   "n_seasons": 1,
+   "crop": "sorghum"
+  },
+  "4e84988f9474ddf714e7e11b29d9f80932018c64": {
+   "credibility": 0.7917,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 4.17,
+   "n_seasons": 1,
+   "crop": "sorghum"
+  },
+  "a80d3a3238be1ff94c4357ad25722af2faf397ac": {
+   "credibility": 0.6083,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 7.83,
+   "n_seasons": 2,
+   "crop": "sorghum"
+  },
+  "3a9ea46fc0390bbd459c7d60b91f5fbf428d7d22": {
+   "credibility": 0.1083,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 17.83,
+   "n_seasons": 2,
+   "crop": "maize"
+  },
+  "03c35905c7b53a3f456b98f88a0c47acd7209cbb": {
+   "credibility": 0.4333,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 11.33,
+   "n_seasons": 2,
+   "crop": "maize"
+  },
+  "474345acff3ccb0ac2fe4fcf94cebf1019903923": {
+   "credibility": 0.6583,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 6.83,
+   "n_seasons": 1,
+   "crop": "sorghum"
+  },
+  "5a6232376078efae40e5fda26684ab19c7bb6c77": {
+   "credibility": 0.5,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 10.0,
+   "n_seasons": 1,
+   "crop": "sorghum"
+  },
+  "36d838d85e96ad2538320b1ce0b5668a8f44101d": {
+   "credibility": 0.475,
+   "mode": "full",
+   "spearman": 0.5,
+   "median_timing_error_days": 11.0,
+   "n_seasons": 3,
+   "crop": "maize"
+  },
+  "58303d3d4cf73b34fae90ab0f1aaeb749fd2efe2": {
+   "credibility": 0.7958,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 4.08,
+   "n_seasons": 2,
+   "crop": "maize"
+  },
+  "d7aa55ae1684d1529bf9a022920d35651f57466f": {
+   "credibility": 0.0,
+   "mode": "timing_only",
+   "spearman": null,
+   "median_timing_error_days": 49.58,
+   "n_seasons": 2,
+   "crop": "maize"
+  }
+ }
+}
