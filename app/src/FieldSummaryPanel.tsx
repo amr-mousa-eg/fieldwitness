@@ -4,7 +4,7 @@ import { optionName, t } from "./strings";
 import { TagBadge } from "./tags";
 
 export function FieldSummaryPanel({ summary }: { summary: ComparisonSummary }) {
-  const { currentOption, topAlternative, isCurrentBest, tokens, metrics } = summary;
+  const { currentOption, topAlternative, isCurrentBest, currentNotSimulated: ns, tokens, metrics } = summary;
   const target = topAlternative ?? currentOption;
 
   return (
@@ -62,22 +62,24 @@ export function FieldSummaryPanel({ summary }: { summary: ComparisonSummary }) {
                 {metrics.water_use.label}{" "}
                 <TagBadge tag={metrics.water_use.tag} source={metrics.water_use.source} />
               </th>
-              <td>
-                {metrics.water_use.currentValue.toLocaleString()} {metrics.water_use.unit}
+              <td className={ns ? "muted" : undefined}>
+                {ns ? t("season.notSimulated") : `${metrics.water_use.currentValue.toLocaleString()} ${metrics.water_use.unit}`}
               </td>
               <td>
                 {metrics.water_use.topValue.toLocaleString()} {metrics.water_use.unit}
               </td>
               <td
                 className={
-                  metrics.water_use.isAboutTheSame
+                  ns || metrics.water_use.isAboutTheSame
                     ? "diff-same"
                     : metrics.water_use.diff < 0
                     ? "diff-pro"
                     : "diff-con"
                 }
               >
-                {metrics.water_use.isAboutTheSame
+                {ns
+                  ? "—"
+                  : metrics.water_use.isAboutTheSame
                   ? t("summary.aboutTheSame")
                   : `${metrics.water_use.diff > 0 ? "+" : ""}${metrics.water_use.diff} ${
                       metrics.water_use.unit
@@ -89,22 +91,24 @@ export function FieldSummaryPanel({ summary }: { summary: ComparisonSummary }) {
                 {metrics.bad_year_water.label}{" "}
                 <TagBadge tag={metrics.bad_year_water.tag} source={metrics.bad_year_water.source} />
               </th>
-              <td>
-                {metrics.bad_year_water.currentValue.toLocaleString()} {metrics.bad_year_water.unit}
+              <td className={ns ? "muted" : undefined}>
+                {ns ? t("season.notSimulated") : `${metrics.bad_year_water.currentValue.toLocaleString()} ${metrics.bad_year_water.unit}`}
               </td>
               <td>
                 {metrics.bad_year_water.topValue.toLocaleString()} {metrics.bad_year_water.unit}
               </td>
               <td
                 className={
-                  metrics.bad_year_water.isAboutTheSame
+                  ns || metrics.bad_year_water.isAboutTheSame
                     ? "diff-same"
                     : metrics.bad_year_water.diff < 0
                     ? "diff-pro"
                     : "diff-con"
                 }
               >
-                {metrics.bad_year_water.isAboutTheSame
+                {ns
+                  ? "—"
+                  : metrics.bad_year_water.isAboutTheSame
                   ? t("summary.aboutTheSame")
                   : `${metrics.bad_year_water.diff > 0 ? "+" : ""}${metrics.bad_year_water.diff} ${
                       metrics.bad_year_water.unit
@@ -116,22 +120,24 @@ export function FieldSummaryPanel({ summary }: { summary: ComparisonSummary }) {
                 {metrics.bare_soil.label}{" "}
                 <TagBadge tag={metrics.bare_soil.tag} source={metrics.bare_soil.source} />
               </th>
-              <td>
-                {metrics.bare_soil.currentValue.toFixed(1)} {metrics.bare_soil.unit}
+              <td className={ns ? "muted" : undefined}>
+                {ns ? t("season.notSimulated") : `${metrics.bare_soil.currentValue.toFixed(1)} ${metrics.bare_soil.unit}`}
               </td>
               <td>
                 {metrics.bare_soil.topValue.toFixed(1)} {metrics.bare_soil.unit}
               </td>
               <td
                 className={
-                  metrics.bare_soil.isAboutTheSame
+                  ns || metrics.bare_soil.isAboutTheSame
                     ? "diff-same"
                     : metrics.bare_soil.diff < 0
                     ? "diff-pro"
                     : "diff-con"
                 }
               >
-                {metrics.bare_soil.isAboutTheSame
+                {ns
+                  ? "—"
+                  : metrics.bare_soil.isAboutTheSame
                   ? t("summary.aboutTheSame")
                   : `${metrics.bare_soil.diff > 0 ? "+" : ""}${metrics.bare_soil.diff.toFixed(1)} ${
                       metrics.bare_soil.unit
@@ -147,7 +153,9 @@ export function FieldSummaryPanel({ summary }: { summary: ComparisonSummary }) {
                 <span className={`grade grade-${target.grade}`}>{target.grade}</span>
               </td>
               <td>
-                {currentOption.grade === target.grade
+                {ns
+                  ? "—"
+                  : currentOption.grade === target.grade
                   ? t("summary.aboutTheSame")
                   : `${currentOption.grade} → ${target.grade}`}
               </td>

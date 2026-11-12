@@ -199,3 +199,23 @@ describe("sentence verification across all real Kansas pilot packs", () => {
     }
   });
 });
+
+describe("history-only Current (not simulated)", () => {
+  it("never calls an unsimulated Current best and flags it instead of showing 0", () => {
+    const cur: Option = { ...mockOption("current", ["perennial_forage", "sorghum", "sorghum"], 0, 0, 0, "D", 1), metrics: {} };
+    const alt = mockOption("opt1", ["sorghum", "fallow", "sorghum"], 1817, 2086, 200, "D", 2);
+    const s = generateFieldSummary(mockPack([cur, alt]), DEFAULT_PRIORITIES, NO_CONSTRAINTS, null);
+    expect(s.currentNotSimulated).toBe(true);
+    expect(s.isCurrentBest).toBe(false);
+    expect(s.sentence).toContain("not simulated");
+    expect(s.sentence).not.toContain("ranks best");
+    expect(s.topAlternative?.option_id).toBe("opt1");
+  });
+
+  it("leaves a fully simulated Current unflagged", () => {
+    const cur = mockOption("current", ["maize", "sorghum", "fallow"], 1500, 1700, 600, "C", 1);
+    const alt = mockOption("opt1", ["sorghum", "fallow", "sorghum"], 1400, 1600, 500, "C", 2);
+    const s = generateFieldSummary(mockPack([cur, alt]), DEFAULT_PRIORITIES, NO_CONSTRAINTS, null);
+    expect(s.currentNotSimulated).toBe(false);
+  });
+});
