@@ -19,6 +19,7 @@ import {
   plantsPerSide,
   waterFillFraction,
 } from "./field3d/growth";
+import { isCoverWeek } from "./field3d/farm";
 import { frameGeometry, grainTexture, plantBody, plantHead, rootTemplate, weedRosette } from "./field3d/geometry";
 import { ThemeBinder } from "./field3d/themed";
 
@@ -49,6 +50,7 @@ export interface Field3DSceneProps {
     irrigation: number;
     rootDepth: number;
     historyOnly: string | null;
+    cover: boolean;
   } | null) => void;
 }
 
@@ -398,6 +400,22 @@ export function Field3DScene({
       scene.add(weeds);
     }
 
+    // Cover-crop weeks (same rule as the farm view, `isCoverWeek`): a green mat sized by the canopy
+    // proxy, instead of the sparse fallow weeds.
+    const coverRnd = seededRandom(SEED + 11);
+    const coverMat = T.color(keep(new THREE.MeshLambertMaterial({ side: THREE.DoubleSide })), 0x5aa845, 0x7fd06a);
+    const coverN = quality.weeds * 3;
+    const coverMesh = new THREE.InstancedMesh(keep(weedRosette()), coverMat, coverN);
+    const coverBase = Array.from({ length: coverN }, () => ({
+      x: (coverRnd() * 2 - 1) * FIELD_HALF,
+      z: (coverRnd() * 2 - 1) * FIELD_HALF,
+      yaw: coverRnd() * Math.PI * 2,
+    }));
+    coverMesh.castShadow = true;
+    coverMesh.renderOrder = 8;
+    coverMesh.visible = false;
+    scene.add(coverMesh);
+
     // --- Weather: rain drops (count ∝ weekly rain) and drip irrigation lines (irrigation > 0) ---
     const dropGeo = keep(new THREE.CylinderGeometry(0.004, 0.004, 0.08, 3));
     const rain = new THREE.InstancedMesh(
@@ -496,7 +514,18 @@ export function Field3DScene({
       for (const [k, set] of plantSets) {
         if (k !== kind) set.body.visible = set.head.visible = false;
       }
-      weeds.visible = kind === "fallow" && !hist;
+      const cover = !hist && kind === "fallow" && isCoverWeek(opt, scen, w);
+      weeds.visible = kind === "fallow" && !hist && !cover;
+      coverMesh.visible = cover;
+      if (cover) {
+        const sc = 0.9 + 1.6 * Math.max(0, Math.min(1, canopy));
+        coverBase.forEach((b, i) => {
+          tmpE.set(0, b.yaw, 0);
+          tmpQ.setFromEuler(tmpE);
+          coverMesh.setMatrixAt(i, tmpM.compose(tmpP.set(b.x, 0.006, b.z), tmpQ, tmpS.set(sc, sc, sc)));
+        });
+        coverMesh.instanceMatrix.needsUpdate = true;
+      }
       if (kind !== "fallow") {
         const growth = seasonGrowth(opt.crops, opt.stages, scen.canopy_cover, w);
         const set = plantsFor(kind);
@@ -703,6 +732,7 @@ export function Field3DScene({
         set.head.dispose();
       }
       weeds.dispose();
+      coverMesh.dispose();
       rain.dispose();
       irrigation.traverse((o) => {
         if (o instanceof THREE.InstancedMesh) o.dispose();
@@ -734,6 +764,7 @@ export function Field3DScene({
       irrigation: scenario.irrigation_mm[w] ?? 0,
       rootDepth: option.root_depth_m[w] ?? 0,
       historyOnly: historyOnlyKey(option.sequence, option.crops, w),
+      cover: historyOnlyKey(option.sequence, option.crops, w) === null && isCoverWeek(option, scenario, w),
     });
   }, [weekIndex, scenario, option, onHoverData]);
 
