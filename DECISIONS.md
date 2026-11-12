@@ -599,6 +599,40 @@ Written and committed before executing the diagnostic analysis or inspecting res
 2. **Fix.** Shared theme store (`subscribeTheme`, `THEME_EVENT`, `useSyncExternalStore`; also follows other tabs and the system setting). `ThemeBinder` re-applies registered colours, opacities and lights in place. View panes are mounted on first show and then only hidden (`hidden`, paused off screen by the IntersectionObserver).
 3. **Measured (headless Chrome, software WebGL, no GPU; click -> second rAF = frame painted; median of 5 after the first visit).** Before: desktop 898–1486 ms, phone (390 px, 4x CPU) 170–1207 ms; heap 8.0 -> 10.5 MB after 20 toggles. After: desktop next frame starts 21–62 ms, painted 120–253 ms (software raster of a resized canvas; the 100 ms target is met only for the frame start); phone painted 42–85 ms (target 250 ms met). First visit of a pane still builds it once (~1.1–1.8 s). Heap after all panes built 11.41 MB -> 11.47 MB after 20 more toggles (desktop), 11.18 -> 11.59 MB (phone); canvases stay at 3. Live dark switch: 338 ms to painted (desktop, software), same canvas elements. Not measured on a real GPU or phone.
 
+## 2026-11-12 — Pre-registration: reliability tiers learned from measured error (branch `experiment/reliability-grades`)
+
+Written and committed before any feature is computed or any model fitted. Not changed afterwards; changes go in a new dated entry with the reason. Nothing here changes main, packs, the app, `config/grading.yaml` or any default. Tiers are named R1–R4; they are **not** evidence grades and do not use the neighbour witness.
+
+**Baseline verified (`results/hindcast/grade_validity.json`, `scripts/t7_grade_validity.py`):** grade per field-season at cut-off 2021-12-31: D if the fit source is the prior; B if the field's cut-off credibility ≥ 0.6; else C. Metric: forecast-mode canopy-integral CRPS, n = 463 (2022–2024). Grade B 16.96 [15.07, 18.95] (n 170), C 17.30 [15.28, 19.56] (n 268), D 24.02 [14.04, 31.25] (n 25); D − B 7.07 [−3.28, 14.32]: not shown.
+
+**Data.** Training: the conformal experiment's rolling-origin pseudo-forecasts for seasons 2019, 2020, 2021 (cut-offs 2018, 2019, 2020), copied from the local checkout of branch `experiment/conformal` (PR #14) to `results/hindcast/reliability/from_conformal/` (SHA-256 listed in the outputs). The cut-off-2021 file of that run equals the published records (200/200 fields, parsed JSON; the files differ only in line endings). Test, used once at the end: the published 2022–2024 records. 2025: no clean-test records exist locally, so not used.
+
+**Unit:** one field-season, forecast run, crops maize, sorghum, winter wheat.
+
+**Primary target:** y = log(CRPS_ci / S), where CRPS_ci is the stored canopy-integral CRPS and S = max(1.0, median observed canopy integral of the same field and crop over its scored seasons in the same data set) (training: 2019–2021; test: 2022–2024). The floor 1.0 is a team choice (tag A). **Secondary target:** absolute peak-timing error (|err_median| of the peak day), reported with the same tiers.
+
+**Features (fixed; all known at that forecast's cut-off; NO year, NO outcome of the predicted season):**
+1. `n_clear_fit`: number of clear HLS observations (de-duplicated days 1–365) summed over the field's fit seasons. Fit season = labelled maize/sorghum/winter-wheat season with year ≤ cut-off and ≥ 10 clear observations (the T7.1 rule, without its weather-completeness check).
+2. `credibility`: `compute_cutoff_credibility` (scripts/t7_grade_validity.py) run with the cut-off of that forecast; missing (not assessable) → NaN.
+3. `rel_spread`: (q95 − q5) / q50 of the forecast canopy integral (the prediction itself, made at the cut-off).
+4. `crop`: one-hot.
+5. `area_ha`: pilot field area.
+Unit test: each feature is recomputed after removing all data dated after the cut-off and must not change.
+
+**Models (fixed hyper-parameters, tag A):** (a) null: training mean; (b) crop: per-crop training mean; (c) grade: linear regression of y on the grade number (B = 1, C = 2, D = 3; grade computed as in t7 at that forecast's cut-off); (d) credibility: linear regression on credibility plus a missing indicator (NaN filled with 0); (e) `sklearn.ensemble.HistGradientBoostingRegressor(max_depth=2, max_iter=100, learning_rate=0.1, min_samples_leaf=20, random_state=20261114)` on all 5 features. Simplicity order a < b < c < d < e.
+
+**Model choice (training data only):** leave-one-10-km-block-out CV on 2019–2021. CV loss = mean squared error of the held-out predictions of y; SE = sd of the per-row squared errors / √n. Chosen model = the simplest model whose CV loss ≤ (best CV loss + its SE).
+
+**Tiers:** fit the chosen model on all training rows; tier boundaries = the 25/50/75 % quantiles of its predictions on the training rows; R1 = lowest predicted error … R4 = highest. Boundaries frozen and applied unchanged to the test years. If the chosen model gives fewer than 4 distinct predictions, ties go to the lower tier, and empty tiers are reported as such.
+
+**Test (once, 2022–2024):** per tier, n, mean forecast canopy-integral CRPS (raw), 95 % spatial block bootstrap CI (`block_bootstrap` of `scripts/t7_diagnosis.py`; 10 km blocks, 1,000 resamples, seed 42); n < 20: "too few to judge". Spearman between predicted y and realised y, pooled and per crop, CI from the same block resampling. Breakdowns per crop and per year. Tiers built from crop alone (model b), and the current grades, are shown alongside.
+
+**Gate (all four must hold, pooled 2022–2024; otherwise "not shown"):** (i) mean realised CRPS ordered R1 < R2 < R3 < R4; (ii) the block-bootstrap CI of mean(R4) − mean(R1) excludes 0; (iii) the Spearman CI (predicted vs realised y) excludes 0; (iv) model (e) beats models (b) and (c) on test Spearman: the CI of each difference ρ(e) − ρ(b) and ρ(e) − ρ(c) is entirely > 0. Condition (iv) is evaluated even if (e) is not the chosen model. Per crop and per year: the same checks, reported, not part of the gate.
+
+**Honesty checks:** tiers from crop alone vs the chosen tiers (how much of the separation is crop); mean realised CRPS in the test years vs the training years. Tiers are relative reliability only, not a promised error size.
+
+**Outputs:** `results/hindcast/reliability/` (training table, CV table, model and frozen boundaries JSON, test-by-tier CSV + md, per-crop and per-year breakdowns, plot), `docs/RELIABILITY_TIERS_EXPERIMENT.md`.
+
 ## Handoff
 2026-11-11: Methods diagram redesigned (Item 9, branch `claude/methods-diagram-721d67`); try-it tour rebuilt (bottom card, 7 steps ticked by real `fw:tour` app events, Skip restores start page; branch `claude/try-it-tour-bc2305`); independent SSURGO soil check done (branch `claude/ssurgo-check-be7ff1`, `scripts/check_ssurgo.py`, `results/validation/soil_ssurgo_check.*`): negative, simulation TAW ≈ half of SSURGO, no correlation. See PLAN.md Phase 12; then 3D realism pass (branch `claude/field3d-realism-f326e2`: procedural layered soil, water fill line, instanced crops, rain/irrigation from pack data, phone caps, fps fallback).
 Checks after merging main (tour, diagram, soil) into the 3D branch: vitest, typecheck, build, keyboard and overflow (360/390 px), pytest and ruff all green (vitest 163 passed / 1 skipped; pytest 255 passed / 7 skipped). Known, not fixed: timing test `test_runtime_all_candidates_one_field` can exceed 60 s under load; React duplicate-key warning `fallow` from CorrectionPanel (predates all four).
