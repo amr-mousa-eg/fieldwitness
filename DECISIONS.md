@@ -609,3 +609,57 @@ Next: user reviews tour screenshots; freeze after 12 Nov EOD; tag `v1.0-spaceapp
 
 1. **What:** added `docs/COORDINATION.md`, which covers the rules for Claude Code (laptop 1) and Google Antigravity (laptop 2), branch prefixes (`claude/`, `experiment/`, `docs/` vs `ag/`), hotspot files and an "Active work" table. The owner approved protecting `main` with branch protection: a pull request is required (0 approvals), force pushes and deletion are blocked, and the rules are enforced for administrators. The owner also approved a ruleset that blocks deleting or updating the tag `v1.0-spaceapps`.
 2. **Why:** two agents now push to the same repository. The table and the prefixes keep them off each other's files. `DECISIONS.md` is append-only per agent, so neither rewrites the other's record. From now on every change to `main` goes through a pull request that the owner merges. This ends the earlier standing permission to push to `main`.
+
+## 2026-11-12 — [claude-code] PRE-REGISTRATION: bias diagnosis and per-crop centre recalibration (experiment, branch `experiment/bias-diagnosis`)
+
+Written and committed before any analysis is run. Nothing here changes `main`, packs, the app, config or defaults. Any change to this plan needs a new dated entry.
+
+1. **Question.** Why are the 2022–2024 forecast errors larger and biased (conformal work: about 31% of observed maize and wheat values above the predicted median; forced-weather 90% coverage 21% / 35% / 14%)? Does a simple per-crop correction fitted on 2019–2021 remove the bias on 2022–2024? Tuning until a number looks good is not a goal.
+2. **Data.**
+   - Fit: ONLY the out-of-sample pseudo-forecasts with cut-offs 2018, 2019, 2020 (seasons 2019, 2020, 2021; 432 field-seasons), copied read-only from branch `experiment/conformal` commit `c56a917`, `results/hindcast/conformal/pseudo_cut{2018,2019,2020}.jsonl`. `pseudo_cut2021` overlaps the test years and is not used.
+   - Test, used once at the end: `results/hindcast/ks_t14slh_records.jsonl` (cut-off 31 Dec 2021, seasons 2022–2024).
+   - 2025: not used (no local records).
+   - Blocks and areas: `results/pilot_fields/ks_t14slh.csv` (`block` = 10 km cell, `area_ha`).
+3. **Part A, diagnosis (no fitting).**
+   - For forecast and forced modes, per crop and per year 2019–2024: n, the median signed error and the mean absolute error of the canopy integral and of peak timing.
+   - Signed error = predicted median − observed (the stored `err_median`).
+   - 95% CIs by spatial block bootstrap: resample 10 km blocks with replacement, 1,000 resamples, seed 20261114. Cells with n < 20 are "too few to judge".
+   - Drivers, forecast mode, canopy signed error, Spearman rho with block-bootstrap CI, separately for 2019–2021 and 2022–2024:
+     - (a) seasonal rain anomaly (% of the 2001-to-cut-off-year mean) and temperature anomaly (°C, mean daily Tmax/Tmin average), from NASA POWER read through `fieldwitness.data.power.read`. The climatology is computed under `as_of(cut-off)`; the season itself is read under `as_of(cut-off)` + `forcing_weather()`, as in forced mode. Season windows (team choice, A): Apr–Sep of year Y for maize and sorghum; Oct (Y−1) to Jun (Y) for winter wheat.
+     - (b) number of clear HLS observations in the same window (`data/fields/ks_t14slh_hls_series.parquet`, rows with `n_clear` > 0).
+     - (c) field area (ha).
+   - A driver "tracks" the bias only if its rho CI excludes 0. Otherwise the text says "cause not established".
+4. **Part B, corrections, fitted per crop on forecast-mode fit data only (crops with n ≥ 20 in the fit data).**
+   - (1) A constant multiplier m on all five canopy-integral quantiles: m = median(observed / predicted median).
+   - (2) An isotonic increasing map from predicted median to observed canopy integral (scikit-learn `IsotonicRegression`, `out_of_bounds="clip"`), applied to each quantile.
+   - (3) A peak-timing shift s (days) added to all five peak quantiles: s = −median(signed peak error).
+   - Selection for canopy: candidates in order of simplicity (none, (1), (2)). Score each by 5-fold spatial-block cross-validation (folds = 10 km blocks, seed 20261114) on mean canopy CRPS. Pick the simplest candidate whose mean is within one standard error of the best. (3) is adopted for a crop only if its CV mean absolute peak error beats "none" by more than one SE.
+   - The chosen corrections are frozen in `results/hindcast/bias_diagnosis/frozen_corrections.json` before the test data is read, then applied unchanged to 2022–2024.
+5. **CRPS estimator.** Only five quantiles (0.05, 0.25, 0.5, 0.75, 0.95) are stored. Before and after correction, CRPS is approximated as 2 × the mean pinball loss over these five levels (the same estimator both times). The stored sample CRPS is not compared with it.
+6. **Gate (forecast mode, test 2022–2024).** For EVERY crop with n ≥ 20 that received a canopy correction, both must hold:
+   - (i) |corrected median signed canopy error| < |raw|, and its 95% block-bootstrap CI includes 0;
+   - (ii) the 95% block-bootstrap CI of the mean paired canopy CRPS difference (corrected − raw) has an upper bound ≤ 0, i.e. it excludes "worse".
+   - Coverage of the 50% and 90% ranges, before and after, is reported as information only.
+   - If the fit-period (2019–2021) median signed canopy error and the test-period one have opposite signs, or the fit-period CI includes 0, the report says "the shift is year-specific; a fixed correction cannot fix it", and nothing is adopted.
+   - Whatever the result, nothing is adopted into `main` by this experiment.
+7. **Outputs.** `results/hindcast/bias_diagnosis/` (CSV + md tables, plots of signed error by crop and year with CIs, both modes), `docs/BIAS_DIAGNOSIS.md` (1 page), unit tests for the aggregation and the three corrections. No file under `app/`, `packs/` or `config/` changes.
+
+## 2026-11-12 — [claude-code] RESULT: bias diagnosis and per-crop centre recalibration — gate FAILED, not adopted
+
+1. **Ran** exactly as pre-registered above (commit eb19a5b). Outputs are in `results/hindcast/bias_diagnosis/`; summary in `docs/BIAS_DIAGNOSIS.md`.
+2. **Diagnosis.** In forecast mode, maize and winter wheat over-predict the canopy integral in 2019–2023, in both the fit and the test periods (same sign; not year-specific). Exception: winter wheat 2024 (about 0). Sorghum is about 0 in 2019–2021 and +11.5 in 2022. Forced mode shows the same pattern.
+3. **Drivers** (Spearman rho of the canopy error):
+   - rain anomaly: negative in both periods (2022–2024: −0.21 [−0.28, −0.13]);
+   - temperature anomaly: −0.31 [−0.38, −0.22] in 2022–2024 only;
+   - clear-observation count: cause not established;
+   - field size: +0.12 in 2019–2021 only.
+4. **Frozen corrections:**
+   - maize: canopy multiplier 0.855, peak shift +10 d;
+   - sorghum: none;
+   - winter wheat: isotonic canopy map, peak shift −35 d.
+5. **Gate (2022–2024): FAIL.**
+   - Maize: bias +11.25 → +1.13, CI includes 0, but the CRPS-difference CI [−2.92, +0.53] does not exclude "worse".
+   - Winter wheat: CRPS clearly better (−3.27 [−4.25, −2.25]), but the bias stays at +5.87 [+0.81, +8.80], which excludes 0.
+   - Sorghum: no correction.
+6. **Decision:** not adopted; nothing changes on `main`. Draft PR only.
+7. **Next (not done):** test whether a dryness-dependent term, or a soil water capacity prior set from SSURGO, explains the bias. That would need its own pre-registration.
