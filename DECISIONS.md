@@ -609,3 +609,19 @@ Next: user reviews tour screenshots; freeze after 12 Nov EOD; tag `v1.0-spaceapp
 
 1. **What:** added `docs/COORDINATION.md`, which covers the rules for Claude Code (laptop 1) and Google Antigravity (laptop 2), branch prefixes (`claude/`, `experiment/`, `docs/` vs `ag/`), hotspot files and an "Active work" table. The owner approved protecting `main` with branch protection: a pull request is required (0 approvals), force pushes and deletion are blocked, and the rules are enforced for administrators. The owner also approved a ruleset that blocks deleting or updating the tag `v1.0-spaceapps`.
 2. **Why:** two agents now push to the same repository. The table and the prefixes keep them off each other's files. `DECISIONS.md` is append-only per agent, so neither rewrites the other's record. From now on every change to `main` goes through a pull request that the owner merges. This ends the earlier standing permission to push to `main`.
+
+## 2026-11-12 — [claude-code] Housekeeping: branch protection record, Tasks 1–4 status
+
+1. **Branch protection for `main`, as applied by the owner on 12 Nov 2026 (owner's report):** pull request required, 0 approvals, admins enforced, force pushes and deletions blocked.
+   - **Verification in this session:** the read-only `gh api .../branches/main/protection` call was refused by the permission layer, so the settings were NOT read back directly.
+   - **Indirect evidence:** the owner merged PRs #19 and #20 at 17:56–17:57 UTC with 0 reviews. A required approval count of 1 or more would block that while admins are enforced, so this fits "0 approvals". The admin, force-push and deletion settings were not re-checked.
+2. **Ruleset "protect v1.0-spaceapps"** (id 27138383): target tag, enforcement active, per the earlier session's read. The read-only `gh api .../rulesets/27138383` call was refused this session, so its include pattern and rules are still unconfirmed.
+3. **Tasks of this session:**
+   - Task 1, app fix: PR #19, merged by the owner. The summary shows "not simulated" instead of 0 for a history-only current rotation.
+   - Task 2, bilingual guide: PR #20, merged by the owner.
+   - Task 3, bias diagnosis: draft PR #21, gate failed, not adopted.
+   - Task 4: this entry.
+4. **Still open:** cover-crop seasons render as bare fallow in 3D (`app/src/field3d/growth.ts`, `toCropKind`); the Arabic guide needs a native-speaker review.
+5. **Local clean-up that needs the owner** (nothing was deleted by Claude Code):
+   - the 3.76 GB ZIP `data/csb_2025_tmp/NationalCSB_2018-2025_rev23.zip`;
+   - the spare worktree `.claude/worktrees/docs-coordination` (branch `docs/coordination`, already merged as #16).
