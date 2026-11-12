@@ -643,3 +643,23 @@ Written and committed before any analysis is run. Nothing here changes `main`, p
    - If the fit-period (2019–2021) median signed canopy error and the test-period one have opposite signs, or the fit-period CI includes 0, the report says "the shift is year-specific; a fixed correction cannot fix it", and nothing is adopted.
    - Whatever the result, nothing is adopted into `main` by this experiment.
 7. **Outputs.** `results/hindcast/bias_diagnosis/` (CSV + md tables, plots of signed error by crop and year with CIs, both modes), `docs/BIAS_DIAGNOSIS.md` (1 page), unit tests for the aggregation and the three corrections. No file under `app/`, `packs/` or `config/` changes.
+
+## 2026-11-12 — [claude-code] RESULT: bias diagnosis and per-crop centre recalibration — gate FAILED, not adopted
+
+1. **Ran** exactly as pre-registered above (commit eb19a5b). Outputs are in `results/hindcast/bias_diagnosis/`; summary in `docs/BIAS_DIAGNOSIS.md`.
+2. **Diagnosis.** In forecast mode, maize and winter wheat over-predict the canopy integral in 2019–2023, in both the fit and the test periods (same sign; not year-specific). Exception: winter wheat 2024 (about 0). Sorghum is about 0 in 2019–2021 and +11.5 in 2022. Forced mode shows the same pattern.
+3. **Drivers** (Spearman rho of the canopy error):
+   - rain anomaly: negative in both periods (2022–2024: −0.21 [−0.28, −0.13]);
+   - temperature anomaly: −0.31 [−0.38, −0.22] in 2022–2024 only;
+   - clear-observation count: cause not established;
+   - field size: +0.12 in 2019–2021 only.
+4. **Frozen corrections:**
+   - maize: canopy multiplier 0.855, peak shift +10 d;
+   - sorghum: none;
+   - winter wheat: isotonic canopy map, peak shift −35 d.
+5. **Gate (2022–2024): FAIL.**
+   - Maize: bias +11.25 → +1.13, CI includes 0, but the CRPS-difference CI [−2.92, +0.53] does not exclude "worse".
+   - Winter wheat: CRPS clearly better (−3.27 [−4.25, −2.25]), but the bias stays at +5.87 [+0.81, +8.80], which excludes 0.
+   - Sorghum: no correction.
+6. **Decision:** not adopted; nothing changes on `main`. Draft PR only.
+7. **Next (not done):** test whether a dryness-dependent term, or a soil water capacity prior set from SSURGO, explains the bias. That would need its own pre-registration.
