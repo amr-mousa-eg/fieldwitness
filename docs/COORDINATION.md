@@ -40,6 +40,7 @@ These files are edited often by both sides. Claim them in the table before you e
 | Antigravity | `ag/model-specs` | `docs/research/aquacrop_canopy_cover.md`, `docs/research/phenology_priors.md` | PR open for review (AG-2 research specs) | 2026-11-12 |
 | Antigravity | none | none | No active work yet | 2026-11-12 |
 | Claude Code | `claude/app-fixes` | `app/src/fieldSummary.ts`, `app/src/FieldSummaryPanel.tsx`, `app/tests/fieldSummary.test.ts` | Open PR, not merged | 2026-11-12 |
+| Claude Code | `claude/cover-crop-3d` | `app/src/Field3DScene.tsx`, `app/src/Field3DView.tsx` | Open PR, not merged | 2026-11-12 |
 
 ## Sync check
 
