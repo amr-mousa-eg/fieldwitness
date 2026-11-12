@@ -15,9 +15,211 @@ FieldWitness is a free website for 200 real crop fields in Kansas, USA. For each
 
 ## Part A: how it was built, stage by stage
 
-*(Part A follows Part B in the writing order of this document; see below.)*
+The order below follows the git history (4 to 12 Nov 2026). Stages overlap in time, because several things were built at once. Each stage gives the dates, the goal, the steps, the reason, an everyday comparison, the results, what went wrong, and where to look.
 
-PART_A_PLACEHOLDER
+| Stage | Dates (2026) | Key result |
+|---|---|---|
+| 0 Challenge and idea | 4 Nov (earlier work not recorded) | Plan with gates; three-witness idea |
+| 1 Project set-up | 4 Nov | Checks and secret scan pass on GitHub |
+| 2 Data access | 4 Nov | Each source tested with one real call |
+| 3 Region and crops | 4 Nov | Kansas chosen by measurement; 11 crops from FAO-56 |
+| 4 Fields and histories | 4 to 5 Nov | 200 fields; 134,685 field-dates; 1,600 labelled field-years |
+| 5 Field story | 4 Nov | Season detection 78.3% against a 90% target (missed) |
+| 6 Soil-water bucket | 4 Nov | Reproduces the FAO-56 worked example |
+| 7 Calibration | 7 Nov | 185 of 200 fields get a credibility score |
+| 8 Rotation engine | 7 to 8 Nov | 36 ranked rotations per field; grades B, C, D only |
+| 9 Neighbour witness | 7 to 8 Nov | 0 of 92 passed; switched off |
+| 10 Field packs | 4 and 7 Nov | 200 packs validate with no problems |
+| 11 Website | 4 to 7 Nov | Five core views on real data |
+| 12 Hindcast | 7 to 8 Nov | Small edge on 3 of 4 measures; ranges too narrow |
+| 13 Online | 7 to 9 Nov | Live on GitHub Pages |
+| 14 Second computer and AI | 8 Nov | All tests pass on the second laptop |
+| 15 Polish | 8 Nov | Basemap, names, legend, light and dark |
+| 16 Speed | 8 to 9 Nov | Starting code cut by 84.7% |
+| 17 Late features and fixes | 9 to 12 Nov | 3D view, tour, builder, farm view; more honest negatives |
+
+### Stage 0: Reading the challenge and choosing the idea
+- **Dates:** 4 Nov. The records don't say when thinking began before that.
+- **Goal:** turn the official challenge into a plan a small team and AI assistants could build in days.
+- **Steps:** the challenge text went into `docs/official_challenge.md`; `PLAN.md` set phases that each end in a pass-or-fail "gate"; Claude Code reviewed it (version 1.1); version 1.2 matched it line by line to the challenge (current rotation as option 1, five-part explanations, calendars, weather sliders); a "never claim" list was fixed (no tonnes, no fertility from space, no prices or profit, no AI deciding).
+- **Why:** build "the smallest demo that is still the real idea" first, end to end.
+- **Analogy:** reading the exam question twice and writing an outline before the essay.
+- **Results:** a phased plan with gates and fixed rules.
+- **What went wrong:** the plan cited a 2025 paper as confirmed; Claude Code marked it unverified until it was checked (Stage 9). The records don't say who wrote version 1.0 or why this idea won.
+- **Where to look:** `PLAN.md`, `docs/official_challenge.md`, `DECISIONS.md` ("Plan review").
+
+### Stage 1: Setting up the workshop
+- **Dates:** 4 Nov.
+- **Goal:** a clean repository, automatic checks, a secret scanner and written rules before any science.
+- **Steps:** Claude Code created the layout (commit 1d3a3a5) and pinned Python 3.12; GitHub runs the tests and the gitleaks secret scan on every change; `CLAUDE.md` holds twelve hard rules (never invent data or citations; test every outside service first; tag every number; report failures; ask before downloads over 1 GB, new packages or data-layout changes).
+- **Why:** AI assistants can write convincing but invented details; the rules limit the damage.
+- **Analogy:** setting up a lab with safety rules and a lab book before the first experiment.
+- **Results:** the first change passed both checks; every later decision went into the dated log `DECISIONS.md`.
+- **What went wrong:** two tool installs hung on Windows; a formatter damaged the plan's Markdown and was told to skip it; an early check used a token from the computer's credential manager, which led to rule 12 (never extract tokens or passwords).
+- **Where to look:** `CLAUDE.md`, `DECISIONS.md` ("T0.1", "T0.2"), commits 1d3a3a5, 799f04a.
+
+### Stage 2: Getting access to the data
+- **Dates:** 4 Nov.
+- **Goal:** prove with one small real request that each data source works.
+- **Steps:** NASA login and an HLS search for the Kansas tile; an AppEEARS test (about 22.5 minutes, 17 files, checksums verified); boundary reads (20,190 CSB polygons in the Kansas box); NASA POWER weather worked; SoilGrids was down at first; the Kansas water-use records needed a disclaimer that only the user could accept.
+- **Why:** rule 2, test before use. The user split sources into "essential" and "validation only", so a missing validation source would not block the project.
+- **Analogy:** checking every road and bridge on the route before the trip.
+- **Results:** satellite, weather, boundary and label sources confirmed; real response shapes recorded in `docs/api_notes.md`.
+- **What went wrong:** the office network blocked one add-on, and the user chose not to work around it; a second AppEEARS login cancelled the first; two unverified soil sources were dropped.
+- **Where to look:** `docs/api_notes.md`, `DATA.md`, `DECISIONS.md`.
+
+### Stage 3: Choosing the region, and crop settings from FAO-56
+- **Dates:** 4 Nov.
+- **Goal:** pick regions by measurement and load crop water settings from the published guide.
+- **Steps:** a census of six candidate areas (Kansas, Beauce, Toulouse, central Ukraine, Nile Delta, Punjab); the user set the measurability rule (at least four whole 30 m pixels, 15 m from the edge, which lifted Kansas from 88.6% to 98.1% measurable); the user chose Kansas first; `config/crops.yaml` got 11 crops, 82 values from FAO-56 tables and 9 team assumptions.
+- **Why:** numbers make the choice traceable; rule 8 forbids constants from memory.
+- **Analogy:** surveying several plots before buying one, and copying the building code from the official book.
+- **Results:** three tiers on paper; only Kansas was carried through to the website.
+- **What went wrong:** a crop-filter prefix wrongly dropped crops such as safflower, caught against the official table; many scenes cover only part of a tile.
+- **Where to look:** `docs/census/`, `config/regions.yaml`, `config/crops.yaml`.
+
+### Stage 4: Fields and their histories
+- **Dates:** 4 to 5 Nov.
+- **Goal:** pick 200 Kansas fields and collect each one's satellite, label, weather and soil history.
+- **Steps:** 200 of 9,905 candidate parcels were picked with a fixed random seed (89 winter wheat, 57 sorghum, 54 maize), spread over 116 of 121 ten-kilometre blocks; HLS greenness came via point requests (about 1.3 GB, a user-approved exception to the 1 GB rule); CSB labels 2017 to 2024; POWER weather 2001 to 2024 with no gaps; SoilGrids values; the "as_of" guard was built.
+- **Why:** the guard keeps later forecast tests honest; coarse data stays background only.
+- **Analogy:** collecting 200 patients' records under one rule about which records the doctor may see.
+- **Results:** 134,685 field-dates; all 1,600 field-years labelled; Gate 1 passed for Kansas.
+- **What went wrong:** a shared login token caused a "forbidden" error; CSB field ids do not carry across years; the Kansas water-use records were never obtained.
+- **Where to look:** `results/pilot_fields/`, `results/labels/`, `docs/gates/gate-1.md`.
+
+### Stage 5: The field story
+- **Dates:** 4 Nov.
+- **Goal:** turn greenness curves into seasons and a bare-soil calendar (Part B4).
+- **Steps:** smoothing (Savitzky–Golay), season and phase detection, a monthly bare-soil calendar (cut-off 0.30, tag A), a test with a pass mark fixed in advance (90%).
+- **Why:** the calendar answers a challenge question directly; the fixed pass mark stops bending the result.
+- **Analogy:** marking each heartbeat on a trace, then checking the marks against a doctor's.
+- **Results:** 74.6% on the first 30 fields, 82.9% on a development set, **78.3%** on the fresh test set (155 of 198).
+- **What went wrong:** the target was missed; the user decided not to tune further. A planned crop classifier was postponed.
+- **Where to look:** `results/story/`, `DECISIONS.md` ("T2.2").
+
+### Stage 6: The soil-water bucket
+- **Dates:** 4 Nov.
+- **Goal:** witness 1, a daily water ledger for each crop and rotation (Part B5).
+- **Steps:** FAO-56 Penman–Monteith reference ET from POWER weather; crop coefficient curves; the daily balance (FAO-56 Eq. 82 to 85) with water stress; season outputs; rotation runs that carry soil water across seasons; a vulnerability calendar.
+- **Why:** a public, standard method, so each number traces to a published equation.
+- **Analogy:** a bank account: rain is a deposit, plants and sun are withdrawals.
+- **Results:** tests reproduce the FAO-56 worked example; 200 fields × 30 parameter sets × 20 weather years took 8.4 seconds.
+- **What went wrong:** the assistant first stopped because it could not open the FAO-56 text (rule 8); several settings are assumptions; the later soil check found the water capacity too low.
+- **Where to look:** `src/fieldwitness/physics/`, `docs/fao56_equations.md`.
+
+### Stage 7: Calibration
+- **Dates:** 7 Nov.
+- **Goal:** witness 2, tune five unknown settings per field to its own past and score the fit (Part B6).
+- **Steps:** prior ranges with reasons (tag A); made-up test fields with known answers; ABC; checks on 300 and then 500 made-up fields; credibility scores on real fields.
+- **Why:** ABC needs no assumption about the shape of errors, and made-up fields show what can be recovered.
+- **Analogy:** tuning a guitar string against a reference note.
+- **Results:** 185 of 200 fields scored; median 0.5; 42.7% at 0.6 or more.
+- **What went wrong:** some settings were recovered with little information; "irrigated or not" was right 77% of the time; scores are in-sample; the irrigation check against water-use records was never done.
+- **Where to look:** `results/inference/`, `config/priors.yaml`, `src/fieldwitness/infer/`.
+
+### Stage 8: The rotation engine
+- **Dates:** 7 to 8 Nov.
+- **Goal:** list, simulate, rank, grade and explain every allowed rotation (Parts B7 to B9).
+- **Steps:** Current first; 61 sequences filtered to 36 by rules; simulation over possible worlds and weather years 2001 to 2021; the user chose the RYI definition per rotation year; dominated options removed, then a weighted score; grades; "what to measure next"; template explanations; 12 weather what-ifs per field; farmer corrections kept in the browser.
+- **Why:** the challenge asks for at least three strategies including the existing one, each explained.
+- **Analogy:** a hiring panel that shows its scoring sheet and lets you change the weights.
+- **Results:** 2,772 B, 3,600 C, 360 D, 0 A across 187 fields; the top option changes in 10% to 59.5% of fields under the what-ifs.
+- **What went wrong:** early rankings rewarded bare fallow (fixed with bare-soil penalties and diversity rules); a rank-storage bug (Stage 10); what-if counts were first taken from intermediate output.
+- **Where to look:** `src/fieldwitness/rotate/`, `config/ranking.yaml`, `config/grading.yaml`, `results/rotate/`.
+
+### Stage 9: The neighbour witness (switched off)
+- **Dates:** 7 to 8 Nov.
+- **Goal:** witness 3, learn previous-crop effects from similar neighbouring fields.
+- **Steps:** a 1,400-row table; two packages approved by the user (scikit-learn, doubleml); double machine learning with 10 km blocks held out together; four checks fixed in advance; a descriptive literature sign check (2 agree, 1 disagrees, 13 inconclusive); a matched second design.
+- **Why:** pass marks set before looking stop cherry-picking.
+- **Analogy:** a pass mark written before the papers are marked.
+- **Results:** 0 of 92 (first design) and 0 of 32 (matched design) passed all checks. The witness is off; grades stop at B.
+- **What went wrong:** a negative result, stated as such; the unattended assistant loop kept re-running the blocked paper check.
+- **Where to look:** `results/neighbours/`, `docs/gates/gate-5.md`.
+
+### Stage 10: One data file per field
+- **Dates:** 4 Nov (data shapes approved by the user) and 7 Nov (pack builder).
+- **Goal:** give the website checked files so it runs without a server.
+- **Steps:** schemas in Python; a pack builder (37 options per field: Current plus 36); a validator that rejects untagged numbers and files of 300 KB or more; website data types generated from the Python shapes.
+- **Why:** small files load fast and work offline; tagging stops unlabelled values.
+- **Analogy:** a standard patient form, and a clerk who rejects incomplete forms.
+- **Results:** all 200 packs validate (Gate 6); the demo folder now holds 1,203 files.
+- **What went wrong:** the first real load stored the sort position instead of the rank (fixed in commit ce69ebf).
+- **Where to look:** `src/fieldwitness/schemas.py`, `src/fieldwitness/packs/`, `docs/gates/gate-6.md`.
+
+### Stage 11: The website
+- **Dates:** 4 to 7 Nov.
+- **Goal:** build the screens while the data was still being made.
+- **Steps:** a branch with clearly marked SYNTHETIC sample data and a build guard that refuses to publish it; the map, field story and Field Card; then the Advisor console, scoreboard, calendar, explainers, map layers and Methods page; on 7 Nov the switch to the real packs (the "Gate 6 merge").
+- **Why:** parallel work saves time; the guard stops fake numbers being shown as real.
+- **Analogy:** a shop display with props, and a sign saying so, while the stock arrives.
+- **Results:** Map, Field story, Field Card, Advisor console and Scoreboard work for all 200 fields (React, Vite, TypeScript, MapLibre).
+- **What went wrong:** the real-data load exposed the rank bug; package installs were blocked in unattended runs.
+- **Where to look:** `app/src/`, `app/fixtures/`.
+
+### Stage 12: Testing against the past
+- **Dates:** 7 to 8 Nov.
+- **Goal:** check whether the method forecasts better than simple methods (Part B10).
+- **Steps:** cut-off 31 Dec 2021; stages 5 to 8 re-run on older data; 2022 to 2024 predicted; scored in forecast and forced modes; three baselines.
+- **Why:** a method is trusted only if it beats a simple one on unseen data.
+- **Analogy:** an exam on unseen questions, compared with last year's class average.
+- **Results:** 266 maize and sorghum field-seasons on 7 Nov, 463 with winter wheat on 8 Nov; small edges, ranges too narrow.
+- **What went wrong:** weak skill was found on the first run and kept as it was; winter wheat has no baseline.
+- **Where to look:** `results/hindcast/`, `scripts/t73_baselines.py`.
+
+### Stage 13: Going online
+- **Dates:** 7 to 9 Nov.
+- **Goal:** a public address with no login.
+- **Steps:** a hosting comparison (first visit 7.7 MB compressed); a GitHub Pages workflow with the demo packs in the repository; the Netlify link removed so Pages is the one address; sturdier checks on 9 Nov.
+- **Why:** static files need no server or database, and visitors' data stays on their device.
+- **Analogy:** printing a booklet each reader takes home, instead of running a help desk.
+- **Results:** live at https://amr-mousa-eg.github.io/fieldwitness/, working offline after the first visit.
+- **What went wrong:** the records don't say who ran the first deployment or when the repository became public.
+- **Where to look:** `app/deploy/README.md`, `.github/workflows/pages.yml`.
+
+### Stage 14: A second computer and a second AI assistant
+- **Dates:** 8 Nov.
+- **Goal:** continue on a second laptop with Google Antigravity, losing nothing.
+- **Steps:** a migration plan; a clean copy from GitHub plus about 1.57 GB of data carried separately; the environment rebuilt; everything re-checked; the unattended Claude Code loop paused.
+- **Why:** a clean copy proves nothing depends on one machine's hidden state.
+- **Analogy:** moving house and switching every light on to check.
+- **Results:** 247 Python tests and 58 website tests passed; 0 pack problems. `AI_USE.md` credits Antigravity with the migration check, the second neighbour analyses and much of Phases 10 to 12.
+- **What went wrong:** a stale blocking note had to be removed. The records don't say why the move was needed.
+- **Where to look:** `docs/MIGRATION_PLAN.md`, `AI_USE.md`.
+
+### Stage 15: Polish
+- **Dates:** 8 Nov.
+- **Goal:** make the site readable and trustworthy before the freeze.
+- **Steps:** a NASA true-colour basemap with credit; names Field 1 to Field 200; a legend; light, dark and automatic modes; the weak results stated in the app; a first-visit guide.
+- **Why:** limits belong on the page, not hidden in a file.
+- **Analogy:** tidying and labelling a shop before opening day.
+- **Results:** all P0 and P1 tasks done; keyboard check 13 of 13.
+- **What went wrong:** a Nile Delta confidence map and the Toulouse region were dropped.
+- **Where to look:** `PLAN.md` (Phase 11).
+
+### Stage 16: Speed
+- **Dates:** 8 to 9 Nov.
+- **Goal:** find why the site was slow, fix the causes, measure again.
+- **Steps:** lazy loading cut the starting bundle from 1,785.76 KB to 273.64 KB (84.7%); first-load requests fell from 838 to 38; layout jumps removed; on 9 Nov new features dropped the desktop score from 88 to 31, and moving code into later-loaded pieces fixed it.
+- **Why:** farmers may have slow phones and networks.
+- **Analogy:** packing for day one and mailing the rest.
+- **Results:** a much smaller starting load; a mobile score of 66 to 67 accepted as it was.
+- **What went wrong:** the 9 Nov slowdown came from the team's own new features and was caught by measuring.
+- **Where to look:** `DECISIONS.md` ("P1.13", "P1.14").
+
+### Stage 17: Late features, checks and fixes
+- **Dates:** 9 to 12 Nov.
+- **Goal:** make the evidence clearer and the site easier to try, without changing any result.
+- **Steps:** Add my field; the plain-language summary; the 3D view ("Illustration of simulated values — not a photo"); a "try it" tour; a pre-registered hindcast diagnosis and grade-validity test; "Why this ranking?" and "What we got wrong"; a read-only USDA SSURGO soil check; the Rotation Builder and farm view ("Scenery, not data"), on for everyone from 11 Nov with `?builder=0` and `?farm=0` as kill switches; a shared theme store that removed the 3D toggle lag. On 12 Nov: the first version of this account (PR #12), coordination rules for the two AI agents (PR #16), and three experiments kept as drafts and not adopted (PRs #13, #14, #15).
+- **Why:** visitors learn most by trying; every feature kept the same honesty rules.
+- **Analogy:** after building the engine, adding a dashboard so the driver can see what it does.
+- **Results:** browser parity over 2,160 runs, largest difference 0.0000057 mm; 3D toggle on a simulated phone from 170–1,207 ms to 42–85 ms.
+- **What went wrong:** the grade-validity test did not pass; the soil check was negative (142 mm against 282 mm); the tour button was invisible in light mode; pages scrolled sideways on phones; a hard-coded weather year contradicted the data. All were recorded; the fixable ones were fixed.
+- **Where to look:** `PLAN.md` (Phase 12), `results/validation/`, `app/src/builder/`, `docs/COORDINATION.md`.
+
+### What exists now
+One region (Kansas tile T14SLH, 200 fields), a public website, and an open repository with the pipeline, tests, negative results and decision log. Building stopped at the end of 12 Nov 2026 (feature freeze). Work after that is fixes, documents and experiments that stay on their own branches.
 
 ---
 
