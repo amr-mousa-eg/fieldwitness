@@ -37,7 +37,7 @@ These files are edited often by both sides. Claim them in the table before you e
 | Claude Code | `experiment/reliability-grades` (draft PR #15) | Reliability tiers learned from measured error | Draft, not adopted; do not merge | 2026-11-12 |
 | Claude Code | `docs/coordination` | `docs/COORDINATION.md`, `DECISIONS.md` (append) | Open PR | 2026-11-12 |
 | Antigravity | none | none | No active work yet | 2026-11-12 |
-| Claude Code | `experiment/bias-diagnosis` (draft PR) | `scripts/x4_bias_diagnosis.py`, `src/fieldwitness/experimental/bias.py`, `tests/test_bias_diagnosis.py`, `results/hindcast/bias_diagnosis/`, `docs/BIAS_DIAGNOSIS.md`, `DECISIONS.md` (append) | In progress; experiment, not for merge | 2026-11-12 |
+| Claude Code | `experiment/bias-diagnosis` (draft PR) | `scripts/x4_bias_diagnosis.py`, `src/fieldwitness/experimental/bias.py`, `tests/test_bias_diagnosis.py`, `results/hindcast/bias_diagnosis/`, `docs/BIAS_DIAGNOSIS.md`, `DECISIONS.md` (append) | Draft PR, gate failed, not adopted; do not merge | 2026-11-12 |
 
 ## Sync check
 
