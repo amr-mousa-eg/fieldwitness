@@ -1,0 +1,119 @@
+{
+ "source": "NASS NationalCSB_2018-2025_rev23.zip (3,758,023,527 bytes), layer national1825",
+ "pairs_2018_2024": 1393,
+ "overall_agreement_2018_2024": 0.9834888729361091,
+ "min_agreement_to_use_code": 0.9,
+ "crosswalk": {
+  "1": {
+   "label": "maize",
+   "agreement": 0.9615384615384616,
+   "n_pairs": 286,
+   "all_labels": {
+    "maize": 275,
+    "fallow": 5,
+    "sorghum": 4,
+    "winter_wheat": 2
+   }
+  },
+  "4": {
+   "label": "sorghum",
+   "agreement": 0.9904458598726115,
+   "n_pairs": 314,
+   "all_labels": {
+    "sorghum": 311,
+    "maize": 2,
+    "fallow": 1
+   }
+  },
+  "5": {
+   "label": "soybean",
+   "agreement": 1.0,
+   "n_pairs": 4,
+   "all_labels": {
+    "soybean": 4
+   }
+  },
+  "6": {
+   "label": "sunflower",
+   "agreement": 1.0,
+   "n_pairs": 1,
+   "all_labels": {
+    "sunflower": 1
+   }
+  },
+  "24": {
+   "label": "winter_wheat",
+   "agreement": 0.993006993006993,
+   "n_pairs": 429,
+   "all_labels": {
+    "winter_wheat": 426,
+    "sorghum": 2,
+    "maize": 1
+   }
+  },
+  "36": {
+   "label": "perennial_forage",
+   "agreement": 1.0,
+   "n_pairs": 22,
+   "all_labels": {
+    "perennial_forage": 22
+   }
+  },
+  "61": {
+   "label": "fallow",
+   "agreement": 0.9861111111111112,
+   "n_pairs": 288,
+   "all_labels": {
+    "fallow": 284,
+    "maize": 3,
+    "winter_wheat": 1
+   }
+  },
+  "176": {
+   "label": "non_arable",
+   "agreement": 0.9705882352941176,
+   "n_pairs": 34,
+   "all_labels": {
+    "non_arable": 33,
+    "maize": 1
+   }
+  },
+  "205": {
+   "label": "other_annual",
+   "agreement": 0.9,
+   "n_pairs": 10,
+   "all_labels": {
+    "other_annual": 9,
+    "winter_wheat": 1
+   }
+  },
+  "225": {
+   "label": "winter_wheat",
+   "agreement": 1.0,
+   "n_pairs": 2,
+   "all_labels": {
+    "winter_wheat": 2
+   }
+  },
+  "236": {
+   "label": "winter_wheat",
+   "agreement": 1.0,
+   "n_pairs": 3,
+   "all_labels": {
+    "winter_wheat": 3
+   }
+  }
+ },
+ "fields_without_polygon": 1,
+ "labels_2025": {
+  "fallow": 64,
+  "sorghum": 54,
+  "maize": 46,
+  "winter_wheat": 21,
+  "other_annual": 9,
+  "non_arable": 4,
+  "perennial_forage": 1,
+  "unknown": 1
+ },
+ "tag": "E (NASS CSB/CDL), crosswalk D (learned from 2018-2024 agreement)"
+}

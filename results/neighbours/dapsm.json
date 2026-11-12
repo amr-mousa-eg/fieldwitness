@@ -1,0 +1,237 @@
+{
+  "experiment": "Experiment 1: distance-adjusted propensity score matching (DAPSM)",
+  "preregistration": "DECISIONS.md 2026-11-12 'Pre-registration: two algorithm experiments'",
+  "cutoff_year": 2021,
+  "rows_used": 800,
+  "geometry_source": "data/fields/ks_t14slh_pilot.parquet (CSB polygons, WGS 84); centroid in EPSG:32614",
+  "distance_scaling": "dist_km / 145.3052 km (max pairwise centroid distance, 200 fields)",
+  "w_grid_summary": [
+    {
+      "w": 0.0,
+      "median_smd_max": 0.5350115635420948,
+      "mean_smd_max": 0.5350115635420948,
+      "n_pass_balance": 0,
+      "n_contrasts": 4
+    },
+    {
+      "w": 0.1,
+      "median_smd_max": 0.6606582186163727,
+      "mean_smd_max": 0.6606582186163727,
+      "n_pass_balance": 0,
+      "n_contrasts": 4
+    },
+    {
+      "w": 0.2,
+      "median_smd_max": 0.5701269101222453,
+      "mean_smd_max": 0.5701269101222453,
+      "n_pass_balance": 0,
+      "n_contrasts": 4
+    },
+    {
+      "w": 0.3,
+      "median_smd_max": 0.5904041749189257,
+      "mean_smd_max": 0.5904041749189257,
+      "n_pass_balance": 0,
+      "n_contrasts": 4
+    },
+    {
+      "w": 0.4,
+      "median_smd_max": 0.5904041749189257,
+      "mean_smd_max": 0.5904041749189257,
+      "n_pass_balance": 0,
+      "n_contrasts": 4
+    },
+    {
+      "w": 0.5,
+      "median_smd_max": 0.6214780788620263,
+      "mean_smd_max": 0.6214780788620263,
+      "n_pass_balance": 0,
+      "n_contrasts": 4
+    },
+    {
+      "w": 0.6,
+      "median_smd_max": 0.687679004653852,
+      "mean_smd_max": 0.687679004653852,
+      "n_pass_balance": 0,
+      "n_contrasts": 4
+    },
+    {
+      "w": 0.7,
+      "median_smd_max": 0.8153522186809427,
+      "mean_smd_max": 0.8153522186809427,
+      "n_pass_balance": 0,
+      "n_contrasts": 4
+    },
+    {
+      "w": 0.8,
+      "median_smd_max": 0.7613106466059841,
+      "mean_smd_max": 0.7613106466059841,
+      "n_pass_balance": 0,
+      "n_contrasts": 4
+    },
+    {
+      "w": 0.9,
+      "median_smd_max": 0.7856293540397145,
+      "mean_smd_max": 0.7856293540397145,
+      "n_pass_balance": 0,
+      "n_contrasts": 4
+    },
+    {
+      "w": 1.0,
+      "median_smd_max": 0.8551903651832318,
+      "mean_smd_max": 0.8551903651832318,
+      "n_pass_balance": 0,
+      "n_contrasts": 4
+    }
+  ],
+  "chosen_w": 0.0,
+  "contrast_rows": 12,
+  "fitted": 4,
+  "old_ipw_same_rows": {
+    "overlap": {
+      "pass": 4,
+      "fail": 0,
+      "untested": 0,
+      "pass_share_of_tested": 1.0,
+      "wilson95": [
+        0.5101091596030786,
+        0.9999999999999999
+      ]
+    },
+    "balance": {
+      "pass": 0,
+      "fail": 4,
+      "untested": 0,
+      "pass_share_of_tested": 0.0,
+      "wilson95": [
+        0.0,
+        0.4898908403969213
+      ]
+    },
+    "placebo": {
+      "pass": 0,
+      "fail": 0,
+      "untested": 4,
+      "pass_share_of_tested": null,
+      "wilson95": [
+        NaN,
+        NaN
+      ]
+    },
+    "negctrl": {
+      "pass": 0,
+      "fail": 0,
+      "untested": 4,
+      "pass_share_of_tested": null,
+      "wilson95": [
+        NaN,
+        NaN
+      ]
+    }
+  },
+  "old_ipw_same_rows_evidence": 0,
+  "dapsm": {
+    "overlap": {
+      "pass": 4,
+      "fail": 0,
+      "untested": 0,
+      "pass_share_of_tested": 1.0,
+      "wilson95": [
+        0.5101091596030786,
+        0.9999999999999999
+      ]
+    },
+    "balance": {
+      "pass": 0,
+      "fail": 4,
+      "untested": 0,
+      "pass_share_of_tested": 0.0,
+      "wilson95": [
+        0.0,
+        0.4898908403969213
+      ]
+    },
+    "placebo": {
+      "pass": 0,
+      "fail": 0,
+      "untested": 4,
+      "pass_share_of_tested": null,
+      "wilson95": [
+        NaN,
+        NaN
+      ]
+    },
+    "negctrl": {
+      "pass": 0,
+      "fail": 0,
+      "untested": 4,
+      "pass_share_of_tested": null,
+      "wilson95": [
+        NaN,
+        NaN
+      ]
+    }
+  },
+  "dapsm_evidence": 0,
+  "old_published_all_years": {
+    "fitted": 32,
+    "overlap": {
+      "pass": 32,
+      "fail": 0,
+      "untested": 0,
+      "pass_share_of_tested": 1.0,
+      "wilson95": [
+        0.8928208002353198,
+        1.0000000000000002
+      ]
+    },
+    "balance": {
+      "pass": 8,
+      "fail": 24,
+      "untested": 0,
+      "pass_share_of_tested": 0.25,
+      "wilson95": [
+        0.1325240085114254,
+        0.4210655913709147
+      ]
+    },
+    "placebo": {
+      "pass": 7,
+      "fail": 5,
+      "untested": 20,
+      "pass_share_of_tested": 0.5833333333333334,
+      "wilson95": [
+        0.31951131084242423,
+        0.8067396875653928
+      ]
+    },
+    "negctrl": {
+      "pass": 23,
+      "fail": 5,
+      "untested": 4,
+      "pass_share_of_tested": 0.8214285714285714,
+      "wilson95": [
+        0.6440857505322257,
+        0.9212149810424002
+      ]
+    },
+    "evidence": 0
+  },
+  "h1_balance_tested_both": 4,
+  "h1_balance_pass_old": 0,
+  "h1_balance_pass_dapsm": 0,
+  "h1_holds": false,
+  "dapsm_worst_covariate_counts": {
+    "clay_pct": 4
+  },
+  "thresholds_tag_A": {
+    "ps_range": [
+      0.05,
+      0.95
+    ],
+    "overlap_max_share": 0.1,
+    "smd_max": 0.25
+  },
+  "witness_status": "OFF (unchanged; grading and app not modified)",
+  "tag": "D"
+}

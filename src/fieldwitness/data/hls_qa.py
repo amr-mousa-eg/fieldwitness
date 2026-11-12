@@ -49,9 +49,12 @@ def read_task(folder: Path) -> pd.DataFrame:
     return pd.concat(frames, ignore_index=True) if frames else pd.DataFrame()
 
 
-def build_series(region_id: str) -> pd.DataFrame:
-    """Per field and date: median NDVI/EVI over clear pixels, n_clear, clear_fraction, tag O."""
-    root = OUT / region_id
+def build_series(region_id: str, root: Path | None = None) -> pd.DataFrame:
+    """Per field and date: median NDVI/EVI over clear pixels, n_clear, clear_fraction, tag O.
+
+    `root` defaults to the T1.5 download folder; Experiment 3 passes the extra-year folder.
+    """
+    root = root or OUT / region_id
     pts = pd.DataFrame(json.loads((OUT / f"{region_id}_points.json").read_text(encoding="utf-8")))
     n_sampled = pts.groupby("category").size()
     px = pd.concat([read_task(p) for p in sorted(root.iterdir()) if p.is_dir()], ignore_index=True)

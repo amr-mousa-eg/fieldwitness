@@ -499,3 +499,9 @@ When V1–V16 pass, migration is complete. Record the results in the DECISIONS.m
 ## Minimum information to collect from the old Claude Code sessions
 
 None is strictly required: the repository documents are the source of truth, and §0 captures the rest. Do **not** reopen the old sessions just for this (each would reload ~370k tokens). If the §0 inspection shows uncommitted work, the loop window and `logs/autopilot/` explain which run produced it.
+
+---
+
+## Future work (not implemented)
+
+Planned research directions, not part of the current results (added 12 Nov 2026 on branch `experiment/algo-upgrade`): a physics-informed water-balance network (`src/fieldwitness/experimental/neural_physics/`) and amortised neural posterior estimation with `sbi` (`src/fieldwitness/experimental/neural_infer/`). Both are docstring-only stubs that raise `NotImplementedError`; neither is installed, used or validated.
