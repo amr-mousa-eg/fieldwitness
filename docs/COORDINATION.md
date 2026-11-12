@@ -43,6 +43,8 @@ These files are edited often by both sides. Claim them in the table before you e
 | Claude Code | `docs/how-we-built-bilingual` | `docs/HOW_WE_BUILT_FIELDWITNESS.en.md`, `docs/HOW_WE_BUILT_FIELDWITNESS.ar.md`, `README.md` (2 links) | Merged (#20) | 2026-11-12 |
 | Claude Code | `experiment/bias-diagnosis` (draft PR #21) | `scripts/x4_bias_diagnosis.py`, `src/fieldwitness/experimental/bias.py`, `tests/test_bias_diagnosis.py`, `results/hindcast/bias_diagnosis/`, `docs/BIAS_DIAGNOSIS.md` | Draft, gate failed, not adopted; do not merge | 2026-11-12 |
 | Claude Code | `docs/housekeeping` | `DECISIONS.md` (append), `docs/COORDINATION.md` | Open PR | 2026-11-12 |
+| Claude Code | `experiment/bias-diagnosis` (draft PR) | `scripts/x4_bias_diagnosis.py`, `src/fieldwitness/experimental/bias.py`, `tests/test_bias_diagnosis.py`, `results/hindcast/bias_diagnosis/`, `docs/BIAS_DIAGNOSIS.md`, `DECISIONS.md` (append) | Draft PR, gate failed, not adopted; do not merge | 2026-11-12 |
+| Claude Code | `claude/app-fixes` | `app/src/fieldSummary.ts`, `app/src/FieldSummaryPanel.tsx`, `app/tests/fieldSummary.test.ts` | Merged (#19) | 2026-11-12 |
 | Claude Code | `claude/app-fixes` | `app/src/fieldSummary.ts`, `app/src/FieldSummaryPanel.tsx`, `app/tests/fieldSummary.test.ts` | Open PR, not merged | 2026-11-12 |
 | Claude Code | `claude/cover-crop-3d` | `app/src/Field3DScene.tsx`, `app/src/Field3DView.tsx` | Open PR, not merged | 2026-11-12 |
 
