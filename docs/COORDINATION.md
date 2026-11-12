@@ -36,8 +36,11 @@ These files are edited often by both sides. Claim them in the table before you e
 | Claude Code | `experiment/conformal` (draft PR #14) | Conformal recalibration of the intervals | Draft, gate failed, not adopted; do not merge | 2026-11-12 |
 | Claude Code | `experiment/reliability-grades` (draft PR #15) | Reliability tiers learned from measured error | Draft, not adopted; do not merge | 2026-11-12 |
 | Claude Code | `docs/coordination` | `docs/COORDINATION.md`, `DECISIONS.md` (append) | Open PR | 2026-11-12 |
+| Antigravity | `ag/consistency-audit` | `docs/drafts/consistency_audit_ag.md` | In progress (AG-1 consistency audit) | 2026-11-12 |
+| Antigravity | `ag/model-specs` | `docs/research/aquacrop_canopy_cover.md`, `docs/research/phenology_priors.md` | PR open for review (AG-2 research specs) | 2026-11-12 |
 | Antigravity | none | none | No active work yet | 2026-11-12 |
 | Claude Code | `experiment/bias-diagnosis` (draft PR) | `scripts/x4_bias_diagnosis.py`, `src/fieldwitness/experimental/bias.py`, `tests/test_bias_diagnosis.py`, `results/hindcast/bias_diagnosis/`, `docs/BIAS_DIAGNOSIS.md`, `DECISIONS.md` (append) | Draft PR, gate failed, not adopted; do not merge | 2026-11-12 |
+| Claude Code | `claude/app-fixes` | `app/src/fieldSummary.ts`, `app/src/FieldSummaryPanel.tsx`, `app/tests/fieldSummary.test.ts` | Merged (#19) | 2026-11-12 |
 
 ## Sync check
 
