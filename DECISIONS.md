@@ -681,9 +681,149 @@ Written before any 2025 HLS or 2025 label is on this machine. Not changed afterw
 
 - **HLS 2025 (user, 2026-11-12):** submit and download 3 AppEEARS point tasks for 2025, the same 2,325 points and 3 chunks (995/999/331 points) as T1.5, estimated 175–185 MB, under the 1 GB cap (the normal cap applies; no exception). Separate registry `data/appeears/ks_t14slh_tasks_2025.json` and folder `data/appeears/ks_t14slh_2025/`; the T1.5 registry, folder and `ks_t14slh_hls_series.parquet` are not changed. Code: `hls_series.submit_year`, `wait_and_download(registry=, root=)`, `hls_qa.build_series(root=)`.
 - **2025 labels (user, 2026-11-12): one-time exception to the 1 GB cap (rule 11)** for one file only: NASS `NationalCSB_2018-2025_rev23.zip`, 3,758,023,527 bytes (HTTP Content-Length, read 2026-11-12), released 27 Mar 2026. Only the T14SLH tile extract of the 2025 layer is kept; the ZIP is deleted afterwards. The source.coop GeoParquet copy has no 2025 year (HTTP 404). CropScape CDL was tried first and did not answer (two 60 s timeouts).
+## 2026-11-12 — Pre-registration: conformal recalibration of the prediction intervals (branch `experiment/conformal`)
+
+Written and committed before any calibration run. Not changed afterwards; changes go in a new dated entry with the reason. Goal: make the stated 90 % interval cover about 90 % of observed outcomes. Not a goal: more accurate point predictions. Nothing here touches main, packs, the app, `config/grading.yaml` or any default.
+
+**Baseline verified (2026-11-12, `results/hindcast/ks_t14slh_records.jsonl`, `scripts/t71_hindcast.py`):** each prediction is 200 samples; stored quantiles `q` = 5/25/50/75/95 %; the 90 % interval is [q5, q95] and the 50 % interval [q25, q75] (np.quantile of the samples), for the canopy integral and for the peak day (also SOS and cover days, not used here). 90 % coverage, canopy integral — forecast: maize 27.4 % (n 124), sorghum 43.7 % (142), winter wheat 23.9 % (197); forced: 21.0 %, 35.2 %, 14.2 %. Peak day — forecast: 92.7 %, 84.5 %, 34.5 %; forced: 67.7 %, 71.8 %, 21.3 %. Tag D (model) vs O (HLS).
+
+**Calibration data (no peeking, no in-sample residuals):** rolling-origin pseudo-forecasts with the unchanged hindcast code (`scripts/t71_hindcast.py` executed with only its cut-off, scored years and output path replaced in memory): cut-off 2018-12-31 → season 2019, 2019-12-31 → 2020, 2020-12-31 → 2021. Same n_ref 2,000, k 100, seeds, priors, crops (maize, sorghum, winter wheat), forecast and forced run types. Fitting inside `as_of(cut-off)`; labels of the scored year are read only as the observation (as in T7.1). Calibration seasons are ≤ 2021 only. A 4th run with cut-off 2021-12-31 → 2022–2024 must reproduce the published records exactly (proof that the wrapper is the published code path). Test years 2022–2024 are never used to fit or choose anything. 2025 is not used: its HLS is not on disk (labels alone exist on another branch).
+
+**Nonconformity score:** s = |observed − q50| / h, h = (q95 − q5)/2, per field-season, separately for the canopy integral and the peak day (both have stored intervals). h = 0: score excluded and counted.
+
+**Multiplier (split conformal, finite-sample rule, Mondrian by crop and run type):** for level L ∈ {0.50, 0.80, 0.90}, m_L = the k-th smallest calibration score, k = ceil((n + 1)·L). n < 30 scores in a crop × run type: "too few to calibrate", interval left unchanged. Calibrated interval = q50 ± m_L·h (symmetric around the unchanged median).
+- **Pooled version:** one m_L per crop × run type from all calibration scores.
+- **Block-aware version (primary):** for a test field in 10 km block b, m_L is computed from the calibration scores of that crop × run type with block b left out (leave-one-block-out). Also gives a cross-validated coverage check on the calibration seasons.
+
+**Point predictions:** q50 (and every stored quantile) unchanged, bit-identical (unit test).
+
+**Metrics (test years 2022–2024):** coverage at 50/80/90 % per crop × run type × year and pooled, with n and 95 % spatial block bootstrap CI (10 km blocks, 1,000 resamples, seed 42, as `t7_diagnosis.py`); n < 20: "too few to judge". Before = stored intervals ([q5, q95], [q25, q75]; no stored 80 % interval, so "before" at 80 % is not available). Mean width before vs after, and the Winkler interval score at α = 0.10: W = width + (2/α)·(lower − y)₊ + (2/α)·(y − upper)₊.
+
+**Gate (fixed now):** for every crop with n ≥ 20 in forecast mode, block-aware 90 % coverage of the **canopy integral** on 2022–2024 pooled lies in [85 %, 95 %] (point estimate; CI reported), and the mean width increase is reported. Fail on a crop = not adopted for that crop. Peak day is reported with the same criterion as a secondary result, not part of the gate.
+
+**Bias check:** per crop and run type on 2022–2024: share of observations above q50 and the median signed error (observed − q50) with block-bootstrap CI. If the share is outside [40 %, 60 %] or the CI excludes 0, the report says "interval widening cannot fix a biased centre" for that cell, whatever the coverage.
+
+**Stopping rules:** if the rolling-origin runs cannot be built (data or runtime), stop and report; no in-sample substitute. No re-running with other levels, cut-offs, score definitions or groupings after seeing test results.
+
+**Outputs:** `results/hindcast/conformal/` (scores CSV, multipliers JSON, before/after table CSV + md, reliability plots), `docs/CONFORMAL_EXPERIMENT.md`.
+
+## 2026-11-12 — Conformal recalibration result: gate failed for all crops, not adopted
+
+Run exactly as pre-registered (`results/hindcast/conformal/before_after.md`). Rolling-origin calibration built for all 200 fields (cut-offs 2018/2019/2020 → seasons 2019/2020/2021; about 9 min per run); the cut-off-2021 re-run is identical to the published records. Calibration scores (forecast, canopy integral): maize 127, sorghum 134, winter wheat 167. Pooled m90: maize 3.54, sorghum 2.03, winter wheat 3.41. Block-aware 90 % coverage 2022–2024 (forecast, canopy integral): maize 27.4 → 79.8 % [72.6, 86.7], sorghum 43.7 → 69.0 % [61.3, 77.4], winter wheat 23.9 → 75.6 % [69.3, 82.1]; mean width ×3.54, ×2.03, ×3.40; Winkler 272 → 117, 180 → 123, 318 → 126. Gate [85 %, 95 %]: **fail for all three crops**. Leave-one-block-out coverage on the calibration seasons themselves was 90.3–90.6 %, so the shortfall comes from larger errors in 2022–2024 than in 2019–2021 (exchangeability not met). Biased centre (share above median outside 40–60 % or signed-error CI excludes 0): maize and winter wheat, forecast and forced: "interval widening cannot fix a biased centre". Pooled version gives the same coverage within 1 point. Not adopted; nothing outside the branch changed.
+## 2026-11-12 — Pre-registration: reliability tiers learned from measured error (branch `experiment/reliability-grades`)
+
+Written and committed before any feature is computed or any model fitted. Not changed afterwards; changes go in a new dated entry with the reason. Nothing here changes main, packs, the app, `config/grading.yaml` or any default. Tiers are named R1–R4; they are **not** evidence grades and do not use the neighbour witness.
+
+**Baseline verified (`results/hindcast/grade_validity.json`, `scripts/t7_grade_validity.py`):** grade per field-season at cut-off 2021-12-31: D if the fit source is the prior; B if the field's cut-off credibility ≥ 0.6; else C. Metric: forecast-mode canopy-integral CRPS, n = 463 (2022–2024). Grade B 16.96 [15.07, 18.95] (n 170), C 17.30 [15.28, 19.56] (n 268), D 24.02 [14.04, 31.25] (n 25); D − B 7.07 [−3.28, 14.32]: not shown.
+
+**Data.** Training: the conformal experiment's rolling-origin pseudo-forecasts for seasons 2019, 2020, 2021 (cut-offs 2018, 2019, 2020), copied from the local checkout of branch `experiment/conformal` (PR #14) to `results/hindcast/reliability/from_conformal/` (SHA-256 listed in the outputs). The cut-off-2021 file of that run equals the published records (200/200 fields, parsed JSON; the files differ only in line endings). Test, used once at the end: the published 2022–2024 records. 2025: no clean-test records exist locally, so not used.
+
+**Unit:** one field-season, forecast run, crops maize, sorghum, winter wheat.
+
+**Primary target:** y = log(CRPS_ci / S), where CRPS_ci is the stored canopy-integral CRPS and S = max(1.0, median observed canopy integral of the same field and crop over its scored seasons in the same data set) (training: 2019–2021; test: 2022–2024). The floor 1.0 is a team choice (tag A). **Secondary target:** absolute peak-timing error (|err_median| of the peak day), reported with the same tiers.
+
+**Features (fixed; all known at that forecast's cut-off; NO year, NO outcome of the predicted season):**
+1. `n_clear_fit`: number of clear HLS observations (de-duplicated days 1–365) summed over the field's fit seasons. Fit season = labelled maize/sorghum/winter-wheat season with year ≤ cut-off and ≥ 10 clear observations (the T7.1 rule, without its weather-completeness check).
+2. `credibility`: `compute_cutoff_credibility` (scripts/t7_grade_validity.py) run with the cut-off of that forecast; missing (not assessable) → NaN.
+3. `rel_spread`: (q95 − q5) / q50 of the forecast canopy integral (the prediction itself, made at the cut-off).
+4. `crop`: one-hot.
+5. `area_ha`: pilot field area.
+Unit test: each feature is recomputed after removing all data dated after the cut-off and must not change.
+
+**Models (fixed hyper-parameters, tag A):** (a) null: training mean; (b) crop: per-crop training mean; (c) grade: linear regression of y on the grade number (B = 1, C = 2, D = 3; grade computed as in t7 at that forecast's cut-off); (d) credibility: linear regression on credibility plus a missing indicator (NaN filled with 0); (e) `sklearn.ensemble.HistGradientBoostingRegressor(max_depth=2, max_iter=100, learning_rate=0.1, min_samples_leaf=20, random_state=20261114)` on all 5 features. Simplicity order a < b < c < d < e.
+
+**Model choice (training data only):** leave-one-10-km-block-out CV on 2019–2021. CV loss = mean squared error of the held-out predictions of y; SE = sd of the per-row squared errors / √n. Chosen model = the simplest model whose CV loss ≤ (best CV loss + its SE).
+
+**Tiers:** fit the chosen model on all training rows; tier boundaries = the 25/50/75 % quantiles of its predictions on the training rows; R1 = lowest predicted error … R4 = highest. Boundaries frozen and applied unchanged to the test years. If the chosen model gives fewer than 4 distinct predictions, ties go to the lower tier, and empty tiers are reported as such.
+
+**Test (once, 2022–2024):** per tier, n, mean forecast canopy-integral CRPS (raw), 95 % spatial block bootstrap CI (`block_bootstrap` of `scripts/t7_diagnosis.py`; 10 km blocks, 1,000 resamples, seed 42); n < 20: "too few to judge". Spearman between predicted y and realised y, pooled and per crop, CI from the same block resampling. Breakdowns per crop and per year. Tiers built from crop alone (model b), and the current grades, are shown alongside.
+
+**Gate (all four must hold, pooled 2022–2024; otherwise "not shown"):** (i) mean realised CRPS ordered R1 < R2 < R3 < R4; (ii) the block-bootstrap CI of mean(R4) − mean(R1) excludes 0; (iii) the Spearman CI (predicted vs realised y) excludes 0; (iv) model (e) beats models (b) and (c) on test Spearman: the CI of each difference ρ(e) − ρ(b) and ρ(e) − ρ(c) is entirely > 0. Condition (iv) is evaluated even if (e) is not the chosen model. Per crop and per year: the same checks, reported, not part of the gate.
+
+**Honesty checks:** tiers from crop alone vs the chosen tiers (how much of the separation is crop); mean realised CRPS in the test years vs the training years. Tiers are relative reliability only, not a promised error size.
+
+**Outputs:** `results/hindcast/reliability/` (training table, CV table, model and frozen boundaries JSON, test-by-tier CSV + md, per-crop and per-year breakdowns, plot), `docs/RELIABILITY_TIERS_EXPERIMENT.md`.
+
+## 2026-11-12 — Reliability tiers result: not shown, not adopted
+
+Run as pre-registered (`results/hindcast/reliability/test_by_tier.md`). Training: 428 field-seasons 2019–2021 (maize 127 / 84 fields, sorghum 134 / 107, winter wheat 167 / 145); credibility computed at each cut-off (assessable fields 114, 159, 169, 176 at 2018–2021). LOBO CV loss: null 1.201, crop 1.083, grade 1.204, credibility 1.187, gbm 1.136 → chosen **crop** (best outright). It gives 3 distinct predictions, so R4 is empty by construction. Test 2022–2024 (n 463): R1 = sorghum 12.41 [10.13, 14.66], R2 = maize 17.68 [15.13, 20.33], R3 = wheat 21.15 [18.67, 23.62], R4 empty. Gate: (i) fail, (ii) fail (R4 empty), (iii) pass (ρ 0.212 [0.113, 0.306]), (iv) fail (ρ gbm − crop −0.043 [−0.119, 0.036]). Within-crop gbm ρ ≈ 0 for every crop; 2024 order R3 < R2. Mean CRPS training 11.74 vs test 17.54. The separation is entirely crop. Grades recomputed at cut-off 2021 reproduce B 170 / C 268 / D 25. Nothing outside the branch changed.
 
 ## Handoff
 2026-11-11: Methods diagram redesigned (Item 9, branch `claude/methods-diagram-721d67`); try-it tour rebuilt (bottom card, 7 steps ticked by real `fw:tour` app events, Skip restores start page; branch `claude/try-it-tour-bc2305`); independent SSURGO soil check done (branch `claude/ssurgo-check-be7ff1`, `scripts/check_ssurgo.py`, `results/validation/soil_ssurgo_check.*`): negative, simulation TAW ≈ half of SSURGO, no correlation. See PLAN.md Phase 12; then 3D realism pass (branch `claude/field3d-realism-f326e2`: procedural layered soil, water fill line, instanced crops, rain/irrigation from pack data, phone caps, fps fallback).
 Checks after merging main (tour, diagram, soil) into the 3D branch: vitest, typecheck, build, keyboard and overflow (360/390 px), pytest and ruff all green (vitest 163 passed / 1 skipped; pytest 255 passed / 7 skipped). Known, not fixed: timing test `test_runtime_all_candidates_one_field` can exceed 60 s under load; React duplicate-key warning `fallow` from CorrectionPanel (predates all four).
 2026-11-11 later: fix for history-only seasons in Field in 3D, Calendar and Field Card (perennial forage shown as "history only; not simulated", never as bare fallow); see PLAN.md Phase 12. Rotation Builder Level B (3D only) built on branch `feature/rotation-builder` behind `?builder=1`: parity passed (2160 runs, max 5.7e-6 mm); merged as 6c8faad (flag off by default). Farm view on branch `feature/farm-view` (PR open, not merged): waits for the user's screenshot review.
 Next: user reviews tour screenshots; freeze after 12 Nov EOD; tag `v1.0-spaceapps` waits for 13 Nov approval; post-freeze, decide whether to base the TAW prior on soil data (fix `priors.yaml` wording); try the 3D view on a real phone.
+
+## 2026-11-12 — [claude-code] Coordination between two AI agents; main protected
+
+1. **What:** added `docs/COORDINATION.md`, which covers the rules for Claude Code (laptop 1) and Google Antigravity (laptop 2), branch prefixes (`claude/`, `experiment/`, `docs/` vs `ag/`), hotspot files and an "Active work" table. The owner approved protecting `main` with branch protection: a pull request is required (0 approvals), force pushes and deletion are blocked, and the rules are enforced for administrators. The owner also approved a ruleset that blocks deleting or updating the tag `v1.0-spaceapps`.
+2. **Why:** two agents now push to the same repository. The table and the prefixes keep them off each other's files. `DECISIONS.md` is append-only per agent, so neither rewrites the other's record. From now on every change to `main` goes through a pull request that the owner merges. This ends the earlier standing permission to push to `main`.
+
+## 2026-11-12 — [claude-code] Housekeeping: branch protection record, Tasks 1–4 status
+
+1. **Branch protection for `main`, as applied by the owner on 12 Nov 2026 (owner's report):** pull request required, 0 approvals, admins enforced, force pushes and deletions blocked.
+   - **Verification in this session:** the read-only `gh api .../branches/main/protection` call was refused by the permission layer, so the settings were NOT read back directly.
+   - **Indirect evidence:** the owner merged PRs #19 and #20 at 17:56–17:57 UTC with 0 reviews. A required approval count of 1 or more would block that while admins are enforced, so this fits "0 approvals". The admin, force-push and deletion settings were not re-checked.
+2. **Ruleset "protect v1.0-spaceapps"** (id 27138383): target tag, enforcement active, per the earlier session's read. The read-only `gh api .../rulesets/27138383` call was refused this session, so its include pattern and rules are still unconfirmed.
+3. **Tasks of this session:**
+   - Task 1, app fix: PR #19, merged by the owner. The summary shows "not simulated" instead of 0 for a history-only current rotation.
+   - Task 2, bilingual guide: PR #20, merged by the owner.
+   - Task 3, bias diagnosis: draft PR #21, gate failed, not adopted.
+   - Task 4: this entry.
+4. **Still open:** cover-crop seasons render as bare fallow in 3D (`app/src/field3d/growth.ts`, `toCropKind`); the Arabic guide needs a native-speaker review.
+5. **Local clean-up that needs the owner** (nothing was deleted by Claude Code):
+   - the 3.76 GB ZIP `data/csb_2025_tmp/NationalCSB_2018-2025_rev23.zip`;
+   - the spare worktree `.claude/worktrees/docs-coordination` (branch `docs/coordination`, already merged as #16).
+## 2026-11-12 — [claude-code] PRE-REGISTRATION: bias diagnosis and per-crop centre recalibration (experiment, branch `experiment/bias-diagnosis`)
+
+Written and committed before any analysis is run. Nothing here changes `main`, packs, the app, config or defaults. Any change to this plan needs a new dated entry.
+
+1. **Question.** Why are the 2022–2024 forecast errors larger and biased (conformal work: about 31% of observed maize and wheat values above the predicted median; forced-weather 90% coverage 21% / 35% / 14%)? Does a simple per-crop correction fitted on 2019–2021 remove the bias on 2022–2024? Tuning until a number looks good is not a goal.
+2. **Data.**
+   - Fit: ONLY the out-of-sample pseudo-forecasts with cut-offs 2018, 2019, 2020 (seasons 2019, 2020, 2021; 432 field-seasons), copied read-only from branch `experiment/conformal` commit `c56a917`, `results/hindcast/conformal/pseudo_cut{2018,2019,2020}.jsonl`. `pseudo_cut2021` overlaps the test years and is not used.
+   - Test, used once at the end: `results/hindcast/ks_t14slh_records.jsonl` (cut-off 31 Dec 2021, seasons 2022–2024).
+   - 2025: not used (no local records).
+   - Blocks and areas: `results/pilot_fields/ks_t14slh.csv` (`block` = 10 km cell, `area_ha`).
+3. **Part A, diagnosis (no fitting).**
+   - For forecast and forced modes, per crop and per year 2019–2024: n, the median signed error and the mean absolute error of the canopy integral and of peak timing.
+   - Signed error = predicted median − observed (the stored `err_median`).
+   - 95% CIs by spatial block bootstrap: resample 10 km blocks with replacement, 1,000 resamples, seed 20261114. Cells with n < 20 are "too few to judge".
+   - Drivers, forecast mode, canopy signed error, Spearman rho with block-bootstrap CI, separately for 2019–2021 and 2022–2024:
+     - (a) seasonal rain anomaly (% of the 2001-to-cut-off-year mean) and temperature anomaly (°C, mean daily Tmax/Tmin average), from NASA POWER read through `fieldwitness.data.power.read`. The climatology is computed under `as_of(cut-off)`; the season itself is read under `as_of(cut-off)` + `forcing_weather()`, as in forced mode. Season windows (team choice, A): Apr–Sep of year Y for maize and sorghum; Oct (Y−1) to Jun (Y) for winter wheat.
+     - (b) number of clear HLS observations in the same window (`data/fields/ks_t14slh_hls_series.parquet`, rows with `n_clear` > 0).
+     - (c) field area (ha).
+   - A driver "tracks" the bias only if its rho CI excludes 0. Otherwise the text says "cause not established".
+4. **Part B, corrections, fitted per crop on forecast-mode fit data only (crops with n ≥ 20 in the fit data).**
+   - (1) A constant multiplier m on all five canopy-integral quantiles: m = median(observed / predicted median).
+   - (2) An isotonic increasing map from predicted median to observed canopy integral (scikit-learn `IsotonicRegression`, `out_of_bounds="clip"`), applied to each quantile.
+   - (3) A peak-timing shift s (days) added to all five peak quantiles: s = −median(signed peak error).
+   - Selection for canopy: candidates in order of simplicity (none, (1), (2)). Score each by 5-fold spatial-block cross-validation (folds = 10 km blocks, seed 20261114) on mean canopy CRPS. Pick the simplest candidate whose mean is within one standard error of the best. (3) is adopted for a crop only if its CV mean absolute peak error beats "none" by more than one SE.
+   - The chosen corrections are frozen in `results/hindcast/bias_diagnosis/frozen_corrections.json` before the test data is read, then applied unchanged to 2022–2024.
+5. **CRPS estimator.** Only five quantiles (0.05, 0.25, 0.5, 0.75, 0.95) are stored. Before and after correction, CRPS is approximated as 2 × the mean pinball loss over these five levels (the same estimator both times). The stored sample CRPS is not compared with it.
+6. **Gate (forecast mode, test 2022–2024).** For EVERY crop with n ≥ 20 that received a canopy correction, both must hold:
+   - (i) |corrected median signed canopy error| < |raw|, and its 95% block-bootstrap CI includes 0;
+   - (ii) the 95% block-bootstrap CI of the mean paired canopy CRPS difference (corrected − raw) has an upper bound ≤ 0, i.e. it excludes "worse".
+   - Coverage of the 50% and 90% ranges, before and after, is reported as information only.
+   - If the fit-period (2019–2021) median signed canopy error and the test-period one have opposite signs, or the fit-period CI includes 0, the report says "the shift is year-specific; a fixed correction cannot fix it", and nothing is adopted.
+   - Whatever the result, nothing is adopted into `main` by this experiment.
+7. **Outputs.** `results/hindcast/bias_diagnosis/` (CSV + md tables, plots of signed error by crop and year with CIs, both modes), `docs/BIAS_DIAGNOSIS.md` (1 page), unit tests for the aggregation and the three corrections. No file under `app/`, `packs/` or `config/` changes.
+
+## 2026-11-12 — [claude-code] RESULT: bias diagnosis and per-crop centre recalibration — gate FAILED, not adopted
+
+1. **Ran** exactly as pre-registered above (commit eb19a5b). Outputs are in `results/hindcast/bias_diagnosis/`; summary in `docs/BIAS_DIAGNOSIS.md`.
+2. **Diagnosis.** In forecast mode, maize and winter wheat over-predict the canopy integral in 2019–2023, in both the fit and the test periods (same sign; not year-specific). Exception: winter wheat 2024 (about 0). Sorghum is about 0 in 2019–2021 and +11.5 in 2022. Forced mode shows the same pattern.
+3. **Drivers** (Spearman rho of the canopy error):
+   - rain anomaly: negative in both periods (2022–2024: −0.21 [−0.28, −0.13]);
+   - temperature anomaly: −0.31 [−0.38, −0.22] in 2022–2024 only;
+   - clear-observation count: cause not established;
+   - field size: +0.12 in 2019–2021 only.
+4. **Frozen corrections:**
+   - maize: canopy multiplier 0.855, peak shift +10 d;
+   - sorghum: none;
+   - winter wheat: isotonic canopy map, peak shift −35 d.
+5. **Gate (2022–2024): FAIL.**
+   - Maize: bias +11.25 → +1.13, CI includes 0, but the CRPS-difference CI [−2.92, +0.53] does not exclude "worse".
+   - Winter wheat: CRPS clearly better (−3.27 [−4.25, −2.25]), but the bias stays at +5.87 [+0.81, +8.80], which excludes 0.
+   - Sorghum: no correction.
+6. **Decision:** not adopted; nothing changes on `main`. Draft PR only.
+7. **Next (not done):** test whether a dryness-dependent term, or a soil water capacity prior set from SSURGO, explains the bias. That would need its own pre-registration.

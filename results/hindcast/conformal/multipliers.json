@@ -1,0 +1,166 @@
+{
+ "pooled": {
+  "maize|forced|canopy_integral": {
+   "m50": 1.728048254347538,
+   "n_scores": 127,
+   "m80": 3.2077541761187875,
+   "m90": 4.66672010757137,
+   "n_zero_width_excluded": 0,
+   "status": "calibrated"
+  },
+  "maize|forced|peak": {
+   "m50": 0.7692307692307693,
+   "n_scores": 123,
+   "m80": 1.511111111111111,
+   "m90": 2.625,
+   "n_zero_width_excluded": 4,
+   "status": "calibrated"
+  },
+  "maize|forecast|canopy_integral": {
+   "m50": 1.3317910728859303,
+   "n_scores": 127,
+   "m80": 2.4594729609270556,
+   "m90": 3.5424657534246573,
+   "n_zero_width_excluded": 0,
+   "status": "calibrated"
+  },
+  "maize|forecast|peak": {
+   "m50": 0.5555555555555556,
+   "n_scores": 127,
+   "m80": 1.044776119402985,
+   "m90": 1.2615384615384615,
+   "n_zero_width_excluded": 0,
+   "status": "calibrated"
+  },
+  "sorghum|forced|canopy_integral": {
+   "m50": 0.8552321848919341,
+   "n_scores": 134,
+   "m80": 1.9074370328048371,
+   "m90": 2.665533980582524,
+   "n_zero_width_excluded": 0,
+   "status": "calibrated"
+  },
+  "sorghum|forced|peak": {
+   "m50": 0.6538461538461539,
+   "n_scores": 134,
+   "m80": 1.4482758620689655,
+   "m90": 2.56,
+   "n_zero_width_excluded": 0,
+   "status": "calibrated"
+  },
+  "sorghum|forecast|canopy_integral": {
+   "m50": 0.7535407464932294,
+   "n_scores": 134,
+   "m80": 1.398216268225891,
+   "m90": 2.032737985638005,
+   "n_zero_width_excluded": 0,
+   "status": "calibrated"
+  },
+  "sorghum|forecast|peak": {
+   "m50": 0.5714285714285714,
+   "n_scores": 134,
+   "m80": 1.0,
+   "m90": 1.3777777777777778,
+   "n_zero_width_excluded": 0,
+   "status": "calibrated"
+  },
+  "winter_wheat|forced|canopy_integral": {
+   "m50": 2.3300404139598134,
+   "n_scores": 167,
+   "m80": 4.790111877523551,
+   "m90": 5.7766046386191965,
+   "n_zero_width_excluded": 0,
+   "status": "calibrated"
+  },
+  "winter_wheat|forced|peak": {
+   "m50": 1.6923076923076923,
+   "n_scores": 153,
+   "m80": 3.739130434782609,
+   "m90": 9.25,
+   "n_zero_width_excluded": 14,
+   "status": "calibrated"
+  },
+  "winter_wheat|forecast|canopy_integral": {
+   "m50": 1.431377447241292,
+   "n_scores": 167,
+   "m80": 2.7979346283968125,
+   "m90": 3.4142574692442875,
+   "n_zero_width_excluded": 0,
+   "status": "calibrated"
+  },
+  "winter_wheat|forecast|peak": {
+   "m50": 0.9473684210526315,
+   "n_scores": 167,
+   "m80": 1.4736842105263157,
+   "m90": 1.8235294117647058,
+   "n_zero_width_excluded": 0,
+   "status": "calibrated"
+  }
+ },
+ "block_aware_m90_range_over_test_blocks": {
+  "maize|forced|canopy_integral": {
+   "m90_min": 4.147231569287243,
+   "m90_max": 4.66672010757137
+  },
+  "maize|forced|peak": {
+   "m90_min": 2.0,
+   "m90_max": 2.625
+  },
+  "maize|forecast|canopy_integral": {
+   "m90_min": 3.501502102944122,
+   "m90_max": 3.5424657534246573
+  },
+  "maize|forecast|peak": {
+   "m90_min": 1.24,
+   "m90_max": 1.2615384615384615
+  },
+  "sorghum|forced|canopy_integral": {
+   "m90_min": 2.664404338247755,
+   "m90_max": 2.665533980582524
+  },
+  "sorghum|forced|peak": {
+   "m90_min": 2.0,
+   "m90_max": 2.56
+  },
+  "sorghum|forecast|canopy_integral": {
+   "m90_min": 2.0142421097613097,
+   "m90_max": 2.032737985638005
+  },
+  "sorghum|forecast|peak": {
+   "m90_min": 1.3760379596678527,
+   "m90_max": 1.3777777777777778
+  },
+  "winter_wheat|forced|canopy_integral": {
+   "m90_min": 5.43379356995066,
+   "m90_max": 5.7766046386191965
+  },
+  "winter_wheat|forced|peak": {
+   "m90_min": 8.111888111888106,
+   "m90_max": 10.5
+  },
+  "winter_wheat|forecast|canopy_integral": {
+   "m90_min": 3.3143485379053166,
+   "m90_max": 3.4142574692442875
+  },
+  "winter_wheat|forecast|peak": {
+   "m90_min": 1.8072289156626506,
+   "m90_max": 1.8235294117647058
+  }
+ },
+ "calibration_seasons": {
+  "2019": 592,
+  "2020": 524,
+  "2021": 596
+ },
+ "calibration_fields": 189,
+ "reproduction_check": {
+  "fields_per_run": {
+   "2018": 200,
+   "2019": 200,
+   "2020": 200,
+   "2021": 200
+  },
+  "cut2021_identical_to_published": true
+ },
+ "tag": "D"
+}

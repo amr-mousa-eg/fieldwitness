@@ -80,7 +80,7 @@ interface HoverMetric {
   rootDepth: number;
   /** History-only season key (e.g. perennial_forage) owning this week: nothing is simulated. */
   historyOnly: string | null;
-  /** Cover-crop week (farm view mapping, `field3d/farm.ts`); the glass view does not set it. */
+  /** Cover-crop week (`isCoverWeek` in `field3d/farm.ts`); set by both the farm and the glass view. */
   cover?: boolean;
 }
 

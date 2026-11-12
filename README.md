@@ -173,6 +173,7 @@ and `app/deploy/README.md`.
 - `app/`: React + Vite + TypeScript + MapLibre web app.
 - `results/`: validation outputs, including negative results.
 - `PLAN.md`, `DECISIONS.md`, `DATA.md`, `AI_USE.md`: plan, decision log, datasets and licences, AI disclosure.
+- Plain-language guide to how FieldWitness was built and how its prediction works: [English](docs/HOW_WE_BUILT_FIELDWITNESS.en.md) · [العربية (machine-assisted draft)](docs/HOW_WE_BUILT_FIELDWITNESS.ar.md).
 
 ## Not claimed
 
