@@ -90,11 +90,23 @@ def build(region_id: str = REGION) -> pd.DataFrame:
     lab = labels.read(region_id)
     series = hls_qa.read(region_id)
     series = series.dropna(subset=["ndvi"])
-    pilot = pd.read_parquet(f"data/fields/{region_id}_pilot.parquet").set_index("field_id")
+    pilot = (
+        pd.read_parquet(f"data/fields/{region_id}_pilot.parquet")
+        .drop_duplicates("field_id")
+        .set_index("field_id")
+    )
     soil = pd.read_parquet(f"data/soil/{region_id}_fields.parquet")
     soil = soil[(soil["depth"] == SOIL_DEPTH) & (soil["stat"] == "mean")]
-    soil = soil.pivot(index="field_id", columns="property", values="value")
-    crop_of = lab.set_index(["field_id", "year"])["crop"].to_dict()
+    soil = soil.drop_duplicates(subset=["field_id", "property"]).pivot(
+        index="field_id", columns="property", values="value"
+    )
+    lab_cols = lab.set_index(["field_id", "year"])
+    crop_of = lab_cols["crop"].to_dict()
+    src_of = (
+        lab_cols["crop_source"].to_dict()
+        if "crop_source" in lab.columns
+        else dict.fromkeys(crop_of, "label")
+    )
     by_field = {fid: g for fid, g in series.groupby("field_id")}
     rows = []
     for fid, g in by_field.items():
@@ -114,6 +126,7 @@ def build(region_id: str = REGION) -> pd.DataFrame:
                 "crop": crop,
                 "prev_crop": prev,
                 "prev2_crop": crop_of.get((fid, year - 2)),
+                "crop_source": src_of.get((fid, year), "label"),
                 "area_ha": float(r["area_ha"]),
                 "lon": float(r["lon"]),
                 "lat": float(r["lat"]),
@@ -158,16 +171,25 @@ def write(df: pd.DataFrame, region_id: str = REGION) -> dict:
     RESULTS.mkdir(parents=True, exist_ok=True)
     df.to_parquet(OUT / f"{region_id}_field_season.parquet", index=False)
     cc = contrast_counts(df)
+    is_clf = "crop_source" in df.columns and (df["crop_source"] == "classifier").any()
+    tags = dict(TAGS)
+    if is_clf:
+        tags.update(crop="D", prev_crop="D", prev2_crop="D")
     summary = {
+        "region_id": region_id,
         "rows": len(df),
         "rows_with_outcome": int(df["canopy_integral"].notna().sum()),
         "fields": int(df["field_id"].nunique()),
-        "tags": TAGS,
+        "crop_source": "classifier (Tier 3 unlabelled, tag D)" if is_clf else "label (tag E)",
+        "tags": tags,
         "windows_tag_A": WINDOWS,
         "contrast_counts": cc.to_dict("records"),
         "irrigation_proxy": "not available (WorldCereal needs a login, T1.4)",
         "et_outcome": "not available (no ECOSTRESS data)",
     }
-    (RESULTS / "field_season_summary.json").write_text(json.dumps(summary, indent=2), "utf-8")
-    cc.to_csv(RESULTS / "precrop_contrast_counts.csv", index=False)
+    prefix = "" if region_id == REGION else f"{region_id}_"
+    (RESULTS / f"{prefix}field_season_summary.json").write_text(
+        json.dumps(summary, indent=2), "utf-8"
+    )
+    cc.to_csv(RESULTS / f"{prefix}precrop_contrast_counts.csv", index=False)
     return summary

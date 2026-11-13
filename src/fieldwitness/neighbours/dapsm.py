@@ -23,18 +23,18 @@ EARTH_RADIUS_KM = 6371.0088  # IUGG mean Earth radius (tag E)
 W_GRID = tuple(round(0.1 * i, 1) for i in range(11))
 
 
-def centroids(pilot: pd.DataFrame) -> pd.DataFrame:
+def centroids(pilot: pd.DataFrame, epsg: str = "EPSG:32614") -> pd.DataFrame:
     """Field centroids (lat, lon, WGS 84) from WKB polygons in WGS 84.
 
-    The centroid is computed in UTM zone 14N (EPSG:32614, the zone of tile T14SLH) so it is a
-    planar area centroid, then converted back to lon/lat.
+    The centroid is computed in the tile's UTM zone (`epsg`, default EPSG:32614 for T14SLH) so
+    it is a planar area centroid, then converted back to lon/lat.
     """
     import shapely
     from pyproj import Transformer
 
     geom = shapely.from_wkb(pilot["geometry"].to_numpy())
-    fwd = Transformer.from_crs("EPSG:4326", "EPSG:32614", always_xy=True)
-    back = Transformer.from_crs("EPSG:32614", "EPSG:4326", always_xy=True)
+    fwd = Transformer.from_crs("EPSG:4326", epsg, always_xy=True)
+    back = Transformer.from_crs(epsg, "EPSG:4326", always_xy=True)
     projected = shapely.transform(geom, lambda xy: np.column_stack(fwd.transform(*xy.T)))
     c = shapely.centroid(projected)
     lon, lat = back.transform(shapely.get_x(c), shapely.get_y(c))

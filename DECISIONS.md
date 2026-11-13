@@ -1064,11 +1064,32 @@ Integrated all 24 NASA Earth observation missions, USDA, USGS, FAO, and ECMWF pa
    - Preserved 100% EN/AR i18n key parity and updated `app/tests/chatbotLlm.test.ts`, `app/tests/methodsDiagram.test.ts`, and `app/tests/tour.test.ts` to cross-check every reported figure against `results/story/phenology_benchmark.json` and `results/hindcast/conformal/cqr_evaluation.json`.
    - Includes `docs/SCIENTIFIC_METHODS.md` (pure scientific algorithms reference) from commit `2a56f2e`.
 
+## 2026-11-13 — [antigravity] Phase 2 Central Ukraine (`ua_central_t36uvu`) Neighbours Witness Evaluation (`feature/central-ukraine-neighbours`)
+
+1. **Pre-Registered Execution & Open Data Pipeline (`src/fieldwitness/data/s2_cog.py`, `src/fieldwitness/resolve/pilot.py`, `src/fieldwitness/story/ukraine_seasons.py`):**
+   - **Boundary & Imagery Budget:** Added Central Ukraine (`ua_central_t36uvu`, Kirovohrad oblast area, Sentinel-2 tile `T36UVU` / `EPSG:32636`, Tier 3 unlabelled) alongside Kansas (`ks_t14slh`) without exceeding the `< 1 GB` download ceiling (`~650 MB` total across FTW `ua_t36uvu` extract + 128 Sentinel-2 L2A 20 m COG window reads + SoilGrids WCS + POWER daily weather).
+   - **Sentinel-2 L2A COG Fix (`s2_cog.py`):** Fixed double `-0.1` BOA radiometric offset subtraction when `earthsearch:boa_offset_applied == true` on Element84 Earth Search v1 (`sentinel-2-l2a`) STAC items (offset only subtracted once from `raster:bands[0].offset` when unapplied).
+   - **Pilot Sample & Scale Integrity (`pilot.py`, `results/pilot_fields/ua_central_t36uvu_summary.json`):** Deduplicated FTW `field_id` geometries and stratified `395` unique fields (`area >= 5.0 ha`, median `48.68 ha`, median `473` interior 15 m pixels, `0` scale-flagged) uniformly across `8` disjoint 10 km spatial blocks inside the 2×2 20 m IFD tile window (`tx in {1,2}, ty in {7,8}`).
+   - **Tier 3 Causal Crop Sequence Inference (`ukraine_seasons.py`, `table.py`):** Because `labels.source == "none"` in Tier 3, annual crop labels (`winter_wheat`, `sunflower`, `maize`, `fallow`) were inferred strictly causally using observations `<= year-12-31` via Savitzky–Golay phenology + Phase 1 TWDTW (`crop_source = "classifier"`, uncertainty tag `D` across `crop`, `prev_crop`, `prev2_crop`), yielding `2,765` field-season rows (`2,145` with outcomes). Added `epsg` support in [`dapsm.centroids`](file:///home/antigravity/amr-mousa-eg/fieldwitness/src/fieldwitness/neighbours/dapsm.py) and dynamic extra `prev2_crop` levels (`sunflower`) in [`dml.py`](file:///home/antigravity/amr-mousa-eg/fieldwitness/src/fieldwitness/neighbours/dml.py).
+
+2. **Empirical Neighbours Comparison (`scripts/run_ukraine_neighbours.py`, `results/neighbours/ua_central_t36uvu_report.md`):**
+   - **Winter Wheat Outcome Coverage Finding:** Under frozen `table.py`'s `(1, 196)` Jan 1–Jul 15 ≥ 80% coverage rule, `crop == "winter_wheat"` outcome rows have `n = 0` due to snow/winter cloud sparsity Dec–Feb at `48.2°N`. Frozen thresholds were preserved; `winter_wheat` is tested heavily as preceding crop (`prev_crop == winter_wheat`: `n = 434` full / `n = 193` `<=2021`; `prev2_crop == winter_wheat`: `n = 292`).
+   - **Kansas (`ks_t14slh`) vs Central Ukraine (`ua_central_t36uvu`) Summary:**
+     - **Primary DML (`dml.py`):** Kansas (2018–2024): `92` fitted, `60/92` overlap, `0/92` balance, `50/56` placebo, `23/28` negctrl → **`0`** evidence. Ukraine (`<=2021`): `64` fitted, `52/64` overlap, `12/64` balance (weighted median \|SMD\| `0.321` vs raw `0.594`), `23/44` placebo (`20` untested), `16/32` negctrl (`32` untested) → **`7`** evidence. Ukraine (2018–2024): `72` fitted, `64/72` overlap, `48/72` balance (weighted median \|SMD\| `0.174` vs raw `0.553`), `36/64` placebo, `31/60` negctrl → **`11`** evidence.
+     - **Matching DML (`matching.py`):** Kansas (2018–2024): `32` fitted, `32/32` overlap, `8/32` balance → **`0`** evidence. Ukraine (`<=2021`): `108` fitted, `84/108` overlap, `12/108` balance, `26/44` placebo, `35/60` negctrl → **`4`** evidence. Ukraine (2018–2024): `172` fitted, `144/172` overlap, `36/172` balance, `107/144` placebo, `73/112` negctrl → **`13`** evidence.
+     - **DAPSM (`dapsm.py`):** Kansas (`<=2021`, `w*=0.0`): `4` fitted, `0/4` balance → **`0`** evidence. Ukraine (`<=2021`, `w*=0.8`): `108` fitted, `84/108` overlap, `0/108` balance (`w=0.5, 0.6, 0.9, 1.0` passed `4/108`; worst covariate `area_ha`) → **`0`** evidence. Ukraine (2018–2024, `w*=0.4`): `172` fitted, `144/172` overlap, `8/172` balance, `92/144` placebo, `67/112` negctrl → **`1`** evidence (`sunflower [prev2=maize]: maize vs sunflower on canopy_drop (all): -0.032 [-0.066, -0.010]`).
+
+3. **Witness Status Verdict & Verification:**
+   - **Total rows clearing all 4 gates:** **`11`** pre-cutoff (`<=2021`: `7` Primary DML + `4` Matching DML + `0` DAPSM) and **`25`** full period (`2018–2024`: `11` + `13` + `1`), demonstrating that Central Ukraine breaks Kansas's structural overlap/balance deadlock.
+   - **Production Witness Policy:** Because Tier 3 Ukraine crop sequences come from an unvalidated Sentinel-2 NDVI classifier (`crop_source = "classifier"`, tag `D`) without regional parcel ground-truth labels, **Neighbours stays strictly OFF in grading** (`config/grading.yaml` and `app/public/packs/ks_t14slh/` untouched).
+   - **Verification:** `uv run ruff format --check .`, `uv run ruff check .`, `uv run python scripts/t10_red_team_audit.py`, `uv run pytest -q` (363 passed, 9 skipped), and frontend `tsc` + `vitest` (`221 passed | 2 skipped`) all pass.
+
 ## Autopilot handoff
 
-- **Updated:** 2026-11-13 (branch `feature/website-enhanced-metrics`)
-- **What this run did:** Replaced legacy `78.3%` website metrics with verified Phase 1 phenology benchmark and Phase 4 Split-CQR calibration results across UI components, bilingual EN/AR strings, chatbot KB/FACTS, and frontend tests.
-- **In progress:** None.
+- **Updated:** 2026-11-13 (branch `feature/central-ukraine-neighbours`, merged `origin/main`)
+- **What this run did:** Added Tier 3 Central Ukraine (`ua_central_t36uvu`, 395 FTW fields across 8 spatial blocks) via an open Sentinel-2 L2A 20 m COG pipeline (`s2_cog.py`, `ukraine_seasons.py`, `run_ukraine_neighbours.py`), ran all 3 Phase 2 Neighbours causal estimators across pre-cutoff (`<=2021`) and full (`2018–2024`) periods vs Kansas (`ks_t14slh`), generated empirical gate reports (`results/neighbours/ua_central_t36uvu_report.md`), and merged `origin/main` cleanly.
+- **In progress:** None. PR #44 ready for merge on `feature/central-ukraine-neighbours`.
 - **Background tasks:** None.
-- **Remaining / Next task:** Merge PR for `feature/website-enhanced-metrics`, then proceed to Phase 2 (Spatial Causal Inference & Neighbours Witness) if requested.
-- **Risks / Notes:** Production packs in `app/public/packs/` remain untouched; zero unverified or fabricated metrics introduced.
+- **Remaining / Next task:** Independently cross-validate Tier 3 classifier labels against ground-truth parcel surveys (or a validated Tier 1/2 region with crop rotation diversity) before deciding whether to enable the Neighbours witness in grading; merge PR #44 once reviewed.
+- **Risks / Notes:** Total local downloads stayed under the `< 1 GB` ceiling (`~650 MB`); `config/grading.yaml` and `app/public/packs/ks_t14slh/` were not altered; Neighbours remains `OFF` in grading because `ua_central_t36uvu` labels are classifier-derived (tag `D`).
+

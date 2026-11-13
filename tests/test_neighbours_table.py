@@ -52,3 +52,27 @@ def test_table_tagged_and_unique():
     assert not df.duplicated(["field_id", "year"]).any()
     for col in df.columns:
         assert col in table.TAGS or col in {"field_id", "year", "lon", "lat", "block"}
+
+
+def test_write_classifier_tags_crop_as_d(tmp_path, monkeypatch):
+    monkeypatch.setattr(table, "OUT", tmp_path / "data")
+    monkeypatch.setattr(table, "RESULTS", tmp_path / "results")
+    df = pd.DataFrame(
+        {
+            "field_id": ["f1", "f2"],
+            "year": [2020, 2020],
+            "crop": ["maize", "sunflower"],
+            "prev_crop": ["sunflower", "maize"],
+            "prev2_crop": ["winter_wheat", "winter_wheat"],
+            "crop_source": ["classifier", "classifier"],
+            "canopy_integral": [35.0, 28.0],
+        }
+    )
+    summary = table.write(df, region_id="ua_test")
+    assert summary["region_id"] == "ua_test"
+    assert summary["tags"]["crop"] == "D"
+    assert summary["tags"]["prev_crop"] == "D"
+    assert summary["tags"]["prev2_crop"] == "D"
+    assert (tmp_path / "data" / "ua_test_field_season.parquet").exists()
+    assert (tmp_path / "results" / "ua_test_field_season_summary.json").exists()
+    assert (tmp_path / "results" / "ua_test_precrop_contrast_counts.csv").exists()

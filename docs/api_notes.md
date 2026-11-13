@@ -391,3 +391,9 @@ Verified via direct HTTP/REST probes and CMR/GIBS endpoints:
 - **Endpoint:** `GET https://quickstats.nass.usda.gov/api/api_GET/` (requires `key` via `NASS_QUICKSTATS_API_KEY`).
 - **Guardrail:** Strictly restricted to `AREA HARVESTED` / crop frequency context. Zero commodity prices or revenue predictions allowed per CLAUDE.md Rule 4.
 
+## Element84 Earth Search v1 (`sentinel-2-l2a` Collection 1 COGs) — Verified 2026-11-13
+
+- **STAC Search Endpoint:** `POST https://earth-search.aws.element84.com/v1/search`
+- **Query Shape:** `{"collections": ["sentinel-2-l2a"], "query": {"grid:code": {"eq": "MGRS-36UVU"}, "eo:cloud_cover": {"lt": 35.0}}, "datetime": "2017-01-01T00:00:00Z/2024-12-31T23:59:59Z", "limit": 200}` (pagination via `links` where `rel == "next"` using `nxt["body"]`).
+- **Assets & 20 m IFD Layout:** Each feature provides `assets.red` (B04, 10 m IFD 0 / 20 m `5490×5490` IFD 1, `512×512` tiles), `assets.nir` (B08, same layout), and `assets.scl` (SCL, native 20 m `5490×5490` IFD 0, `512×512` tiles, clear land classes `4 = Vegetation`, `5 = Not-vegetated`).
+- **Radiometric Offset Caveat (`earthsearch:boa_offset_applied` vs `raster:bands[0].offset`):** On 70 of 128 selected scenes (2018–2024 ESA Processing Baselines 04.00/05.xx), STAC `assets.{red,nir}.raster:bands[0].offset` still advertises `-0.1`, while `properties["earthsearch:boa_offset_applied"]` is `true` and the underlying COG uint16 DNs are already offset-corrected (matching `Element84/earth-search#71`). Live pixel checks on `T36UVU` confirmed water (`SCL=6`) median Red DN `209–277` and dark vegetation (`SCL=4`) median Red DN `471–549` (well below `1000`). Applying `-0.1` again clips dark vegetation Red reflectance to `0.0` and produces spurious `NDVI = 1.0`. Bypassing `raster:bands[0].offset` when `earthsearch:boa_offset_applied == true` eliminated all `>= 0.999` artifacts across 48,199 rows (`max NDVI = 0.9874`).
