@@ -142,7 +142,7 @@ function VulnerabilityCalendar({ cal, sequence }: { cal: FieldCalendar; sequence
         </p>
       ))}
       {missing.length > 0 && (
-        <p className="muted">{t("cal.vuln.missing", { crops: missing.map(cropName).join(", ") })}</p>
+        <p className="muted">{t("cal.vuln.missing", { crops: missing.map((c) => cropName(c)).join(", ") })}</p>
       )}
     </section>
   );

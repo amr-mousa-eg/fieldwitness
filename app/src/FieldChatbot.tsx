@@ -8,6 +8,7 @@ import {
   resolveFieldLabel,
   subscribeLiveChatState,
 } from "./chatbotContext";
+import { t, useLocale } from "./strings";
 import type { RegionIndex } from "./types";
 
 interface ChatMessage {
@@ -205,6 +206,7 @@ export function FieldChatbot({
     return () => window.removeEventListener("keydown", onKey);
   }, [isOpen]);
 
+  const locale = useLocale();
   const activePack = fieldId ? liveState.fieldPack : null;
   const fieldLabel = resolveFieldLabel(activePack, index);
   const ctx: ChatContextSnapshot = {
@@ -218,6 +220,7 @@ export function FieldChatbot({
     priorities: fieldId ? liveState.priorities : null,
     hindcast: page === "scoreboard" ? liveState.hindcast : null,
     liveProfile: page === "add-field" ? liveState.liveProfile : null,
+    locale,
   };
 
   const contextSummary = activePack
@@ -241,7 +244,7 @@ export function FieldChatbot({
       setTestStatus({ state: "error", message: "Enter an endpoint URL first." });
       return;
     }
-    setTestStatus({ state: "testing", message: "Sending test request..." });
+    setTestStatus({ state: "testing", message: t("chat.settings.testing") });
     try {
       const reply = await callLlmEndpoint(llmCfg, "Reply briefly.", [], "Reply with OK", 24);
       saveLlmConfig({ ...llmCfg, enabled: true });
@@ -322,10 +325,10 @@ export function FieldChatbot({
   return (
     <div className="chatbot-root">
       {isOpen && (
-        <section className="chatbot-drawer" aria-label="FieldWitness Context Assistant">
+        <section className="chatbot-drawer" aria-label={t("chat.title")}>
           <header className="chatbot-header">
             <div className="chatbot-title-wrap">
-              <strong className="chatbot-title">FieldWitness Assistant</strong>
+              <strong className="chatbot-title">{t("chat.title")}</strong>
               <span className="chatbot-ctx-pill" title="Live active context">
                 {contextSummary}
               </span>
@@ -335,25 +338,25 @@ export function FieldChatbot({
                 type="button"
                 className="chatbot-icon-btn"
                 onClick={() => setMessages([WELCOME_MESSAGE])}
-                aria-label="Reset conversation"
-                title="Clear conversation"
+                aria-label={t("chat.reset")}
+                title={t("chat.reset")}
               >
-                Reset
+                {t("chat.reset")}
               </button>
               <button
                 type="button"
                 className="chatbot-icon-btn"
                 onClick={() => setShowSettings((s) => !s)}
-                aria-label="Assistant API settings"
-                title="Optional LLM API Settings"
+                aria-label={t("chat.api")}
+                title={t("chat.api")}
               >
-                API
+                {t("chat.api")}
               </button>
               <button
                 type="button"
                 className="chatbot-icon-btn"
                 onClick={() => setIsOpen(false)}
-                aria-label="Close assistant"
+                aria-label={t("chat.close")}
               >
                 ✕
               </button>
@@ -363,7 +366,7 @@ export function FieldChatbot({
           {showSettings && (
             <div className="chatbot-settings">
               <p className="chatbot-settings-note">
-                Built-in Grounded Mode works offline for free. For generative LLM answers, pick a preset (or enter a proxy URL) and paste your API key (stored in browser only):
+                {t("chat.settings.note")}
               </p>
               <div className="chatbot-chips" style={{ marginBottom: "0.35rem" }}>
                 <button
@@ -460,7 +463,7 @@ export function FieldChatbot({
                   onClick={handleTestConnection}
                   disabled={testStatus.state === "testing"}
                 >
-                  {testStatus.state === "testing" ? "Testing..." : "Test Connection"}
+                  {testStatus.state === "testing" ? t("chat.settings.testing") : t("chat.settings.test")}
                 </button>
                 {testStatus.state !== "idle" && (
                   <span
@@ -508,7 +511,7 @@ export function FieldChatbot({
             {isLoading && (
               <div className="chatbot-msg chatbot-msg--assistant">
                 <div className="chatbot-bubble">
-                  <p className="chatbot-text">Thinking with project context...</p>
+                  <p className="chatbot-text">{t("chat.thinking")}</p>
                 </div>
               </div>
             )}
@@ -525,17 +528,13 @@ export function FieldChatbot({
               ref={inputRef}
               type="text"
               className="chatbot-input"
-              placeholder={
-                activePack
-                  ? `Ask about Field ${fieldLabel ?? ""} or FieldWitness...`
-                  : "Ask about witnesses, grades, soil, wheat..."
-              }
+              placeholder={t("chat.placeholder")}
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              aria-label="Ask FieldWitness question"
+              aria-label={t("chat.placeholder")}
             />
             <button type="submit" className="chatbot-send-btn" disabled={!input.trim() || isLoading}>
-              Send
+              {t("chat.send")}
             </button>
           </form>
         </section>
@@ -549,9 +548,9 @@ export function FieldChatbot({
           setTimeout(() => inputRef.current?.focus(), 50);
         }}
         aria-expanded={isOpen}
-        aria-label="Ask FieldWitness Assistant"
+        aria-label={t("chat.toggle")}
       >
-        {isOpen ? "Close Chat" : "Ask FieldWitness"}
+        {isOpen ? t("chat.close") : t("chat.toggle")}
       </button>
     </div>
   );

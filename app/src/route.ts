@@ -4,8 +4,8 @@ export type FieldTab = "story" | "options" | "calendar" | "advisor" | "sim3d";
 export const TABS: FieldTab[] = ["story", "options", "calendar", "advisor", "sim3d"];
 
 /** Region-level pages. Field ids are 40-hex hashes, so these names never collide with one. */
-export type RegionPage = "map" | "scoreboard" | "methods" | "add-field";
-export const PAGES: RegionPage[] = ["map", "scoreboard", "methods", "add-field"];
+export type RegionPage = "map" | "scoreboard" | "compare" | "methods" | "add-field";
+export const PAGES: RegionPage[] = ["map", "scoreboard", "compare", "methods", "add-field"];
 
 /** App location in the URL hash: #/<region_id>[/<page> | /<field_id>[/<tab>]] or #/add-field. */
 export interface Route {
@@ -30,6 +30,24 @@ export function parseHash(hash: string): Route {
   const page = PAGES.includes(normSecond as RegionPage) ? (normSecond as RegionPage) : "map";
   const fieldId = normSecond !== null && !PAGES.includes(normSecond as RegionPage) ? normSecond : null;
   return { regionId, page, fieldId, tab: TABS.includes(tab as FieldTab) ? (tab as FieldTab) : "story" };
+}
+
+export function parseCompareQuery(hash: string): { a: string | null; b: string | null } {
+  const qIdx = hash.indexOf("?");
+  if (qIdx < 0) return { a: null, b: null };
+  const params = new URLSearchParams(hash.slice(qIdx + 1));
+  return {
+    a: params.get("a") || null,
+    b: params.get("b") || null,
+  };
+}
+
+export function compareHref(regionId: string, a?: string | null, b?: string | null): string {
+  const params = new URLSearchParams();
+  if (a) params.set("a", a);
+  if (b) params.set("b", b);
+  const qs = params.toString();
+  return `#/${encodeURIComponent(regionId)}/compare${qs ? `?${qs}` : ""}`;
 }
 
 export function routeHref(regionId: string, fieldId?: string | null, tab?: FieldTab): string {
