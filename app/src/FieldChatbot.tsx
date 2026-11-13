@@ -25,28 +25,31 @@ interface LlmConfig {
 }
 
 const STORAGE_KEY = "fieldwitness_chatbot_llm_cfg_v1";
+const ENV_PROXY_URL = (import.meta.env.VITE_CHATBOT_PROXY_URL as string | undefined)?.trim() || "";
+const ENV_MODEL = (import.meta.env.VITE_CHATBOT_MODEL as string | undefined)?.trim() || "gpt-4o-mini";
 
 function loadLlmConfig(): LlmConfig {
+  const defaultCfg: LlmConfig = {
+    enabled: Boolean(ENV_PROXY_URL),
+    endpoint: ENV_PROXY_URL || "https://api.openai.com/v1/chat/completions",
+    model: ENV_MODEL,
+    apiKey: "",
+  };
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) {
       const parsed = JSON.parse(raw) as Partial<LlmConfig>;
       return {
-        enabled: Boolean(parsed.enabled),
-        endpoint: parsed.endpoint || "https://api.openai.com/v1/chat/completions",
-        model: parsed.model || "gpt-4o-mini",
+        enabled: parsed.enabled !== undefined ? Boolean(parsed.enabled) : defaultCfg.enabled,
+        endpoint: parsed.endpoint || defaultCfg.endpoint,
+        model: parsed.model || defaultCfg.model,
         apiKey: parsed.apiKey || "",
       };
     }
   } catch {
     // ignore storage errors
   }
-  return {
-    enabled: false,
-    endpoint: "https://api.openai.com/v1/chat/completions",
-    model: "gpt-4o-mini",
-    apiKey: "",
-  };
+  return defaultCfg;
 }
 
 export function FieldChatbot({
@@ -139,24 +142,33 @@ export function FieldChatbot({
     setMessages((prev) => [...prev, userMsg]);
     if (!rawText) setInput("");
 
-    if (llmCfg.enabled && llmCfg.endpoint && llmCfg.apiKey) {
+    if (llmCfg.enabled && llmCfg.endpoint.trim()) {
       setIsLoading(true);
       try {
-        const res = await fetch(llmCfg.endpoint, {
+        const headers: Record<string, string> = {
+          "Content-Type": "application/json",
+        };
+        if (llmCfg.apiKey.trim()) {
+          headers.Authorization = `Bearer ${llmCfg.apiKey.trim()}`;
+        }
+        const history = messages
+          .filter((m) => m.id !== "welcome")
+          .slice(-6)
+          .map((m) => ({ role: m.role, content: m.text }));
+
+        const res = await fetch(llmCfg.endpoint.trim(), {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${llmCfg.apiKey}`,
-          },
+          headers,
           body: JSON.stringify({
-            model: llmCfg.model || "gpt-4o-mini",
+            model: llmCfg.model || ENV_MODEL,
             messages: [
               { role: "system", content: buildSystemPrompt(ctx) },
+              ...history,
               { role: "user", content: query },
             ],
             temperature: 0.2,
           }),
-          signal: AbortSignal.timeout(15000),
+          signal: AbortSignal.timeout(20000),
         });
         if (res.ok) {
           const data = await res.json();
@@ -229,7 +241,7 @@ export function FieldChatbot({
           {showSettings && (
             <div className="chatbot-settings">
               <p className="chatbot-settings-note">
-                Built-in Grounded Mode works offline for free. Optionally connect your own OpenAI-compatible API key (stored in browser only):
+                Built-in Grounded Mode works offline for free. For generative LLM answers, connect a CORS-enabled proxy URL (no key needed) or your own OpenAI-compatible API key (stored in browser only):
               </p>
               <label className="chatbot-check">
                 <input
@@ -237,26 +249,26 @@ export function FieldChatbot({
                   checked={llmCfg.enabled}
                   onChange={(e) => saveLlmConfig({ ...llmCfg, enabled: e.target.checked })}
                 />
-                Use Custom LLM Endpoint
+                Use LLM Endpoint
               </label>
               <input
                 type="url"
                 className="chatbot-setting-input"
-                placeholder="Endpoint URL (e.g. https://api.openai.com/v1/chat/completions)"
+                placeholder="Proxy or OpenAI-compatible URL"
                 value={llmCfg.endpoint}
                 onChange={(e) => saveLlmConfig({ ...llmCfg, endpoint: e.target.value })}
               />
               <input
                 type="text"
                 className="chatbot-setting-input"
-                placeholder="Model (e.g. gpt-4o-mini)"
+                placeholder="Model (e.g. gpt-4o-mini, gemini-2.5-flash)"
                 value={llmCfg.model}
                 onChange={(e) => saveLlmConfig({ ...llmCfg, model: e.target.value })}
               />
               <input
                 type="password"
                 className="chatbot-setting-input"
-                placeholder="API Key (stored locally in browser)"
+                placeholder="API Key (optional if using a server proxy)"
                 value={llmCfg.apiKey}
                 onChange={(e) => saveLlmConfig({ ...llmCfg, apiKey: e.target.value })}
               />
