@@ -1,0 +1,8 @@
+name = "fieldwitness-chatbot-proxy"
+main = "chatbot-proxy.js"
+compatibility_date = "2024-11-01"
+
+[vars]
+ALLOWED_ORIGIN = "https://amr-mousa-eg.github.io"
+LLM_UPSTREAM_URL = "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
+LLM_MODEL = "gemini-2.5-flash"
