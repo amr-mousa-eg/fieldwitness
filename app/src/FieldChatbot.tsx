@@ -69,6 +69,10 @@ export function FieldChatbot({
   const [llmCfg, setLlmCfg] = useState<LlmConfig>(() => loadLlmConfig());
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [testStatus, setTestStatus] = useState<{ state: "idle" | "testing" | "ok" | "error"; message: string }>({
+    state: "idle",
+    message: "",
+  });
   const [messages, setMessages] = useState<ChatMessage[]>(() => [
     {
       id: "welcome",
@@ -123,10 +127,66 @@ export function FieldChatbot({
 
   const saveLlmConfig = (next: LlmConfig) => {
     setLlmCfg(next);
+    setTestStatus({ state: "idle", message: "" });
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
     } catch {
       // ignore storage errors
+    }
+  };
+
+  const handleTestConnection = async () => {
+    const endpoint = llmCfg.endpoint.trim();
+    if (!endpoint) {
+      setTestStatus({ state: "error", message: "Enter an endpoint URL first." });
+      return;
+    }
+    setTestStatus({ state: "testing", message: "Sending test request..." });
+    try {
+      const headers: Record<string, string> = {
+        "Content-Type": "application/json",
+      };
+      if (llmCfg.apiKey.trim()) {
+        headers.Authorization = `Bearer ${llmCfg.apiKey.trim()}`;
+      }
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers,
+        body: JSON.stringify({
+          model: llmCfg.model || ENV_MODEL,
+          messages: [{ role: "user", content: "Reply with OK" }],
+          max_tokens: 16,
+          temperature: 0,
+        }),
+        signal: AbortSignal.timeout(15000),
+      });
+      if (!res.ok) {
+        const errText = await res.text().catch(() => "");
+        setTestStatus({
+          state: "error",
+          message: `Failed (HTTP ${res.status})${errText ? `: ${errText.slice(0, 140)}` : ""}`,
+        });
+        return;
+      }
+      const data = await res.json();
+      const reply = data?.choices?.[0]?.message?.content;
+      if (typeof reply === "string" && reply.trim()) {
+        saveLlmConfig({ ...llmCfg, enabled: true });
+        setTestStatus({
+          state: "ok",
+          message: `Connected! Reply: "${reply.trim().slice(0, 60)}"`,
+        });
+      } else {
+        setTestStatus({
+          state: "error",
+          message: "HTTP 200 received, but response had no choices[0].message.content.",
+        });
+      }
+    } catch (err) {
+      setTestStatus({
+        state: "error",
+        message: err instanceof Error ? `Error: ${err.message}` : "Network or CORS error",
+      });
     }
   };
 
@@ -343,6 +403,32 @@ export function FieldChatbot({
                 value={llmCfg.apiKey}
                 onChange={(e) => saveLlmConfig({ ...llmCfg, apiKey: e.target.value })}
               />
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginTop: "0.25rem", flexWrap: "wrap" }}>
+                <button
+                  type="button"
+                  className="chatbot-chip"
+                  onClick={handleTestConnection}
+                  disabled={testStatus.state === "testing"}
+                >
+                  {testStatus.state === "testing" ? "Testing..." : "Test Connection"}
+                </button>
+                {testStatus.state !== "idle" && (
+                  <span
+                    role="status"
+                    style={{
+                      fontSize: "0.75rem",
+                      color:
+                        testStatus.state === "ok"
+                          ? "#16a34a"
+                          : testStatus.state === "error"
+                            ? "#dc2626"
+                            : "inherit",
+                    }}
+                  >
+                    {testStatus.message}
+                  </span>
+                )}
+              </div>
             </div>
           )}
 
