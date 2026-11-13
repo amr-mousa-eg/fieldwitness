@@ -147,7 +147,7 @@ export default function RotationBuilder({
   const grow = () => {
     if (!complete) return;
     const seq = placed as string[];
-    const label = bt("builder.yours", { seq: seq.map(cropName).join(" → ") });
+    const label = bt("builder.yours", { seq: seq.map((c) => cropName(c)).join(" → ") });
     const ranked = optionFor(pack, seq);
     onGrow(simulateOption(inp, seq, ["normal", "dry", "hot"], { option_id: "builder", label, rank: ranked?.rank ?? -1 }));
     setGrown(seq);
@@ -255,9 +255,9 @@ export default function RotationBuilder({
                 </tr>
               </thead>
               <tbody>
-                <ResultRow label={bt("builder.row.yours", { seq: grown.map(cropName).join(" → ") })} option={yours} />
-                <ResultRow label={bt("builder.row.current", { seq: current ? current.sequence.map(cropName).join(" → ") : "" })} option={current} />
-                <ResultRow label={bt("builder.row.top", { seq: top ? top.sequence.map(cropName).join(" → ") : "" })} option={top} />
+                <ResultRow label={bt("builder.row.yours", { seq: grown.map((c) => cropName(c)).join(" → ") })} option={yours} />
+                <ResultRow label={bt("builder.row.current", { seq: current ? current.sequence.map((c) => cropName(c)).join(" → ") : "" })} option={current} />
+                <ResultRow label={bt("builder.row.top", { seq: top ? top.sequence.map((c) => cropName(c)).join(" → ") : "" })} option={top} />
               </tbody>
             </table>
           </div>

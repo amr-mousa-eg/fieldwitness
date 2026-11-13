@@ -940,6 +940,19 @@ Written and committed before any analysis is run. Nothing here changes `main`, p
 4. **Verification:**
    - `uv run python scripts/t10_red_team_audit.py` (passed), `uv run ruff check . && uv run ruff format --check .` (clean), `cd app && npm test` (178 passed across 29 files), `cd app && npm run build` (clean in 795 ms).
 
+## 2026-11-13 — [antigravity] Enhancement Phase 3: Full EN/AR bilingual RTL & Side-by-Side Field Compare
 
-
-
+1. **Context & Motivation:** Complete Phase 3 of the post-PR #31 enhancement plan: deliver full bilingual English / Arabic (`EN | عربي`) runtime localization with true RTL layout mirroring (`dir="rtl"` + CSS logical properties) and add a side-by-side Parcel Comparison page (`#/<region>/compare?a=...&b=...`).
+2. **Implementation:**
+   - **Bilingual i18n & RTL (`app/src/locale.ts`, `app/src/LangToggle.tsx`, `app/src/strings.ts`, `app/src/strings/en.json`, `app/src/strings/ar.json`, `app/src/styles.css`):**
+     - Added reactive `"en" | "ar"` locale store persisted in `localStorage` (`"fw-locale"`), synchronizing `document.documentElement.lang` and `dir` (`"ltr"` | `"rtl"`).
+     - Added accessible `LangToggle` button group in `.header-actions` and wired `useLocale()` into `App.tsx`.
+     - Expanded `en.json` and generated `ar.json` to **754 matched keys** with 100% key and `{placeholder}` parity aligned with `docs/HOW_WE_BUILT_FIELDWITNESS.ar.md`.
+     - Externalized strings in `AddFieldPage.tsx`, `PrintDossier.tsx`, `FieldChatbot.tsx`, and `FieldPage.tsx`, and propagated active `locale` to `chatbotContext.ts` `buildSystemPrompt`.
+     - Converted directional CSS layout properties to logical properties (`margin-inline-start`, `border-inline-start/end`, `inset-inline-start/end`, `text-align: start`) plus `[dir="rtl"] .mdia-arrow` flip.
+   - **Side-by-Side Field Comparison (`app/src/ComparePage.tsx`, `app/src/route.ts`, `app/src/FieldPage.tsx`, `app/src/App.tsx`):**
+     - Added `"compare"` route cleanly without altering the `RegionRoute` object shape verified by `wkt.test.ts` (`parseCompareQuery`, `compareHref`).
+     - Implemented `ComparePage` with `Field A` vs `Field B` selectors, swap control, URL hash synchronization, Parcel & ABC Credibility comparison, Current vs Rank #1 rotation metrics with `Delta (B − A)`, bare-soil month counts, and last 5 observed seasons.
+3. **Verification:**
+   - Added `app/tests/i18nAndCompare.test.ts` testing key/placeholder parity, locale switching, compare hash routing, and `ComparePage` SSR rendering.
+   - Verified with `uv run python scripts/t10_red_team_audit.py`, `uv run ruff check . && uv run ruff format --check .`, `cd app && npm test && npm run build`.
