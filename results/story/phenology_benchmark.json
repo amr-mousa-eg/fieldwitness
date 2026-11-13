@@ -1,0 +1,426 @@
+{
+  "dev": {
+    "Savitzky-Golay + Thresholds (Baseline)": {
+      "algorithm": "Savitzky-Golay + Thresholds (Baseline)",
+      "n_samples": 240,
+      "binary_match_share": 0.829,
+      "exact_crop_accuracy": 0.829,
+      "ms_per_field": 12.4,
+      "total_runtime_s": 2.97,
+      "by_crop": {
+        "winter_wheat": {
+          "count": 84,
+          "exact_acc": 0.75,
+          "binary_match": 0.75
+        },
+        "maize": {
+          "count": 62,
+          "exact_acc": 0.887,
+          "binary_match": 0.887
+        },
+        "sorghum": {
+          "count": 38,
+          "exact_acc": 0.921,
+          "binary_match": 0.921
+        },
+        "fallow": {
+          "count": 55,
+          "exact_acc": 0.818,
+          "binary_match": 0.818
+        },
+        "soybean": {
+          "count": 1,
+          "exact_acc": 1.0,
+          "binary_match": 1.0
+        }
+      }
+    },
+    "Standard DTW": {
+      "algorithm": "Standard DTW",
+      "n_samples": 240,
+      "binary_match_share": 0.896,
+      "exact_crop_accuracy": 0.567,
+      "ms_per_field": 4.73,
+      "total_runtime_s": 1.135,
+      "by_crop": {
+        "winter_wheat": {
+          "count": 84,
+          "exact_acc": 0.333,
+          "binary_match": 0.905
+        },
+        "maize": {
+          "count": 62,
+          "exact_acc": 0.677,
+          "binary_match": 0.935
+        },
+        "sorghum": {
+          "count": 38,
+          "exact_acc": 0.579,
+          "binary_match": 0.974
+        },
+        "fallow": {
+          "count": 55,
+          "exact_acc": 0.782,
+          "binary_match": 0.782
+        },
+        "soybean": {
+          "count": 1,
+          "exact_acc": 1.0,
+          "binary_match": 1.0
+        }
+      }
+    },
+    "TWDTW (Modified Logistic)": {
+      "algorithm": "TWDTW (Modified Logistic)",
+      "n_samples": 240,
+      "binary_match_share": 0.875,
+      "exact_crop_accuracy": 0.771,
+      "ms_per_field": 5.05,
+      "total_runtime_s": 1.212,
+      "by_crop": {
+        "winter_wheat": {
+          "count": 84,
+          "exact_acc": 0.774,
+          "binary_match": 0.833
+        },
+        "maize": {
+          "count": 62,
+          "exact_acc": 0.726,
+          "binary_match": 0.903
+        },
+        "sorghum": {
+          "count": 38,
+          "exact_acc": 0.763,
+          "binary_match": 1.0
+        },
+        "fallow": {
+          "count": 55,
+          "exact_acc": 0.818,
+          "binary_match": 0.818
+        },
+        "soybean": {
+          "count": 1,
+          "exact_acc": 1.0,
+          "binary_match": 1.0
+        }
+      }
+    },
+    "WDDTW (Derivative-Weighted)": {
+      "algorithm": "WDDTW (Derivative-Weighted)",
+      "n_samples": 240,
+      "binary_match_share": 0.875,
+      "exact_crop_accuracy": 0.783,
+      "ms_per_field": 5.24,
+      "total_runtime_s": 1.257,
+      "by_crop": {
+        "winter_wheat": {
+          "count": 84,
+          "exact_acc": 0.762,
+          "binary_match": 0.821
+        },
+        "maize": {
+          "count": 62,
+          "exact_acc": 0.694,
+          "binary_match": 0.887
+        },
+        "sorghum": {
+          "count": 38,
+          "exact_acc": 0.868,
+          "binary_match": 1.0
+        },
+        "fallow": {
+          "count": 55,
+          "exact_acc": 0.855,
+          "binary_match": 0.855
+        },
+        "soybean": {
+          "count": 1,
+          "exact_acc": 1.0,
+          "binary_match": 1.0
+        }
+      }
+    },
+    "VDTW (Vector Spectral Angle)": {
+      "algorithm": "VDTW (Vector Spectral Angle)",
+      "n_samples": 240,
+      "binary_match_share": 0.733,
+      "exact_crop_accuracy": 0.613,
+      "ms_per_field": 4.93,
+      "total_runtime_s": 1.184,
+      "by_crop": {
+        "winter_wheat": {
+          "count": 84,
+          "exact_acc": 0.56,
+          "binary_match": 0.619
+        },
+        "maize": {
+          "count": 62,
+          "exact_acc": 0.613,
+          "binary_match": 0.855
+        },
+        "sorghum": {
+          "count": 38,
+          "exact_acc": 0.684,
+          "binary_match": 0.921
+        },
+        "fallow": {
+          "count": 55,
+          "exact_acc": 0.636,
+          "binary_match": 0.636
+        },
+        "soybean": {
+          "count": 1,
+          "exact_acc": 1.0,
+          "binary_match": 1.0
+        }
+      }
+    },
+    "CropFormer (Self-Attention)": {
+      "algorithm": "CropFormer (Self-Attention)",
+      "n_samples": 240,
+      "binary_match_share": 0.858,
+      "exact_crop_accuracy": 0.608,
+      "ms_per_field": 1.02,
+      "total_runtime_s": 0.245,
+      "by_crop": {
+        "winter_wheat": {
+          "count": 84,
+          "exact_acc": 0.798,
+          "binary_match": 0.893
+        },
+        "maize": {
+          "count": 62,
+          "exact_acc": 0.5,
+          "binary_match": 0.871
+        },
+        "sorghum": {
+          "count": 38,
+          "exact_acc": 0.211,
+          "binary_match": 0.947
+        },
+        "fallow": {
+          "count": 55,
+          "exact_acc": 0.727,
+          "binary_match": 0.727
+        },
+        "soybean": {
+          "count": 1,
+          "exact_acc": 0.0,
+          "binary_match": 1.0
+        }
+      }
+    }
+  },
+  "test": {
+    "Savitzky-Golay + Thresholds (Baseline)": {
+      "algorithm": "Savitzky-Golay + Thresholds (Baseline)",
+      "n_samples": 240,
+      "binary_match_share": 0.783,
+      "exact_crop_accuracy": 0.783,
+      "ms_per_field": 12.4,
+      "total_runtime_s": 2.97,
+      "by_crop": {
+        "winter_wheat": {
+          "count": 77,
+          "exact_acc": 0.662,
+          "binary_match": 0.662
+        },
+        "maize": {
+          "count": 41,
+          "exact_acc": 0.829,
+          "binary_match": 0.829
+        },
+        "sorghum": {
+          "count": 61,
+          "exact_acc": 0.902,
+          "binary_match": 0.902
+        },
+        "fallow": {
+          "count": 60,
+          "exact_acc": 0.8,
+          "binary_match": 0.8
+        },
+        "soybean": {
+          "count": 1,
+          "exact_acc": 0.0,
+          "binary_match": 0.0
+        }
+      }
+    },
+    "Standard DTW": {
+      "algorithm": "Standard DTW",
+      "n_samples": 240,
+      "binary_match_share": 0.887,
+      "exact_crop_accuracy": 0.562,
+      "ms_per_field": 4.76,
+      "total_runtime_s": 1.143,
+      "by_crop": {
+        "winter_wheat": {
+          "count": 77,
+          "exact_acc": 0.39,
+          "binary_match": 0.857
+        },
+        "maize": {
+          "count": 41,
+          "exact_acc": 0.512,
+          "binary_match": 0.878
+        },
+        "sorghum": {
+          "count": 61,
+          "exact_acc": 0.557,
+          "binary_match": 1.0
+        },
+        "fallow": {
+          "count": 60,
+          "exact_acc": 0.833,
+          "binary_match": 0.833
+        },
+        "soybean": {
+          "count": 1,
+          "exact_acc": 0.0,
+          "binary_match": 0.0
+        }
+      }
+    },
+    "TWDTW (Modified Logistic)": {
+      "algorithm": "TWDTW (Modified Logistic)",
+      "n_samples": 240,
+      "binary_match_share": 0.867,
+      "exact_crop_accuracy": 0.725,
+      "ms_per_field": 5.08,
+      "total_runtime_s": 1.219,
+      "by_crop": {
+        "winter_wheat": {
+          "count": 77,
+          "exact_acc": 0.727,
+          "binary_match": 0.779
+        },
+        "maize": {
+          "count": 41,
+          "exact_acc": 0.537,
+          "binary_match": 0.805
+        },
+        "sorghum": {
+          "count": 61,
+          "exact_acc": 0.689,
+          "binary_match": 1.0
+        },
+        "fallow": {
+          "count": 60,
+          "exact_acc": 0.9,
+          "binary_match": 0.9
+        },
+        "soybean": {
+          "count": 1,
+          "exact_acc": 0.0,
+          "binary_match": 0.0
+        }
+      }
+    },
+    "WDDTW (Derivative-Weighted)": {
+      "algorithm": "WDDTW (Derivative-Weighted)",
+      "n_samples": 240,
+      "binary_match_share": 0.829,
+      "exact_crop_accuracy": 0.754,
+      "ms_per_field": 5.23,
+      "total_runtime_s": 1.256,
+      "by_crop": {
+        "winter_wheat": {
+          "count": 77,
+          "exact_acc": 0.714,
+          "binary_match": 0.727
+        },
+        "maize": {
+          "count": 41,
+          "exact_acc": 0.61,
+          "binary_match": 0.756
+        },
+        "sorghum": {
+          "count": 61,
+          "exact_acc": 0.738,
+          "binary_match": 0.918
+        },
+        "fallow": {
+          "count": 60,
+          "exact_acc": 0.933,
+          "binary_match": 0.933
+        },
+        "soybean": {
+          "count": 1,
+          "exact_acc": 0.0,
+          "binary_match": 0.0
+        }
+      }
+    },
+    "VDTW (Vector Spectral Angle)": {
+      "algorithm": "VDTW (Vector Spectral Angle)",
+      "n_samples": 240,
+      "binary_match_share": 0.708,
+      "exact_crop_accuracy": 0.567,
+      "ms_per_field": 5.14,
+      "total_runtime_s": 1.233,
+      "by_crop": {
+        "winter_wheat": {
+          "count": 77,
+          "exact_acc": 0.545,
+          "binary_match": 0.649
+        },
+        "maize": {
+          "count": 41,
+          "exact_acc": 0.634,
+          "binary_match": 0.878
+        },
+        "sorghum": {
+          "count": 61,
+          "exact_acc": 0.508,
+          "binary_match": 0.77
+        },
+        "fallow": {
+          "count": 60,
+          "exact_acc": 0.617,
+          "binary_match": 0.617
+        },
+        "soybean": {
+          "count": 1,
+          "exact_acc": 0.0,
+          "binary_match": 0.0
+        }
+      }
+    },
+    "CropFormer (Self-Attention)": {
+      "algorithm": "CropFormer (Self-Attention)",
+      "n_samples": 240,
+      "binary_match_share": 0.787,
+      "exact_crop_accuracy": 0.45,
+      "ms_per_field": 1.07,
+      "total_runtime_s": 0.256,
+      "by_crop": {
+        "winter_wheat": {
+          "count": 77,
+          "exact_acc": 0.675,
+          "binary_match": 0.805
+        },
+        "maize": {
+          "count": 41,
+          "exact_acc": 0.244,
+          "binary_match": 0.854
+        },
+        "sorghum": {
+          "count": 61,
+          "exact_acc": 0.098,
+          "binary_match": 0.852
+        },
+        "fallow": {
+          "count": 60,
+          "exact_acc": 0.667,
+          "binary_match": 0.667
+        },
+        "soybean": {
+          "count": 1,
+          "exact_acc": 0.0,
+          "binary_match": 0.0
+        }
+      }
+    }
+  }
+}
