@@ -1013,12 +1013,38 @@ Owner-approved exception to the 12 Nov build freeze. Rebased onto main after #32
 3. **Verification:**
    - Verified in headless Chromium at `1280×900` (EN Light, AR Light, AR Dark) and `390×844` (Mobile AR Dark): all 9 legend rows share identical vertical text alignment, zero legend/guidance/zoom overlap on desktop, zero horizontal overflow, and zero runtime errors.
 
+## 2026-11-13 — [antigravity] NASA & Partner Resources Integration (`feature/nasa-partner-resources`)
+
+Integrated all 24 NASA Earth observation missions, USDA, USGS, FAO, and ECMWF partner data resources requested by the user:
+1. **Live Network Probing & Verification (`docs/api_notes.md`):**
+   - Verified live WMTS endpoints on NASA GIBS for VIIRS Corrected Reflectance, GPM IMERG Precipitation Rate, and SRTM Color Index.
+   - Verified CMR concept IDs for GPM IMERG Final Daily v07 (`C2723754864-GES_DISC`), VIIRS 500 m Vegetation Indices (`C2519127224-LPCLOUD`), SRTM 30 m DEM (`C2763266360-LPCLOUD`), GLDAS-2 Noah (`C1342986035-GES_DISC`), NLDAS-2 Forcing (`C2033151148-GES_DISC`), ECOSTRESS JET v003 (`C4057232489-LPCLOUD`), and GEDI Canopy Top (`C3974616071-LPCLOUD`).
+   - Verified open REST/WMS/WCS endpoints for USGS NWIS (groundwater levels and streamflow), Oregon State PRISM 4 km climate data, ECMWF ERA5 & ERA5-Land via Open-Meteo archive, USDA NASS CropScape CDL, USDA-NRCS STATSGO2 via SDA, USGS MRLC NLCD 2021, USDA NAIP orthophotography ImageServer, USFS/DOI LANDFIRE product catalog, USDA Ag Data Commons Figshare API, and CoCoRaHS citizen-science rain gauge CSV exports.
+   - Handled key-gated and out-of-scope resources: USDA AMS Market News pricing forecasts strictly excluded per CLAUDE.md Rule 4 (market outlet context only); USDA NASS QuickStats connector implemented with strict harvested acreage guardrail (zero commodity price queries); OpenET and GEDI documented as external/canopy-structure reference data.
+2. **Python Data Connectors (`src/fieldwitness/data/`):**
+   - Implemented 15 new modules: `gpm_imerg.py`, `ecostress.py`, `nwis.py`, `prism.py`, `era5.py`, `cropscape.py`, `statsgo.py`, `nlcd.py`, `naip.py`, `landfire.py`, `ag_data_commons.py`, `ldas.py`, `gaez.py`, `cocorahs.py`, and `quickstats.py`.
+   - Updated `context.py` with SRTMGL1 and SMAP surface moisture / brightness temperature bands; updated `appeears.py` with VIIRS, ECOSTRESS, and SRTM layer definitions.
+   - Registered all time-series readers (`gpm_imerg`, `ecostress`, `nwis_gw`, `prism`, `era5`, `cocorahs`) under `@register(...)` with full `asof` cutoff enforcement and leakage guarding.
+3. **Frontend Integration & Bilingual Documentation:**
+   - Added WMTS backdrop URLs in `app/src/mapLayers.ts` for VIIRS (`VIIRS_SNPP_CorrectedReflectance_TrueColor`), GPM IMERG (`IMERG_Precipitation_Rate`), and SRTM (`SRTM_Color_Index`).
+   - Expanded `DATASETS` table in `app/src/MethodsPage.tsx` from 14 to 31 datasets, linking all 24 resources with DOIs, spatial/temporal resolutions, and methods context.
+   - Added complete English and Arabic bilingual strings in `app/src/strings/en.json` and `app/src/strings/ar.json` with 100% key and placeholder parity.
+   - Comprehensively updated `DATA.md` documenting every resource's access endpoints, scale contract flags, and provenance tags (`O`, `D`, `E`).
+4. **Verification & Quality Gates:**
+   - Created `tests/test_nasa_partner_resources.py` with 15 unit tests covering all new modules.
+   - Added reader test cases to `tests/test_leakage.py` ensuring zero temporal data leakage across cutoffs (14/14 passed).
+   - Full Python test suite passed: 349 tests passed (9 skipped due to local disk parquets).
+   - Full Vitest frontend suite passed: 221 tests passed (2 skipped).
+   - TypeScript check (`tsc --noEmit`) and Vite build passed with 0 errors.
+   - Ruff linting and formatting passed with 0 errors.
+   - Red Team Audit (`t10_red_team_audit.py`) passed with 0 violations.
+
 ## Autopilot handoff
 
-- **Updated:** 2026-11-13 (branch `fix/map-legend-alignment`)
-- **What this run did:** Fixed `<MapLegend />` row/label misalignment and `.guidance-panel` / RTL attribution overlap in `app/src/styles.css`, added regression test in `app/tests/mapLayers.test.ts`, verified visually in Chromium across EN/AR, Light/Dark, Desktop & Mobile, and ran all JS/TS & Python verification suites.
+- **Updated:** 2026-11-13 (branch `feature/nasa-partner-resources`)
+- **What this run did:** Integrated all 24 NASA & partner data resources across Python connectors, map layers, Methods documentation, bilingual strings, comprehensive unit tests, leakage tests, and API notes.
 - **In progress:** None.
 - **Background tasks:** None.
-- **Remaining / Next task:** Merge `fix/map-legend-alignment` PR into `main`.
-- **Risks / Notes:** Full pack regeneration with `--taw-source ssurgo` (`t62_draws -> t72_export`) requires local `data/` parquets not mounted in this remote VM; `workers/chat-proxy/` requires owner Cloudflare deploy + key when activating the live free proxy.
+- **Remaining / Next task:** Push branch `feature/nasa-partner-resources` and open Pull Request.
+- **Risks / Notes:** No new pyproject dependencies added; all external network calls have offline mock fallbacks and timeout guards.
 

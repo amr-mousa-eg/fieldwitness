@@ -323,3 +323,71 @@ Checked 2026-11-13 from the official pages. No test call made (every call needs 
 - **Cloudflare Workers Rate Limiting binding** (`developers.cloudflare.com/workers/runtime-apis/bindings/rate-limit/`): `[[ratelimits]] name, namespace_id (string, positive integer), [ratelimits.simple] limit, period (10 or 60)`; `await env.X.limit({ key })` → `{ success }`; counts approximate, per location, eventually consistent. Free-plan availability not stated on that page or the pricing page: UNVERIFIED.
 - **Workers KV Free plan** (`developers.cloudflare.com/kv/platform/limits/`): 100,000 reads/day, 1,000 writes/day (different keys), 1 write/s to the same key. Namespace: `npx wrangler kv namespace create <BINDING>`; binding `[[kv_namespaces]] binding, id`.
 - **Workers Free plan**: 100,000 requests/day (`/workers/platform/pricing/`).
+
+## NASA & Partner Resources Verification (2026-11-13)
+
+Verified via direct HTTP/REST probes and CMR/GIBS endpoints:
+
+### 1. NASA GIBS (Global Imagery Browse Services) — WMTS EPSG:3857
+- **Base Endpoint:** `https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/`
+- **Layers Verified Active (HTTP 200 PNG/JPEG):**
+  - `VIIRS_SNPP_CorrectedReflectance_TrueColor/default/{date}/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg`
+  - `IMERG_Precipitation_Rate/default/{date}/GoogleMapsCompatible_Level6/{z}/{y}/{x}.png`
+  - `SRTM_Color_Index/default/default/GoogleMapsCompatible_Level6/{z}/{y}/{x}.png`
+  - `MODIS_Terra_CorrectedReflectance_TrueColor/default/{date}/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg`
+  - `HLS_S30_Nadir_BRDF_Adjusted_Reflectance/default/{date}/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg`
+
+### 2. NASA CMR Collection & Granule Search
+- `GPM_3IMERGDF.07`: Concept ID `C2723754864-GES_DISC` (0.1° daily precipitation).
+- `VNP13A1.002`: Concept ID `C2519127224-LPCLOUD` (VIIRS 500 m 16-day NDVI/EVI).
+- `SRTMGL1.003`: Concept ID `C2763266360-LPCLOUD` (SRTM 30 m global elevation).
+- `GLDAS_NOAH025_3H.2.1`: Concept ID `C1342986035-GES_DISC` (0.25° 3-hourly land data assimilation).
+- `NLDAS_FORA0125_H.2.0`: Concept ID `C2033151148-GES_DISC` (0.125° hourly North American forcing).
+- `ECO_L3T_JET.003`: Concept ID `C4057232489-LPCLOUD` (70 m tiled actual evapotranspiration PT-JPL).
+- `GEDI02_A.002`: Concept ID `C3974616071-LPCLOUD` (GEDI canopy height/elevation profiles).
+
+### 3. USDA Soil Data Access (SDA) — STATSGO2
+- **Endpoint:** `POST https://sdmdataaccess.sc.egov.usda.gov/tabular/post.rest`
+- **Format:** `{"query": "...", "format": "JSON+COLUMNNAME"}`
+- **Filter:** `legend.areasymbol = 'US'` selects national 1:250,000 STATSGO2 map units. Returns `mukey`, `muname`, `comppct_r`, `awc_r`, `claytotal_r`, `sandtotal_r`.
+
+### 4. USGS NWIS (National Water Information System)
+- **Groundwater:** `GET https://waterservices.usgs.gov/nwis/gwlevels/?format=json&bBox=-101.5,37.5,-100.5,38.5` (HTTP 200 JSON with `timeSeries[].values[].value`).
+- **Streamflow:** `GET https://waterservices.usgs.gov/nwis/dv/?format=json&bBox=-101.5,37.5,-100.5,38.5&parameterCd=00060` (HTTP 200).
+
+### 5. PRISM Climate Data (Oregon State University)
+- **Endpoint:** `GET https://services.nacse.org/prism/data/get/us/4km/{var}/{date}`
+- **Format:** HTTP 200 ZIP containing BIL raster and metadata for `ppt`, `tmax`, `tmin`, `tmean`.
+
+### 6. ECMWF ERA5 & ERA5-Land (Open-Meteo Archive)
+- **Endpoint:** `GET https://archive-api.open-meteo.com/v1/archive?latitude=38.0&longitude=-101.0&start_date=2023-01-01&end_date=2023-12-31&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,et0_fao_evapotranspiration&timezone=UTC`
+- **Format:** HTTP 200 JSON with daily arrays.
+
+### 7. USDA NASS Cropland Data Layer (CropScape)
+- **Endpoint:** `GET https://nassgeodata.gmu.edu/axis2/services/CDLService/GetCDLValue?year=2023&x={lon}&y={lat}`
+- **Format:** HTTP 200 XML `<return>{code}, {class_name}</return>`.
+
+### 8. USGS / MRLC NLCD (National Land Cover Database)
+- **Endpoint:** `https://www.mrlc.gov/geoserver/mrlc_display/NLCD_2021_Land_Cover_L48/wms` (WMS GetMap) and `/wcs` (WCS GetCoverage).
+- **Format:** OGC standard raster/PNG at 30 m resolution.
+
+### 9. USDA NAIP (National Agriculture Imagery Program)
+- **Endpoint:** `GET https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox={bbox}&size=512,512&format=png&f=image`
+- **Format:** HTTP 200 PNG aerial orthophotography (<1 m resolution).
+
+### 10. USFS / DOI LANDFIRE
+- **Endpoint:** `GET https://lfps.usgs.gov/api/products`
+- **Format:** HTTP 200 JSON listing 139 layers (EVT, EVC, BPS, FBFM40).
+
+### 11. USDA Ag Data Commons (NAL / ARS)
+- **Endpoint:** `POST https://api.figshare.com/v2/articles/search` with `{"institution": 1146, "search_for": "..."}`
+- **Format:** HTTP 200 JSON containing open research articles and dataset metadata.
+
+### 12. CoCoRaHS Citizen-Science Rain Gauges
+- **Endpoint:** `https://data.cocorahs.org/export/exportreports.aspx`
+- **Format:** CSV with StationNumber, Date, TotalPrecipAmt (inches).
+
+### 13. USDA NASS QuickStats
+- **Endpoint:** `GET https://quickstats.nass.usda.gov/api/api_GET/` (requires `key` via `NASS_QUICKSTATS_API_KEY`).
+- **Guardrail:** Strictly restricted to `AREA HARVESTED` / crop frequency context. Zero commodity prices or revenue predictions allowed per CLAUDE.md Rule 4.
+

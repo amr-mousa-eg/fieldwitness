@@ -83,5 +83,18 @@ export function rampExpression(prop: string, [lo, hi]: Domain, ramp: readonly st
  */
 export const GIBS_BACKDROP_URL =
   "https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/MODIS_Terra_CorrectedReflectance_TrueColor/default/2023-08-15/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpeg";
-/** Below this zoom the MODIS backdrop shows; from it on, the HLS 30 m layer takes over. */
+
+/** Alternative Suomi NPP VIIRS true colour reflectance backdrop (375 m / 750 m). */
+export const GIBS_VIIRS_BACKDROP_URL =
+  "https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/VIIRS_SNPP_CorrectedReflectance_TrueColor/default/2023-08-15/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpeg";
+
+/** NASA GPM IMERG global precipitation rate overlay layer (0.1 deg). */
+export const GIBS_IMERG_PRECIP_URL =
+  "https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/IMERG_Precipitation_Rate/default/2023-07-04/GoogleMapsCompatible_Level6/{z}/{y}/{x}.png";
+
+/** NASA SRTM 30 m global digital elevation color index. */
+export const GIBS_SRTM_COLOR_URL =
+  "https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/SRTM_Color_Index/default/default/GoogleMapsCompatible_Level12/{z}/{y}/{x}.png";
+
+/** Below this zoom the MODIS/VIIRS backdrop shows; from it on, the HLS 30 m layer takes over. */
 export const BASEMAP_HANDOVER_ZOOM = 10;

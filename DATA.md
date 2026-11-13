@@ -59,43 +59,100 @@ Only the row groups whose `bbox` statistics intersect the query box are read (se
   - Endpoint: `https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/HLS_S30_Nadir_BRDF_Adjusted_Reflectance/default/2023-07-04/GoogleMapsCompatible_Level12/{z}/{y}/{x}.png` (EPSG:3857). Offline/error behavior: falls back to neutral background.
   - Required attribution: "Imagery: NASA GIBS / LP DAAC (HLS S30, 2023-07-04)".
   - Licence: NASA Earth Science Data Policy (open and free for all users).
-- **ECOSTRESS** `ECO_L3T_JET` v003 — NASA LP DAAC (verified in CMR; access verified for future extensions).
+- **NASA GPM & IMERG Precipitation**:
+  - Products: `GPM_3IMERGDF` v07 (Concept ID `C2723754864-GES_DISC`), half-hourly and daily global calibrated precipitation (0.1° resolution).
+  - GIBS Layers: `IMERG_Precipitation_Rate`, `IMERG_Precipitation_Rate_30min` (`GoogleMapsCompatible_Level6`).
+  - Licence: NASA Earth Science Data Policy (open and free).
+- **Suomi NPP & NOAA-20 / NOAA-21 VIIRS & MODIS Reflectance**:
+  - Products: `VNP13A1.002` (500 m 16-day NDVI/EVI, `C2519127224-LPCLOUD`), `VNP09GA.002` (500m/1km daily surface reflectance).
+  - GIBS Layers: `MODIS_Terra_CorrectedReflectance_TrueColor`, `VIIRS_SNPP_CorrectedReflectance_TrueColor` (`GoogleMapsCompatible_Level9`).
+  - Licence: NASA Earth Science Data Policy (open and free).
+- **NASA ECOSTRESS Thermal Evapotranspiration**:
+  - Products: `ECO_L3T_JET` v003 (Concept ID `C4057232489-LPCLOUD`, 70 m PT-JPL tiled ETa) and v002 (`C2076106409-LPCLOUD`).
+  - Scale: 70 m spatial resolution meets field scale contract (CLAUDE.md Rule 5).
+  - Licence: NASA Earth Science Data Policy (open and free).
+- **NASA Shuttle Radar Topography Mission (SRTM) & NASADEM**:
+  - Products: `NASADEM_HGT` v001 (`C2763264762-LPCLOUD`) and `SRTMGL1` v003 (`C2763266360-LPCLOUD`), 1 arc-second (~30 m global DEM).
+  - GIBS Layer: `SRTM_Color_Index` (`GoogleMapsCompatible_Level12`).
+  - Licence: NASA Earth Science Data Policy (open and free).
+- **NASA SMAP L4 Soil Moisture**:
+  - Product: `SPL4SMGP` v008 (Concept ID `C3480440870-NSIDC_CPRD`, 9 km root-zone and surface soil moisture).
+  - Scale: 9 km regional context only, scale-flagged (Rule 5).
+  - Licence: NASA Earth Science Data Policy (open and free).
+- **NASA GRACE / GRACE-FO Mascons**:
+  - Product: `TELLUS_GRAC-GRFO_MASCON_CRI_GRID_RL06.3_V4` (PO.DAAC, 0.5° terrestrial water storage anomalies).
+  - Scale: Coarse regional context only, scale-flagged.
+  - Licence: NASA Earth Science Data Policy.
+- **NASA NLDAS & GLDAS Land Data Assimilation Systems**:
+  - Products: `NLDAS_FORA0125_H.2.0` (`C2033151148-GES_DISC`, 0.125°), `GLDAS_NOAH025_3H.2.1` (`C1342986035-GES_DISC`, 0.25°).
+  - Scale: Coarse regional hydrological forcing/context, scale-flagged.
+  - Licence: NASA Earth Science Data Policy.
+- **NASA GEDI (Global Ecosystem Dynamics Investigation)**:
+  - Products: `GEDI02_A` v003 (`C3974616071-LPCLOUD`).
+  - Evaluation: Noted and excluded from annual crop canopy models (sparse footprints primarily calibrated for forest canopy 3D structure, PLAN.md §1b).
 
-## Crop parameters and statistics (T0.6)
-
-- **FAO-56** — Allen, R.G., Pereira, L.S., Raes, D., Smith, M. (1998). *Crop evapotranspiration — Guidelines for computing crop water requirements.* FAO Irrigation and Drainage Paper 56. HTML edition: Chapter 6 `https://www.fao.org/4/x0490e/x0490e0b.htm` (Tables 11, 12), Chapter 8 `https://www.fao.org/4/x0490e/x0490e0e.htm` (Tables 22, 24). Values copied into `config/crops.yaml` with table/row references (`scripts/extract_fao56.py`).
-- **FAO-33** (Doorenbos & Kassam, 1979, *Yield response to water*) — seasonal Ky values as reproduced in FAO-56 Table 24.
-- **FAO-66** — Steduto, P., Hsiao, T.C., Fereres, E., Raes, D. (2012). *Crop yield response to water.* FAO Irrigation and Drainage Paper 66.
-- **FAOSTAT QCL** — FAO. (2025). FAOSTAT: Production — Crops and livestock products, `Production_Crops_Livestock_E_All_Data_(Normalized).zip`. Accessed 4 November 2026. Licence: **CC-BY-4.0** (FAO database terms of use).
-
-## Weather, soil, water use and taxonomy (Gate 0 access checks)
+## Weather, soil, water use and partner datasets
 
 - **NASA POWER** daily point API, community AG: `https://power.larc.nasa.gov/api/temporal/daily/point` (parameters T2M_MAX, T2M_MIN, RH2M, WS2M, ALLSKY_SFC_SW_DWN, PRECTOTCORR).
   - Citation: Sparks, A. H. (2018). nasapower: A NASA POWER Global Meteorology, Surface Solar Energy and Climatology Data Client for R. *Journal of Open Source Software*, 3(30), 1035. https://doi.org/10.21105/joss.01035
   - Terms: NASA Open Data Policy (public domain, free reuse with attribution).
-- **ISRIC SoilGrids 2.0** — WCS `https://maps.isric.org/mapserv?map=/map/<property>.map`.
-  - Licence: **CC-BY 4.0** (ISRIC data policy v2024-1).
-  - Citation: Poggio, L., de Sousa, L. M., Batjes, N. H., et al. (2021). SoilGrids 2.0: producing soil information for the globe with quantified spatial uncertainty. *SOIL*, 7(1), 217–240. https://doi.org/10.5194/soil-7-217-2021
-- **USDA-NRCS SSURGO** via Soil Data Access (SDA), `POST https://sdmdataaccess.sc.egov.usda.gov/tabular/post.rest` — **independent soil check only** (Phase 12, `scripts/check_ssurgo.py`); never a simulation input. Tables `mapunit`, `component` (`comppct_r`), `chorizon` (`hzdept_r`, `hzdepb_r`, `awc_r`, `claytotal_r`, `sandtotal_r`) at each pilot field centroid; tag E. Shapes in `docs/api_notes.md`.
-  - Citation (SDA Citation page): Soil Survey Staff, Natural Resources Conservation Service, United States Department of Agriculture. Soil Survey Geographic (SSURGO) Database. Available online at https://sdmdataaccess.sc.egov.usda.gov. Accessed 11/11/2026.
-  - Terms: no data licence is stated on the SDA pages; the site disclaimer is the standard USDA computer-system use notice. Public-domain status UNVERIFIED (official NRCS page not reachable on 2026-11-11). Requests were sequential, one point each, cached.
-- **Kansas WIMAS** (Kansas Geological Survey / Kansas Department of Agriculture, Division of Water Resources): `https://geohydro.kgs.ku.edu/geohydro/wimas/`; requires accepting disclaimer; optional truth comparison.
-- **OpenET**: not used; stretch S6 (2026-11-04), terms unread; not accessed in MVP.
-- **GBIF Backbone Taxonomy** via `https://api.gbif.org/v1/species/match`:
-  - Citation: GBIF Secretariat (2023). GBIF Backbone Taxonomy. Checklist dataset https://doi.org/10.15468/39omei. CC-BY 4.0.
-- **USDA NRCS PLANTS Database** via `https://plantsservices.sc.egov.usda.gov/api/`:
-  - Citation: USDA, NRCS. (2024). The PLANTS Database (http://plants.usda.gov). National Plant Data Team, Greensboro, NC USA. Public domain.
-- **NASADEM** (`NASADEM_HGT` v001, NASA LP DAAC) — slope per pilot field:
-  - DOI: https://doi.org/10.5067/MEaSUREs/NASADEM/NASADEM_HGT.001
-  - Citation: NASA JPL (2020). NASADEM Merged DEM Global 1 arc second V001. NASA EOSDIS Land Processes DAAC.
-  - Licence: NASA Open Data Policy.
-- **GRACE/GRACE-FO JPL mascons** (`TELLUS_GRAC-GRFO_MASCON_CRI_GRID_RL06.3_V4`, PO.DAAC) — regional water-storage series:
-  - Citations: Watkins et al. (2015), *J. Geophys. Res. Solid Earth*, 120, 2648–2671; Wiese et al. (2016), *Water Resour. Res.*, 52, 7400–7416.
-  - Licence: NASA Open Data Policy.
-- **SMAP L4** (`SPL4SMGP` v008, NSIDC via AppEEARS) — regional root-zone soil moisture context:
-  - DOI: https://doi.org/10.5067/T5RUATAQREF8
-  - Citation: Reichle, R., De Lannoy, G., Koster, R. D., et al. (2018). SMAP L4 Global 3-hourly 9 km EASE-Grid Surface and Root-Zone Soil Moisture Geophysical Data, Version 8. NASA NSIDC DAAC.
-  - Licence: NASA Open Data Policy.
+- **ECMWF ERA5 & ERA5-Land Reanalysis**:
+  - Source: European Centre for Medium-Range Weather Forecasts (ECMWF) Copernicus Climate Change Service.
+  - Access: Open-Meteo Historical Archive REST API (`https://archive-api.open-meteo.com/v1/archive`) & Copernicus CDS.
+  - Licence: Copernicus Open Access Licence (free reuse with attribution).
+- **PRISM Climate Group**:
+  - Source: Oregon State University PRISM Climate Group (4 km and 800 m gridded weather).
+  - Access: Centralized public web service (`https://services.nacse.org/prism/data/get/us/4km/{var}/{date}`).
+  - Licence: Free research/educational use; terms of service apply.
+- **USDA-NRCS Web Soil Survey (WSS) / SSURGO & STATSGO2**:
+  - Source: USDA Natural Resources Conservation Service via Soil Data Access (SDA) REST API (`https://sdmdataaccess.sc.egov.usda.gov/tabular/post.rest`).
+  - High-res: SSURGO 1:24,000 mapunits (county catalogs, e.g. `KS055`, median 282.1 mm AWS across pilot).
+  - Fallback: STATSGO2 1:250,000 generalized mapping (national catalog `areasymbol = 'US'`).
+  - Licence: Public domain.
+- **USDA NASS Cropland Data Layer (CDL) & CropScape**:
+  - Source: USDA National Agricultural Statistics Service 30 m annual cropland classifications.
+  - Access: CropScape Web Service (`https://nassgeodata.gmu.edu/axis2/services/CDLService`).
+  - Licence: Public domain.
+- **USDA NASS QuickStats**:
+  - Source: USDA NASS Agricultural Statistics database (`https://quickstats.nass.usda.gov/api/api_GET/`).
+  - Scope: County crop prevalence and harvested acreages. Commodity prices and profit forecasts strictly excluded per CLAUDE.md Rule 4.
+  - Licence: Public domain; free API key.
+- **USDA Ag Data Commons**:
+  - Source: USDA National Agricultural Library (NAL) open access agricultural research catalog (`https://agdatacommons.nal.usda.gov/`).
+  - Access: Figshare search API (Institution ID 1146).
+  - Licence: Public domain / CC0.
+- **USDA NAIP (National Agriculture Imagery Program)**:
+  - Source: USDA Farm Service Agency & USGS The National Map (TNM).
+  - Access: ArcGIS ImageServer (`https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer`).
+  - Resolution: 0.6 m – 1.0 m growing-season aerial orthophotography.
+  - Licence: Public domain.
+- **USGS NLCD (National Land Cover Database)**:
+  - Source: Multi-Resolution Land Characteristics Consortium (MRLC) / USGS.
+  - Access: WCS/WMS (`https://www.mrlc.gov/geoserver/mrlc_display/NLCD_2021_Land_Cover_L48/wcs`).
+  - Resolution: 30 m land cover classifications.
+  - Licence: Public domain.
+- **USGS NWIS (National Water Information System)**:
+  - Source: US Geological Survey Water Services (`https://waterservices.usgs.gov/nwis/`).
+  - Endpoints: Groundwater levels (`/gwlevels/`) and daily discharge streamflow (`/dv/`).
+  - Licence: Public domain.
+- **USFS / DOI LANDFIRE**:
+  - Source: US Forest Service & Department of the Interior (`https://lfps.usgs.gov/api/products`).
+  - Resolution: 30 m vegetation, fuels, and disturbance dynamics.
+  - Licence: Public domain.
+- **FAO GAEZ v4 (Global Agro-Ecological Zones)**:
+  - Source: FAO & IIASA (`https://gaez-services.fao.org/server/rest/services`).
+  - Resolution: 5 arc-minute (~10 km) regional agro-climatic suitability zones and soil terrain constraints.
+  - Licence: CC-BY-4.0.
+- **CoCoRaHS (Community Collaborative Rain, Hail & Snow Network)**:
+  - Source: Citizen-science volunteer daily rain-gauge network (`https://data.cocorahs.org/export/exportreports.aspx`).
+  - Licence: Open educational and research access.
+- **ISRIC SoilGrids 2.0**:
+  - Access: WCS `https://maps.isric.org/mapserv?map=/map/<property>.map`.
+  - Licence: CC-BY 4.0; Poggio et al. (2021).
+- **OpenET**:
+  - Status: Operational field-scale ET; requires registration, API key and terms acceptance. Excluded from MVP (PLAN.md S6).
+- **USDA AMS Market News**:
+  - Status: Market presence metadata only. Commodity price and profit forecasting strictly excluded per CLAUDE.md Rule 4 and red-team audit.
 
 ## Derived app inputs: 3D replay (Rotation Builder)
 

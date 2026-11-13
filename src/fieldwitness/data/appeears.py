@@ -53,6 +53,20 @@ HLS_LAYERS = [
     {"product": "HLSS30.020", "layer": "Fmask"},
 ]
 
+VIIRS_LAYERS = [
+    {"product": "VNP13A1.002", "layer": "_500m_16_days_NDVI"},
+    {"product": "VNP13A1.002", "layer": "_500m_16_days_EVI"},
+]
+
+ECOSTRESS_LAYERS = [
+    {"product": "ECO_L3T_JET.003", "layer": "ET_PT_JPL_daily"},
+    {"product": "ECO_L3T_JET.003", "layer": "ET_PT_JPL_quality"},
+]
+
+SRTM_LAYERS = [
+    {"product": "SRTMGL1_NC.003", "layer": "DEM"},
+]
+
 
 def login() -> requests.Session:
     from earthaccess.auth import netrc_path
