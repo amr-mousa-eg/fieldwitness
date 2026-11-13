@@ -83,15 +83,15 @@ describe("Methods Diagram (Phase 12, Item 9)", () => {
   });
 
   it("keeps the honest facts from the Methods page", () => {
-    expect(boxText("field_story")).toContain("78.3%");
-    expect(strings["methods.limits.3"]).toContain("78.3 %");
+    expect(boxText("field_story")).toContain("86.7%");
+    expect(strings["methods.limits.3"]).toContain("86.7 %");
     expect(boxText("agreement")).toContain("Capped at B");
     expect(strings["methods.limits.4"]).toContain("top out at B");
     expect(boxText("w3_neighbours")).toContain("No neighbour contrast passed the diagnostic checks (0 of 32)");
     expect(strings["methods.limits.4"]).toContain("0 of 32");
     const hindcast = boxText("hindcast_check");
-    expect(hindcast).toContain("Weak skill");
-    expect(hindcast).toContain("underdispersed CIs");
+    expect(hindcast).toContain("Split-CQR");
+    expect(hindcast).toContain("85.8–90.3%");
     expect(hindcast).toContain("Beats baselines B1/B2 overall");
     expect(hindcast).toContain("31 Dec 2021");
     expect(boxText("w1_physics")).toContain("FAO-56");
