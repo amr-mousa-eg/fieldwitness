@@ -187,10 +187,37 @@ export function FieldChatbot({
             return;
           }
         }
-      } catch {
-        // Fallback cleanly to built-in grounded advisor
+        const errBody = await res.text().catch(() => "");
+        const errHint = `LLM HTTP ${res.status}${errBody ? `: ${errBody.slice(0, 120)}` : ""}`;
+        setIsLoading(false);
+        const ans = answerQuestion(query, ctx);
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: `a-${Date.now()}`,
+            role: "assistant",
+            text: `${ans.text}\n\n[LLM fallback reason: ${errHint}]`,
+            sourceLabel: "Grounded Fallback (LLM Error)",
+            followUps: ans.followUps,
+          },
+        ]);
+        return;
+      } catch (err) {
+        const errHint = err instanceof Error ? err.message : "Network or CORS error";
+        setIsLoading(false);
+        const ans = answerQuestion(query, ctx);
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: `a-${Date.now()}`,
+            role: "assistant",
+            text: `${ans.text}\n\n[LLM fallback reason: ${errHint}]`,
+            sourceLabel: "Grounded Fallback (LLM Error)",
+            followUps: ans.followUps,
+          },
+        ]);
+        return;
       }
-      setIsLoading(false);
     }
 
     const ans = answerQuestion(query, ctx);
