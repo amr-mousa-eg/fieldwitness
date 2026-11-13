@@ -1000,12 +1000,25 @@ Owner-approved exception to the 12 Nov build freeze. Rebased onto main after #32
    - **Unified `?` Explainers (`app/src/Explain.tsx`, `app/src/explainers.ts`, components):** Added `<Explain id="..." />` popovers using the existing `.explain` / `.explain-pop` design across titles and metrics (e.g., `Field3DView`, `AddFieldPage`, `DiagnosisSection`, `FieldSummaryPanel`, `Scoreboard`, `MethodsPage`) and fixed RTL viewport clamping in `Explain.tsx`.
    - **Post-PR #38 Merge:** Merged `origin/main` (PR #38) cleanly into `fix/ui-arabic-explainers-visuals`, combining the server-side proxy + FACTS/guardrail/privacy chatbot architecture with full bilingual (`EN`/`AR`) chips, context summaries, RTL-safe logical styles, and verified all suites.
 
+## 2026-11-13 — [antigravity] Map Legend Alignment & Overlay Placement Fix (`fix/map-legend-alignment`)
+
+1. **Root Causes Found:**
+   - Global `.grade` in `app/src/styles.css` defines `margin-inline-start: auto` (intended for trailing badges inside `.field-item-head`), which shifted the `C`, `D`, and `A` rows inside `.map-legend-list li` toward the trailing edge and broke label alignment.
+   - Mismatched leading indicator widths (`1rem` swatches and scale icons vs `1.6rem` grade badges) misaligned label start edges across sections.
+   - Desktop `.guidance-panel` shared `inset-inline-start: 1rem` with `.map-legend`, causing vertical overlap, and RTL desktop `.map-legend` overlapped MapLibre's bottom-right attribution control.
+2. **Implementation (`app/src/styles.css`, `app/tests/mapLayers.test.ts`):**
+   - Converted `.map-legend-list li` to a uniform two-column CSS grid (`grid-template-columns: 1.6rem minmax(0, 1fr); align-items: center; column-gap: 0.5rem; text-align: start;`) with centered column-1 icons (`justify-self: center`), overrode `.map-legend .grade { margin-inline-start: 0; width: 1.6rem; box-sizing: border-box; }`, normalized RTL subtitle typography (`letter-spacing: 0; text-transform: none;`), added `max-height: calc(100% - 2.5rem); overflow-y: auto;` (`calc(100% - 3.75rem)` on mobile), and offset `[dir="rtl"] .map-legend` to `bottom: 2.5rem`.
+   - Moved desktop `.guidance-panel` to `inset-inline-end: 3.5rem; z-index: 15; max-width: 22rem;` so it clears both `.map-legend` and MapLibre zoom controls in LTR and RTL.
+   - Added a regression unit test in `app/tests/mapLayers.test.ts`.
+3. **Verification:**
+   - Verified in headless Chromium at `1280×900` (EN Light, AR Light, AR Dark) and `390×844` (Mobile AR Dark): all 9 legend rows share identical vertical text alignment, zero legend/guidance/zoom overlap on desktop, zero horizontal overflow, and zero runtime errors.
+
 ## Autopilot handoff
 
-- **Updated:** 2026-11-13 (branch `fix/ui-arabic-explainers-visuals`)
-- **What this run did:** Resolved PR #39 merge conflicts against `origin/main` (PR #38 `claude/chatbot-free-llm`), integrating the proxy/own-key/FACTS/guardrail/privacy chatbot with the bilingual UI polish, RTL fixes, chart colors, and `<Explain />` popovers; verified JS/TS tests, build, headless Chromium CDP checks, Python tests, ruff, and red-team audit.
+- **Updated:** 2026-11-13 (branch `fix/map-legend-alignment`)
+- **What this run did:** Fixed `<MapLegend />` row/label misalignment and `.guidance-panel` / RTL attribution overlap in `app/src/styles.css`, added regression test in `app/tests/mapLayers.test.ts`, verified visually in Chromium across EN/AR, Light/Dark, Desktop & Mobile, and ran all JS/TS & Python verification suites.
 - **In progress:** None.
-- **Background tasks:** None (vite preview daemons stopped).
-- **Remaining / Next task:** Merge PR #39 (`fix/ui-arabic-explainers-visuals`) into `main`.
-- **Risks / Notes:** Full pack regeneration with `--taw-source ssurgo` (`t62_draws -> t72_export`) still requires local `data/` parquets not mounted in this remote VM; `workers/chat-proxy/` still needs owner Cloudflare deploy + key when activating the live free proxy.
+- **Background tasks:** None.
+- **Remaining / Next task:** Merge `fix/map-legend-alignment` PR into `main`.
+- **Risks / Notes:** Full pack regeneration with `--taw-source ssurgo` (`t62_draws -> t72_export`) requires local `data/` parquets not mounted in this remote VM; `workers/chat-proxy/` requires owner Cloudflare deploy + key when activating the live free proxy.
 
