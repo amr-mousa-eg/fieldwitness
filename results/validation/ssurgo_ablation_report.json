@@ -1,0 +1,142 @@
+{
+  "schema_version": "1.0",
+  "tag": "D",
+  "external_soil_source": "USDA-NRCS SSURGO AWS [E]",
+  "n_fields_matched": 198,
+  "mean_ssurgo_aws_mm": 265.8,
+  "mean_sim_taw_mm": 146.6,
+  "cells": [
+    {
+      "metric": "canopy_integral",
+      "regime": "drought_2022_2023",
+      "deficit_bin": "low_gap",
+      "n": 87,
+      "too_few_to_judge": false,
+      "mean_taw_gap_mm": 63.1,
+      "mean_signed_err": -7.44,
+      "mae": 19.62,
+      "cov90": 0.2989
+    },
+    {
+      "metric": "canopy_integral",
+      "regime": "drought_2022_2023",
+      "deficit_bin": "mid_gap",
+      "n": 87,
+      "too_few_to_judge": false,
+      "mean_taw_gap_mm": 129.3,
+      "mean_signed_err": -22.03,
+      "mae": 24.39,
+      "cov90": 0.2759
+    },
+    {
+      "metric": "canopy_integral",
+      "regime": "drought_2022_2023",
+      "deficit_bin": "high_gap",
+      "n": 88,
+      "too_few_to_judge": false,
+      "mean_taw_gap_mm": 164.3,
+      "mean_signed_err": -17.63,
+      "mae": 19.77,
+      "cov90": 0.2727
+    },
+    {
+      "metric": "canopy_integral",
+      "regime": "wet_2024",
+      "deficit_bin": "low_gap",
+      "n": 67,
+      "too_few_to_judge": false,
+      "mean_taw_gap_mm": 66.8,
+      "mean_signed_err": 9.63,
+      "mae": 19.49,
+      "cov90": 0.3433
+    },
+    {
+      "metric": "canopy_integral",
+      "regime": "wet_2024",
+      "deficit_bin": "mid_gap",
+      "n": 67,
+      "too_few_to_judge": false,
+      "mean_taw_gap_mm": 128.4,
+      "mean_signed_err": -1.29,
+      "mae": 16.81,
+      "cov90": 0.3582
+    },
+    {
+      "metric": "canopy_integral",
+      "regime": "wet_2024",
+      "deficit_bin": "high_gap",
+      "n": 64,
+      "too_few_to_judge": false,
+      "mean_taw_gap_mm": 164.6,
+      "mean_signed_err": 0.72,
+      "mae": 20.02,
+      "cov90": 0.3438
+    },
+    {
+      "metric": "cover_days",
+      "regime": "drought_2022_2023",
+      "deficit_bin": "low_gap",
+      "n": 87,
+      "too_few_to_judge": false,
+      "mean_taw_gap_mm": 63.1,
+      "mean_signed_err": 12.86,
+      "mae": 38.52,
+      "cov90": 0.1264
+    },
+    {
+      "metric": "cover_days",
+      "regime": "drought_2022_2023",
+      "deficit_bin": "mid_gap",
+      "n": 87,
+      "too_few_to_judge": false,
+      "mean_taw_gap_mm": 129.3,
+      "mean_signed_err": -13.98,
+      "mae": 40.43,
+      "cov90": 0.069
+    },
+    {
+      "metric": "cover_days",
+      "regime": "drought_2022_2023",
+      "deficit_bin": "high_gap",
+      "n": 88,
+      "too_few_to_judge": false,
+      "mean_taw_gap_mm": 164.3,
+      "mean_signed_err": -3.35,
+      "mae": 29.93,
+      "cov90": 0.0909
+    },
+    {
+      "metric": "cover_days",
+      "regime": "wet_2024",
+      "deficit_bin": "low_gap",
+      "n": 67,
+      "too_few_to_judge": false,
+      "mean_taw_gap_mm": 66.8,
+      "mean_signed_err": 35.1,
+      "mae": 39.61,
+      "cov90": 0.0299
+    },
+    {
+      "metric": "cover_days",
+      "regime": "wet_2024",
+      "deficit_bin": "mid_gap",
+      "n": 67,
+      "too_few_to_judge": false,
+      "mean_taw_gap_mm": 128.4,
+      "mean_signed_err": 20.75,
+      "mae": 35.78,
+      "cov90": 0.0597
+    },
+    {
+      "metric": "cover_days",
+      "regime": "wet_2024",
+      "deficit_bin": "high_gap",
+      "n": 64,
+      "too_few_to_judge": false,
+      "mean_taw_gap_mm": 164.6,
+      "mean_signed_err": 21.08,
+      "mae": 38.75,
+      "cov90": 0.0156
+    }
+  ]
+}
