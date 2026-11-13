@@ -1,13 +1,14 @@
-import { useEffect, useRef, useState } from "react";
+import { Fragment, type ReactNode, useEffect, useRef, useState } from "react";
 import {
   type ChatContextSnapshot,
+  type LiveChatStoreState,
   answerQuestion,
   buildSystemPrompt,
-  getActiveFieldPack,
+  getLiveChatState,
   resolveFieldLabel,
-  subscribeActiveFieldPack,
+  subscribeLiveChatState,
 } from "./chatbotContext";
-import type { FieldPack, RegionIndex } from "./types";
+import type { RegionIndex } from "./types";
 
 interface ChatMessage {
   id: string;
@@ -26,12 +27,22 @@ interface LlmConfig {
 
 const STORAGE_KEY = "fieldwitness_chatbot_llm_cfg_v1";
 const ENV_PROXY_URL = (import.meta.env.VITE_CHATBOT_PROXY_URL as string | undefined)?.trim() || "";
-const ENV_MODEL = (import.meta.env.VITE_CHATBOT_MODEL as string | undefined)?.trim() || "gpt-4o-mini";
+const ENV_MODEL = (import.meta.env.VITE_CHATBOT_MODEL as string | undefined)?.trim() || "gemini-2.5-flash";
+
+const WELCOME_MESSAGE: ChatMessage = {
+  id: "welcome",
+  role: "assistant",
+  text: "Hello! I am the FieldWitness Context Assistant. Ask me about the Three Witnesses, Evidence Grades A–D, USDA SSURGO soil TAW, winter wheat calibration, climate what-ifs, or any field you open.",
+  sourceLabel: "FieldWitness Assistant [O/D/E]",
+  followUps: ["What is FieldWitness?", "How do the three witnesses work?", "What are the project's honest limits?"],
+};
 
 function loadLlmConfig(): LlmConfig {
   const defaultCfg: LlmConfig = {
     enabled: Boolean(ENV_PROXY_URL),
-    endpoint: ENV_PROXY_URL || "https://api.openai.com/v1/chat/completions",
+    endpoint:
+      ENV_PROXY_URL ||
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
     model: ENV_MODEL,
     apiKey: "",
   };
@@ -52,6 +63,104 @@ function loadLlmConfig(): LlmConfig {
   return defaultCfg;
 }
 
+/** Renders safe inline Markdown (**bold**, `code`) and newlines without dangerouslySetInnerHTML. */
+function renderInlineTokens(line: string): ReactNode[] {
+  const tokens = line.split(/(\*\*[^*]+\*\*|`[^`]+`)/g);
+  return tokens.map((tok, i) => {
+    if (tok.startsWith("**") && tok.endsWith("**") && tok.length > 4) {
+      return <strong key={i}>{tok.slice(2, -2)}</strong>;
+    }
+    if (tok.startsWith("`") && tok.endsWith("`") && tok.length > 2) {
+      return <code key={i}>{tok.slice(1, -1)}</code>;
+    }
+    return <Fragment key={i}>{tok}</Fragment>;
+  });
+}
+
+function renderChatText(text: string): ReactNode {
+  const lines = text.split("\n");
+  return lines.map((line, idx) => (
+    <Fragment key={idx}>
+      {renderInlineTokens(line)}
+      {idx < lines.length - 1 && <br />}
+    </Fragment>
+  ));
+}
+
+async function callLlmEndpoint(
+  cfg: LlmConfig,
+  systemPrompt: string,
+  history: { role: "user" | "assistant"; content: string }[],
+  userQuery: string,
+  maxTokens = 700,
+): Promise<string> {
+  let url = cfg.endpoint.trim();
+  const key = cfg.apiKey.trim();
+  const isGeminiNative = url.includes("generativelanguage.googleapis.com") && url.includes(":generateContent");
+
+  if (isGeminiNative) {
+    if (cfg.model.trim() && url.includes("/models/")) {
+      url = url.replace(/\/models\/[^:]+:/, `/models/${encodeURIComponent(cfg.model.trim())}:`);
+    }
+    if (key && !url.includes("key=")) {
+      url += `${url.includes("?") ? "&" : "?"}key=${encodeURIComponent(key)}`;
+    }
+    const contents = [
+      ...history.map((m) => ({
+        role: m.role === "assistant" ? "model" : "user",
+        parts: [{ text: m.content }],
+      })),
+      { role: "user", parts: [{ text: userQuery }] },
+    ];
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        systemInstruction: { parts: [{ text: systemPrompt }] },
+        contents,
+        generationConfig: { temperature: 0.2, maxOutputTokens: maxTokens },
+      }),
+      signal: AbortSignal.timeout(20000),
+    });
+    if (!res.ok) {
+      const errBody = await res.text().catch(() => "");
+      throw new Error(`HTTP ${res.status}${errBody ? `: ${errBody.slice(0, 140)}` : ""}`);
+    }
+    const data = await res.json();
+    const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (typeof reply === "string" && reply.trim()) return reply.trim();
+    throw new Error("Gemini HTTP 200 returned no text candidate");
+  }
+
+  const headers: Record<string, string> = { "Content-Type": "application/json" };
+  if (key) {
+    headers.Authorization = `Bearer ${key}`;
+  }
+  const res = await fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify({
+      model: cfg.model || ENV_MODEL,
+      messages: [
+        { role: "system", content: systemPrompt },
+        ...history,
+        { role: "user", content: userQuery },
+      ],
+      temperature: 0.2,
+      max_tokens: maxTokens,
+    }),
+    signal: AbortSignal.timeout(20000),
+  });
+  if (!res.ok) {
+    const errBody = await res.text().catch(() => "");
+    throw new Error(`HTTP ${res.status}${errBody ? `: ${errBody.slice(0, 140)}` : ""}`);
+  }
+  const data = await res.json();
+  const reply = data?.choices?.[0]?.message?.content;
+  if (typeof reply === "string" && reply.trim()) return reply.trim();
+  throw new Error("HTTP 200 returned no choices[0].message.content");
+}
+
 export function FieldChatbot({
   page,
   regionId,
@@ -65,34 +174,22 @@ export function FieldChatbot({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
-  const [activePack, setActivePack] = useState<FieldPack | null>(() => getActiveFieldPack());
+  const [liveState, setLiveState] = useState<LiveChatStoreState>(() => getLiveChatState());
   const [llmCfg, setLlmCfg] = useState<LlmConfig>(() => loadLlmConfig());
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [messages, setMessages] = useState<ChatMessage[]>(() => [
-    {
-      id: "welcome",
-      role: "assistant",
-      text: "Hello! I am the FieldWitness Context Assistant. Ask me about the Three Witnesses, Evidence Grades A–D, USDA SSURGO soil TAW, winter wheat calibration, or any field you open.",
-      sourceLabel: "FieldWitness Assistant [O/D/E]",
-      followUps: ["What is FieldWitness?", "How do the three witnesses work?", "What are the project's honest limits?"],
-    },
-  ]);
+  const [testStatus, setTestStatus] = useState<{ state: "idle" | "testing" | "ok" | "error"; message: string }>({
+    state: "idle",
+    message: "",
+  });
+  const [messages, setMessages] = useState<ChatMessage[]>(() => [WELCOME_MESSAGE]);
 
   const listRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
-    return subscribeActiveFieldPack((pack) => {
-      setActivePack(pack);
-    });
+    return subscribeLiveChatState(setLiveState);
   }, []);
-
-  useEffect(() => {
-    if (!fieldId) {
-      setActivePack(null);
-    }
-  }, [fieldId]);
 
   useEffect(() => {
     if (isOpen && listRef.current) {
@@ -108,6 +205,7 @@ export function FieldChatbot({
     return () => window.removeEventListener("keydown", onKey);
   }, [isOpen]);
 
+  const activePack = fieldId ? liveState.fieldPack : null;
   const fieldLabel = resolveFieldLabel(activePack, index);
   const ctx: ChatContextSnapshot = {
     page: fieldId ? "field" : page || "map",
@@ -115,18 +213,47 @@ export function FieldChatbot({
     fieldId,
     fieldNumberLabel: fieldLabel,
     fieldPack: activePack,
+    fieldCalendar: fieldId ? liveState.fieldCalendar : null,
+    fieldScenarios: fieldId ? liveState.fieldScenarios : null,
+    priorities: fieldId ? liveState.priorities : null,
+    hindcast: page === "scoreboard" ? liveState.hindcast : null,
+    liveProfile: page === "add-field" ? liveState.liveProfile : null,
   };
 
   const contextSummary = activePack
     ? `Field ${fieldLabel ?? activePack.field.field_id.slice(0, 8)} (${activePack.field.area_ha.toFixed(1)} ha)`
-    : `${ctx.page.toUpperCase()} · ${regionId}`;
+    : ctx.liveProfile
+      ? `Global (${ctx.liveProfile.latitude.toFixed(2)}, ${ctx.liveProfile.longitude.toFixed(2)})`
+      : `${ctx.page.toUpperCase()} · ${regionId}`;
 
   const saveLlmConfig = (next: LlmConfig) => {
     setLlmCfg(next);
+    setTestStatus({ state: "idle", message: "" });
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
     } catch {
       // ignore storage errors
+    }
+  };
+
+  const handleTestConnection = async () => {
+    if (!llmCfg.endpoint.trim()) {
+      setTestStatus({ state: "error", message: "Enter an endpoint URL first." });
+      return;
+    }
+    setTestStatus({ state: "testing", message: "Sending test request..." });
+    try {
+      const reply = await callLlmEndpoint(llmCfg, "Reply briefly.", [], "Reply with OK", 24);
+      saveLlmConfig({ ...llmCfg, enabled: true });
+      setTestStatus({
+        state: "ok",
+        message: `Connected! Reply: "${reply.slice(0, 60)}"`,
+      });
+    } catch (err) {
+      setTestStatus({
+        state: "error",
+        message: err instanceof Error ? `Failed: ${err.message}` : "Network or CORS error",
+      });
     }
   };
 
@@ -145,62 +272,21 @@ export function FieldChatbot({
     if (llmCfg.enabled && llmCfg.endpoint.trim()) {
       setIsLoading(true);
       try {
-        const headers: Record<string, string> = {
-          "Content-Type": "application/json",
-        };
-        if (llmCfg.apiKey.trim()) {
-          headers.Authorization = `Bearer ${llmCfg.apiKey.trim()}`;
-        }
         const history = messages
           .filter((m) => m.id !== "welcome")
           .slice(-6)
           .map((m) => ({ role: m.role, content: m.text }));
-
-        const res = await fetch(llmCfg.endpoint.trim(), {
-          method: "POST",
-          headers,
-          body: JSON.stringify({
-            model: llmCfg.model || ENV_MODEL,
-            messages: [
-              { role: "system", content: buildSystemPrompt(ctx) },
-              ...history,
-              { role: "user", content: query },
-            ],
-            temperature: 0.2,
-          }),
-          signal: AbortSignal.timeout(20000),
-        });
-        if (res.ok) {
-          const data = await res.json();
-          const reply = data?.choices?.[0]?.message?.content;
-          if (typeof reply === "string" && reply.trim()) {
-            setMessages((prev) => [
-              ...prev,
-              {
-                id: `a-${Date.now()}`,
-                role: "assistant",
-                text: reply.trim(),
-                sourceLabel: `LLM (${llmCfg.model}) · Project Context`,
-              },
-            ]);
-            setIsLoading(false);
-            return;
-          }
-        }
-        const errBody = await res.text().catch(() => "");
-        const errHint = `LLM HTTP ${res.status}${errBody ? `: ${errBody.slice(0, 120)}` : ""}`;
-        setIsLoading(false);
-        const ans = answerQuestion(query, ctx);
+        const reply = await callLlmEndpoint(llmCfg, buildSystemPrompt(ctx), history, query, 700);
         setMessages((prev) => [
           ...prev,
           {
             id: `a-${Date.now()}`,
             role: "assistant",
-            text: `${ans.text}\n\n[LLM fallback reason: ${errHint}]`,
-            sourceLabel: "Grounded Fallback (LLM Error)",
-            followUps: ans.followUps,
+            text: reply,
+            sourceLabel: `LLM (${llmCfg.model || ENV_MODEL}) · Full Context`,
           },
         ]);
+        setIsLoading(false);
         return;
       } catch (err) {
         const errHint = err instanceof Error ? err.message : "Network or CORS error";
@@ -248,6 +334,15 @@ export function FieldChatbot({
               <button
                 type="button"
                 className="chatbot-icon-btn"
+                onClick={() => setMessages([WELCOME_MESSAGE])}
+                aria-label="Reset conversation"
+                title="Clear conversation"
+              >
+                Reset
+              </button>
+              <button
+                type="button"
+                className="chatbot-icon-btn"
                 onClick={() => setShowSettings((s) => !s)}
                 aria-label="Assistant API settings"
                 title="Optional LLM API Settings"
@@ -268,9 +363,24 @@ export function FieldChatbot({
           {showSettings && (
             <div className="chatbot-settings">
               <p className="chatbot-settings-note">
-                Built-in Grounded Mode works offline for free. For generative LLM answers, pick a provider preset (or enter a proxy URL) and paste your API key (stored in your browser only):
+                Built-in Grounded Mode works offline for free. For generative LLM answers, pick a preset (or enter a proxy URL) and paste your API key (stored in browser only):
               </p>
               <div className="chatbot-chips" style={{ marginBottom: "0.35rem" }}>
+                <button
+                  type="button"
+                  className="chatbot-chip"
+                  onClick={() =>
+                    saveLlmConfig({
+                      ...llmCfg,
+                      enabled: true,
+                      endpoint:
+                        "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+                      model: "gemini-2.5-flash",
+                    })
+                  }
+                >
+                  Gemini Native (AI Studio)
+                </button>
                 <button
                   type="button"
                   className="chatbot-chip"
@@ -283,7 +393,7 @@ export function FieldChatbot({
                     })
                   }
                 >
-                  Gemini (AI Studio)
+                  Gemini (OpenAI-compat)
                 </button>
                 <button
                   type="button"
@@ -325,14 +435,14 @@ export function FieldChatbot({
               <input
                 type="url"
                 className="chatbot-setting-input"
-                placeholder="Proxy or OpenAI-compatible URL"
+                placeholder="Proxy, Gemini Native, or OpenAI-compatible URL"
                 value={llmCfg.endpoint}
                 onChange={(e) => saveLlmConfig({ ...llmCfg, endpoint: e.target.value })}
               />
               <input
                 type="text"
                 className="chatbot-setting-input"
-                placeholder="Model (e.g. gpt-4o-mini, gemini-2.5-flash)"
+                placeholder="Model (e.g. gemini-2.5-flash, gpt-4o-mini)"
                 value={llmCfg.model}
                 onChange={(e) => saveLlmConfig({ ...llmCfg, model: e.target.value })}
               />
@@ -343,6 +453,32 @@ export function FieldChatbot({
                 value={llmCfg.apiKey}
                 onChange={(e) => saveLlmConfig({ ...llmCfg, apiKey: e.target.value })}
               />
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginTop: "0.25rem", flexWrap: "wrap" }}>
+                <button
+                  type="button"
+                  className="chatbot-chip"
+                  onClick={handleTestConnection}
+                  disabled={testStatus.state === "testing"}
+                >
+                  {testStatus.state === "testing" ? "Testing..." : "Test Connection"}
+                </button>
+                {testStatus.state !== "idle" && (
+                  <span
+                    role="status"
+                    style={{
+                      fontSize: "0.75rem",
+                      color:
+                        testStatus.state === "ok"
+                          ? "#16a34a"
+                          : testStatus.state === "error"
+                            ? "#dc2626"
+                            : "inherit",
+                    }}
+                  >
+                    {testStatus.message}
+                  </span>
+                )}
+              </div>
             </div>
           )}
 
@@ -350,7 +486,7 @@ export function FieldChatbot({
             {messages.map((m) => (
               <div key={m.id} className={`chatbot-msg chatbot-msg--${m.role}`}>
                 <div className="chatbot-bubble">
-                  <p className="chatbot-text">{m.text}</p>
+                  <p className="chatbot-text">{renderChatText(m.text)}</p>
                   {m.sourceLabel && <span className="chatbot-source">{m.sourceLabel}</span>}
                 </div>
                 {m.role === "assistant" && m.followUps && m.followUps.length > 0 && (

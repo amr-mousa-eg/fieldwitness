@@ -14,6 +14,7 @@ import {
   SOWING_WINDOWS,
   SUPPORTED_AREAS_TEXT,
 } from "./customField";
+import { setActiveLiveClimateProfile } from "./chatbotContext";
 import { fetchLiveClimateProfile, type LiveClimateProfile } from "./liveClimateApi";
 import {
   clearAllCustomFields,
@@ -336,8 +337,19 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
                 if (form.latitude !== null && form.longitude !== null) {
                   setLoadingClimate(true);
                   try {
-                    const prof = await fetchLiveClimateProfile(form.latitude, form.longitude);
+                    const irrMm =
+                      form.irrigation.is_irrigated === "yes" && form.irrigation.amount != null
+                        ? form.irrigation.unit === "in"
+                          ? form.irrigation.amount * 25.4
+                          : form.irrigation.amount
+                        : 0;
+                    const prof = await fetchLiveClimateProfile(form.latitude, form.longitude, {
+                      irrigationBudgetMm: irrMm,
+                      cantGrow: form.constraints.cant_grow,
+                      organicMatterPct: form.soil_tests.organic_matter_pct,
+                    });
                     setLiveProfile(prof);
+                    setActiveLiveClimateProfile(prof);
                   } finally {
                     setLoadingClimate(false);
                   }
@@ -345,17 +357,19 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
               }}
               disabled={loadingClimate}
             >
-              {loadingClimate ? "Connecting to NASA POWER & Soil APIs..." : "🌍 Evaluate Global Field with Live NASA POWER & Soil Data"}
+              {loadingClimate
+                ? "Running NASA POWER + Soil + FAO-56 Simulation..."
+                : "🌍 Evaluate Global Field (NASA POWER + Live Soil + FAO-56 Physics)"}
             </button>
           </div>
         )}
 
         {liveProfile && (
           <div className="card-box global-profile-card" aria-label="Live Climate & Crop Rotation Assessment" style={{ marginTop: "1rem", borderLeft: "4px solid var(--accent)" }}>
-            <h3>Global Climate & Crop Rotation Assessment (NASA POWER + Soil Context)</h3>
+            <h3>Global Climate & FAO-56 Rotation Assessment ({liveProfile.simulationMode})</h3>
             <div className="climate-meta-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(11rem, 1fr))", gap: "0.75rem", margin: "0.75rem 0" }}>
               <div className="climate-stat">
-                <span className="stat-label" style={{ display: "block", fontSize: "0.8rem", color: "var(--muted)" }}>Climate Zone:</span>
+                <span className="stat-label" style={{ display: "block", fontSize: "0.8rem", color: "var(--muted)" }}>Climate Zone ({liveProfile.yearsEvaluated} yr):</span>
                 <strong>{liveProfile.climateZone}</strong>
               </div>
               <div className="climate-stat">
@@ -367,29 +381,29 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
                 <strong>{liveProfile.annualEtoMm} mm [D]</strong>
               </div>
               <div className="climate-stat">
-                <span className="stat-label" style={{ display: "block", fontSize: "0.8rem", color: "var(--muted)" }}>Water Deficit:</span>
+                <span className="stat-label" style={{ display: "block", fontSize: "0.8rem", color: "var(--muted)" }}>Water Deficit (P/ET₀ {liveProfile.aridityIndex}):</span>
                 <strong>{liveProfile.waterDeficitMm} mm [D]</strong>
               </div>
               <div className="climate-stat">
-                <span className="stat-label" style={{ display: "block", fontSize: "0.8rem", color: "var(--muted)" }}>Aridity Index (P/ET₀):</span>
-                <strong>{liveProfile.aridityIndex}</strong>
+                <span className="stat-label" style={{ display: "block", fontSize: "0.8rem", color: "var(--muted)" }}>Soil AWS ({liveProfile.soilContext.textureClass}):</span>
+                <strong>{liveProfile.soilContext.estimatedAweMm} mm {liveProfile.soilContext.tag}</strong>
               </div>
               <div className="climate-stat">
                 <span className="stat-label" style={{ display: "block", fontSize: "0.8rem", color: "var(--muted)" }}>Soil Source:</span>
-                <strong>{liveProfile.soilContext.source} [E]</strong>
+                <strong>{liveProfile.soilContext.source}</strong>
               </div>
             </div>
 
-            <h4 style={{ margin: "0.75rem 0 0.25rem", fontSize: "0.95rem" }}>Recommended Adapted Rotations for this Environment:</h4>
+            <h4 style={{ margin: "0.75rem 0 0.25rem", fontSize: "0.95rem" }}>Simulated 3-Season Rotations (ranked by RYI [D]):</h4>
             <ul className="global-rotation-list" style={{ paddingLeft: "1.2rem", margin: "0.25rem 0" }}>
               {liveProfile.recommendedRotations.map((r, i) => (
                 <li key={i} style={{ marginBottom: "0.5rem", fontSize: "0.88rem" }}>
-                  <strong>{r.name}</strong> ({r.waterDemand}) — {r.rationale}
+                  <strong>#{i + 1} {r.name}</strong> — RYI: <strong>{r.ryi}</strong> [D] · Water use: <strong>{r.waterUseMm} mm</strong> (Worst yr: {r.badYearWaterMm} mm) [D] · Bare: {r.bareMonths} mo — {r.rationale}
                 </li>
               ))}
             </ul>
             <p className="disclaimer-mandatory" style={{ marginTop: "0.5rem", fontSize: "0.75rem", color: "var(--muted)" }}>
-              Live agro-meteorological assessment forced by NASA POWER surface solar & thermal meteorology (CERES/MERRA-2) and FAO-56 dual crop coefficient reference evapotranspiration.
+              In-browser FAO-56 daily root-zone water balance forced by multi-year NASA POWER meteorology ({liveProfile.source}) and live SSURGO/SoilGrids soil context.
             </p>
           </div>
         )}

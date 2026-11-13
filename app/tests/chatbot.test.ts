@@ -1,30 +1,34 @@
 import { describe, expect, it } from "vitest";
 import { answerQuestion, buildSystemPrompt } from "../src/chatbotContext";
-import type { FieldPack } from "../src/types";
+import { fetchLiveClimateProfile } from "../src/liveClimateApi";
+import type { FieldCalendar, FieldPack, FieldScenarios } from "../src/types";
 
 const MOCK_PACK: FieldPack = {
   schema_version: "1",
   field: {
     field_id: "02cced77704c6b4a72bfdb5e0462c450800b7ae3",
-    region_id: "ks_t14slh",
+    geometry_wkt: "POLYGON ((0 0, 0 1, 1 1, 1 0, 0 0))",
     area_ha: 64.5,
+    region_id: "ks_t14slh",
+    tier: 1,
+    boundary_source: "CSB",
+    scale_flags: { HLS: false, POWER: true },
     interior_pixels: 412,
-    boundary_source: "USDA CSB",
-    scale_flag: false,
-    geometry: { type: "Polygon", coordinates: [[[0, 0], [0, 1], [1, 1], [1, 0], [0, 0]]] },
   },
   story: [
     {
       year: 2023,
+      index: 0,
       crop: "winter_wheat",
-      crop_source: "USDA CSB",
-      sos_doy: 100,
-      peak_doy: 145,
-      eos_doy: 185,
-      canopy_integral: 65,
-      cover_days: 170,
+      crop_conf: 1,
+      crop_source: "label",
+      sos: { value: 100, unit: "day", tag: "O", source: "HLS" },
+      peak: { value: 145, unit: "day", tag: "O", source: "HLS" },
+      eos: { value: 185, unit: "day", tag: "O", source: "HLS" },
+      canopy_integral: { value: 65, unit: "NDVI-d", tag: "D", source: "HLS" },
+      cover_days: { value: 170, unit: "d", tag: "D", source: "HLS" },
+      bare_days: { value: 195, unit: "d", tag: "D", source: "HLS" },
       clear_obs: 24,
-      tag: "O",
     },
   ],
   credibility: { value: 0.64, unit: "0-1", tag: "D", source: "ABC" },
@@ -70,7 +74,42 @@ const MOCK_PACK: FieldPack = {
   generated_at: "2026-11-07T00:00:00Z",
 };
 
-describe("FieldWitness Context Chatbot", () => {
+const MOCK_CALENDAR: FieldCalendar = {
+  schema_version: "1.2",
+  field_id: MOCK_PACK.field.field_id,
+  bare_observed: [
+    { month: 1, bare_share: { value: 0.75, unit: "share", tag: "O", source: "HLS" }, clear_obs: 12, years_with_data: 6, insufficient: false },
+  ],
+  bare_observed_years: [2017, 2024],
+  bare_by_option: {},
+  vulnerability: [
+    {
+      crop: "sorghum",
+      years: [2001, 2021],
+      thresholds: {},
+      threshold_notes: {},
+      shares: {
+        water_stress: { x: [1, 2, 3], values: [0.1, 0.45, 0.2], unit: "share", tag: "D", source: "sim" },
+        heat: { x: [1, 2, 3], values: [0.05, 0.3, 0.1], unit: "share", tag: "D", source: "sim" },
+      },
+    },
+  ],
+  data_as_of: "2024-12-31",
+};
+
+const MOCK_SCENARIOS: FieldScenarios = {
+  schema_version: "1.2",
+  field_id: MOCK_PACK.field.field_id,
+  baseline_id: "t+0_p+0",
+  note: "Sensitivity tests on past weather, not climate projections.",
+  scenarios: [
+    { scenario_id: "t+0_p+0", dt_c: 0, dp_pct: 0, metrics: {}, ranks: { "winter_wheat|sorghum|fallow": 1 } },
+    { scenario_id: "t+2_p-20", dt_c: 2, dp_pct: -20, metrics: {}, ranks: { "winter_wheat|fallow|winter_wheat": 1 } },
+  ],
+  data_as_of: "2024-12-31",
+};
+
+describe("FieldWitness Context Chatbot & Live Physics", () => {
   it("answers general project questions about the Three Witnesses", () => {
     const ans = answerQuestion("How do the three witnesses work?", {
       page: "methods",
@@ -81,7 +120,7 @@ describe("FieldWitness Context Chatbot", () => {
     expect(ans.followUps.length).toBeGreaterThan(0);
   });
 
-  it("enforces scope guardrails against profit and tonnes/ha claims", () => {
+  it("enforces scope guardrails against profit and harvest mass claims", () => {
     const ans = answerQuestion("What will my profit in dollars be?", {
       page: "map",
       regionId: "ks_t14slh",
@@ -90,29 +129,61 @@ describe("FieldWitness Context Chatbot", () => {
     expect(ans.text).toContain("Relative Yield Index");
   });
 
-  it("answers active field questions using live FieldPack data", () => {
-    const ans = answerQuestion("What is the top rotation for this field?", {
+  it("answers active field, calendar, and climate scenario questions", () => {
+    const ctx = {
       page: "field",
       regionId: "ks_t14slh",
       fieldId: MOCK_PACK.field.field_id,
       fieldNumberLabel: "1",
       fieldPack: MOCK_PACK,
-    });
-    expect(ans.text).toContain("Field 1");
-    expect(ans.text).toContain("1450 mm");
-    expect(ans.text).toContain("0.35");
+      fieldCalendar: MOCK_CALENDAR,
+      fieldScenarios: MOCK_SCENARIOS,
+    };
+    const rotAns = answerQuestion("What is the top rotation for this field?", ctx);
+    expect(rotAns.text).toContain("Field 1");
+    expect(rotAns.text).toContain("1450 mm");
+    expect(rotAns.text).toContain("0.35");
+
+    const calAns = answerQuestion("What are the bare soil months and hazards?", ctx);
+    expect(calAns.text).toContain("Jan (75%)");
+    expect(calAns.text).toContain("45%");
+
+    const scenAns = answerQuestion("What should I measure next or under climate scenarios?", ctx);
+    expect(scenAns.text).toContain("winter_wheat|fallow|winter_wheat");
   });
 
-  it("builds a system prompt containing both project facts and active field context", () => {
+  it("builds a rich system prompt containing project facts, calendar, scenarios, and active field context", () => {
     const prompt = buildSystemPrompt({
       page: "field",
       regionId: "ks_t14slh",
       fieldId: MOCK_PACK.field.field_id,
       fieldNumberLabel: "1",
       fieldPack: MOCK_PACK,
+      fieldCalendar: MOCK_CALENDAR,
+      fieldScenarios: MOCK_SCENARIOS,
+      priorities: { waterUse: 3, badYearWater: 2, bareSoil: 1, ryi: 2, regret: 0 },
     });
     expect(prompt).toContain("FieldWitness Scientific Assistant");
     expect(prompt).toContain("CURRENTLY VIEWED FIELD");
-    expect(prompt).toContain("64.5 ha");
+    expect(prompt).toContain("High Observed Bare-Soil Months [O]: Jan (75%)");
+    expect(prompt).toContain("Weather Sensitivity (+2 °C, -20% rain)");
+    expect(prompt).toContain("Active Priority Weights [A]: waterUse=3");
+  });
+
+  it("simulates multi-year FAO-56 rotations cleanly in global offline fallback mode", async () => {
+    const origFetch = globalThis.fetch;
+    globalThis.fetch = (() => Promise.reject(new Error("offline"))) as typeof fetch;
+    try {
+      const prof = await fetchLiveClimateProfile(39.39, -101.05, {
+        irrigationBudgetMm: 100,
+        cantGrow: ["winter_wheat"],
+      });
+      expect(prof.recommendedRotations.length).toBeGreaterThan(0);
+      expect(prof.recommendedRotations[0].waterUseMm).toBeGreaterThan(0);
+      expect(prof.recommendedRotations[0].ryi).toBeGreaterThan(0);
+      expect(prof.soilContext.estimatedAweMm).toBeGreaterThanOrEqual(200);
+    } finally {
+      globalThis.fetch = origFetch;
+    }
   });
 });

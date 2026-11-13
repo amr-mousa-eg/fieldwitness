@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Backtest } from "./AdvisorConsole";
 import { DiagnosisSection } from "./DiagnosisSection";
 import { Explain } from "./Explain";
+import { setActiveHindcast } from "./chatbotContext";
 import { loadHindcast, loadPack } from "./data";
 import { formatDate } from "./format";
 import { GRADE_VALIDITY } from "./gradeValidity";
@@ -154,11 +155,13 @@ export function Scoreboard({ index }: { index: RegionIndex }) {
 
   useEffect(() => {
     setH(null);
+    setActiveHindcast(null);
     setStory(null);
     setError(null);
     loadHindcast(region)
       .then((x) => {
         setH(x);
+        setActiveHindcast(x);
         setMode(modesOf(x)[0] ?? "forecast");
         return loadPack(region, x.story_field_id).then(setStory);
       })
