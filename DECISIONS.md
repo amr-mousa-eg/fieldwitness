@@ -1056,13 +1056,19 @@ Integrated all 24 NASA Earth observation missions, USDA, USGS, FAO, and ECMWF pa
    - Added reader test cases to `tests/test_leakage.py` ensuring zero temporal data leakage across cutoffs (14/14 passed).
    - Verified post-merge with `origin/main` (including Phase 1 phenology benchmark): all Python tests, Vitest frontend tests, ruff, TypeScript, Vite build, and Red Team Audit pass cleanly.
 
+## 2026-11-13 — [antigravity] Website Metrics Upgrade: Phase 1 Phenology & Phase 4 Split-CQR Calibration (`feature/website-enhanced-metrics`)
+
+1. **Changes (`app/src/MethodsPage.tsx`, `app/src/MethodsDiagram.tsx`, `app/src/strings/en.json`, `app/src/strings/ar.json`, `app/src/chatbotContext.ts`):**
+   - Replaced legacy Savitzky–Golay `78.3%` season-detection headline numbers across the Methods page, system architecture diagram, Try-It tour, advisor caveats, explainer popovers, and AI assistant `FACTS`/`KNOWLEDGE_BASE`/`KNOWLEDGE_BASE_AR` with verified Phase 1 benchmark results (`results/story/phenology_benchmark.json`, 240 held-out field-years across 30 spatial blocks): TWDTW **86.7%** season match (**72.5%** multi-class, **90.0%** fallow), Standard DTW **88.7%** binary match, WDDTW **75.4%** multi-class (**93.3%** fallow), and CropFormer **1.07 ms/field** inference speed.
+   - Added a dedicated "Algorithmic enhancements benchmark (Phase 1 & Phase 4)" comparison section and bilingual table to `MethodsPage.tsx`, and updated hindcast summaries to include Phase 4 Split-CQR conformal calibration (`results/hindcast/conformal/cqr_evaluation.json`): lifting 90% coverage from raw 35.0%/9.0% baselines to **85.8–90.3%** (SOS), **82.3–89.3%** (cover days), and **70.4–77.4%** (canopy integral, reducing Winkler error 32–62%).
+   - Preserved 100% EN/AR i18n key parity and updated `app/tests/chatbotLlm.test.ts`, `app/tests/methodsDiagram.test.ts`, and `app/tests/tour.test.ts` to cross-check every reported figure against `results/story/phenology_benchmark.json` and `results/hindcast/conformal/cqr_evaluation.json`.
+   - Includes `docs/SCIENTIFIC_METHODS.md` (pure scientific algorithms reference) from commit `2a56f2e`.
+
 ## Autopilot handoff
 
-- **Updated:** 2026-11-13 (branch `feature/nasa-partner-resources`, merged `origin/main`)
-- **What this run did:** Integrated all 24 NASA & partner data resources across Python connectors, map layers, Methods documentation, bilingual strings, unit tests, leakage tests, and API notes; resolved merge conflict in `DECISIONS.md` against `origin/main` (PR #41).
-- **In progress:** None. Phase 1 merged on `main`; PR #42 ready for merge.
+- **Updated:** 2026-11-13 (branch `feature/website-enhanced-metrics`)
+- **What this run did:** Replaced legacy `78.3%` website metrics with verified Phase 1 phenology benchmark and Phase 4 Split-CQR calibration results across UI components, bilingual EN/AR strings, chatbot KB/FACTS, and frontend tests.
+- **In progress:** None.
 - **Background tasks:** None.
-- **Remaining / Next task:** Merge PR #42 and proceed to Phase 2 (Spatial Causal Inference & Neighbours Witness) in a separate session upon user request.
-- **Risks / Notes:** No new pyproject dependencies added; all external network calls have offline mock fallbacks and timeout guards; production packs in `app/public/packs/` remain untouched.
-
-
+- **Remaining / Next task:** Merge PR for `feature/website-enhanced-metrics`, then proceed to Phase 2 (Spatial Causal Inference & Neighbours Witness) if requested.
+- **Risks / Notes:** Production packs in `app/public/packs/` remain untouched; zero unverified or fabricated metrics introduced.

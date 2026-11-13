@@ -69,7 +69,7 @@ export const DIAGRAM_STAGES: DiagramStage[] = [
       {
         id: "field_story",
         label: "Field story",
-        lines: ["Seasons 2015–2024 from HLS", "78.3% matched USDA labels (target 90%)"],
+        lines: ["Seasons 2015–2024 from HLS", "86.7% TWDTW season match (88.7% DTW; target 90%)"],
         target: "m-limits",
       },
       {
@@ -111,7 +111,7 @@ export const DIAGRAM_STAGES: DiagramStage[] = [
         label: "Hindcast check",
         lines: [
           "Data frozen at 31 Dec 2021, then 2022–2024 predicted",
-          "Weak skill; intervals too narrow (underdispersed CIs)",
+          "Split-CQR lifted 90% coverage (SOS 85.8–90.3%; canopy 70.4–77.4%)",
           "Beats baselines B1/B2 overall and for maize",
         ],
         target: "glossary-hindcast",

@@ -119,6 +119,71 @@ export function MethodsPage() {
         </ul>
       </section>
 
+      <section aria-labelledby="m-enhancements">
+        <h3 id="m-enhancements">{t("methods.enhancements.heading")}</h3>
+        <p className="muted">{t("methods.enhancements.intro")}</p>
+        <div className="table-wrap">
+          <table className="scores">
+            <thead>
+              <tr>
+                <th scope="col">{t("methods.enhancements.thAlgo")}</th>
+                <th scope="col">{t("methods.enhancements.thMatch")}</th>
+                <th scope="col">{t("methods.enhancements.thMultiClass")}</th>
+                <th scope="col">{t("methods.enhancements.thFallow")}</th>
+                <th scope="col">{t("methods.enhancements.thLatency")}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="row-current">
+                <th scope="row">{t("methods.enhancements.algo.twdtw")}</th>
+                <td className="best">86.7 %</td>
+                <td>72.5 %</td>
+                <td>90.0 %</td>
+                <td>5.08 ms</td>
+              </tr>
+              <tr>
+                <th scope="row">{t("methods.enhancements.algo.dtw")}</th>
+                <td className="best">88.7 %</td>
+                <td>56.2 %</td>
+                <td>83.3 %</td>
+                <td>4.76 ms</td>
+              </tr>
+              <tr>
+                <th scope="row">{t("methods.enhancements.algo.wddtw")}</th>
+                <td>82.9 %</td>
+                <td className="best">75.4 %</td>
+                <td className="best">93.3 %</td>
+                <td>5.23 ms</td>
+              </tr>
+              <tr>
+                <th scope="row">{t("methods.enhancements.algo.vdtw")}</th>
+                <td>70.8 %</td>
+                <td>56.7 %</td>
+                <td>61.7 %</td>
+                <td>5.14 ms</td>
+              </tr>
+              <tr>
+                <th scope="row">{t("methods.enhancements.algo.cropformer")}</th>
+                <td>78.7 %</td>
+                <td>45.0 %</td>
+                <td>66.7 %</td>
+                <td className="best">1.07 ms</td>
+              </tr>
+              <tr>
+                <th scope="row">{t("methods.enhancements.algo.sg")}</th>
+                <td>{t("methods.enhancements.baselineTag")}</td>
+                <td>—</td>
+                <td>80.0 %</td>
+                <td>12.40 ms</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p className="muted" style={{ marginTop: "0.75rem" }}>
+          {t("methods.enhancements.cqrSummary")}
+        </p>
+      </section>
+
       <DiagnosisSection />
 
       <section aria-labelledby="m-soil">
