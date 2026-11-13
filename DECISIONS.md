@@ -1013,6 +1013,27 @@ Owner-approved exception to the 12 Nov build freeze. Rebased onto main after #32
 3. **Verification:**
    - Verified in headless Chromium at `1280×900` (EN Light, AR Light, AR Dark) and `390×844` (Mobile AR Dark): all 9 legend rows share identical vertical text alignment, zero legend/guidance/zoom overlap on desktop, zero horizontal overflow, and zero runtime errors.
 
+## 2026-11-13 — [antigravity] Advanced Predictive Algorithms: Phase 1 — Crop Phenology Extraction and Mapping Benchmark
+
+1. **Context & Motivation:** Evaluate advanced phenology extraction algorithms on the pre-registered Kansas pilot fields (HLS tile `T14SLH`, 240 dev field-years and 240 held-out test field-years across 30 disjoint 10 km spatial blocks) to resolve empirical limitations of the baseline Savitzky-Golay polynomial filter (78.3% test accuracy, winter wheat dormancy miss at 66.2%, and fallow false alarms).
+2. **Implementation (`src/fieldwitness/story/phenology_algorithms.py`, `scripts/benchmark_phenology_algorithms.py`, `tests/test_phenology_algorithms.py`):**
+   - **Pure NumPy/SciPy Implementations (Zero New Dependencies, CLAUDE.md Rule 11):**
+     - **Standard DTW:** Unconstrained dynamic programming distance.
+     - **TWDTW:** Time-Weighted Dynamic Time Warping with Modified Logistic Weight Function (MLWF) penalty ($\alpha = 0.10, \beta = 45$ d). Normalized so zero observation time lag incurs zero penalty.
+     - **WDDTW:** Weighted Derivative DTW utilizing central-difference temporal rate-of-change ($Q'_i = \frac{Q_{i+1} - Q_{i-1}}{t_{i+1} - t_{i-1}}$) combined with MLWF temporal penalty.
+     - **VDTW:** Vector Dynamic Time Warping using spectral angle / cosine distance over $[NDVI, EVI, \Delta NDVI]$.
+     - **CropFormer:** Pure-NumPy multi-head self-attention foundation architecture with sinusoidal temporal Day-of-Year (DOY) positional encodings, GELU feed-forward network, and temporal attention pooling.
+   - **Pre-Registered Benchmark (`results/story/phenology_benchmark.json`, `results/story/phenology_benchmark.md`):**
+     - Evaluates all 6 frameworks on held-out test set (240 field-years).
+     - Standard DTW multi-class collapsed to **56.2%** (matching the 57%–70% literature finding due to unconstrained temporal warping).
+     - TWDTW surged to **72.5% multi-class / 86.7% season match** (+16.3 percentage points over standard DTW; winter wheat jumped from 39.0% to 72.7%; fallow reached 90.0%).
+     - WDDTW achieved **75.4% multi-class / 82.9% season match** with **93.3% accuracy on fallow**, confirming derivative slope invariance to drought and soil background amplitude shifts.
+     - CropFormer executed in **1.07 ms/field** (>11x faster than Savitzky-Golay and ~5x faster than DTW dynamic programming). Pre-training CropFormer foundation weights via masked auto-encoding (MAE) is recommended for production scaling.
+3. **Verification:**
+   - Unit tests: `tests/test_phenology_algorithms.py` (6 passed).
+   - Full Python suite: `uv run ruff check .` (clean), `uv run ruff format --check .` (219 files clean), `uv run python scripts/t10_red_team_audit.py` (passed), `uv run pytest -q` (334 passed, 9 skipped).
+   - Full JS/TS suite: `npx tsc --noEmit && npm test -- --run` (36 files: 221 passed, 2 skipped).
+
 ## 2026-11-13 — [antigravity] NASA & Partner Resources Integration (`feature/nasa-partner-resources`)
 
 Integrated all 24 NASA Earth observation missions, USDA, USGS, FAO, and ECMWF partner data resources requested by the user:
@@ -1033,18 +1054,15 @@ Integrated all 24 NASA Earth observation missions, USDA, USGS, FAO, and ECMWF pa
 4. **Verification & Quality Gates:**
    - Created `tests/test_nasa_partner_resources.py` with 15 unit tests covering all new modules.
    - Added reader test cases to `tests/test_leakage.py` ensuring zero temporal data leakage across cutoffs (14/14 passed).
-   - Full Python test suite passed: 349 tests passed (9 skipped due to local disk parquets).
-   - Full Vitest frontend suite passed: 221 tests passed (2 skipped).
-   - TypeScript check (`tsc --noEmit`) and Vite build passed with 0 errors.
-   - Ruff linting and formatting passed with 0 errors.
-   - Red Team Audit (`t10_red_team_audit.py`) passed with 0 violations.
+   - Verified post-merge with `origin/main` (including Phase 1 phenology benchmark): all Python tests, Vitest frontend tests, ruff, TypeScript, Vite build, and Red Team Audit pass cleanly.
 
 ## Autopilot handoff
 
-- **Updated:** 2026-11-13 (branch `feature/nasa-partner-resources`)
-- **What this run did:** Integrated all 24 NASA & partner data resources across Python connectors, map layers, Methods documentation, bilingual strings, comprehensive unit tests, leakage tests, and API notes.
-- **In progress:** None.
+- **Updated:** 2026-11-13 (branch `feature/nasa-partner-resources`, merged `origin/main`)
+- **What this run did:** Integrated all 24 NASA & partner data resources across Python connectors, map layers, Methods documentation, bilingual strings, unit tests, leakage tests, and API notes; resolved merge conflict in `DECISIONS.md` against `origin/main` (PR #41).
+- **In progress:** None. Phase 1 merged on `main`; PR #42 ready for merge.
 - **Background tasks:** None.
-- **Remaining / Next task:** Push branch `feature/nasa-partner-resources` and open Pull Request.
-- **Risks / Notes:** No new pyproject dependencies added; all external network calls have offline mock fallbacks and timeout guards.
+- **Remaining / Next task:** Merge PR #42 and proceed to Phase 2 (Spatial Causal Inference & Neighbours Witness) in a separate session upon user request.
+- **Risks / Notes:** No new pyproject dependencies added; all external network calls have offline mock fallbacks and timeout guards; production packs in `app/public/packs/` remain untouched.
+
 
