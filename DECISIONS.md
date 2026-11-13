@@ -897,3 +897,13 @@ Written and committed before any analysis is run. Nothing here changes `main`, p
    - Python linters & formatting: `uv run ruff check .` (0 errors), `uv run ruff format --check .` (clean).
    - Frontend tests & build: `cd app && npm test` (173 passed across 28 test files), `cd app && npm run build` (clean Vite production bundle in 651 ms).
 
+## 2026-11-13 — [antigravity] Final polish: SSURGO TAW CLI option & Print Dossier alignment
+
+1. **Changes:**
+   - Added `--taw-source {config,ssurgo}` CLI option to `scripts/t62_draws.py`, wiring `get_field_taw_base(field_id=...)` from `src/fieldwitness/data/ssurgo_taw.py` so posterior world generation can run against empirical USDA-NRCS SSURGO field AWS (median 282.1 mm, tag `[E]`) when local data is mounted.
+   - Updated `app/src/PrintDossier.tsx` Witness 3 and Local Soil Context cards to reflect the 30-year K-State Colby agronomic trials (`[E]`) alongside the observational circuit breaker, and USDA-NRCS SSURGO AWS alongside SoilGrids 2.0.
+   - Updated `docs/COORDINATION.md` marking PR #27 merged.
+2. **Verification:**
+   - `uv run ruff check . && uv run ruff format --check .`, `uv run python scripts/t10_red_team_audit.py`, `uv run pytest -q`, `cd app && npm test && npm run build`.
+
+

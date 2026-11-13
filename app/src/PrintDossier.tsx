@@ -123,9 +123,9 @@ export function PrintDossier({
               <strong>Witness 2 (Field Past):</strong> Multi-year HLS 30 m calibration (ABC credibility: {((pack.credibility.value ?? 0) * 100).toFixed(0)}%). <span className="print-badge on">ACTIVE</span>
             </li>
             <li>
-              <strong>Witness 3 (Neighbours):</strong> Double Machine Learning causal contrasts across similar fields. <span className="print-badge off">OFF (Circuit Breaker)</span>
+              <strong>Witness 3 (Neighbours / Trials):</strong> Observational satellite contrasts <span className="print-badge off">OFF (Circuit Breaker)</span>; grounded in 30-year K-State Colby agronomic trials (tag [E]) where matched.
               <p className="print-witness-note">
-                Automatically turned OFF to guard against unobserved rotational confounding in observational farm data. Evidence grade ceiling: Grade B.
+                Observational contrasts are turned OFF to guard against farmer selection bias. Rotations matching K-State Research &amp; Extension trials unlock independent [E] validation.
               </p>
             </li>
           </ul>
@@ -145,7 +145,7 @@ export function PrintDossier({
               <strong>Recommended Next Measurement:</strong> {pack.advice.measure_next}
             </li>
             <li>
-              <strong>Local Soil Context:</strong> ISRIC SoilGrids 2.0 (250 m context) clay, sand, SOC. Simulation root-zone baseline: calibrated 150 mm base.
+              <strong>Local Soil Context:</strong> USDA-NRCS SSURGO silt loam AWS (median 282.1 mm [E]) &amp; ISRIC SoilGrids 2.0 (250 m clay/sand/SOC).
             </li>
           </ul>
         </div>
