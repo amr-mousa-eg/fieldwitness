@@ -906,4 +906,19 @@ Written and committed before any analysis is run. Nothing here changes `main`, p
 2. **Verification:**
    - `uv run ruff check . && uv run ruff format --check .`, `uv run python scripts/t10_red_team_audit.py`, `uv run pytest -q`, `cd app && npm test && npm run build`.
 
+## 2026-11-13 — [antigravity] Context-aware project & field chatbot
+
+1. **Context & Motivation:** Enable visitors, farmers, and Space Apps judges to ask natural-language questions anywhere on the website with full awareness of both the FieldWitness scientific methodology and the specific field pack currently open.
+2. **Implementation:**
+   - **Grounded Knowledge & Live Field Context (`app/src/chatbotContext.ts`):**
+     - Encodes project facts (Three Witnesses, Evidence Grades A–D, `[O, D, E, A]` source tags, USDA SSURGO 282.1 mm median AWS, K-State Colby 30-yr trials, winter wheat phenology calibration, honest hindcast limits, global NASA POWER climate lookup, and strict no-profit/no-tonnes-per-ha guardrails).
+     - Subscribes to active `FieldPack` via `setActiveFieldPack` from `app/src/FieldPage.tsx` to answer field-specific questions (current rotation, top 3 alternatives, ABC credibility, satellite crop history, and `measure_next` flip sensitivity).
+     - Includes `buildSystemPrompt(ctx)` for optional user-supplied OpenAI-compatible LLM endpoints.
+   - **Floating Accessible Drawer (`app/src/FieldChatbot.tsx` & `app/src/styles.css`):**
+     - Lazy-loaded from `app/src/App.tsx` (5.90 kB chunk), hidden in `@media print`.
+     - Zero-key offline grounded mode by default, with optional browser-local BYOK/endpoint settings and automatic fallback.
+3. **Verification:**
+   - `app/tests/chatbot.test.ts` (4 passed), `cd app && npm test` (177 passed across 29 files), `cd app && npm run build` (708 ms), `uv run python scripts/t10_red_team_audit.py` (passed), `uv run ruff check .` & `uv run ruff format --check .` (clean).
+
+
 
