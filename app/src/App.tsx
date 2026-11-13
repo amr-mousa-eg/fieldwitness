@@ -1,14 +1,16 @@
 import { Suspense, lazy, useEffect, useRef, useState } from "react";
 import { DemoBanner } from "./DemoBanner";
+import { LangToggle } from "./LangToggle";
 import { MapPage } from "./MapPage";
 import { loadIndex, loadRegions } from "./data";
 import { PAGES, pageHref, useRoute } from "./route";
 import { ThemeToggle } from "./ThemeToggle";
-import { t } from "./strings";
+import { t, useLocale } from "./strings";
 import type { RegionIndex, RegionList } from "./types";
 
 const FieldPage = lazy(() => import("./FieldPage").then((m) => ({ default: m.FieldPage })));
 const Scoreboard = lazy(() => import("./Scoreboard").then((m) => ({ default: m.Scoreboard })));
+const ComparePage = lazy(() => import("./ComparePage").then((m) => ({ default: m.ComparePage })));
 const MethodsPage = lazy(() => import("./MethodsPage").then((m) => ({ default: m.MethodsPage })));
 const AddFieldPage = lazy(() => import("./AddFieldPage").then((m) => ({ default: m.AddFieldPage })));
 const TourGuide = lazy(() => import("./TourGuide").then((m) => ({ default: m.TourGuide })));
@@ -20,6 +22,7 @@ function focusMain(): void {
 }
 
 export function App() {
+  useLocale();
   const route = useRoute();
   const [regions, setRegions] = useState<RegionList | null>(null);
   const [index, setIndex] = useState<RegionIndex | null>(null);
@@ -99,6 +102,7 @@ export function App() {
           >
             {t("tour.launch")}
           </button>
+          <LangToggle />
           <ThemeToggle />
         </div>
         <nav className="app-nav" aria-label={t("nav.label")}>
@@ -121,6 +125,10 @@ export function App() {
         ) : index && route.page === "scoreboard" ? (
           <main id="main" tabIndex={-1} className="app-field">
             <Scoreboard index={index} />
+          </main>
+        ) : index && route.page === "compare" ? (
+          <main id="main" tabIndex={-1} className="app-field">
+            <ComparePage index={index} />
           </main>
         ) : route.page === "methods" ? (
           <main id="main" tabIndex={-1} className="app-field">

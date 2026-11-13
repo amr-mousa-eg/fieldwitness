@@ -1,0 +1,838 @@
+{
+  "schema_version": "1.0",
+  "tag": "D",
+  "source": "model:calibration@v1 (CQR pre-registered 2026-11-13)",
+  "n_cal_rows": 3424,
+  "n_test_rows": 3704,
+  "n_spatial_blocks": 109,
+  "forecast_summary": [
+    {
+      "crop": "maize",
+      "run": "forecast",
+      "metric": "canopy_integral",
+      "n": 124,
+      "too_few_to_judge": false,
+      "stored": {
+        "cov90": {
+          "value": 0.2742,
+          "ci_low": 0.188,
+          "ci_high": 0.3577,
+          "n": 124
+        },
+        "width90": {
+          "value": 18.4568,
+          "ci_low": 17.5235,
+          "ci_high": 19.3631,
+          "n": 124
+        },
+        "winkler90": {
+          "value": 271.6735,
+          "ci_low": 227.6858,
+          "ci_high": 319.9998,
+          "n": 124
+        }
+      },
+      "cqr_sym": {
+        "cov90": {
+          "value": 0.7742,
+          "ci_low": 0.7059,
+          "ci_high": 0.8357,
+          "n": 124
+        },
+        "width90": {
+          "value": 60.3713,
+          "ci_low": 59.4171,
+          "ci_high": 61.3212,
+          "n": 124
+        },
+        "winkler90": {
+          "value": 116.1868,
+          "ci_low": 94.0597,
+          "ci_high": 142.6881,
+          "n": 124
+        }
+      },
+      "cqr_asym": {
+        "cov90": {
+          "value": 0.7661,
+          "ci_low": 0.697,
+          "ci_high": 0.8304,
+          "n": 124
+        },
+        "width90": {
+          "value": 58.1952,
+          "ci_low": 57.069,
+          "ci_high": 59.3884,
+          "n": 124
+        },
+        "winkler90": {
+          "value": 116.7626,
+          "ci_low": 93.323,
+          "ci_high": 145.8146,
+          "n": 124
+        }
+      },
+      "gate_85_95": "fail",
+      "gate_80_floor": "fail"
+    },
+    {
+      "crop": "maize",
+      "run": "forecast",
+      "metric": "cover_days",
+      "n": 124,
+      "too_few_to_judge": false,
+      "stored": {
+        "cov90": {
+          "value": 0.1129,
+          "ci_low": 0.0615,
+          "ci_high": 0.1692,
+          "n": 124
+        },
+        "width90": {
+          "value": 10.2363,
+          "ci_low": 10.065,
+          "ci_high": 10.4285,
+          "n": 124
+        },
+        "winkler90": {
+          "value": 577.9782,
+          "ci_low": 475.0894,
+          "ci_high": 697.5276,
+          "n": 124
+        }
+      },
+      "cqr_sym": {
+        "cov90": {
+          "value": 0.8226,
+          "ci_low": 0.7519,
+          "ci_high": 0.8908,
+          "n": 124
+        },
+        "width90": {
+          "value": 111.4137,
+          "ci_low": 110.7677,
+          "ci_high": 111.9654,
+          "n": 124
+        },
+        "winkler90": {
+          "value": 196.8734,
+          "ci_low": 153.0259,
+          "ci_high": 251.8961,
+          "n": 124
+        }
+      },
+      "cqr_asym": {
+        "cov90": {
+          "value": 0.7581,
+          "ci_low": 0.6812,
+          "ci_high": 0.8265,
+          "n": 124
+        },
+        "width90": {
+          "value": 122.8887,
+          "ci_low": 121.7283,
+          "ci_high": 123.8425,
+          "n": 124
+        },
+        "winkler90": {
+          "value": 212.1952,
+          "ci_low": 172.7548,
+          "ci_high": 260.6157,
+          "n": 124
+        }
+      },
+      "gate_85_95": "fail",
+      "gate_80_floor": "fail"
+    },
+    {
+      "crop": "maize",
+      "run": "forecast",
+      "metric": "peak",
+      "n": 124,
+      "too_few_to_judge": false,
+      "stored": {
+        "cov90": {
+          "value": 0.9274,
+          "ci_low": 0.879,
+          "ci_high": 0.9685,
+          "n": 124
+        },
+        "width90": {
+          "value": 59.4065,
+          "ci_low": 57.0454,
+          "ci_high": 61.8231,
+          "n": 124
+        },
+        "winkler90": {
+          "value": 85.8016,
+          "ci_low": 61.3108,
+          "ci_high": 127.7979,
+          "n": 124
+        }
+      },
+      "cqr_sym": {
+        "cov90": {
+          "value": 0.9355,
+          "ci_low": 0.8882,
+          "ci_high": 0.976,
+          "n": 124
+        },
+        "width90": {
+          "value": 61.1161,
+          "ci_low": 58.7268,
+          "ci_high": 63.4849,
+          "n": 124
+        },
+        "winkler90": {
+          "value": 86.8661,
+          "ci_low": 62.7829,
+          "ci_high": 128.3666,
+          "n": 124
+        }
+      },
+      "cqr_asym": {
+        "cov90": {
+          "value": 0.9355,
+          "ci_low": 0.8879,
+          "ci_high": 0.9764,
+          "n": 124
+        },
+        "width90": {
+          "value": 75.2452,
+          "ci_low": 72.8395,
+          "ci_high": 77.6646,
+          "n": 124
+        },
+        "winkler90": {
+          "value": 100.5113,
+          "ci_low": 76.4443,
+          "ci_high": 141.7278,
+          "n": 124
+        }
+      },
+      "gate_85_95": "fail",
+      "gate_80_floor": "fail"
+    },
+    {
+      "crop": "maize",
+      "run": "forecast",
+      "metric": "sos",
+      "n": 124,
+      "too_few_to_judge": false,
+      "stored": {
+        "cov90": {
+          "value": 0.3145,
+          "ci_low": 0.2195,
+          "ci_high": 0.3984,
+          "n": 124
+        },
+        "width90": {
+          "value": 23.6129,
+          "ci_low": 21.296,
+          "ci_high": 26.1049,
+          "n": 124
+        },
+        "winkler90": {
+          "value": 235.2984,
+          "ci_low": 168.7239,
+          "ci_high": 317.6198,
+          "n": 124
+        }
+      },
+      "cqr_sym": {
+        "cov90": {
+          "value": 0.8952,
+          "ci_low": 0.8376,
+          "ci_high": 0.9478,
+          "n": 124
+        },
+        "width90": {
+          "value": 69.5661,
+          "ci_low": 67.2552,
+          "ci_high": 72.0858,
+          "n": 124
+        },
+        "winkler90": {
+          "value": 138.7597,
+          "ci_low": 84.6644,
+          "ci_high": 206.995,
+          "n": 124
+        }
+      },
+      "cqr_asym": {
+        "cov90": {
+          "value": 0.9032,
+          "ci_low": 0.8492,
+          "ci_high": 0.9508,
+          "n": 124
+        },
+        "width90": {
+          "value": 95.4028,
+          "ci_low": 93.0495,
+          "ci_high": 97.8289,
+          "n": 124
+        },
+        "winkler90": {
+          "value": 148.169,
+          "ci_low": 108.0793,
+          "ci_high": 201.1017,
+          "n": 124
+        }
+      },
+      "gate_85_95": "pass",
+      "gate_80_floor": "pass"
+    },
+    {
+      "crop": "sorghum",
+      "run": "forecast",
+      "metric": "canopy_integral",
+      "n": 142,
+      "too_few_to_judge": false,
+      "stored": {
+        "cov90": {
+          "value": 0.4366,
+          "ci_low": 0.3446,
+          "ci_high": 0.5232,
+          "n": 142
+        },
+        "width90": {
+          "value": 17.2447,
+          "ci_low": 16.6201,
+          "ci_high": 17.8144,
+          "n": 142
+        },
+        "winkler90": {
+          "value": 179.9053,
+          "ci_low": 139.9862,
+          "ci_high": 227.5027,
+          "n": 142
+        }
+      },
+      "cqr_sym": {
+        "cov90": {
+          "value": 0.7042,
+          "ci_low": 0.6143,
+          "ci_high": 0.7892,
+          "n": 142
+        },
+        "width90": {
+          "value": 35.3142,
+          "ci_low": 34.6824,
+          "ci_high": 35.9142,
+          "n": 142
+        },
+        "winkler90": {
+          "value": 120.9134,
+          "ci_low": 91.7137,
+          "ci_high": 156.0592,
+          "n": 142
+        }
+      },
+      "cqr_asym": {
+        "cov90": {
+          "value": 0.662,
+          "ci_low": 0.5755,
+          "ci_high": 0.7434,
+          "n": 142
+        },
+        "width90": {
+          "value": 35.762,
+          "ci_low": 35.1354,
+          "ci_high": 36.3538,
+          "n": 142
+        },
+        "winkler90": {
+          "value": 122.8249,
+          "ci_low": 95.3485,
+          "ci_high": 154.5948,
+          "n": 142
+        }
+      },
+      "gate_85_95": "fail",
+      "gate_80_floor": "fail"
+    },
+    {
+      "crop": "sorghum",
+      "run": "forecast",
+      "metric": "cover_days",
+      "n": 142,
+      "too_few_to_judge": false,
+      "stored": {
+        "cov90": {
+          "value": 0.0634,
+          "ci_low": 0.0268,
+          "ci_high": 0.1045,
+          "n": 142
+        },
+        "width90": {
+          "value": 6.1218,
+          "ci_low": 5.9118,
+          "ci_high": 6.3284,
+          "n": 142
+        },
+        "winkler90": {
+          "value": 559.8331,
+          "ci_low": 446.3932,
+          "ci_high": 697.496,
+          "n": 142
+        }
+      },
+      "cqr_sym": {
+        "cov90": {
+          "value": 0.8873,
+          "ci_low": 0.8258,
+          "ci_high": 0.94,
+          "n": 142
+        },
+        "width90": {
+          "value": 127.4035,
+          "ci_low": 126.3216,
+          "ci_high": 128.0893,
+          "n": 142
+        },
+        "winkler90": {
+          "value": 226.6923,
+          "ci_low": 171.5832,
+          "ci_high": 299.4811,
+          "n": 142
+        }
+      },
+      "cqr_asym": {
+        "cov90": {
+          "value": 0.7958,
+          "ci_low": 0.7297,
+          "ci_high": 0.8542,
+          "n": 142
+        },
+        "width90": {
+          "value": 96.7979,
+          "ci_low": 95.4714,
+          "ci_high": 97.8134,
+          "n": 142
+        },
+        "winkler90": {
+          "value": 213.3894,
+          "ci_low": 162.4049,
+          "ci_high": 279.7923,
+          "n": 142
+        }
+      },
+      "gate_85_95": "fail",
+      "gate_80_floor": "fail"
+    },
+    {
+      "crop": "sorghum",
+      "run": "forecast",
+      "metric": "peak",
+      "n": 142,
+      "too_few_to_judge": false,
+      "stored": {
+        "cov90": {
+          "value": 0.8451,
+          "ci_low": 0.7817,
+          "ci_high": 0.9,
+          "n": 142
+        },
+        "width90": {
+          "value": 48.9789,
+          "ci_low": 47.4526,
+          "ci_high": 50.5838,
+          "n": 142
+        },
+        "winkler90": {
+          "value": 112.1479,
+          "ci_low": 81.0338,
+          "ci_high": 152.6376,
+          "n": 142
+        }
+      },
+      "cqr_sym": {
+        "cov90": {
+          "value": 0.8732,
+          "ci_low": 0.8113,
+          "ci_high": 0.9272,
+          "n": 142
+        },
+        "width90": {
+          "value": 62.9493,
+          "ci_low": 61.4162,
+          "ci_high": 64.5547,
+          "n": 142
+        },
+        "winkler90": {
+          "value": 105.8859,
+          "ci_low": 80.0562,
+          "ci_high": 142.4278,
+          "n": 142
+        }
+      },
+      "cqr_asym": {
+        "cov90": {
+          "value": 0.8944,
+          "ci_low": 0.8446,
+          "ci_high": 0.9375,
+          "n": 142
+        },
+        "width90": {
+          "value": 99.662,
+          "ci_low": 98.07,
+          "ci_high": 101.3173,
+          "n": 142
+        },
+        "winkler90": {
+          "value": 127.5282,
+          "ci_low": 112.8508,
+          "ci_high": 145.9593,
+          "n": 142
+        }
+      },
+      "gate_85_95": "fail",
+      "gate_80_floor": "fail"
+    },
+    {
+      "crop": "sorghum",
+      "run": "forecast",
+      "metric": "sos",
+      "n": 142,
+      "too_few_to_judge": false,
+      "stored": {
+        "cov90": {
+          "value": 0.662,
+          "ci_low": 0.58,
+          "ci_high": 0.7464,
+          "n": 142
+        },
+        "width90": {
+          "value": 28.2979,
+          "ci_low": 26.2823,
+          "ci_high": 30.2126,
+          "n": 142
+        },
+        "winkler90": {
+          "value": 351.3049,
+          "ci_low": 236.6727,
+          "ci_high": 492.7932,
+          "n": 142
+        }
+      },
+      "cqr_sym": {
+        "cov90": {
+          "value": 0.8944,
+          "ci_low": 0.8394,
+          "ci_high": 0.9392,
+          "n": 142
+        },
+        "width90": {
+          "value": 116.0303,
+          "ci_low": 113.994,
+          "ci_high": 118.0206,
+          "n": 142
+        },
+        "winkler90": {
+          "value": 283.3261,
+          "ci_low": 203.0529,
+          "ci_high": 391.5172,
+          "n": 142
+        }
+      },
+      "cqr_asym": {
+        "cov90": {
+          "value": 0.8873,
+          "ci_low": 0.8345,
+          "ci_high": 0.9362,
+          "n": 142
+        },
+        "width90": {
+          "value": 113.6641,
+          "ci_low": 111.587,
+          "ci_high": 115.8165,
+          "n": 142
+        },
+        "winkler90": {
+          "value": 233.3613,
+          "ci_low": 173.1143,
+          "ci_high": 314.7204,
+          "n": 142
+        }
+      },
+      "gate_85_95": "pass",
+      "gate_80_floor": "pass"
+    },
+    {
+      "crop": "winter_wheat",
+      "run": "forecast",
+      "metric": "canopy_integral",
+      "n": 197,
+      "too_few_to_judge": false,
+      "stored": {
+        "cov90": {
+          "value": 0.2386,
+          "ci_low": 0.185,
+          "ci_high": 0.3056,
+          "n": 197
+        },
+        "width90": {
+          "value": 22.4694,
+          "ci_low": 21.8758,
+          "ci_high": 23.0897,
+          "n": 197
+        },
+        "winkler90": {
+          "value": 317.9957,
+          "ci_low": 280.7316,
+          "ci_high": 359.1133,
+          "n": 197
+        }
+      },
+      "cqr_sym": {
+        "cov90": {
+          "value": 0.736,
+          "ci_low": 0.6719,
+          "ci_high": 0.7969,
+          "n": 197
+        },
+        "width90": {
+          "value": 72.1547,
+          "ci_low": 71.5553,
+          "ci_high": 72.7746,
+          "n": 197
+        },
+        "winkler90": {
+          "value": 121.9803,
+          "ci_low": 105.5703,
+          "ci_high": 141.8257,
+          "n": 197
+        }
+      },
+      "cqr_asym": {
+        "cov90": {
+          "value": 0.6853,
+          "ci_low": 0.6161,
+          "ci_high": 0.75,
+          "n": 197
+        },
+        "width90": {
+          "value": 60.0993,
+          "ci_low": 59.499,
+          "ci_high": 60.7364,
+          "n": 197
+        },
+        "winkler90": {
+          "value": 120.379,
+          "ci_low": 101.0382,
+          "ci_high": 146.0479,
+          "n": 197
+        }
+      },
+      "gate_85_95": "fail",
+      "gate_80_floor": "fail"
+    },
+    {
+      "crop": "winter_wheat",
+      "run": "forecast",
+      "metric": "cover_days",
+      "n": 197,
+      "too_few_to_judge": false,
+      "stored": {
+        "cov90": {
+          "value": 0.0457,
+          "ci_low": 0.0162,
+          "ci_high": 0.0824,
+          "n": 197
+        },
+        "width90": {
+          "value": 10.0411,
+          "ci_low": 9.7188,
+          "ci_high": 10.3921,
+          "n": 197
+        },
+        "winkler90": {
+          "value": 822.9244,
+          "ci_low": 726.7942,
+          "ci_high": 921.3077,
+          "n": 197
+        }
+      },
+      "cqr_sym": {
+        "cov90": {
+          "value": 0.9594,
+          "ci_low": 0.9286,
+          "ci_high": 0.9854,
+          "n": 197
+        },
+        "width90": {
+          "value": 225.6046,
+          "ci_low": 225.229,
+          "ci_high": 226.0385,
+          "n": 197
+        },
+        "winkler90": {
+          "value": 244.1782,
+          "ci_low": 230.8163,
+          "ci_high": 261.0123,
+          "n": 197
+        }
+      },
+      "cqr_asym": {
+        "cov90": {
+          "value": 0.8934,
+          "ci_low": 0.8535,
+          "ci_high": 0.9327,
+          "n": 197
+        },
+        "width90": {
+          "value": 189.069,
+          "ci_low": 188.5453,
+          "ci_high": 189.6153,
+          "n": 197
+        },
+        "winkler90": {
+          "value": 246.8761,
+          "ci_low": 219.864,
+          "ci_high": 272.3013,
+          "n": 197
+        }
+      },
+      "gate_85_95": "pass",
+      "gate_80_floor": "pass"
+    },
+    {
+      "crop": "winter_wheat",
+      "run": "forecast",
+      "metric": "peak",
+      "n": 197,
+      "too_few_to_judge": false,
+      "stored": {
+        "cov90": {
+          "value": 0.3452,
+          "ci_low": 0.2727,
+          "ci_high": 0.4205,
+          "n": 197
+        },
+        "width90": {
+          "value": 85.7657,
+          "ci_low": 84.2619,
+          "ci_high": 87.2908,
+          "n": 197
+        },
+        "winkler90": {
+          "value": 672.6896,
+          "ci_low": 544.3562,
+          "ci_high": 809.4295,
+          "n": 197
+        }
+      },
+      "cqr_sym": {
+        "cov90": {
+          "value": 0.8071,
+          "ci_low": 0.75,
+          "ci_high": 0.8646,
+          "n": 197
+        },
+        "width90": {
+          "value": 174.3576,
+          "ci_low": 172.9572,
+          "ci_high": 175.8767,
+          "n": 197
+        },
+        "winkler90": {
+          "value": 409.9769,
+          "ci_low": 324.1968,
+          "ci_high": 503.0509,
+          "n": 197
+        }
+      },
+      "cqr_asym": {
+        "cov90": {
+          "value": 0.7817,
+          "ci_low": 0.7179,
+          "ci_high": 0.8432,
+          "n": 197
+        },
+        "width90": {
+          "value": 139.932,
+          "ci_low": 138.4495,
+          "ci_high": 141.3763,
+          "n": 197
+        },
+        "winkler90": {
+          "value": 423.3381,
+          "ci_low": 320.6143,
+          "ci_high": 534.6088,
+          "n": 197
+        }
+      },
+      "gate_85_95": "fail",
+      "gate_80_floor": "fail"
+    },
+    {
+      "crop": "winter_wheat",
+      "run": "forecast",
+      "metric": "sos",
+      "n": 197,
+      "too_few_to_judge": false,
+      "stored": {
+        "cov90": {
+          "value": 0.2081,
+          "ci_low": 0.1535,
+          "ci_high": 0.2637,
+          "n": 197
+        },
+        "width90": {
+          "value": 38.651,
+          "ci_low": 36.7718,
+          "ci_high": 40.4751,
+          "n": 197
+        },
+        "winkler90": {
+          "value": 1082.9556,
+          "ci_low": 945.0772,
+          "ci_high": 1211.0413,
+          "n": 197
+        }
+      },
+      "cqr_sym": {
+        "cov90": {
+          "value": 0.8985,
+          "ci_low": 0.8526,
+          "ci_high": 0.9412,
+          "n": 197
+        },
+        "width90": {
+          "value": 234.6383,
+          "ci_low": 232.7628,
+          "ci_high": 236.4597,
+          "n": 197
+        },
+        "winkler90": {
+          "value": 274.9277,
+          "ci_low": 250.5888,
+          "ci_high": 305.8654,
+          "n": 197
+        }
+      },
+      "cqr_asym": {
+        "cov90": {
+          "value": 0.8579,
+          "ci_low": 0.8063,
+          "ci_high": 0.9063,
+          "n": 197
+        },
+        "width90": {
+          "value": 155.2033,
+          "ci_low": 153.3666,
+          "ci_high": 156.8651,
+          "n": 197
+        },
+        "winkler90": {
+          "value": 231.3251,
+          "ci_low": 179.844,
+          "ci_high": 291.2601,
+          "n": 197
+        }
+      },
+      "gate_85_95": "pass",
+      "gate_80_floor": "pass"
+    }
+  ]
+}

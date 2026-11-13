@@ -1,5 +1,6 @@
 import { fieldNumber } from "./fields";
 import type { LiveClimateProfile } from "./liveClimateApi";
+import type { Locale } from "./locale";
 import type { Priorities } from "./rank";
 import { cropName, optionName } from "./strings";
 import type { FieldCalendar, FieldPack, FieldScenarios, RegionHindcast, RegionIndex } from "./types";
@@ -15,6 +16,7 @@ export interface ChatContextSnapshot {
   priorities?: Priorities | null;
   hindcast?: RegionHindcast | null;
   liveProfile?: LiveClimateProfile | null;
+  locale?: Locale;
 }
 
 export interface ChatAnswer {
@@ -322,12 +324,18 @@ export function buildSystemPrompt(ctx: ChatContextSnapshot): string {
     sections.push(summarizeHindcast(ctx.hindcast));
   }
 
+  const langRule =
+    ctx.locale === "ar"
+      ? "4. Respond in clear Modern Standard Arabic matching the user's interface language.\n\n"
+      : "4. Respond in the same language as the user's question (English or Arabic).\n\n";
+
   return (
     "You are the FieldWitness Scientific Assistant for NASA Space Apps Challenge 2026 ('Field Shift: Adapting Farms with NASA Data').\n" +
     "Rules:\n" +
     "1. Answer clearly and honestly using the project facts and active field/page context below.\n" +
     "2. Preserve data provenance tags ([O] observed, [D] derived, [E] external, [A] assumption) when quoting metrics.\n" +
-    "3. Never invent harvest mass per hectare, dollar profit, commodity prices, or guaranteed outcomes.\n\n" +
+    "3. Never invent harvest mass per hectare, dollar profit, commodity prices, or guaranteed outcomes.\n" +
+    langRule +
     "PROJECT KNOWLEDGE:\n" +
     baseFacts +
     "\n\n" +
