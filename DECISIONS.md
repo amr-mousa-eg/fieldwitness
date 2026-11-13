@@ -1034,13 +1034,35 @@ Owner-approved exception to the 12 Nov build freeze. Rebased onto main after #32
    - Full Python suite: `uv run ruff check .` (clean), `uv run ruff format --check .` (219 files clean), `uv run python scripts/t10_red_team_audit.py` (passed), `uv run pytest -q` (334 passed, 9 skipped).
    - Full JS/TS suite: `npx tsc --noEmit && npm test -- --run` (36 files: 221 passed, 2 skipped).
 
+## 2026-11-13 — [antigravity] NASA & Partner Resources Integration (`feature/nasa-partner-resources`)
+
+Integrated all 24 NASA Earth observation missions, USDA, USGS, FAO, and ECMWF partner data resources requested by the user:
+1. **Live Network Probing & Verification (`docs/api_notes.md`):**
+   - Verified live WMTS endpoints on NASA GIBS for VIIRS Corrected Reflectance, GPM IMERG Precipitation Rate, and SRTM Color Index.
+   - Verified CMR concept IDs for GPM IMERG Final Daily v07 (`C2723754864-GES_DISC`), VIIRS 500 m Vegetation Indices (`C2519127224-LPCLOUD`), SRTM 30 m DEM (`C2763266360-LPCLOUD`), GLDAS-2 Noah (`C1342986035-GES_DISC`), NLDAS-2 Forcing (`C2033151148-GES_DISC`), ECOSTRESS JET v003 (`C4057232489-LPCLOUD`), and GEDI Canopy Top (`C3974616071-LPCLOUD`).
+   - Verified open REST/WMS/WCS endpoints for USGS NWIS (groundwater levels and streamflow), Oregon State PRISM 4 km climate data, ECMWF ERA5 & ERA5-Land via Open-Meteo archive, USDA NASS CropScape CDL, USDA-NRCS STATSGO2 via SDA, USGS MRLC NLCD 2021, USDA NAIP orthophotography ImageServer, USFS/DOI LANDFIRE product catalog, USDA Ag Data Commons Figshare API, and CoCoRaHS citizen-science rain gauge CSV exports.
+   - Handled key-gated and out-of-scope resources: USDA AMS Market News pricing forecasts strictly excluded per CLAUDE.md Rule 4 (market outlet context only); USDA NASS QuickStats connector implemented with strict harvested acreage guardrail (zero commodity price queries); OpenET and GEDI documented as external/canopy-structure reference data.
+2. **Python Data Connectors (`src/fieldwitness/data/`):**
+   - Implemented 15 new modules: `gpm_imerg.py`, `ecostress.py`, `nwis.py`, `prism.py`, `era5.py`, `cropscape.py`, `statsgo.py`, `nlcd.py`, `naip.py`, `landfire.py`, `ag_data_commons.py`, `ldas.py`, `gaez.py`, `cocorahs.py`, and `quickstats.py`.
+   - Updated `context.py` with SRTMGL1 and SMAP surface moisture / brightness temperature bands; updated `appeears.py` with VIIRS, ECOSTRESS, and SRTM layer definitions.
+   - Registered all time-series readers (`gpm_imerg`, `ecostress`, `nwis_gw`, `prism`, `era5`, `cocorahs`) under `@register(...)` with full `asof` cutoff enforcement and leakage guarding.
+3. **Frontend Integration & Bilingual Documentation:**
+   - Added WMTS backdrop URLs in `app/src/mapLayers.ts` for VIIRS (`VIIRS_SNPP_CorrectedReflectance_TrueColor`), GPM IMERG (`IMERG_Precipitation_Rate`), and SRTM (`SRTM_Color_Index`).
+   - Expanded `DATASETS` table in `app/src/MethodsPage.tsx` from 14 to 31 datasets, linking all 24 resources with DOIs, spatial/temporal resolutions, and methods context.
+   - Added complete English and Arabic bilingual strings in `app/src/strings/en.json` and `app/src/strings/ar.json` with 100% key and placeholder parity.
+   - Comprehensively updated `DATA.md` documenting every resource's access endpoints, scale contract flags, and provenance tags (`O`, `D`, `E`).
+4. **Verification & Quality Gates:**
+   - Created `tests/test_nasa_partner_resources.py` with 15 unit tests covering all new modules.
+   - Added reader test cases to `tests/test_leakage.py` ensuring zero temporal data leakage across cutoffs (14/14 passed).
+   - Verified post-merge with `origin/main` (including Phase 1 phenology benchmark): all Python tests, Vitest frontend tests, ruff, TypeScript, Vite build, and Red Team Audit pass cleanly.
+
 ## Autopilot handoff
 
-- **Updated:** 2026-11-13 (branch `feature/phase1-phenology-algorithms`)
-- **What this run did:** Implemented Phase 1 (Advanced Crop Phenology Extraction and Mapping: Standard DTW, TWDTW, WDDTW, VDTW, CropFormer Self-Attention), verified mathematical properties in unit tests, generated comprehensive empirical benchmark report on 240 held-out field-seasons, and passed all repo test suites.
-- **In progress:** Phase 1 complete. Awaiting user prompt for Phase 2 (Spatial Causal Inference & Neighbours Witness).
+- **Updated:** 2026-11-13 (branch `feature/nasa-partner-resources`, merged `origin/main`)
+- **What this run did:** Integrated all 24 NASA & partner data resources across Python connectors, map layers, Methods documentation, bilingual strings, unit tests, leakage tests, and API notes; resolved merge conflict in `DECISIONS.md` against `origin/main` (PR #41).
+- **In progress:** None. Phase 1 merged on `main`; PR #42 ready for merge.
 - **Background tasks:** None.
-- **Remaining / Next task:** Review Phase 1 results and proceed to Phase 2 in the next session upon user request.
-- **Risks / Notes:** Production packs in `app/public/packs/` remain untouched as requested; CropFormer pre-training on large-scale unlabeled CONUS HLS data remains the recommended path to cross >90% multi-class accuracy.
+- **Remaining / Next task:** Merge PR #42 and proceed to Phase 2 (Spatial Causal Inference & Neighbours Witness) in a separate session upon user request.
+- **Risks / Notes:** No new pyproject dependencies added; all external network calls have offline mock fallbacks and timeout guards; production packs in `app/public/packs/` remain untouched.
 
 

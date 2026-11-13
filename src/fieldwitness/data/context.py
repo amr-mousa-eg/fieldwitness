@@ -27,6 +27,9 @@ from fieldwitness.data.hls_series import interior_points
 
 OUT = Path("data/context")
 SMAP_LAYER = {"product": "SPL4SMGP.008", "layer": "Geophysical_Data_sm_rootzone"}
+SMAP_SURFACE_LAYER = {"product": "SPL4SMGP.008", "layer": "Geophysical_Data_sm_surface"}
+SMAP_TEMP_LAYER = {"product": "SPL4SMGP.008", "layer": "Geophysical_Data_tb_h"}
+SRTM_CONCEPT_ID = "C2763266360-LPCLOUD"  # SRTMGL1 v003 30m Global
 
 
 # ---------------------------------------------------------------- (a) slope from NASADEM

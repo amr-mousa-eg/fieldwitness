@@ -9,10 +9,16 @@ from pathlib import Path
 import pandas as pd
 import pytest
 
+import fieldwitness.data.cocorahs  # noqa: F401
 import fieldwitness.data.context  # noqa: F401  (registers its reader)
+import fieldwitness.data.ecostress  # noqa: F401
+import fieldwitness.data.era5  # noqa: F401
+import fieldwitness.data.gpm_imerg  # noqa: F401
 import fieldwitness.data.hls_qa  # noqa: F401  (registers its reader)
 import fieldwitness.data.labels  # noqa: F401  (registers its reader)
+import fieldwitness.data.nwis  # noqa: F401
 import fieldwitness.data.power  # noqa: F401  (registers its reader)
+import fieldwitness.data.prism  # noqa: F401
 from fieldwitness.data.asof import READERS, LeakageError, as_of, forcing_weather, guard
 
 CUT = dt.date(2021, 12, 31)
@@ -48,12 +54,100 @@ def _hls_table():
     return pd.DataFrame({"date": pd.to_datetime(["2020-06-01", "2021-12-31", "2022-03-01"])})
 
 
+def _daily_weather_table(extra_cols=None):
+    df = pd.DataFrame({"date": ["2021-06-01", "2021-12-31", "2022-03-01"]})
+    if extra_cols:
+        for k, v in extra_cols.items():
+            df[k] = v
+    return df
+
+
 CASES = {
     "grace": lambda fn: list(pd.to_datetime(fn(table=_grace_table())["time"])),
     "power": lambda fn: fn(-100.66, 38.34, end=dt.date(2024, 12, 31), loader=_power_loader).index,
     "labels": lambda fn: [dt.date(y, 12, 31) for y in fn(table=_labels_table())["year"]],
     "hls_series": lambda fn: list(
         fn("x", end=dt.date(2024, 12, 31), table=_hls_table())["date"].dt.date
+    ),
+    "gpm_imerg": lambda fn: list(
+        fn(
+            table=_daily_weather_table(
+                {"rain_mm": [1.0, 2.0, 3.0], "scale_flag": [True] * 3, "tag": ["O"] * 3}
+            )
+        )["date"]
+    ),
+    "ecostress": lambda fn: list(
+        fn(
+            table=pd.DataFrame(
+                {
+                    "field_id": ["f1"] * 3,
+                    "date": ["2021-06-01", "2021-12-31", "2022-03-01"],
+                    "eta_mm": [2.0, 3.0, 4.0],
+                    "qc_good": [True] * 3,
+                    "tag": ["D"] * 3,
+                }
+            )
+        )["date"]
+    ),
+    "nwis_gw": lambda fn: list(
+        fn(
+            table=pd.DataFrame(
+                {
+                    "site_id": ["s1"] * 3,
+                    "site_name": ["w1"] * 3,
+                    "lat": [38.0] * 3,
+                    "lon": [-100.0] * 3,
+                    "date": ["2021-06-01", "2021-12-31", "2022-03-01"],
+                    "depth_to_water_ft": [40.0] * 3,
+                    "depth_to_water_m": [12.0] * 3,
+                    "tag": ["E"] * 3,
+                }
+            )
+        )["date"]
+    ),
+    "prism": lambda fn: list(
+        fn(
+            table=_daily_weather_table(
+                {
+                    "ppt_mm": [1.0, 2.0, 3.0],
+                    "tmax_c": [20.0] * 3,
+                    "tmin_c": [10.0] * 3,
+                    "tmean_c": [15.0] * 3,
+                    "scale_flag": [True] * 3,
+                    "tag": ["E"] * 3,
+                }
+            )
+        )["date"]
+    ),
+    "era5": lambda fn: list(
+        fn(
+            table=_daily_weather_table(
+                {
+                    "tmax_c": [25.0] * 3,
+                    "tmin_c": [10.0] * 3,
+                    "rain_mm": [0.0] * 3,
+                    "eto_mm": [4.0] * 3,
+                    "wind_max_ms": [5.0] * 3,
+                    "rad_mj_m2": [15.0] * 3,
+                    "scale_flag": [True] * 3,
+                    "tag": ["E"] * 3,
+                }
+            )
+        )["date"]
+    ),
+    "cocorahs": lambda fn: list(
+        fn(
+            table=pd.DataFrame(
+                {
+                    "station_id": ["st1"] * 3,
+                    "date": ["2021-06-01", "2021-12-31", "2022-03-01"],
+                    "lat": [38.0] * 3,
+                    "lon": [-100.0] * 3,
+                    "rain_mm": [1.0, 2.0, 3.0],
+                    "tag": ["E"] * 3,
+                }
+            )
+        )["date"]
     ),
 }
 
