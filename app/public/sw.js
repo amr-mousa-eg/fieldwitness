@@ -1,8 +1,9 @@
 // FieldWitness service worker (production only; registered in src/main.tsx).
 // - App files under assets/ have hashed names: cache first.
 // - Pages and packs/: network first, so data stays fresh online; the cached copy is used offline.
-const APP_CACHE = "fw-app-v1";
-const DATA_CACHE = "fw-data-v1"; // must match src/data.ts
+const CACHE_VERSION = "v2-dev"; // replaced with build stamp in dist/sw.js by Vite
+const APP_CACHE = `fw-app-${CACHE_VERSION}`;
+const DATA_CACHE = `fw-data-${CACHE_VERSION}`; // auto-rotates across builds
 const KEEP = [APP_CACHE, DATA_CACHE];
 
 self.addEventListener("install", () => self.skipWaiting());
