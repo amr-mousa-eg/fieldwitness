@@ -110,8 +110,8 @@ What this means:
 
 A dated record of issues encountered during development, how they were caught, and what was changed:
 
-- **2026-11-04 — Season detection missed target:** Achieved 78.3 % accuracy on held-out test data (155/198 field-seasons; 74.6 % in pilot checks), falling short of the pre-registered 90.0 % accuracy target. Preserved openly as an honest limitation (`results/story/kansas_season_eval.json`, `DECISIONS.md`).
-- **2026-11-05 — Neighbour witness failed all diagnostics:** Causal Double Machine Learning on previous-crop contrasts failed covariate balance across historical sequences and failed negative control checks (0 of 32 contrasts passed). Kept strictly OFF in grading; evidence grades capped at B (`results/neighbours/diagnostics.md`, `DECISIONS.md`).
+- **2026-11-04 — Season detection missed target:** Achieved 78.3 % accuracy on held-out test data (188/240 field-seasons; 74.6 % in pilot checks), falling short of the pre-registered 90.0 % accuracy target. Preserved openly as an honest limitation (`results/story/ks_seasons_test.json`, `DECISIONS.md`).
+- **2026-11-05 — Neighbour witness failed all diagnostics:** Causal Double Machine Learning on previous-crop contrasts failed covariate balance across historical sequences and failed negative control checks (0 of 92 primary contrasts in `results/neighbours/diagnostics.md`, 0 of 32 in `results/neighbours/matching_diagnostics.md`). Kept strictly OFF in grading as an automated AI safety circuit breaker against rotational confounding; evidence grades capped at B (`DECISIONS.md`).
 - **2026-11-06 — Ranking rewarded fallow:** Early ranking iterations scored bare fallow as optimal because it consumed zero crop transpiration, ignoring soil degradation. Fixed by introducing bare-soil month penalties and crop diversity constraints (`config/ranking.yaml`, `DECISIONS.md`).
 - **2026-11-07 — Rank-order bug in packs and mis-tracked T6.8 metrics:** In commit `ce69ebf`, packs had rank indices assigned prior to constraint filtering, and manual audit revealed T6.8 metric counts were tracked from intermediate script output. Corrected and covered with automated pack assertions (commit `ce69ebf`, `DECISIONS.md`).
 - **2026-11-04 — Broken DOIs in data documentation:** Automated link validation detected malformed and unreachable DOI URLs in early drafts of `DATA.md`. Replaced with verified persistent identifiers from official NASA DAAC and ISRIC registries (`DATA.md`, `DECISIONS.md`).
@@ -125,7 +125,7 @@ A dated record of issues encountered during development, how they were caught, a
 Before expanding coverage beyond the Kansas High Plains pilot (HLS tile T14SLH), FieldWitness tests three pre-registered validation gates:
 1. **Census and scale gate:** Field size and interior-pixel share (>= 4 interior 30 m pixels with a 15 m buffer) to ensure field observations are not dominated by boundary mix.
 2. **Season detection gate:** Accuracy target of 90 % against ground data. Kansas achieved 78.3 % on held-out test data (missing the target).
-3. **Hindcast skill gate:** Weak hindcast skill across fields (canopy integral 90 % interval coverage was 35.0 %, cover days 9.0 %, Spearman r = 0.264).
+3. **Hindcast skill gate:** Weak hindcast skill across fields (canopy integral 90 % interval coverage was 35.0 %, cover days 9.0 %, Spearman rank correlation rho = 0.264).
 
 Because Kansas missed the season detection target and shows weak hindcast skill, it is published strictly as a pilot with limits visible, not as a general product. Evidence grades are capped at B (Grade A disabled), neighbour evidence is inactive, and we make no yield hindcast claims.
 

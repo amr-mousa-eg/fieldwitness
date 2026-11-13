@@ -50,7 +50,7 @@ Overlays include field-scale slope erosion exposure, regional GRACE/GRACE-FO wat
 ### How it works
 1. **Witness 1 (Physics):** Implements the FAO-56 dual crop coefficient root-zone water balance model, computing daily transpiration, soil evaporation, and water stress forced by NASA POWER solar radiation, temperatures, humidity, wind speed, and precipitation.
 2. **Witness 2 (Field's Own Past):** Calibrates crop rooting depth and soil water capacity against the field's multi-year HLS vegetation index curve using Approximate Bayesian Computation (ABC), generating a 0–100% past credibility score.
-3. **Witness 3 (Neighbours):** Evaluates previous-crop rotation effects using Double Machine Learning with spatial cross-fitting. In Kansas, pre-registered diagnostic tests (covariate balance across historical crop sequences and placebo/negative controls) failed (0 of 32 tested contrasts passed all checks). Consequently, the neighbour witness remains strictly OFF in grading, capping Kansas evidence grades at B.
+3. **Witness 3 (Neighbours):** Evaluates previous-crop rotation effects using Double Machine Learning with spatial cross-fitting. In Kansas, pre-registered diagnostic tests (covariate balance across historical crop sequences and placebo/negative controls) failed (0 of 92 primary contrasts and 0 of 32 matched contrasts passed all checks). Consequently, an automated AI safety circuit breaker keeps the neighbour witness strictly OFF in grading, capping Kansas evidence grades at B.
 4. **Grading & Ranking:** An agreement engine synthesizes active witnesses into evidence grades A–D. A Pareto filter and regret minimizer rank options according to user preferences.
 
 ### How we kept it honest
@@ -63,8 +63,8 @@ Overlays include field-scale slope erosion exposure, regional GRACE/GRACE-FO wat
   - Baseline B0 outperformed FieldWitness on ground cover days (25.3 vs 30.4).
   - 90% uncertainty intervals were under-dispersed (holding 52% of green-up dates, 35% of greenness totals, and 9% of cover days). These limitations are transparently published in the app and documentation.
   - **Grade Validity Check:** Pre-registered test could not show that evidence grades predict forecasting accuracy (n = 463 field-seasons: grade-B CRPS 17.0 vs grade-D 24.0, difference 95% CI [-3.3, 14.3]; grade D had only 25 field-seasons; verdict: not shown).
-  - **Hindcast Diagnostic Breakdown:** FieldWitness forecast-mode canopy integral CRPS beats B1 (diff +1.23 [0.48, 1.99]) and B2 (+1.35 [0.74, 1.90]) overall and for maize, but does not strictly beat baselines for sorghum (+0.77 [-0.10, 1.64], 95% CI spans 0). Winter wheat has no baseline run (existing baseline code is single-calendar year only) and exhibits a peak timing error about 36 days late (untested explanation: uncalibrated phenology prior stage lengths).
-- **Negative Results Preserved:** The season detection algorithm missed its pre-registered 90% accuracy target (achieving 78.3% on held-out test data, 74.6% in pilot checks). Rather than tuning post-hoc, this failure is published openly in the UI and methods documentation.
+  - **Hindcast Diagnostic Breakdown:** FieldWitness forecast-mode canopy integral CRPS beats B1 (diff +1.23 [0.48, 1.99]) and B2 (+1.35 [0.74, 1.90]) overall and for maize, but does not strictly beat baselines for sorghum (+0.77 [-0.10, 1.64], 95% CI spans 0). Winter wheat has no baseline run (existing baseline code is single-calendar year only) and exhibits a peak timing absolute error of 58.9 d [52.2, 66.3] d with a signed median offset of +36.0 d (untested explanation: uncalibrated phenology prior stage lengths).
+- **Negative Results Preserved:** The season detection algorithm missed its pre-registered 90% accuracy target (achieving 78.3% on held-out test data, 188 of 240 field-seasons; 74.6% in pilot checks). Rather than tuning post-hoc, this failure is published openly in the UI and methods documentation.
 - **No Overclaiming:** No yield predictions in tonnes, no speculative profit calculations, no claims of "measuring soil carbon from orbit", and no opaque AI decision-making.
 
 ---
@@ -101,8 +101,8 @@ Overlays include field-scale slope erosion exposure, regional GRACE/GRACE-FO wat
 1. **USDA NASS Crop Sequence Boundaries (CSB), 2017–2024 Edition:**
    - Role: Provides field boundary geometry and annual crop classification labels for Kansas pilot fields (public domain).
 2. **ISRIC SoilGrids 2.0:**
-   - Properties: Clay, sand, silt fraction, bulk density, and available water capacity at 250 m resolution (CC-BY 4.0; DOI: 10.5194/soil-7-217-2021).
-   - Role: Establishes baseline total evaporable water (TEW) and readily evaporable water (REW) for soil water modeling.
+   - Properties: Clay, sand, silt fraction, bulk density, and organic carbon at 250 m resolution (CC-BY 4.0; DOI: 10.5194/soil-7-217-2021).
+   - Role: Provides regional soil texture and organic carbon context and serves as background confounders in neighbour causal analysis. (Not used to derive root-zone water capacity in the simulation, which uses a calibrated 150 mm baseline).
 3. **FAO Irrigation and Drainage Paper 56 (FAO-56):**
    - Tables 11, 12, 17, 22, and 24: Basal crop coefficients ($K_{cb}$), stage lengths, root depths, depletion fractions ($p$), and yield response factors ($K_y$).
 4. **EuroCrops HCAT3 Taxonomy & French RPG:**
