@@ -852,3 +852,13 @@ Written and committed before any analysis is run. Nothing here changes `main`, p
 - **Next Task:** Task P2.19 (Printable 1-Page Field Dossier component and print stylesheet on branch `ag/printable-dossier`).
 - **Claude Code coordination:** PRs #13, #14, #15, #17, #18, #19, #20, #21, #22, #23 merged/closed on main. Claude Code has active work in `docs/COORDINATION.md` for clean 2025 tests (`x3-clean2025`).
 
+## 2026-11-12 — [antigravity] Printable 1-page field report (P2.19)
+
+1. **Context & Motivation:** Farmers and extension agents in low-connectivity rural Kansas environments require physical single-page field dossiers that can be printed or exported to PDF for in-person advisory visits and field consultations without requiring an active internet connection.
+2. **Implementation:**
+   - Component: `app/src/PrintDossier.tsx` structured for A4 portrait export.
+   - Content: Executive header with field ID, region, area, boundary source, interior pixels count, and data as-of date; executive assessment box with dynamic comparison and ranking sentences; evaluated 3-season crop rotations table (Current vs Top 3 alternatives with real units, evidence grades, water use, dry-year water, bare-soil months, RYI, regret); two-column verification cards (Three Witnesses framework showing physics and calibration active, and Witness 3 circuit breaker OFF; field history track and advisory notes); compact 7-year satellite trajectory table (SOS, Peak, EOS, Canopy integral, cover days, clear obs); data source tags legend (`[O, D, E, A]`), NASA/data attributions, and fixed disclaimer.
+   - Stylesheet: Added `@media print` rules in `app/src/styles.css` hiding interactive web chrome (`.app-header`, `.app-nav`, `.tabs`, `.field-head`, `.field-page > a`, `.field-story`, `.field-card`, `.calendar-view`, `.advisor-console`, `.sim3d-scene`, `.sim3d-loading-state`, `.field-aside`, `.tour-card`, `.guidance-panel`, `.print-btn`, `#theme-toggle`), revealing `.print-dossier` with high-contrast print typography and page-break rules.
+   - Screen Integration: "Print field dossier" button in `.field-head` in `FieldPage.tsx`, styled cleanly and hidden during print.
+   - Localization: Added `"field.print"` and `"field.print.title"` to `app/src/strings/en.json`.
+3. **Verification:** Validated JSON syntax with `python3 -m json.tool`, verified Python tests and formatting (`uv run ruff check .`, `uv run ruff format --check .`, `uv run pytest -q`: 313 passed).
