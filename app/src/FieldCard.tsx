@@ -4,6 +4,7 @@ import { CropChips } from "./CropChips";
 import { Explain, MetricLabel } from "./Explain";
 import { FieldSummaryPanel } from "./FieldSummaryPanel";
 import { RankingExplainerSection } from "./RankingExplainerSection";
+import { setActiveFieldScenarios, setActivePriorities } from "./chatbotContext";
 import { emitTour } from "./tourEvents";
 import { loadScenarios } from "./data";
 import { generateFieldSummary } from "./fieldSummary";
@@ -326,10 +327,21 @@ export function FieldCard({ pack, regionId }: { pack: FieldPack; regionId: strin
 
   useEffect(() => {
     setScenarios(null);
+    setActiveFieldScenarios(null);
     loadScenarios(regionId, fid)
-      .then(setScenarios)
-      .catch(() => setScenarios(null));
+      .then((s) => {
+        setScenarios(s);
+        setActiveFieldScenarios(s);
+      })
+      .catch(() => {
+        setScenarios(null);
+        setActiveFieldScenarios(null);
+      });
   }, [regionId, fid]);
+
+  useEffect(() => {
+    setActivePriorities(priorities);
+  }, [priorities]);
 
   const scenario = dt === 0 && dp === 0 ? null : findScenario(scenarios, dt, dp);
   const rows = useMemo(

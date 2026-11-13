@@ -920,5 +920,26 @@ Written and committed before any analysis is run. Nothing here changes `main`, p
 3. **Verification:**
    - `app/tests/chatbot.test.ts` (4 passed), `cd app && npm test` (177 passed across 29 files), `cd app && npm run build` (708 ms), `uv run python scripts/t10_red_team_audit.py` (passed), `uv run ruff check .` & `uv run ruff format --check .` (clean).
 
+## 2026-11-13 — [antigravity] Enhancement Phases 1–2: Narrative reconciliation, full chatbot context & Gemini REST, global live FAO-56 physics
+
+1. **Context & Motivation:** Executing Phases 1–2 of the post-PR #31 enhancement plan:
+   - Eliminate narrative contradictions between upgraded backend capabilities (`trials.py` Grade A, `--taw-source ssurgo`, `ks_calibrated_kstate`) and shipped demo pack descriptions (`packs/demo/ks_t14slh/` still stamped `2026-11-07`).
+   - Expand `FieldChatbot` context from basic `FieldPack` fields to full multi-source workspace context + native Google Gemini `:generateContent` REST compatibility + UX polish.
+   - Upgrade `AddFieldPage` global evaluation from single-year 2023 lookup + fixed soil heuristic to multi-year NASA POWER + live USDA SSURGO SDA / ISRIC SoilGrids REST + browser-executed daily FAO-56 water balance.
+2. **Implementation:**
+   - **Copy Reconciliation (`app/src/strings/en.json`):** Updated `guidance.grades` and `methods.ds.ssurgo.use` to distinguish transparently between shipped Kansas demo packs (150 mm `[A]` prior, Grade capped at B, observational Witness 3 OFF) and full-rebuild pipeline capabilities (`--taw-source ssurgo`, 30-yr K-State Colby trial benchmarks `[E]`).
+   - **Live Global Physics Engine (`app/src/liveClimateApi.ts`, `app/src/AddFieldPage.tsx`):**
+     - Fetches multi-year (2021–2023) daily NASA POWER meteorology (`T2M_MAX`, `T2M_MIN`, `RH2M`, `WS2M`, `ALLSKY_SFC_SW_DWN`, `PRECTOTCORR`).
+     - Fetches live soil AWS / sand / clay / SOC via USDA-NRCS SSURGO SDA REST (CONUS) or ISRIC SoilGrids v2.0 REST (global) with graceful timeout fallback.
+     - Runs an in-browser 3-year daily FAO-56 root-zone water balance (`simulateSequenceDaily`) honoring farmer irrigation budgets, `cant_grow` constraints, and soil organic matter inputs, emitting `[D]`/`[E]` tagged `waterUseMm`, `badYearWaterMm`, `ryi`, and `bareMonths`.
+   - **Deep Chatbot Context & Gemini Support (`app/src/chatbotContext.ts`, `app/src/FieldChatbot.tsx`, `app/src/FieldCard.tsx`, `app/src/CalendarView.tsx`, `app/src/Scoreboard.tsx`):**
+     - Added live pub/sub publication for `FieldCalendar`, `FieldScenarios`, user priority slider weights, `RegionHindcast` rows, and `LiveClimateProfile`.
+     - Upgraded `buildSystemPrompt` and `answerQuestion` with scored BM25-lite token retrieval across active telemetry + knowledge base.
+     - Added native Google Gemini `:generateContent` REST support alongside OpenAI-compatible `/chat/completions`, a Reset Chat button, and safe inline Markdown formatting (`renderChatText`).
+3. **Pack Rebuild Note:** Full regeneration of `packs/ks_t14slh/` and `packs/demo/ks_t14slh/` via `t62_draws --taw-source ssurgo` -> `t72_export` requires local `data/` parquets not mounted in this remote VM and remains flagged for the local data workstation.
+4. **Verification:**
+   - `uv run python scripts/t10_red_team_audit.py` (passed), `uv run ruff check . && uv run ruff format --check .` (clean), `cd app && npm test` (178 passed across 29 files), `cd app && npm run build` (clean in 795 ms).
+
+
 
 

@@ -4,6 +4,7 @@ import { CropChips } from "./CropChips";
 import { CHART_COLOURS } from "./theme";
 import { useTheme } from "./useTheme";
 import { HAZARDS, MONTHS, monthValue, shadeLevel, vulnerabilityFor } from "./calendar";
+import { setActiveFieldCalendar } from "./chatbotContext";
 import { loadCalendar, loadLayers } from "./data";
 import { formatTagged } from "./format";
 import { cropName, optionName, t } from "./strings";
@@ -226,10 +227,17 @@ export function CalendarView({ pack, regionId }: { pack: FieldPack; regionId: st
 
   useEffect(() => {
     setCal(null);
+    setActiveFieldCalendar(null);
     setError(false);
     loadCalendar(regionId, fid)
-      .then(setCal)
-      .catch(() => setError(true));
+      .then((c) => {
+        setCal(c);
+        setActiveFieldCalendar(c);
+      })
+      .catch(() => {
+        setError(true);
+        setActiveFieldCalendar(null);
+      });
   }, [regionId, fid]);
   useEffect(() => {
     setLayers(null);
