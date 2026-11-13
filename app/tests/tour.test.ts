@@ -257,8 +257,8 @@ describe("try-it tour: honest copy", () => {
   it("only repeats claims the app already makes", () => {
     expect(str("tour.field.body")).toContain("B at best");
     expect(str("methods.limits.4")).toContain("top out at B");
-    expect(str("tour.season.body")).toContain("78.3 %");
-    expect(str("methods.limits.3")).toContain("78.3 %");
+    expect(str("tour.season.body")).toContain("86.7 %");
+    expect(str("methods.limits.3")).toContain("86.7 %");
     expect(str("tour.priority.body")).toContain("saved in this browser only");
     expect(str("card.store")).toContain("saved in this browser only");
     expect(str("tour.sim3d.body")).toContain("not a photo");

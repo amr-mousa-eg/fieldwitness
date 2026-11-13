@@ -1056,6 +1056,14 @@ Integrated all 24 NASA Earth observation missions, USDA, USGS, FAO, and ECMWF pa
    - Added reader test cases to `tests/test_leakage.py` ensuring zero temporal data leakage across cutoffs (14/14 passed).
    - Verified post-merge with `origin/main` (including Phase 1 phenology benchmark): all Python tests, Vitest frontend tests, ruff, TypeScript, Vite build, and Red Team Audit pass cleanly.
 
+## 2026-11-13 — [antigravity] Website Metrics Upgrade: Phase 1 Phenology & Phase 4 Split-CQR Calibration (`feature/website-enhanced-metrics`)
+
+1. **Changes (`app/src/MethodsPage.tsx`, `app/src/MethodsDiagram.tsx`, `app/src/strings/en.json`, `app/src/strings/ar.json`, `app/src/chatbotContext.ts`):**
+   - Replaced legacy Savitzky–Golay `78.3%` season-detection headline numbers across the Methods page, system architecture diagram, Try-It tour, advisor caveats, explainer popovers, and AI assistant `FACTS`/`KNOWLEDGE_BASE`/`KNOWLEDGE_BASE_AR` with verified Phase 1 benchmark results (`results/story/phenology_benchmark.json`, 240 held-out field-years across 30 spatial blocks): TWDTW **86.7%** season match (**72.5%** multi-class, **90.0%** fallow), Standard DTW **88.7%** binary match, WDDTW **75.4%** multi-class (**93.3%** fallow), and CropFormer **1.07 ms/field** inference speed.
+   - Added a dedicated "Algorithmic enhancements benchmark (Phase 1 & Phase 4)" comparison section and bilingual table to `MethodsPage.tsx`, and updated hindcast summaries to include Phase 4 Split-CQR conformal calibration (`results/hindcast/conformal/cqr_evaluation.json`): lifting 90% coverage from raw 35.0%/9.0% baselines to **85.8–90.3%** (SOS), **82.3–89.3%** (cover days), and **70.4–77.4%** (canopy integral, reducing Winkler error 32–62%).
+   - Preserved 100% EN/AR i18n key parity and updated `app/tests/chatbotLlm.test.ts`, `app/tests/methodsDiagram.test.ts`, and `app/tests/tour.test.ts` to cross-check every reported figure against `results/story/phenology_benchmark.json` and `results/hindcast/conformal/cqr_evaluation.json`.
+   - Includes `docs/SCIENTIFIC_METHODS.md` (pure scientific algorithms reference) from commit `2a56f2e`.
+
 ## 2026-11-13 — [antigravity] Phase 2 Central Ukraine (`ua_central_t36uvu`) Neighbours Witness Evaluation (`feature/central-ukraine-neighbours`)
 
 1. **Pre-Registered Execution & Open Data Pipeline (`src/fieldwitness/data/s2_cog.py`, `src/fieldwitness/resolve/pilot.py`, `src/fieldwitness/story/ukraine_seasons.py`):**
@@ -1078,10 +1086,10 @@ Integrated all 24 NASA Earth observation missions, USDA, USGS, FAO, and ECMWF pa
 
 ## Autopilot handoff
 
-- **Updated:** 2026-11-13 (branch `feature/central-ukraine-neighbours`)
-- **What this run did:** Added Tier 3 Central Ukraine (`ua_central_t36uvu`, 395 FTW fields across 8 spatial blocks) via an open Sentinel-2 L2A 20 m COG pipeline (`s2_cog.py`, `ukraine_seasons.py`, `run_ukraine_neighbours.py`), ran all 3 Phase 2 Neighbours causal estimators across pre-cutoff (`<=2021`) and full (`2018–2024`) periods vs Kansas (`ks_t14slh`), and generated empirical gate reports (`results/neighbours/ua_central_t36uvu_report.md`).
-- **In progress:** None. Ready for PR merge on `feature/central-ukraine-neighbours`.
+- **Updated:** 2026-11-13 (branch `feature/central-ukraine-neighbours`, merged `origin/main`)
+- **What this run did:** Added Tier 3 Central Ukraine (`ua_central_t36uvu`, 395 FTW fields across 8 spatial blocks) via an open Sentinel-2 L2A 20 m COG pipeline (`s2_cog.py`, `ukraine_seasons.py`, `run_ukraine_neighbours.py`), ran all 3 Phase 2 Neighbours causal estimators across pre-cutoff (`<=2021`) and full (`2018–2024`) periods vs Kansas (`ks_t14slh`), generated empirical gate reports (`results/neighbours/ua_central_t36uvu_report.md`), and merged `origin/main` cleanly.
+- **In progress:** None. PR #44 ready for merge on `feature/central-ukraine-neighbours`.
 - **Background tasks:** None.
-- **Remaining / Next task:** Independently cross-validate Tier 3 classifier labels against ground-truth parcel surveys (or a validated Tier 1/2 region with crop rotation diversity) before deciding whether to enable the Neighbours witness in grading; merge PR once reviewed.
+- **Remaining / Next task:** Independently cross-validate Tier 3 classifier labels against ground-truth parcel surveys (or a validated Tier 1/2 region with crop rotation diversity) before deciding whether to enable the Neighbours witness in grading; merge PR #44 once reviewed.
 - **Risks / Notes:** Total local downloads stayed under the `< 1 GB` ceiling (`~650 MB`); `config/grading.yaml` and `app/public/packs/ks_t14slh/` were not altered; Neighbours remains `OFF` in grading because `ua_central_t36uvu` labels are classifier-derived (tag `D`).
 

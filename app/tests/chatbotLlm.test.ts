@@ -200,9 +200,14 @@ describe("KB facts consistency", () => {
 
   it("FACTS match the repo's result files", () => {
     const seasons = readJson("results/story/ks_seasons_test.json");
-    expect(FACTS.seasonDetectionPct.value).toBe((seasons.match_share * 100).toFixed(1));
-    expect(Number(FACTS.seasonDetectionTotal.value)).toBe(seasons.n_field_years);
-    expect(Number(FACTS.seasonDetectionMatched.value)).toBe(seasons.rows.filter((r: { match: boolean }) => r.match).length);
+    const bench = readJson("results/story/phenology_benchmark.json").test;
+    expect(FACTS.twdtwSeasonMatchPct.value).toBe((bench["TWDTW (Modified Logistic)"].binary_match_share * 100).toFixed(1));
+    expect(FACTS.twdtwMultiClassPct.value).toBe((bench["TWDTW (Modified Logistic)"].exact_crop_accuracy * 100).toFixed(1));
+    expect(FACTS.dtwBinaryMatchPct.value).toBe((bench["Standard DTW"].binary_match_share * 100).toFixed(1));
+    expect(FACTS.wddtwMultiClassPct.value).toBe((bench["WDDTW (Derivative-Weighted)"].exact_crop_accuracy * 100).toFixed(1));
+    expect(FACTS.wddtwFallowPct.value).toBe((bench["WDDTW (Derivative-Weighted)"].by_crop.fallow.exact_acc * 100).toFixed(1));
+    expect(FACTS.cropformerMsPerField.value).toBe(bench["CropFormer (Self-Attention)"].ms_per_field.toFixed(2));
+    expect(Number(FACTS.seasonDetectionTotal.value)).toBe(bench["TWDTW (Modified Logistic)"].n_samples);
     expect(Number(FACTS.seasonDetectionTarget.value)).toBe(seasons.target * 100);
 
     const base = readJson("results/hindcast/ks_t14slh_baselines.json");
@@ -211,6 +216,15 @@ describe("KB facts consistency", () => {
     expect(FACTS.hindcastSpearman.value).toBe(row("canopy_integral").spearman.toFixed(3));
     expect(FACTS.ciCoverage90Pct.value).toBe((row("canopy_integral").covered90 * 100).toFixed(1));
     expect(FACTS.coverDaysCoverage90Pct.value).toBe((row("cover_days").covered90 * 100).toFixed(1));
+
+    const cqr = readJson("results/hindcast/conformal/cqr_evaluation.json").forecast_summary;
+    const cqrRow = (crop: string, metric: string) =>
+      cqr.find((r: { crop: string; metric: string }) => r.crop === crop && r.metric === metric);
+    expect(FACTS.cqrSosMinPct.value).toBe((cqrRow("winter_wheat", "sos").cqr_asym.cov90.value * 100).toFixed(1));
+    expect(FACTS.cqrSosMaxPct.value).toBe((cqrRow("maize", "sos").cqr_asym.cov90.value * 100).toFixed(1));
+    expect(FACTS.cqrCoverDaysWheatPct.value).toBe((cqrRow("winter_wheat", "cover_days").cqr_asym.cov90.value * 100).toFixed(1));
+    expect(FACTS.cqrCiMinPct.value).toBe((cqrRow("sorghum", "canopy_integral").cqr_sym.cov90.value * 100).toFixed(1));
+    expect(FACTS.cqrCiMaxPct.value).toBe((cqrRow("maize", "canopy_integral").cqr_sym.cov90.value * 100).toFixed(1));
 
     const gv = readJson("results/hindcast/grade_validity.json");
     expect(FACTS.gradeValidityLo.value).toBe(gv.primary_test.diff_d_minus_b_ci95[0].toFixed(2));
