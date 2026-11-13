@@ -62,3 +62,24 @@ def test_exactly_half_assumptions_is_not_d():
 def test_d_without_inputs_or_physics():
     assert grade_option(PHYS, None, 0.9, {}, CFG)[0] == "D"
     assert grade_option(None, None, 0.9, GOOD, CFG)[0] == "D"
+
+
+def test_grade_a_agronomic_trials():
+    trial_eff = Effect(0.11, 0.07, 0.15)
+    g, r = grade_option(PHYS, None, 0.7, GOOD, CFG, trials=trial_eff)
+    assert g == "A"
+    assert any("agronomic trial benchmarks agree" in x for x in r)
+
+
+def test_grade_b_agronomic_trials_blocked_by_tag_a():
+    trial_eff = Effect(0.11, 0.07, 0.15)
+    g, r = grade_option(PHYS, None, 0.7, {**GOOD, "kc": "A"}, CFG, trials=trial_eff)
+    assert g == "B"
+    assert any("block grade A" in x for x in r)
+
+
+def test_grade_c_agronomic_trials_disagree():
+    trial_eff = Effect(-0.08, -0.12, -0.04)  # Opposite sign
+    g, r = grade_option(PHYS, None, 0.3, GOOD, CFG, trials=trial_eff)
+    assert g == "C"
+    assert any("agronomic trial benchmarks disagree" in x for x in r)

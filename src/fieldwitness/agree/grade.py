@@ -40,6 +40,7 @@ def grade_option(
     credibility: float | None,
     key_input_tags: dict[str, str],
     cfg: dict,
+    trials: Effect | None = None,
 ) -> tuple[str, list[str]]:
     """Return (grade, reasons). ``cfg`` is the ``grades`` block of grading.yaml."""
     reasons: list[str] = []
@@ -61,22 +62,30 @@ def grade_option(
         else "own past not supporting (credibility missing or below threshold)"
     )
     agree = 1 + int(cred_ok)  # physics + own past
-    nb_ok = False
-    if neighbours is None:
-        reasons.append("no neighbour estimate")
-    else:
-        nb_ok = _same_sign(physics, neighbours) and _overlap(physics, neighbours)
+    ext_ok = False
+    if neighbours is not None:
+        ext_ok = _same_sign(physics, neighbours) and _overlap(physics, neighbours)
         reasons.append(
             "neighbours agree with physics"
-            if nb_ok
+            if ext_ok
             else "neighbours disagree with physics (sign or 90 % intervals)"
         )
-        agree += int(nb_ok)
+        agree += int(ext_ok)
+    elif trials is not None:
+        ext_ok = _same_sign(physics, trials) and _overlap(physics, trials)
+        reasons.append(
+            "agronomic trial benchmarks agree with physics"
+            if ext_ok
+            else "agronomic trial benchmarks disagree with physics"
+        )
+        agree += int(ext_ok)
+    else:
+        reasons.append("no neighbour estimate")
 
-    if nb_ok and cred_ok and n_a <= cfg["A"]["max_key_inputs_tag_A"]:
+    if ext_ok and cred_ok and n_a <= cfg["A"]["max_key_inputs_tag_A"]:
         return "A", reasons
     if agree >= cfg["B"]["min_agreeing_witnesses"]:
-        if nb_ok and n_a > cfg["A"]["max_key_inputs_tag_A"]:
+        if ext_ok and n_a > cfg["A"]["max_key_inputs_tag_A"]:
             reasons.append(f"{n_a} key input(s) tagged A block grade A")
         return "B", reasons
     return "C", reasons

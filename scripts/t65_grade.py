@@ -19,6 +19,7 @@ import pandas as pd
 import yaml
 
 from fieldwitness.agree.grade import Effect, grade_option
+from fieldwitness.agree.trials import get_trial_effect
 from fieldwitness.rotate.candidates import enumerate_candidates
 from fieldwitness.rotate.current import all_current
 from fieldwitness.rotate.evaluate import evaluate
@@ -93,16 +94,25 @@ for fid in pilot.index:
             float(np.nanpercentile(diff, 5)),
             float(np.nanpercentile(diff, 95)),
         )
-        g, reasons = grade_option(phys, None, cred.get(fid), tags, cfg)
+        trial_eff, bench = get_trial_effect(cand)
+        g, reasons = grade_option(phys, None, cred.get(fid), tags, cfg, trials=trial_eff)
         grades[g] += 1
-        opts.append(
-            {
-                "option": cand,
-                "grade": g,
-                "reasons": reasons,
-                "physics_ryi_effect": [phys.value, phys.lo90, phys.hi90],
+        opt_entry = {
+            "option": cand,
+            "grade": g,
+            "reasons": reasons,
+            "physics_ryi_effect": [phys.value, phys.lo90, phys.hi90],
+        }
+        if bench is not None and trial_eff is not None:
+            opt_entry["agronomic_trial"] = {
+                "source": "K-State Research and Extension (Tag E)",
+                "citation": bench.citation,
+                "trial_name": bench.trial_name,
+                "yield_advantage_pct": bench.yield_advantage_pct,
+                "water_storage_delta_mm": bench.water_storage_differential_mm,
+                "trial_ryi_effect": [trial_eff.value, trial_eff.lo90, trial_eff.hi90],
             }
-        )
+        opts.append(opt_entry)
     out[fid] = {
         "current": cur.sequence,
         "credibility": cred.get(fid),

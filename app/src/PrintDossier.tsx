@@ -2,29 +2,13 @@ import { fieldNumber } from "./fields";
 import { formatDate } from "./format";
 import { generateFieldSummary } from "./fieldSummary";
 import { explainRanking } from "./rankingExplainer";
-import { rankOptions } from "./rank";
+import { DEFAULT_PRIORITIES, NO_CONSTRAINTS, rankOptions } from "./rank";
 import { cropName, optionName, t } from "./strings";
 import type { FieldPack, RegionIndex } from "./types";
 
-const DEFAULT_PRIORITIES = {
-  water: 1,
-  bare: 1,
-  badYear: 1,
-  erosion: 1,
-  legume: 1,
-  residue: 1,
-};
-
-const DEFAULT_CONSTRAINTS = {
-  no_crops: [],
-  irrigation_only: false,
-  max_water_mm: null,
-  must_market: false,
-};
-
 export function PrintDossier({
   pack,
-  regionId,
+  regionId: _regionId,
   index,
 }: {
   pack: FieldPack;
@@ -33,9 +17,9 @@ export function PrintDossier({
 }) {
   const fieldId = pack.field.field_id;
   const num = index ? fieldNumber(fieldId, index.fields) : fieldId.slice(0, 8);
-  const ranked = rankOptions(pack.options, DEFAULT_PRIORITIES, DEFAULT_CONSTRAINTS);
-  const rankingExpl = explainRanking(ranked);
-  const summary = generateFieldSummary(pack, DEFAULT_PRIORITIES, DEFAULT_CONSTRAINTS);
+  const ranked = rankOptions(pack.options, DEFAULT_PRIORITIES, NO_CONSTRAINTS, null);
+  const rankingExpl = explainRanking(ranked, DEFAULT_PRIORITIES);
+  const summary = generateFieldSummary(pack, DEFAULT_PRIORITIES, NO_CONSTRAINTS, null);
   const currentOpt = pack.options.find((o) => o.option_id === "current");
   const topAlts = ranked.filter((r) => r.option.option_id !== "current").slice(0, 3);
 

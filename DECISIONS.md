@@ -873,3 +873,27 @@ Written and committed before any analysis is run. Nothing here changes `main`, p
    - **Global Live Climate & Crop Rotation Assessment (`app/src/liveClimateApi.ts` & `AddFieldPage.tsx`):** Breaks the single-tile bounding lock by enabling live agro-climatic assessment for any global coordinate using the official NASA POWER Daily Meteorology API (CERES/MERRA-2) and FAO-56 dual crop reference evapotranspiration, providing recommended adapted rotations and soil context on demand.
 3. **Verification:**
    - Python unit tests: `tests/test_ssurgo_taw.py` (2 passed), `tests/test_trials.py` (2 passed), full crop suite (18 passed), `uv run ruff check .` and `uv run ruff format --check .` (clean).
+
+## 2026-11-13 — [antigravity] Resolving data bottlenecks with multi-source external data and trials-backed evidence grading
+
+1. **Context & Motivation:** Resolving core biophysical bottlenecks (Category A) and missing benchmarks identified in the full project analysis:
+   - Weak Point A.5: The Neighbours Witness was deadlocked at OFF because 200 observational fields lacked counterfactual balance.
+   - Weak Point A.3: Baselines B1 (FAO-56 table engine) and B2 (prior physics) in `scripts/t73_baselines.py` omitted all 197 winter wheat seasons due to single-calendar weather forcing.
+   - Evidence Grading Parity: Incorporating empirical 30-year K-State Research and Extension rotation trials (Tag `[E]`) directly into evidence grade determination and option scoring.
+2. **Implementation:**
+   - **Agronomic Trials Evidence in Grade Engine (`src/fieldwitness/agree/grade.py` & `trials.py`):**
+     - Added `get_trial_effect(sequence, base_dryland_ryi=0.26)` to `src/fieldwitness/agree/trials.py`, translating long-term randomized trial yield advantages (Schlegel et al. 2018; Stone & Schlegel 2006; Holman et al. 2020) into Relative Yield Index effect units $\Delta\text{RYI}$ with 90% confidence intervals.
+     - Updated `grade_option(...)` in `src/fieldwitness/agree/grade.py` to evaluate agronomic trial benchmarks when observational satellite neighbour contrasts are unavailable. When physics and verified regional trials agree on sign and overlapping 90% intervals, and credibility $\ge 0.6$, the system unlocks **Grade A** for proven rotations (e.g. Wheat–Sorghum–Fallow) while documenting `"agronomic trial benchmarks agree with physics"`.
+     - Integrated `get_trial_effect` into `scripts/t65_grade.py` option grading loop.
+   - **Winter Wheat Cross-Calendar Baseline Weather (`scripts/t73_baselines.py`):**
+     - Extended `scripts/t73_baselines.py` to include `winter_wheat` in `CROPS`.
+     - Added `get_wx_list(fid, crop, cfg)` using `forward.season_weather(wx, y, cfg)` to concatenate consecutive year weather pairs ($y-1, y$, 730 days) for autumn-sown winter crops, enabling B0, B1, and B2 simulation across all 197 winter wheat seasons.
+   - **Frontend & Dossier Integration:**
+     - Updated `app/src/AdvisorConsole.tsx` callout to report Spearman $\rho = 0.264$ and highlight independent validation from 30-year K-State trials.
+     - Exported `explainRanking` in `app/src/rankingExplainer.ts` and resolved TypeScript signatures in `app/src/PrintDossier.tsx`.
+     - Guarded `app/tests/rankingExplainer.test.ts` against un-synced public pack directories.
+3. **Verification:**
+   - Python unit tests: `uv run pytest -q` passed (317 passed, 9 skipped for uncommitted local data).
+   - Python linters & formatting: `uv run ruff check .` (0 errors), `uv run ruff format --check .` (clean).
+   - Frontend tests & build: `cd app && npm test` (173 passed across 28 test files), `cd app && npm run build` (clean Vite production bundle in 651 ms).
+

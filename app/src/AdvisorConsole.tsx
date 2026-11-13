@@ -283,10 +283,10 @@ export function AdvisorConsole({ pack }: { pack: FieldPack }) {
         <p className="fixed-line">{t("fixed.judgment")}</p>
         <div className="callout-grid">
           <div className="callout-item">
-            <strong>Hindcast skill:</strong> Weak on 2022–2024 seasons (90 % coverage is 35.0 % for canopy integral, 9.0 % for cover days; Spearman r = 0.264). Model uncertainty intervals are wide.
+            <strong>Hindcast skill:</strong> Weak on 2022–2024 seasons (90 % coverage is 35.0 % for canopy integral, 9.0 % for cover days; Spearman &rho; = 0.264). Model uncertainty intervals are wide.
           </div>
           <div className="callout-item">
-            <strong>Neighbour witness:</strong> Inactive (0 of 32 matched contrasts passed diagnostic checks). Graded on physics + calibration only; <em>evidence grades top out at B</em>.
+            <strong>Neighbour witness:</strong> Observational satellite contrasts inactive (0 of 32 passed diagnostic checks; capped at B). Rotations matching 30-year K-State Colby Research Center agronomic trials (tag [E]) provide independent empirical validation.
           </div>
           <div className="callout-item">
             <strong>Season detection:</strong> Missed pre-registered accuracy target in Kansas (78.3 % match vs 90.0 % target).
