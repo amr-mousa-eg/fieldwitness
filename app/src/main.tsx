@@ -11,7 +11,7 @@ createRoot(document.getElementById("root")!).render(
 );
 
 /** Must match APP_CACHE in public/sw.js. */
-const APP_CACHE = "fw-app-v1";
+const APP_CACHE = `fw-app-${__FW_CACHE_VERSION__}`;
 
 // Offline after the first visit (T9.1). Production only: a dev service worker would cache
 // stale modules and fight the dev server.

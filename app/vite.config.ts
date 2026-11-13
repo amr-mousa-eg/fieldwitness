@@ -1,5 +1,5 @@
 /// <reference types="vitest/config" />
-import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { defineConfig, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
@@ -73,6 +73,24 @@ export function refuseFixtures(): Plugin {
   };
 }
 
+/** Stamp dist/sw.js with the build's __FW_CACHE_VERSION__ so PWA caches rotate per deploy. */
+export function versionServiceWorker(cacheVersion: string): Plugin {
+  let outDir = "";
+  return {
+    name: "fieldwitness-version-sw",
+    apply: "build",
+    configResolved(config) {
+      outDir = resolve(config.root, config.build.outDir);
+    },
+    closeBundle() {
+      const swPath = join(outDir, "sw.js");
+      if (!existsSync(swPath)) return;
+      const raw = readFileSync(swPath, "utf-8");
+      writeFileSync(swPath, raw.replace('"v2-dev"', JSON.stringify(cacheVersion)), "utf-8");
+    },
+  };
+}
+
 /**
  * Public path the app is served from: "/" (Netlify, local) or "/<repo>/" (a GitHub Pages project
  * site). Data, the service worker and its scope all follow it (import.meta.env.BASE_URL).
@@ -83,10 +101,35 @@ function basePath(): string {
   return b;
 }
 
-export default defineConfig(({ command }) => ({
-  base: basePath(),
-  plugins: [react(), serveFixtures(), refuseFixtures()],
-  // The app reads this to show the DEMO DATA banner; a build can only be "packs".
-  define: { __FW_DATA_MODE__: JSON.stringify(dataMode(command)) },
-  test: { environment: "node", testTimeout: 120_000 },
-}));
+export default defineConfig(({ command }) => {
+  const cacheVersion =
+    command === "build"
+      ? `v2-${(process.env.GITHUB_SHA ?? "").slice(0, 8) || Date.now().toString(36)}`
+      : "v2-dev";
+
+  return {
+    base: basePath(),
+    plugins: [react(), serveFixtures(), refuseFixtures(), versionServiceWorker(cacheVersion)],
+    // The app reads this to show the DEMO DATA banner; a build can only be "packs".
+    define: {
+      __FW_DATA_MODE__: JSON.stringify(dataMode(command)),
+      __FW_CACHE_VERSION__: JSON.stringify(cacheVersion),
+    },
+    build: {
+      chunkSizeWarningLimit: 1150,
+      rolldownOptions: {
+        output: {
+          codeSplitting: {
+            groups: [
+              { name: "vendor-maplibre", test: /node_modules\/maplibre-gl/, priority: 30 },
+              { name: "vendor-three", test: /node_modules\/three/, priority: 25 },
+              { name: "vendor-charts", test: /node_modules\/(recharts|d3-|victory-vendor)/, priority: 20 },
+              { name: "vendor-react", test: /node_modules\/(react|react-dom|scheduler)/, priority: 15 },
+            ],
+          },
+        },
+      },
+    },
+    test: { environment: "node", testTimeout: 120_000 },
+  };
+});
