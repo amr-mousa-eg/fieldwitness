@@ -9,7 +9,7 @@ import { ScaleFlags } from "./ScaleFlags";
 import { loadPack } from "./data";
 import { formatDate } from "./format";
 import { fieldNumber } from "./fields";
-import { type FieldTab, TABS, routeHref } from "./route";
+import { compareHref, type FieldTab, TABS, routeHref } from "./route";
 import { t } from "./strings";
 import { TagLegend } from "./tags";
 import type { FieldPack, RegionIndex } from "./types";
@@ -77,14 +77,19 @@ export function FieldPage({
                 <dd>{formatDate(new Date(`${pack.data_as_of}T00:00:00Z`))}</dd>
               </div>
             </dl>
-            <button
-              type="button"
-              className="print-btn"
-              onClick={() => window.print()}
-              title={t("field.print.title")}
-            >
-              🖨️ {t("field.print")}
-            </button>
+            <div className="field-head-actions">
+              <a className="secondary-btn" href={compareHref(regionId, fieldId)}>
+                ⇄ {t("field.compare")}
+              </a>
+              <button
+                type="button"
+                className="print-btn"
+                onClick={() => window.print()}
+                title={t("field.print.title")}
+              >
+                🖨️ {t("field.print")}
+              </button>
+            </div>
           </header>
           <nav className="tabs" aria-label={t("field.tabs")}>
             {TABS.map((x) => (

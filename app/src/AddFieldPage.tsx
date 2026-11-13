@@ -357,53 +357,51 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
               }}
               disabled={loadingClimate}
             >
-              {loadingClimate
-                ? "Running NASA POWER + Soil + FAO-56 Simulation..."
-                : "🌍 Evaluate Global Field (NASA POWER + Live Soil + FAO-56 Physics)"}
+              {loadingClimate ? t("addfield.eval.loading") : t("addfield.eval.btn")}
             </button>
           </div>
         )}
 
         {liveProfile && (
-          <div className="card-box global-profile-card" aria-label="Live Climate & Crop Rotation Assessment" style={{ marginTop: "1rem", borderLeft: "4px solid var(--accent)" }}>
-            <h3>Global Climate & FAO-56 Rotation Assessment ({liveProfile.simulationMode})</h3>
+          <div className="card-box global-profile-card" aria-label={t("addfield.eval.title", { mode: liveProfile.simulationMode })} style={{ marginTop: "1rem", borderInlineStart: "4px solid var(--accent)" }}>
+            <h3>{t("addfield.eval.title", { mode: liveProfile.simulationMode })}</h3>
             <div className="climate-meta-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(11rem, 1fr))", gap: "0.75rem", margin: "0.75rem 0" }}>
               <div className="climate-stat">
-                <span className="stat-label" style={{ display: "block", fontSize: "0.8rem", color: "var(--muted)" }}>Climate Zone ({liveProfile.yearsEvaluated} yr):</span>
+                <span className="stat-label" style={{ display: "block", fontSize: "0.8rem", color: "var(--muted)" }}>{t("addfield.eval.zone", { years: liveProfile.yearsEvaluated })}</span>
                 <strong>{liveProfile.climateZone}</strong>
               </div>
               <div className="climate-stat">
-                <span className="stat-label" style={{ display: "block", fontSize: "0.8rem", color: "var(--muted)" }}>Annual Rain:</span>
+                <span className="stat-label" style={{ display: "block", fontSize: "0.8rem", color: "var(--muted)" }}>{t("addfield.eval.rain")}</span>
                 <strong>{liveProfile.annualPrecipitationMm} mm [O/D]</strong>
               </div>
               <div className="climate-stat">
-                <span className="stat-label" style={{ display: "block", fontSize: "0.8rem", color: "var(--muted)" }}>Annual ET₀:</span>
+                <span className="stat-label" style={{ display: "block", fontSize: "0.8rem", color: "var(--muted)" }}>{t("addfield.eval.eto")}</span>
                 <strong>{liveProfile.annualEtoMm} mm [D]</strong>
               </div>
               <div className="climate-stat">
-                <span className="stat-label" style={{ display: "block", fontSize: "0.8rem", color: "var(--muted)" }}>Water Deficit (P/ET₀ {liveProfile.aridityIndex}):</span>
+                <span className="stat-label" style={{ display: "block", fontSize: "0.8rem", color: "var(--muted)" }}>{t("addfield.eval.deficit", { aridity: liveProfile.aridityIndex })}</span>
                 <strong>{liveProfile.waterDeficitMm} mm [D]</strong>
               </div>
               <div className="climate-stat">
-                <span className="stat-label" style={{ display: "block", fontSize: "0.8rem", color: "var(--muted)" }}>Soil AWS ({liveProfile.soilContext.textureClass}):</span>
+                <span className="stat-label" style={{ display: "block", fontSize: "0.8rem", color: "var(--muted)" }}>{t("addfield.eval.soilAws", { texture: liveProfile.soilContext.textureClass })}</span>
                 <strong>{liveProfile.soilContext.estimatedAweMm} mm {liveProfile.soilContext.tag}</strong>
               </div>
               <div className="climate-stat">
-                <span className="stat-label" style={{ display: "block", fontSize: "0.8rem", color: "var(--muted)" }}>Soil Source:</span>
+                <span className="stat-label" style={{ display: "block", fontSize: "0.8rem", color: "var(--muted)" }}>{t("addfield.eval.soilSrc")}</span>
                 <strong>{liveProfile.soilContext.source}</strong>
               </div>
             </div>
 
-            <h4 style={{ margin: "0.75rem 0 0.25rem", fontSize: "0.95rem" }}>Simulated 3-Season Rotations (ranked by RYI [D]):</h4>
-            <ul className="global-rotation-list" style={{ paddingLeft: "1.2rem", margin: "0.25rem 0" }}>
+            <h4 style={{ margin: "0.75rem 0 0.25rem", fontSize: "0.95rem" }}>{t("addfield.eval.rotations")}</h4>
+            <ul className="global-rotation-list" style={{ paddingInlineStart: "1.2rem", margin: "0.25rem 0" }}>
               {liveProfile.recommendedRotations.map((r, i) => (
                 <li key={i} style={{ marginBottom: "0.5rem", fontSize: "0.88rem" }}>
-                  <strong>#{i + 1} {r.name}</strong> — RYI: <strong>{r.ryi}</strong> [D] · Water use: <strong>{r.waterUseMm} mm</strong> (Worst yr: {r.badYearWaterMm} mm) [D] · Bare: {r.bareMonths} mo — {r.rationale}
+                  <strong>#{i + 1} {r.name}</strong> — RYI: <strong>{r.ryi}</strong> [D] · {t("metric.water_use_mm")}: <strong>{r.waterUseMm} mm</strong> ({t("metric.bad_year_water_mm")}: {r.badYearWaterMm} mm) [D] · {t("explain.bare_soil_months.title")}: {r.bareMonths} — {r.rationale}
                 </li>
               ))}
             </ul>
             <p className="disclaimer-mandatory" style={{ marginTop: "0.5rem", fontSize: "0.75rem", color: "var(--muted)" }}>
-              In-browser FAO-56 daily root-zone water balance forced by multi-year NASA POWER meteorology ({liveProfile.source}) and live SSURGO/SoilGrids soil context.
+              {t("addfield.eval.disclaimer", { source: liveProfile.source })}
             </p>
           </div>
         )}
@@ -415,9 +413,9 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
           <h3 id="nearest-h">{nearestResult.label}</h3>
           <div className="nearest-field-content">
             <div className="nearest-field-header">
-              <span className="field-badge">Pilot Field {nearestResult.fieldNumber}</span>
+              <span className="field-badge">{t("addfield.nearest.pilot", { num: nearestResult.fieldNumber })}</span>
               <span className="field-dist">
-                <strong>{nearestResult.distanceKm} km</strong> from your location
+                <strong>{t("addfield.nearest.dist", { km: nearestResult.distanceKm })}</strong>
               </span>
               <span className="field-ha">{nearestResult.field.area_ha} ha</span>
             </div>
