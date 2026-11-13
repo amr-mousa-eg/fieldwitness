@@ -1,5 +1,5 @@
 import { fieldNumber } from "./fields";
-import { formatDate } from "./format";
+import { formatDate, localizeCounterfactualFlip, localizeMeasureNext } from "./format";
 import { generateFieldSummary } from "./fieldSummary";
 import { explainRanking } from "./rankingExplainer";
 import { DEFAULT_PRIORITIES, NO_CONSTRAINTS, rankOptions } from "./rank";
@@ -117,16 +117,19 @@ export function PrintDossier({
           <h4>{t("print.witnessHeading")}</h4>
           <ul className="print-witness-list">
             <li>
-              <strong>Witness 1 (Physics):</strong> FAO-56 dual crop water balance forced by NASA POWER daily surface meteorology. <span className="print-badge on">ACTIVE</span>
+              <strong>{t("print.w1Label")}</strong> {t("print.w1Desc")}{" "}
+              <span className="print-badge on">{t("print.badgeActive")}</span>
             </li>
             <li>
-              <strong>Witness 2 (Field Past):</strong> Multi-year HLS 30 m calibration (ABC credibility: {((pack.credibility.value ?? 0) * 100).toFixed(0)}%). <span className="print-badge on">ACTIVE</span>
+              <strong>{t("print.w2Label")}</strong>{" "}
+              {t("print.w2Desc", { cred: ((pack.credibility.value ?? 0) * 100).toFixed(0) })}{" "}
+              <span className="print-badge on">{t("print.badgeActive")}</span>
             </li>
             <li>
-              <strong>Witness 3 (Neighbours / Trials):</strong> Observational satellite contrasts <span className="print-badge off">OFF (Circuit Breaker)</span>; grounded in 30-year K-State Colby agronomic trials (tag [E]) where matched.
-              <p className="print-witness-note">
-                Observational contrasts are turned OFF to guard against farmer selection bias. Rotations matching K-State Research &amp; Extension trials unlock independent [E] validation.
-              </p>
+              <strong>{t("print.w3Label")}</strong> {t("print.w3Desc")}{" "}
+              <span className="print-badge off">{t("print.badgeOff")}</span>
+              {t("print.w3Trials")}
+              <p className="print-witness-note">{t("print.w3Note")}</p>
             </li>
           </ul>
         </div>
@@ -135,17 +138,17 @@ export function PrintDossier({
           <h4>{t("print.advisoryHeading")}</h4>
           <ul className="print-advice-list">
             <li>
-              <strong>Historical Rotation Track:</strong>{" "}
+              <strong>{t("print.histTrack")}</strong>{" "}
               {pack.story.slice(-6).map((s) => `${s.year}: ${s.crop ? cropName(s.crop) : t("crop.fallow")}`).join(" → ")}
             </li>
             <li>
-              <strong>Decision Flip Sensitivity:</strong> {pack.advice.counterfactual_flip}
+              <strong>{t("print.flipSens")}</strong> {localizeCounterfactualFlip(pack.advice.counterfactual_flip)}
             </li>
             <li>
-              <strong>Recommended Next Measurement:</strong> {pack.advice.measure_next}
+              <strong>{t("print.nextMeas")}</strong> {localizeMeasureNext(pack.advice.measure_next)}
             </li>
             <li>
-              <strong>Local Soil Context:</strong> USDA-NRCS SSURGO silt loam AWS (median 282.1 mm [E]) &amp; ISRIC SoilGrids 2.0 (250 m clay/sand/SOC).
+              <strong>{t("print.soilCtxLabel")}</strong> {t("print.soilCtxVal")}
             </li>
           </ul>
         </div>
@@ -172,11 +175,11 @@ export function PrintDossier({
               <tr key={s.year}>
                 <td><strong>{s.year}</strong></td>
                 <td>{s.crop ? cropName(s.crop) : t("crop.fallow")}</td>
-                <td>{s.sos.value != null ? `DOY ${Math.round(s.sos.value)}` : "—"}</td>
-                <td>{s.peak.value != null ? `DOY ${Math.round(s.peak.value)}` : "—"}</td>
-                <td>{s.eos.value != null ? `DOY ${Math.round(s.eos.value)}` : "—"}</td>
+                <td>{s.sos.value != null ? t("print.doy", { doy: Math.round(s.sos.value) }) : "—"}</td>
+                <td>{s.peak.value != null ? t("print.doy", { doy: Math.round(s.peak.value) }) : "—"}</td>
+                <td>{s.eos.value != null ? t("print.doy", { doy: Math.round(s.eos.value) }) : "—"}</td>
                 <td>{s.canopy_integral.value != null ? s.canopy_integral.value.toFixed(1) : "—"}</td>
-                <td>{s.cover_days.value != null ? `${Math.round(s.cover_days.value)} d` : "—"}</td>
+                <td>{s.cover_days.value != null ? t("print.daysVal", { days: Math.round(s.cover_days.value) }) : "—"}</td>
                 <td>{s.clear_obs}</td>
               </tr>
             ))}
@@ -189,9 +192,7 @@ export function PrintDossier({
         <div className="print-tags-legend">
           <strong>{t("tag.legend")}:</strong> <code>[O]</code> {t("tag.O")} · <code>[D]</code> {t("tag.D")} · <code>[E]</code> {t("tag.E")} · <code>[A]</code> {t("tag.A")}.
         </div>
-        <p className="print-attribution">
-          Data Sources: NASA Harmonized Landsat Sentinel-2 (HLS 30 m) · NASA GIBS / LP DAAC · NASA POWER Daily Surface Meteorology · USDA NASS CSB 2017–2024 · ISRIC SoilGrids 2.0 · FAO-56.
-        </p>
+        <p className="print-attribution">{t("print.attribution")}</p>
         <p className="print-disclaimer">
           <strong>{t("print.notice")}</strong> {t("fixed.judgment")}
         </p>

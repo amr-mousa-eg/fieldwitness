@@ -40,9 +40,10 @@ export function FieldList({
     const filtered = fieldsWithNum.filter(({ field, num }) => {
       if (!q) return true;
       const numStr = String(num);
-      const nameStr = `field ${num}`.toLowerCase();
+      const nameEn = `field ${num}`.toLowerCase();
+      const nameLoc = t("field.label", { num }).toLowerCase();
       const hashStr = field.field_id.toLowerCase();
-      return nameStr.includes(q) || numStr === q || hashStr.includes(q);
+      return nameEn.includes(q) || nameLoc.includes(q) || numStr === q || hashStr.includes(q);
     });
 
     return filtered.sort((a, b) => {
@@ -122,8 +123,8 @@ export function FieldList({
             type="button"
             className="field-sort-dir"
             onClick={() => setSortDir((d) => (d === "asc" ? "desc" : "asc"))}
-            title={sortDir === "asc" ? "Ascending" : "Descending"}
-            aria-label={sortDir === "asc" ? "Ascending" : "Descending"}
+            title={sortDir === "asc" ? t("fields.sort.asc") : t("fields.sort.desc")}
+            aria-label={sortDir === "asc" ? t("fields.sort.asc") : t("fields.sort.desc")}
           >
             {sortDir === "asc" ? "▲" : "▼"}
           </button>
@@ -144,7 +145,7 @@ export function FieldList({
               >
                 <span className="field-item-head">
                   <span className="field-ident">
-                    <strong className="field-name">Field {num}</strong>
+                    <strong className="field-name">{t("field.label", { num })}</strong>
                     <span className="field-id-hash">{f.field_id.slice(0, 8)}</span>
                   </span>
                   <span className="field-area">{t("fields.area", { area: f.area_ha })}</span>

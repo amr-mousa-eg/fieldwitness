@@ -91,7 +91,9 @@ export function MethodsPage() {
       </section>
 
       <section aria-labelledby="m-limits">
-        <h3 id="m-limits">{t("methods.limits")}</h3>
+        <h3 id="m-limits">
+          {t("methods.limits")} <Explain id="hindcast" />
+        </h3>
         <ul>
           {list("methods.limits", 8).map((s, i) => (
             <li key={i}>{s}</li>
@@ -103,7 +105,8 @@ export function MethodsPage() {
 
       <section aria-labelledby="m-soil">
         <h3 id="m-soil">
-          {t("methods.soil.heading")} <TagBadge tag="E" source={t("methods.soil.source")} />
+          {t("methods.soil.heading")} <Explain id="available_water_capacity" />{" "}
+          <TagBadge tag="E" source={t("methods.soil.source")} />
         </h3>
         <p>{t("methods.soil.intro")}</p>
         <ul>
@@ -115,7 +118,9 @@ export function MethodsPage() {
       </section>
 
       <section aria-labelledby="m-builder">
-        <h3 id="m-builder">{t("methods.builder.heading")}</h3>
+        <h3 id="m-builder">
+          {t("methods.builder.heading")} <Explain id="pareto_ranking" />
+        </h3>
         <p>{t("methods.builder.intro")}</p>
         <ul>
           {list("methods.builder", 4).map((s, i) => (

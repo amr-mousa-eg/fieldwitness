@@ -1,6 +1,6 @@
 import { fieldNumber } from "./fields";
 import type { LiveClimateProfile } from "./liveClimateApi";
-import type { Locale } from "./locale";
+import { getLocale, type Locale } from "./locale";
 import type { Priorities } from "./rank";
 import { cropName, optionName } from "./strings";
 import type { FieldCalendar, FieldPack, FieldScenarios, RegionHindcast, RegionIndex } from "./types";
@@ -243,12 +243,118 @@ export const KNOWLEDGE_BASE: KnowledgeEntry[] = [
   },
 ];
 
-const MONTHS_SHORT = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const KNOWLEDGE_BASE_AR: KnowledgeEntry[] = [
+  {
+    id: "overview",
+    title: "ما هو FieldWitness؟",
+    keywords: ["ما هو", "نظرة", "المشروع", "تطبيق", "نبذة", "فكرة", "ناسا", "fieldwitness", "what is"],
+    answer:
+      "تطبيق FieldWitness هو أداة دعم قرار للدورات الزراعية طُوّرت لتحدي NASA Space Apps 2026. يغطي التطبيق 200 حقل تجريبي في غرب كانساس (الشريحة `T14SLH`)، ويعيد بناء 12 عامًا من صور NASA HLS بدقة 30 م [O/D]، ويشغّل موازنة المياه FAO-56 المعايَرة بتاريخ الحقل (ABC) [D] لتقييم دورات من 3 مواسم ومنح درجات الدليل A–D.",
+    sourceLabel: "نظرة عامة على المشروع [O/D/E]",
+    followUps: ["كيف يعمل الشهود الثلاثة؟", "كيف تُحدد درجات الدليل A–D؟", "ما هي الحدود الصريحة للمشروع؟"],
+  },
+  {
+    id: "witnesses",
+    title: "نظام الشهود الثلاثة",
+    keywords: ["شاهد", "شهود", "الشهود", "فيزياء", "الماضي", "جيران", "الجيران", "كولبي", "معايرة"],
+    answer:
+      "يُقيَّم كل خيار دورة زراعية عبر ثلاثة شهود مستقلين:\n1) **الفيزياء (الشاهد 1)**: موازنة المياه اليومية FAO-56 في منطقة الجذور المدفوعة بطقس NASA POWER [D].\n2) **ماضي الحقل (الشاهد 2)**: معايرة بايزية تقريبية (ABC) تطابق الفيزياء مع 12 عامًا من صور NASA HLS 30 م [D].\n3) **الجيران / التجارب (الشاهد 3)**: مقارنات الجيران الملاحظية متوقفة **OFF** بقاطع أمان آلي بعد فشل فحوصات التوازن (0/92 و0/32)؛ لذا تتوقف الدرجات الحالية عند B، مع دعم تجارب محطة كولبي الممتدة 30 عامًا [E] لفتح الدرجة A عند إعادة بناء الحزم.",
+    sourceLabel: "إطار الشهود الثلاثة [D/E]",
+    followUps: ["لماذا شاهد الجيران متوقف؟", "كيف تُحدد درجات الدليل A–D؟", "ما بيانات التربة المستخدمة؟"],
+  },
+  {
+    id: "grades",
+    title: "درجات الدليل A–D",
+    keywords: ["درجة", "درجات", "الدليل", "a-d", "مصداقية", "تقييم", "grade"],
+    answer:
+      "تلخص درجات الدليل مستوى اتفاق الشهود وجودة المدخلات:\n• **الدرجة A**: اتفاق الفيزياء مع التحقق الخارجي ومصداقية ABC ≥ 0.60 دون مدخلات افتراضية أساسية [A] (تتوقف الحزم الشحنية عند B حاليًا).\n• **الدرجة B**: اتفاق شاهدين على الأقل (الفيزياء + ماضي الحقل بمصداقية ≥ 0.60).\n• **الدرجة C**: دعم شاهد واحد فقط أو تعارض بين الشهود.\n• **الدرجة D**: اعتماد أكثر من نصف المدخلات على افتراضات [A].\nملاحظة: في الاختبار التراجعي لم يثبت إحصائيًا تفوق الدرجة B على D في الدقة (فاصل ثقة 95% [-3.28، +14.32]).",
+    sourceLabel: "قواعد الدرجات [A/D/E]",
+    followUps: ["ما معنى الحروف [O] و[D] و[E] و[A]؟", "ما هي الحدود الصريحة للمشروع؟"],
+  },
+  {
+    id: "tags",
+    title: "وسوم مصادر البيانات [O، D، E، A]",
+    keywords: ["وسم", "وسوم", "حروف", "مصدر", "رموز", "tag", "provenance"],
+    answer:
+      "يحمل كل رقم في FieldWitness رمز مصدر يوضح طبيعته:\n• **[O] مرصود**: قياسات قمر صناعي أو أرضية مباشرة (بكسلات NASA HLS الداخلية بدقة 30 م).\n• **[D] مُشتق**: مخرجات نموذج الفيزياء FAO-56 ومعايرة ABC.\n• **[E] خارجي**: بيانات رسمية من خارج التطبيق (NASA POWER، USDA CSB، SSURGO، SoilGrids 2.0، وتجارب كولبي).\n• **[A] افتراض**: خيارات تصميمية أو قيم مبدئية (مثل أوزان الأولويات وافتراض 150 ملم للتربة).",
+    sourceLabel: "معيار توثيق المصادر",
+    followUps: ["ما بيانات التربة المستخدمة؟", "ما هي الحدود الصريحة للمشروع؟"],
+  },
+  {
+    id: "soil",
+    title: "السعة المائية للتربة (SSURGO وSoilGrids)",
+    keywords: ["تربة", "التربة", "سعة", "ssurgo", "soilgrids", "طين", "رمل", "taw", "aws"],
+    answer:
+      "يدمج FieldWitness مصدرين رئيسيين للتربة:\n• **USDA-NRCS SSURGO [E]**: وسيط السعة المائية المتاحة عبر 198 حقلًا في كانساس يبلغ **282.1 ملم** (مقابل 142 ملم وسيط المحاكاة الأساسي المبني على افتراض 150 ملم [A]).\n• **ISRIC SoilGrids 2.0 (250 م) [E]**: يُستخدم للسياق العالمي والقوام والاستعلامات الحية في صفحة \"أضف حقلي\".",
+    sourceLabel: "بيانات التربة SSURGO وSoilGrids [E]",
+    followUps: ["كيف يعمل القمح الشتوي؟", "ما هو التقييم المناخي العالمي؟"],
+  },
+  {
+    id: "wheat",
+    title: "فينولوجيا القمح الشتوي عبر السنوات",
+    keywords: ["قمح", "القمح", "شتوي", "ذرة", "فينولوجيا", "خط الأساس", "wheat"],
+    answer:
+      "يشكّل القمح الشتوي **31.4%** من حقول كانساس التجريبية. أظهرت معاملات أيداهو غير المعايَرة تأخرًا بنحو 36 يومًا في ذروة الخضرة، فجرى توثيق ملف كانساس المعاير من إرشاد K-State MF587 ومراصد Mesonet [E] وتمديد الاختبار التراجعي عبر سنتين تقويميتين ليشمل 197 موسم قمح شتوي.",
+    sourceLabel: "فينولوجيا القمح وخطوط الأساس [E/D]",
+    followUps: ["ما هي الحدود الصريحة للمشروع؟", "كيف يعمل الشهود الثلاثة؟"],
+  },
+  {
+    id: "honesty",
+    title: "الحدود الصريحة ومهارة الاختبار التراجعي",
+    keywords: ["حدود", "الحدود", "صريحة", "دقة", "تراجعي", "خطأ", "عيوب", "سلبيات", "honest", "limits"],
+    answer:
+      "يعرض FieldWitness جميع النتائج السلبية والمحدودة بشفافية:\n• **كشف المواسم**: دقة 78.3% (188/240 موسمًا مقابل الهدف 90.0%).\n• **التقييم التراجعي** (تجميد 2021-12-31، اختبار 2022–2024): ارتباط سبيرمان ρ = 0.264، وتغطية نطاق 90% تبلغ 35.0% لمجموع الخضرة و9.0% لأيام الغطاء.\n• **شاهد الجيران الملاحظي**: اجتاز 0 من 32 مقارنة فحوصات التوازن فبقي موقَفًا.\n• **دون توقع أرباح أو أطنان**: يكتفي بمؤشر الإنتاجية النسبي RYI (0–1) واستهلاك المياه ومخاطر التربة العارية.",
+    sourceLabel: "الاختبار التراجعي والمراجعة العلمية [D/E]",
+    followUps: ["لماذا لا يتنبأ بالأرباح أو الأطنان؟", "كيف يعمل الشهود الثلاثة؟"],
+  },
+  {
+    id: "scope",
+    title: "لماذا لا توجد توقعات للربح المالي أو وزن المحصول؟",
+    keywords: ["ربح", "أرباح", "مال", "سعر", "أسعار", "طن", "أطنان", "إنتاجية", "profit", "price"],
+    answer:
+      "يمتنع FieldWitness عمدًا عن التنبؤ بالأرباح المالية أو أسعار الحبوب أو الأوزان بالطن للهكتار، لأن صور الأقمار الصناعية لا ترى الأسعار المحلية أو تكاليف الأسمدة ورطوبة الحصاد. بدلًا من ذلك يعرض **مؤشر الإنتاجية النسبي (RYI من 0 إلى 1) [D]**، و**استهلاك المياه (ملم)**، و**مياه سنة الجفاف (CVaR10)**، و**أشهر التربة العارية [D]**.",
+    sourceLabel: "نطاق المشروع العلمي",
+    followUps: ["ما هي الحدود الصريحة للمشروع؟", "ما معنى الحروف [O] و[D] و[E] و[A]؟"],
+  },
+  {
+    id: "global",
+    title: "التقييم المناخي العالمي (أضف حقلي)",
+    keywords: ["عالمي", "أضف حقلي", "احداثيات", "إحداثيات", "خارج كانساس", "مناخ", "مصر", "القاهرة"],
+    answer:
+      "في صفحة **أضف حقلي** يمكن لأي إحداثي في العالم تشغيل جلب آلي لبيانات **NASA POWER اليومية (2021–2023)** [E] مع **بيانات تربة SSURGO أو SoilGrids 2.0 الحية** [E] وتشغيل **موازنة المياه اليومية FAO-56 [D]** مباشرة في المتصفح مع مراعاة ميزانية الريّ والمحاصيل المستبعدة.",
+    sourceLabel: "موصل المناخ العالمي FAO-56 [D/E]",
+    followUps: ["ما بيانات التربة المستخدمة؟", "ما هو FieldWitness؟"],
+  },
+  {
+    id: "print",
+    title: "ملف الطباعة والعرض ثلاثي الأبعاد والتقويم",
+    keywords: ["طباعة", "ملف", "تقرير", "ثلاثي", "3d", "تقويم", "مزرعة", "صقيع", "حرارة", "سيناريو"],
+    answer:
+      "تتضمن صفحة كل حقل:\n• **طباعة ملف الحقل**: تقرير قرار منسق في صفحة A4 واحدة.\n• **التقويم وحساسية الطقس**: التربة العارية الشهرية المرصودة [O] ومخاطر الحرارة والصقيع والإجهاد المائي والأمطار الشديدة [D].\n• **الحقل ثلاثي الأبعاد ومنشئ الدورات**: متابعة أسبوعية للغطاء النباتي ورطوبة التربة واختبارات تغيّر الطقس.",
+    sourceLabel: "مزايا الواجهة التفاعلية [D]",
+    followUps: ["ما هو FieldWitness؟", "كيف يعمل الشهود الثلاثة؟"],
+  },
+];
 
-function summarizeFieldPack(ctx: ChatContextSnapshot): string {
+const MONTHS_SHORT_EN = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const MONTHS_SHORT_AR = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
+
+function summarizeFieldPack(ctx: ChatContextSnapshot, isAr = false): string {
   const pack = ctx.fieldPack!;
-  const numLabel = ctx.fieldNumberLabel ? `Field ${ctx.fieldNumberLabel}` : `Field ${pack.field.field_id.slice(0, 8)}`;
-  const cred = pack.credibility.value != null ? `${(pack.credibility.value * 100).toFixed(0)}%` : "not assessable";
+  const loc: Locale = isAr ? "ar" : "en";
+  const months = isAr ? MONTHS_SHORT_AR : MONTHS_SHORT_EN;
+  const numLabel = ctx.fieldNumberLabel
+    ? isAr
+      ? `الحقل ${ctx.fieldNumberLabel}`
+      : `Field ${ctx.fieldNumberLabel}`
+    : isAr
+      ? `الحقل ${pack.field.field_id.slice(0, 8)}`
+      : `Field ${pack.field.field_id.slice(0, 8)}`;
+  const cred = pack.credibility.value != null
+    ? `${(pack.credibility.value * 100).toFixed(0)}%`
+    : isAr
+      ? "غير قابل للتقييم"
+      : "not assessable";
   const currentOpt = pack.options.find((o) => o.option_id === "current");
   const topAlts = pack.options
     .filter((o) => o.option_id !== "current")
@@ -256,14 +362,68 @@ function summarizeFieldPack(ctx: ChatContextSnapshot): string {
     .slice(0, 3);
   const recentHistory = pack.story
     .slice(-5)
-    .map((s) => `${s.year}: ${s.crop ? cropName(s.crop) : "Fallow"}`)
-    .join(" -> ");
+    .map((s) => `${s.year}: ${s.crop ? cropName(s.crop, loc) : isAr ? "بور" : "Fallow"}`)
+    .join(" ← ");
+
+  if (isAr) {
+    const altLines = topAlts
+      .map((o, idx) => {
+        const w = o.metrics.water_use_mm?.value != null ? `${o.metrics.water_use_mm.value.toFixed(0)} ملم` : "غير متاح";
+        const ryi = o.metrics.ryi?.value != null ? o.metrics.ryi.value.toFixed(2) : "غير متاح";
+        return `  #${idx + 1}: ${optionName(o, "ar")} (درجة ${o.grade}، المياه ${w}، RYI ${ryi})`;
+      })
+      .join("\n");
+
+    let extra = "";
+    if (ctx.fieldCalendar) {
+      const bareMonths = ctx.fieldCalendar.bare_observed
+        .filter((m) => !m.insufficient && (m.bare_share?.value ?? 0) >= 0.5)
+        .map((m) => `${months[m.month - 1]} (${Math.round((m.bare_share?.value ?? 0) * 100)}%)`);
+      if (bareMonths.length > 0) {
+        extra += `\n• أشهر التربة العارية المرتفعة [O]: ${bareMonths.join("، ")}`;
+      }
+      const hazards = ctx.fieldCalendar.vulnerability
+        .slice(0, 3)
+        .map((v) => {
+          const ws = Math.max(...(v.shares.water_stress?.values.map((x) => x ?? 0) ?? [0]));
+          const hs = Math.max(...(v.shares.heat?.values.map((x) => x ?? 0) ?? [0]));
+          return `${cropName(v.crop, "ar")} (ذروة الإجهاد المائي ${Math.round(ws * 100)}%، الحرارة ${Math.round(hs * 100)}%)`;
+        });
+      if (hazards.length > 0) {
+        extra += `\n• ذروة حساسية المحاصيل [D]: ${hazards.join("؛ ")}`;
+      }
+    }
+
+    if (ctx.fieldScenarios && ctx.fieldScenarios.scenarios.length > 0) {
+      const baseTop = Object.entries(
+        ctx.fieldScenarios.scenarios.find((s) => s.scenario_id === ctx.fieldScenarios!.baseline_id)?.ranks ?? {},
+      ).find(([, r]) => r === 1)?.[0];
+      const stress = ctx.fieldScenarios.scenarios.find((s) => s.dt_c >= 2 && s.dp_pct <= -20);
+      const stressTop = stress ? Object.entries(stress.ranks).find(([, r]) => r === 1)?.[0] : undefined;
+      if (baseTop && stressTop) {
+        extra +=
+          baseTop === stressTop
+            ? `\n• حساسية الطقس (+2 °م، -20% مطر) [D]: الخيار الأول يبقى ثابتًا.`
+            : `\n• حساسية الطقس (+2 °م، -20% مطر) [D]: يتحوّل الخيار الأول من ${baseTop} إلى ${stressTop}.`;
+      }
+    }
+
+    return (
+      `سياق الحقل النشط — ${numLabel} (${pack.field.area_ha.toFixed(1)} هكتار، ${pack.field.interior_pixels} بكسل داخلي 30 م [O]، حتى ${pack.data_as_of}):\n` +
+      `• التاريخ المحصولي الأخير: ${recentHistory || "غير متاح"}\n` +
+      `• مصداقية الشاهد 2 (ABC): ${cred} [D]\n` +
+      (currentOpt ? `• الدورة الحالية: ${optionName(currentOpt, "ar")} (درجة ${currentOpt.grade})\n` : "") +
+      `• أفضل البدائل المصنفة:\n${altLines}\n` +
+      `• الخطوة الموصى بقياسها: ${pack.advice.measure_next}` +
+      extra
+    );
+  }
 
   const altLines = topAlts
     .map((o, idx) => {
       const w = o.metrics.water_use_mm?.value != null ? `${o.metrics.water_use_mm.value.toFixed(0)} mm` : "N/A";
       const ryi = o.metrics.ryi?.value != null ? o.metrics.ryi.value.toFixed(2) : "N/A";
-      return `  #${idx + 1}: ${optionName(o)} (Grade ${o.grade}, Water ${w}, RYI ${ryi})`;
+      return `  #${idx + 1}: ${optionName(o, "en")} (Grade ${o.grade}, Water ${w}, RYI ${ryi})`;
     })
     .join("\n");
 
@@ -271,7 +431,7 @@ function summarizeFieldPack(ctx: ChatContextSnapshot): string {
   if (ctx.fieldCalendar) {
     const bareMonths = ctx.fieldCalendar.bare_observed
       .filter((m) => !m.insufficient && (m.bare_share?.value ?? 0) >= 0.5)
-      .map((m) => `${MONTHS_SHORT[m.month - 1]} (${Math.round((m.bare_share?.value ?? 0) * 100)}%)`);
+      .map((m) => `${months[m.month - 1]} (${Math.round((m.bare_share?.value ?? 0) * 100)}%)`);
     if (bareMonths.length > 0) {
       extra += `\n• High Observed Bare-Soil Months [O]: ${bareMonths.join(", ")}`;
     }
@@ -280,7 +440,7 @@ function summarizeFieldPack(ctx: ChatContextSnapshot): string {
       .map((v) => {
         const ws = Math.max(...(v.shares.water_stress?.values.map((x) => x ?? 0) ?? [0]));
         const hs = Math.max(...(v.shares.heat?.values.map((x) => x ?? 0) ?? [0]));
-        return `${cropName(v.crop)} (peak water stress ${Math.round(ws * 100)}%, heat ${Math.round(hs * 100)}%)`;
+        return `${cropName(v.crop, "en")} (peak water stress ${Math.round(ws * 100)}%, heat ${Math.round(hs * 100)}%)`;
       });
     if (hazards.length > 0) {
       extra += `\n• Crop Vulnerability Peaks [D]: ${hazards.join("; ")}`;
@@ -310,17 +470,26 @@ function summarizeFieldPack(ctx: ChatContextSnapshot): string {
 
   return (
     `Active Field Context — ${numLabel} (${pack.field.area_ha.toFixed(1)} ha, ${pack.field.interior_pixels} interior 30 m pixels [O], as of ${pack.data_as_of}):\n` +
-    `• Recent Crop History: ${recentHistory || "N/A"}\n` +
+    `• Recent Crop History: ${pack.story.slice(-5).map((s) => `${s.year}: ${s.crop ? cropName(s.crop, "en") : "Fallow"}`).join(" -> ") || "N/A"}\n` +
     `• ABC Own-Past Credibility: ${cred} [D]\n` +
-    (currentOpt ? `• Current Rotation: ${optionName(currentOpt)} (Grade ${currentOpt.grade})\n` : "") +
+    (currentOpt ? `• Current Rotation: ${optionName(currentOpt, "en")} (Grade ${currentOpt.grade})\n` : "") +
     `• Top Ranked Alternatives:\n${altLines}\n` +
     `• Sensitivity & Next Step: ${pack.advice.measure_next}` +
     extra
   );
 }
 
-function summarizeLiveProfile(prof: LiveClimateProfile): string {
+function summarizeLiveProfile(prof: LiveClimateProfile, isAr = false): string {
   const top = prof.recommendedRotations[0];
+  if (isAr) {
+    return (
+      `التقييم العالمي النشط (${prof.latitude.toFixed(4)}, ${prof.longitude.toFixed(4)}):\n` +
+      `• المنطقة المناخية: ${prof.climateZone} (${prof.source}، ${prof.yearsEvaluated} سنوات)\n` +
+      `• المطر السنوي: ${prof.annualPrecipitationMm} ملم | ET0: ${prof.annualEtoMm} ملم | الجفاف: ${prof.aridityIndex}\n` +
+      `• سياق التربة: ${prof.soilContext.source} (${prof.soilContext.estimatedAweMm} ملم AWS ${prof.soilContext.tag})\n` +
+      (top ? `• أفضل دورة محاكاة (${prof.simulationMode}): ${top.name} — RYI ${top.ryi}، المياه ${top.waterUseMm} ملم، التربة العارية ${top.bareMonths} شهر` : "")
+    );
+  }
   return (
     `Active Global Evaluation (${prof.latitude.toFixed(4)}, ${prof.longitude.toFixed(4)}):\n` +
     `• Climate Zone: ${prof.climateZone} (${prof.source}, ${prof.yearsEvaluated} yr)\n` +
@@ -330,10 +499,12 @@ function summarizeLiveProfile(prof: LiveClimateProfile): string {
   );
 }
 
-function summarizeHindcast(h: RegionHindcast): string {
+function summarizeHindcast(h: RegionHindcast, isAr = false): string {
   const canopy = h.rows.filter((r) => r.mode === "forecast" && r.metric === "canopy_integral");
   const lines = canopy.map((r) => `${r.method}: CRPS=${r.scores.crps?.toFixed(2) ?? "N/A"} (n=${r.n})`);
-  return `Active Hindcast Scoreboard (${h.region_id}, cutoff ${h.cutoff}): ${lines.join("; ")}`;
+  return isAr
+    ? `لوحة الاختبار التراجعي (${h.region_id}، تاريخ القطع ${h.cutoff}): ${lines.join("؛ ")}`
+    : `Active Hindcast Scoreboard (${h.region_id}, cutoff ${h.cutoff}): ${lines.join("; ")}`;
 }
 
 /** Keyword score of every KB entry for a query, best first (ties keep KB order). */
@@ -368,17 +539,18 @@ export function buildSystemPrompt(ctx: ChatContextSnapshot, query = "", k = 3): 
   const facts = entries.map((e) => `- ${e.title}: ${e.answer}`).join("\n");
   const sections: string[] = [];
   if (ctx.fieldPack) {
-    sections.push(`CURRENTLY VIEWED FIELD:\n${summarizeFieldPack(ctx)}`);
+    sections.push(`CURRENTLY VIEWED FIELD:\n${summarizeFieldPack(ctx, false)}`);
   } else {
     sections.push(`CURRENT PAGE: ${ctx.page} (Region: ${ctx.regionId}). No pilot field pack open.`);
   }
   // A field the user added stays private unless they opted in.
   if (ctx.liveProfile && ctx.shareCustomField) {
-    sections.push(`USER-ADDED FIELD (shared by the user):\n${summarizeLiveProfile(ctx.liveProfile)}`);
+    sections.push(`USER-ADDED FIELD (shared by the user):\n${summarizeLiveProfile(ctx.liveProfile, false)}`);
   }
-  if (ctx.hindcast) sections.push(summarizeHindcast(ctx.hindcast));
+  if (ctx.hindcast) sections.push(summarizeHindcast(ctx.hindcast, false));
+  const activeLocale = ctx.locale ?? getLocale();
   const lang =
-    ctx.locale === "ar"
+    activeLocale === "ar"
       ? "7. Respond in clear Modern Standard Arabic (the user's interface language)."
       : "7. Respond in the same language as the user's question (English or Arabic).";
   return `${RULES}\n${lang}\n\nPROJECT FACTS:\n${facts}\n\n${sections.join("\n\n")}`;
@@ -389,14 +561,19 @@ export function resolveFieldLabel(pack: FieldPack | null | undefined, index: Reg
   return String(fieldNumber(pack.field.field_id, index.fields));
 }
 
-const SCOPE_RE = /(profit|dollar|\$|income|price|cost|tonne|t\/ha|bushel|bu\/ac|bu per|guarant)/i;
+const SCOPE_RE = /(profit|dollar|\$|income|price|cost|tonne|t\/ha|bushel|bu\/ac|bu per|guarant|ربح|أرباح|مال|سعر|أسعار|طن|أطنان|ضمان)/i;
 const FIELD_RE =
-  /(this field|my field|current field|summarize|summary|top option|best option|top rotation|best rotation|recommend|rank|grade|credibility|history|story|water|bare|flip|measure|sensitive|scenario|climate|hazard|frost|heat|calendar|alternative)/;
+  /(this field|my field|current field|summarize|summary|top option|best option|top rotation|best rotation|recommend|rank|grade|credibility|history|story|water|bare|flip|measure|sensitive|scenario|climate|hazard|frost|heat|calendar|alternative|الحقل|لخص|لخّص|ملخص|أفضل|توصية|ترتيب|درجة|مصداقية|تاريخ|قصة|مياه|تربة عارية|تقويم|مخاطر|صقيع|حرارة|سيناريو|بديل|قياس)/;
 
 const KNOWN_PROMPTS = new Set(
-  [...KNOWLEDGE_BASE.flatMap((e) => [e.title, ...e.followUps]), "Summarize this field", "What should I measure next?"].map(
-    (s) => s.toLowerCase(),
-  ),
+  [
+    ...KNOWLEDGE_BASE.flatMap((e) => [e.title, ...e.followUps]),
+    ...KNOWLEDGE_BASE_AR.flatMap((e) => [e.title, ...e.followUps]),
+    "Summarize this field",
+    "What should I measure next?",
+    "لخّص هذا الحقل",
+    "ما الذي يُنصح بقياسه لاحقًا؟",
+  ].map((s) => s.toLowerCase()),
 );
 
 /** A KB score at or above this answers locally without calling the LLM. */
@@ -423,20 +600,34 @@ export function violatesGuardrails(reply: string): boolean {
 }
 
 export function answerQuestion(query: string, ctx: ChatContextSnapshot): ChatAnswer {
-  const q = query.trim().toLowerCase();
+  const raw = query.trim();
+  const q = raw.toLowerCase();
+  const hasArabicScript = /[\u0600-\u06FF]/.test(raw);
+  const isAr = ctx.locale === "ar" || hasArabicScript;
+  const kb = isAr ? KNOWLEDGE_BASE_AR : KNOWLEDGE_BASE;
+  const months = isAr ? MONTHS_SHORT_AR : MONTHS_SHORT_EN;
+
   if (!q) {
-    return {
-      text: "Ask me anything about FieldWitness—how the Three Witnesses work, evidence grades A–D, soil TAW, winter wheat calibration, climate what-ifs, or the field you are currently viewing.",
-      sourceLabel: "FieldWitness Assistant",
-      followUps: ctx.fieldPack
-        ? ["Summarize this field", "What is the top rotation for this field?", "What are the bare soil months and hazards?"]
-        : ["What is FieldWitness?", "How do the three witnesses work?", "What are the project's honest limits?"],
-    };
+    return isAr
+      ? {
+          text: "اسألني أي سؤال عن FieldWitness: نظام الشهود الثلاثة، أو درجات الدليل A–D، أو التربة (SSURGO)، أو القمح الشتوي، أو اختبارات الطقس، أو الحقل المعروض حاليًا.",
+          sourceLabel: "مساعد FieldWitness",
+          followUps: ctx.fieldPack
+            ? ["لخّص هذا الحقل", "ما أفضل دورة لهذا الحقل؟", "ما أشهر التربة العارية والمخاطر؟"]
+            : ["ما هو FieldWitness؟", "كيف يعمل الشهود الثلاثة؟", "ما هي الحدود الصريحة للمشروع؟"],
+        }
+      : {
+          text: "Ask me anything about FieldWitness—how the Three Witnesses work, evidence grades A–D, soil TAW, winter wheat calibration, climate what-ifs, or the field you are currently viewing.",
+          sourceLabel: "FieldWitness Assistant",
+          followUps: ctx.fieldPack
+            ? ["Summarize this field", "What is the top rotation for this field?", "What are the bare soil months and hazards?"]
+            : ["What is FieldWitness?", "How do the three witnesses work?", "What are the project's honest limits?"],
+        };
   }
 
   // 1. Strict scientific scope guardrail (no dollar profit / yield mass / certainty)
   if (SCOPE_RE.test(q)) {
-    const scope = KNOWLEDGE_BASE.find((e) => e.id === "scope")!;
+    const scope = kb.find((e) => e.id === "scope")!;
     return {
       text: scope.answer,
       sourceLabel: scope.sourceLabel,
@@ -445,8 +636,24 @@ export function answerQuestion(query: string, ctx: ChatContextSnapshot): ChatAns
   }
 
   // 2. Live global Add-My-Field query when liveProfile is available
-  if (ctx.liveProfile && /(global|my field|coordinate|lat|lon|nasa power|rain|eto|deficit|simulated|location)/.test(q)) {
+  if (ctx.liveProfile && /(global|my field|coordinate|lat|lon|nasa power|rain|eto|deficit|simulated|location|عالمي|احداثي|إحداثي|مناخ|مطر|حقل)/.test(q)) {
     const p = ctx.liveProfile;
+    if (isAr) {
+      const rots = p.recommendedRotations
+        .slice(0, 3)
+        .map((r, i) => `• #${i + 1} **${r.name}**: RYI ${r.ryi} [D]، المياه ${r.waterUseMm} ملم (سنة الجفاف ${r.badYearWaterMm} ملم)، التربة العارية ${r.bareMonths} شهر`)
+        .join("\n");
+      return {
+        text:
+          `التقييم المناخي العالمي الحي (${p.latitude.toFixed(4)}, ${p.longitude.toFixed(4)}):\n` +
+          `• **المنطقة المناخية**: ${p.climateZone} (${p.source}، ${p.yearsEvaluated} سنوات)\n` +
+          `• **المطر / ET₀ / العجز**: ${p.annualPrecipitationMm} ملم / ${p.annualEtoMm} ملم / ${p.waterDeficitMm} ملم\n` +
+          `• **التربة**: ${p.soilContext.source} (${p.soilContext.estimatedAweMm} ملم AWS ${p.soilContext.tag})\n` +
+          `**${p.simulationMode}**:\n${rots}`,
+        sourceLabel: "ملف التقييم العالمي FAO-56 [D/E]",
+        followUps: ["ما بيانات التربة المستخدمة؟", "كيف يعمل الشهود الثلاثة؟"],
+      };
+    }
     const rots = p.recommendedRotations
       .slice(0, 3)
       .map((r, i) => `• #${i + 1} **${r.name}**: RYI ${r.ryi} [D], Water ${r.waterUseMm} mm (Worst yr ${r.badYearWaterMm} mm), Bare ${r.bareMonths} mo`)
@@ -467,42 +674,60 @@ export function answerQuestion(query: string, ctx: ChatContextSnapshot): ChatAns
   const pack = ctx.fieldPack;
   const asksAboutThisField =
     pack &&
-    /(this field|my field|current field|summarize|summary|top option|best option|top rotation|best rotation|recommend|rank|grade|credibility|history|story|water|bare|flip|measure|sensitive|scenario|climate|hazard|frost|heat|calendar|alternative)/.test(
+    /(this field|my field|current field|summarize|summary|top option|best option|top rotation|best rotation|recommend|rank|grade|credibility|history|story|water|bare|flip|measure|sensitive|scenario|climate|hazard|frost|heat|calendar|alternative|الحقل|لخص|لخّص|ملخص|أفضل|توصية|ترتيب|درجة|مصداقية|تاريخ|قصة|مياه|تربة عارية|تقويم|مخاطر|صقيع|حرارة|سيناريو|بديل|قياس)/.test(
       q,
     );
 
   if (pack && asksAboutThisField) {
-    const label = ctx.fieldNumberLabel ? `Field ${ctx.fieldNumberLabel}` : `Field ${pack.field.field_id.slice(0, 8)}`;
+    const loc: Locale = isAr ? "ar" : "en";
+    const label = ctx.fieldNumberLabel
+      ? isAr
+        ? `الحقل ${ctx.fieldNumberLabel}`
+        : `Field ${ctx.fieldNumberLabel}`
+      : isAr
+        ? `الحقل ${pack.field.field_id.slice(0, 8)}`
+        : `Field ${pack.field.field_id.slice(0, 8)}`;
     const topAlts = pack.options
       .filter((o) => o.option_id !== "current")
       .sort((a, b) => a.rank - b.rank)
       .slice(0, 3);
     const currentOpt = pack.options.find((o) => o.option_id === "current");
 
-    if (/(bare|hazard|frost|heat|calendar|vulnerable)/.test(q) && ctx.fieldCalendar) {
+    if (/(bare|hazard|frost|heat|calendar|vulnerable|عارية|مخاطر|صقيع|حرارة|تقويم|حساسية)/.test(q) && ctx.fieldCalendar) {
       const bare = ctx.fieldCalendar.bare_observed
         .filter((m) => !m.insufficient && (m.bare_share?.value ?? 0) >= 0.4)
-        .map((m) => `${MONTHS_SHORT[m.month - 1]} (${Math.round((m.bare_share?.value ?? 0) * 100)}%)`)
-        .join(", ");
+        .map((m) => `${months[m.month - 1]} (${Math.round((m.bare_share?.value ?? 0) * 100)}%)`)
+        .join(isAr ? "، " : ", ");
       const vulns = ctx.fieldCalendar.vulnerability
         .slice(0, 3)
         .map((v) => {
           const ws = Math.max(...(v.shares.water_stress?.values.map((x) => x ?? 0) ?? [0]));
           const ht = Math.max(...(v.shares.heat?.values.map((x) => x ?? 0) ?? [0]));
-          return `${cropName(v.crop)}: water stress up to ${Math.round(ws * 100)}%, heat up to ${Math.round(ht * 100)}%`;
+          return isAr
+            ? `${cropName(v.crop, "ar")}: إجهاد مائي حتى ${Math.round(ws * 100)}%، حرارة حتى ${Math.round(ht * 100)}%`
+            : `${cropName(v.crop, "en")}: water stress up to ${Math.round(ws * 100)}%, heat up to ${Math.round(ht * 100)}%`;
         })
         .join("\n• ");
-      return {
-        text:
-          `Calendar & Vulnerability Summary for ${label}:\n` +
-          `• **Bare Soil (>=40% years bare [O])**: ${bare || "Low year-round bare exposure"}\n` +
-          `• **Crop Stress Peaks [D]**:\n• ${vulns || "Open Calendar tab to inspect monthly charts."}`,
-        sourceLabel: `${label} Calendar [O/D]`,
-        followUps: ["What is the top rotation for this field?", "What should I measure next?"],
-      };
+      return isAr
+        ? {
+            text:
+              `ملخص التقويم والحساسية لـ ${label}:\n` +
+              `• **أشهر التربة العارية (≥40% سنوات عارية [O])**: ${bare || "تعرض منخفض طوال السنة"}\n` +
+              `• **ذروة إجهاد المحاصيل [D]**:\n• ${vulns || "افتح تبويب التقويم لمراجعة المخططات الشهرية."}`,
+            sourceLabel: `تقويم ${label} [O/D]`,
+            followUps: ["ما أفضل دورة لهذا الحقل؟", "ما الذي يُنصح بقياسه لاحقًا؟"],
+          }
+        : {
+            text:
+              `Calendar & Vulnerability Summary for ${label}:\n` +
+              `• **Bare Soil (>=40% years bare [O])**: ${bare || "Low year-round bare exposure"}\n` +
+              `• **Crop Stress Peaks [D]**:\n• ${vulns || "Open Calendar tab to inspect monthly charts."}`,
+            sourceLabel: `${label} Calendar [O/D]`,
+            followUps: ["What is the top rotation for this field?", "What should I measure next?"],
+          };
     }
 
-    if (/(measure|flip|sensitive|next|scenario)/.test(q)) {
+    if (/(measure|flip|sensitive|next|scenario|قياس|تغير|حساسية|تالي|سيناريو)/.test(q)) {
       let scenNote = "";
       if (ctx.fieldScenarios && ctx.fieldScenarios.scenarios.length > 0) {
         const baseTop = Object.entries(
@@ -511,83 +736,141 @@ export function answerQuestion(query: string, ctx: ChatContextSnapshot): ChatAns
         const hotDry = ctx.fieldScenarios.scenarios.find((s) => s.dt_c >= 2 && s.dp_pct <= -20);
         const hdTop = hotDry ? Object.entries(hotDry.ranks).find(([, r]) => r === 1)?.[0] : undefined;
         if (baseTop && hdTop) {
-          scenNote =
-            baseTop === hdTop
-              ? `\n• **+2 °C / −20% rain what-if [D]**: Top-ranked option holds steady.`
-              : `\n• **+2 °C / −20% rain what-if [D]**: Rank #1 switches to ${hdTop}.`;
+          if (isAr) {
+            scenNote =
+              baseTop === hdTop
+                ? `\n• **اختبار الطقس (+2 °م / −20% مطر) [D]**: يبقى الخيار المتصدر ثابتًا.`
+                : `\n• **اختبار الطقس (+2 °م / −20% مطر) [D]**: يتغيّر الخيار #1 إلى ${hdTop}.`;
+          } else {
+            scenNote =
+              baseTop === hdTop
+                ? `\n• **+2 °C / −20% rain what-if [D]**: Top-ranked option holds steady.`
+                : `\n• **+2 °C / −20% rain what-if [D]**: Rank #1 switches to ${hdTop}.`;
+          }
         }
       }
-      return {
-        text:
-          `For **${label}**:\n` +
-          `• **Recommended next measurement**: ${pack.advice.measure_next}\n` +
-          `• **Counterfactual flip sensitivity**: ${pack.advice.counterfactual_flip}\n` +
-          `• **Flip probability**: ${pack.advice.flip_probability.value != null ? `${(pack.advice.flip_probability.value * 100).toFixed(0)}% [D]` : "N/A"}` +
-          scenNote,
-        sourceLabel: `${label} Advice [D]`,
-        followUps: ["What is the top rotation for this field?", "What is this field's crop history?"],
-      };
+      return isAr
+        ? {
+            text:
+              `بالنسبة إلى **${label}**:\n` +
+              `• **القياس التالي الموصى به**: ${pack.advice.measure_next}\n` +
+              `• **حساسية تغيّر القرار**: ${pack.advice.counterfactual_flip}\n` +
+              `• **احتمال التغيّر**: ${pack.advice.flip_probability.value != null ? `${(pack.advice.flip_probability.value * 100).toFixed(0)}% [D]` : "غير متاح"}` +
+              scenNote,
+            sourceLabel: `توصيات ${label} [D]`,
+            followUps: ["ما أفضل دورة لهذا الحقل؟", "ما تاريخ هذا الحقل؟"],
+          }
+        : {
+            text:
+              `For **${label}**:\n` +
+              `• **Recommended next measurement**: ${pack.advice.measure_next}\n` +
+              `• **Counterfactual flip sensitivity**: ${pack.advice.counterfactual_flip}\n` +
+              `• **Flip probability**: ${pack.advice.flip_probability.value != null ? `${(pack.advice.flip_probability.value * 100).toFixed(0)}% [D]` : "N/A"}` +
+              scenNote,
+            sourceLabel: `${label} Advice [D]`,
+            followUps: ["What is the top rotation for this field?", "What is this field's crop history?"],
+          };
     }
 
-    if (/(history|story|past|previous)/.test(q)) {
+    if (/(history|story|past|previous|تاريخ|قصة|ماضي|سابق)/.test(q)) {
       const hist = pack.story
         .slice(-8)
-        .map((s) => `${s.year}: ${s.crop ? cropName(s.crop) : "Fallow"} (clear obs: ${s.clear_obs} [O])`)
+        .map((s) =>
+          isAr
+            ? `${s.year}: ${s.crop ? cropName(s.crop, "ar") : "بور"} (مشاهدات صافية: ${s.clear_obs} [O])`
+            : `${s.year}: ${s.crop ? cropName(s.crop, "en") : "Fallow"} (clear obs: ${s.clear_obs} [O])`,
+        )
         .join("\n• ");
-      return {
-        text: `Observed NASA HLS 30 m history for **${label}** (${pack.field.interior_pixels} interior pixels [O]):\n• ${hist}`,
-        sourceLabel: `${label} Satellite Story [O/E]`,
-        followUps: ["What is the top rotation for this field?", "What should I measure next?"],
-      };
+      return isAr
+        ? {
+            text: `تاريخ الأقمار الصناعية NASA HLS 30 م لـ **${label}** (${pack.field.interior_pixels} بكسل داخلي [O]):\n• ${hist}`,
+            sourceLabel: `قصة ${label} [O/E]`,
+            followUps: ["ما أفضل دورة لهذا الحقل؟", "ما الذي يُنصح بقياسه لاحقًا؟"],
+          }
+        : {
+            text: `Observed NASA HLS 30 m history for **${label}** (${pack.field.interior_pixels} interior pixels [O]):\n• ${hist}`,
+            sourceLabel: `${label} Satellite Story [O/E]`,
+            followUps: ["What is the top rotation for this field?", "What should I measure next?"],
+          };
     }
 
-    if (/(top|best|recommend|alternative|option|rank|water|ryi)/.test(q) && topAlts.length > 0) {
+    if (/(top|best|recommend|alternative|option|rank|water|ryi|أفضل|توصية|بديل|خيار|ترتيب|مياه)/.test(q) && topAlts.length > 0) {
+      if (isAr) {
+        const lines = topAlts
+          .map((o, i) => {
+            const w = o.metrics.water_use_mm?.value != null ? `${o.metrics.water_use_mm.value.toFixed(0)} ملم` : "غير متاح";
+            const by = o.metrics.bad_year_water_mm?.value != null ? `${o.metrics.bad_year_water_mm.value.toFixed(0)} ملم` : "غير متاح";
+            const ryi = o.metrics.ryi?.value != null ? o.metrics.ryi.value.toFixed(2) : "غير متاح";
+            return `• **#${i + 1} ${optionName(o, "ar")}** — درجة **${o.grade}** | المياه: ${w} (سنة الجفاف: ${by}) [D] | RYI: ${ryi} [D]`;
+          })
+          .join("\n");
+        return {
+          text:
+            `أعلى الدورات الثلاثية ترتيبًا لـ **${label}** (${pack.field.area_ha.toFixed(1)} هكتار):\n` +
+            lines +
+            (currentOpt ? `\n• **الدورة الحالية**: ${optionName(currentOpt, "ar")} (درجة ${currentOpt.grade})` : ""),
+          sourceLabel: `خيارات ${label} [D/E]`,
+          followUps: ["ما الذي يُنصح بقياسه لاحقًا؟", "ما أشهر التربة العارية والمخاطر؟"],
+        };
+      }
       const lines = topAlts
         .map((o, i) => {
           const w = o.metrics.water_use_mm?.value != null ? `${o.metrics.water_use_mm.value.toFixed(0)} mm` : "N/A";
           const by = o.metrics.bad_year_water_mm?.value != null ? `${o.metrics.bad_year_water_mm.value.toFixed(0)} mm` : "N/A";
           const ryi = o.metrics.ryi?.value != null ? o.metrics.ryi.value.toFixed(2) : "N/A";
-          return `• **#${i + 1} ${optionName(o)}** — Grade **${o.grade}** | Water: ${w} (bad yr: ${by}) [D] | RYI: ${ryi} [D]`;
+          return `• **#${i + 1} ${optionName(o, loc)}** — Grade **${o.grade}** | Water: ${w} (bad yr: ${by}) [D] | RYI: ${ryi} [D]`;
         })
         .join("\n");
       return {
         text:
           `Top ranked 3-season rotations for **${label}** (${pack.field.area_ha.toFixed(1)} ha):\n` +
           lines +
-          (currentOpt ? `\n• **Current rotation**: ${optionName(currentOpt)} (Grade ${currentOpt.grade})` : ""),
+          (currentOpt ? `\n• **Current rotation**: ${optionName(currentOpt, loc)} (Grade ${currentOpt.grade})` : ""),
         sourceLabel: `${label} Options [D/E]`,
         followUps: ["What should I measure next?", "What are the bare soil months and hazards?"],
       };
     }
 
-    return {
-      text: summarizeFieldPack(ctx),
-      sourceLabel: `${label} Live Context [O/D]`,
-      followUps: ["What is the top rotation for this field?", "What are the bare soil months and hazards?", "What should I measure next?"],
-    };
+    return isAr
+      ? {
+          text: summarizeFieldPack(ctx, true),
+          sourceLabel: `سياق ${label} [O/D]`,
+          followUps: ["ما أفضل دورة لهذا الحقل؟", "ما أشهر التربة العارية والمخاطر؟", "ما الذي يُنصح بقياسه لاحقًا؟"],
+        }
+      : {
+          text: summarizeFieldPack(ctx, false),
+          sourceLabel: `${label} Live Context [O/D]`,
+          followUps: ["What is the top rotation for this field?", "What are the bare soil months and hazards?", "What should I measure next?"],
+        };
   }
 
   // 4. Scoreboard / hindcast query
-  if (ctx.hindcast && /(scoreboard|hindcast|crps|baseline|b0|b1|b2|metric)/.test(q)) {
+  if (ctx.hindcast && /(scoreboard|hindcast|crps|baseline|b0|b1|b2|metric|لوحة النتائج|اختبار تراجعي|خط الأساس)/.test(q)) {
     const canopy = ctx.hindcast.rows.filter((r) => r.mode === "forecast" && r.metric === "canopy_integral");
     if (canopy.length > 0) {
       const lines = canopy
-        .map((r) => `• **${r.method}**: CRPS ${r.scores.crps?.toFixed(2) ?? "N/A"} | 90% cov ${r.scores.covered90 != null ? `${Math.round(r.scores.covered90 * 100)}%` : "N/A"} (n=${r.n})`)
+        .map((r) => `• **${r.method}**: CRPS ${r.scores.crps?.toFixed(2) ?? "N/A"} | ${isAr ? "تغطية 90%" : "90% cov"} ${r.scores.covered90 != null ? `${Math.round(r.scores.covered90 * 100)}%` : "N/A"} (n=${r.n})`)
         .join("\n");
-      return {
-        text: `Region **${ctx.hindcast.region_id}** Hindcast Forecast Scoreboard (Canopy Integral, cutoff ${ctx.hindcast.cutoff}):\n${lines}`,
-        sourceLabel: "Hindcast Scoreboard [D]",
-        followUps: ["What are the project's honest limits?", "How does winter wheat phenology work?"],
-      };
+      return isAr
+        ? {
+            text: `لوحة الاختبار التراجعي للمنطقة **${ctx.hindcast.region_id}** (تاريخ القطع ${ctx.hindcast.cutoff}):\n${lines}`,
+            sourceLabel: "لوحة الاختبار التراجعي [D]",
+            followUps: ["ما هي الحدود الصريحة للمشروع؟", "كيف يعمل القمح الشتوي؟"],
+          }
+        : {
+            text: `Region **${ctx.hindcast.region_id}** Hindcast Forecast Scoreboard (Canopy Integral, cutoff ${ctx.hindcast.cutoff}):\n${lines}`,
+            sourceLabel: "Hindcast Scoreboard [D]",
+            followUps: ["What are the project's honest limits?", "How does winter wheat phenology work?"],
+          };
     }
   }
 
-  // 5. Scored keyword retrieval over Knowledge Base (BM25-lite token + phrase weight)
-  const queryTokens = q.split(/[^a-z0-9_]+/).filter((w) => w.length >= 2);
+  // 5. Scored keyword retrieval over Knowledge Base (supports English + Arabic Unicode tokens)
+  const queryTokens = q.split(/[^a-z0-9_\u0600-\u06FF]+/).filter((w) => w.length >= 2);
   let bestEntry: KnowledgeEntry | null = null;
   let bestScore = 0;
 
-  for (const entry of KNOWLEDGE_BASE) {
+  for (const entry of kb) {
     let score = 0;
     for (const kw of entry.keywords) {
       if (q.includes(kw)) {
@@ -613,10 +896,23 @@ export function answerQuestion(query: string, ctx: ChatContextSnapshot): ChatAns
   }
 
   // 6. Helpful grounded fallback listing active context capabilities
+  if (isAr) {
+    return {
+      text:
+        `الإجابات المدمجة تغطي موضوعات FieldWitness المفهرسة وبيانات الحقل/الصفحة المفتوحة.\n\n` +
+        (pack ? `${summarizeFieldPack(ctx, true)}\n\n` : "") +
+        "جرّب السؤال عن **الشهود الثلاثة**، أو **درجات الدليل A–D**، أو **بيانات التربة SSURGO**، أو **القمح الشتوي**، أو **الحدود الصريحة للمشروع**، أو **التقييم المناخي العالمي**.",
+      sourceLabel: "الإجابات المدمجة (دون اتصال)",
+      followUps: pack
+        ? ["لخّص هذا الحقل", "ما أفضل دورة لهذا الحقل؟", "ما أشهر التربة العارية والمخاطر؟"]
+        : ["ما هو FieldWitness؟", "كيف يعمل الشهود الثلاثة؟", "ما هي الحدود الصريحة للمشروع؟"],
+    };
+  }
+
   return {
     text:
       `Built-in answers cover the indexed FieldWitness topics and the active field/page data.\n\n` +
-      (pack ? `${summarizeFieldPack(ctx)}\n\n` : "") +
+      (pack ? `${summarizeFieldPack(ctx, false)}\n\n` : "") +
       "Try asking about the **Three Witnesses**, **Evidence Grades A–D**, **USDA SSURGO soil TAW**, **Winter Wheat calibration**, **Honest Hindcast Limits**, or **Global Live Climate Assessment**.",
     sourceLabel: "Grounded Fallback (Offline Mode)",
     followUps: pack

@@ -1,6 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Line, LineChart, ResponsiveContainer, YAxis } from "recharts";
 import { CropChips } from "./CropChips";
+import { Explain } from "./Explain";
+import { useLocale } from "./locale";
 import { CHART_COLOURS } from "./theme";
 import { useTheme } from "./useTheme";
 import { HAZARDS, MONTHS, monthValue, shadeLevel, vulnerabilityFor } from "./calendar";
@@ -9,22 +11,30 @@ import { loadCalendar, loadLayers } from "./data";
 import { formatTagged } from "./format";
 import { cropName, optionName, t } from "./strings";
 import { TagBadge, TaggedValue } from "./tags";
-import { Explain } from "./Explain";
 import type { ExplainerId } from "./explainers";
 import type { FieldCalendar, FieldPack, Hazard, RegionLayers, RegionalLayer, Tag } from "./types";
 
-const MONTH_NAMES = MONTHS.map((m) => new Date(Date.UTC(2001, m - 1, 1)).toLocaleDateString("en-GB", { month: "short", timeZone: "UTC" }));
-
 function Head() {
+  const loc = useLocale();
+  const monthNames = useMemo(
+    () =>
+      MONTHS.map((m) =>
+        new Date(Date.UTC(2001, m - 1, 1)).toLocaleDateString(
+          loc === "ar" ? "ar-EG-u-nu-latn" : "en-GB",
+          { month: "short", timeZone: "UTC" },
+        ),
+      ),
+    [loc],
+  );
   return (
     <thead>
       <tr>
         <th scope="col">
           <span className="sr-only">{t("cal.row")}</span>
         </th>
-        {MONTH_NAMES.map((m) => (
+        {MONTHS.map((m, idx) => (
           <th key={m} scope="col">
-            {m}
+            {monthNames[idx]}
           </th>
         ))}
       </tr>
@@ -55,7 +65,10 @@ function BareCalendar({ cal, optionId, label }: { cal: FieldCalendar; optionId: 
   const [first, last] = cal.bare_observed_years;
   return (
     <section aria-labelledby="bare-h">
-      <h3 id="bare-h">{t("cal.bare")}</h3>
+      <h3 id="bare-h">
+        {t("cal.bare")}
+        <Explain id="bare_soil_months" />
+      </h3>
       <p className="muted">{t("cal.bare.note")}</p>
       <div className="table-wrap">
         <table className="cal">
@@ -97,7 +110,10 @@ function VulnerabilityCalendar({ cal, sequence }: { cal: FieldCalendar; sequence
   const { found, missing, historyOnly } = vulnerabilityFor(cal, { sequence });
   return (
     <section aria-labelledby="vuln-h">
-      <h3 id="vuln-h">{t("cal.vuln")}</h3>
+      <h3 id="vuln-h">
+        {t("cal.vuln")}
+        <Explain id="drought_tolerant" />
+      </h3>
       <p className="muted">{t("cal.vuln.note")}</p>
       {found.map((v) => (
         <div key={v.crop} className="cal-crop">

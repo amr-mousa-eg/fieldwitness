@@ -13,8 +13,8 @@
   model (Google Gemini free tier by default, or Groq) through a server-side proxy
   (`workers/chat-proxy/`). The LLM only explains evidence: it never ranks options or makes the
   rotation decision, every reply is labelled "AI-generated from project facts, may be wrong. Not a
-  recommendation.", and replies that mention yield mass, money or certainty are replaced by the
-  grounded answer. The decision engine stays deterministic and contains no generative AI.
+  recommendation.", and replies making forbidden yield mass, money or certainty claims are replaced
+  by the grounded answer. The decision engine stays deterministic and contains no generative AI.
 
 ## Tools
 

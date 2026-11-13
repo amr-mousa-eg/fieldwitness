@@ -49,13 +49,13 @@ function loadOwnKey(): OwnKeyConfig {
 let nextId = 0;
 const newId = (p: string) => `${p}-${Date.now()}-${nextId++}`;
 
-const welcome = (): ChatMessage => ({
+const makeWelcomeMessage = (): ChatMessage => ({
   id: "welcome",
   role: "assistant",
   kind: "note",
   text: t("chat.welcome"),
   sourceLabel: t("chat.title"),
-  followUps: ["What is FieldWitness?", "How do the three witnesses work?", "What are the project's honest limits?"],
+  followUps: [t("chat.chip.whatIs"), t("chat.chip.witnesses"), t("chat.chip.limits")],
 });
 
 /** Renders safe inline Markdown (**bold**, `code`) without dangerouslySetInnerHTML. */
@@ -102,7 +102,8 @@ export function FieldChatbot({
   const [shareCustomField, setShareCustomField] = useState(false);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [messages, setMessages] = useState<ChatMessage[]>(() => [welcome()]);
+  const locale = useLocale();
+  const [messages, setMessages] = useState<ChatMessage[]>(() => [makeWelcomeMessage()]);
 
   const listRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -111,6 +112,10 @@ export function FieldChatbot({
   const wasOpen = useRef(false);
 
   useEffect(() => subscribeLiveChatState(setLiveState), []);
+
+  useEffect(() => {
+    setMessages((prev) => prev.map((m) => (m.id === "welcome" ? makeWelcomeMessage() : m)));
+  }, [locale]);
 
   useEffect(() => {
     if (isOpen && listRef.current) listRef.current.scrollTop = listRef.current.scrollHeight;
@@ -134,7 +139,6 @@ export function FieldChatbot({
 
   useEffect(() => () => stopRef.current?.abort(), []);
 
-  const locale = useLocale();
   const activePack = fieldId ? liveState.fieldPack : null;
   const fieldLabel = resolveFieldLabel(activePack, index);
   const liveProfile = page === "add-field" ? liveState.liveProfile : null;
@@ -153,11 +157,19 @@ export function FieldChatbot({
     locale,
   };
 
+  const pageDisplay =
+    ctx.page === "field"
+      ? t("error.what.field")
+      : t(`nav.${ctx.page}` as "nav.map");
+
   const contextSummary = activePack
-    ? `Field ${fieldLabel ?? activePack.field.field_id.slice(0, 8)} (${activePack.field.area_ha.toFixed(1)} ha)`
+    ? `${t("field.label", { num: fieldLabel ?? activePack.field.field_id.slice(0, 8) })} (${t("fields.area", { area: activePack.field.area_ha.toFixed(1) })})`
     : liveProfile
-      ? `Global (${liveProfile.latitude.toFixed(2)}, ${liveProfile.longitude.toFixed(2)})`
-      : `${ctx.page.toUpperCase()} · ${regionId}`;
+      ? t("chat.ctxGlobal", {
+          lat: liveProfile.latitude.toFixed(2),
+          lon: liveProfile.longitude.toFixed(2),
+        })
+      : `${pageDisplay} · ${regionId}`;
 
   const useOwnKey = ownKey.enabled && ownKey.endpoint.trim() !== "" && ownKey.apiKey.trim() !== "";
   const llmEndpoint = useOwnKey ? ownKey.endpoint.trim() : PROXY_URL;
@@ -227,7 +239,9 @@ export function FieldChatbot({
           <header className="chatbot-header">
             <div className="chatbot-title-wrap">
               <strong className="chatbot-title">{t("chat.title")}</strong>
-              <span className="chatbot-ctx-pill">{contextSummary}</span>
+              <span className="chatbot-ctx-pill" title={t("chat.ctxLive")}>
+                {contextSummary}
+              </span>
             </div>
             <div className="chatbot-header-actions">
               <button
@@ -235,8 +249,10 @@ export function FieldChatbot({
                 className="chatbot-icon-btn"
                 onClick={() => {
                   stopRef.current?.abort();
-                  setMessages([welcome()]);
+                  setMessages([makeWelcomeMessage()]);
                 }}
+                aria-label={t("chat.reset")}
+                title={t("chat.reset")}
               >
                 {t("chat.reset")}
               </button>

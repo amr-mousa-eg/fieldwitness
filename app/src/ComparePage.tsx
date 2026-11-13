@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
+import { Explain } from "./Explain";
 import { loadCalendar, loadPack } from "./data";
 import { getFieldNumberMap } from "./fields";
 import { computeBareSoilMonths } from "./fieldSummary";
+import { formatDate } from "./format";
 import { DEFAULT_PRIORITIES, NO_CONSTRAINTS, rankOptions } from "./rank";
 import { compareHref, parseCompareQuery, routeHref } from "./route";
-import { cropName, optionName, t } from "./strings";
+import { cropName, optionName, t, useLocale } from "./strings";
 import { TagBadge } from "./tags";
 import type { FieldCalendar, FieldPack, Option, RegionIndex, Tagged } from "./types";
 
@@ -32,11 +34,16 @@ function fmtTaggedNum(v: Tagged | undefined, digits = 0, suffix = "") {
   );
 }
 
-function fmtDelta(a: number | null | undefined, b: number | null | undefined, digits = 0, unit = ""): string {
+function fmtDelta(a: number | null | undefined, b: number | null | undefined, digits = 0, unit = "") {
   if (a == null || b == null) return "—";
   const d = b - a;
   const sign = d > 0 ? "+" : "";
-  return `${sign}${d.toFixed(digits)}${unit}`;
+  return (
+    <>
+      <bdi dir="ltr">{sign}{d.toFixed(digits)}</bdi>
+      {unit}
+    </>
+  );
 }
 
 function highBareMonthCount(cal: FieldCalendar | null): number | null {
@@ -45,6 +52,7 @@ function highBareMonthCount(cal: FieldCalendar | null): number | null {
 }
 
 export function ComparePage({ index }: { index: RegionIndex }) {
+  useLocale();
   const numberMap = useMemo(() => getFieldNumberMap(index.fields), [index.fields]);
   const sortedFields = useMemo(
     () => [...index.fields].sort((x, y) => (numberMap.get(x.field_id) ?? 0) - (numberMap.get(y.field_id) ?? 0)),
@@ -113,8 +121,10 @@ export function ComparePage({ index }: { index: RegionIndex }) {
 
   const numA = numberMap.get(idA) ?? 1;
   const numB = numberMap.get(idB) ?? 2;
-  const labelA = `Field ${numA} (${idA.slice(0, 8)})`;
-  const labelB = `Field ${numB} (${idB.slice(0, 8)})`;
+  const fieldNameA = t("field.label", { num: numA });
+  const fieldNameB = t("field.label", { num: numB });
+  const labelA = `${fieldNameA} (${idA.slice(0, 8)})`;
+  const labelB = `${fieldNameB} (${idB.slice(0, 8)})`;
 
   const curA = packA ? currentOptionForPack(packA) : null;
   const curB = packB ? currentOptionForPack(packB) : null;
@@ -127,7 +137,9 @@ export function ComparePage({ index }: { index: RegionIndex }) {
   return (
     <article className="compare-page" aria-labelledby="compare-heading">
       <header className="compare-head">
-        <h2 id="compare-heading">{t("compare.heading")}</h2>
+        <h2 id="compare-heading">
+          {t("compare.heading")} <Explain id="compare_fields" />
+        </h2>
         <p className="muted">{t("compare.intro")}</p>
       </header>
 
@@ -139,7 +151,12 @@ export function ComparePage({ index }: { index: RegionIndex }) {
               const n = numberMap.get(f.field_id) ?? 0;
               return (
                 <option key={f.field_id} value={f.field_id}>
-                  Field {n} · {f.area_ha.toFixed(1)} ha · {f.top_grade} ({f.field_id.slice(0, 8)})
+                  {t("compare.fieldOption", {
+                    num: n,
+                    area: f.area_ha.toFixed(1),
+                    grade: f.top_grade,
+                    hash: f.field_id.slice(0, 8),
+                  })}
                 </option>
               );
             })}
@@ -161,7 +178,12 @@ export function ComparePage({ index }: { index: RegionIndex }) {
               const n = numberMap.get(f.field_id) ?? 0;
               return (
                 <option key={f.field_id} value={f.field_id}>
-                  Field {n} · {f.area_ha.toFixed(1)} ha · {f.top_grade} ({f.field_id.slice(0, 8)})
+                  {t("compare.fieldOption", {
+                    num: n,
+                    area: f.area_ha.toFixed(1),
+                    grade: f.top_grade,
+                    hash: f.field_id.slice(0, 8),
+                  })}
                 </option>
               );
             })}
@@ -200,24 +222,26 @@ export function ComparePage({ index }: { index: RegionIndex }) {
                     <td>{t("compare.area")}</td>
                     <td>{t("fields.area", { area: packA.field.area_ha.toFixed(1) })}</td>
                     <td>{t("fields.area", { area: packB.field.area_ha.toFixed(1) })}</td>
-                    <td>{fmtDelta(packA.field.area_ha, packB.field.area_ha, 1, " ha")}</td>
+                    <td>{fmtDelta(packA.field.area_ha, packB.field.area_ha, 1, ` ${t("unit.ha")}`)}</td>
                   </tr>
                   <tr>
                     <td>{t("compare.pixels")}</td>
-                    <td>{packA.field.interior_pixels} [O]</td>
-                    <td>{packB.field.interior_pixels} [O]</td>
+                    <td>{t("compare.pixelsTag", { count: packA.field.interior_pixels })}</td>
+                    <td>{t("compare.pixelsTag", { count: packB.field.interior_pixels })}</td>
                     <td>{fmtDelta(packA.field.interior_pixels, packB.field.interior_pixels, 0)}</td>
                   </tr>
                   <tr>
-                    <td>{t("compare.credibility")}</td>
+                    <td>
+                      {t("compare.credibility")} <Explain id="credibility" />
+                    </td>
                     <td>{fmtTaggedNum(packA.credibility, 2)}</td>
                     <td>{fmtTaggedNum(packB.credibility, 2)}</td>
                     <td>{fmtDelta(packA.credibility.value, packB.credibility.value, 2)}</td>
                   </tr>
                   <tr>
                     <td>{t("compare.asof")}</td>
-                    <td>{packA.data_as_of}</td>
-                    <td>{packB.data_as_of}</td>
+                    <td>{formatDate(new Date(`${packA.data_as_of}T00:00:00Z`))}</td>
+                    <td>{formatDate(new Date(`${packB.data_as_of}T00:00:00Z`))}</td>
                     <td>—</td>
                   </tr>
                 </tbody>
@@ -252,15 +276,15 @@ export function ComparePage({ index }: { index: RegionIndex }) {
                   </tr>
                   <tr>
                     <td>{t("compare.currentWater")}</td>
-                    <td>{fmtTaggedNum(curA?.metrics.water_use_mm, 0, " mm")}</td>
-                    <td>{fmtTaggedNum(curB?.metrics.water_use_mm, 0, " mm")}</td>
-                    <td>{fmtDelta(curA?.metrics.water_use_mm?.value, curB?.metrics.water_use_mm?.value, 0, " mm")}</td>
+                    <td>{fmtTaggedNum(curA?.metrics.water_use_mm, 0, t("compare.mmUnit"))}</td>
+                    <td>{fmtTaggedNum(curB?.metrics.water_use_mm, 0, t("compare.mmUnit"))}</td>
+                    <td>{fmtDelta(curA?.metrics.water_use_mm?.value, curB?.metrics.water_use_mm?.value, 0, t("compare.mmUnit"))}</td>
                   </tr>
                   <tr>
                     <td>{t("compare.currentBadWater")}</td>
-                    <td>{fmtTaggedNum(curA?.metrics.bad_year_water_mm, 0, " mm")}</td>
-                    <td>{fmtTaggedNum(curB?.metrics.bad_year_water_mm, 0, " mm")}</td>
-                    <td>{fmtDelta(curA?.metrics.bad_year_water_mm?.value, curB?.metrics.bad_year_water_mm?.value, 0, " mm")}</td>
+                    <td>{fmtTaggedNum(curA?.metrics.bad_year_water_mm, 0, t("compare.mmUnit"))}</td>
+                    <td>{fmtTaggedNum(curB?.metrics.bad_year_water_mm, 0, t("compare.mmUnit"))}</td>
+                    <td>{fmtDelta(curA?.metrics.bad_year_water_mm?.value, curB?.metrics.bad_year_water_mm?.value, 0, t("compare.mmUnit"))}</td>
                   </tr>
                   <tr>
                     <td>{t("compare.currentRyi")}</td>
@@ -282,15 +306,15 @@ export function ComparePage({ index }: { index: RegionIndex }) {
                   </tr>
                   <tr>
                     <td>{t("compare.topWater")}</td>
-                    <td>{fmtTaggedNum(topA?.metrics.water_use_mm, 0, " mm")}</td>
-                    <td>{fmtTaggedNum(topB?.metrics.water_use_mm, 0, " mm")}</td>
-                    <td>{fmtDelta(topA?.metrics.water_use_mm?.value, topB?.metrics.water_use_mm?.value, 0, " mm")}</td>
+                    <td>{fmtTaggedNum(topA?.metrics.water_use_mm, 0, t("compare.mmUnit"))}</td>
+                    <td>{fmtTaggedNum(topB?.metrics.water_use_mm, 0, t("compare.mmUnit"))}</td>
+                    <td>{fmtDelta(topA?.metrics.water_use_mm?.value, topB?.metrics.water_use_mm?.value, 0, t("compare.mmUnit"))}</td>
                   </tr>
                   <tr>
                     <td>{t("compare.topBadWater")}</td>
-                    <td>{fmtTaggedNum(topA?.metrics.bad_year_water_mm, 0, " mm")}</td>
-                    <td>{fmtTaggedNum(topB?.metrics.bad_year_water_mm, 0, " mm")}</td>
-                    <td>{fmtDelta(topA?.metrics.bad_year_water_mm?.value, topB?.metrics.bad_year_water_mm?.value, 0, " mm")}</td>
+                    <td>{fmtTaggedNum(topA?.metrics.bad_year_water_mm, 0, t("compare.mmUnit"))}</td>
+                    <td>{fmtTaggedNum(topB?.metrics.bad_year_water_mm, 0, t("compare.mmUnit"))}</td>
+                    <td>{fmtDelta(topA?.metrics.bad_year_water_mm?.value, topB?.metrics.bad_year_water_mm?.value, 0, t("compare.mmUnit"))}</td>
                   </tr>
                   <tr>
                     <td>{t("compare.topRyi")}</td>
@@ -301,14 +325,14 @@ export function ComparePage({ index }: { index: RegionIndex }) {
                   <tr>
                     <td>{t("compare.topBareMonths")}</td>
                     <td>
-                      {topA ? `${computeBareMonths(topA)?.toFixed(1) ?? "—"} mo [D]` : "—"}
+                      {topA ? `${computeBareMonths(topA)?.toFixed(1) ?? "—"}${t("compare.moUnit")} [D]` : "—"}
                     </td>
                     <td>
-                      {topB ? `${computeBareMonths(topB)?.toFixed(1) ?? "—"} mo [D]` : "—"}
+                      {topB ? `${computeBareMonths(topB)?.toFixed(1) ?? "—"}${t("compare.moUnit")} [D]` : "—"}
                     </td>
                     <td>
                       {topA && topB
-                        ? fmtDelta(computeBareMonths(topA), computeBareMonths(topB), 1, " mo")
+                        ? fmtDelta(computeBareMonths(topA), computeBareMonths(topB), 1, t("compare.moUnit"))
                         : "—"}
                     </td>
                   </tr>
@@ -343,10 +367,12 @@ export function ComparePage({ index }: { index: RegionIndex }) {
                 </thead>
                 <tbody>
                   <tr>
-                    <td>{t("compare.obsBareHighMonths")}</td>
-                    <td>{bareHighA != null ? `${bareHighA} / 12 [O]` : "—"}</td>
-                    <td>{bareHighB != null ? `${bareHighB} / 12 [O]` : "—"}</td>
-                    <td>{fmtDelta(bareHighA, bareHighB, 0, " mo")}</td>
+                    <td>
+                      {t("compare.obsBareHighMonths")} <Explain id="bare_soil_months" />
+                    </td>
+                    <td>{bareHighA != null ? t("compare.outOf12", { count: bareHighA }) : "—"}</td>
+                    <td>{bareHighB != null ? t("compare.outOf12", { count: bareHighB }) : "—"}</td>
+                    <td>{fmtDelta(bareHighA, bareHighB, 0, t("compare.moUnit"))}</td>
                   </tr>
                   <tr>
                     <td>{t("compare.recentHistory")}</td>
@@ -369,10 +395,10 @@ export function ComparePage({ index }: { index: RegionIndex }) {
             </div>
             <div className="compare-actions">
               <a className="action-btn" href={routeHref(index.region_id, idA)}>
-                {t("compare.openField", { field: `Field ${numA}` })}
+                {t("compare.openField", { field: fieldNameA })}
               </a>
               <a className="action-btn" href={routeHref(index.region_id, idB)}>
-                {t("compare.openField", { field: `Field ${numB}` })}
+                {t("compare.openField", { field: fieldNameB })}
               </a>
             </div>
           </section>

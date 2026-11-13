@@ -7,6 +7,8 @@
  * RYI) respecting farmer irrigation caps and crop constraints.
  */
 
+import { t } from "./strings";
+
 export interface GlobalEvaluationOptions {
   irrigationBudgetMm?: number;
   cantGrow?: string[];
@@ -27,7 +29,7 @@ export interface GlobalRotationResult {
 export interface LiveClimateProfile {
   latitude: number;
   longitude: number;
-  source: "NASA POWER Daily Meteorology (API)" | "NASA POWER Regional Baseline";
+  source: string;
   yearsEvaluated: number;
   tag: "[D] / [E]";
   annualPrecipitationMm: number;
@@ -35,7 +37,7 @@ export interface LiveClimateProfile {
   waterDeficitMm: number;
   aridityIndex: number;
   climateZone: string;
-  simulationMode: "FAO-56 Multi-Year Daily Balance [D]" | "Regional Baseline Model [A/D]";
+  simulationMode: string;
   recommendedRotations: GlobalRotationResult[];
   soilContext: {
     source: string;
@@ -191,10 +193,10 @@ function simulateSequenceDaily(
 }
 
 function classifyTexture(sandPct: number, clayPct: number): string {
-  if (sandPct > 70 && clayPct < 15) return "Sandy Loam / Loamy Sand";
-  if (clayPct >= 35) return "Clay / Silty Clay Loam";
-  if (sandPct < 35 && clayPct < 27) return "Silt Loam";
-  return "Loam / Clay Loam";
+  if (sandPct > 70 && clayPct < 15) return t("live.texture.sandyLoam");
+  if (clayPct >= 35) return t("live.texture.clay");
+  if (sandPct < 35 && clayPct < 27) return t("live.texture.siltLoam");
+  return t("live.texture.loam");
 }
 
 async function fetchLiveSoilContext(
@@ -221,7 +223,7 @@ async function fetchLiveSoilContext(
         const awsCm = Number(row?.[2]);
         if (Number.isFinite(awsCm) && awsCm > 1) {
           return {
-            source: `USDA-NRCS SSURGO (${String(row?.[1] || "Soil Survey").slice(0, 40)})`,
+            source: t("live.soilSrc.ssurgo", { name: String(row?.[1] || "Soil Survey").slice(0, 40) }),
             tag: "[E]",
             estimatedAweMm: Math.round(awsCm * 10 + omBonus),
             textureClass: String(row?.[1] || "SSURGO Surveyed Soil").slice(0, 42),
@@ -258,7 +260,7 @@ async function fetchLiveSoilContext(
       awsMm = Math.max(95, Math.min(340, awsMm + Math.round(omBonus)));
       if (sandRaw != null || fcRaw != null) {
         return {
-          source: "ISRIC SoilGrids 2.0 REST (Live 250 m)",
+          source: t("live.soilSrc.soilgrids"),
           tag: "[E]",
           estimatedAweMm: awsMm,
           textureClass: classifyTexture(sandPct, clayPct),
@@ -271,10 +273,10 @@ async function fetchLiveSoilContext(
 
   const inPilotKs = Math.abs(lon - -101) < 2 && Math.abs(lat - 38.5) < 2;
   return {
-    source: inPilotKs ? "USDA-NRCS SSURGO Kansas Median [E]" : "Global FAO-56 Soil Prior (Offline Fallback) [A]",
+    source: inPilotKs ? t("live.soilSrc.ksMedian") : t("live.soilSrc.prior"),
     tag: inPilotKs ? "[E]" : "[A]",
     estimatedAweMm: (inPilotKs ? 282 : 180) + Math.round(omBonus),
-    textureClass: inPilotKs ? "Silt Loam (Keith / Richfield)" : "Loam / Silt Loam (Prior)",
+    textureClass: inPilotKs ? t("live.texture.ksMedian") : t("live.texture.prior"),
   };
 }
 
@@ -291,51 +293,51 @@ function selectCandidatePool(
     pool = [
       {
         sequence: ["winter_wheat", "sorghum", "fallow"],
-        name: "Wheat–Sorghum–Fallow",
+        name: t("live.rot.wheatSorghumFallow"),
         waterDemand: "Low dryland",
-        rationale: "Conserves offseason precipitation; summer sorghum captures warm-season rainfall.",
+        rationale: t("live.rat.aridWsf"),
       },
       {
         sequence: ["winter_wheat", "fallow", "winter_wheat"],
-        name: "Wheat–Fallow",
+        name: t("live.rot.wheatFallow"),
         waterDemand: "Low dryland",
-        rationale: "Recharges deep profile water during fallow prior to autumn wheat sowing.",
+        rationale: t("live.rat.aridWf"),
       },
       {
         sequence: ["sorghum", "fallow", "cover_crop"],
-        name: "Sorghum–Fallow–Cover",
+        name: t("live.rot.sorghumFallowCover"),
         waterDemand: "Moderate",
-        rationale: "Adds winter ground cover to cut wind/water bare-soil exposure.",
+        rationale: t("live.rat.aridSfc"),
       },
     ];
   } else if (aridityIndex < 0.65) {
     pool = [
       {
         sequence: ["winter_wheat", "maize", "soybean"],
-        name: "Wheat–Maize–Soybean",
+        name: t("live.rot.wheatMaizeSoybean"),
         waterDemand: "Moderate",
-        rationale: "Balances cereal transpiration with legume N-fixation and pest family breaks.",
+        rationale: t("live.rat.subWms"),
       },
       {
         sequence: ["winter_wheat", "sorghum", "fallow"],
-        name: "Wheat–Sorghum–Fallow",
+        name: t("live.rot.wheatSorghumFallow"),
         waterDemand: "Low-Moderate",
-        rationale: "Resilient hedge when rainfall drops below seasonal norms or irrigation is capped.",
+        rationale: t("live.rat.subWsf"),
       },
       {
         sequence: ["maize", "soybean", "cover_crop"],
-        name: "Maize–Soybean–Cover",
+        name: t("live.rot.maizeSoybeanCover"),
         waterDemand: "Moderate-High",
-        rationale: "High canopy cover days with reduced offseason bare soil.",
+        rationale: t("live.rat.subMsc"),
       },
     ];
   } else {
     pool = [
       {
         sequence: ["maize", "soybean", "cover_crop"],
-        name: "Maize–Soybean–Cover",
+        name: t("live.rot.maizeSoybeanCover"),
         waterDemand: "High",
-        rationale: "Maintains continuous residue and root uptake under humid rainfall.",
+        rationale: t("live.rat.humMsc"),
       },
       {
         sequence: isTropical
@@ -344,12 +346,12 @@ function selectCandidatePool(
             ? ["durum_wheat", "chickpea", "fallow"]
             : ["winter_wheat", "maize", "soybean"],
         name: isTropical
-          ? "Rice–Maize–Pulses"
+          ? t("live.rot.riceMaizePulses")
           : isMediterranean
-            ? "Mediterranean Wheat–Chickpea"
-            : "Wheat–Maize–Soybean",
+            ? t("live.rot.medWheatChickpea")
+            : t("live.rot.wheatMaizeSoybean"),
         waterDemand: "Moderate-High",
-        rationale: "Matched to regional photoperiod and wet-season distribution.",
+        rationale: t("live.rat.humRegion"),
       },
     ];
   }
@@ -456,11 +458,11 @@ export async function fetchLiveClimateProfile(
   const waterDeficit = Math.max(0, annualEto - annualPrecip);
   const aridityIndex = Math.round((annualPrecip / Math.max(1, annualEto)) * 100) / 100;
 
-  let climateZone = "Continental Semi-Arid";
-  if (aridityIndex < 0.2) climateZone = "Hyper-Arid / Desert";
-  else if (aridityIndex < 0.4) climateZone = "Semi-Arid Steppe (Comparable to Western Kansas)";
-  else if (aridityIndex < 0.65) climateZone = "Dry Sub-Humid";
-  else climateZone = "Humid Temperate / Wet";
+  let climateZone = t("live.zone.semiArid");
+  if (aridityIndex < 0.2) climateZone = t("live.zone.hyperArid");
+  else if (aridityIndex < 0.4) climateZone = t("live.zone.semiArid");
+  else if (aridityIndex < 0.65) climateZone = t("live.zone.drySubHumid");
+  else climateZone = t("live.zone.humid");
 
   const cantGrow = new Set(options.cantGrow ?? []);
   const irrBudget = Math.max(0, options.irrigationBudgetMm ?? 0);
@@ -482,7 +484,7 @@ export async function fetchLiveClimateProfile(
   return {
     latitude: lat,
     longitude: lon,
-    source: usedApi ? "NASA POWER Daily Meteorology (API)" : "NASA POWER Regional Baseline",
+    source: usedApi ? t("live.source.api") : t("live.source.baseline"),
     yearsEvaluated: yearlyWeather.length,
     tag: "[D] / [E]",
     annualPrecipitationMm: annualPrecip,
@@ -490,7 +492,7 @@ export async function fetchLiveClimateProfile(
     waterDeficitMm: waterDeficit,
     aridityIndex,
     climateZone,
-    simulationMode: usedApi ? "FAO-56 Multi-Year Daily Balance [D]" : "Regional Baseline Model [A/D]",
+    simulationMode: usedApi ? t("live.mode.fao56") : t("live.mode.baseline"),
     recommendedRotations,
     soilContext,
   };

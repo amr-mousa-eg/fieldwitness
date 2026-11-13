@@ -133,11 +133,11 @@
 
 .sim3d-alt-notice {
   padding: 0.45rem 0.75rem;
-  background: rgba(0, 0, 0, 0.03);
-  border-left: 3px solid var(--muted);
-  border-radius: 0 4px 4px 0;
+  background: var(--surface-tint);
+  border-inline-start: 3px solid var(--accent);
+  border-radius: 4px;
   font-size: 0.85rem;
-  color: var(--muted);
+  color: var(--ink);
 }
 .sim3d-alt-notice p {
   margin: 0;
@@ -393,8 +393,8 @@
 .sim3d-fallback-banner {
   padding: 0.5rem 0.75rem;
   background: rgba(245, 158, 11, 0.1);
-  border-left: 3px solid #f59e0b;
-  border-radius: 0 4px 4px 0;
+  border-inline-start: 3px solid #f59e0b;
+  border-radius: 4px;
   font-size: 0.85rem;
 }
 .sim3d-fallback-banner p {
@@ -575,7 +575,7 @@
 }
 .farm-label:last-child {
   justify-content: flex-end;
-  text-align: right;
+  text-align: end;
 }
 .farm-ns {
   padding: 0.05rem 0.45rem;

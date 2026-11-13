@@ -33,7 +33,7 @@ export function App() {
   useEffect(() => {
     loadRegions()
       .then(setRegions)
-      .catch((e: Error) => setError(t("error.load", { what: "the region list", message: e.message })));
+      .catch((e: Error) => setError(t("error.load", { what: t("error.what.regions"), message: e.message })));
   }, []);
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export function App() {
       .then((idx) => {
         setIndex(idx);
       })
-      .catch((e: Error) => setError(t("error.load", { what: "the region", message: e.message })));
+      .catch((e: Error) => setError(t("error.load", { what: t("error.what.region"), message: e.message })));
   }, [regionId]);
 
   // T9.7: after moving to another page or field, put keyboard focus at the start of the new

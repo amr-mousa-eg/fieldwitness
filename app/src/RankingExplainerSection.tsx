@@ -1,4 +1,6 @@
 import { useMemo } from "react";
+import { Explain } from "./Explain";
+import { unitLabel } from "./format";
 import { type Priorities, type Ranked } from "./rank";
 import { explainTopRanking, type RankingExplanation } from "./rankingExplainer";
 import { optionName, t } from "./strings";
@@ -28,18 +30,19 @@ export function RankingExplainerSection({
     <section ref={seenRef} className="ranking-explainer-card" aria-labelledby="ranking-explainer-h">
       <h4 id="ranking-explainer-h" className="ranking-explainer-title">
         {t("rankExplainer.heading")}
+        <Explain id="pareto_ranking" />
       </h4>
       <p className="ranking-explainer-sentence" data-testid="ranking-explainer-sentence">
         {sentence}
       </p>
 
       <div className="ranking-explainer-table-wrap">
-        <table className="ranking-explainer-table" aria-label="Ranking contribution breakdown">
+        <table className="ranking-explainer-table" aria-label={t("rankExplainer.tableAria")}>
           <thead>
             <tr>
-              <th scope="col">Priority Criterion</th>
+              <th scope="col">{t("rankExplainer.thCriterion")}</th>
               <th scope="col">
-                Weight <TagBadge tag="A" source="user slider choice" />
+                {t("rankExplainer.thWeight")} <TagBadge tag="A" source={t("rankExplainer.weightSource")} />
               </th>
               <th scope="col">
                 {optionName(top.option)} <span className="rank-badge top-badge">#1</span>
@@ -47,7 +50,7 @@ export function RankingExplainerSection({
               <th scope="col">
                 {optionName(next.option)} <span className="rank-badge next-badge">#2</span>
               </th>
-              <th scope="col">Score Impact</th>
+              <th scope="col">{t("rankExplainer.thImpact")}</th>
             </tr>
           </thead>
           <tbody>
@@ -63,8 +66,8 @@ export function RankingExplainerSection({
                   <td className="ranking-explainer-crit-cell">
                     <span className="crit-label">{cTop.label}</span>
                     {isDominant && (
-                      <span className="dominant-tag" title="Primary differentiator (>= 40% of score difference)">
-                        primary
+                      <span className="dominant-tag" title={t("rankExplainer.primaryTitle")}>
+                        {t("rankExplainer.primary")}
                       </span>
                     )}
                   </td>
@@ -84,8 +87,8 @@ export function RankingExplainerSection({
                     <div className="raw-metrics-list">
                       {cTop.metrics.map((m) => (
                         <span key={m.metric} className="raw-metric-chip">
-                          {m.value != null ? m.value.toFixed(1) : "—"} {m.unit}{" "}
-                          <TagBadge tag={m.tag as Tag} source="modeled metric" />
+                          {m.value != null ? m.value.toFixed(1) : "—"} {unitLabel(m.unit)}{" "}
+                          <TagBadge tag={m.tag as Tag} source={t("rankExplainer.metricSource")} />
                         </span>
                       ))}
                     </div>
@@ -103,8 +106,8 @@ export function RankingExplainerSection({
                     <div className="raw-metrics-list">
                       {cNext.metrics.map((m) => (
                         <span key={m.metric} className="raw-metric-chip">
-                          {m.value != null ? m.value.toFixed(1) : "—"} {m.unit}{" "}
-                          <TagBadge tag={m.tag as Tag} source="modeled metric" />
+                          {m.value != null ? m.value.toFixed(1) : "—"} {unitLabel(m.unit)}{" "}
+                          <TagBadge tag={m.tag as Tag} source={t("rankExplainer.metricSource")} />
                         </span>
                       ))}
                     </div>
@@ -120,7 +123,7 @@ export function RankingExplainerSection({
           </tbody>
           <tfoot>
             <tr className="ranking-explainer-total-row">
-              <th scope="row">Total Weighted Score</th>
+              <th scope="row">{t("rankExplainer.thTotal")}</th>
               <td>—</td>
               <td className="ranking-explainer-num-cell">
                 <strong>{top.totalScore.toFixed(3)}</strong>
