@@ -74,7 +74,9 @@ function GradeValiditySection() {
   const verdictRef = useTourSeen("limits");
   return (
     <section className="score-block grade-validity" aria-labelledby="score-gv">
-      <h4 id="score-gv">{t("score.gradeValidity.heading")}</h4>
+      <h4 id="score-gv">
+        {t("score.gradeValidity.heading")} <Explain id="evidence_grade" />
+      </h4>
       <p className="muted">{t("score.gradeValidity.intro")}</p>
 
       <div
@@ -104,32 +106,32 @@ function GradeValiditySection() {
           <tbody>
             <tr>
               <th scope="row">
-                <span className="method-name">Grade B</span>
+                <span className="method-name">{t("score.gradeLabel", { grade: "B" })}</span>
                 <span className="method-desc">{t("score.gradeValidity.bDesc")}</span>
               </th>
               <td>{g.B.n}</td>
               <td>{g.B.forecast_ci_crps_mean.toFixed(2)} [{g.B.forecast_ci_crps_ci95[0].toFixed(2)}, {g.B.forecast_ci_crps_ci95[1].toFixed(2)}]</td>
-              <td>{g.B.forecast_peak_abs_err_mean.toFixed(1)} d</td>
+              <td>{t("score.daysShort", { v: g.B.forecast_peak_abs_err_mean.toFixed(1) })}</td>
               <td>{Math.round(g.B.forecast_ci_covered90_share * 100)} %</td>
             </tr>
             <tr>
               <th scope="row">
-                <span className="method-name">Grade C</span>
+                <span className="method-name">{t("score.gradeLabel", { grade: "C" })}</span>
                 <span className="method-desc">{t("score.gradeValidity.cDesc")}</span>
               </th>
               <td>{g.C.n}</td>
               <td>{g.C.forecast_ci_crps_mean.toFixed(2)} [{g.C.forecast_ci_crps_ci95[0].toFixed(2)}, {g.C.forecast_ci_crps_ci95[1].toFixed(2)}]</td>
-              <td>{g.C.forecast_peak_abs_err_mean.toFixed(1)} d</td>
+              <td>{t("score.daysShort", { v: g.C.forecast_peak_abs_err_mean.toFixed(1) })}</td>
               <td>{Math.round(g.C.forecast_ci_covered90_share * 100)} %</td>
             </tr>
             <tr>
               <th scope="row">
-                <span className="method-name">Grade D</span>
+                <span className="method-name">{t("score.gradeLabel", { grade: "D" })}</span>
                 <span className="method-desc">{t("score.gradeValidity.dDesc")}</span>
               </th>
               <td>{g.D.n}</td>
               <td>{g.D.forecast_ci_crps_mean.toFixed(2)} [{g.D.forecast_ci_crps_ci95[0].toFixed(2)}, {g.D.forecast_ci_crps_ci95[1].toFixed(2)}]</td>
-              <td>{g.D.forecast_peak_abs_err_mean.toFixed(1)} d</td>
+              <td>{t("score.daysShort", { v: g.D.forecast_peak_abs_err_mean.toFixed(1) })}</td>
               <td>{Math.round(g.D.forecast_ci_covered90_share * 100)} %</td>
             </tr>
           </tbody>

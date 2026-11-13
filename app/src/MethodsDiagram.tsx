@@ -1,4 +1,5 @@
 import { useRoute } from "./route";
+import { type StringKey, t } from "./strings";
 
 /**
  * Methods diagram (Phase 12, Item 9; redesigned 11 Nov 2026).
@@ -150,21 +151,23 @@ function Box({ box, regionId }: { box: DiagramBox; regionId: string }) {
       data-status={box.status}
     >
       <span className="mdia-box-head">
-        <span className="mdia-box-label">{box.label}</span>
+        <span className="mdia-box-label">{t(`methods.diagram.box.${box.id}.label` as StringKey)}</span>
         {box.status && (
-          <span className={`mdia-status mdia-status--${box.status.toLowerCase()}`}>{box.status}</span>
+          <span className={`mdia-status mdia-status--${box.status.toLowerCase()}`}>
+            {t(`methods.diagram.status.${box.status.toLowerCase()}` as StringKey)}
+          </span>
         )}
       </span>
       {box.sources && (
         <ul className="mdia-sources">
-          {box.sources.map((s) => (
-            <li key={s.name}>{s.name}</li>
+          {box.sources.map((s, idx) => (
+            <li key={s.name}>{t(`methods.diagram.src.${idx}` as StringKey)}</li>
           ))}
         </ul>
       )}
-      {box.lines.map((line) => (
+      {box.lines.map((line, idx) => (
         <span key={line} className="mdia-line">
-          {line}
+          {t(`methods.diagram.box.${box.id}.line${idx}` as StringKey)}
         </span>
       ))}
     </a>
@@ -176,7 +179,7 @@ export function MethodsDiagram() {
   return (
     <figure className="mdia" aria-labelledby="methods-diagram-caption">
       <figcaption id="methods-diagram-caption" className="mdia-caption">
-        How FieldWitness works, in four steps. Select a box to read how that part works.
+        {t("methods.diagram.caption")}
       </figcaption>
       <ol className="mdia-stages">
         {DIAGRAM_STAGES.map((stage) => (
@@ -185,8 +188,8 @@ export function MethodsDiagram() {
               <span className="mdia-step" aria-hidden="true">
                 {stage.step}
               </span>
-              <span className="sr-only">Step {stage.step}: </span>
-              {stage.title}
+              <span className="sr-only">{t("methods.diagram.stepSr", { step: stage.step })}</span>
+              {t(`methods.diagram.stage.${stage.id}` as StringKey)}
             </p>
             <div className="mdia-boxes">
               {stage.boxes.map((box) => (

@@ -23,7 +23,14 @@ import {
   missingWitnesses,
   witnessRows,
 } from "./advisor";
-import { formatDate, formatTagged, harvestDayToDate } from "./format";
+import {
+  formatDate,
+  formatTagged,
+  harvestDayToDate,
+  localizeCounterfactualFlip,
+  localizeGradeReason,
+  localizeMeasureNext,
+} from "./format";
 import { cropName, metricName, optionName, t } from "./strings";
 import { TagBadge, TaggedValue } from "./tags";
 import { CHART_COLOURS } from "./theme";
@@ -136,7 +143,7 @@ function OptionWitnesses({ option, place }: { option: Option; place: number | nu
       )}
       <ul className="grade-reasons">
         {option.grade_reasons.map((s, i) => (
-          <li key={i}>{s}</li>
+          <li key={i}>{localizeGradeReason(s)}</li>
         ))}
       </ul>
     </details>
@@ -171,7 +178,9 @@ export function Backtest({ pack, mode: fixedMode }: { pack: FieldPack; mode?: Le
   if (metrics.length === 0 || rows.length === 0) {
     return (
       <section aria-labelledby="backtest-h">
-        <h3 id="backtest-h">{t("advisor.backtest")}</h3>
+        <h3 id="backtest-h">
+          {t("advisor.backtest")} <Explain id="hindcast" />
+        </h3>
         <p className="muted">{t("advisor.backtest.none")}</p>
       </section>
     );
@@ -183,7 +192,9 @@ export function Backtest({ pack, mode: fixedMode }: { pack: FieldPack; mode?: Le
 
   return (
     <section aria-labelledby="backtest-h">
-      <h3 id="backtest-h">{t("advisor.backtest")}</h3>
+      <h3 id="backtest-h">
+        {t("advisor.backtest")} <Explain id="hindcast" />
+      </h3>
       <p className="muted">{t("advisor.backtest.note", { asof: asOf.join(", ") })}</p>
       <div className="chart-controls">
         <label>
@@ -223,11 +234,20 @@ export function Backtest({ pack, mode: fixedMode }: { pack: FieldPack; mode?: Le
       <div className="chart" role="img" aria-label={t("advisor.backtest.alt")}>
         <ResponsiveContainer width="100%" height={240}>
           <ComposedChart data={data} margin={{ top: 10, right: 16, bottom: 0, left: 0 }}>
-            <CartesianGrid strokeDasharray="2 4" vertical={false} />
-            <XAxis dataKey="label" type="category" padding={{ left: 60, right: 60 }} />
-            <YAxis width={48} domain={["auto", "auto"]} />
+            <CartesianGrid stroke={chart.grid} strokeDasharray="2 4" vertical={false} />
+            <XAxis
+              dataKey="label"
+              type="category"
+              padding={{ left: 60, right: 60 }}
+              stroke={chart.axis}
+              tick={{ fill: chart.axis, fontSize: 12 }}
+            />
+            <YAxis width={48} domain={["auto", "auto"]} stroke={chart.axis} tick={{ fill: chart.axis, fontSize: 12 }} />
             <ReferenceLine y={0} stroke={chart.pred} />
-            <Tooltip formatter={(v) => (Array.isArray(v) ? null : Number(v).toFixed(1))} />
+            <Tooltip
+              contentStyle={{ backgroundColor: chart.tooltipBg, borderColor: chart.tooltipBorder, color: chart.tooltipText }}
+              formatter={(v) => (Array.isArray(v) ? null : Number(v).toFixed(1))}
+            />
             <Scatter dataKey="pred" name={t("advisor.predicted")} fill={chart.pred} isAnimationActive={false}>
               <ErrorBar dataKey="err" direction="y" width={8} stroke={chart.pred} />
             </Scatter>
@@ -279,23 +299,25 @@ export function AdvisorConsole({ pack }: { pack: FieldPack }) {
   const alternatives = pack.options.filter((o) => o.option_id !== "current").sort((a, b) => a.rank - b.rank);
   return (
     <div className="advisor">
-      <section className="advisor-limits-callout" aria-label="Advisor caveats and limits">
+      <section className="advisor-limits-callout" aria-label={t("advisor.caveats.aria")}>
         <p className="fixed-line">{t("fixed.judgment")}</p>
         <div className="callout-grid">
           <div className="callout-item">
-            <strong>Hindcast skill:</strong> Weak on 2022–2024 seasons (90 % coverage is 35.0 % for canopy integral, 9.0 % for cover days; Spearman &rho; = 0.264). Model uncertainty intervals are wide.
+            <strong>{t("advisor.caveats.hindcast.title")}</strong> {t("advisor.caveats.hindcast.body")}
           </div>
           <div className="callout-item">
-            <strong>Neighbour witness:</strong> Observational satellite contrasts inactive (0 of 32 passed diagnostic checks; capped at B). Rotations matching 30-year K-State Colby Research Center agronomic trials (tag [E]) provide independent empirical validation.
+            <strong>{t("advisor.caveats.neighbour.title")}</strong> {t("advisor.caveats.neighbour.body")}
           </div>
           <div className="callout-item">
-            <strong>Season detection:</strong> Missed pre-registered accuracy target in Kansas (78.3 % match vs 90.0 % target).
+            <strong>{t("advisor.caveats.season.title")}</strong> {t("advisor.caveats.season.body")}
           </div>
         </div>
       </section>
       <section className="advisor-top" aria-labelledby="cred-h">
         <div>
-          <h3 id="cred-h">{t("advisor.credibility")}</h3>
+          <h3 id="cred-h">
+            {t("advisor.credibility")} <Explain id="credibility" />
+          </h3>
           <p className="big-number">
             <TaggedValue v={pack.credibility} />
           </p>
@@ -304,9 +326,11 @@ export function AdvisorConsole({ pack }: { pack: FieldPack }) {
         </div>
         <div>
           <h3>{t("advisor.next")}</h3>
-          <p>{pack.advice.measure_next}</p>
-          <h3>{t("advisor.flip")}</h3>
-          <p>{pack.advice.counterfactual_flip}</p>
+          <p>{localizeMeasureNext(pack.advice.measure_next)}</p>
+          <h3>
+            {t("advisor.flip")} <Explain id="flip_probability" />
+          </h3>
+          <p>{localizeCounterfactualFlip(pack.advice.counterfactual_flip)}</p>
           <p>
             {t("advisor.flipProb")} <TaggedValue v={pack.advice.flip_probability} />
           </p>
@@ -314,8 +338,7 @@ export function AdvisorConsole({ pack }: { pack: FieldPack }) {
       </section>
       <section aria-labelledby="witness-h">
         <h3 id="witness-h">
-          {t("advisor.witnesses")}
-          <Explain id="evidence_grade" />
+          {t("advisor.witnesses")} <Explain id="witness" />
         </h3>
         <p className="muted">{t("advisor.witnesses.note")}</p>
         {current.map((o) => (

@@ -16,18 +16,34 @@ import { bt } from "./builder/strings";
 import { FarmScene } from "./FarmScene";
 import { builderEnabled, builderOpenAtStart, farmEnabled } from "./featureFlags";
 import { weekTelemetry } from "./field3d/farm";
-import { FARM_TEXT } from "./field3d/farmText";
 import { MIN_MEDIAN_FPS, type QualityTier, historyOnlyKey, pickQuality } from "./field3d/growth";
 import { isHistoryOnly } from "./seasons";
 import { Explain } from "./Explain";
 import { SIM3D_EXPLAINERS, explainer } from "./explainers";
 import { loadSim3D } from "./data";
-import { cropName, t } from "./strings";
+import { type StringKey, cropName, getLocale, t } from "./strings";
 import { TagBadge } from "./tags";
 import { CHART_COLOURS } from "./theme";
 import type { FieldPack, FieldSim3D, Sim3DOption, Sim3DScenario } from "./types";
 import { emitTour } from "./tourEvents";
 import { useTheme } from "./useTheme";
+
+function sim3dWeatherLabel(label: string, year: number): string {
+  if (getLocale() !== "ar") return label;
+  if (/^Weather of \d{4} \(median-rain year\)$/i.test(label)) {
+    return `طقس ${year} (سنة أمطار متوسطة)`;
+  }
+  return label;
+}
+
+function sim3dOptionLabel(opt: Pick<Sim3DOption, "option_id" | "label" | "sequence">): string {
+  if (getLocale() !== "ar") return opt.label;
+  if (opt.option_id === "current") return t("sim3d.current");
+  const seq = opt.sequence.map((c) => cropName(c)).join(" → ");
+  const m = /^Alternative\s+(\d+):/i.exec(opt.label);
+  if (m) return `${t("card.alt", { n: m[1] })}: ${seq}`;
+  return seq || opt.label;
+}
 
 // Lazy: the builder (and its physics port) loads only when the feature flag is on.
 const RotationBuilder = lazy(() => import("./builder/RotationBuilder"));
@@ -52,20 +68,29 @@ function prefersReducedMotion(): boolean {
   );
 }
 
-const SCENARIO_LABELS: Record<string, string> = {
-  "t+0_p+0": "Median weather (+0°C, 0% rain)",
-  "t+0_p-20": "Dry year (+0°C, -20% rain)",
-  "t+0_p-10": "Moderately dry (+0°C, -10% rain)",
-  "t+0_p+10": "Wet year (+0°C, +10% rain)",
-  "t+1_p+0": "Warming +1°C (0% rain)",
-  "t+1_p-20": "Hot & dry (+1°C, -20% rain)",
-  "t+1_p-10": "Hot & moderate dry (+1°C, -10% rain)",
-  "t+1_p+10": "Hot & wet (+1°C, +10% rain)",
-  "t+2_p+0": "Warming +2°C (0% rain)",
-  "t+2_p-20": "Severe heat & drought (+2°C, -20% rain)",
-  "t+2_p-10": "Heat & dry (+2°C, -10% rain)",
-  "t+2_p+10": "Heat & high rain (+2°C, +10% rain)",
-};
+const KNOWN_STAGES = new Set(["fallow", "initial", "development", "mid", "late"]);
+const KNOWN_SCENARIOS = new Set([
+  "t+0_p+0",
+  "t+0_p-20",
+  "t+0_p-10",
+  "t+0_p+10",
+  "t+1_p+0",
+  "t+1_p-20",
+  "t+1_p-10",
+  "t+1_p+10",
+  "t+2_p+0",
+  "t+2_p-20",
+  "t+2_p-10",
+  "t+2_p+10",
+]);
+
+function scenarioLabel(sid: string): string {
+  return KNOWN_SCENARIOS.has(sid) ? t(`sim3d.scen.${sid}` as StringKey) : sid;
+}
+
+function stageLabel(stage: string): string {
+  return KNOWN_STAGES.has(stage) ? t(`sim3d.stage.${stage}` as StringKey) : stage;
+}
 
 interface HoverMetric {
   week: number;
@@ -93,11 +118,11 @@ function MetricStrip({ m, source }: { m: HoverMetric | null; source: string }) {
     <div className="sim3d-metric-strip">
       <div
         className="sim3d-metric-item"
-        title="Crop type and phenological growth stage from FAO-56 dual crop coefficient model [D]"
-        data-tooltip="Crop type and phenological growth stage from FAO-56 dual crop coefficient model [D]"
+        title={t("sim3d.metric.cropStageTip")}
+        data-tooltip={t("sim3d.metric.cropStageTip")}
       >
         <span className="sim3d-metric-label">
-          Crop & Stage {!hist && !m?.cover && m?.crop === "fallow" && <Explain id="fallow_bare_soil" />}
+          {t("sim3d.metric.cropStage")} {!hist && !m?.cover && m?.crop === "fallow" && <Explain id="fallow_bare_soil" />}
         </span>
         <span className="sim3d-metric-val">
           {hist ? (
@@ -105,72 +130,78 @@ function MetricStrip({ m, source }: { m: HoverMetric | null; source: string }) {
           ) : m?.crop === "fallow" ? (
             m.cover ? (
               <>
-                cover crop {d}
+                {cropName("cover_crop")} {d}
               </>
             ) : (
-              "Bare fallow [D]"
+              t("sim3d.bareFallow")
             )
           ) : (
             <>
-              {m?.crop.replace(/_/g, " ")} ({m?.stage}) {d}
+              {m ? cropName(m.crop) : "—"} ({m ? stageLabel(m.stage) : "—"}) {d}
             </>
           )}
         </span>
       </div>
       <div
         className="sim3d-metric-item"
-        title="Root-zone soil water / total available water capacity in root zone (mm) [D]"
-        data-tooltip="Root-zone soil water / total available water capacity in root zone (mm) [D]"
+        title={t("sim3d.metric.soilWaterTip")}
+        data-tooltip={t("sim3d.metric.soilWaterTip")}
       >
         <span className="sim3d-metric-label">
-          Available Soil Water <Explain id="root_zone_soil_water" /> <Explain id="available_water_capacity" />
+          {t("sim3d.metric.soilWater")} <Explain id="root_zone_soil_water" /> <Explain id="available_water_capacity" />
         </span>
         <span className="sim3d-metric-val">
           {hist ? ns : (
             <>
-              <strong>{m?.soilWater.toFixed(1)}</strong> of {m?.taw.toFixed(0)} mm {d}
+              {t("sim3d.metric.soilWaterOf", {
+                water: m?.soilWater.toFixed(1) ?? "—",
+                taw: m?.taw.toFixed(0) ?? "—",
+              })}{" "}
+              {d}
             </>
           )}
         </span>
       </div>
       <div
         className="sim3d-metric-item"
-        title="Canopy proxy (Kc / Kc max) from FAO-56 dual crop coefficient model (0.00–1.00) [D]"
-        data-tooltip="Canopy proxy (Kc / Kc max) from FAO-56 dual crop coefficient model (0.00–1.00) [D]"
+        title={t("sim3d.metric.canopyTip")}
+        data-tooltip={t("sim3d.metric.canopyTip")}
       >
         <span className="sim3d-metric-label">
-          Canopy Proxy (Kc/Kc max) <Explain id="canopy_proxy" />
+          {t("sim3d.metric.canopy")} <Explain id="canopy_proxy" />
         </span>
         <span className="sim3d-metric-val">{hist ? ns : <>{m?.canopyCover.toFixed(2)} {d}</>}</span>
       </div>
       <div
         className="sim3d-metric-item"
-        title="FAO-56 water stress coefficient (0.00 = severe stress, 1.00 = no stress) [D]"
-        data-tooltip="FAO-56 water stress coefficient (0.00 = severe stress, 1.00 = no stress) [D]"
+        title={t("sim3d.metric.ksTip")}
+        data-tooltip={t("sim3d.metric.ksTip")}
       >
         <span className="sim3d-metric-label">
-          Water Stress (Ks) <Explain id="water_stress_ks" />
+          {t("sim3d.metric.ks")} <Explain id="water_stress_ks" />
         </span>
         <span className="sim3d-metric-val">{hist ? ns : <>{m?.ks.toFixed(2)} {d}</>}</span>
       </div>
       <div
         className="sim3d-metric-item"
-        title="Effective root-zone depth (m) [D]"
-        data-tooltip="Effective root-zone depth (m) [D]"
+        title={t("sim3d.metric.rootDepthTip")}
+        data-tooltip={t("sim3d.metric.rootDepthTip")}
       >
-        <span className="sim3d-metric-label">Root Depth</span>
-        <span className="sim3d-metric-val">{hist ? ns : <>{m?.rootDepth.toFixed(2)} m {d}</>}</span>
+        <span className="sim3d-metric-label">
+          {t("sim3d.metric.rootDepth")} <Explain id="root_depth" />
+        </span>
+        <span className="sim3d-metric-val">{hist ? ns : <>{m?.rootDepth.toFixed(2)} {t("unit.m")} {d}</>}</span>
       </div>
       <div
         className="sim3d-metric-item"
-        title="Weekly precipitation and net irrigation applied (mm) [D]"
-        data-tooltip="Weekly precipitation and net irrigation applied (mm) [D]"
+        title={t("sim3d.metric.rainIrrTip")}
+        data-tooltip={t("sim3d.metric.rainIrrTip")}
       >
         <span className="sim3d-metric-label">
-          Rain / Irrigation <Explain id="evapotranspiration" />
+          {t("sim3d.metric.rainIrr")} <Explain id="evapotranspiration" />
         </span>
         <span className="sim3d-metric-val">
-          {m?.rain.toFixed(1)} mm / {hist ? ns : <>{m?.irrigation.toFixed(1)} mm</>} {d}
+          {m?.rain.toFixed(1)} {t("unit.mm")} / {hist ? ns : <>{m?.irrigation.toFixed(1)} {t("unit.mm")}</>} {d}
         </span>
       </div>
     </div>
@@ -203,15 +234,15 @@ function FarmStage({
 }) {
   const plots = useMemo(() => [current, other] as [typeof current, typeof other], [current, other]);
   const m = plots.map((p) => weekTelemetry(p.option, p.scenario, week));
-  const labels = [FARM_TEXT.current, otherLabel];
+  const labels = [t("sim3d.current"), otherLabel];
   return (
-    <section className="farm-stage" aria-label={FARM_TEXT.label}>
+    <section className="farm-stage" aria-label={t("farm.label")}>
       <div className="farm-labels">
         {plots.map((p, i) => (
           <div key={i} className="farm-label">
             <strong>{labels[i]}</strong>
             <span className="sim3d-seq-tag">{p.option.sequence.map((c) => cropName(c)).join(" → ")}</span>
-            {m[i].historyOnly && <span className="farm-ns">{FARM_TEXT.notSimulated}</span>}
+            {m[i].historyOnly && <span className="farm-ns">{t("season.notSimulated")}</span>}
           </div>
         ))}
       </div>
@@ -224,7 +255,7 @@ function FarmStage({
         reducedMotion={reducedMotion}
         onFrameStats={onFrameStats}
       />
-      <p className="farm-scenery-note">{FARM_TEXT.scenery}</p>
+      <p className="farm-scenery-note">{t("farm.scenery")}</p>
       <div className="farm-strips">
         {plots.map((_, i) => (
           <div key={i} className="farm-strip">
@@ -246,6 +277,7 @@ export default function Field3DView({
 }) {
   const { effective } = useTheme();
   const isDark = effective === "dark";
+  const chart = CHART_COLOURS[effective];
 
   const [sim3d, setSim3d] = useState<FieldSim3D | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -373,7 +405,7 @@ export default function Field3DView({
   if (error || !sim3d) {
     return (
       <div className="sim3d-error-state" role="alert">
-        <p>{t("error.load", { what: "3D simulation", message: error ?? "no data" })}</p>
+        <p>{t("error.load", { what: t("error.what.sim3d"), message: error ?? t("error.noData") })}</p>
       </div>
     );
   }
@@ -387,7 +419,7 @@ export default function Field3DView({
   }
 
   return (
-    <section className="sim3d-view" aria-label="Field in 3D Simulation View">
+    <section className="sim3d-view" aria-label={t("sim3d.ariaLabel")}>
       {/* Honesty & Baseline Weather Badges */}
       <header className="sim3d-header">
         <div className="sim3d-banner-row">
@@ -395,15 +427,13 @@ export default function Field3DView({
             <span aria-hidden="true">ℹ️</span> {t("sim3d.honesty")}
           </span>
           <span className="sim3d-weather-pill">
-            <span aria-hidden="true">🌦️</span> {sim3d.weather_label} <TagBadge tag="D" />
+            <span aria-hidden="true">🌦️</span> {sim3dWeatherLabel(sim3d.weather_label, sim3d.weather_year)} <TagBadge tag="D" />
           </span>
           <span className="sim3d-disclaimer-pill">
             {t("sim3d.disclaimer", { year: sim3d.weather_year })}
           </span>
         </div>
-        <p className="sim3d-subtitle">
-          Observe how the rotation and roots interact with soil moisture week by week over the 3-year timeline.
-        </p>
+        <p className="sim3d-subtitle">{t("sim3d.subtitle")}</p>
       </header>
 
       {showBuilder && (
@@ -432,11 +462,12 @@ export default function Field3DView({
       )}
 
       {/* Control Toolbar */}
-      <nav className="sim3d-toolbar" aria-label="Simulation Controls">
+      <nav className="sim3d-toolbar" aria-label={t("sim3d.controlsAria")}>
         <div className="sim3d-control-group">
           <label htmlFor="sim3d-scenario-select">
             <strong>{t("sim3d.scenario")}:</strong>
-          </label>
+          </label>{" "}
+          <Explain id="weather_whatif" />
           <select
             id="sim3d-scenario-select"
             className="sim3d-select"
@@ -448,7 +479,7 @@ export default function Field3DView({
           >
             {scenarioIds.map((sid) => (
               <option key={sid} value={sid}>
-                {SCENARIO_LABELS[sid] ?? sid}
+                {scenarioLabel(sid)}
               </option>
             ))}
           </select>
@@ -467,7 +498,7 @@ export default function Field3DView({
           >
             {sim3d.alternatives.map((alt, idx) => (
               <option key={alt.option_id} value={idx}>
-                {alt.label}
+                {sim3dOptionLabel(alt)}
               </option>
             ))}
           </select>
@@ -483,9 +514,9 @@ export default function Field3DView({
                 setFarmMode((f) => !f);
               }}
               aria-pressed={!farmMode && !useFallback}
-              title={FARM_TEXT.xrayTitle}
+              title={t("farm.xrayTitle")}
             >
-              {FARM_TEXT.xray}
+              {t("farm.xray")}
             </button>
           )}
           <button
@@ -517,9 +548,9 @@ export default function Field3DView({
             className={`sim3d-toggle-btn ${useFallback ? "active" : ""}`}
             onClick={() => setUseFallback((f) => !f)}
             aria-pressed={useFallback}
-            title="Toggle between 3D interactive view and accessible 2D time-series charts"
+            title={t("sim3d.toggleTitle")}
           >
-            {useFallback ? "3D View" : "2D Fallback"}
+            {useFallback ? t("sim3d.view3d") : t("sim3d.view2d")}
           </button>
         </div>
       </nav>
@@ -528,7 +559,7 @@ export default function Field3DView({
       {activeAlternative && (
         <div className="sim3d-alt-notice" role="note">
           <p>
-            {builtOption ? bt("sim3d.builderNotice") : t("sim3d.defaultNotice", { name: activeAlternative.label })}
+            {builtOption ? bt("sim3d.builderNotice") : t("sim3d.defaultNotice", { name: sim3dOptionLabel(activeAlternative) })}
           </p>
         </div>
       )}
@@ -540,7 +571,7 @@ export default function Field3DView({
           <FarmStage
             current={{ option: sim3d.current, scenario: curScen }}
             other={{ option: activeAlternative, scenario: altScen }}
-            otherLabel={activeAlternative.label}
+            otherLabel={sim3dOptionLabel(activeAlternative)}
             week={week}
             month={activeWeekInfo.month}
             isDark={isDark}
@@ -560,15 +591,15 @@ export default function Field3DView({
           {(
             <div className="sim3d-card" hidden={viewMode === "toggle" && toggleActive !== "current"}>
               <header className="sim3d-card-header">
-                <h3>Current Rotation</h3>
+                <h3>{t("sim3d.current")}</h3>
                 <span className="sim3d-seq-tag">
-                  {sim3d.current.sequence.join(" → ").replace(/_/g, " ")}
+                  {sim3d.current.sequence.map((c) => cropName(c)).join(" → ")}
                 </span>
               </header>
 
               <div
                 className="sim3d-canvas-wrap"
-                title="Interactive 3D simulation block: drag to rotate, pinch or scroll to zoom. Amber structures represent crop canopy; downward meshes represent root depth; blue translucent volume represents available soil water."
+                title={t("sim3d.canvasTitle")}
               >
                 <Field3DScene
                   option={sim3d.current}
@@ -591,15 +622,15 @@ export default function Field3DView({
           {activeAlternative && altScen && (
             <div className="sim3d-card" hidden={viewMode === "toggle" && toggleActive !== "alt"}>
               <header className="sim3d-card-header">
-                <h3>{activeAlternative.label}</h3>
+                <h3>{sim3dOptionLabel(activeAlternative)}</h3>
                 <span className="sim3d-seq-tag">
-                  {activeAlternative.sequence.join(" → ").replace(/_/g, " ")}
+                  {activeAlternative.sequence.map((c) => cropName(c)).join(" → ")}
                 </span>
               </header>
 
               <div
                 className="sim3d-canvas-wrap"
-                title="Interactive 3D simulation block: drag to rotate, pinch or scroll to zoom. Amber structures represent crop canopy; downward meshes represent root depth; blue translucent volume represents available soil water."
+                title={t("sim3d.canvasTitle")}
               >
                 <Field3DScene
                   option={activeAlternative}
@@ -621,7 +652,7 @@ export default function Field3DView({
       )}
       {useFallback && (
         /* Accessible 2D Fallback Chart */
-        <div className="sim3d-fallback-section" role="region" aria-label="2D Simulation Fallback Chart">
+        <div className="sim3d-fallback-section" role="region" aria-label={t("sim3d.fallbackAria")}>
           <div className="sim3d-fallback-banner">
             <p>
               <strong>{t("sim3d.fallbackTitle")}:</strong>{" "}
@@ -631,25 +662,36 @@ export default function Field3DView({
           <div style={{ width: "100%", height: 320 }}>
             <ResponsiveContainer>
               <LineChart data={fallbackChartData} margin={{ top: 10, right: 20, left: 10, bottom: 20 }}>
-                <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
-                <XAxis dataKey="week" interval={12} tick={{ fontSize: 11 }} />
-                <YAxis unit="mm" tick={{ fontSize: 11 }} />
-                <Tooltip />
-                <Legend />
-                <ReferenceLine x={activeWeekInfo.label} stroke="#f59e0b" strokeWidth={2} label="Selected week" />
+                <CartesianGrid stroke={chart.grid} strokeDasharray="3 3" />
+                <XAxis dataKey="week" interval={12} stroke={chart.axis} tick={{ fill: chart.axis, fontSize: 11 }} />
+                <YAxis unit={` ${t("unit.mm")}`} stroke={chart.axis} tick={{ fill: chart.axis, fontSize: 11 }} />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: chart.tooltipBg,
+                    borderColor: chart.tooltipBorder,
+                    color: chart.tooltipText,
+                  }}
+                />
+                <Legend wrapperStyle={{ color: chart.axis }} />
+                <ReferenceLine
+                  x={activeWeekInfo.label}
+                  stroke={chart.marks}
+                  strokeWidth={2}
+                  label={{ value: t("sim3d.selectedWeek"), fill: chart.marks, fontSize: 11 }}
+                />
                 <Line
                   type="monotone"
                   dataKey="curSoilWater"
-                  name="Current: Soil Water (mm) [D]"
-                  stroke={isDark ? CHART_COLOURS.dark.pred : CHART_COLOURS.light.pred}
+                  name={t("sim3d.curSoilSeries")}
+                  stroke={chart.pred}
                   dot={false}
                   strokeWidth={2}
                 />
                 <Line
                   type="monotone"
                   dataKey="altSoilWater"
-                  name="Alternative: Soil Water (mm) [D]"
-                  stroke={isDark ? CHART_COLOURS.dark.obs : CHART_COLOURS.light.obs}
+                  name={t("sim3d.altSoilSeries")}
+                  stroke={chart.obs}
                   dot={false}
                   strokeWidth={2}
                 />
@@ -672,20 +714,20 @@ export default function Field3DView({
             className={`sim3d-toggle-pill ${toggleActive === "current" ? "active" : ""}`}
             onClick={() => setToggleActive("current")}
           >
-            Current Rotation
+            {t("sim3d.current")}
           </button>
           <button
             type="button"
             className={`sim3d-toggle-pill ${toggleActive === "alt" ? "active" : ""}`}
             onClick={() => setToggleActive("alt")}
           >
-            {activeAlternative?.label}
+            {activeAlternative ? sim3dOptionLabel(activeAlternative) : ""}
           </button>
         </div>
       )}
 
       {/* Timeline Scrubber & Playback Controls */}
-      <footer className="sim3d-timeline-tray" aria-label="Timeline Scrubber">
+      <footer className="sim3d-timeline-tray" aria-label={t("sim3d.timelineAria")}>
         <div className="sim3d-playback-row">
           <button
             type="button"
@@ -696,7 +738,7 @@ export default function Field3DView({
             }}
             aria-label={isPlaying ? t("sim3d.pause") : t("sim3d.play")}
           >
-            {isPlaying ? "⏸ Pause" : "▶ Play"}
+            {isPlaying ? t("sim3d.pauseBtn") : t("sim3d.playBtn")}
           </button>
 
           <button
@@ -720,9 +762,9 @@ export default function Field3DView({
               className="sim3d-slider"
             />
             <div className="sim3d-scrubber-labels">
-              <span>2022 (Year 1)</span>
-              <span>2023 (Year 2)</span>
-              <span>2024 (Year 3)</span>
+              <span>{t("sim3d.yearLabel", { year: 2022, n: 1 })}</span>
+              <span>{t("sim3d.yearLabel", { year: 2023, n: 2 })}</span>
+              <span>{t("sim3d.yearLabel", { year: 2024, n: 3 })}</span>
             </div>
           </div>
 
@@ -766,9 +808,9 @@ export default function Field3DView({
                   <a
                     href={`#/${regionId}/methods#glossary-${id}`}
                     className="sim3d-guide-glossary-link"
-                    title={`View ${e.title} in technical glossary`}
+                    title={t("sim3d.glossaryTitle", { title: e.title })}
                   >
-                    Glossary ↗
+                    {t("sim3d.glossaryLink")}
                   </a>
                 </div>
                 <p className="sim3d-guide-card-body">{e.body}</p>

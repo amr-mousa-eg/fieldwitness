@@ -1,7 +1,9 @@
+import { getLocale } from "./locale";
+import ar from "./strings/ar.json";
 import en from "./strings/en.json";
 
 /**
- * Explainer ids (T9.10). Text, source and link live in strings/en.json as
+ * Explainer ids (T9.10). Text, source and link live in strings/en.json and strings/ar.json as
  * explain.<id>.title / .body / .source / .url; every source was read on 2026-11-06.
  */
 export const EXPLAINERS = [
@@ -28,6 +30,15 @@ export const EXPLAINERS = [
   "witness",
   "bare_soil_months",
   "bad_year_water",
+  "plain_summary",
+  "pareto_ranking",
+  "weather_whatif",
+  "regret",
+  "flip_probability",
+  "root_depth",
+  "diagnosis",
+  "global_eval",
+  "compare_fields",
 ] as const;
 export type ExplainerId = (typeof EXPLAINERS)[number];
 
@@ -50,8 +61,9 @@ export interface ExplainerText {
 }
 
 export function explainer(id: ExplainerId): ExplainerText {
-  const s = en as Record<string, string>;
-  const get = (part: string) => s[`explain.${id}.${part}`] ?? "";
+  const dict = (getLocale() === "ar" ? ar : en) as Record<string, string>;
+  const fallback = en as Record<string, string>;
+  const get = (part: string) => dict[`explain.${id}.${part}`] ?? fallback[`explain.${id}.${part}`] ?? "";
   return { title: get("title"), body: get("body"), source: get("source"), url: get("url") };
 }
 

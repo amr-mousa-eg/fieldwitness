@@ -16,6 +16,7 @@ import { Explain } from "./Explain";
 import { emitTour } from "./tourEvents";
 import { loadSeries } from "./data";
 import { formatDate, harvestDayToDate } from "./format";
+import { useLocale } from "./locale";
 import { cropName, t } from "./strings";
 import { TagBadge, TaggedValue } from "./tags";
 import { CHART_COLOURS } from "./theme";
@@ -23,7 +24,6 @@ import type { FieldPack, FieldSeries, Season, Tagged, TaggedSeries } from "./typ
 import { useTheme } from "./useTheme";
 
 const DAY = 86_400_000;
-const CHART = { ndvi: "#3e7d3a", evi: "#6b5ea8", smooth: "#22313a", marks: "#8a6a1f" };
 
 interface Point {
   x: number;
@@ -101,6 +101,7 @@ function Timeline({ story }: { story: Season[] }) {
 
 function GreennessChart({ pack, series }: { pack: FieldPack; series: FieldSeries }) {
   const { effective } = useTheme();
+  const locale = useLocale();
   const chart = CHART_COLOURS[effective];
   const [focus, setFocus] = useState<string>("all");
   const [showEvi, setShowEvi] = useState(false);
@@ -129,7 +130,10 @@ function GreennessChart({ pack, series }: { pack: FieldPack; series: FieldSeries
   }, [domain]);
   const span = domain[1] - domain[0];
   const tickFmt = (time: number) =>
-    new Date(time).toLocaleDateString("en-GB", span > 800 * DAY ? { year: "numeric", timeZone: "UTC" } : { month: "short", year: "numeric", timeZone: "UTC" });
+    new Date(time).toLocaleDateString(
+      locale === "ar" ? "ar-EG-u-nu-latn" : "en-GB",
+      span > 800 * DAY ? { year: "numeric", timeZone: "UTC" } : { month: "short", year: "numeric", timeZone: "UTC" },
+    );
 
   return (
     <section aria-labelledby="chart-h">
@@ -164,24 +168,24 @@ function GreennessChart({ pack, series }: { pack: FieldPack; series: FieldSeries
       </div>
       <ul className="chart-key">
         <li>
-          <span className="key-dot" style={{ background: CHART.ndvi }} /> {t("story.series.ndvi")}{" "}
+          <span className="key-dot" style={{ background: chart.ndvi }} /> {t("story.series.ndvi")}{" "}
           <TagBadge tag={series.ndvi.tag} source={series.ndvi.source} />
         </li>
         {showEvi && (
           <li>
-            <span className="key-triangle" style={{ borderBottomColor: CHART.evi }} /> {t("story.series.evi")}{" "}
+            <span className="key-triangle" style={{ borderBottomColor: chart.evi }} /> {t("story.series.evi")}{" "}
             <TagBadge tag={series.evi.tag} source={series.evi.source} />
           </li>
         )}
         <li>
-          <span className="key-line" style={{ background: CHART.smooth }} /> {t("story.series.smooth")}{" "}
+          <span className="key-line" style={{ background: chart.smooth }} /> {t("story.series.smooth")}{" "}
           <TagBadge tag={series.ndvi_smooth.tag} source={series.ndvi_smooth.source} />
         </li>
       </ul>
       <div className="chart" role="img" aria-label={t("story.chart.note")}>
         <ResponsiveContainer width="100%" height={300}>
           <ComposedChart margin={{ top: 10, right: 16, bottom: 0, left: 0 }}>
-            <CartesianGrid strokeDasharray="2 4" vertical={false} />
+            <CartesianGrid stroke={chart.grid} strokeDasharray="2 4" vertical={false} />
             <XAxis
               dataKey="x"
               type="number"
@@ -190,9 +194,18 @@ function GreennessChart({ pack, series }: { pack: FieldPack; series: FieldSeries
               allowDataOverflow
               ticks={yearTicks.length > 1 ? yearTicks : undefined}
               tickFormatter={tickFmt}
+              stroke={chart.axis}
+              tick={{ fill: chart.axis, fontSize: 12 }}
             />
-            <YAxis domain={[0, 1]} ticks={[0, 0.25, 0.5, 0.75, 1]} width={40} />
+            <YAxis
+              domain={[0, 1]}
+              ticks={[0, 0.25, 0.5, 0.75, 1]}
+              width={40}
+              stroke={chart.axis}
+              tick={{ fill: chart.axis, fontSize: 12 }}
+            />
             <Tooltip
+              contentStyle={{ backgroundColor: chart.tooltipBg, borderColor: chart.tooltipBorder, color: chart.tooltipText }}
               labelFormatter={(time) => formatDate(new Date(Number(time)))}
               formatter={(v) => Number(v).toFixed(2)}
             />

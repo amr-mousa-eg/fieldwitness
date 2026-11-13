@@ -50,13 +50,13 @@ export function FieldPage({
   return (
     <article className="field-page">
       <a href={routeHref(regionId)}>{t("field.back")}</a>
-      {error && <p role="alert">{t("error.load", { what: "the field", message: error })}</p>}
+      {error && <p role="alert">{t("error.load", { what: t("error.what.field"), message: error })}</p>}
       {!error && !pack && <p>{t("field.loading")}</p>}
       {pack && (
         <>
           <header className="field-head">
             <h2>
-              {index ? `Field ${fieldNumber(fieldId, index.fields)}` : t("field.heading", { id: fieldId.slice(0, 8) })}{" "}
+              {index ? t("field.label", { num: fieldNumber(fieldId, index.fields) }) : t("field.heading", { id: fieldId.slice(0, 8) })}{" "}
               <small className="field-id-hash">({fieldId.slice(0, 8)})</small>
             </h2>
             <dl className="field-facts">

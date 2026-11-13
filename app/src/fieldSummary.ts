@@ -19,6 +19,7 @@ import {
   ROTATION_DAYS,
   SUMMARY_THRESHOLDS,
 } from "./fieldSummaryConfig";
+import { getLocale } from "./locale";
 import {
   type Constraints,
   type Priorities,
@@ -108,6 +109,7 @@ export function buildMetricComparisons(
   bad_year_water: MetricComparisonItem;
   bare_soil: MetricComparisonItem;
 } {
+  const isAr = getLocale() === "ar";
   const curWater = Math.round(current.metrics.water_use_mm?.value ?? 0);
   const topWater = Math.round(top.metrics.water_use_mm?.value ?? 0);
   const diffWater = topWater - curWater;
@@ -126,39 +128,45 @@ export function buildMetricComparisons(
   return {
     water_use: {
       metric: "water_use_mm",
-      label: "Water use",
-      unit: "mm",
+      label: isAr ? "استهلاك المياه" : "Water use",
+      unit: isAr ? "ملم" : "mm",
       currentValue: curWater,
       topValue: topWater,
       diff: diffWater,
       isAboutTheSame: sameWater,
       isFavorableForTop: sameWater ? null : diffWater < 0,
       tag: "D",
-      source: "FAO-56 water balance simulation over posterior worlds",
+      source: isAr
+        ? "محاكاة موازنة المياه FAO-56 عبر العوالم المعايَرة"
+        : "FAO-56 water balance simulation over posterior worlds",
     },
     bad_year_water: {
       metric: "bad_year_water_mm",
-      label: "Bad-year water",
-      unit: "mm",
+      label: isAr ? "مياه سنة الجفاف" : "Bad-year water",
+      unit: isAr ? "ملم" : "mm",
       currentValue: curBadWater,
       topValue: topBadWater,
       diff: diffBadWater,
       isAboutTheSame: sameBadWater,
       isFavorableForTop: sameBadWater ? null : diffBadWater < 0,
       tag: "D",
-      source: "FAO-56 water balance upper 10% tail (CVaR10)",
+      source: isAr
+        ? "موازنة المياه FAO-56 لذيل أسوأ 10% من السنوات (CVaR10)"
+        : "FAO-56 water balance upper 10% tail (CVaR10)",
     },
     bare_soil: {
       metric: "bare_soil_months",
-      label: "Bare soil",
-      unit: "months",
+      label: isAr ? "التربة العارية" : "Bare soil",
+      unit: isAr ? "أشهر" : "months",
       currentValue: curBareMonths,
       topValue: topBareMonths,
       diff: diffBareMonths,
       isAboutTheSame: sameBare,
       isFavorableForTop: sameBare ? null : diffBareMonths < 0,
       tag: "D",
-      source: "simulated crop cover duration over 3 seasons",
+      source: isAr
+        ? "مدة الغطاء النباتي المحاكاة عبر 3 مواسم"
+        : "simulated crop cover duration over 3 seasons",
     },
   };
 }
@@ -178,6 +186,7 @@ export function generateFieldSummary(
   constraints: Constraints,
   scenario: Scenario | null
 ): ComparisonSummary {
+  const isAr = getLocale() === "ar";
   const { current, topAlt, isCurrentBest } = resolveTopOptions(
     pack,
     priorities,
@@ -191,6 +200,27 @@ export function generateFieldSummary(
 
   // No simulated value for Current (a history-only season, `seasons.ts`): never show it as 0.
   if (current.metrics.water_use_mm?.value == null) {
+    if (isAr) {
+      const lead = "تتضمن دورتك الحالية موسمًا غير محاكى، لذا لا يمكن مقارنتها مباشرة";
+      const tokens: SummaryToken[] = topAlt
+        ? [
+            { kind: "text", text: `${lead}. وأفضل خيار محاكى هو ${optionName(topAlt)} (الدليل: ` },
+            { kind: "grade", grade: topAlt.grade },
+            { kind: "text", text: ")." },
+          ]
+        : [{ kind: "text", text: `${lead}.` }];
+      return {
+        isCurrentBest: false,
+        currentNotSimulated: true,
+        currentOption: current,
+        topAlternative: topAlt,
+        sentence: tokens.map((tk) => (tk.kind === "text" ? tk.text : tk.kind === "grade" ? `درجة ${tk.grade}` : "")).join(""),
+        tokens,
+        evidenceGrade: targetOption.grade,
+        metrics,
+      };
+    }
+
     const lead = "Your current rotation has a season that is not simulated, so it cannot be compared";
     const tokens: SummaryToken[] = topAlt
       ? [
@@ -212,6 +242,25 @@ export function generateFieldSummary(
   }
 
   if (isCurrentBest || !topAlt) {
+    if (isAr) {
+      const text = `تتصدر دورتك الحالية الترتيب وفق الأولويات التي حددتها (الدليل: درجة ${current.grade}).`;
+      const tokens: SummaryToken[] = [
+        { kind: "text", text: "تتصدر دورتك الحالية الترتيب وفق الأولويات التي حددتها (الدليل: " },
+        { kind: "grade", grade: current.grade },
+        { kind: "text", text: ")." },
+      ];
+      return {
+        isCurrentBest: true,
+        currentNotSimulated: false,
+        currentOption: current,
+        topAlternative: topAlt,
+        sentence: text,
+        tokens,
+        evidenceGrade: current.grade,
+        metrics,
+      };
+    }
+
     const text = `Your current rotation ranks best for the priorities you set (evidence: grade ${current.grade}).`;
     const tokens: SummaryToken[] = [
       { kind: "text", text: "Your current rotation ranks best for the priorities you set (evidence: " },
@@ -248,12 +297,107 @@ export function compareToCurrent(
   current: Option,
   target: Option,
 ): Pick<ComparisonSummary, "sentence" | "tokens" | "evidenceGrade" | "metrics"> {
+  const isAr = getLocale() === "ar";
   const metrics = buildMetricComparisons(current, target);
   const evidenceGrade = target.grade;
   const topAlt = target;
 
   // Generate clauses for the option vs current
   const clauses: Clause[] = [];
+
+  if (isAr) {
+    if (!metrics.water_use.isAboutTheSame) {
+      const absDiff = Math.abs(metrics.water_use.diff);
+      const isLess = metrics.water_use.diff < 0;
+      clauses.push({
+        text: `${isLess ? "يوفر" : "يزيد استهلاك المياه بمقدار"} ${absDiff} ملم ${isLess ? "من المياه" : ""}`.trim(),
+        isPro: isLess,
+        tokens: [
+          { kind: "text", text: isLess ? "يوفر " : "يستهلك " },
+          { kind: "tagged", value: absDiff, unit: "ملم", tag: "D", source: metrics.water_use.source },
+          { kind: "text", text: isLess ? " أقل من المياه" : " مياه إضافية" },
+        ],
+      });
+    }
+
+    if (!metrics.bad_year_water.isAboutTheSame) {
+      const absDiff = Math.abs(metrics.bad_year_water.diff);
+      const isLess = metrics.bad_year_water.diff < 0;
+      clauses.push({
+        text: `${isLess ? "يحتاج" : "يزيد"} ${absDiff} ملم ${isLess ? "أقل" : "إضافية"} في سنوات الجفاف`,
+        isPro: isLess,
+        tokens: [
+          { kind: "text", text: isLess ? "يحتاج " : "يزيد " },
+          { kind: "tagged", value: absDiff, unit: "ملم", tag: "D", source: metrics.bad_year_water.source },
+          { kind: "text", text: ` ${isLess ? "أقل" : "أكثر"} في سنوات الجفاف` },
+        ],
+      });
+    }
+
+    if (!metrics.bare_soil.isAboutTheSame) {
+      const absMonths = Math.abs(Math.round(metrics.bare_soil.diff));
+      const isFewer = metrics.bare_soil.diff < 0;
+      const monthWord = absMonths === 1 ? "شهر" : "أشهر";
+      clauses.push({
+        text: `له ${absMonths} ${monthWord} تربة عارية ${isFewer ? "أقل" : "أكثر"}`,
+        isPro: isFewer,
+        tokens: [
+          { kind: "text", text: "له " },
+          { kind: "tagged", value: absMonths, unit: monthWord, tag: "D", source: metrics.bare_soil.source },
+          { kind: "text", text: ` تربة عارية ${isFewer ? "أقل" : "أكثر"}` },
+        ],
+      });
+    }
+
+    const optLabel = optionName(topAlt);
+    const startText = `التحوّل إلى ${optLabel} `;
+    const startTokens: SummaryToken[] = [{ kind: "text", text: startText }];
+    const endTokens: SummaryToken[] = [
+      { kind: "text", text: " (الدليل: " },
+      { kind: "grade", grade: evidenceGrade },
+      { kind: "text", text: ")." },
+    ];
+
+    if (clauses.length === 0) {
+      const text = `${startText}له تقريبًا نفس استهلاك المياه ومياه سنة الجفاف والتربة العارية مقارنةً بدورتك الحالية (الدليل: درجة ${evidenceGrade}).`;
+      const tokens: SummaryToken[] = [
+        ...startTokens,
+        { kind: "text", text: "له تقريبًا نفس استهلاك المياه ومياه سنة الجفاف والتربة العارية مقارنةً بدورتك الحالية" },
+        ...endTokens,
+      ];
+      return { sentence: text, tokens, evidenceGrade, metrics };
+    }
+
+    const pros = clauses.filter((c) => c.isPro);
+    const cons = clauses.filter((c) => !c.isPro);
+
+    let sentenceBodyText = "";
+    const bodyTokens: SummaryToken[] = [];
+    const joinTokens = (list: Clause[], sep = " و") => {
+      const res: SummaryToken[] = [];
+      list.forEach((c, idx) => {
+        if (idx > 0) res.push({ kind: "text", text: sep });
+        res.push(...c.tokens);
+      });
+      return res;
+    };
+
+    if (pros.length > 0 && cons.length > 0) {
+      sentenceBodyText = `${pros.map((c) => c.text).join(" و")}، لكنه ${cons.map((c) => c.text).join(" و")}`;
+      bodyTokens.push(...joinTokens(pros));
+      bodyTokens.push({ kind: "text", text: "، لكنه " });
+      bodyTokens.push(...joinTokens(cons));
+    } else if (pros.length > 0) {
+      sentenceBodyText = pros.map((c) => c.text).join(" و");
+      bodyTokens.push(...joinTokens(pros));
+    } else {
+      sentenceBodyText = cons.map((c) => c.text).join(" و");
+      bodyTokens.push(...joinTokens(cons));
+    }
+
+    const sentence = `${startText}${sentenceBodyText} (الدليل: درجة ${evidenceGrade}).`;
+    return { sentence, tokens: [...startTokens, ...bodyTokens, ...endTokens], evidenceGrade, metrics };
+  }
 
   // 1. Water use clause
   if (!metrics.water_use.isAboutTheSame) {

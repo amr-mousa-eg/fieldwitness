@@ -30,13 +30,15 @@ const STORAGE_KEY = "fieldwitness_chatbot_llm_cfg_v1";
 const ENV_PROXY_URL = (import.meta.env.VITE_CHATBOT_PROXY_URL as string | undefined)?.trim() || "";
 const ENV_MODEL = (import.meta.env.VITE_CHATBOT_MODEL as string | undefined)?.trim() || "gemini-2.5-flash";
 
-const WELCOME_MESSAGE: ChatMessage = {
-  id: "welcome",
-  role: "assistant",
-  text: "Hello! I am the FieldWitness Context Assistant. Ask me about the Three Witnesses, Evidence Grades A–D, USDA SSURGO soil TAW, winter wheat calibration, climate what-ifs, or any field you open.",
-  sourceLabel: "FieldWitness Assistant [O/D/E]",
-  followUps: ["What is FieldWitness?", "How do the three witnesses work?", "What are the project's honest limits?"],
-};
+function makeWelcomeMessage(): ChatMessage {
+  return {
+    id: "welcome",
+    role: "assistant",
+    text: t("chat.welcome"),
+    sourceLabel: t("chat.welcomeSource"),
+    followUps: [t("chat.chip.whatIs"), t("chat.chip.witnesses"), t("chat.chip.limits")],
+  };
+}
 
 function loadLlmConfig(): LlmConfig {
   const defaultCfg: LlmConfig = {
@@ -183,10 +185,15 @@ export function FieldChatbot({
     state: "idle",
     message: "",
   });
-  const [messages, setMessages] = useState<ChatMessage[]>(() => [WELCOME_MESSAGE]);
+  const locale = useLocale();
+  const [messages, setMessages] = useState<ChatMessage[]>(() => [makeWelcomeMessage()]);
 
   const listRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    setMessages((prev) => prev.map((m) => (m.id === "welcome" ? makeWelcomeMessage() : m)));
+  }, [locale]);
 
   useEffect(() => {
     return subscribeLiveChatState(setLiveState);
@@ -206,7 +213,6 @@ export function FieldChatbot({
     return () => window.removeEventListener("keydown", onKey);
   }, [isOpen]);
 
-  const locale = useLocale();
   const activePack = fieldId ? liveState.fieldPack : null;
   const fieldLabel = resolveFieldLabel(activePack, index);
   const ctx: ChatContextSnapshot = {
@@ -223,11 +229,19 @@ export function FieldChatbot({
     locale,
   };
 
+  const pageDisplay =
+    ctx.page === "field"
+      ? t("error.what.field")
+      : t(`nav.${ctx.page}` as "nav.map");
+
   const contextSummary = activePack
-    ? `Field ${fieldLabel ?? activePack.field.field_id.slice(0, 8)} (${activePack.field.area_ha.toFixed(1)} ha)`
+    ? `${t("field.label", { num: fieldLabel ?? activePack.field.field_id.slice(0, 8) })} (${t("fields.area", { area: activePack.field.area_ha.toFixed(1) })})`
     : ctx.liveProfile
-      ? `Global (${ctx.liveProfile.latitude.toFixed(2)}, ${ctx.liveProfile.longitude.toFixed(2)})`
-      : `${ctx.page.toUpperCase()} · ${regionId}`;
+      ? t("chat.ctxGlobal", {
+          lat: ctx.liveProfile.latitude.toFixed(2),
+          lon: ctx.liveProfile.longitude.toFixed(2),
+        })
+      : `${pageDisplay} · ${regionId}`;
 
   const saveLlmConfig = (next: LlmConfig) => {
     setLlmCfg(next);
@@ -241,7 +255,7 @@ export function FieldChatbot({
 
   const handleTestConnection = async () => {
     if (!llmCfg.endpoint.trim()) {
-      setTestStatus({ state: "error", message: "Enter an endpoint URL first." });
+      setTestStatus({ state: "error", message: t("chat.settings.testMissing") });
       return;
     }
     setTestStatus({ state: "testing", message: t("chat.settings.testing") });
@@ -250,12 +264,12 @@ export function FieldChatbot({
       saveLlmConfig({ ...llmCfg, enabled: true });
       setTestStatus({
         state: "ok",
-        message: `Connected! Reply: "${reply.slice(0, 60)}"`,
+        message: t("chat.settings.testOk", { reply: reply.slice(0, 60) }),
       });
     } catch (err) {
       setTestStatus({
         state: "error",
-        message: err instanceof Error ? `Failed: ${err.message}` : "Network or CORS error",
+        message: err instanceof Error ? t("chat.settings.testFail", { err: err.message }) : t("chat.settings.networkErr"),
       });
     }
   };
@@ -286,13 +300,13 @@ export function FieldChatbot({
             id: `a-${Date.now()}`,
             role: "assistant",
             text: reply,
-            sourceLabel: `LLM (${llmCfg.model || ENV_MODEL}) · Full Context`,
+            sourceLabel: t("chat.llmSource", { model: llmCfg.model || ENV_MODEL }),
           },
         ]);
         setIsLoading(false);
         return;
       } catch (err) {
-        const errHint = err instanceof Error ? err.message : "Network or CORS error";
+        const errHint = err instanceof Error ? err.message : t("chat.settings.networkErr");
         setIsLoading(false);
         const ans = answerQuestion(query, ctx);
         setMessages((prev) => [
@@ -300,8 +314,8 @@ export function FieldChatbot({
           {
             id: `a-${Date.now()}`,
             role: "assistant",
-            text: `${ans.text}\n\n[LLM fallback reason: ${errHint}]`,
-            sourceLabel: "Grounded Fallback (LLM Error)",
+            text: `${ans.text}\n\n${t("chat.fallbackNote", { err: errHint })}`,
+            sourceLabel: t("chat.fallbackSource"),
             followUps: ans.followUps,
           },
         ]);
@@ -329,7 +343,7 @@ export function FieldChatbot({
           <header className="chatbot-header">
             <div className="chatbot-title-wrap">
               <strong className="chatbot-title">{t("chat.title")}</strong>
-              <span className="chatbot-ctx-pill" title="Live active context">
+              <span className="chatbot-ctx-pill" title={t("chat.ctxLive")}>
                 {contextSummary}
               </span>
             </div>
@@ -337,7 +351,7 @@ export function FieldChatbot({
               <button
                 type="button"
                 className="chatbot-icon-btn"
-                onClick={() => setMessages([WELCOME_MESSAGE])}
+                onClick={() => setMessages([makeWelcomeMessage()])}
                 aria-label={t("chat.reset")}
                 title={t("chat.reset")}
               >
@@ -382,7 +396,7 @@ export function FieldChatbot({
                     })
                   }
                 >
-                  Gemini Native (AI Studio)
+                  {t("chat.settings.presetGeminiNative")}
                 </button>
                 <button
                   type="button"
@@ -396,7 +410,7 @@ export function FieldChatbot({
                     })
                   }
                 >
-                  Gemini (OpenAI-compat)
+                  {t("chat.settings.presetGeminiOpenAi")}
                 </button>
                 <button
                   type="button"
@@ -410,7 +424,7 @@ export function FieldChatbot({
                     })
                   }
                 >
-                  OpenAI
+                  {t("chat.settings.presetOpenAi")}
                 </button>
                 <button
                   type="button"
@@ -424,7 +438,7 @@ export function FieldChatbot({
                     })
                   }
                 >
-                  DeepSeek
+                  {t("chat.settings.presetDeepSeek")}
                 </button>
               </div>
               <label className="chatbot-check">
@@ -433,26 +447,26 @@ export function FieldChatbot({
                   checked={llmCfg.enabled}
                   onChange={(e) => saveLlmConfig({ ...llmCfg, enabled: e.target.checked })}
                 />
-                Use LLM Endpoint
+                {t("chat.settings.useLlm")}
               </label>
               <input
                 type="url"
                 className="chatbot-setting-input"
-                placeholder="Proxy, Gemini Native, or OpenAI-compatible URL"
+                placeholder={t("chat.settings.endpointPlaceholder")}
                 value={llmCfg.endpoint}
                 onChange={(e) => saveLlmConfig({ ...llmCfg, endpoint: e.target.value })}
               />
               <input
                 type="text"
                 className="chatbot-setting-input"
-                placeholder="Model (e.g. gemini-2.5-flash, gpt-4o-mini)"
+                placeholder={t("chat.settings.modelPlaceholder")}
                 value={llmCfg.model}
                 onChange={(e) => saveLlmConfig({ ...llmCfg, model: e.target.value })}
               />
               <input
                 type="password"
                 className="chatbot-setting-input"
-                placeholder="API Key (optional if using a server proxy)"
+                placeholder={t("chat.settings.keyPlaceholder")}
                 value={llmCfg.apiKey}
                 onChange={(e) => saveLlmConfig({ ...llmCfg, apiKey: e.target.value })}
               />
@@ -472,9 +486,9 @@ export function FieldChatbot({
                       fontSize: "0.75rem",
                       color:
                         testStatus.state === "ok"
-                          ? "#16a34a"
+                          ? "var(--data-pos)"
                           : testStatus.state === "error"
-                            ? "#dc2626"
+                            ? "var(--data-neg)"
                             : "inherit",
                     }}
                   >

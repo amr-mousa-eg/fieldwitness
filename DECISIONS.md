@@ -842,16 +842,6 @@ Written and committed before any analysis is run. Nothing here changes `main`, p
      - Winter wheat timing metrics in `submission.md` updated to report both MAE 58.9 d [52.2, 66.3] d and signed median +36.0 d.
 3. **Branch:** `ag/safety-audit-fixes`.
 
-## Autopilot handoff
-
-**2026-11-12, Task AG-3 (Antigravity session 3).**
-- **State after Task AG-3:** Consistency audit discrepancies reconciled across README, submission draft, and UI strings. Automated AI safety circuit breaker for Witness 3 documented. Branch `ag/safety-audit-fixes` ready for PR.
-- **In progress:** None.
-- **Background tasks:** None.
-- **Live Deployment:** https://amr-mousa-eg.github.io/fieldwitness/ (200 Kansas pilot fields, offline PWA enabled).
-- **Next Task:** Task P2.19 (Printable 1-Page Field Dossier component and print stylesheet on branch `ag/printable-dossier`).
-- **Claude Code coordination:** PRs #13, #14, #15, #17, #18, #19, #20, #21, #22, #23 merged/closed on main. Claude Code has active work in `docs/COORDINATION.md` for clean 2025 tests (`x3-clean2025`).
-
 ## 2026-11-12 — [antigravity] Printable 1-page field report (P2.19)
 
 1. **Context & Motivation:** Farmers and extension agents in low-connectivity rural Kansas environments require physical single-page field dossiers that can be printed or exported to PDF for in-person advisory visits and field consultations without requiring an active internet connection.
@@ -987,4 +977,22 @@ Pre-registered BEFORE execution (`CLAUDE.md` rule 7); existing `packs/` and UI g
    - Added `app/tests/buildAndSw.test.ts` validating isolated vendor chunk emission and `dist/sw.js` cache stamp parity.
    - Executed headless Chromium (`156.0.8078.79`) CDP E2E smoke test across 5 routes (`#/`, Compare, Scoreboard, Methods, Add My Field) at both desktop (`1280x800`) and mobile (`390x844`): verified `EN -> AR` `dir="rtl"` toggle, Chatbot open/query/reset flow, **0 horizontal overflow**, and **0 uncaught runtime exceptions**.
    - Full repo gates green (`ruff check`, `ruff format --check`, `t10_red_team_audit.py`, `uv run pytest -q`, `tsc --noEmit`, `npm test`, `npm run build`).
+
+## 2026-11-13 — [antigravity] UI Polish, Full Arabic Sub-section Localization, Chart Colors & Native `?` Explainers
+
+1. **Changes (`fix/ui-arabic-explainers-visuals`):**
+   - **Formatting & RTL fixes (`app/src/styles.css`, `app/src/format.ts`, `app/src/FieldSummaryPanel.tsx`, `app/src/ComparePage.tsx`, `app/src/Field3DView.css`, `app/src/builder/RotationBuilder.css`, `app/src/TourGuide.css`):** Added `flex-wrap: wrap` to `.app-nav` eliminating the 30 px mobile RTL horizontal overflow across all routes; replaced directional margins/paddings with CSS logical properties (including `.mini` table cells); wrapped signed numeric deltas in `<bdi dir="ltr">` / `\u2066...\u2069` so minus/plus signs stay leading in RTL.
+   - **Data Text & Graph Colors (`app/src/theme.ts`, `app/src/styles.css`, `app/src/tags.tsx`, chart components):** Added high-contrast semantic chart tokens (`--chart-pred`, `--chart-obs`, `--chart-ndvi`, `--chart-evi`, `marks`, tooltips) and distinct colour palettes across Light & Dark modes.
+   - **Complete Arabic Localization Across Sub-sections (`app/src/strings/ar.json`, `app/src/strings/en.json`, `app/src/builder/strings.ts`, `app/src/builder/strings.ar.json`, `app/src/format.ts`, `app/src/FieldStory.tsx`, `app/src/CalendarView.tsx`, `app/src/AdvisorConsole.tsx`, `app/src/Scoreboard.tsx`, `app/src/DiagnosisSection.tsx`, `app/src/MethodsPage.tsx`, `app/src/MethodsDiagram.tsx`, `app/src/PrintDossier.tsx`, `app/src/ComparePage.tsx`, `app/src/FieldList.tsx`, `app/src/FieldPage.tsx`, `app/src/FieldCard.tsx`, `app/src/Field3DView.tsx`, `app/src/AddFieldPage.tsx`, `app/src/FieldChatbot.tsx`, `app/src/builder/RotationBuilder.tsx`, `app/src/fieldSummary.ts`, `app/src/rankingExplainer.ts`, `app/src/liveClimateApi.ts`, `app/src/chatbotContext.ts`):** Localized all remaining sub-sections, pack unit strings (`unitLabel`), pack prose (`localizeMeasureNext`, `localizeCounterfactualFlip`, `localizeGradeReason`), 3D scenario/option labels, and builder UI with 100% EN/AR key and placeholder parity.
+   - **Unified `?` Explainers (`app/src/Explain.tsx`, `app/src/explainers.ts`, components):** Added `<Explain id="..." />` popovers using the existing `.explain` / `.explain-pop` design across titles and metrics (e.g., `Field3DView`, `AddFieldPage`, `DiagnosisSection`, `FieldSummaryPanel`, `Scoreboard`, `MethodsPage`) and fixed RTL viewport clamping in `Explain.tsx`.
+2. **Verification:** `npx tsc --noEmit && npm test` (35 files, 203 passed | 2 skipped), `npm run build` (clean in 905 ms), headless Chromium CDP audit across 19 route/viewport/theme combinations (0 errors, 0 horizontal overflow, popovers within `[0, clientWidth]`), `uv run ruff check . && uv run ruff format --check .`, `uv run python scripts/t10_red_team_audit.py`, and `uv run pytest -q` (328 passed, 9 skipped).
+
+## Autopilot handoff
+
+- **Updated:** 2026-11-13 (branch `fix/ui-arabic-explainers-visuals`)
+- **What this run did:** Completed UI text/delta RTL formatting, appealing chart/data colours, mobile `.app-nav` wrapping & RTL popover fixes, 100% Arabic localization across all UI sub-sections + pack advice/unit strings, and unified `<Explain id="..." />` `?` help buttons across remaining views; verified all JS/TS tests, build, Chromium CDP screenshots/checks, Python tests, ruff, and red-team audit.
+- **In progress:** None.
+- **Background tasks:** None (vite preview daemons stopped).
+- **Remaining / Next task:** Merge the open PR on `fix/ui-arabic-explainers-visuals` into `main` so GitHub Pages redeploys the updated frontend; optionally inspect/close PR #36 if superseded.
+- **Risks / Notes:** Full pack regeneration with `--taw-source ssurgo` (`t62_draws -> t72_export`) still requires local `data/` parquets not mounted in this remote VM.
 

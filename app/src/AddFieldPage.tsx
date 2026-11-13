@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
-  COVERAGE_ERROR_MESSAGE,
   type CustomFieldFormData,
   findNearestAnalysedField,
   generateCsvTemplate,
@@ -10,10 +9,9 @@ import {
   KANSAS_CROPS,
   parseCsvInput,
   PRESET_LOCATIONS,
-  SOIL_TEST_DISCLAIMER,
   SOWING_WINDOWS,
-  SUPPORTED_AREAS_TEXT,
 } from "./customField";
+import { Explain } from "./Explain";
 import { setActiveLiveClimateProfile } from "./chatbotContext";
 import { fetchLiveClimateProfile, type LiveClimateProfile } from "./liveClimateApi";
 import {
@@ -28,7 +26,7 @@ import {
 } from "./customFieldStore";
 import { DEFAULT_PRIORITIES, isDefault, type PriorityKey, PRIORITY_KEYS } from "./rank";
 import { routeHref } from "./route";
-import { t } from "./strings";
+import { type StringKey, cropName, t } from "./strings";
 import { emitTour } from "./tourEvents";
 import type { RegionIndex } from "./types";
 
@@ -104,7 +102,7 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
   // Save to device storage
   const handleSaveField = () => {
     if (form.latitude === null || form.longitude === null) {
-      alert("Please enter coordinates and check location before saving.");
+      alert(t("addfield.alertNoCoords"));
       return;
     }
     const record = convertFormToRecord(form, isSupported, selectedId ?? undefined);
@@ -215,7 +213,7 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
           setLonInput(String(res.data.longitude));
           handleCheckLocation(res.data.latitude, res.data.longitude);
         }
-        setCsvSuccess("CSV record parsed and populated into form successfully.");
+        setCsvSuccess(t("addfield.csvParsedOk"));
       }
     };
     reader.readAsText(file);
@@ -246,7 +244,7 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
         alert(res.errors.join("\n"));
       } else {
         setSavedFields(loadSavedFields());
-        alert(`Successfully imported ${res.imported} custom field(s).`);
+        alert(t("addfield.jsonImported", { n: res.imported }));
       }
     };
     reader.readAsText(file);
@@ -258,7 +256,7 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
       <header className="page-header">
         <h2 id="addfield-h">
           {t("addfield.title")}{" "}
-          <span className="tag-pill tag-E" title="Farmer-entered data (tag E)">
+          <span className="tag-pill tag-E" title={t("addfield.tagTitle")}>
             E
           </span>
         </h2>
@@ -268,7 +266,9 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
 
       {/* SECTION 1: Location & Coverage Check */}
       <section className="card-box" aria-labelledby="loc-h">
-        <h3 id="loc-h">{t("addfield.check.heading")}</h3>
+        <h3 id="loc-h">
+          {t("addfield.check.heading")} <Explain id="global_eval" />
+        </h3>
         <p className="muted">{t("addfield.check.help")}</p>
 
         <div className="presets-bar">
@@ -283,7 +283,7 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
                 emitTour(`preset:${preset.id}`);
               }}
             >
-              {preset.label}
+              {t(`addfield.preset.${preset.id}` as StringKey)}
             </button>
           ))}
         </div>
@@ -295,7 +295,7 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
               type="number"
               step="0.0001"
               value={latInput}
-              placeholder="e.g. 37.9717"
+              placeholder={t("addfield.latPlaceholder")}
               onChange={(e) => setLatInput(e.target.value)}
             />
           </label>
@@ -305,7 +305,7 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
               type="number"
               step="0.0001"
               value={lonInput}
-              placeholder="e.g. -100.8727"
+              placeholder={t("addfield.lonPlaceholder")}
               onChange={(e) => setLonInput(e.target.value)}
             />
           </label>
@@ -316,8 +316,8 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
 
         {checked && !isSupported && (
           <div className="coverage-alert-box error" role="alert">
-            <h4 className="alert-heading">{COVERAGE_ERROR_MESSAGE}</h4>
-            <p className="alert-body">{SUPPORTED_AREAS_TEXT}</p>
+            <h4 className="alert-heading">{t("addfield.unsupported.error")}</h4>
+            <p className="alert-body">{t("addfield.unsupported.areas")}</p>
           </div>
         )}
 
@@ -364,7 +364,10 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
 
         {liveProfile && (
           <div className="card-box global-profile-card" aria-label={t("addfield.eval.title", { mode: liveProfile.simulationMode })} style={{ marginTop: "1rem", borderInlineStart: "4px solid var(--accent)" }}>
-            <h3>{t("addfield.eval.title", { mode: liveProfile.simulationMode })}</h3>
+            <h3>
+              {t("addfield.eval.title", { mode: liveProfile.simulationMode })}{" "}
+              <Explain id="global_eval" />
+            </h3>
             <div className="climate-meta-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(11rem, 1fr))", gap: "0.75rem", margin: "0.75rem 0" }}>
               <div className="climate-stat">
                 <span className="stat-label" style={{ display: "block", fontSize: "0.8rem", color: "var(--muted)" }}>{t("addfield.eval.zone", { years: liveProfile.yearsEvaluated })}</span>
@@ -372,19 +375,22 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
               </div>
               <div className="climate-stat">
                 <span className="stat-label" style={{ display: "block", fontSize: "0.8rem", color: "var(--muted)" }}>{t("addfield.eval.rain")}</span>
-                <strong>{liveProfile.annualPrecipitationMm} mm [O/D]</strong>
+                <strong>{liveProfile.annualPrecipitationMm} {t("unit.mm")} [O/D]</strong>
               </div>
               <div className="climate-stat">
                 <span className="stat-label" style={{ display: "block", fontSize: "0.8rem", color: "var(--muted)" }}>{t("addfield.eval.eto")}</span>
-                <strong>{liveProfile.annualEtoMm} mm [D]</strong>
+                <strong>{liveProfile.annualEtoMm} {t("unit.mm")} [D]</strong>
               </div>
               <div className="climate-stat">
                 <span className="stat-label" style={{ display: "block", fontSize: "0.8rem", color: "var(--muted)" }}>{t("addfield.eval.deficit", { aridity: liveProfile.aridityIndex })}</span>
-                <strong>{liveProfile.waterDeficitMm} mm [D]</strong>
+                <strong>{liveProfile.waterDeficitMm} {t("unit.mm")} [D]</strong>
               </div>
               <div className="climate-stat">
-                <span className="stat-label" style={{ display: "block", fontSize: "0.8rem", color: "var(--muted)" }}>{t("addfield.eval.soilAws", { texture: liveProfile.soilContext.textureClass })}</span>
-                <strong>{liveProfile.soilContext.estimatedAweMm} mm {liveProfile.soilContext.tag}</strong>
+                <span className="stat-label" style={{ display: "block", fontSize: "0.8rem", color: "var(--muted)" }}>
+                  {t("addfield.eval.soilAws", { texture: liveProfile.soilContext.textureClass })}{" "}
+                  <Explain id="available_water_capacity" />
+                </span>
+                <strong>{liveProfile.soilContext.estimatedAweMm} {t("unit.mm")} {liveProfile.soilContext.tag}</strong>
               </div>
               <div className="climate-stat">
                 <span className="stat-label" style={{ display: "block", fontSize: "0.8rem", color: "var(--muted)" }}>{t("addfield.eval.soilSrc")}</span>
@@ -396,7 +402,7 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
             <ul className="global-rotation-list" style={{ paddingInlineStart: "1.2rem", margin: "0.25rem 0" }}>
               {liveProfile.recommendedRotations.map((r, i) => (
                 <li key={i} style={{ marginBottom: "0.5rem", fontSize: "0.88rem" }}>
-                  <strong>#{i + 1} {r.name}</strong> — RYI: <strong>{r.ryi}</strong> [D] · {t("metric.water_use_mm")}: <strong>{r.waterUseMm} mm</strong> ({t("metric.bad_year_water_mm")}: {r.badYearWaterMm} mm) [D] · {t("explain.bare_soil_months.title")}: {r.bareMonths} — {r.rationale}
+                  <strong>#{i + 1} {r.name}</strong> — RYI: <strong>{r.ryi}</strong> [D] · {t("metric.water_use_mm")}: <strong>{r.waterUseMm} {t("unit.mm")}</strong> ({t("metric.bad_year_water_mm")}: {r.badYearWaterMm} {t("unit.mm")}) [D] · {t("explain.bare_soil_months.title")}: {r.bareMonths} — {r.rationale}
                 </li>
               ))}
             </ul>
@@ -410,20 +416,20 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
       {/* NEAREST ANALYSED FIELD (If coordinates checked) */}
       {checked && nearestResult && (
         <section className="card-box nearest-field-box" aria-labelledby="nearest-h">
-          <h3 id="nearest-h">{nearestResult.label}</h3>
+          <h3 id="nearest-h">{t("addfield.nearest.label")}</h3>
           <div className="nearest-field-content">
             <div className="nearest-field-header">
               <span className="field-badge">{t("addfield.nearest.pilot", { num: nearestResult.fieldNumber })}</span>
               <span className="field-dist">
                 <strong>{t("addfield.nearest.dist", { km: nearestResult.distanceKm })}</strong>
               </span>
-              <span className="field-ha">{nearestResult.field.area_ha} ha</span>
+              <span className="field-ha">{nearestResult.field.area_ha} {t("unit.ha")}</span>
             </div>
 
-            <p className="disclaimer-mandatory">{nearestResult.disclaimer}</p>
+            <p className="disclaimer-mandatory">{t("addfield.nearest.disclaimer")}</p>
             {nearestResult.farDisclaimer && (
               <p className="disclaimer-far" role="note">
-                {nearestResult.farDisclaimer}
+                {t("addfield.nearest.farDisclaimer")}
               </p>
             )}
 
@@ -450,7 +456,7 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
             type="text"
             className="text-input"
             value={form.name}
-            placeholder="e.g. North 80 / Pivot 2"
+            placeholder={t("addfield.namePlaceholder")}
             onChange={(e) => setForm({ ...form, name: e.target.value })}
           />
         </label>
@@ -458,13 +464,15 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
         <div className="seasons-grid">
           {form.seasons.map((season, idx) => {
             const seasonLabels = [
-              `Last season (${season.harvest_year})`,
-              `Season before (${season.harvest_year})`,
-              `Season before that (${season.harvest_year})`,
+              t("addfield.seasonLast", { year: season.harvest_year }),
+              t("addfield.seasonPrev", { year: season.harvest_year }),
+              t("addfield.seasonPrev2", { year: season.harvest_year }),
             ];
             return (
               <fieldset key={season.harvest_year} className="season-box">
-                <legend className="season-legend">{seasonLabels[idx] ?? `Harvest Year ${season.harvest_year}`}</legend>
+                <legend className="season-legend">
+                  {seasonLabels[idx] ?? t("addfield.harvestYear", { year: season.harvest_year })}
+                </legend>
 
                 <label className="form-sublabel">
                   <span>{t("addfield.crop")}:</span>
@@ -478,7 +486,7 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
                   >
                     {KANSAS_CROPS.map((c) => (
                       <option key={c.id} value={c.id}>
-                        {c.label}
+                        {t(`addfield.cropOpt.${c.id}` as StringKey)}
                       </option>
                     ))}
                   </select>
@@ -496,7 +504,7 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
                   >
                     {SOWING_WINDOWS.map((w) => (
                       <option key={w.id} value={w.id}>
-                        {w.label}
+                        {t(`addfield.sowing.${w.id}` as StringKey)}
                       </option>
                     ))}
                   </select>
@@ -524,7 +532,7 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
                   })
                 }
               />
-              Yes
+              {t("addfield.yes")}
             </label>
             <label className="radio-opt">
               <input
@@ -539,7 +547,7 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
                   })
                 }
               />
-              No
+              {t("addfield.no")}
             </label>
             <label className="radio-opt">
               <input
@@ -554,7 +562,7 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
                   })
                 }
               />
-              I don't know
+              {t("addfield.unknown")}
             </label>
           </div>
 
@@ -567,7 +575,7 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
                   step="0.5"
                   min="0"
                   value={form.irrigation.amount ?? ""}
-                  placeholder="e.g. 10"
+                  placeholder={t("addfield.irrAmountPlaceholder")}
                   onChange={(e) =>
                     setForm({
                       ...form,
@@ -608,8 +616,8 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
               </div>
               <span className="muted amount-help">
                 {form.irrigation.unit === "in"
-                  ? "(Stored as mm: 1 in = 25.4 mm)"
-                  : "(Direct mm)"}
+                  ? t("addfield.unitHelpIn")
+                  : t("addfield.unitHelpMm")}
               </span>
             </div>
           )}
@@ -618,7 +626,7 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
         {/* SOIL TESTS (OPTIONAL) */}
         <fieldset className="sub-fieldset">
           <legend>{t("addfield.soil.heading")}</legend>
-          <p className="notice-box">{SOIL_TEST_DISCLAIMER}</p>
+          <p className="notice-box">{t("addfield.soil.notice")}</p>
 
           <div className="soil-inputs-grid">
             <label className="coord-label">
@@ -629,7 +637,7 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
                 min="0"
                 max="100"
                 value={form.soil_tests.organic_matter_pct ?? ""}
-                placeholder="e.g. 2.1"
+                placeholder={t("addfield.omPlaceholder")}
                 onChange={(e) =>
                   setForm({
                     ...form,
@@ -650,7 +658,7 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
                 min="0"
                 max="14"
                 value={form.soil_tests.ph ?? ""}
-                placeholder="e.g. 7.2"
+                placeholder={t("addfield.phPlaceholder")}
                 onChange={(e) =>
                   setForm({
                     ...form,
@@ -670,7 +678,7 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
                 step="0.1"
                 min="0"
                 value={form.soil_tests.cec ?? ""}
-                placeholder="e.g. 18.5"
+                placeholder={t("addfield.cecPlaceholder")}
                 onChange={(e) =>
                   setForm({
                     ...form,
@@ -745,7 +753,7 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
                       });
                     }}
                   />
-                  {t(`crop.${cId}` as "crop.maize")}
+                  {cropName(cId)}
                 </label>
               ))}
             </div>
@@ -770,7 +778,7 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
                       });
                     }}
                   />
-                  {t(`crop.${cId}` as "crop.maize")}
+                  {cropName(cId)}
                 </label>
               ))}
             </div>
@@ -783,7 +791,7 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
               className="text-input num-short"
               min="0"
               value={form.constraints.water_cap_mm ?? ""}
-              placeholder="e.g. 350"
+              placeholder={t("addfield.waterCapPlaceholder")}
               onChange={(e) =>
                 setForm({
                   ...form,
@@ -802,7 +810,7 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
               className="notes-textarea"
               rows={3}
               value={form.constraints.notes}
-              placeholder="e.g. Center pivot irrigation, sandy loam soil; herbicide carryover history"
+              placeholder={t("addfield.notesPlaceholder")}
               onChange={(e) =>
                 setForm({
                   ...form,
@@ -824,10 +832,7 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
       {/* SECTION 3: Offline CSV Template & Upload */}
       <section className="card-box" aria-labelledby="csv-h">
         <h3 id="csv-h">{t("addfield.csv.heading")}</h3>
-        <p className="muted">
-          Download a blank key-value CSV template (UTF-8 BOM compatible with Excel/Sheets), fill it in
-          at your convenience offline, and upload it back.
-        </p>
+        <p className="muted">{t("addfield.csvHelp")}</p>
 
         <div className="csv-actions-row">
           <button type="button" className="action-btn" onClick={handleDownloadCsv}>
@@ -849,7 +854,7 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
         {csvSuccess && <p className="csv-success-msg">{csvSuccess}</p>}
         {csvErrors.length > 0 && (
           <div className="csv-errors-box" role="alert">
-            <p className="error-title">CSV parsing issues:</p>
+            <p className="error-title">{t("addfield.csvErrorsTitle")}</p>
             <ul>
               {csvErrors.map((err, i) => (
                 <li key={i}>{err}</li>
@@ -894,7 +899,7 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
         </div>
 
         {savedFields.length === 0 ? (
-          <p className="muted">No fields saved on this device yet.</p>
+          <p className="muted">{t("addfield.savedEmpty")}</p>
         ) : (
           <ul className="saved-list">
             {savedFields.map((f) => (
@@ -904,11 +909,12 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
               >
                 <div className="saved-item-info">
                   <span className="saved-name">{f.name}</span>
-                  <span className="saved-coords">
-                    {f.coordinates.latitude.toFixed(4)}°N, {f.coordinates.longitude.toFixed(4)}°W
+                  <span className="saved-coords" dir="ltr">
+                    {Math.abs(f.coordinates.latitude).toFixed(4)}°{f.coordinates.latitude >= 0 ? "N" : "S"},{" "}
+                    {Math.abs(f.coordinates.longitude).toFixed(4)}°{f.coordinates.longitude >= 0 ? "E" : "W"}
                   </span>
                   <span className={`saved-tag ${f.is_supported ? "tag-ok" : "tag-out"}`}>
-                    {f.is_supported ? "Supported" : "Unsupported"}
+                    {f.is_supported ? t("addfield.supportedBadge") : t("addfield.unsupportedBadge")}
                   </span>
                 </div>
                 <div className="saved-item-actions">
@@ -917,13 +923,13 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
                     className="select-item-btn"
                     onClick={() => handleSelectSaved(f)}
                   >
-                    View / Edit
+                    {t("addfield.viewEdit")}
                   </button>
                   <button
                     type="button"
                     className="delete-item-btn"
                     onClick={() => handleDeleteSaved(f.id)}
-                    aria-label={`Delete ${f.name}`}
+                    aria-label={t("addfield.deleteLabel", { name: f.name })}
                   >
                     ×
                   </button>

@@ -8,7 +8,7 @@ import { setActiveFieldScenarios, setActivePriorities } from "./chatbotContext";
 import { emitTour } from "./tourEvents";
 import { loadScenarios } from "./data";
 import { generateFieldSummary } from "./fieldSummary";
-import { formatDelta, formatTagged } from "./format";
+import { formatDelta, formatTagged, localizeGradeReason } from "./format";
 import {
   type Constraints,
   DEFAULT_PRIORITIES,
@@ -101,7 +101,7 @@ function Detail({ row, current }: { row: Ranked; current: Ranked | undefined }) 
           <h4>{t("detail.gradeReasons")}</h4>
           <ul>
             {o.grade_reasons.map((s, i) => (
-              <li key={i}>{s}</li>
+              <li key={i}>{localizeGradeReason(s)}</li>
             ))}
           </ul>
         </section>
@@ -149,7 +149,10 @@ function Detail({ row, current }: { row: Ranked; current: Ranked | undefined }) 
             );
           })}
           <div>
-            <dt>{t("detail.regret")}</dt>
+            <dt>
+              {t("detail.regret")}
+              <Explain id="regret" />
+            </dt>
             <dd>
               <TaggedValue v={o.regret} />
             </dd>
@@ -278,15 +281,23 @@ function WhatIfPanel({
   if (!scenarios) {
     return (
       <fieldset className="panel">
-        <legend>{t("whatif.heading")}</legend>
+        <legend>
+          {t("whatif.heading")} <Explain id="weather_whatif" />
+        </legend>
         <p className="muted">{t("whatif.missing")}</p>
       </fieldset>
     );
   }
   return (
     <fieldset className="panel">
-      <legend>{t("whatif.heading")}</legend>
-      <p className="muted">{scenarios.note}</p>
+      <legend>
+        {t("whatif.heading")} <Explain id="weather_whatif" />
+      </legend>
+      <p className="muted">
+        {scenarios.note === "Sensitivity tests on past weather, not climate projections."
+          ? t("whatif.note")
+          : scenarios.note}
+      </p>
       <label className="slider">
         <span>{t("whatif.temp")}</span>
         <input
@@ -364,7 +375,9 @@ export function FieldCard({ pack, regionId }: { pack: FieldPack; regionId: strin
   return (
     <div className="card-layout">
       <section className="card-main" aria-labelledby="card-h">
-        <h3 id="card-h">{t("card.heading")}</h3>
+        <h3 id="card-h">
+          {t("card.heading")} <Explain id="pareto_ranking" />
+        </h3>
         <p className="muted">
           {t("card.intro")} {t(isDefault(priorities) ? "card.ranking.default" : "card.ranking.mine")}
         </p>

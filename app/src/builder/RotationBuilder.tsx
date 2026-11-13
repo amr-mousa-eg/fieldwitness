@@ -8,7 +8,7 @@ import "./RotationBuilder.css";
 import { loadSim3DInputs } from "../data";
 import { simulateOption } from "../field3d/physics";
 import { compareToCurrent, computeBareSoilMonths, type SummaryToken } from "../fieldSummary";
-import { cropName, t } from "../strings";
+import { cropName, getLocale, t } from "../strings";
 import { type BuilderKey, bt } from "./strings";
 import { TagBadge } from "../tags";
 import { emitTour } from "../tourEvents";
@@ -19,13 +19,14 @@ const CARD_ORDER = ["maize", "sorghum", "winter_wheat", "cover_crop", "fallow"];
 const DRAG_PX = 8;
 
 function Tokens({ tokens }: { tokens: SummaryToken[] }) {
+  const isAr = getLocale() === "ar";
   return (
     <>
       {tokens.map((k, i) =>
         k.kind === "text" ? (
           <span key={i}>{k.text}</span>
         ) : k.kind === "grade" ? (
-          <strong key={i}>grade {k.grade}</strong>
+          <strong key={i}>{isAr ? t("score.gradeLabel", { grade: k.grade }) : `grade ${k.grade}`}</strong>
         ) : (
           <span key={i} className="tagged">
             {k.value} {k.unit} <TagBadge tag={k.tag} source={k.source} />
@@ -48,11 +49,12 @@ function Cell({ m, unit, digits = 0, months = false }: { m: Tagged | undefined; 
 
 function ResultRow({ label, option }: { label: string; option: Option | null }) {
   const m = option?.metrics ?? {};
+  const mm = t("unit.mm");
   return (
     <tr>
       <th scope="row">{label}</th>
-      <Cell m={m.water_use_mm} unit="mm" />
-      <Cell m={m.bad_year_water_mm} unit="mm" />
+      <Cell m={m.water_use_mm} unit={mm} />
+      <Cell m={m.bad_year_water_mm} unit={mm} />
       <Cell m={m.cover_days} unit={bt("builder.months")} digits={1} months />
       <td>{option?.grade ?? t("season.notSimulated")}</td>
     </tr>

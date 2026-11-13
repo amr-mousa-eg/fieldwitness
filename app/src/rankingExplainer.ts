@@ -8,7 +8,7 @@ import {
   PRIORITY_METRICS,
 } from "./rank";
 import { RANKING_EXPLAINER_CONFIG } from "./rankingExplainerConfig";
-import { optionName, t } from "./strings";
+import { type StringKey, optionName, t } from "./strings";
 import type { Option } from "./types";
 
 export interface MetricContributionDetail {
@@ -44,15 +44,6 @@ export interface RankingExplanation {
   dominantShare?: number;
   sentence: string;
 }
-
-const PRIORITY_LABELS: Record<PriorityKey, string> = {
-  water: "Use less water",
-  bare: "Fewer bare-soil months",
-  badYear: "Do better in a bad year",
-  erosion: "Less erosion",
-  legume: "More nitrogen-fixing crops",
-  residue: "More organic matter input",
-};
 
 /**
  * Compute the exact mathematical breakdown of priority contributions for a given option
@@ -106,7 +97,7 @@ export function computeOptionBreakdown(
 
     contributions.push({
       key: k,
-      label: PRIORITY_LABELS[k],
+      label: t(`prio.${k}` as StringKey),
       weight,
       scaledValue: avgScaled,
       contribution,
@@ -178,7 +169,7 @@ export function explainTopRanking(
     maxShare >= RANKING_EXPLAINER_CONFIG.dominantContributionShare
   ) {
     const pct = Math.round(maxShare * 100);
-    const critLabel = PRIORITY_LABELS[dominantPrio];
+    const critLabel = t(`prio.${dominantPrio}` as StringKey);
     return {
       top: topBreakdown,
       next: nextBreakdown,

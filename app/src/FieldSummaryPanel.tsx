@@ -1,16 +1,20 @@
 import { Fragment } from "react";
+import { Explain } from "./Explain";
 import { type ComparisonSummary } from "./fieldSummary";
-import { optionName, t } from "./strings";
+import { cropName, optionName, t } from "./strings";
 import { TagBadge } from "./tags";
 
 export function FieldSummaryPanel({ summary }: { summary: ComparisonSummary }) {
   const { currentOption, topAlternative, isCurrentBest, currentNotSimulated: ns, tokens, metrics } = summary;
   const target = topAlternative ?? currentOption;
+  const currentSeq = currentOption.sequence.map((c) => cropName(c)).join(" → ");
+  const targetSeq = target.sequence.map((c) => cropName(c)).join(" → ");
 
   return (
     <div className="field-summary-card" aria-labelledby="field-summary-h">
       <h4 id="field-summary-h" className="field-summary-title">
         {t("summary.heading")}
+        <Explain id="plain_summary" />
       </h4>
       <p className="field-summary-sentence" data-testid="summary-sentence">
         {tokens.map((token, i) => {
@@ -45,13 +49,13 @@ export function FieldSummaryPanel({ summary }: { summary: ComparisonSummary }) {
               <th scope="col">{t("summary.metric")}</th>
               <th scope="col">
                 <span className="summary-col-title">{t("card.current")}</span>
-                <span className="summary-col-sub">({currentOption.sequence.join(" → ")})</span>
+                <span className="summary-col-sub">{t("summary.colSeq", { seq: currentSeq })}</span>
               </th>
               <th scope="col">
                 <span className="summary-col-title">
                   {isCurrentBest ? t("summary.topAlternative") : optionName(target)}
                 </span>
-                <span className="summary-col-sub">({target.sequence.join(" → ")})</span>
+                <span className="summary-col-sub">{t("summary.colSeq", { seq: targetSeq })}</span>
               </th>
               <th scope="col">{t("summary.difference")}</th>
             </tr>
@@ -81,9 +85,12 @@ export function FieldSummaryPanel({ summary }: { summary: ComparisonSummary }) {
                   ? "—"
                   : metrics.water_use.isAboutTheSame
                   ? t("summary.aboutTheSame")
-                  : `${metrics.water_use.diff > 0 ? "+" : ""}${metrics.water_use.diff} ${
-                      metrics.water_use.unit
-                    }`}
+                  : (
+                    <>
+                      <bdi dir="ltr">{metrics.water_use.diff > 0 ? "+" : ""}{metrics.water_use.diff}</bdi>{" "}
+                      {metrics.water_use.unit}
+                    </>
+                  )}
               </td>
             </tr>
             <tr>
@@ -110,9 +117,12 @@ export function FieldSummaryPanel({ summary }: { summary: ComparisonSummary }) {
                   ? "—"
                   : metrics.bad_year_water.isAboutTheSame
                   ? t("summary.aboutTheSame")
-                  : `${metrics.bad_year_water.diff > 0 ? "+" : ""}${metrics.bad_year_water.diff} ${
-                      metrics.bad_year_water.unit
-                    }`}
+                  : (
+                    <>
+                      <bdi dir="ltr">{metrics.bad_year_water.diff > 0 ? "+" : ""}{metrics.bad_year_water.diff}</bdi>{" "}
+                      {metrics.bad_year_water.unit}
+                    </>
+                  )}
               </td>
             </tr>
             <tr>
@@ -139,9 +149,12 @@ export function FieldSummaryPanel({ summary }: { summary: ComparisonSummary }) {
                   ? "—"
                   : metrics.bare_soil.isAboutTheSame
                   ? t("summary.aboutTheSame")
-                  : `${metrics.bare_soil.diff > 0 ? "+" : ""}${metrics.bare_soil.diff.toFixed(1)} ${
-                      metrics.bare_soil.unit
-                    }`}
+                  : (
+                    <>
+                      <bdi dir="ltr">{metrics.bare_soil.diff > 0 ? "+" : ""}{metrics.bare_soil.diff.toFixed(1)}</bdi>{" "}
+                      {metrics.bare_soil.unit}
+                    </>
+                  )}
               </td>
             </tr>
             <tr>

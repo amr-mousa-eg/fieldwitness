@@ -9,7 +9,7 @@ const TAG_KEY = { O: "tag.O", D: "tag.D", E: "tag.E", A: "tag.A" } as const;
 export function TagBadge({ tag, source }: { tag: Tag; source?: string }) {
   const meaning = t(TAG_KEY[tag]);
   return (
-    <abbr className={`tag tag-${tag}`} title={source ? `${meaning}. Source: ${source}` : meaning}>
+    <abbr className={`tag tag-${tag}`} title={source ? t("tag.sourceTitle", { meaning, source }) : meaning}>
       {tag}
     </abbr>
   );

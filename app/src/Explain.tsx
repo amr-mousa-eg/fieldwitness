@@ -33,8 +33,13 @@ export function Explain({ id }: { id: ExplainerId }) {
     if (open || !button.current) return setPos(null);
     const r = button.current.getBoundingClientRect();
     const width = Math.min(POP_WIDTH, window.innerWidth - 2 * GUTTER);
-    const left = Math.max(GUTTER, Math.min(r.left, window.innerWidth - width - GUTTER));
-    setPos({ top: r.bottom + 4, left, width });
+    const isRtl =
+      typeof document !== "undefined" &&
+      (document.documentElement.dir === "rtl" || getComputedStyle(button.current).direction === "rtl");
+    const rawLeft = isRtl ? r.right - width : r.left;
+    const left = Math.max(GUTTER, Math.min(rawLeft, window.innerWidth - width - GUTTER));
+    const top = Math.min(r.bottom + 4, Math.max(GUTTER, window.innerHeight - 240));
+    setPos({ top, left, width });
   };
 
   useEffect(() => {
