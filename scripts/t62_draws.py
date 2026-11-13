@@ -9,8 +9,8 @@ Fields with no fitted season (e.g. winter-wheat-only) get PRIOR worlds (tag A), 
 crop-specific and is not stored.
 """
 
+import argparse
 import json
-import sys
 import time
 from pathlib import Path
 
@@ -18,12 +18,17 @@ import numpy as np
 import pandas as pd
 
 from fieldwitness.data import labels, power
+from fieldwitness.data.ssurgo_taw import get_field_taw_base
 from fieldwitness.infer import abc, forward, priors, synthetic
 from fieldwitness.physics.forcing import forcing
 from fieldwitness.rotate.evaluate import N_WORLDS, subsample_draws
 
-n_ref = int(sys.argv[1]) if len(sys.argv) > 1 else 3000
-k = int(sys.argv[2]) if len(sys.argv) > 2 else 150
+_ap = argparse.ArgumentParser(description="Pool per-field posterior worlds.")
+_ap.add_argument("n_ref", nargs="?", type=int, default=3000)
+_ap.add_argument("k", nargs="?", type=int, default=150)
+_ap.add_argument("--taw-source", choices=("config", "ssurgo"), default="config")
+_args = _ap.parse_args()
+n_ref, k, taw_source = _args.n_ref, _args.k, _args.taw_source
 SEED = priors.SEED
 CROPS = ("maize", "sorghum")
 MIN_OBS = 10
@@ -57,19 +62,21 @@ def weather(lon, lat, years):
     return out
 
 
-def worlds(h):
+def worlds(h, field_taw_base: float = taw_base):
     irrig = np.asarray(h["irrigated"], bool)
     return {
-        "taw_mm": taw_base * np.asarray(h["taw_scale"], float),
+        "taw_mm": field_taw_base * np.asarray(h["taw_scale"], float),
         "kc_scale": np.asarray(h["kc_mid_scale"], float),
         "budget_mm": np.where(irrig, np.asarray(h["irrigation_mm"], float), 0.0),
     }
 
 
-prior_pool = worlds(priors.sample(2000, seed=SEED + 620))
+prior_hidden = priors.sample(2000, seed=SEED + 620)
+prior_pool = worlds(prior_hidden, taw_base)
 t0 = time.time()
 fields = {}
 for i, fid in enumerate(pilot.index):
+    f_taw_base = get_field_taw_base(field_id=str(fid)) if taw_source == "ssurgo" else taw_base
     lf = lab[lab["field_id"] == fid]
     parts, years = [], []
     if len(lf):
@@ -85,14 +92,15 @@ for i, fid in enumerate(pilot.index):
                 *wx[rec.year], n_ref, crop_p[rec.crop], cfgs[rec.crop], seed=SEED + 1000 + rec.year
             )
             p = abc.posterior(g["doy"].to_numpy(int), g["ndvi"].to_numpy(float), ref, noise, k, rng)
-            w = worlds(ref["hidden"])
+            w = worlds(ref["hidden"], f_taw_base)
             parts.append({key: v[p["idx"]] for key, v in w.items()})
             years.append(int(rec.year))
     if parts:
         pool = {key: np.concatenate([q[key] for q in parts]) for key in parts[0]}
         src, tag = "posterior", "D"
     else:
-        pool, src, tag = prior_pool, "prior", "A"
+        pool = worlds(prior_hidden, f_taw_base) if taw_source == "ssurgo" else prior_pool
+        src, tag = "prior", "A"
     d = subsample_draws(pool, N_WORLDS, seed=SEED + i)
     fields[str(fid)] = {
         "source": src,
