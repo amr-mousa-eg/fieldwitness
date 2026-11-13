@@ -42,7 +42,7 @@ These files are edited often by both sides. Claim them in the table before you e
 | Antigravity | `ag/external-data-engine` | `config/crops.yaml`, `src/fieldwitness/agree/trials.py`, `src/fieldwitness/data/ssurgo_taw.py`, `scripts/t73_baselines.py`, `app/src/liveSim.ts`, `DECISIONS.md` | Merged (#26) | 2026-11-12 |
 | Antigravity | `ag/multi-source-solutions` | `src/fieldwitness/agree/grade.py`, `scripts/t65_grade.py`, `scripts/t73_baselines.py`, `app/src/advisor.ts`, `app/src/AdvisorConsole.tsx`, `app/src/liveClimateApi.ts`, `DECISIONS.md` | Merged (#27) | 2026-11-13 |
 | Antigravity | `ag/final-polish` | `scripts/t62_draws.py`, `app/src/PrintDossier.tsx`, `docs/COORDINATION.md`, `DECISIONS.md` | Merged (#28) | 2026-11-13 |
-| Antigravity | `ag/context-chatbot` | `app/src/chatbotContext.ts`, `app/src/FieldChatbot.tsx`, `app/src/App.tsx`, `app/src/FieldPage.tsx`, `app/src/styles.css`, `app/tests/chatbot.test.ts`, `DECISIONS.md` | In progress (Context-aware project & field chatbot) | 2026-11-13 |
+| Antigravity | `ag/context-chatbot` | `app/src/chatbotContext.ts`, `app/src/FieldChatbot.tsx`, `app/src/App.tsx`, `app/src/FieldPage.tsx`, `app/src/styles.css`, `app/tests/chatbot.test.ts`, `DECISIONS.md` | Merged (#29–#31) | 2026-11-13 |
 | Claude Code | `claude/app-fixes` | `app/src/fieldSummary.ts`, `app/src/FieldSummaryPanel.tsx`, `app/tests/fieldSummary.test.ts` | Merged (#19) | 2026-11-12 |
 | Claude Code | `docs/how-we-built-bilingual` | `docs/HOW_WE_BUILT_FIELDWITNESS.en.md`, `docs/HOW_WE_BUILT_FIELDWITNESS.ar.md`, `README.md` (2 links) | Merged (#20) | 2026-11-12 |
 | Claude Code | `experiment/bias-diagnosis` (draft PR #21) | `scripts/x4_bias_diagnosis.py`, `src/fieldwitness/experimental/bias.py`, `tests/test_bias_diagnosis.py`, `results/hindcast/bias_diagnosis/`, `docs/BIAS_DIAGNOSIS.md` | Draft, gate failed, not adopted; do not merge | 2026-11-12 |
@@ -51,6 +51,7 @@ These files are edited often by both sides. Claim them in the table before you e
 | Claude Code | `claude/app-fixes` | `app/src/fieldSummary.ts`, `app/src/FieldSummaryPanel.tsx`, `app/tests/fieldSummary.test.ts` | Merged (#19) | 2026-11-12 |
 | Claude Code | `claude/app-fixes` | `app/src/fieldSummary.ts`, `app/src/FieldSummaryPanel.tsx`, `app/tests/fieldSummary.test.ts` | Open PR, not merged | 2026-11-12 |
 | Claude Code | `claude/cover-crop-3d` | `app/src/Field3DScene.tsx`, `app/src/Field3DView.tsx` | Open PR, not merged | 2026-11-12 |
+| Claude Code | `claude/chatbot-free-llm` | `app/src/chatbotContext.ts`, `app/src/chatbotClient.ts`, `app/src/FieldChatbot.tsx`, `app/src/styles.css` (chatbot block), `app/src/strings/en.json` (chat.* keys), `app/tests/chatbot*.test.ts`, `workers/`, `docs/api_notes.md`, `README.md`, `AI_USE.md`, `docs/drafts/submission.md` §5, `DECISIONS.md` | Post-freeze exception approved by owner; PR open | 2026-11-13 |
 
 ## Sync check
 

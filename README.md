@@ -48,6 +48,11 @@ For each field:
   baselines, including diagnostic breakdowns and grade-validity checks.
 - **Add my field (v0).** Client-side zero-server field digitizer and rotation evaluator running locally in
   browser storage.
+- **Ask FieldWitness (optional assistant).** A chat drawer that explains the project and the open
+  field from a tested set of facts. If a chat proxy is configured (`workers/chat-proxy/`), other
+  questions go to a third-party LLM (Gemini or Groq free tier); those replies are labelled
+  "AI-generated … Not a recommendation". The LLM never ranks options; the decision engine is
+  deterministic. Fields you add yourself are never sent to it.
 - **Guided tour.** 8-step "try it" walkthrough: field card, season, priority weights, ranking
   explainer, 3D simulation, building a rotation, limits, and adding a field.
 

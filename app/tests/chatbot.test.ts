@@ -111,7 +111,7 @@ describe("FieldWitness Context Chatbot", () => {
       fieldNumberLabel: "1",
       fieldPack: MOCK_PACK,
     });
-    expect(prompt).toContain("FieldWitness Scientific Assistant");
+    expect(prompt).toContain("FieldWitness assistant");
     expect(prompt).toContain("CURRENTLY VIEWED FIELD");
     expect(prompt).toContain("64.5 ha");
   });
