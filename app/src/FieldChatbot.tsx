@@ -241,8 +241,52 @@ export function FieldChatbot({
           {showSettings && (
             <div className="chatbot-settings">
               <p className="chatbot-settings-note">
-                Built-in Grounded Mode works offline for free. For generative LLM answers, connect a CORS-enabled proxy URL (no key needed) or your own OpenAI-compatible API key (stored in browser only):
+                Built-in Grounded Mode works offline for free. For generative LLM answers, pick a provider preset (or enter a proxy URL) and paste your API key (stored in your browser only):
               </p>
+              <div className="chatbot-chips" style={{ marginBottom: "0.35rem" }}>
+                <button
+                  type="button"
+                  className="chatbot-chip"
+                  onClick={() =>
+                    saveLlmConfig({
+                      ...llmCfg,
+                      enabled: true,
+                      endpoint: "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
+                      model: "gemini-2.5-flash",
+                    })
+                  }
+                >
+                  Gemini (AI Studio)
+                </button>
+                <button
+                  type="button"
+                  className="chatbot-chip"
+                  onClick={() =>
+                    saveLlmConfig({
+                      ...llmCfg,
+                      enabled: true,
+                      endpoint: "https://api.openai.com/v1/chat/completions",
+                      model: "gpt-4o-mini",
+                    })
+                  }
+                >
+                  OpenAI
+                </button>
+                <button
+                  type="button"
+                  className="chatbot-chip"
+                  onClick={() =>
+                    saveLlmConfig({
+                      ...llmCfg,
+                      enabled: true,
+                      endpoint: "https://api.deepseek.com/chat/completions",
+                      model: "deepseek-chat",
+                    })
+                  }
+                >
+                  DeepSeek
+                </button>
+              </div>
               <label className="chatbot-check">
                 <input
                   type="checkbox"
