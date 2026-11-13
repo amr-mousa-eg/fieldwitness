@@ -827,3 +827,28 @@ Written and committed before any analysis is run. Nothing here changes `main`, p
    - Sorghum: no correction.
 6. **Decision:** not adopted; nothing changes on `main`. Draft PR only.
 7. **Next (not done):** test whether a dryness-dependent term, or a soil water capacity prior set from SSURGO, explains the bias. That would need its own pre-registration.
+
+## 2026-11-12 — [antigravity] Consistency reconciliation and AI safety circuit breaker documentation (Task AG-3)
+
+1. **Neighbours stance confirmed ("The most honest proven way"):**
+   - In light of three independent negative results (T5.3 0/92 contrasts passed balance, T5.xa 0/32 passed placebo/control, and PR #13 DAPSM 0/4 passed balance with 4/4 untested under cut-off 2021-12-31), the Neighbour Witness (Witness 3) remains strictly **OFF** in grading.
+   - Preserved as an automated AI safety circuit breaker: multi-year rotational habits create severe unobserved confounding (SMD 0.97 in T5.3). FieldWitness's pre-registered diagnostics shut off the witness rather than hallucinating false advice.
+2. **Consistency reconciliations applied:**
+   - `README.md`, `app/src/strings/en.json`, and `docs/drafts/submission.md` updated:
+     - Season evaluation metric aligned to `results/story/ks_seasons_test.json` (188 of 240 field-seasons, 78.33%); removed citation to non-existent `kansas_season_eval.json`.
+     - Diagnostic citation clarified: 0 of 92 primary contrasts in `results/neighbours/diagnostics.md`, 0 of 32 in `results/neighbours/matching_diagnostics.md`.
+     - Correlation metric labeled precisely as Spearman rank correlation rho = 0.264 (was "Pearson r = 0.264" in `en.json:474`).
+     - SoilGrids description in `submission.md` corrected to reflect actual usage (background texture context/confounders; not used in water balance, which uses a calibrated 150 mm base).
+     - Winter wheat timing metrics in `submission.md` updated to report both MAE 58.9 d [52.2, 66.3] d and signed median +36.0 d.
+3. **Branch:** `ag/safety-audit-fixes`.
+
+## Autopilot handoff
+
+**2026-11-12, Task AG-3 (Antigravity session 3).**
+- **State after Task AG-3:** Consistency audit discrepancies reconciled across README, submission draft, and UI strings. Automated AI safety circuit breaker for Witness 3 documented. Branch `ag/safety-audit-fixes` ready for PR.
+- **In progress:** None.
+- **Background tasks:** None.
+- **Live Deployment:** https://amr-mousa-eg.github.io/fieldwitness/ (200 Kansas pilot fields, offline PWA enabled).
+- **Next Task:** Task P2.19 (Printable 1-Page Field Dossier component and print stylesheet on branch `ag/printable-dossier`).
+- **Claude Code coordination:** PRs #13, #14, #15, #17, #18, #19, #20, #21, #22, #23 merged/closed on main. Claude Code has active work in `docs/COORDINATION.md` for clean 2025 tests (`x3-clean2025`).
+
