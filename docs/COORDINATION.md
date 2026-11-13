@@ -55,6 +55,7 @@ These files are edited often by both sides. Claim them in the table before you e
 | Claude Code | `claude/app-fixes` | `app/src/fieldSummary.ts`, `app/src/FieldSummaryPanel.tsx`, `app/tests/fieldSummary.test.ts` | Merged (#19) | 2026-11-12 |
 | Claude Code | `claude/app-fixes` | `app/src/fieldSummary.ts`, `app/src/FieldSummaryPanel.tsx`, `app/tests/fieldSummary.test.ts` | Open PR, not merged | 2026-11-12 |
 | Claude Code | `claude/cover-crop-3d` | `app/src/Field3DScene.tsx`, `app/src/Field3DView.tsx` | Open PR, not merged | 2026-11-12 |
+| Claude Code | `claude/chatbot-free-llm` | `app/src/chatbotContext.ts`, `app/src/chatbotClient.ts`, `app/src/FieldChatbot.tsx`, `app/src/styles.css` (chatbot block), `app/src/strings/en.json` (chat.* keys), `app/tests/chatbot*.test.ts`, `workers/`, `docs/api_notes.md`, `README.md`, `AI_USE.md`, `docs/drafts/submission.md` §5, `DECISIONS.md` | Post-freeze exception approved by owner; PR open | 2026-11-13 |
 
 ## Sync check
 
