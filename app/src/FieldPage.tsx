@@ -1,6 +1,7 @@
 import { Suspense, lazy, useEffect, useState } from "react";
 import { AdvisorConsole } from "./AdvisorConsole";
 import { CalendarView } from "./CalendarView";
+import { setActiveFieldPack } from "./chatbotContext";
 import { FieldCard } from "./FieldCard";
 import { FieldStory } from "./FieldStory";
 import { PrintDossier } from "./PrintDossier";
@@ -40,6 +41,11 @@ export function FieldPage({
       .then(setPack)
       .catch((e: Error) => setError(e.message));
   }, [regionId, fieldId]);
+
+  useEffect(() => {
+    setActiveFieldPack(pack);
+    return () => setActiveFieldPack(null);
+  }, [pack]);
 
   return (
     <article className="field-page">

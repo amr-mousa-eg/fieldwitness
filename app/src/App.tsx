@@ -12,6 +12,7 @@ const Scoreboard = lazy(() => import("./Scoreboard").then((m) => ({ default: m.S
 const MethodsPage = lazy(() => import("./MethodsPage").then((m) => ({ default: m.MethodsPage })));
 const AddFieldPage = lazy(() => import("./AddFieldPage").then((m) => ({ default: m.AddFieldPage })));
 const TourGuide = lazy(() => import("./TourGuide").then((m) => ({ default: m.TourGuide })));
+const FieldChatbot = lazy(() => import("./FieldChatbot").then((m) => ({ default: m.FieldChatbot })));
 
 /** Every page renders exactly one <main id="main" tabIndex={-1}>. */
 function focusMain(): void {
@@ -155,6 +156,14 @@ export function App() {
           <TourGuide isOpen={isTourOpen} onClose={() => setIsTourOpen(false)} />
         </Suspense>
       )}
+      <Suspense fallback={null}>
+        <FieldChatbot
+          page={route.page ?? "map"}
+          regionId={regionId ?? "ks_t14slh"}
+          fieldId={route.fieldId ?? undefined}
+          index={index}
+        />
+      </Suspense>
     </div>
   );
 }
