@@ -1717,6 +1717,19 @@ table.mini {
   outline: 2px solid var(--focus);
   outline-offset: 2px;
 }
+.global-profile-card {
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-left: 4px solid var(--accent);
+  border-radius: 4px;
+  padding: 1rem 1.25rem;
+}
+.climate-stat {
+  padding: 0.5rem;
+  background: var(--page);
+  border-radius: 4px;
+  border: 1px solid var(--rule);
+}
 .field-row {
   display: flex;
   flex-direction: column;

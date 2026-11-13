@@ -14,6 +14,7 @@ import {
   SOWING_WINDOWS,
   SUPPORTED_AREAS_TEXT,
 } from "./customField";
+import { fetchLiveClimateProfile, type LiveClimateProfile } from "./liveClimateApi";
 import {
   clearAllCustomFields,
   convertFormToRecord,
@@ -44,6 +45,8 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
   const [lonInput, setLonInput] = useState<string>("");
   const [checked, setChecked] = useState<boolean>(false);
   const [isSupported, setIsSupported] = useState<boolean>(false);
+  const [liveProfile, setLiveProfile] = useState<LiveClimateProfile | null>(null);
+  const [loadingClimate, setLoadingClimate] = useState<boolean>(false);
 
   const [savedFields, setSavedFields] = useState<CustomFieldRecord[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -64,6 +67,7 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
     const supported = isInsideKansasTile(lon, lat);
     setIsSupported(supported);
     setChecked(true);
+    setLiveProfile(null);
     setForm((prev) => ({
       ...prev,
       latitude: lat,
@@ -320,6 +324,73 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
           <div className="coverage-alert-box success">
             <h4 className="alert-heading">{t("addfield.supported.title")}</h4>
             <p className="alert-body">{t("addfield.supported.desc")}</p>
+          </div>
+        )}
+
+        {checked && form.latitude !== null && form.longitude !== null && (
+          <div className="global-eval-action" style={{ marginTop: "1rem" }}>
+            <button
+              type="button"
+              className="action-btn"
+              onClick={async () => {
+                if (form.latitude !== null && form.longitude !== null) {
+                  setLoadingClimate(true);
+                  try {
+                    const prof = await fetchLiveClimateProfile(form.latitude, form.longitude);
+                    setLiveProfile(prof);
+                  } finally {
+                    setLoadingClimate(false);
+                  }
+                }
+              }}
+              disabled={loadingClimate}
+            >
+              {loadingClimate ? "Connecting to NASA POWER & Soil APIs..." : "🌍 Evaluate Global Field with Live NASA POWER & Soil Data"}
+            </button>
+          </div>
+        )}
+
+        {liveProfile && (
+          <div className="card-box global-profile-card" aria-label="Live Climate & Crop Rotation Assessment" style={{ marginTop: "1rem", borderLeft: "4px solid var(--accent)" }}>
+            <h3>Global Climate & Crop Rotation Assessment (NASA POWER + Soil Context)</h3>
+            <div className="climate-meta-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(11rem, 1fr))", gap: "0.75rem", margin: "0.75rem 0" }}>
+              <div className="climate-stat">
+                <span className="stat-label" style={{ display: "block", fontSize: "0.8rem", color: "var(--muted)" }}>Climate Zone:</span>
+                <strong>{liveProfile.climateZone}</strong>
+              </div>
+              <div className="climate-stat">
+                <span className="stat-label" style={{ display: "block", fontSize: "0.8rem", color: "var(--muted)" }}>Annual Rain:</span>
+                <strong>{liveProfile.annualPrecipitationMm} mm [O/D]</strong>
+              </div>
+              <div className="climate-stat">
+                <span className="stat-label" style={{ display: "block", fontSize: "0.8rem", color: "var(--muted)" }}>Annual ET₀:</span>
+                <strong>{liveProfile.annualEtoMm} mm [D]</strong>
+              </div>
+              <div className="climate-stat">
+                <span className="stat-label" style={{ display: "block", fontSize: "0.8rem", color: "var(--muted)" }}>Water Deficit:</span>
+                <strong>{liveProfile.waterDeficitMm} mm [D]</strong>
+              </div>
+              <div className="climate-stat">
+                <span className="stat-label" style={{ display: "block", fontSize: "0.8rem", color: "var(--muted)" }}>Aridity Index (P/ET₀):</span>
+                <strong>{liveProfile.aridityIndex}</strong>
+              </div>
+              <div className="climate-stat">
+                <span className="stat-label" style={{ display: "block", fontSize: "0.8rem", color: "var(--muted)" }}>Soil Source:</span>
+                <strong>{liveProfile.soilContext.source} [E]</strong>
+              </div>
+            </div>
+
+            <h4 style={{ margin: "0.75rem 0 0.25rem", fontSize: "0.95rem" }}>Recommended Adapted Rotations for this Environment:</h4>
+            <ul className="global-rotation-list" style={{ paddingLeft: "1.2rem", margin: "0.25rem 0" }}>
+              {liveProfile.recommendedRotations.map((r, i) => (
+                <li key={i} style={{ marginBottom: "0.5rem", fontSize: "0.88rem" }}>
+                  <strong>{r.name}</strong> ({r.waterDemand}) — {r.rationale}
+                </li>
+              ))}
+            </ul>
+            <p className="disclaimer-mandatory" style={{ marginTop: "0.5rem", fontSize: "0.75rem", color: "var(--muted)" }}>
+              Live agro-meteorological assessment forced by NASA POWER surface solar & thermal meteorology (CERES/MERRA-2) and FAO-56 dual crop coefficient reference evapotranspiration.
+            </p>
           </div>
         )}
       </section>
