@@ -3,6 +3,7 @@ import {
   type Priorities,
   type PriorityKey,
   type Ranked,
+  DEFAULT_PRIORITIES,
   PRIORITY_KEYS,
   PRIORITY_METRICS,
 } from "./rank";
@@ -201,3 +202,24 @@ export function explainTopRanking(
     sentence: t("rankExplainer.similar", { nextOption: nextName }),
   };
 }
+
+/**
+ * Returns deterministic ranking explanation for ranked alternatives.
+ */
+export function explainRanking(
+  allRankedKept: Ranked[],
+  p: Priorities = DEFAULT_PRIORITIES,
+): RankingExplanation {
+  const res = explainTopRanking(allRankedKept, p);
+  if (res) return res;
+  const rows = allRankedKept.map((r) => ({ option: r.option, metrics: r.metrics }));
+  const top = allRankedKept.length > 0
+    ? computeOptionBreakdown(allRankedKept[0], rows, p)
+    : { option: {} as Option, totalScore: 0, contributions: [] };
+  return {
+    top,
+    scoreDiff: 0,
+    sentence: t("rankExplainer.single"),
+  };
+}
+

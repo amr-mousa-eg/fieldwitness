@@ -21,6 +21,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal
 
+from fieldwitness.agree.grade import Effect
+
 
 @dataclass(frozen=True)
 class AgronomicTrialBenchmark:
@@ -128,3 +130,24 @@ def match_rotation_to_trials(sequence: list[str]) -> AgronomicTrialBenchmark | N
     """Matches a candidate rotation to published long-term Kansas trial evidence."""
     rot_type = classify_rotation_system(sequence)
     return TRIAL_BENCHMARKS.get(rot_type)
+
+
+def get_trial_effect(
+    sequence: list[str], base_dryland_ryi: float = 0.26
+) -> tuple[Effect | None, AgronomicTrialBenchmark | None]:
+    """Returns the calibrated trial Effect in Delta-RYI units and the trial benchmark.
+
+    Converts percentage yield advantage from long-term randomized trials
+    into Relative Yield Index units: Delta-RYI = (yield_pct / 100.0) * base_dryland_ryi.
+    """
+    bench = match_rotation_to_trials(sequence)
+    if bench is None:
+        return None, None
+
+    eff_pct = bench.yield_advantage_pct / 100.0
+    err_pct = max(0.12, abs(eff_pct) * 0.35)
+    val = round(eff_pct * base_dryland_ryi, 4)
+    lo = round((eff_pct - err_pct) * base_dryland_ryi, 4)
+    hi = round((eff_pct + err_pct) * base_dryland_ryi, 4)
+    effect = Effect(value=val, lo90=min(lo, hi), hi90=max(lo, hi))
+    return effect, bench

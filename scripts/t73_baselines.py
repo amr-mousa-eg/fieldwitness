@@ -31,7 +31,7 @@ from fieldwitness.physics.forcing import forcing
 CUT = dt.date(2021, 12, 31)
 S = 200
 SEED = priors.SEED
-CROPS = ("maize", "sorghum")
+CROPS = ("maize", "sorghum", "winter_wheat")
 MIN_OBS = 10
 METRICS = ("sos", "peak", "canopy_integral", "cover_days")
 OUT = Path("results/hindcast")
@@ -144,6 +144,22 @@ with as_of(CUT):
         lon, lat = pilot.loc[fid, "lon"], pilot.loc[fid, "lat"]
         wx_cache[fid] = weather(lon, lat, list(range(2001, CUT.year + 1)))
 
+
+def get_wx_list(fid: str, crop: str, cfg: dict) -> list[tuple[np.ndarray, np.ndarray]]:
+    wx = wx_cache[fid]
+    past_years = [y for y in wx if y <= CUT.year]
+    if int(cfg["nominal_sow_doy"].get(crop, 0)) >= 0:
+        return [wx[y] for y in past_years]
+    # Winter crop: pair consecutive years (y-1, y) to provide 730 days
+    pairs = []
+    for y in past_years:
+        if y - 1 in wx:
+            sw = forward.season_weather(wx, y, cfg)
+            if sw is not None:
+                pairs.append(sw)
+    return pairs if pairs else [wx[y] for y in past_years]
+
+
 rows = []
 for rec in recs:
     fid = rec["field_id"]
@@ -151,7 +167,7 @@ for rec in recs:
         c, y = s["crop"], s["year"]
         doy, nd = obs_series(fid, y)
         obs = stats(doy, nd[:, None])[0]
-        wl = list(wx_cache[fid].values())
+        wl = get_wx_list(fid, c, cfgs[c])
         own = past.get((fid, c))
         b0_src = "own_field_past" if own else "region_crop_pool"
         b0 = np.array(own if own else crop_pool[c])
