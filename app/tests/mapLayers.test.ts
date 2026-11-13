@@ -75,3 +75,11 @@ describe("low-zoom NASA backdrop (MODIS) hands over to HLS at zoom 10", () => {
     expect(mapView.indexOf('id: "backdrop"')).toBeLessThan(mapView.indexOf('{ id: "basemap"'));
   });
 });
+
+describe("MapLegend layout alignment", () => {
+  it("aligns legend items in a two-column grid and resets .grade auto start margin", () => {
+    const css = readFileSync(join(import.meta.dirname, "../src/styles.css"), "utf8");
+    expect(css).toMatch(/\.map-legend-list li\s*\{[^}]*display:\s*grid;[^}]*grid-template-columns:\s*1\.6rem minmax\(0,\s*1fr\);/s);
+    expect(css).toMatch(/\.map-legend \.grade\s*\{[^}]*margin-inline-start:\s*0;/s);
+  });
+});

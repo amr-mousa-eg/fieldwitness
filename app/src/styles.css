@@ -315,7 +315,13 @@ a {
   border-radius: 4px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
   max-width: 19rem;
+  max-height: calc(100% - 2.5rem);
+  overflow-y: auto;
   font-size: 0.8rem;
+  text-align: start;
+}
+[dir="rtl"] .map-legend {
+  bottom: 2.5rem;
 }
 .map-legend-summary {
   padding: 0.35rem 0.6rem;
@@ -325,6 +331,7 @@ a {
   user-select: none;
   background: var(--panel);
   border-radius: 4px;
+  text-align: start;
 }
 .map-legend-content {
   padding: 0.5rem 0.75rem 0.75rem;
@@ -343,19 +350,35 @@ a {
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--muted);
+  text-align: start;
+}
+[dir="rtl"] .map-legend-subtitle {
+  letter-spacing: 0;
+  text-transform: none;
 }
 .map-legend-list {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 0.25rem;
+  gap: 0.3rem;
 }
 .map-legend-list li {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1.6rem minmax(0, 1fr);
   align-items: center;
-  gap: 0.45rem;
+  column-gap: 0.5rem;
   font-size: 0.8rem;
+  line-height: 1.35;
+  text-align: start;
+}
+.map-legend-list li > :first-child {
+  justify-self: center;
+}
+.map-legend .grade {
+  margin-inline-start: 0;
+  width: 1.6rem;
+  box-sizing: border-box;
 }
 .legend-swatch-field {
   display: inline-block;
@@ -404,13 +427,13 @@ a {
 .guidance-panel {
   position: absolute;
   top: 1rem;
-  inset-inline-start: 1rem;
-  z-index: 10;
+  inset-inline-end: 3.5rem;
+  z-index: 15;
   background: var(--panel);
   border: 1px solid var(--rule);
   border-radius: 6px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
-  max-width: 23rem;
+  max-width: 22rem;
   padding: 0.85rem 1rem;
   display: flex;
   flex-direction: column;
@@ -501,6 +524,7 @@ a {
     bottom: 3.25rem; /* above the imagery credit (up to two lines on phones) */
     inset-inline-start: 0.5rem;
     max-width: calc(100% - 1rem);
+    max-height: calc(100% - 3.75rem);
   }
   .map,
   .map-loading {
