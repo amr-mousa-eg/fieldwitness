@@ -3,6 +3,7 @@ import { AdvisorConsole } from "./AdvisorConsole";
 import { CalendarView } from "./CalendarView";
 import { FieldCard } from "./FieldCard";
 import { FieldStory } from "./FieldStory";
+import { PrintDossier } from "./PrintDossier";
 import { ScaleFlags } from "./ScaleFlags";
 import { loadPack } from "./data";
 import { formatDate } from "./format";
@@ -70,6 +71,14 @@ export function FieldPage({
                 <dd>{formatDate(new Date(`${pack.data_as_of}T00:00:00Z`))}</dd>
               </div>
             </dl>
+            <button
+              type="button"
+              className="print-btn"
+              onClick={() => window.print()}
+              title={t("field.print.title")}
+            >
+              🖨️ {t("field.print")}
+            </button>
           </header>
           <nav className="tabs" aria-label={t("field.tabs")}>
             {TABS.map((x) => (
@@ -91,6 +100,7 @@ export function FieldPage({
             <ScaleFlags flags={pack.field.scale_flags} />
             <TagLegend />
           </div>
+          <PrintDossier pack={pack} regionId={regionId} index={index} />
         </>
       )}
     </article>
