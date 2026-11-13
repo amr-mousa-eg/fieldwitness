@@ -978,4 +978,13 @@ Pre-registered BEFORE execution (`CLAUDE.md` rule 7); existing `packs/` and UI g
    - **SSURGO TAW Stratification (`n=198` fields):** During `2022–2023` drought seasons, `canopy_integral` negative bias deepened from `-7.44` (low TAW gap `63.1 mm`) to `-22.03` (mid gap `129.3 mm`) and `-17.63` (high gap `164.3 mm`), motivating the `--taw-source ssurgo` full-data rebuild flagged for the local workstation.
    - **EO Validation Package (`tests/test_eo_validation.py`, `tests/test_calibration.py`):** All unit tests, `check_smap_gpm.py`, `check_ecostress.py`, `check_wimas.py`, `ruff`, and `t10_red_team_audit.py` pass cleanly.
 
+## 2026-11-13 — [antigravity] Enhancement Phase 5: Rolldown Vendor Bundle Splitting, SW Cache Versioning & Headless Chromium E2E Smoke
+
+1. **Implementation (`app/vite.config.ts`, `app/public/sw.js`, `app/src/main.tsx`, `app/src/vite-env.d.ts`):**
+   - Configured Vite 8 Rolldown `build.rolldownOptions.output.codeSplitting.groups` isolating `vendor-maplibre`, `vendor-three`, `vendor-charts`, and `vendor-react`, slashing entry & lazy app chunks (`index` `368.7 kB -> 149.5 kB`, `MapView` `1,069.2 kB -> 6.4 kB`, `Field3DView` `633.5 kB -> 48.4 kB`, `AdvisorConsole` `387.0 kB -> 10.2 kB`).
+   - Added build-stamped `__FW_CACHE_VERSION__` (`versionServiceWorker` Vite plugin stamping `dist/sw.js` and matching `main.tsx` `APP_CACHE = fw-app-${__FW_CACHE_VERSION__}`) so every deploy automatically rotates PWA caches.
+2. **Verification:**
+   - Added `app/tests/buildAndSw.test.ts` validating isolated vendor chunk emission and `dist/sw.js` cache stamp parity.
+   - Executed headless Chromium (`156.0.8078.79`) CDP E2E smoke test across 5 routes (`#/`, Compare, Scoreboard, Methods, Add My Field) at both desktop (`1280x800`) and mobile (`390x844`): verified `EN -> AR` `dir="rtl"` toggle, Chatbot open/query/reset flow, **0 horizontal overflow**, and **0 uncaught runtime exceptions**.
+   - Full repo gates green (`ruff check`, `ruff format --check`, `t10_red_team_audit.py`, `uv run pytest -q`, `tsc --noEmit`, `npm test`, `npm run build`).
 
