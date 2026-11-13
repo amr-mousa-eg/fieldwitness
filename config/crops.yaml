@@ -111,6 +111,8 @@ crops:
     stage_lengths_days:
       ks_t14slh: {value: [160, 75, 75, 25], ref: {source: fao56_ch6, table: 11, row: "Winter Wheat | October | Idaho, USA"}, verified: true,
                   choice: "Continental row with winter dormancy, closest to Kansas (A)."}
+      ks_calibrated_kstate: {value: [160, 70, 40, 25], ref: {source: fao56_ch6, table: 11, row: "Winter Wheat | October | Idaho, USA"}, verified: true,
+                             choice: "Calibrated to Kansas High Plains heading (DOY 140-150) and harvest (early July) per K-State Extension MF587 & Mesonet (docs/research/phenology_priors.md)."}
       fr_toulouse_t31tcj: {value: [30, 140, 40, 30], ref: {source: fao56_ch6, table: 11, row: "Winter Wheat | November | Mediterranean"}, verified: true,
                            choice: "Mediterranean row, closest to Toulouse (A)."}
       ua_central_t36uvu: {value: [160, 75, 75, 25], ref: {source: fao56_ch6, table: 11, row: "Winter Wheat | October | Idaho, USA"}, verified: true,
