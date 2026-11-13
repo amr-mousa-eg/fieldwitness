@@ -32,6 +32,8 @@
   "field.pixels": "Interior HLS pixels",
   "field.boundary": "Boundary from",
   "field.asof": "Data up to",
+  "field.print": "Print field dossier",
+  "field.print.title": "Print or export 1-page physical field decision dossier (A4)",
   "field.tabs": "Field views",
   "tab.story": "Field story",
   "tab.options": "Options",
