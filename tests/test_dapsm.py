@@ -32,6 +32,16 @@ def test_centroids_square_field():
     assert c.loc[0, "lat"] == pytest.approx(38.005, abs=1e-5)
 
 
+def test_centroids_ukraine_utm36n():
+    import shapely
+
+    sq = shapely.box(32.30, 48.20, 32.31, 48.21)
+    pilot = pd.DataFrame({"field_id": ["ua1"], "geometry": [shapely.to_wkb(sq)]})
+    c = dapsm.centroids(pilot, epsg="EPSG:32636")
+    assert c.loc[0, "lon"] == pytest.approx(32.305, abs=1e-5)
+    assert c.loc[0, "lat"] == pytest.approx(48.205, abs=1e-5)
+
+
 def _toy():
     # rows 0,1 treated; 2,3,4 reference. Fields: 0->A, 1->B, 2->A, 3->C, 4->D
     ps = np.array([0.50, 0.20, 0.50, 0.21, 0.90])

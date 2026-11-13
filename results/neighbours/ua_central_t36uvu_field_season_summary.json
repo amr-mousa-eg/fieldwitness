@@ -1,0 +1,98 @@
+{
+  "region_id": "ua_central_t36uvu",
+  "rows": 2765,
+  "rows_with_outcome": 2145,
+  "fields": 395,
+  "crop_source": "classifier (Tier 3 unlabelled, tag D)",
+  "tags": {
+    "canopy_integral": "D",
+    "peak_ndvi": "D",
+    "cover_days": "D",
+    "season_length": "D",
+    "canopy_drop": "D",
+    "season_precip_mm": "D",
+    "season_tmax_c": "D",
+    "clay_pct": "E",
+    "sand_pct": "E",
+    "soc_g_kg": "E",
+    "area_ha": "E",
+    "crop": "D",
+    "prev_crop": "D",
+    "prev2_crop": "D",
+    "dry_season": "A"
+  },
+  "windows_tag_A": {
+    "maize": [
+      91,
+      304
+    ],
+    "sorghum": [
+      91,
+      304
+    ],
+    "soybean": [
+      91,
+      304
+    ],
+    "sunflower": [
+      91,
+      304
+    ],
+    "winter_wheat": [
+      1,
+      196
+    ]
+  },
+  "contrast_counts": [
+    {
+      "crop": "maize",
+      "prev_crop": "maize",
+      "n": 420,
+      "n_fields": 212
+    },
+    {
+      "crop": "maize",
+      "prev_crop": "sunflower",
+      "n": 372,
+      "n_fields": 265
+    },
+    {
+      "crop": "maize",
+      "prev_crop": "winter_wheat",
+      "n": 185,
+      "n_fields": 164
+    },
+    {
+      "crop": "maize",
+      "prev_crop": "fallow",
+      "n": 2,
+      "n_fields": 2
+    },
+    {
+      "crop": "sunflower",
+      "prev_crop": "sunflower",
+      "n": 494,
+      "n_fields": 245
+    },
+    {
+      "crop": "sunflower",
+      "prev_crop": "maize",
+      "n": 419,
+      "n_fields": 284
+    },
+    {
+      "crop": "sunflower",
+      "prev_crop": "winter_wheat",
+      "n": 249,
+      "n_fields": 186
+    },
+    {
+      "crop": "sunflower",
+      "prev_crop": "fallow",
+      "n": 4,
+      "n_fields": 4
+    }
+  ],
+  "irrigation_proxy": "not available (WorldCereal needs a login, T1.4)",
+  "et_outcome": "not available (no ECOSTRESS data)"
+}

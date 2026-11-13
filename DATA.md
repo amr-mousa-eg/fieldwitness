@@ -12,11 +12,13 @@ Only the row groups whose `bbox` statistics intersect the query box are read (se
 
 - Punjab file (Tier 3 candidate): `https://data.source.coop/ftw/global-data/predictions/vectors/alpha/results-by-admin-conf/admin:country_code=IN/IN_PB.parquet`
   (10,396,804 polygons over the 2024 and 2025 layers; CRS OGC:CRS84; 159 row groups, 992 MB).
+- Ukraine file (Tier 3 `ua_central_t36uvu`): `https://data.source.coop/ftw/global-data/predictions/vectors/alpha/results-by-admin-conf/admin:country_code=UA/Ukraine.parquet`
+  (windowed extract for `T36UVU` 2×2 20 m COG tiles `tx in {1,2}, ty in {7,8}`, 40.0 MB downloaded, deduplicated to 395 unique fields ≥ 5 ha across 8 10-km spatial blocks; 0 scale-flagged).
 - Kansas file (not used: CSB is the Tier 1 source): `.../admin:country_code=US/US_KS.parquet` (1,103,107 polygons; 17 row groups, 531 MB).
 - Other countries: `.../results-by-admin-conf/admin:country_code=<CC>/...`; find files via the STAC catalogue
   `https://data.source.coop/ftw/global-data/predictions/vectors/collection.json`.
 - Licence: **CC-BY-4.0**. Attribution: Fields of the World / Taylor Geospatial (polygons from the PRUE model on Sentinel-2).
-- Caveat (from the README): a "field" is a predicted remote-sensing field unit, not a cadastral parcel; alpha release.
+- Caveat (from the README): a "field" is a predicted remote-sensing field unit, not a cadastral parcel; alpha release. No crop labels (`labels.source == "none"`), so Ukraine crop histories are inferred via causal Sentinel-2 phenology + TWDTW (`crop_source = "classifier"`, tag `D`).
 
 ### USDA NASS Crop Sequence Boundaries (CSB), 2017–2024 edition
 
@@ -51,6 +53,12 @@ Only the row groups whose `bbox` statistics intersect the query box are read (se
   - DOIs: `HLSL30.002`: https://doi.org/10.5067/HLS/HLSL30.002 ; `HLSS30.002`: https://doi.org/10.5067/HLS/HLSS30.002
   - Citation: Claverie, M., Ju, J., Masek, J. G., et al. (2018). The Harmonized Landsat and Sentinel-2 (HLS) Product. *Remote Sensing of Environment*, 219, 145–161.
   - Licence: NASA Earth Science Data Policy (open and free for all users).
+- **Sentinel-2 L2A Collection 1 COGs (Element84 Earth Search v1, Tier 3 `ua_central_t36uvu`)**:
+  - Endpoint: `https://earth-search.aws.element84.com/v1/search`, collection `sentinel-2-l2a` (`grid:code = "MGRS-36UVU"`).
+  - Access (`fieldwitness.data.s2_cog`): HTTP Range reads of targeted 20 m (`512×512`) COG tiles for `red` (B04 IFD 1), `nir` (B08 IFD 1), and `scl` (SCL IFD 0, keeping clear classes `SCL in {4, 5}`). Computes NDVI and 2-band EVI2 (`2.5 * (NIR - RED) / (NIR + 2.4 * RED + 1.0)`, Jiang et al. 2008, *Remote Sensing of Environment* 112(10):3833–3845) over up to 12 seeded interior pixel centres per field (15 m inward buffer).
+  - Radiometric offset caveat: STAC `raster:bands` on baseline 04.00/05.xx scenes advertises `offset = -0.1` even when `earthsearch:boa_offset_applied == true`; `s2_cog.py` applies `-0.1` only when `earthsearch:boa_offset_applied` is falsy to avoid double subtraction.
+  - Central Ukraine dataset (`ua_central_t36uvu`): 128 balanced scenes (`2017-03-01` to `2024-11-17`), 48,199 clear field-date rows across 395 fields (`0` saturated `ndvi >= 0.999` values); combined session downloads across FTW (40.0 MB), S2 COG (~595 MB including offset fix re-extraction), NASA POWER (244 points, ~15 MB HTTP), and SoilGrids (35.1 KB) stayed ~650 MB (`< 1 GB` cap).
+  - Licence: Copernicus Sentinel Data Terms and Conditions (open and free, attribution to European Union / ESA / Copernicus via Element84 Earth Search AWS Public Dataset).
 - **NASA GIBS HLS True-Colour Basemap (T9.1 / P0.1)**:
   - Source: NASA Global Imagery Browse Services (GIBS) / LP DAAC, part of NASA EOSDIS.
   - Layer: `HLS_S30_Nadir_BRDF_Adjusted_Reflectance` (Sentinel-2 MSI true-colour RGB: Red B04, Green B03, Blue B02).

@@ -35,11 +35,15 @@ MIN_ARM = {"all": 30, "wet": 20, "dry": 20}
 MIN_BLOCKS = 5
 
 
+BASE_PREV2_LEVELS = ("winter_wheat", "maize", "sorghum", "fallow", "unknown")
+
+
 def design(df: pd.DataFrame) -> pd.DataFrame:
     """Confounder matrix: numeric columns plus one-hot of the crop two years back."""
     x = df[list(CONFOUNDERS)].astype(float).copy()
     prev2 = df["prev2_crop"].fillna("unknown")
-    for level in ("winter_wheat", "maize", "sorghum", "fallow", "unknown"):
+    extra = tuple(sorted(set(prev2.unique()) - set(BASE_PREV2_LEVELS)))
+    for level in (*BASE_PREV2_LEVELS, *extra):
         x[f"prev2_{level}"] = (prev2 == level).astype(float)
     return x
 

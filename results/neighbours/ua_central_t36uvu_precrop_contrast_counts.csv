@@ -1,0 +1,9 @@
+crop,prev_crop,n,n_fields
+maize,maize,420,212
+maize,sunflower,372,265
+maize,winter_wheat,185,164
+maize,fallow,2,2
+sunflower,sunflower,494,245
+sunflower,maize,419,284
+sunflower,winter_wheat,249,186
+sunflower,fallow,4,4

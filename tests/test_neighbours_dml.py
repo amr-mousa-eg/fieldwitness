@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from fieldwitness.neighbours.dml import SEED, contrast_list, fit_contrast
+from fieldwitness.neighbours.dml import SEED, contrast_list, design, fit_contrast
 
 
 def _synthetic(n=300, effect=5.0):
@@ -47,3 +47,12 @@ def test_small_arm_is_skipped():
 def test_contrast_list_needs_both_arms():
     df = _synthetic()
     assert contrast_list(df) == [("maize", "maize", "winter_wheat")]
+
+
+def test_design_includes_extra_prev2_levels():
+    df = _synthetic(n=10)
+    df.loc[0, "prev2_crop"] = "sunflower"
+    x = design(df)
+    assert "prev2_sunflower" in x.columns
+    assert x.loc[0, "prev2_sunflower"] == 1.0
+    assert x.loc[1, "prev2_sunflower"] == 0.0

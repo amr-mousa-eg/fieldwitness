@@ -1,0 +1,29 @@
+{
+ "region_id": "ua_central_t36uvu",
+ "candidates": 778,
+ "candidates_by_crop": {
+  "unlabelled": 778
+ },
+ "quotas": {
+  "unlabelled": 400
+ },
+ "pilot_fields": 395,
+ "blocks_covered": 8,
+ "blocks_with_candidates": 8,
+ "area_ha_median": 48.678,
+ "interior_px_median": 473.0,
+ "hls_scale_flagged": 0,
+ "cog_tile_window": [
+  [
+   1,
+   2
+  ],
+  [
+   7,
+   8
+  ]
+ ],
+ "min_area_ha": 5.0,
+ "seed": 20261114,
+ "stratification": "10 km block uniform (Tier 3 unlabelled FTW boundaries)"
+}
