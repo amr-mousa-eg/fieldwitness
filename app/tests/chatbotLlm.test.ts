@@ -246,5 +246,13 @@ describe("KB facts consistency", () => {
     expect(readme).toContain(`signed median offset +${FACTS.wheatPeakMedianLateDays.value} d`);
     expect(readme).toContain(`since ${FACTS.hlsFirstSeason.value}`);
     expect(readme).toContain(`${FACTS.pilotFields.value} pilot fields`);
+
+    const uaSummary = readJson("results/pilot_fields/ua_central_t36uvu_summary.json");
+    const uaSeasons = readJson("results/neighbours/ua_central_t36uvu_field_season_summary.json");
+    const uaReport = readText("results/neighbours/ua_central_t36uvu_report.md");
+    expect(Number(FACTS.uaFields.value)).toBe(uaSummary.pilot_fields);
+    expect(Number(FACTS.uaSeasons.value)).toBe(uaSeasons.rows);
+    expect(uaReport).toContain(`${FACTS.uaPreCutoffPass.value} pre-cutoff`);
+    expect(uaReport).toContain(`${FACTS.uaFullPass.value} full-period`);
   });
 });

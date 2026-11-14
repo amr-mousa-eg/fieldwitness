@@ -6,6 +6,7 @@ import { IS_DEMO_DATA } from "./data";
 import { EXPLAINERS, explainer } from "./explainers";
 import { type StringKey, t } from "./strings";
 import { TagBadge, TagLegend } from "./tags";
+import { UkraineNeighboursSection } from "./UkraineNeighboursSection";
 
 /** Datasets as listed in DATA.md; text in strings/en.json (methods.ds.<id>.*). */
 /** Datasets as listed in DATA.md; text in strings/en.json (methods.ds.<id>.*). */
@@ -185,6 +186,8 @@ export function MethodsPage() {
       </section>
 
       <DiagnosisSection />
+
+      <UkraineNeighboursSection />
 
       <section aria-labelledby="m-soil">
         <h3 id="m-soil">
