@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Backtest } from "./AdvisorConsole";
 import { DiagnosisSection } from "./DiagnosisSection";
+import { UkraineNeighboursSection } from "./UkraineNeighboursSection";
 import { Explain } from "./Explain";
 import { setActiveHindcast } from "./chatbotContext";
 import { loadHindcast, loadPack } from "./data";
@@ -213,6 +214,7 @@ export function Scoreboard({ index }: { index: RegionIndex }) {
         <>
           <GradeValiditySection />
           <DiagnosisSection />
+          <UkraineNeighboursSection />
         </>
       )}
       <div className="score-story">

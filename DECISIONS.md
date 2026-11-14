@@ -1086,10 +1086,10 @@ Integrated all 24 NASA Earth observation missions, USDA, USGS, FAO, and ECMWF pa
 
 ## Autopilot handoff
 
-- **Updated:** 2026-11-13 (branch `feature/central-ukraine-neighbours`, merged `origin/main`)
-- **What this run did:** Added Tier 3 Central Ukraine (`ua_central_t36uvu`, 395 FTW fields across 8 spatial blocks) via an open Sentinel-2 L2A 20 m COG pipeline (`s2_cog.py`, `ukraine_seasons.py`, `run_ukraine_neighbours.py`), ran all 3 Phase 2 Neighbours causal estimators across pre-cutoff (`<=2021`) and full (`2018–2024`) periods vs Kansas (`ks_t14slh`), generated empirical gate reports (`results/neighbours/ua_central_t36uvu_report.md`), and merged `origin/main` cleanly.
-- **In progress:** None. PR #44 ready for merge on `feature/central-ukraine-neighbours`.
+- **Updated:** 2026-11-14 (branch `main`, post-PR #44)
+- **What this run did:** Verified `main` is up to date with `origin/main` (`f3cadf3`) with no git merge conflicts, and surfaced the recently merged Central Ukraine (`ua_central_t36uvu`) Phase 2 Neighbours Witness evaluation in the web app (`app/src/ukraineNeighbours.ts`, `app/src/UkraineNeighboursSection.tsx`) on both `MethodsPage` and `Scoreboard`, with full EN/AR localization (`app/src/strings/en.json`, `app/src/strings/ar.json`), updated `FACTS` and `witnesses` KB entries in `app/src/chatbotContext.ts`, and cross-checked unit tests (`app/tests/ukraineNeighbours.test.ts`, `app/tests/chatbotLlm.test.ts`).
+- **In progress:** None.
 - **Background tasks:** None.
-- **Remaining / Next task:** Independently cross-validate Tier 3 classifier labels against ground-truth parcel surveys (or a validated Tier 1/2 region with crop rotation diversity) before deciding whether to enable the Neighbours witness in grading; merge PR #44 once reviewed.
-- **Risks / Notes:** Total local downloads stayed under the `< 1 GB` ceiling (`~650 MB`); `config/grading.yaml` and `app/public/packs/ks_t14slh/` were not altered; Neighbours remains `OFF` in grading because `ua_central_t36uvu` labels are classifier-derived (tag `D`).
+- **Remaining / Next task:** Independently cross-validate Tier 3 Ukraine classifier labels against ground-truth parcel surveys (or a validated Tier 1/2 region with crop rotation diversity) before deciding whether to enable the Neighbours witness in grading.
+- **Risks / Notes:** Neighbours remains `OFF` in grading (`config/grading.yaml` and `packs/demo/ks_t14slh/` untouched) because `ua_central_t36uvu` crop labels are classifier-derived (`tag D`).
 
