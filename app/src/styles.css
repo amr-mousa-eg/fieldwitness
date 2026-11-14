@@ -20,6 +20,13 @@
   --grade-b: #1f5f7e;
   --grade-c: #785800;
   --grade-d: #8a2a1a;
+  --grade-fg: #ffffff;
+  --shade: rgba(34, 49, 58, 0.055);
+  --surface-tint: rgba(34, 49, 58, 0.04);
+  --surface-raised: #ffffff;
+  --data-highlight: #1f5f7e;
+  --data-pos: #1d5e2b;
+  --data-neg: #8a2a1a;
   --chart-smooth: #22313a;
   --chart-grid: #c9d1cd;
   --chart-muted: #56646b;
@@ -57,6 +64,13 @@
     --grade-b: #64b5f6;
     --grade-c: #ffd54f;
     --grade-d: #ef9a9a;
+    --grade-fg: #151c20;
+    --shade: rgba(228, 235, 232, 0.06);
+    --surface-tint: rgba(228, 235, 232, 0.05);
+    --surface-raised: #222d33;
+    --data-highlight: #64b5f6;
+    --data-pos: #68bb76;
+    --data-neg: #ef9a9a;
     --chart-smooth: #e4ebe8;
     --chart-grid: #34424a;
     --chart-muted: #a2b0b6;
@@ -86,6 +100,13 @@
   --grade-b: #64b5f6;
   --grade-c: #ffd54f;
   --grade-d: #ef9a9a;
+  --grade-fg: #151c20;
+  --shade: rgba(228, 235, 232, 0.06);
+  --surface-tint: rgba(228, 235, 232, 0.05);
+  --surface-raised: #222d33;
+  --data-highlight: #64b5f6;
+  --data-pos: #68bb76;
+  --data-neg: #ef9a9a;
   --chart-smooth: #e4ebe8;
   --chart-grid: #34424a;
   --chart-muted: #a2b0b6;
@@ -114,6 +135,13 @@
   --grade-b: #1f5f7e;
   --grade-c: #785800;
   --grade-d: #8a2a1a;
+  --grade-fg: #ffffff;
+  --shade: rgba(34, 49, 58, 0.055);
+  --surface-tint: rgba(34, 49, 58, 0.04);
+  --surface-raised: #ffffff;
+  --data-highlight: #1f5f7e;
+  --data-pos: #1d5e2b;
+  --data-neg: #8a2a1a;
   --chart-smooth: #22313a;
   --chart-grid: #c9d1cd;
   --chart-muted: #56646b;
@@ -3375,6 +3403,87 @@ html.tour-open .chatbot-root {
   direction: ltr;
   unicode-bidi: isolate;
 }
+
+/* ---- Field list evidence grade filter bar ---- */
+.grade-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-bottom: 0.6rem;
+}
+.grade-filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.22rem 0.5rem;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  background: var(--page);
+  color: var(--ink);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.12s, background 0.12s, transform 0.08s;
+}
+.grade-filter-btn:hover:not(:disabled) {
+  border-color: var(--focus);
+  background: var(--surface-tint);
+}
+.grade-filter-btn:disabled {
+  opacity: 0.48;
+  cursor: default;
+}
+.grade-filter-btn.active {
+  border-color: var(--focus);
+  background: var(--focus);
+  color: var(--on-accent);
+}
+.grade-filter-btn.active .grade-filter-count {
+  color: var(--on-accent);
+  opacity: 0.9;
+}
+.grade-filter-btn .grade-dot {
+  display: inline-block;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 2px;
+}
+.grade-dot-A { background: var(--grade-a); }
+.grade-dot-B { background: var(--grade-b); }
+.grade-dot-C { background: var(--grade-c); }
+.grade-dot-D { background: var(--grade-d); }
+.grade-filter-count {
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+  font-weight: 500;
+}
+.field-load-more {
+  margin-top: 0.5rem;
+  width: 100%;
+  text-align: center;
+}
+
+/* ---- Scoreboard regional grade distribution card ---- */
+.grade-distribution-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin: 0.65rem 0;
+}
+.grade-stat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.35rem 0.65rem;
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  font-size: 0.88rem;
+}
+.grade-stat-pill .grade {
+  margin-inline-start: 0;
+}
+
 
 
 

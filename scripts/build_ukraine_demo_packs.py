@@ -1,10 +1,12 @@
-"""Build a 20-field demo pack for Central Ukraine (ua_central_t36uvu, Tier 3).
+"""Build a 120-field demo pack for Central Ukraine (ua_central_t36uvu, Tier 3).
 
 Uses real open data already supported in the repo:
   - FTW 2024 field boundaries (data/fields/ua_central_t36uvu_pilot.parquet)
   - Sentinel-2 L2A 20 m COG NDVI/EVI2 series (fieldwitness.data.s2_cog, tag O)
   - Causal Tier 3 crop-sequence classifier (fieldwitness.story.ukraine_seasons, tag D)
   - NASA POWER daily weather 2001-2024 (fieldwitness.data.power, tag E)
+  - ISRIC SoilGrids 2.0 0-135 cm root-zone TAW via Saxton & Rawls (2006) (tag E)
+  - Panel-OBDML (<= 2021) Neighbours cover_days witness (tag D)
   - FAO-56 water balance & rotation ranking (fieldwitness.rotate, tag D / A)
 
 Outputs packs/demo/ua_central_t36uvu/ and updates packs/demo/regions.json.
@@ -13,11 +15,14 @@ Outputs packs/demo/ua_central_t36uvu/ and updates packs/demo/regions.json.
 from __future__ import annotations
 
 import json
+import multiprocessing
+from concurrent.futures import ProcessPoolExecutor, as_completed
 from datetime import UTC, date, datetime
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
+import shapely
 import yaml
 from shapely import wkb
 
@@ -68,13 +73,18 @@ from fieldwitness.story.ukraine_seasons import infer_region_labels
 
 REGION = "ua_central_t36uvu"
 SEED = priors.SEED
-N_DEMO = 20
+N_DEMO = 120
 N_REF = 3000
 K_ABC = 150
 MIN_OBS_ABC = 10
 Y0, Y1 = 2001, 2024
 OUT_ROOT = Path("packs/demo")
 MAX_PACK_BYTES = 300_000
+UA_HLS_BASEMAP_URL = (
+    "https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/"
+    "HLS_S30_Nadir_BRDF_Adjusted_Reflectance/default/2023-08-15/"
+    "GoogleMapsCompatible_Level12/{z}/{y}/{x}.png"
+)
 
 # Modelled crops in rotate.slots (SOW_DAY) that also have ua_central_t36uvu params in crops.yaml
 ROTATION_CROPS = ("winter_wheat", "maize", "fallow", "cover_crop")
@@ -127,8 +137,8 @@ def _write(path: Path, model, problems: list[str]) -> None:
     path.write_text(txt, "utf-8")
 
 
-def _select_20_fields(pilot: pd.DataFrame) -> pd.DataFrame:
-    """Pick 20 fields stratified across the spatial blocks (seeded)."""
+def _select_demo_fields(pilot: pd.DataFrame) -> pd.DataFrame:
+    """Pick N_DEMO fields stratified across the spatial blocks (seeded)."""
     rng = np.random.default_rng(SEED)
     pilot = pilot.sort_values("field_id").reset_index(drop=True)
     blocks = sorted(pilot["block"].unique())
@@ -147,9 +157,15 @@ def _select_20_fields(pilot: pd.DataFrame) -> pd.DataFrame:
     return pilot.loc[chosen_idx].reset_index(drop=True)
 
 
+_WEATHER_CACHE: dict[tuple[str, float], tuple] = {}
+
+
 def _weather(lon: float, lat: float):
+    w_path, elev = power.cached(lon, lat)
+    cache_key = (str(w_path), round(lat, 2))
+    if cache_key in _WEATHER_CACHE:
+        return _WEATHER_CACHE[cache_key]
     w = power.read(lon, lat, f"{Y0}-01-01", f"{Y1}-12-31")
-    _, elev = power.cached(lon, lat)
     f = forcing(w, lat, float(elev or 0.0))
     rain, eto = [], []
     wx_by_year: dict[int, tuple[np.ndarray, np.ndarray]] = {}
@@ -162,7 +178,9 @@ def _weather(lon: float, lat: float):
         rain.append(r_arr)
         eto.append(e_arr)
         wx_by_year[y] = (r_arr, e_arr)
-    return w, float(elev or 0.0), np.array(rain), np.array(eto), wx_by_year
+    res = (w, float(elev or 0.0), np.array(rain), np.array(eto), wx_by_year)
+    _WEATHER_CACHE[cache_key] = res
+    return res
 
 
 def _bare_observed_from_s2(s: pd.DataFrame) -> list[BareMonth]:
@@ -587,126 +605,53 @@ def _build_option_metrics(
     return m_dict, raw_m
 
 
-def main() -> None:
-    import geopandas as gpd
+_CTX: dict = {}
 
-    pilot_all = gpd.read_parquet(f"data/fields/{REGION}_pilot.parquet")
-    pilot_20 = _select_20_fields(pilot_all)
-    demo_ids = set(pilot_20["field_id"].astype(str))
-    grid = load_grid(REGION)
 
-    print(
-        f"Selected {len(pilot_20)} fields across {pilot_20['block'].nunique()} blocks.", flush=True
+def _build_one_field(f_idx: int):
+    ctx = _CTX
+    r = ctx["pilot_20"].iloc[f_idx]
+    fid = str(r["field_id"])
+    r_row = r.to_dict()
+    if not isinstance(r_row["geometry"], (bytes, bytearray)):
+        r_row["geometry"] = wkb.dumps(r_row["geometry"])
+    fld = B.field_model(r_row, REGION, tier=3)
+    s2_df = ctx["s2_df"]
+    clf_df = ctx["clf_df"]
+    s = s2_df[s2_df["field_id"] == fid].sort_values("date")
+    cf = clf_df[clf_df["field_id"] == fid]
+    crop_by_year = {int(y): str(c) for y, c in zip(cf["year"], cf["crop"], strict=True)}
+    soil_map = ctx["soil_map"]
+    soil_taw_map = ctx["soil_taw_map"]
+    soil_f = soil_map.get(fid, {})
+    taw_base_mm = soil_taw_map.get(fid, 150.0)
+    taw_tag = "E" if fid in soil_taw_map else "A"
+    soil_note = (
+        f"SoilGrids 2.0 [E]: 0-135 cm TAW={taw_base_mm:.1f} mm (Saxton & Rawls 2006); "
+        f"0-30 cm clay {soil_f['clay']}%, sand {soil_f['sand']}%, SOC {soil_f['soc']} g/kg"
+        if {"clay", "sand", "soc"}.issubset(soil_f) and fid in soil_taw_map
+        else "SoilGrids 2.0 context pending; 150 mm TAW fallback [A]"
     )
-    s2_cache = Path(f"data/fields/{REGION}_hls_series.parquet")
-    if s2_cache.exists():
-        s2_all = pd.read_parquet(s2_cache)
-        s2_df = s2_all[s2_all["field_id"].isin(demo_ids)].copy()
-        if demo_ids.issubset(set(s2_df["field_id"].astype(str))):
-            print(
-                f"Loaded cached S2 series ({len(s2_df)} rows for {len(demo_ids)} fields).",
-                flush=True,
-            )
-        else:
-            s2_df, s2_meta = build_s2_series(
-                REGION,
-                pilot_20,
-                grid,
-                mgrs_code="MGRS-36UVU",
-                start_date="2017-01-01",
-                end_date="2024-12-31",
-                max_per_month=1,
-                max_total_scenes=48,
-                max_bytes=200_000_000,
-            )
-            print(
-                f"S2 series: {s2_meta['rows_written']} rows, {s2_meta['fields_with_obs']} fields.",
-                flush=True,
-            )
-    else:
-        s2_df, s2_meta = build_s2_series(
-            REGION,
-            pilot_20,
-            grid,
-            mgrs_code="MGRS-36UVU",
-            start_date="2017-01-01",
-            end_date="2024-12-31",
-            max_per_month=1,
-            max_total_scenes=48,
-            max_bytes=200_000_000,
-        )
-        print(
-            f"S2 series: {s2_meta['rows_written']} rows, {s2_meta['fields_with_obs']} fields.",
-            flush=True,
-        )
-    s2_df["date"] = pd.to_datetime(s2_df["date"])
 
-    # Classify crops causally (tag D) using cached full-tile parquet when complete
-    lbl_cache = Path(f"data/labels/{REGION}.parquet")
-    if lbl_cache.exists():
-        clf_all = pd.read_parquet(lbl_cache)
-        clf_df = clf_all[clf_all["field_id"].isin(demo_ids)].copy()
-        if not demo_ids.issubset(set(clf_df["field_id"].astype(str))):
-            clf_df = infer_region_labels(s2_df, years=list(range(2017, 2025)))
-    else:
-        clf_df = infer_region_labels(s2_df, years=list(range(2017, 2025)))
+    w_df, elev, rain, eto, wx_by_year = _weather(float(r["lon"]), float(r["lat"]))
 
-    soil_map, soil_taw_map = _load_soil_profile(Path(f"data/soil/{REGION}_fields.parquet"))
-    pob_map = _load_pre_panel_obdml(Path(f"results/neighbours/{REGION}_panel_obdml.csv"))
-    grading_all = yaml.safe_load(Path("config/grading.yaml").read_text(encoding="utf-8"))
-    grading_cfg = grading_all["grades"]
-    cred_cfg = grading_all["credibility"]
-
-    out_dir = OUT_ROOT / REGION
-    out_dir.mkdir(parents=True, exist_ok=True)
-    crops = load_crops()
-    cfg = load_story()
-    vcfg = X.load_vuln_cfg()
-    presets = load_presets()
-
-    # ABC setup
-    cfg0 = forward.load_cfg()
-    crop_params_map = {
-        c: forward.crop_params(c, REGION) for c in ("sunflower", "maize", "winter_wheat")
-    }
-    noise_sd = synthetic.census(s2_df)["noise_sd"]
-    rng_abc = np.random.default_rng(SEED + 45)
-    prior_hidden = priors.sample(2000, seed=SEED + 620)
-
+    # Per-field ABC calibration & credibility (seeded per field for process-order determinism)
+    rng_abc = np.random.default_rng(SEED + 45 + f_idx)
+    pob_map = ctx["pob_map"]
+    grading_cfg = ctx["grading_cfg"]
+    cred_cfg = ctx["cred_cfg"]
+    out_dir = ctx["out_dir"]
+    crops = ctx["crops"]
+    cfg = ctx["cfg"]
+    vcfg = ctx["vcfg"]
+    presets = ctx["presets"]
+    cfg0 = ctx["cfg0"]
+    crop_params_map = ctx["crop_params_map"]
+    noise_sd = ctx["noise_sd"]
+    prior_hidden = ctx["prior_hidden"]
+    as_of = ctx["as_of"]
     problems: list[str] = []
-    summaries: list[FieldSummary] = []
-    cred_rows: list[dict] = []
-    colour: dict[str, dict[str, Tagged]] = {
-        "erosion_exposure": {},
-        "water_stress_share": {},
-        "frost_share": {},
-    }
-    hindcast_scores: list[tuple[str, float, float, float]] = []
-    story_fid = str(pilot_20.iloc[0]["field_id"])
-    as_of = s2_df["date"].max().date() if not s2_df.empty else date(2024, 12, 31)
-
-    for f_idx, (_, r) in enumerate(pilot_20.iterrows()):
-        fid = str(r["field_id"])
-        r_row = r.to_dict()
-        if not isinstance(r_row["geometry"], (bytes, bytearray)):
-            r_row["geometry"] = wkb.dumps(r_row["geometry"])
-        fld = B.field_model(r_row, REGION, tier=3)
-        s = s2_df[s2_df["field_id"] == fid].sort_values("date")
-        cf = clf_df[clf_df["field_id"] == fid]
-        crop_by_year = {int(y): str(c) for y, c in zip(cf["year"], cf["crop"], strict=True)}
-        soil_f = soil_map.get(fid, {})
-        taw_base_mm = soil_taw_map.get(fid, 150.0)
-        taw_tag = "E" if fid in soil_taw_map else "A"
-        soil_note = (
-            f"SoilGrids 2.0 [E]: 0-135 cm TAW={taw_base_mm:.1f} mm (Saxton & Rawls 2006); "
-            f"0-30 cm clay {soil_f['clay']}%, sand {soil_f['sand']}%, SOC {soil_f['soc']} g/kg"
-            if {"clay", "sand", "soc"}.issubset(soil_f) and fid in soil_taw_map
-            else "SoilGrids 2.0 context pending; 150 mm TAW fallback [A]"
-        )
-
-        w_df, elev, rain, eto, wx_by_year = _weather(float(r["lon"]), float(r["lat"]))
-
-        # Per-field ABC calibration & credibility
+    if True:
         field_draws, cred_val, cred_meta = _calibrate_field_abc(
             fid=fid,
             field_idx=f_idx,
@@ -722,7 +667,6 @@ def main() -> None:
             rng=rng_abc,
             prior_hidden=prior_hidden,
         )
-        cred_rows.append(cred_meta)
         med_taw = round(float(np.median(field_draws["taw_mm"])), 2)
         med_kc = round(float(np.median(field_draws["kc_scale"])), 4)
         med_budget = round(float(np.median(field_draws["budget_mm"])), 1)
@@ -1213,16 +1157,15 @@ def main() -> None:
         _write(out_dir / f"{fid}.sim3d_inputs.json", sim3d_in, problems)
 
         # Field colouring (Current option)
-        colour["erosion_exposure"][fid] = cur_opt.metrics["erosion_exposure"]
         ws_max = max(v.shares["water_stress"].values[0] or 0.0 for v in vuln) if vuln else 0.0
         fr_max = max(v.shares["frost"].values[0] or 0.0 for v in vuln) if vuln else 0.0
-        colour["water_stress_share"][fid] = Tagged(
+        ws_tag = Tagged(
             value=round(float(ws_max), 3),
             unit="share of years",
             tag="D",
             source="POWER daily weather x crop windows (crops.yaml)",
         )
-        colour["frost_share"][fid] = Tagged(
+        fr_tag = Tagged(
             value=round(float(fr_max), 3),
             unit="share of years",
             tag="D",
@@ -1230,10 +1173,11 @@ def main() -> None:
         )
 
         # Track 2022-2024 observed cover_days for hindcast summary
+        hind_f: list[tuple[str, float, float, float]] = []
         for sm in seasons:
             if sm.year in (2022, 2023, 2024) and sm.cover_days.value is not None:
                 pred_cd = (cur_opt.metrics["cover_days"].value or 0.0) / 3.0
-                hindcast_scores.append(
+                hind_f.append(
                     (
                         fid,
                         float(sm.cover_days.value),
@@ -1242,21 +1186,186 @@ def main() -> None:
                     )
                 )
 
-        summaries.append(
-            FieldSummary(
-                field_id=fid,
-                geometry_wkt=fld.geometry_wkt,
-                area_ha=fld.area_ha,
-                current_sequence=cur_seq,
-                top_option_id=top_opt.option_id,
-                top_grade=top_opt.grade,
+        geom_simple = shapely.from_wkt(fld.geometry_wkt)
+        geom_summary_wkt = shapely.to_wkt(
+            geom_simple.simplify(0.0001, preserve_topology=True),
+            rounding_precision=5,
+        )
+        summary = FieldSummary(
+            field_id=fid,
+            geometry_wkt=geom_summary_wkt,
+            area_ha=fld.area_ha,
+            current_sequence=cur_seq,
+            top_option_id=top_opt.option_id,
+            top_grade=top_opt.grade,
+        )
+        log_msg = (
+            f"{fid[:8]} TAW={taw_base_mm:.1f}->{med_taw:.1f}mm "
+            f"cred={cred_val} grades={[o.grade for o in cand_models]} top={top_opt.grade}"
+        )
+        return (
+            f_idx,
+            fid,
+            cur_opt.metrics["erosion_exposure"],
+            ws_tag,
+            fr_tag,
+            hind_f,
+            summary,
+            cred_meta,
+            problems,
+            log_msg,
+        )
+
+
+def main() -> None:
+    import geopandas as gpd
+
+    pilot_all = gpd.read_parquet(f"data/fields/{REGION}_pilot.parquet")
+    pilot_20 = _select_demo_fields(pilot_all)
+    demo_ids = set(pilot_20["field_id"].astype(str))
+    grid = load_grid(REGION)
+
+    print(
+        f"Selected {len(pilot_20)} fields across {pilot_20['block'].nunique()} blocks.", flush=True
+    )
+    s2_cache = Path(f"data/fields/{REGION}_hls_series.parquet")
+    if s2_cache.exists():
+        s2_all = pd.read_parquet(s2_cache)
+        s2_df = s2_all[s2_all["field_id"].isin(demo_ids)].copy()
+        if demo_ids.issubset(set(s2_df["field_id"].astype(str))):
+            print(
+                f"Loaded cached S2 series ({len(s2_df)} rows for {len(demo_ids)} fields).",
+                flush=True,
             )
+        else:
+            s2_df, s2_meta = build_s2_series(
+                REGION,
+                pilot_20,
+                grid,
+                mgrs_code="MGRS-36UVU",
+                start_date="2017-01-01",
+                end_date="2024-12-31",
+                max_per_month=1,
+                max_total_scenes=48,
+                max_bytes=200_000_000,
+            )
+            print(
+                f"S2 series: {s2_meta['rows_written']} rows, {s2_meta['fields_with_obs']} fields.",
+                flush=True,
+            )
+    else:
+        s2_df, s2_meta = build_s2_series(
+            REGION,
+            pilot_20,
+            grid,
+            mgrs_code="MGRS-36UVU",
+            start_date="2017-01-01",
+            end_date="2024-12-31",
+            max_per_month=1,
+            max_total_scenes=48,
+            max_bytes=200_000_000,
         )
         print(
-            f"  [{f_idx + 1:2d}/{N_DEMO}] {fid[:8]} TAW={taw_base_mm:.1f}->{med_taw:.1f}mm "
-            f"cred={cred_val} grades={[o.grade for o in cand_models]} top={top_opt.grade}",
+            f"S2 series: {s2_meta['rows_written']} rows, {s2_meta['fields_with_obs']} fields.",
             flush=True,
         )
+    s2_df["date"] = pd.to_datetime(s2_df["date"])
+
+    # Classify crops causally (tag D) using cached full-tile parquet when complete
+    lbl_cache = Path(f"data/labels/{REGION}.parquet")
+    if lbl_cache.exists():
+        clf_all = pd.read_parquet(lbl_cache)
+        clf_df = clf_all[clf_all["field_id"].isin(demo_ids)].copy()
+        if not demo_ids.issubset(set(clf_df["field_id"].astype(str))):
+            clf_df = infer_region_labels(s2_df, years=list(range(2017, 2025)))
+    else:
+        clf_df = infer_region_labels(s2_df, years=list(range(2017, 2025)))
+
+    soil_map, soil_taw_map = _load_soil_profile(Path(f"data/soil/{REGION}_fields.parquet"))
+    pob_map = _load_pre_panel_obdml(Path(f"results/neighbours/{REGION}_panel_obdml.csv"))
+    grading_all = yaml.safe_load(Path("config/grading.yaml").read_text(encoding="utf-8"))
+    grading_cfg = grading_all["grades"]
+    cred_cfg = grading_all["credibility"]
+
+    out_dir = OUT_ROOT / REGION
+    out_dir.mkdir(parents=True, exist_ok=True)
+    for stale in out_dir.glob("*.json"):
+        stale.unlink()
+
+    crops = load_crops()
+    cfg = load_story()
+    vcfg = X.load_vuln_cfg()
+    presets = load_presets()
+
+    # ABC setup
+    cfg0 = forward.load_cfg()
+    crop_params_map = {
+        c: forward.crop_params(c, REGION) for c in ("sunflower", "maize", "winter_wheat")
+    }
+    noise_sd = synthetic.census(s2_df)["noise_sd"]
+    prior_hidden = priors.sample(2000, seed=SEED + 620)
+    as_of = s2_df["date"].max().date() if not s2_df.empty else date(2024, 12, 31)
+    story_fid = str(pilot_20.iloc[0]["field_id"])
+
+    # Pre-warm POWER cache in parent before fork so child processes inherit read-only weather arrays
+    for _, row in pilot_20.iterrows():
+        _weather(float(row["lon"]), float(row["lat"]))
+
+    _CTX.clear()
+    _CTX.update(
+        {
+            "pilot_20": pilot_20,
+            "s2_df": s2_df,
+            "clf_df": clf_df,
+            "soil_map": soil_map,
+            "soil_taw_map": soil_taw_map,
+            "pob_map": pob_map,
+            "grading_cfg": grading_cfg,
+            "cred_cfg": cred_cfg,
+            "out_dir": out_dir,
+            "crops": crops,
+            "cfg": cfg,
+            "vcfg": vcfg,
+            "presets": presets,
+            "cfg0": cfg0,
+            "crop_params_map": crop_params_map,
+            "noise_sd": noise_sd,
+            "prior_hidden": prior_hidden,
+            "as_of": as_of,
+        }
+    )
+
+    problems: list[str] = []
+    summaries: list[FieldSummary] = []
+    cred_rows: list[dict] = []
+    colour: dict[str, dict[str, Tagged]] = {
+        "erosion_exposure": {},
+        "water_stress_share": {},
+        "frost_share": {},
+    }
+    hindcast_scores: list[tuple[str, float, float, float]] = []
+
+    mp_ctx = multiprocessing.get_context("fork")
+    raw_results = []
+    done_cnt = 0
+    total_cnt = len(pilot_20)
+    with ProcessPoolExecutor(max_workers=2, mp_context=mp_ctx) as pool:
+        futs = [pool.submit(_build_one_field, i) for i in range(total_cnt)]
+        for fut in as_completed(futs):
+            res = fut.result()
+            raw_results.append(res)
+            done_cnt += 1
+            print(f"  [{done_cnt:3d}/{total_cnt}] {res[9]}", flush=True)
+
+    raw_results.sort(key=lambda item: item[0])
+    for _, fid, er_tag, ws_tag, fr_tag, hind_f, summary, cred_meta, probs_f, _ in raw_results:
+        colour["erosion_exposure"][fid] = er_tag
+        colour["water_stress_share"][fid] = ws_tag
+        colour["frost_share"][fid] = fr_tag
+        hindcast_scores.extend(hind_f)
+        summaries.append(summary)
+        cred_rows.append(cred_meta)
+        problems.extend(probs_f)
 
     # Save honest credibility & grade summary
     top_counts: dict[str, int] = {}
@@ -1311,7 +1420,7 @@ def main() -> None:
             round(float(maxx), 4),
             round(float(maxy), 4),
         ),
-        basemap=None,
+        basemap=UA_HLS_BASEMAP_URL,
         fields=summaries,
         data_as_of=as_of,
     )

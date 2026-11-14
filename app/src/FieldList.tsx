@@ -2,12 +2,14 @@ import { useEffect, useMemo, useState } from "react";
 import { CropChips } from "./CropChips";
 import { getFieldNumberMap, gradeRank } from "./fields";
 import { routeHref } from "./route";
-import { t } from "./strings";
+import { cropName, t } from "./strings";
 import { TaggedValue } from "./tags";
 import { emitTour } from "./tourEvents";
-import type { RegionIndex, Tagged } from "./types";
+import type { Grade, RegionIndex, Tagged } from "./types";
 
 type SortKey = "number" | "area" | "grade";
+type GradeFilter = "ALL" | Grade;
+const GRADES: readonly Grade[] = ["A", "B", "C", "D"];
 
 /** Keyboard-reachable list of the same fields the map shows. */
 export function FieldList({
@@ -23,10 +25,24 @@ export function FieldList({
   valueLabel?: string;
 }) {
   const [search, setSearch] = useState("");
+  const [gradeFilter, setGradeFilter] = useState<GradeFilter>("ALL");
   const [sortBy, setSortBy] = useState<SortKey>("number");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
 
+  useEffect(() => {
+    setGradeFilter("ALL");
+    setSearch("");
+  }, [index.region_id]);
+
   const numberMap = useMemo(() => getFieldNumberMap(index.fields), [index.fields]);
+
+  const gradeCounts = useMemo(() => {
+    const counts: Record<Grade, number> = { A: 0, B: 0, C: 0, D: 0 };
+    for (const f of index.fields) {
+      if (f.top_grade in counts) counts[f.top_grade]++;
+    }
+    return counts;
+  }, [index.fields]);
 
   const fieldsWithNum = useMemo(() => {
     return index.fields.map((f) => ({
@@ -38,12 +54,16 @@ export function FieldList({
   const filteredAndSorted = useMemo(() => {
     const q = search.trim().toLowerCase();
     const filtered = fieldsWithNum.filter(({ field, num }) => {
+      if (gradeFilter !== "ALL" && field.top_grade !== gradeFilter) return false;
       if (!q) return true;
       const numStr = String(num);
       const nameEn = `field ${num}`.toLowerCase();
       const nameLoc = t("field.label", { num }).toLowerCase();
       const hashStr = field.field_id.toLowerCase();
-      return nameEn.includes(q) || nameLoc.includes(q) || numStr === q || hashStr.includes(q);
+      const cropMatch = field.current_sequence.some(
+        (c) => c.toLowerCase().includes(q) || cropName(c).toLowerCase().includes(q),
+      );
+      return nameEn.includes(q) || nameLoc.includes(q) || numStr === q || hashStr.includes(q) || cropMatch;
     });
 
     return filtered.sort((a, b) => {
@@ -57,7 +77,7 @@ export function FieldList({
       }
       return sortDir === "asc" ? cmp : -cmp;
     });
-  }, [fieldsWithNum, search, sortBy, sortDir]);
+  }, [fieldsWithNum, search, gradeFilter, sortBy, sortDir]);
 
   // Progressive batch rendering (TBT optimization): render initial 25 items on first paint,
   // then load remaining items when idle so no main-thread tasks exceed 50 ms during startup.
@@ -65,7 +85,7 @@ export function FieldList({
 
   useEffect(() => {
     setRenderLimit(25);
-  }, [search, sortBy, sortDir]);
+  }, [index.region_id, search, gradeFilter, sortBy, sortDir]);
 
   useEffect(() => {
     if (renderLimit >= filteredAndSorted.length) return;
@@ -89,7 +109,42 @@ export function FieldList({
   return (
     <section className="field-list" aria-labelledby="fields-heading">
       <h2 id="fields-heading">{t("fields.heading")}</h2>
-      <p className="muted">{t("fields.count", { n: index.fields.length })}</p>
+      <p className="muted">
+        {gradeFilter === "ALL" && !search.trim()
+          ? t("fields.count", { n: index.fields.length })
+          : t("fields.filteredCount", { shown: filteredAndSorted.length, total: index.fields.length })}
+      </p>
+
+      <div className="grade-filter-bar" role="group" aria-label={t("fields.filterGrade")}>
+        <button
+          type="button"
+          className={`grade-filter-btn${gradeFilter === "ALL" ? " active" : ""}`}
+          aria-pressed={gradeFilter === "ALL"}
+          onClick={() => setGradeFilter("ALL")}
+        >
+          <span>{t("fields.filterAll")}</span>
+          <span className="grade-filter-count">{index.fields.length}</span>
+        </button>
+        {GRADES.map((g) => {
+          const count = gradeCounts[g];
+          const isActive = gradeFilter === g;
+          return (
+            <button
+              key={g}
+              type="button"
+              className={`grade-filter-btn${isActive ? " active" : ""}`}
+              aria-pressed={isActive}
+              disabled={count === 0}
+              title={t("fields.top", { grade: g })}
+              onClick={() => setGradeFilter(isActive ? "ALL" : g)}
+            >
+              <span className={`grade-dot grade-dot-${g}`} aria-hidden="true" />
+              <span>{g}</span>
+              <span className="grade-filter-count">{count}</span>
+            </button>
+          );
+        })}
+      </div>
 
       <div className="field-list-controls">
         <div className="field-search-wrap">
@@ -134,40 +189,51 @@ export function FieldList({
       {filteredAndSorted.length === 0 ? (
         <p className="muted field-no-matches">{t("fields.noMatches")}</p>
       ) : (
-        <ul className="field-items-list">
-          {visibleFields.map(({ field: f, num }) => (
-            <li key={f.field_id}>
-              <a
-                className="field-item"
-                href={routeHref(index.region_id, f.field_id)}
-                onClick={() => emitTour("field")}
-                aria-current={f.field_id === selectedId ? "true" : undefined}
-              >
-                <span className="field-item-head">
-                  <span className="field-ident">
-                    <strong className="field-name">{t("field.label", { num })}</strong>
-                    <span className="field-id-hash">{f.field_id.slice(0, 8)}</span>
+        <>
+          <ul className="field-items-list">
+            {visibleFields.map(({ field: f, num }) => (
+              <li key={f.field_id}>
+                <a
+                  className="field-item"
+                  href={routeHref(index.region_id, f.field_id)}
+                  onClick={() => emitTour("field")}
+                  aria-current={f.field_id === selectedId ? "true" : undefined}
+                >
+                  <span className="field-item-head">
+                    <span className="field-ident">
+                      <strong className="field-name">{t("field.label", { num })}</strong>
+                      <span className="field-id-hash">{f.field_id.slice(0, 8)}</span>
+                    </span>
+                    <span className="field-area">{t("fields.area", { area: f.area_ha })}</span>
+                    <span
+                      className={`grade grade-${f.top_grade}`}
+                      title={t("fields.top", { grade: f.top_grade })}
+                    >
+                      {f.top_grade}
+                    </span>
                   </span>
-                  <span className="field-area">{t("fields.area", { area: f.area_ha })}</span>
-                  <span
-                    className={`grade grade-${f.top_grade}`}
-                    title={t("fields.top", { grade: f.top_grade })}
-                  >
-                    {f.top_grade}
-                  </span>
-                </span>
-                <span className="sr-only">{t("fields.current")}: </span>
-                <CropChips sequence={f.current_sequence} />
-                {values && (
-                  <span className="field-value">
-                    {valueLabel}:{" "}
-                    {values[f.field_id] ? <TaggedValue v={values[f.field_id]} /> : t("value.none")}
-                  </span>
-                )}
-              </a>
-            </li>
-          ))}
-        </ul>
+                  <span className="sr-only">{t("fields.current")}: </span>
+                  <CropChips sequence={f.current_sequence} />
+                  {values && (
+                    <span className="field-value">
+                      {valueLabel}:{" "}
+                      {values[f.field_id] ? <TaggedValue v={values[f.field_id]} /> : t("value.none")}
+                    </span>
+                  )}
+                </a>
+              </li>
+            ))}
+          </ul>
+          {renderLimit < filteredAndSorted.length && (
+            <button
+              type="button"
+              className="secondary-btn field-load-more"
+              onClick={() => setRenderLimit(filteredAndSorted.length)}
+            >
+              {t("fields.showAll", { n: filteredAndSorted.length })}
+            </button>
+          )}
+        </>
       )}
     </section>
   );

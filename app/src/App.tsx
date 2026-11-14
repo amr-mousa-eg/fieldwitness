@@ -109,7 +109,7 @@ export function App() {
           {PAGES.map((p) => (
             <a
               key={p}
-              href={pageHref(regionId ?? "kansas", p)}
+              href={pageHref(regionId ?? "ks_t14slh", p)}
               aria-current={!route.fieldId && route.page === p ? "page" : undefined}
             >
               {t(`nav.${p}`)}
