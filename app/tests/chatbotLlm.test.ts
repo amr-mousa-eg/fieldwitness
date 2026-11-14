@@ -250,9 +250,16 @@ describe("KB facts consistency", () => {
     const uaSummary = readJson("results/pilot_fields/ua_central_t36uvu_summary.json");
     const uaSeasons = readJson("results/neighbours/ua_central_t36uvu_field_season_summary.json");
     const uaReport = readText("results/neighbours/ua_central_t36uvu_report.md");
+    const uaCred = readJson("results/inference/ua_central_t36uvu_credibility.json").summary;
     expect(Number(FACTS.uaFields.value)).toBe(uaSummary.pilot_fields);
     expect(Number(FACTS.uaSeasons.value)).toBe(uaSeasons.rows);
     expect(uaReport).toContain(`${FACTS.uaPreCutoffPass.value} pre-cutoff`);
     expect(uaReport).toContain(`${FACTS.uaFullPass.value} full-period`);
+    expect(Number(FACTS.uaDemoFields.value)).toBe(uaCred.n_fields);
+    expect(Number(FACTS.uaCredGe06.value)).toBe(uaCred.ge_0_6);
+    expect(Number(FACTS.uaTopGradeA.value)).toBe(uaCred.top_grade_counts.A);
+    expect(Number(FACTS.uaTopGradeB.value)).toBe(uaCred.top_grade_counts.B);
+    expect(Number(FACTS.uaTopGradeC.value)).toBe(uaCred.top_grade_counts.C);
+    expect(Number(FACTS.uaAllGradeA.value)).toBe(uaCred.all_candidate_grade_counts.A);
   });
 });

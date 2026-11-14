@@ -163,6 +163,12 @@ export const FACTS = {
   uaSeasons: { value: "2800", src: "results/neighbours/ua_central_t36uvu_field_season_summary.json rows" },
   uaPreCutoffPass: { value: "30", src: "results/neighbours/ua_central_t36uvu_report.md (<=2021 evidence total)" },
   uaFullPass: { value: "70", src: "results/neighbours/ua_central_t36uvu_report.md (2018-2024 evidence total)" },
+  uaDemoFields: { value: "20", src: "results/inference/ua_central_t36uvu_credibility.json summary.n_fields" },
+  uaCredGe06: { value: "11", src: "results/inference/ua_central_t36uvu_credibility.json summary.ge_0_6" },
+  uaTopGradeA: { value: "1", src: "results/inference/ua_central_t36uvu_credibility.json summary.top_grade_counts.A" },
+  uaTopGradeB: { value: "10", src: "results/inference/ua_central_t36uvu_credibility.json summary.top_grade_counts.B" },
+  uaTopGradeC: { value: "9", src: "results/inference/ua_central_t36uvu_credibility.json summary.top_grade_counts.C" },
+  uaAllGradeA: { value: "6", src: "results/inference/ua_central_t36uvu_credibility.json summary.all_candidate_grade_counts.A" },
 } as const;
 
 const F = Object.fromEntries(Object.entries(FACTS).map(([k, v]) => [k, v.value])) as {
@@ -182,16 +188,16 @@ export const KNOWLEDGE_BASE: KnowledgeEntry[] = [
     id: "witnesses",
     title: "The Three Witnesses",
     keywords: ["witness", "witnesses", "three", "physics", "own past", "abc", "neighbour", "neighbor", "doubleml", "trials", "k-state", "colby", "circuit breaker", "ukraine", "t36uvu"],
-    answer: `Every rotation option is checked by three witnesses:\n1) Physics: FAO-56 root-zone water balance forced by NASA POWER daily weather [D].\n2) Field's own past: ABC calibration of the physics against the field's HLS 30 m history; this gives the credibility score [D].\n3) Neighbours: double ML on previous-crop effects across similar fields. In Kansas it stayed OFF (0 of ${F.neighbourPrimaryTotal} primary contrasts and 0 of ${F.neighbourMatchedTotal} matched contrasts passed). In Central Ukraine (${F.uaFields} fields, ${F.uaSeasons} field-seasons), Panel-OBDML and Exact-Year DAPSM pass ${F.uaPreCutoffPass} pre-cutoff and ${F.uaFullPass} full-period contrasts across all four causal checks and are wired as tag [D] Neighbours witnesses (crop labels cross-checked against WorldCereal on cropland and winter wheat, while maize-vs-sunflower remains unvalidated at species level). The repo also contains benchmark code for published K-State Colby rotation trials [E], but in this release no option reaches grade A.`,
-    sourceLabel: "Three witnesses (README.md, results/neighbours/)",
+    answer: `Every rotation option is checked by three witnesses:\n1) Physics: FAO-56 root-zone water balance forced by NASA POWER daily weather [D].\n2) Field's own past: ABC calibration of the physics against the field's HLS 30 m history; this gives the credibility score [D].\n3) Neighbours: double ML on previous-crop effects across similar fields. In Kansas it stayed OFF (0 of ${F.neighbourPrimaryTotal} primary contrasts and 0 of ${F.neighbourMatchedTotal} matched contrasts passed), so Kansas demo packs reach grade B at most. In Central Ukraine (${F.uaFields} fields, ${F.uaSeasons} field-seasons), Panel-OBDML and Exact-Year DAPSM pass ${F.uaPreCutoffPass} pre-cutoff and ${F.uaFullPass} full-period contrasts across all four causal checks and are wired as tag [D] Neighbours witnesses alongside SoilGrids 2.0 root-zone TAW [E] and per-field ABC calibration [D] (${F.uaCredGe06} of ${F.uaDemoFields} demo fields reach ≥ ${F.credibilityMinA} credibility; ${F.uaAllGradeA} candidate options reach grade A). Crop labels in Ukraine are cross-checked against WorldCereal on cropland and winter wheat, while maize-vs-sunflower remains unvalidated at species level. The repo also contains benchmark code for published K-State Colby rotation trials [E].`,
+    sourceLabel: "Three witnesses (README.md, results/neighbours/, results/inference/)",
     followUps: ["How are evidence grades A–D assigned?", "What are the project's honest limits?", "What soil data is used?"],
   },
   {
     id: "grades",
     title: "Evidence Grades A–D",
     keywords: ["grade", "grades", "a-d", "grade a", "grade b", "grade c", "grade d", "evidence", "credibility", "threshold"],
-    answer: `Evidence grades summarise how well the witnesses agree and how many key inputs are assumptions [A]:\n• A: physics and an independent external witness agree, credibility ≥ ${F.credibilityMinA}, and no key input tagged [A]. In this release no option reaches A (the neighbour witness is OFF), so grades are capped at B.\n• B: physics and the field's own past agree.\n• C: only one witness supports the option, or they disagree.\n• D: more than half of the key inputs are assumptions [A].\nGrade validity was not shown: on ${F.gradeValidityN} scored field-seasons the D minus B difference in error had a 95% CI of [${F.gradeValidityLo}, ${F.gradeValidityHi}], which includes zero. Read grades as a description of the evidence, not a guarantee.`,
-    sourceLabel: "Grading rules (config/grading.yaml, results/hindcast/grade_validity.json)",
+    answer: `Evidence grades summarise how well the witnesses agree and how many key inputs are assumptions [A]:\n• A: physics and an independent external witness agree, credibility ≥ ${F.credibilityMinA}, and no key input tagged [A]. In Kansas demo packs no option reaches A (the neighbour witness is OFF), so Kansas grades are capped at B. In Central Ukraine demo packs, SoilGrids 2.0 TAW [E], per-field ABC calibration [D], and Panel-OBDML Neighbours [D] yield top-ranked grades A (${F.uaTopGradeA} of ${F.uaDemoFields} fields, with ${F.uaAllGradeA} candidate options graded A), B (${F.uaTopGradeB} fields), and C (${F.uaTopGradeC} fields).\n• B: physics and the field's own past (or two witnesses) agree.\n• C: only one witness supports the option, or they disagree.\n• D: more than half of the key inputs are assumptions [A].\nGrade validity was not shown on Kansas hindcasts: on ${F.gradeValidityN} scored field-seasons the D minus B difference in error had a 95% CI of [${F.gradeValidityLo}, ${F.gradeValidityHi}], which includes zero. Read grades as a description of the evidence, not a guarantee.`,
+    sourceLabel: "Grading rules (config/grading.yaml, results/hindcast/grade_validity.json, results/inference/)",
     followUps: ["What do tags [O], [D], [E], [A] mean?", "What are the project's honest limits?", "Why does FieldWitness not predict profit or tonnes/ha?"],
   },
   {
@@ -270,7 +276,7 @@ const KNOWLEDGE_BASE_AR: KnowledgeEntry[] = [
     id: "witnesses",
     title: "نظام الشهود الثلاثة",
     keywords: ["شاهد", "شهود", "الشهود", "فيزياء", "الماضي", "جيران", "الجيران", "كولبي", "معايرة", "أوكرانيا", "ukraine"],
-    answer: `يُقيَّم كل خيار دورة زراعية عبر ثلاثة شهود مستقلين:\n1) **الفيزياء (الشاهد 1)**: موازنة المياه اليومية FAO-56 في منطقة الجذور المدفوعة بطقس NASA POWER [D].\n2) **ماضي الحقل (الشاهد 2)**: معايرة بايزية تقريبية (ABC) تطابق الفيزياء مع سجل NASA HLS 30 م [D].\n3) **الجيران (الشاهد 3)**: في كانساس بقي متوقفًا (**OFF**) لعدم اجتياز فحوصات التوازن (0/92 و0/32). أما في وسط أوكرانيا (${F.uaFields} حقلًا و${F.uaSeasons} موسمًا) فاجتازت تصاميم Panel-OBDML وDAPSM السنوي الدقيق ${F.uaPreCutoffPass} مقارنة قبل القطع و${F.uaFullPass} للفترة الكاملة الفحوصات الأربعة، وأُدمجت نتائجها بالوسم [D] في حزم أوكرانيا التجريبية مع الإفصاح عن نتيجة فحص WorldCereal (توافق الأراضي الزراعية والقمح الشتوي مقابل عدم التحقق الفئوي بين الذرة ودوار الشمس).`,
+    answer: `يُقيَّم كل خيار دورة زراعية عبر ثلاثة شهود مستقلين:\n1) **الفيزياء (الشاهد 1)**: موازنة المياه اليومية FAO-56 في منطقة الجذور المدفوعة بطقس NASA POWER [D].\n2) **ماضي الحقل (الشاهد 2)**: معايرة بايزية تقريبية (ABC) تطابق الفيزياء مع سجل السواتل [D].\n3) **الجيران (الشاهد 3)**: في كانساس بقي متوقفًا (**OFF**) لعدم اجتياز فحوصات التوازن (0/92 و0/32) فتتوقف درجات كانساس عند B. أما في وسط أوكرانيا (${F.uaFields} حقلًا و${F.uaSeasons} موسمًا) فاجتازت تصاميم Panel-OBDML وDAPSM السنوي الدقيق ${F.uaPreCutoffPass} مقارنة قبل القطع و${F.uaFullPass} للفترة الكاملة الفحوصات الأربعة، وأُدمجت نتائجها بالوسم [D] مع سعة التربة من SoilGrids 2.0 [E] ومعايرة ABC لكل حقل [D] (${F.uaCredGe06} من أصل ${F.uaDemoFields} حقلًا تجريبيًا بمصداقية ≥ ${F.credibilityMinA}؛ و${F.uaAllGradeA} خيارات بديلة تبلغ الدرجة A) مع الإفصاح عن نتيجة فحص WorldCereal (توافق الأراضي الزراعية والقمح الشتوي مقابل ضعف التمييز الفئوي بين الذرة ودوار الشمس).`,
     sourceLabel: "إطار الشهود الثلاثة [D/E]",
     followUps: ["لماذا شاهد الجيران متوقف؟", "كيف تُحدد درجات الدليل A–D؟", "ما بيانات التربة المستخدمة؟"],
   },
@@ -278,8 +284,7 @@ const KNOWLEDGE_BASE_AR: KnowledgeEntry[] = [
     id: "grades",
     title: "درجات الدليل A–D",
     keywords: ["درجة", "درجات", "الدليل", "a-d", "مصداقية", "تقييم", "grade"],
-    answer:
-      "تلخص درجات الدليل مستوى اتفاق الشهود وجودة المدخلات:\n• **الدرجة A**: اتفاق الفيزياء مع التحقق الخارجي ومصداقية ABC ≥ 0.60 دون مدخلات افتراضية أساسية [A] (تتوقف الحزم الشحنية عند B حاليًا).\n• **الدرجة B**: اتفاق شاهدين على الأقل (الفيزياء + ماضي الحقل بمصداقية ≥ 0.60).\n• **الدرجة C**: دعم شاهد واحد فقط أو تعارض بين الشهود.\n• **الدرجة D**: اعتماد أكثر من نصف المدخلات على افتراضات [A].\nملاحظة: في الاختبار التراجعي لم يثبت إحصائيًا تفوق الدرجة B على D في الدقة (فاصل ثقة 95% [-3.28، +14.32]).",
+    answer: `تلخص درجات الدليل مستوى اتفاق الشهود وجودة المدخلات:\n• **الدرجة A**: اتفاق الفيزياء مع التحقق الخارجي ومصداقية ABC ≥ ${F.credibilityMinA} دون مدخلات افتراضية أساسية [A]. تتوقف حزم كانساس عند B (لإيقاف شاهد الجيران)، بينما في حزم وسط أوكرانيا التجريبية (${F.uaDemoFields} حقلًا) تبلغ الدرجات القصوى للحقول A (${F.uaTopGradeA} حقل، و${F.uaAllGradeA} خيارات بديلة بدرجة A) وB (${F.uaTopGradeB} حقول) وC (${F.uaTopGradeC} حقول).\n• **الدرجة B**: اتفاق شاهدين على الأقل (الفيزياء + ماضي الحقل بمصداقية ≥ ${F.credibilityMinA}).\n• **الدرجة C**: دعم شاهد واحد فقط أو تعارض بين الشهود.\n• **الدرجة D**: اعتماد أكثر من نصف المدخلات على افتراضات [A].\nملاحظة: في الاختبار التراجعي لكانساس لم يثبت إحصائيًا تفوق الدرجة B على D في الدقة (فاصل ثقة 95% [${F.gradeValidityLo}، ${F.gradeValidityHi}]).`,
     sourceLabel: "قواعد الدرجات [A/D/E]",
     followUps: ["ما معنى الحروف [O] و[D] و[E] و[A]؟", "ما هي الحدود الصريحة للمشروع؟"],
   },

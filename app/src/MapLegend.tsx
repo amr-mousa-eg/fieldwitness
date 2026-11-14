@@ -6,7 +6,7 @@ import { t } from "./strings";
  * Explains marker/outline colours, grade badges, and scale-flag symbols.
  * Collapsible on mobile phones, accessible, supports both light and dark themes.
  */
-export function MapLegend() {
+export function MapLegend({ allowGradeA = false }: { allowGradeA?: boolean }) {
   const isMobile = typeof window !== "undefined" && window.innerWidth <= 768;
   const [open, setOpen] = useState(!isMobile);
 
@@ -42,6 +42,15 @@ export function MapLegend() {
         <section className="map-legend-section">
           <h4 className="map-legend-subtitle">{t("legend.evidenceGrades")}</h4>
           <ul className="map-legend-list">
+            <li className={allowGradeA ? undefined : "muted"}>
+              <span
+                className={allowGradeA ? "grade grade-A" : "grade grade-A grade-disabled"}
+                aria-hidden="true"
+              >
+                A
+              </span>
+              <span>{t(allowGradeA ? "legend.gradeA.active" : "legend.gradeA")}</span>
+            </li>
             <li>
               <span className="grade grade-B" aria-hidden="true">
                 B
@@ -59,12 +68,6 @@ export function MapLegend() {
                 D
               </span>
               <span>{t("legend.gradeD")}</span>
-            </li>
-            <li className="muted">
-              <span className="grade grade-A grade-disabled" aria-hidden="true">
-                A
-              </span>
-              <span>{t("legend.gradeA")}</span>
             </li>
           </ul>
         </section>
