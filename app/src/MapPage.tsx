@@ -79,7 +79,7 @@ export function MapPage({ index }: { index: RegionIndex }) {
             grid={grid}
           />
         </Suspense>
-        <MapLegend />
+        <MapLegend allowGradeA={index.region_id !== "ks_t14slh"} />
       </div>
     </main>
   );

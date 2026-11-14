@@ -1,0 +1,610 @@
+{
+  "summary": {
+    "region_id": "ua_central_t36uvu",
+    "n_fields": 20,
+    "with_credibility": 20,
+    "ge_0_6": 11,
+    "median_credibility": 0.602,
+    "taw_soilgrids_min_mm": 191.5,
+    "taw_soilgrids_median_mm": 206.1,
+    "taw_soilgrids_max_mm": 219.7,
+    "top_grade_counts": {
+      "B": 10,
+      "C": 9,
+      "A": 1
+    },
+    "all_candidate_grade_counts": {
+      "B": 53,
+      "C": 41,
+      "A": 6
+    },
+    "n_ref": 3000,
+    "k": 150,
+    "seed": 20261114,
+    "tag": "D",
+    "caveat": "in-sample ABC posterior predictive using Tier 3 classifier labels (kappa=0.035 maize vs sunflower)"
+  },
+  "fields": [
+    {
+      "field_id": "c9ba87fa9adaeae263bcc51cbef548636351edeb",
+      "crop": "sunflower",
+      "n_seasons": 4,
+      "credibility": 0.917,
+      "mode": "full",
+      "spearman": 1.0,
+      "median_timing_error_days": 3.3,
+      "years": [
+        2017,
+        2018,
+        2019,
+        2020
+      ],
+      "fit_years": [
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2023,
+        2024
+      ],
+      "taw_base_mm": 213.54,
+      "taw_post_median_mm": 210.36,
+      "kc_scale_median": 0.9705,
+      "budget_median_mm": 0.0,
+      "taw_source": "soilgrids_saxton_rawls_0_135cm"
+    },
+    {
+      "field_id": "12f1c6e7a57cc1365d4c54bcc3bb4c0d3ca6c4cb",
+      "crop": "sunflower",
+      "n_seasons": 5,
+      "credibility": 0.25,
+      "mode": "full",
+      "spearman": 0.5,
+      "median_timing_error_days": 46.0,
+      "years": [
+        2017,
+        2020,
+        2022,
+        2023,
+        2024
+      ],
+      "fit_years": [
+        2017,
+        2018,
+        2019,
+        2020,
+        2022,
+        2023,
+        2024
+      ],
+      "taw_base_mm": 206.54,
+      "taw_post_median_mm": 215.6,
+      "kc_scale_median": 1.0428,
+      "budget_median_mm": 49.5,
+      "taw_source": "soilgrids_saxton_rawls_0_135cm"
+    },
+    {
+      "field_id": "3b073f9b28e2337adf75ca07339f5d7f6f9b8115",
+      "crop": "sunflower",
+      "n_seasons": 4,
+      "credibility": 0.4,
+      "mode": "full",
+      "spearman": 0.8,
+      "median_timing_error_days": 28.0,
+      "years": [
+        2017,
+        2020,
+        2022,
+        2023
+      ],
+      "fit_years": [
+        2017,
+        2018,
+        2020,
+        2022,
+        2023
+      ],
+      "taw_base_mm": 194.32,
+      "taw_post_median_mm": 173.41,
+      "kc_scale_median": 1.0258,
+      "budget_median_mm": 0.0,
+      "taw_source": "soilgrids_saxton_rawls_0_135cm"
+    },
+    {
+      "field_id": "aa9b7ad7ba811cabec2fe09f05c82a2e3e3ce05f",
+      "crop": "maize",
+      "n_seasons": 3,
+      "credibility": 0.833,
+      "mode": "full",
+      "spearman": 1.0,
+      "median_timing_error_days": 6.7,
+      "years": [
+        2019,
+        2021,
+        2023
+      ],
+      "fit_years": [
+        2017,
+        2019,
+        2020,
+        2021,
+        2023
+      ],
+      "taw_base_mm": 208.44,
+      "taw_post_median_mm": 168.08,
+      "kc_scale_median": 1.047,
+      "budget_median_mm": 0.0,
+      "taw_source": "soilgrids_saxton_rawls_0_135cm"
+    },
+    {
+      "field_id": "6599c27c5b3e56dbe240c7f429d9640b44257ad2",
+      "crop": "sunflower",
+      "n_seasons": 4,
+      "credibility": 0.929,
+      "mode": "full",
+      "spearman": 1.0,
+      "median_timing_error_days": 2.8,
+      "years": [
+        2017,
+        2020,
+        2023,
+        2024
+      ],
+      "fit_years": [
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024
+      ],
+      "taw_base_mm": 205.63,
+      "taw_post_median_mm": 195.8,
+      "kc_scale_median": 1.049,
+      "budget_median_mm": 0.0,
+      "taw_source": "soilgrids_saxton_rawls_0_135cm"
+    },
+    {
+      "field_id": "12693c7efc84a92e74ed3fe15369a264de369686",
+      "crop": "sunflower",
+      "n_seasons": 6,
+      "credibility": 0.318,
+      "mode": "full",
+      "spearman": 0.029,
+      "median_timing_error_days": 7.8,
+      "years": [
+        2017,
+        2018,
+        2020,
+        2022,
+        2023,
+        2024
+      ],
+      "fit_years": [
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024
+      ],
+      "taw_base_mm": 191.54,
+      "taw_post_median_mm": 186.08,
+      "kc_scale_median": 1.0131,
+      "budget_median_mm": 0.0,
+      "taw_source": "soilgrids_saxton_rawls_0_135cm"
+    },
+    {
+      "field_id": "bfcb2d00b55d122a0132f3a2245212653f322326",
+      "crop": "sunflower",
+      "n_seasons": 4,
+      "credibility": 0.479,
+      "mode": "full",
+      "spearman": 0.4,
+      "median_timing_error_days": 8.8,
+      "years": [
+        2019,
+        2022,
+        2023,
+        2024
+      ],
+      "fit_years": [
+        2017,
+        2018,
+        2019,
+        2022,
+        2023,
+        2024
+      ],
+      "taw_base_mm": 204.52,
+      "taw_post_median_mm": 185.39,
+      "kc_scale_median": 1.0131,
+      "budget_median_mm": 0.0,
+      "taw_source": "soilgrids_saxton_rawls_0_135cm"
+    },
+    {
+      "field_id": "c88f410f0c4ad393059e8a344d37f10cf1c1c798",
+      "crop": "maize",
+      "n_seasons": 3,
+      "credibility": 0.3,
+      "mode": "full",
+      "spearman": 0.5,
+      "median_timing_error_days": 18.0,
+      "years": [
+        2017,
+        2022,
+        2023
+      ],
+      "fit_years": [
+        2017,
+        2018,
+        2020,
+        2022,
+        2023
+      ],
+      "taw_base_mm": 207.9,
+      "taw_post_median_mm": 168.3,
+      "kc_scale_median": 1.0462,
+      "budget_median_mm": 0.0,
+      "taw_source": "soilgrids_saxton_rawls_0_135cm"
+    },
+    {
+      "field_id": "6527d4af27e3e639ee45d1c89dad1a5f800cb6d5",
+      "crop": "maize",
+      "n_seasons": 4,
+      "credibility": 0.604,
+      "mode": "full",
+      "spearman": 0.4,
+      "median_timing_error_days": 3.8,
+      "years": [
+        2017,
+        2019,
+        2021,
+        2022
+      ],
+      "fit_years": [
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023
+      ],
+      "taw_base_mm": 213.43,
+      "taw_post_median_mm": 285.16,
+      "kc_scale_median": 0.9633,
+      "budget_median_mm": 0.0,
+      "taw_source": "soilgrids_saxton_rawls_0_135cm"
+    },
+    {
+      "field_id": "5bee0e7b239de0c5073ae299ae5e45e3cd89817c",
+      "crop": "maize",
+      "n_seasons": 4,
+      "credibility": 0.508,
+      "mode": "full",
+      "spearman": 0.4,
+      "median_timing_error_days": 7.7,
+      "years": [
+        2017,
+        2018,
+        2019,
+        2021
+      ],
+      "fit_years": [
+        2017,
+        2018,
+        2019,
+        2021,
+        2023
+      ],
+      "taw_base_mm": 204.99,
+      "taw_post_median_mm": 236.06,
+      "kc_scale_median": 0.9742,
+      "budget_median_mm": 79.6,
+      "taw_source": "soilgrids_saxton_rawls_0_135cm"
+    },
+    {
+      "field_id": "56b5017808eb699327c40f0a27abd05c12cec784",
+      "crop": "maize",
+      "n_seasons": 6,
+      "credibility": 0.457,
+      "mode": "full",
+      "spearman": 0.714,
+      "median_timing_error_days": 16.0,
+      "years": [
+        2018,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024
+      ],
+      "fit_years": [
+        2017,
+        2018,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024
+      ],
+      "taw_base_mm": 205.48,
+      "taw_post_median_mm": 211.51,
+      "kc_scale_median": 1.0472,
+      "budget_median_mm": 0.0,
+      "taw_source": "soilgrids_saxton_rawls_0_135cm"
+    },
+    {
+      "field_id": "044bf56bb3add9b51bc8b909a296419957187e55",
+      "crop": "maize",
+      "n_seasons": 5,
+      "credibility": 0.7,
+      "mode": "full",
+      "spearman": 0.7,
+      "median_timing_error_days": 6.0,
+      "years": [
+        2018,
+        2019,
+        2021,
+        2022,
+        2023
+      ],
+      "fit_years": [
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023
+      ],
+      "taw_base_mm": 199.65,
+      "taw_post_median_mm": 208.34,
+      "kc_scale_median": 1.0659,
+      "budget_median_mm": 0.0,
+      "taw_source": "soilgrids_saxton_rawls_0_135cm"
+    },
+    {
+      "field_id": "70c1e1100194100badfd34a4d467e5f41e386a68",
+      "crop": "maize",
+      "n_seasons": 4,
+      "credibility": 0.6,
+      "mode": "full",
+      "spearman": 0.8,
+      "median_timing_error_days": 12.0,
+      "years": [
+        2018,
+        2019,
+        2020,
+        2021
+      ],
+      "fit_years": [
+        2018,
+        2019,
+        2020,
+        2021,
+        2024
+      ],
+      "taw_base_mm": 192.81,
+      "taw_post_median_mm": 204.44,
+      "kc_scale_median": 0.9441,
+      "budget_median_mm": 213.4,
+      "taw_source": "soilgrids_saxton_rawls_0_135cm"
+    },
+    {
+      "field_id": "83f300b4c423d2093d4e3c3464977434e87ea4de",
+      "crop": "sunflower",
+      "n_seasons": 7,
+      "credibility": 0.539,
+      "mode": "full",
+      "spearman": 0.929,
+      "median_timing_error_days": 17.0,
+      "years": [
+        2017,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024
+      ],
+      "fit_years": [
+        2017,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024
+      ],
+      "taw_base_mm": 191.54,
+      "taw_post_median_mm": 212.62,
+      "kc_scale_median": 0.9845,
+      "budget_median_mm": 137.3,
+      "taw_source": "soilgrids_saxton_rawls_0_135cm"
+    },
+    {
+      "field_id": "51c5013a35f5385ea7aba097031e82310c6b5964",
+      "crop": "maize",
+      "n_seasons": 6,
+      "credibility": 0.429,
+      "mode": "full",
+      "spearman": 0.657,
+      "median_timing_error_days": 16.0,
+      "years": [
+        2018,
+        2019,
+        2021,
+        2022,
+        2023,
+        2024
+      ],
+      "fit_years": [
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024
+      ],
+      "taw_base_mm": 219.7,
+      "taw_post_median_mm": 208.28,
+      "kc_scale_median": 0.9898,
+      "budget_median_mm": 0.0,
+      "taw_source": "soilgrids_saxton_rawls_0_135cm"
+    },
+    {
+      "field_id": "744dfe5a77c04edefa700dbc340aeb3626b07f5d",
+      "crop": "sunflower",
+      "n_seasons": 4,
+      "credibility": 0.646,
+      "mode": "full",
+      "spearman": 1.0,
+      "median_timing_error_days": 14.2,
+      "years": [
+        2017,
+        2019,
+        2020,
+        2024
+      ],
+      "fit_years": [
+        2017,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024
+      ],
+      "taw_base_mm": 195.88,
+      "taw_post_median_mm": 243.31,
+      "kc_scale_median": 0.965,
+      "budget_median_mm": 66.2,
+      "taw_source": "soilgrids_saxton_rawls_0_135cm"
+    },
+    {
+      "field_id": "1d0bfabeeaa88d72be55b82e965a78156ce2e45b",
+      "crop": "sunflower",
+      "n_seasons": 4,
+      "credibility": 0.675,
+      "mode": "full",
+      "spearman": 1.0,
+      "median_timing_error_days": 13.0,
+      "years": [
+        2018,
+        2020,
+        2023,
+        2024
+      ],
+      "fit_years": [
+        2017,
+        2018,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024
+      ],
+      "taw_base_mm": 210.99,
+      "taw_post_median_mm": 189.99,
+      "kc_scale_median": 1.0108,
+      "budget_median_mm": 0.0,
+      "taw_source": "soilgrids_saxton_rawls_0_135cm"
+    },
+    {
+      "field_id": "d048744ec4bc9fdf7ef85c1cef3c8d0d08dd6c6a",
+      "crop": "winter_wheat",
+      "n_seasons": 6,
+      "credibility": 0.84,
+      "mode": "full",
+      "spearman": 0.771,
+      "median_timing_error_days": 1.8,
+      "years": [
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022
+      ],
+      "fit_years": [
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2024
+      ],
+      "taw_base_mm": 210.92,
+      "taw_post_median_mm": 162.01,
+      "kc_scale_median": 1.0322,
+      "budget_median_mm": 0.0,
+      "taw_source": "soilgrids_saxton_rawls_0_135cm"
+    },
+    {
+      "field_id": "505e515df3ae30a702a6c2608b7bc88e5f9fb197",
+      "crop": "sunflower",
+      "n_seasons": 6,
+      "credibility": 0.752,
+      "mode": "full",
+      "spearman": 0.771,
+      "median_timing_error_days": 5.3,
+      "years": [
+        2017,
+        2018,
+        2019,
+        2020,
+        2022,
+        2023
+      ],
+      "fit_years": [
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023
+      ],
+      "taw_base_mm": 208.37,
+      "taw_post_median_mm": 172.19,
+      "kc_scale_median": 1.0292,
+      "budget_median_mm": 0.0,
+      "taw_source": "soilgrids_saxton_rawls_0_135cm"
+    },
+    {
+      "field_id": "b3e727c568151a20c44ddf94aaa5751e4117e067",
+      "crop": "sunflower",
+      "n_seasons": 3,
+      "credibility": 0.867,
+      "mode": "full",
+      "spearman": 1.0,
+      "median_timing_error_days": 5.3,
+      "years": [
+        2017,
+        2018,
+        2020
+      ],
+      "fit_years": [
+        2017,
+        2018,
+        2019,
+        2020
+      ],
+      "taw_base_mm": 215.95,
+      "taw_post_median_mm": 221.47,
+      "kc_scale_median": 1.0021,
+      "budget_median_mm": 139.2,
+      "taw_source": "soilgrids_saxton_rawls_0_135cm"
+    }
+  ]
+}

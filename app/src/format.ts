@@ -49,6 +49,9 @@ export function unitLabel(unit: string): string {
     "RYI regret": "",
     "RYI regret (mean over weather years)": "",
     "RYI change vs Current": "",
+    "days vs continuous summer crop": "أيام مقارنةً بالمحصول الصيفي المستمر",
+    "NDVI-days vs continuous summer crop": "يوم-NDVI مقارنةً بالمحصول الصيفي المستمر",
+    "days/yr vs Current": "يوم/سنة مقارنةً بالحالي",
   };
   return map[unit] ?? unit;
 }
@@ -113,6 +116,16 @@ export function localizeGradeReason(raw: string): string {
     return "الدورة الحالية: خيار مرجعي غير مُقيَّم.";
   }
   if (raw === "no neighbour estimate") return "لا يوجد تقدير من الحقول المجاورة";
+  if (raw === "neighbours agree with physics") return "يتفق شاهد الجيران مع الفيزياء";
+  if (raw === "neighbours disagree with physics (sign or 90 % intervals)") {
+    return "يختلف شاهد الجيران مع الفيزياء (الإشارة أو نطاق 90٪)";
+  }
+  if (raw === "agronomic trial benchmarks agree with physics") {
+    return "تتفق معايير التجارب الزراعية مع الفيزياء";
+  }
+  if (raw === "agronomic trial benchmarks disagree with physics") {
+    return "تختلف معايير التجارب الزراعية مع الفيزياء";
+  }
   if (raw === "own past not supporting (credibility missing or below threshold)") {
     return "التاريخ الذاتي للحقل لا يدعم (المصداقية مفقودة أو دون الحد الأدنى)";
   }
@@ -123,6 +136,8 @@ export function localizeGradeReason(raw: string): string {
   if (mOwn) return `التاريخ الذاتي للحقل يتفق (المصداقية \u2066${mOwn[1]} ≥ ${mOwn[2]}\u2069)`;
   const mAssump = /^(\d+) of (\d+) key inputs are assumptions \(tag A\)$/.exec(raw);
   if (mAssump) return `\u2066${mAssump[1]}\u2069 من أصل \u2066${mAssump[2]}\u2069 مدخلات رئيسية هي افتراضات (الوسم A)`;
+  const mBlock = /^(\d+) key input\(s\) tagged A block grade A$/.exec(raw);
+  if (mBlock) return `\u2066${mBlock[1]}\u2069 من المدخلات الرئيسية بالوسم A تمنع الدرجة A`;
   return raw;
 }
 
