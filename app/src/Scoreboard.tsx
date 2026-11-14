@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Backtest } from "./AdvisorConsole";
+import { CQR_EVALUATION } from "./cqrEvaluation";
 import { DiagnosisSection } from "./DiagnosisSection";
 import { UkraineNeighboursSection } from "./UkraineNeighboursSection";
 import { Explain } from "./Explain";
@@ -9,7 +10,7 @@ import { formatDate } from "./format";
 import { GRADE_VALIDITY } from "./gradeValidity";
 import { type ScoreKey, bestMethods, methodsNotRun, metricsOf, modesOf, rowsFor, scoreKeysOf } from "./hindcast";
 import { routeHref } from "./route";
-import { metricName, t } from "./strings";
+import { cropName, metricName, t } from "./strings";
 import { TagLegend } from "./tags";
 import { useTourSeen } from "./tourEvents";
 import type { FieldPack, HindcastRow, RegionHindcast, RegionIndex } from "./types";
@@ -149,6 +150,64 @@ function GradeValiditySection() {
   );
 }
 
+export function CqrScoreSection() {
+  return (
+    <section className="score-block" aria-labelledby="score-cqr-h">
+      <h4 id="score-cqr-h">
+        {t("score.cqr.heading")} <Explain id="hindcast" />
+      </h4>
+      <p className="muted">
+        {t("score.cqr.intro", {
+          blocks: CQR_EVALUATION.nSpatialBlocks,
+          calRows: CQR_EVALUATION.nCalRows,
+          testRows: CQR_EVALUATION.nTestRows,
+        })}
+      </p>
+      <div className="table-wrap">
+        <table className="scores">
+          <thead>
+            <tr>
+              <th scope="col">{t("score.cqr.thCrop")}</th>
+              <th scope="col">{t("score.cqr.thMetric")}</th>
+              <th scope="col">{t("score.n")}</th>
+              <th scope="col">{t("score.cqr.thRaw")}</th>
+              <th scope="col">{t("score.cqr.thSym")}</th>
+              <th scope="col">{t("score.cqr.thAsym")}</th>
+              <th scope="col">{t("score.cqr.thGate")}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {CQR_EVALUATION.rows.map((r) => (
+              <tr key={`${r.crop}-${r.metric}`} className={r.gate8595 === "pass" ? "row-current" : undefined}>
+                <th scope="row">{cropName(r.crop)}</th>
+                <td>{metricName(r.metric)}</td>
+                <td>{r.n}</td>
+                <td>
+                  {(r.storedCov90 * 100).toFixed(1)} % ({r.storedWinkler90.toFixed(1)})
+                </td>
+                <td className={r.cqrSymCov90 >= 0.85 && r.cqrSymCov90 <= 0.95 ? "best" : undefined}>
+                  {(r.cqrSymCov90 * 100).toFixed(1)} % ({r.cqrSymWinkler90.toFixed(1)})
+                </td>
+                <td className={r.cqrAsymCov90 >= 0.85 && r.cqrAsymCov90 <= 0.95 ? "best" : undefined}>
+                  {(r.cqrAsymCov90 * 100).toFixed(1)} % ({r.cqrAsymWinkler90.toFixed(1)})
+                </td>
+                <td>
+                  <span className={r.gate8595 === "pass" ? "yes-badge" : "no-badge"}>
+                    {t(r.gate8595 === "pass" ? "score.cqr.pass" : "score.cqr.fail")}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p className="muted" style={{ fontSize: "0.85rem", marginTop: "0.5rem" }}>
+        {t("score.cqr.note")}
+      </p>
+    </section>
+  );
+}
+
 export function RegionGradeSummary({ index }: { index: RegionIndex }) {
   const counts = { A: 0, B: 0, C: 0, D: 0 };
   for (const f of index.fields) {
@@ -172,6 +231,9 @@ export function RegionGradeSummary({ index }: { index: RegionIndex }) {
           </div>
         ))}
       </div>
+      <p className="muted" style={{ fontSize: "0.86rem", marginTop: "0.25rem", marginBottom: "0.25rem" }}>
+        <strong>{t(isKansas ? "score.gradeDist.metaKansas" : "score.gradeDist.metaUkraine")}</strong>
+      </p>
       <p className="muted" style={{ fontSize: "0.86rem", marginTop: "0.25rem" }}>
         {t(isKansas ? "score.gradeDist.kansasNote" : "score.gradeDist.ukraineNote")}
       </p>
@@ -206,6 +268,7 @@ export function Scoreboard({ index }: { index: RegionIndex }) {
   const modes = modesOf(h);
   const years = h.scored_years;
   const notRun = methodsNotRun(h);
+  const otherMethodsCount = new Set(h.rows.map((r) => r.method).filter((m) => m !== "fieldwitness")).size;
 
   return (
     <article className="scoreboard" aria-labelledby="score-h">
@@ -213,12 +276,18 @@ export function Scoreboard({ index }: { index: RegionIndex }) {
         {t("score.heading", { region: index.name })} <Explain id="hindcast" />
       </h2>
       <p>
-        {t("score.intro", {
-          cutoff: date(h.cutoff),
-          first: years[0] ?? "",
-          last: years[years.length - 1] ?? "",
-          n: new Set(h.rows.map((r) => r.method).filter((m) => m !== "fieldwitness")).size,
-        })}
+        {otherMethodsCount > 0
+          ? t("score.intro", {
+              cutoff: date(h.cutoff),
+              first: years[0] ?? "",
+              last: years[years.length - 1] ?? "",
+              n: otherMethodsCount,
+            })
+          : t("score.introSingle", {
+              cutoff: date(h.cutoff),
+              first: years[0] ?? "",
+              last: years[years.length - 1] ?? "",
+            })}
       </p>
       {notRun.length > 0 && <p className="muted">{t("score.notRun", { methods: notRun.join(", ") })}</p>}
       <p className="muted">{t("score.honest")}</p>
@@ -243,6 +312,7 @@ export function Scoreboard({ index }: { index: RegionIndex }) {
       ))}
       {region === "ks_t14slh" && (
         <>
+          <CqrScoreSection />
           <GradeValiditySection />
           <DiagnosisSection />
         </>

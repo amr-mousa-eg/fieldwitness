@@ -69,28 +69,40 @@ export const DIAGRAM_STAGES: DiagramStage[] = [
       {
         id: "field_story",
         label: "Field story",
-        lines: ["Seasons 2015–2024 from HLS", "86.7% TWDTW season match (88.7% DTW; target 90%)"],
+        lines: [
+          "Seasons 2015–2024 from HLS (KS) & 2017–2024 S2 L2A (UA)",
+          "86.7% TWDTW season match (88.7% DTW; target 90%)",
+        ],
         target: "m-limits",
       },
       {
         id: "w1_physics",
         label: "Witness 1: Physics",
-        lines: ["FAO-56 water balance, driven by NASA POWER weather"],
+        lines: [
+          "FAO-56 water balance, driven by NASA POWER weather",
+          "KS 150 mm [A] prior; UA SoilGrids 0–135 cm TAW [E] (med. 206.5 mm)",
+        ],
         target: "glossary-water_balance",
         status: "ON",
       },
       {
         id: "w2_past",
         label: "Witness 2: Own past",
-        lines: ["HLS history calibrates the physics (ABC) and gives a credibility score"],
+        lines: [
+          "HLS/S2 history calibrates the physics (ABC) and gives a credibility score",
+          "UA: 120/120 calibrated (73 ≥ 0.60, med. 0.658); KS: 185/200 (med. 0.500)",
+        ],
         target: "glossary-credibility",
         status: "ON",
       },
       {
         id: "w3_neighbours",
         label: "Witness 3: Neighbours",
-        lines: ["No neighbour contrast passed the diagnostic checks (0 of 32)"],
-        target: "m-wrong",
+        lines: [
+          "Kansas: No neighbour contrast passed the diagnostic checks (0 of 32)",
+          "Ukraine (T36UVU): 30 pre-cutoff Panel-OBDML/DAPSM contrasts ACTIVE [D]",
+        ],
+        target: "m-limits",
         status: "OFF",
       },
     ],
@@ -103,8 +115,11 @@ export const DIAGRAM_STAGES: DiagramStage[] = [
       {
         id: "agreement",
         label: "Evidence grade",
-        lines: ["Agreement between witnesses gives A–D", "Capped at B while Witness 3 is OFF"],
-        target: "glossary-evidence_grade",
+        lines: [
+          "Agreement between witnesses gives A–D",
+          "Capped at B in Kansas; A–C unlocked in Ukraine (8 A / 67 B / 45 C top)",
+        ],
+        target: "m-regions",
       },
       {
         id: "hindcast_check",
@@ -175,7 +190,7 @@ function Box({ box, regionId }: { box: DiagramBox; regionId: string }) {
 }
 
 export function MethodsDiagram() {
-  const regionId = useRoute().regionId ?? "kansas";
+  const regionId = useRoute().regionId ?? "ks_t14slh";
   return (
     <figure className="mdia" aria-labelledby="methods-diagram-caption">
       <figcaption id="methods-diagram-caption" className="mdia-caption">

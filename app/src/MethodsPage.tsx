@@ -12,6 +12,7 @@ import { UkraineNeighboursSection } from "./UkraineNeighboursSection";
 /** Datasets as listed in DATA.md; text in strings/en.json (methods.ds.<id>.*). */
 export const DATASETS = [
   "hls",
+  "s2cog",
   "power",
   "smap",
   "gpm",
@@ -37,6 +38,7 @@ export const DATASETS = [
   "gedi",
   "ams",
   "ftw",
+  "worldcereal",
   "rpg",
   "hcat",
   "fao56",
@@ -88,6 +90,49 @@ export function MethodsPage() {
       {IS_DEMO_DATA && <p className="notice">{t("methods.demo")}</p>}
 
       <MethodsDiagram />
+
+      <section id="m-regions" aria-labelledby="m-regions-h">
+        <h3 id="m-regions-h">{t("methods.regions.heading")}</h3>
+        <p className="muted">{t("methods.regions.intro")}</p>
+        <div className="table-wrap">
+          <table className="scores">
+            <thead>
+              <tr>
+                <th scope="col">{t("methods.regions.thRegion")}</th>
+                <th scope="col">{t("methods.regions.thFields")}</th>
+                <th scope="col">{t("methods.regions.thSoil")}</th>
+                <th scope="col">{t("methods.regions.thAbc")}</th>
+                <th scope="col">{t("methods.regions.thNeighbours")}</th>
+                <th scope="col">{t("methods.regions.thGrades")}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">
+                  <span className="method-name">{t("methods.regions.ks.name")}</span>
+                  <span className="method-desc">{t("methods.regions.ks.tier")}</span>
+                </th>
+                <td>{t("methods.regions.ks.fields")}</td>
+                <td>{t("methods.regions.ks.soil")}</td>
+                <td>{t("methods.regions.ks.abc")}</td>
+                <td>{t("methods.regions.ks.neighbours")}</td>
+                <td>{t("methods.regions.ks.grades")}</td>
+              </tr>
+              <tr className="row-current">
+                <th scope="row">
+                  <span className="method-name">{t("methods.regions.ua.name")}</span>
+                  <span className="method-desc">{t("methods.regions.ua.tier")}</span>
+                </th>
+                <td>{t("methods.regions.ua.fields")}</td>
+                <td>{t("methods.regions.ua.soil")}</td>
+                <td>{t("methods.regions.ua.abc")}</td>
+                <td className="best">{t("methods.regions.ua.neighbours")}</td>
+                <td className="best">{t("methods.regions.ua.grades")}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
 
       <section aria-labelledby="m-how">
         <h3 id="m-how">
