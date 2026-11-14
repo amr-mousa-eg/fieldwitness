@@ -19,7 +19,7 @@ function setDismissed(): void {
   }
 }
 
-export function GuidancePanel() {
+export function GuidancePanel({ regionName, fieldCount }: { regionName?: string; fieldCount?: number } = {}) {
   const [dismissed, setLocalDismissed] = useState(isDismissed);
 
   if (dismissed) return null;
@@ -41,7 +41,11 @@ export function GuidancePanel() {
         </button>
       </div>
       <div className="guidance-body">
-        <p>{t("guidance.fields")}</p>
+        <p>
+          {regionName && fieldCount != null
+            ? t("guidance.fieldsRegion", { n: fieldCount, region: regionName })
+            : t("guidance.fields")}
+        </p>
         <p>{t("guidance.grades")}</p>
         <p className="fixed-line">{t("fixed.judgment")}</p>
       </div>

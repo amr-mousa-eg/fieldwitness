@@ -66,7 +66,7 @@ export function MapPage({ index }: { index: RegionIndex }) {
         />
       </aside>
       <div className="map-container">
-        <GuidancePanel />
+        <GuidancePanel regionName={index.name} fieldCount={index.fields.length} />
         <Suspense fallback={<div className="map-loading" />}>
           <MapView
             index={index}

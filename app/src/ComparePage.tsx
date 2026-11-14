@@ -77,6 +77,22 @@ export function ComparePage({ index }: { index: RegionIndex }) {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    const q = typeof window !== "undefined" ? parseCompareQuery(window.location.hash) : { a: null, b: null };
+    const nextA = q.a && numberMap.has(q.a) ? q.a : defaultA;
+    const nextB = q.b && numberMap.has(q.b) ? q.b : defaultB;
+    if (!numberMap.has(idA) || (q.a && numberMap.has(q.a) && q.a !== idA)) {
+      setPackA(null);
+      setCalA(null);
+      setIdA(nextA);
+    }
+    if (!numberMap.has(idB) || (q.b && numberMap.has(q.b) && q.b !== idB)) {
+      setPackB(null);
+      setCalB(null);
+      setIdB(nextB);
+    }
+  }, [index.region_id, numberMap, defaultA, defaultB, idA, idB]);
+
+  useEffect(() => {
     const onHash = () => {
       const q = parseCompareQuery(window.location.hash);
       if (q.a && numberMap.has(q.a)) setIdA(q.a);
@@ -87,7 +103,7 @@ export function ComparePage({ index }: { index: RegionIndex }) {
   }, [numberMap]);
 
   useEffect(() => {
-    if (!idA || !idB) return;
+    if (!idA || !idB || !numberMap.has(idA) || !numberMap.has(idB)) return;
     let alive = true;
     setLoading(true);
     Promise.all([
@@ -109,7 +125,7 @@ export function ComparePage({ index }: { index: RegionIndex }) {
     return () => {
       alive = false;
     };
-  }, [index.region_id, idA, idB]);
+  }, [index.region_id, idA, idB, numberMap]);
 
   const updateSelection = (nextA: string, nextB: string) => {
     setIdA(nextA);
@@ -140,7 +156,7 @@ export function ComparePage({ index }: { index: RegionIndex }) {
         <h2 id="compare-heading">
           {t("compare.heading")} <Explain id="compare_fields" />
         </h2>
-        <p className="muted">{t("compare.intro")}</p>
+        <p className="muted">{t("compare.introRegion", { region: index.name, n: index.fields.length })}</p>
       </header>
 
       <section className="card-box compare-controls">

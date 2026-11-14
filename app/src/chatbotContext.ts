@@ -163,12 +163,12 @@ export const FACTS = {
   uaSeasons: { value: "2800", src: "results/neighbours/ua_central_t36uvu_field_season_summary.json rows" },
   uaPreCutoffPass: { value: "30", src: "results/neighbours/ua_central_t36uvu_report.md (<=2021 evidence total)" },
   uaFullPass: { value: "70", src: "results/neighbours/ua_central_t36uvu_report.md (2018-2024 evidence total)" },
-  uaDemoFields: { value: "20", src: "results/inference/ua_central_t36uvu_credibility.json summary.n_fields" },
-  uaCredGe06: { value: "11", src: "results/inference/ua_central_t36uvu_credibility.json summary.ge_0_6" },
-  uaTopGradeA: { value: "1", src: "results/inference/ua_central_t36uvu_credibility.json summary.top_grade_counts.A" },
-  uaTopGradeB: { value: "10", src: "results/inference/ua_central_t36uvu_credibility.json summary.top_grade_counts.B" },
-  uaTopGradeC: { value: "9", src: "results/inference/ua_central_t36uvu_credibility.json summary.top_grade_counts.C" },
-  uaAllGradeA: { value: "6", src: "results/inference/ua_central_t36uvu_credibility.json summary.all_candidate_grade_counts.A" },
+  uaDemoFields: { value: "120", src: "results/inference/ua_central_t36uvu_credibility.json summary.n_fields" },
+  uaCredGe06: { value: "73", src: "results/inference/ua_central_t36uvu_credibility.json summary.ge_0_6" },
+  uaTopGradeA: { value: "8", src: "results/inference/ua_central_t36uvu_credibility.json summary.top_grade_counts.A" },
+  uaTopGradeB: { value: "67", src: "results/inference/ua_central_t36uvu_credibility.json summary.top_grade_counts.B" },
+  uaTopGradeC: { value: "45", src: "results/inference/ua_central_t36uvu_credibility.json summary.top_grade_counts.C" },
+  uaAllGradeA: { value: "63", src: "results/inference/ua_central_t36uvu_credibility.json summary.all_candidate_grade_counts.A" },
 } as const;
 
 const F = Object.fromEntries(Object.entries(FACTS).map(([k, v]) => [k, v.value])) as {

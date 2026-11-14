@@ -8,7 +8,7 @@ import type { FieldPack, RegionIndex } from "./types";
 
 export function PrintDossier({
   pack,
-  regionId: _regionId,
+  regionId,
   index,
 }: {
   pack: FieldPack;
@@ -22,6 +22,9 @@ export function PrintDossier({
   const summary = generateFieldSummary(pack, DEFAULT_PRIORITIES, NO_CONSTRAINTS, null);
   const currentOpt = pack.options.find((o) => o.option_id === "current");
   const topAlts = ranked.filter((r) => r.option.option_id !== "current").slice(0, 3);
+  const isUkraine = (regionId || pack.field.region_id) === "ua_central_t36uvu";
+  const hasActiveNeighbours = pack.options.some((o) => o.witnesses.some((w) => w.witness === "neighbours"));
+  const regionLabel = index?.name ?? (isUkraine ? "Central Ukraine (T36UVU)" : t("print.regionVal"));
 
   return (
     <section className="print-dossier" aria-label={t("print.aria")}>
@@ -41,7 +44,7 @@ export function PrintDossier({
           <tbody>
             <tr>
               <th>{t("print.region")}</th>
-              <td>{t("print.regionVal")}</td>
+              <td>{regionLabel}</td>
               <th>{t("print.area")}</th>
               <td>{t("fields.area", { area: pack.field.area_ha.toFixed(1) })}</td>
               <th>{t("print.pixels")}</th>
@@ -127,9 +130,13 @@ export function PrintDossier({
             </li>
             <li>
               <strong>{t("print.w3Label")}</strong> {t("print.w3Desc")}{" "}
-              <span className="print-badge off">{t("print.badgeOff")}</span>
-              {t("print.w3Trials")}
-              <p className="print-witness-note">{t("print.w3Note")}</p>
+              <span className={hasActiveNeighbours ? "print-badge on" : "print-badge off"}>
+                {t(hasActiveNeighbours ? "print.badgeActive" : "print.badgeOff")}
+              </span>
+              {!isUkraine && t("print.w3Trials")}
+              <p className="print-witness-note">
+                {t(isUkraine ? (hasActiveNeighbours ? "print.w3NoteUaActive" : "print.w3NoteUaPartial") : "print.w3Note")}
+              </p>
             </li>
           </ul>
         </div>
@@ -148,7 +155,8 @@ export function PrintDossier({
               <strong>{t("print.nextMeas")}</strong> {localizeMeasureNext(pack.advice.measure_next)}
             </li>
             <li>
-              <strong>{t("print.soilCtxLabel")}</strong> {t("print.soilCtxVal")}
+              <strong>{t("print.soilCtxLabel")}</strong>{" "}
+              {t(isUkraine ? "print.soilCtxValUa" : "print.soilCtxVal")}
             </li>
           </ul>
         </div>

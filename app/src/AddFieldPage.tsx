@@ -63,7 +63,13 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
 
   // Update coverage status when lat/lon inputs change
   const handleCheckLocation = (lat: number, lon: number) => {
-    const supported = isInsideKansasTile(lon, lat);
+    const inActiveTile = index?.bbox_lonlat
+      ? lon >= index.bbox_lonlat[0] &&
+        lon <= index.bbox_lonlat[2] &&
+        lat >= index.bbox_lonlat[1] &&
+        lat <= index.bbox_lonlat[3]
+      : false;
+    const supported = isInsideKansasTile(lon, lat) || inActiveTile;
     setIsSupported(supported);
     setChecked(true);
     setLiveProfile(null);
@@ -286,6 +292,16 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
               {t(`addfield.preset.${preset.id}` as StringKey)}
             </button>
           ))}
+          <button
+            type="button"
+            className="preset-btn"
+            onClick={() => {
+              handleApplyPreset(48.0102, 31.9444);
+              emitTour("preset:ukraine-central");
+            }}
+          >
+            {t("addfield.preset.ukraine-central")}
+          </button>
         </div>
 
         <div className="coord-inputs-row">
@@ -324,7 +340,9 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
         {checked && isSupported && (
           <div className="coverage-alert-box success">
             <h4 className="alert-heading">{t("addfield.supported.title")}</h4>
-            <p className="alert-body">{t("addfield.supported.desc")}</p>
+            <p className="alert-body">
+              {regionId === "ua_central_t36uvu" ? t("addfield.supported.descRegion") : t("addfield.supported.desc")}
+            </p>
           </div>
         )}
 

@@ -149,6 +149,36 @@ function GradeValiditySection() {
   );
 }
 
+export function RegionGradeSummary({ index }: { index: RegionIndex }) {
+  const counts = { A: 0, B: 0, C: 0, D: 0 };
+  for (const f of index.fields) {
+    if (f.top_grade in counts) counts[f.top_grade]++;
+  }
+  const isKansas = index.region_id === "ks_t14slh";
+  return (
+    <section className="score-block" aria-labelledby="score-grade-dist">
+      <h4 id="score-grade-dist">
+        {t("score.gradeDist.heading", { region: index.name, n: index.fields.length })}{" "}
+        <Explain id="evidence_grade" />
+      </h4>
+      <div className="grade-distribution-row">
+        {(["A", "B", "C", "D"] as const).map((g) => (
+          <div key={g} className="grade-stat-pill">
+            <span className={`grade grade-${g}`} aria-hidden="true">
+              {g}
+            </span>
+            <strong>{counts[g]}</strong>
+            <span className="muted">{t("score.gradeDist.fields")}</span>
+          </div>
+        ))}
+      </div>
+      <p className="muted" style={{ fontSize: "0.86rem", marginTop: "0.25rem" }}>
+        {t(isKansas ? "score.gradeDist.kansasNote" : "score.gradeDist.ukraineNote")}
+      </p>
+    </section>
+  );
+}
+
 export function Scoreboard({ index }: { index: RegionIndex }) {
   const [h, setH] = useState<RegionHindcast | null>(null);
   const [story, setStory] = useState<FieldPack | null>(null);
@@ -195,6 +225,7 @@ export function Scoreboard({ index }: { index: RegionIndex }) {
       {h.crop_observed_source === "classifier" && (
         <p className="notice">{t("score.classifier")}</p>
       )}
+      <RegionGradeSummary index={index} />
       {modes.length > 1 && (
         <fieldset className="radio-row">
           <legend>{t("score.mode")}</legend>
@@ -214,9 +245,9 @@ export function Scoreboard({ index }: { index: RegionIndex }) {
         <>
           <GradeValiditySection />
           <DiagnosisSection />
-          <UkraineNeighboursSection />
         </>
       )}
+      <UkraineNeighboursSection />
       <div className="score-story">
         {story ? <Backtest pack={story} mode={mode} /> : <p>{t("field.loading")}</p>}
         <p>

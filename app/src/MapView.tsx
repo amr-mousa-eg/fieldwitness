@@ -192,6 +192,15 @@ function getCachedPoints(index: RegionIndex, fields: GeoJSON.FeatureCollection):
   return pts;
 }
 
+export function mapAttributionText(basemap: string | null | undefined): string {
+  const hlsDate = basemap?.match(/\/default\/(\d{4}-\d{2}-\d{2})\//)?.[1];
+  return basemap
+    ? hlsDate
+      ? t("map.attribution.hls.date", { date: hlsDate })
+      : t("map.attribution.hls")
+    : t("map.attribution.none");
+}
+
 export function MapView({ index, selectedId, onSelect, colouring = null, grid = null }: Props) {
   const { effective } = useTheme();
   const dark = effective === "dark";
@@ -212,6 +221,7 @@ export function MapView({ index, selectedId, onSelect, colouring = null, grid = 
 
     const rafId = requestAnimationFrame(() => {
       if (cancelled || !container.current) return;
+      const attributionText = mapAttributionText(index.basemap);
       m = new MapLibreMap({
         container: container.current,
         style: styleFor(index, dark),
@@ -222,7 +232,7 @@ export function MapView({ index, selectedId, onSelect, colouring = null, grid = 
         fitBoundsOptions: { padding: { top: 48, right: 64, bottom: 72, left: 48 }, maxZoom: 14 },
         attributionControl: {
           compact: true,
-          customAttribution: index.basemap ? t("map.attribution.hls") : t("map.attribution.none"),
+          customAttribution: attributionText,
         },
       });
       m.addControl(new NavigationControl({ showCompass: false }), "top-right");
