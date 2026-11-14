@@ -1086,10 +1086,12 @@ Integrated all 24 NASA Earth observation missions, USDA, USGS, FAO, and ECMWF pa
 
 ## Autopilot handoff
 
-- **Updated:** 2026-11-14 (branch `main`, post-PR #44)
-- **What this run did:** Verified `main` is up to date with `origin/main` (`f3cadf3`) with no git merge conflicts, and surfaced the recently merged Central Ukraine (`ua_central_t36uvu`) Phase 2 Neighbours Witness evaluation in the web app (`app/src/ukraineNeighbours.ts`, `app/src/UkraineNeighboursSection.tsx`) on both `MethodsPage` and `Scoreboard`, with full EN/AR localization (`app/src/strings/en.json`, `app/src/strings/ar.json`), updated `FACTS` and `witnesses` KB entries in `app/src/chatbotContext.ts`, and cross-checked unit tests (`app/tests/ukraineNeighbours.test.ts`, `app/tests/chatbotLlm.test.ts`).
+- **Updated:** 2026-11-14 (branch `feat/ukraine-ui-display`, PR #45)
+- **What this run did:**
+  1. Verified `main` was up to date with `origin/main` (`f3cadf3`) with no git merge conflicts, and surfaced the recently merged Central Ukraine (`ua_central_t36uvu`) Phase 2 Neighbours Witness evaluation in the web app (`app/src/ukraineNeighbours.ts`, `app/src/UkraineNeighboursSection.tsx`) on both `MethodsPage` and `Scoreboard`, with full EN/AR localization (`app/src/strings/en.json`, `app/src/strings/ar.json`), updated `FACTS` and `witnesses` KB entries in `app/src/chatbotContext.ts`, and cross-checked unit tests (`app/tests/ukraineNeighbours.test.ts`, `app/tests/chatbotLlm.test.ts`).
+  2. Added `scripts/build_ukraine_demo_packs.py` and generated a 20-field Tier 3 demo pack in `packs/demo/ua_central_t36uvu/` from real FTW 2024 boundaries, Sentinel-2 L2A 20 m COGs (`s2_cog.build_s2_series`, 48 scenes, 917 rows), causal crop classification (`ukraine_seasons.infer_region_labels`), NASA POWER weather, and FAO-56 physics with 150 mm TAW prior (`tag A`, `credibility: null`, `grade: D`, Neighbours OFF), and updated `packs/demo/regions.json` so `ua_central_t36uvu` ("Central Ukraine (T36UVU)", Tier 3) is selectable alongside `ks_t14slh` in the website's region switcher.
 - **In progress:** None.
 - **Background tasks:** None.
-- **Remaining / Next task:** Independently cross-validate Tier 3 Ukraine classifier labels against ground-truth parcel surveys (or a validated Tier 1/2 region with crop rotation diversity) before deciding whether to enable the Neighbours witness in grading.
+- **Remaining / Next task:** Merge PR #45 into `main` so GitHub Actions (`.github/workflows/pages.yml`) deploys the updated site with both Kansas and Central Ukraine in the region switcher. Future scientific step: independently cross-validate Tier 3 Ukraine classifier labels against ground-truth parcel surveys (and run ABC soil calibration for `ua_central_t36uvu`) before deciding whether to enable the Neighbours witness in grading.
 - **Risks / Notes:** Neighbours remains `OFF` in grading (`config/grading.yaml` and `packs/demo/ks_t14slh/` untouched) because `ua_central_t36uvu` crop labels are classifier-derived (`tag D`).
 
