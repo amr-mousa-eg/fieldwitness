@@ -37,6 +37,10 @@ WINDOWS = {  # crop key -> (first, last) day of the season year, tag A
     "sunflower": (91, 304),
     "winter_wheat": (1, 196),
 }
+# Central Ukraine (48.2 N): Dec-Feb snow masks S2 SCL until ~Mar 1 (DOY 60); tag A active window.
+WINDOWS_BY_REGION = {
+    "ua_central_t36uvu": {**WINDOWS, "winter_wheat": (60, 196)},
+}
 SOIL_PROPS = ("clay", "sand", "soc")
 SOIL_DEPTH = "5-15cm"
 TAGS = {
@@ -85,8 +89,11 @@ def season_outcomes(
     }
 
 
-def build(region_id: str = REGION) -> pd.DataFrame:
+def build(
+    region_id: str = REGION, windows: dict[str, tuple[int, int]] | None = None
+) -> pd.DataFrame:
     cfg = load_story()
+    win_map = windows or WINDOWS_BY_REGION.get(region_id, WINDOWS)
     lab = labels.read(region_id)
     series = hls_qa.read(region_id)
     series = series.dropna(subset=["ndvi"])
@@ -136,8 +143,8 @@ def build(region_id: str = REGION) -> pd.DataFrame:
                 row[{"clay": "clay_pct", "sand": "sand_pct", "soc": "soc_g_kg"}[p]] = (
                     float(soil.loc[fid, p]) if fid in soil.index else np.nan
                 )
-            if crop in WINDOWS:
-                a, b = WINDOWS[crop]
+            if crop in win_map:
+                a, b = win_map[crop]
                 gy = g[g["year"] == year]
                 out = season_outcomes(
                     gy["date"].to_numpy(), gy["ndvi"].to_numpy(), year, (a, b), cfg
@@ -175,6 +182,7 @@ def write(df: pd.DataFrame, region_id: str = REGION) -> dict:
     tags = dict(TAGS)
     if is_clf:
         tags.update(crop="D", prev_crop="D", prev2_crop="D")
+    win_map = WINDOWS_BY_REGION.get(region_id, WINDOWS)
     summary = {
         "region_id": region_id,
         "rows": len(df),
@@ -182,7 +190,7 @@ def write(df: pd.DataFrame, region_id: str = REGION) -> dict:
         "fields": int(df["field_id"].nunique()),
         "crop_source": "classifier (Tier 3 unlabelled, tag D)" if is_clf else "label (tag E)",
         "tags": tags,
-        "windows_tag_A": WINDOWS,
+        "windows_tag_A": win_map,
         "contrast_counts": cc.to_dict("records"),
         "irrigation_proxy": "not available (WorldCereal needs a login, T1.4)",
         "et_outcome": "not available (no ECOSTRESS data)",

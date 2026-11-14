@@ -19,8 +19,8 @@ const base = `${import.meta.env.BASE_URL}packs/`;
 /** Static hosts may answer a missing file with index.html and status 200; that is not data. */
 const isJson = (res: Response) => res.ok && (res.headers.get("content-type") ?? "").includes("json");
 
-async function get<T>(path: string): Promise<T> {
-  const res = await fetch(base + path);
+async function get<T>(path: string, init?: RequestInit): Promise<T> {
+  const res = await fetch(base + path, init);
   if (!isJson(res)) {
     throw new Error(res.ok ? `${path} is missing` : `${path} returned HTTP ${res.status}`);
   }
@@ -35,8 +35,9 @@ export function cacheRegionForOffline(_index: RegionIndex): void {
   // On-demand caching handled by service worker
 }
 
-export const loadRegions = () => get<RegionList>("regions.json");
-export const loadIndex = (region: string) => get<RegionIndex>(`${region}/index.json`);
+export const loadRegions = () => get<RegionList>("regions.json", { cache: "no-cache" });
+export const loadIndex = (region: string) =>
+  get<RegionIndex>(`${region}/index.json`, { cache: "no-cache" });
 export const loadHindcast = (region: string) => get<RegionHindcast>(`${region}/hindcast.json`);
 export const loadLayers = (region: string) => get<RegionLayers>(`${region}/layers.json`);
 export const loadPack = (region: string, fid: string) => get<FieldPack>(`${region}/${fid}.json`);

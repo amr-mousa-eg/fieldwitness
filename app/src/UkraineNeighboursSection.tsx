@@ -27,6 +27,7 @@ export function UkraineNeighboursSection() {
           seasons: d.fieldSeasons,
           outcomes: d.fieldSeasonsWithOutcomes,
           area: d.medianAreaHa.toFixed(1),
+          wheat: d.winterWheatRecovered,
         })}
       </p>
 
@@ -36,6 +37,9 @@ export function UkraineNeighboursSection() {
           {t("ukraineNeighbours.verdictBody", {
             pre: d.preCutoffEvidenceTotal,
             full: d.fullPeriodEvidenceTotal,
+            cropland: d.worldCerealCheck.croplandAgreement2021Pct.toFixed(2),
+            wheatConfusion: d.worldCerealCheck.winterWheatFalseMaizePct.toFixed(1),
+            kappa: d.worldCerealCheck.maizeKappa2021.toFixed(3),
           })}
         </p>
       </div>

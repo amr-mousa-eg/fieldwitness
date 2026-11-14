@@ -29,22 +29,28 @@ describe("Central Ukraine (ua_central_t36uvu) Neighbours Witness data", () => {
     expect(report).toContain(`${UKRAINE_NEIGHBOURS_DATA.preCutoffEvidenceTotal} pre-cutoff`);
     expect(report).toContain(`${UKRAINE_NEIGHBOURS_DATA.fullPeriodEvidenceTotal} full-period`);
 
-    const primaryPre = UKRAINE_NEIGHBOURS_DATA.comparisonRows.find(
-      (r) => r.design === "primary_dml" && r.regionKey === "ukraine_pre",
+    const pobPre = UKRAINE_NEIGHBOURS_DATA.comparisonRows.find(
+      (r) => r.design === "panel_obdml" && r.regionKey === "ukraine_pre",
     )!;
-    const primaryFull = UKRAINE_NEIGHBOURS_DATA.comparisonRows.find(
-      (r) => r.design === "primary_dml" && r.regionKey === "ukraine_full",
+    const pobFull = UKRAINE_NEIGHBOURS_DATA.comparisonRows.find(
+      (r) => r.design === "panel_obdml" && r.regionKey === "ukraine_full",
     )!;
-    const matchPre = UKRAINE_NEIGHBOURS_DATA.comparisonRows.find(
-      (r) => r.design === "matching_dml" && r.regionKey === "ukraine_pre",
+    const pobMPre = UKRAINE_NEIGHBOURS_DATA.comparisonRows.find(
+      (r) => r.design === "panel_obdml_matching" && r.regionKey === "ukraine_pre",
     )!;
-    const matchFull = UKRAINE_NEIGHBOURS_DATA.comparisonRows.find(
-      (r) => r.design === "matching_dml" && r.regionKey === "ukraine_full",
+    const pobMFull = UKRAINE_NEIGHBOURS_DATA.comparisonRows.find(
+      (r) => r.design === "panel_obdml_matching" && r.regionKey === "ukraine_full",
     )!;
-    expect(primaryPre.evidencePass + matchPre.evidencePass).toBe(
+    const dapPre = UKRAINE_NEIGHBOURS_DATA.comparisonRows.find(
+      (r) => r.design === "exact_year_dapsm" && r.regionKey === "ukraine_pre",
+    )!;
+    const dapFull = UKRAINE_NEIGHBOURS_DATA.comparisonRows.find(
+      (r) => r.design === "exact_year_dapsm" && r.regionKey === "ukraine_full",
+    )!;
+    expect(pobPre.evidencePass + pobMPre.evidencePass + dapPre.evidencePass).toBe(
       UKRAINE_NEIGHBOURS_DATA.preCutoffEvidenceTotal,
     );
-    expect(primaryFull.evidencePass + matchFull.evidencePass + 1).toBe(
+    expect(pobFull.evidencePass + pobMFull.evidencePass + dapFull.evidencePass).toBe(
       UKRAINE_NEIGHBOURS_DATA.fullPeriodEvidenceTotal,
     );
   });
@@ -53,8 +59,8 @@ describe("Central Ukraine (ua_central_t36uvu) Neighbours Witness data", () => {
     for (const loc of ["en", "ar"] as const) {
       setLocale(loc);
       const html = renderToStaticMarkup(createElement(UkraineNeighboursSection));
-      expect(html).toContain("395");
-      expect(html).toContain("2765");
+      expect(html).toContain("400");
+      expect(html).toContain("2800");
       expect(html).toContain("T36UVU");
       expect(html.toLowerCase()).not.toContain("tonnes");
       expect(html.toLowerCase()).not.toContain("profit");

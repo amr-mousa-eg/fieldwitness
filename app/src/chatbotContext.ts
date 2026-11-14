@@ -159,10 +159,10 @@ export const FACTS = {
   wheatPeakMedianLateDays: { value: "36.0", src: "README.md honest limits (signed median offset)" },
   wheatShareTilePct: { value: "31.4", src: "config/regions.yaml (CSB 2024 winter wheat share)" },
   hlsFirstSeason: { value: "2015", src: "README.md (field seasons since 2015)" },
-  uaFields: { value: "395", src: "results/pilot_fields/ua_central_t36uvu_summary.json pilot_fields" },
-  uaSeasons: { value: "2765", src: "results/neighbours/ua_central_t36uvu_field_season_summary.json rows" },
-  uaPreCutoffPass: { value: "11", src: "results/neighbours/ua_central_t36uvu_report.md (<=2021 evidence total)" },
-  uaFullPass: { value: "25", src: "results/neighbours/ua_central_t36uvu_report.md (2018-2024 evidence total)" },
+  uaFields: { value: "400", src: "results/pilot_fields/ua_central_t36uvu_summary.json pilot_fields" },
+  uaSeasons: { value: "2800", src: "results/neighbours/ua_central_t36uvu_field_season_summary.json rows" },
+  uaPreCutoffPass: { value: "30", src: "results/neighbours/ua_central_t36uvu_report.md (<=2021 evidence total)" },
+  uaFullPass: { value: "70", src: "results/neighbours/ua_central_t36uvu_report.md (2018-2024 evidence total)" },
 } as const;
 
 const F = Object.fromEntries(Object.entries(FACTS).map(([k, v]) => [k, v.value])) as {
@@ -182,7 +182,7 @@ export const KNOWLEDGE_BASE: KnowledgeEntry[] = [
     id: "witnesses",
     title: "The Three Witnesses",
     keywords: ["witness", "witnesses", "three", "physics", "own past", "abc", "neighbour", "neighbor", "doubleml", "trials", "k-state", "colby", "circuit breaker", "ukraine", "t36uvu"],
-    answer: `Every rotation option is checked by three witnesses:\n1) Physics: FAO-56 root-zone water balance forced by NASA POWER daily weather [D].\n2) Field's own past: ABC calibration of the physics against the field's HLS 30 m history; this gives the credibility score [D].\n3) Neighbours: double ML on previous-crop effects across similar fields. In Kansas it failed its diagnostics (0 of ${F.neighbourPrimaryTotal} primary contrasts and 0 of ${F.neighbourMatchedTotal} matched contrasts passed). In Central Ukraine (${F.uaFields} fields, ${F.uaSeasons} field-seasons), ${F.uaPreCutoffPass} pre-cutoff and ${F.uaFullPass} full-period contrasts passed all four checks, but Neighbours stays OFF in grading until classifier labels are ground-truth validated. The repo also contains benchmark code for published K-State Colby rotation trials [E], but in this release no option reaches grade A.`,
+    answer: `Every rotation option is checked by three witnesses:\n1) Physics: FAO-56 root-zone water balance forced by NASA POWER daily weather [D].\n2) Field's own past: ABC calibration of the physics against the field's HLS 30 m history; this gives the credibility score [D].\n3) Neighbours: double ML on previous-crop effects across similar fields. In Kansas it stayed OFF (0 of ${F.neighbourPrimaryTotal} primary contrasts and 0 of ${F.neighbourMatchedTotal} matched contrasts passed). In Central Ukraine (${F.uaFields} fields, ${F.uaSeasons} field-seasons), Panel-OBDML and Exact-Year DAPSM pass ${F.uaPreCutoffPass} pre-cutoff and ${F.uaFullPass} full-period contrasts across all four causal checks and are wired as tag [D] Neighbours witnesses (crop labels cross-checked against WorldCereal on cropland and winter wheat, while maize-vs-sunflower remains unvalidated at species level). The repo also contains benchmark code for published K-State Colby rotation trials [E], but in this release no option reaches grade A.`,
     sourceLabel: "Three witnesses (README.md, results/neighbours/)",
     followUps: ["How are evidence grades A–D assigned?", "What are the project's honest limits?", "What soil data is used?"],
   },
@@ -270,7 +270,7 @@ const KNOWLEDGE_BASE_AR: KnowledgeEntry[] = [
     id: "witnesses",
     title: "نظام الشهود الثلاثة",
     keywords: ["شاهد", "شهود", "الشهود", "فيزياء", "الماضي", "جيران", "الجيران", "كولبي", "معايرة", "أوكرانيا", "ukraine"],
-    answer: `يُقيَّم كل خيار دورة زراعية عبر ثلاثة شهود مستقلين:\n1) **الفيزياء (الشاهد 1)**: موازنة المياه اليومية FAO-56 في منطقة الجذور المدفوعة بطقس NASA POWER [D].\n2) **ماضي الحقل (الشاهد 2)**: معايرة بايزية تقريبية (ABC) تطابق الفيزياء مع سجل NASA HLS 30 م [D].\n3) **الجيران (الشاهد 3)**: في كانساس لم تجتز المقارنات فحوصات التوازن (0/92 و0/32). أما في وسط أوكرانيا (المستوى 3، ${F.uaFields} حقلًا و${F.uaSeasons} موسمًا) فاجتازت ${F.uaPreCutoffPass} مقارنة قبل القطع و${F.uaFullPass} للفترة الكاملة الفحوصات الأربعة، لكنه يبقى موقَفًا (**OFF**) في التقييم حتى التحقق الأرضي من تسميات المصنّف [D].`,
+    answer: `يُقيَّم كل خيار دورة زراعية عبر ثلاثة شهود مستقلين:\n1) **الفيزياء (الشاهد 1)**: موازنة المياه اليومية FAO-56 في منطقة الجذور المدفوعة بطقس NASA POWER [D].\n2) **ماضي الحقل (الشاهد 2)**: معايرة بايزية تقريبية (ABC) تطابق الفيزياء مع سجل NASA HLS 30 م [D].\n3) **الجيران (الشاهد 3)**: في كانساس بقي متوقفًا (**OFF**) لعدم اجتياز فحوصات التوازن (0/92 و0/32). أما في وسط أوكرانيا (${F.uaFields} حقلًا و${F.uaSeasons} موسمًا) فاجتازت تصاميم Panel-OBDML وDAPSM السنوي الدقيق ${F.uaPreCutoffPass} مقارنة قبل القطع و${F.uaFullPass} للفترة الكاملة الفحوصات الأربعة، وأُدمجت نتائجها بالوسم [D] في حزم أوكرانيا التجريبية مع الإفصاح عن نتيجة فحص WorldCereal (توافق الأراضي الزراعية والقمح الشتوي مقابل عدم التحقق الفئوي بين الذرة ودوار الشمس).`,
     sourceLabel: "إطار الشهود الثلاثة [D/E]",
     followUps: ["لماذا شاهد الجيران متوقف؟", "كيف تُحدد درجات الدليل A–D؟", "ما بيانات التربة المستخدمة؟"],
   },
