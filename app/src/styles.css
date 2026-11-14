@@ -1623,6 +1623,12 @@ table.mini {
 .methods li {
   margin: 0.25rem 0;
 }
+.methods a,
+.methods p,
+.methods li,
+.methods dd {
+  overflow-wrap: anywhere;
+}
 .datasets td {
   white-space: normal;
 }

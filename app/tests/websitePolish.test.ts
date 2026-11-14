@@ -3,12 +3,16 @@ import { resolve } from "node:path";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
+import { CQR_EVALUATION } from "../src/cqrEvaluation";
 import { FieldList } from "../src/FieldList";
 import { mapAttributionText } from "../src/MapView";
+import { MethodsPage } from "../src/MethodsPage";
 import { PrintDossier } from "../src/PrintDossier";
-import { RegionGradeSummary } from "../src/Scoreboard";
+import { CqrScoreSection, RegionGradeSummary } from "../src/Scoreboard";
 import { UkraineNeighboursSection } from "../src/UkraineNeighboursSection";
 import { getLocale, setLocale, t } from "../src/strings";
+import ar from "../src/strings/ar.json";
+import en from "../src/strings/en.json";
 import type { FieldPack, FieldSummary, Option, RegionIndex } from "../src/types";
 
 const CSS_PATH = resolve(import.meta.dirname, "..", "src", "styles.css");
@@ -207,5 +211,98 @@ describe("PrintDossier & MapView region awareness", () => {
     expect(mapAttributionText(uaUrl)).toContain("2023-08-15");
     expect(mapAttributionText("custom/tile.png")).toBe(t("map.attribution.hls"));
     expect(mapAttributionText(null)).toBe(t("map.attribution.none"));
+  });
+});
+
+describe("Methods, Data & Scoreboard updates", () => {
+  it("matches CQR_EVALUATION metrics exactly against results/hindcast/conformal/cqr_evaluation.json", () => {
+    const raw = JSON.parse(
+      readFileSync(resolve(import.meta.dirname, "../../results/hindcast/conformal/cqr_evaluation.json"), "utf8"),
+    );
+    expect(CQR_EVALUATION.nCalRows).toBe(raw.n_cal_rows);
+    expect(CQR_EVALUATION.nTestRows).toBe(raw.n_test_rows);
+    expect(CQR_EVALUATION.nSpatialBlocks).toBe(raw.n_spatial_blocks);
+    expect(CQR_EVALUATION.rows).toHaveLength(raw.forecast_summary.length);
+
+    for (const row of CQR_EVALUATION.rows) {
+      const match = raw.forecast_summary.find(
+        (r: { crop: string; metric: string }) => r.crop === row.crop && r.metric === row.metric,
+      );
+      expect(match, `${row.crop}.${row.metric}`).toBeDefined();
+      expect(row.n).toBe(match.n);
+      expect(row.storedCov90).toBe(match.stored.cov90.value);
+      expect(row.storedWinkler90).toBe(match.stored.winkler90.value);
+      expect(row.cqrSymCov90).toBe(match.cqr_sym.cov90.value);
+      expect(row.cqrSymWinkler90).toBe(match.cqr_sym.winkler90.value);
+      expect(row.cqrAsymCov90).toBe(match.cqr_asym.cov90.value);
+      expect(row.cqrAsymWinkler90).toBe(match.cqr_asym.winkler90.value);
+      expect(row.gate8595).toBe(match.gate_85_95);
+    }
+  });
+
+  it("removes leading changelog dates from What we got wrong (EN & AR) without deleting text", () => {
+    const enDict = en as Record<string, string>;
+    const arDict = ar as Record<string, string>;
+    for (let i = 1; i <= 9; i++) {
+      const k = `methods.wrong.${i}`;
+      expect(enDict[k], `EN ${k}`).not.toMatch(/^\s*\d{4}-\d{2}-\d{2}/);
+      expect(arDict[k], `AR ${k}`).not.toMatch(/^\s*\d{4}-\d{2}-\d{2}/);
+      expect(enDict[k].length, `EN ${k} text preserved`).toBeGreaterThan(30);
+      expect(arDict[k].length, `AR ${k} text preserved`).toBeGreaterThan(20);
+    }
+  });
+
+  it("renders updated CqrScoreSection, RegionGradeSummary meta lines, and MethodsPage regions/datasets in EN & AR", () => {
+    const prev = getLocale();
+    const prevWin = (globalThis as { window?: unknown }).window;
+    (globalThis as { window?: unknown }).window = {
+      location: { hash: "#/ks_t14slh/methods" },
+      addEventListener() {},
+      removeEventListener() {},
+    };
+    const ksIndex: RegionIndex = {
+      schema_version: "1.0",
+      region_id: "ks_t14slh",
+      name: "Kansas High Plains (SW Kansas)",
+      tier: 1,
+      bbox_lonlat: [-101.5, 39.0, -100.5, 40.0],
+      basemap: null,
+      fields: makeSummaries(4, ["B", "C", "D", "B"]),
+      data_as_of: "2024-12-31",
+    };
+    const uaIndex: RegionIndex = {
+      schema_version: "1.2",
+      region_id: "ua_central_t36uvu",
+      name: "Central Ukraine (T36UVU)",
+      tier: 3,
+      bbox_lonlat: [31.8, 47.9, 32.1, 48.1],
+      basemap: null,
+      fields: makeSummaries(4, ["A", "B", "C", "B"]),
+      data_as_of: "2024-12-31",
+    };
+    try {
+      for (const loc of ["en", "ar"] as const) {
+        setLocale(loc);
+        const cqrHtml = unescapeHtml(renderToStaticMarkup(createElement(CqrScoreSection)));
+        expect(cqrHtml).toContain(t("score.cqr.heading"));
+        expect(cqrHtml).toContain("89.3 %");
+        expect(cqrHtml).toContain(t("score.cqr.pass"));
+
+        const ksHtml = unescapeHtml(renderToStaticMarkup(createElement(RegionGradeSummary, { index: ksIndex })));
+        expect(ksHtml).toContain(t("score.gradeDist.metaKansas"));
+        const uaHtml = unescapeHtml(renderToStaticMarkup(createElement(RegionGradeSummary, { index: uaIndex })));
+        expect(uaHtml).toContain(t("score.gradeDist.metaUkraine"));
+
+        const methodsHtml = unescapeHtml(renderToStaticMarkup(createElement(MethodsPage)));
+        expect(methodsHtml).toContain('id="m-regions"');
+        expect(methodsHtml).toContain(t("methods.regions.heading"));
+        expect(methodsHtml).toContain(t("methods.ds.s2cog.name"));
+        expect(methodsHtml).toContain(t("methods.ds.worldcereal.name"));
+        expect(methodsHtml).not.toMatch(/2026-11-\d{2}/);
+      }
+    } finally {
+      setLocale(prev);
+      (globalThis as { window?: unknown }).window = prevWin;
+    }
   });
 });

@@ -13,12 +13,18 @@ Only the row groups whose `bbox` statistics intersect the query box are read (se
 - Punjab file (Tier 3 candidate): `https://data.source.coop/ftw/global-data/predictions/vectors/alpha/results-by-admin-conf/admin:country_code=IN/IN_PB.parquet`
   (10,396,804 polygons over the 2024 and 2025 layers; CRS OGC:CRS84; 159 row groups, 992 MB).
 - Ukraine file (Tier 3 `ua_central_t36uvu`): `https://data.source.coop/ftw/global-data/predictions/vectors/alpha/results-by-admin-conf/admin:country_code=UA/Ukraine.parquet`
-  (windowed extract for `T36UVU` 2×2 20 m COG tiles `tx in {1,2}, ty in {7,8}`, 40.0 MB downloaded, deduplicated to 395 unique fields ≥ 5 ha across 8 10-km spatial blocks; 0 scale-flagged).
+  (windowed extract for `T36UVU` 2×2 20 m COG tiles `tx in {1,2}, ty in {7,8}`, 40.0 MB downloaded, deduplicated to 395 / 400 pilot fields ≥ 5 ha across 8 10-km spatial blocks; 120 stratified demo field packs; 0 scale-flagged).
 - Kansas file (not used: CSB is the Tier 1 source): `.../admin:country_code=US/US_KS.parquet` (1,103,107 polygons; 17 row groups, 531 MB).
 - Other countries: `.../results-by-admin-conf/admin:country_code=<CC>/...`; find files via the STAC catalogue
   `https://data.source.coop/ftw/global-data/predictions/vectors/collection.json`.
 - Licence: **CC-BY-4.0**. Attribution: Fields of the World / Taylor Geospatial (polygons from the PRUE model on Sentinel-2).
 - Caveat (from the README): a "field" is a predicted remote-sensing field unit, not a cadastral parcel; alpha release. No crop labels (`labels.source == "none"`), so Ukraine crop histories are inferred via causal Sentinel-2 phenology + TWDTW (`crop_source = "classifier"`, tag `D`).
+
+### OpenGeoHub Global Harmonized Land Cover / ESA WorldCereal 10 m (`ogh-ghlc10` v1.2, T2.4 cross-check)
+
+- Source: OpenGeoHub `ogh-ghlc10` v1.2 (`2020–2024`, class `3` = ESA WorldCereal 10 m main-season maize), DOI: `10.5194/egusphere-2026-5540`.
+- Usage: Independent HTTP range-read cross-check (`3.77 MB` across `400` Central Ukraine fields with 15 m inward polygon buffer; `1,000` spatial-block bootstrap replicates). Verified `98.25%` 2021 annual cropland agreement (`98.35%` across `2020–2024`) and `0.0%` winter-wheat false maize positives, while recording species-level `maize`-vs-`sunflower` separation weakness (`κ = 0.0352`) in `results/story/ua_worldcereal_crosscheck.{json,md}`.
+- Licence: **CC-BY-4.0**. Attribution: OpenGeoHub / ESA WorldCereal Consortium.
 
 ### USDA NASS Crop Sequence Boundaries (CSB), 2017–2024 edition
 
@@ -63,9 +69,9 @@ Only the row groups whose `bbox` statistics intersect the query box are read (se
   - Source: NASA Global Imagery Browse Services (GIBS) / LP DAAC, part of NASA EOSDIS.
   - Layer: `HLS_S30_Nadir_BRDF_Adjusted_Reflectance` (Sentinel-2 MSI true-colour RGB: Red B04, Green B03, Blue B02).
   - Spatial resolution: ~30 m native resolution (WMTS `GoogleMapsCompatible_Level12`, ~29.8 m/pixel at 38°N).
-  - Date of imagery: 2023-07-04 (summer peak vegetation growth, 99.88% clear observation across Kansas tile T14SLH).
-  - Endpoint: `https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/HLS_S30_Nadir_BRDF_Adjusted_Reflectance/default/2023-07-04/GoogleMapsCompatible_Level12/{z}/{y}/{x}.png` (EPSG:3857). Offline/error behavior: falls back to neutral background.
-  - Required attribution: "Imagery: NASA GIBS / LP DAAC (HLS S30, 2023-07-04)".
+  - Dates of imagery: `2023-07-04` for Kansas tile `T14SLH` (99.88% clear) and `2023-08-15` for Central Ukraine tile `T36UVU` (late-summer peak growth).
+  - Endpoint template: `https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/HLS_S30_Nadir_BRDF_Adjusted_Reflectance/default/{YYYY-MM-DD}/GoogleMapsCompatible_Level12/{z}/{y}/{x}.png` (EPSG:3857). Offline/error behavior: falls back to neutral background.
+  - Required attribution: "Imagery: NASA GIBS / LP DAAC (HLS S30, 2023-07-04 / 2023-08-15)".
   - Licence: NASA Earth Science Data Policy (open and free for all users).
 - **NASA GPM & IMERG Precipitation**:
   - Products: `GPM_3IMERGDF` v07 (Concept ID `C2723754864-GES_DISC`), half-hourly and daily global calibrated precipitation (0.1° resolution).
