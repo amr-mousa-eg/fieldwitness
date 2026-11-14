@@ -122,3 +122,18 @@ def test_wilson_interval():
     assert lo == pytest.approx(0.0, abs=1e-12) and 0.10 < hi < 0.11
     lo, hi = dapsm.wilson(8, 32)
     assert lo < 0.25 < hi
+
+
+def test_match_exact_by_year():
+    ps, dist, treated, field = _toy()
+    years = np.array([2020, 2021, 2020, 2021, 2020])
+    # Row 0 (field A, year 2020) cannot match row 2 (same field A) or row 3 (year 2021) -> row 4
+    # Row 1 (field B, year 2021) can only match year 2021 -> row 3
+    m = dapsm.match(ps, dist, treated, field, w=1.0, exact_by=years)
+    assert m[0] == 4
+    assert m[1] == 3
+    # If treated row has an unmatched year, match is -1
+    years_none = np.array([2019, 2021, 2020, 2021, 2020])
+    m2 = dapsm.match(ps, dist, treated, field, w=1.0, exact_by=years_none)
+    assert m2[0] == -1
+    assert m2[1] == 3

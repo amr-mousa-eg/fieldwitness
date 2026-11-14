@@ -7,11 +7,11 @@
  "quotas": {
   "unlabelled": 400
  },
- "pilot_fields": 395,
+ "pilot_fields": 400,
  "blocks_covered": 8,
  "blocks_with_candidates": 8,
- "area_ha_median": 48.678,
- "interior_px_median": 473.0,
+ "area_ha_median": 49.415,
+ "interior_px_median": 479.0,
  "hls_scale_flagged": 0,
  "cog_tile_window": [
   [

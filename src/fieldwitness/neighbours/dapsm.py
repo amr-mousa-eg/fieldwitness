@@ -54,21 +54,32 @@ def haversine_km(lat: np.ndarray, lon: np.ndarray) -> np.ndarray:
 
 
 def match(
-    ps: np.ndarray, dist_scaled: np.ndarray, treated: np.ndarray, field: np.ndarray, w: float
+    ps: np.ndarray,
+    dist_scaled: np.ndarray,
+    treated: np.ndarray,
+    field: np.ndarray,
+    w: float,
+    exact_by: np.ndarray | None = None,
 ) -> np.ndarray:
     """For each row, the index of its matched reference row (-1 for reference rows).
 
     ps (n,), dist_scaled (n, n) between the rows' fields scaled to [0, 1], treated (n,) bool,
     field (n,) field ids. D = w |PS_i - PS_j| + (1 - w) dist; rows of the same field are never
-    matched; ties go to the lowest index. With replacement. -1 also when no reference row exists.
+    matched; ties go to the lowest index. If `exact_by` is provided (e.g. calendar year), only
+    reference rows with matching `exact_by[ref] == exact_by[i]` are eligible. With replacement.
+    -1 also when no eligible reference row exists.
     """
     ps = np.asarray(ps, float)
     t = np.asarray(treated, bool)
     field = np.asarray(field)
+    exact = None if exact_by is None else np.asarray(exact_by)
     ref = np.flatnonzero(~t)
     out = np.full(len(ps), -1)
     for i in np.flatnonzero(t):
-        cand = ref[field[ref] != field[i]]
+        mask = field[ref] != field[i]
+        if exact is not None:
+            mask = mask & (exact[ref] == exact[i])
+        cand = ref[mask]
         if not len(cand):
             continue
         d = w * np.abs(ps[i] - ps[cand]) + (1.0 - w) * dist_scaled[i, cand]

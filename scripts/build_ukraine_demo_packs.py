@@ -18,8 +18,10 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+import yaml
 from shapely import wkb
 
+from fieldwitness.agree.grade import Effect, grade_option
 from fieldwitness.config import load_crops
 from fieldwitness.data import power
 from fieldwitness.data.s2_cog import build_s2_series
@@ -82,6 +84,11 @@ CANDIDATE_SEQS = [
 ]
 
 _OPT_NULL = ("lo50", "hi50", "lo90", "hi90")
+_DEPTH_WEIGHTS = {"0-5cm": 5.0 / 30.0, "5-15cm": 10.0 / 30.0, "15-30cm": 15.0 / 30.0}
+_T24_NOTE = (
+    "T2.4 ogh-ghlc10/WorldCereal check: 98.25% annual cropland, "
+    "0.0% winter-wheat/maize confusion, maize-vs-sunflower kappa=0.035"
+)
 
 
 def _slim(o):
@@ -177,35 +184,192 @@ def _bare_observed_from_s2(s: pd.DataFrame) -> list[BareMonth]:
     return out
 
 
+def _load_soil_0_30(path: Path) -> dict[str, dict[str, float]]:
+    """Load SoilGrids 2.0 0-30 cm depth-weighted mean clay, sand, and SOC per field."""
+    if not path.exists():
+        return {}
+    df = pd.read_parquet(path)
+    sub = df[
+        (df["stat"] == "mean")
+        & (df["depth"].isin(list(_DEPTH_WEIGHTS)))
+        & (df["property"].isin(["clay", "sand", "soc"]))
+        & df["value"].notna()
+    ].copy()
+    sub["w"] = sub["depth"].map(_DEPTH_WEIGHTS)
+    out: dict[str, dict[str, float]] = {}
+    for fid, grp in sub.groupby("field_id"):
+        vals: dict[str, float] = {}
+        for prop, pgrp in grp.groupby("property"):
+            wsum = float(pgrp["w"].sum())
+            if wsum > 0:
+                vals[str(prop)] = round(float((pgrp["value"] * pgrp["w"]).sum() / wsum), 1)
+        if vals:
+            out[str(fid)] = vals
+    return out
+
+
+def _load_pre_panel_obdml(path: Path) -> dict[tuple[str, str, str, str], dict]:
+    """Load strictly pre-cutoff (<=2021) Panel-OBDML rows passing all 4 causal gates."""
+    if not path.exists():
+        return {}
+    df = pd.read_csv(path)
+    ok = df[
+        (df["period"] == "pre_cutoff_le_2021")
+        & (df["show_as_evidence"] == True)  # noqa: E712
+        & (df["stratum"] == "all")
+        & df["outcome"].isin(["cover_days", "canopy_integral"])
+    ]
+    out: dict[tuple[str, str, str, str], dict] = {}
+    for _, row in ok.iterrows():
+        key = (
+            str(row["crop"]),
+            str(row["treated_prev"]),
+            str(row["reference_prev"]),
+            str(row["outcome"]),
+        )
+        out[key] = row.to_dict()
+    return out
+
+
+def _match_neighbours_contrast(
+    cur_seq_raw: list[str],
+    cand_seq: tuple[str, ...],
+    pob_map: dict[tuple[str, str, str, str], dict],
+) -> tuple[list[WitnessResult], list[str]]:
+    """Attach passing pre-cutoff Panel-OBDML contrasts when cereal breaks summer monoculture."""
+    if not pob_map:
+        return [], []
+    cand_pairs = set(zip(cand_seq, cand_seq[1:], strict=False))
+    if ("winter_wheat", "maize") not in cand_pairs:
+        return [], []
+    cur_pairs = set(zip(cur_seq_raw, cur_seq_raw[1:], strict=False))
+    # Only claim a cereal-break contrast if the current sequence lacks winter_wheat -> sunflower
+    # and actually contains continuous sunflower or maize -> sunflower.
+    if ("winter_wheat", "sunflower") in cur_pairs:
+        return [], []
+    if ("sunflower", "sunflower") in cur_pairs:
+        base_key = ("sunflower", "sunflower", "winter_wheat")
+    elif ("maize", "sunflower") in cur_pairs:
+        base_key = ("sunflower", "maize", "winter_wheat")
+    else:
+        return [], []
+
+    w_out: list[WitnessResult] = []
+    notes: list[str] = []
+    for metric in ("cover_days", "canopy_integral"):
+        row = pob_map.get((*base_key, metric))
+        if row is None:
+            continue
+        # Panel-OBDML reports treated_prev (summer) - reference_prev (winter_wheat).
+        # Introducing winter_wheat before a summer crop therefore inverts the sign.
+        eff = round(-float(row["effect"]), 3)
+        lo90 = round(-float(row["hi90"]), 3)
+        hi90 = round(-float(row["lo90"]), 3)
+        unit = (
+            "days vs continuous summer crop"
+            if metric == "cover_days"
+            else "NDVI-days vs continuous summer crop"
+        )
+        w_out.append(
+            WitnessResult(
+                witness="neighbours",
+                metric=metric,
+                estimate=Tagged(
+                    value=eff,
+                    lo90=lo90,
+                    hi90=hi90,
+                    unit=unit,
+                    tag="D",
+                    source=(
+                        f"model:panel_obdml (pre-cutoff <=2021; winter_wheat vs {base_key[1]} "
+                        f"before sunflower; classifier labels [D]; {_T24_NOTE})"
+                    ),
+                ),
+                n=int(row["n"]),
+                diagnostics={
+                    "design": "Panel-OBDML (pooled, <=2021)",
+                    "contrast": f"winter_wheat vs {base_key[1]} -> sunflower",
+                    "smd_weighted_max": round(float(row["smd_weighted_max"]), 3),
+                    "overlap_outside": round(float(row["share_outside"]), 3),
+                    "placebo_pass": True,
+                    "negctrl_pass": True,
+                },
+            )
+        )
+        notes.append(
+            f"Neighbours Panel-OBDML (<=2021) {metric} {eff:+.3f} "
+            f"[{lo90:+.3f}, {hi90:+.3f}] (n={int(row['n'])}, tag D)"
+        )
+    return w_out, notes
+
+
 def main() -> None:
     import geopandas as gpd
 
     pilot_all = gpd.read_parquet(f"data/fields/{REGION}_pilot.parquet")
     pilot_20 = _select_20_fields(pilot_all)
+    demo_ids = set(pilot_20["field_id"].astype(str))
     grid = load_grid(REGION)
 
     print(
         f"Selected {len(pilot_20)} fields across {pilot_20['block'].nunique()} blocks.", flush=True
     )
-    s2_df, s2_meta = build_s2_series(
-        REGION,
-        pilot_20,
-        grid,
-        mgrs_code="MGRS-36UVU",
-        start_date="2017-01-01",
-        end_date="2024-12-31",
-        max_per_month=1,
-        max_total_scenes=48,
-        max_bytes=200_000_000,
-    )
-    print(
-        f"S2 series: {s2_meta['rows_written']} rows, {s2_meta['fields_with_obs']} fields.",
-        flush=True,
-    )
+    s2_cache = Path(f"data/fields/{REGION}_hls_series.parquet")
+    if s2_cache.exists():
+        s2_all = pd.read_parquet(s2_cache)
+        s2_df = s2_all[s2_all["field_id"].isin(demo_ids)].copy()
+        if demo_ids.issubset(set(s2_df["field_id"].astype(str))):
+            print(
+                f"Loaded cached S2 series ({len(s2_df)} rows for {len(demo_ids)} fields).",
+                flush=True,
+            )
+        else:
+            s2_df, s2_meta = build_s2_series(
+                REGION,
+                pilot_20,
+                grid,
+                mgrs_code="MGRS-36UVU",
+                start_date="2017-01-01",
+                end_date="2024-12-31",
+                max_per_month=1,
+                max_total_scenes=48,
+                max_bytes=200_000_000,
+            )
+            print(
+                f"S2 series: {s2_meta['rows_written']} rows, {s2_meta['fields_with_obs']} fields.",
+                flush=True,
+            )
+    else:
+        s2_df, s2_meta = build_s2_series(
+            REGION,
+            pilot_20,
+            grid,
+            mgrs_code="MGRS-36UVU",
+            start_date="2017-01-01",
+            end_date="2024-12-31",
+            max_per_month=1,
+            max_total_scenes=48,
+            max_bytes=200_000_000,
+        )
+        print(
+            f"S2 series: {s2_meta['rows_written']} rows, {s2_meta['fields_with_obs']} fields.",
+            flush=True,
+        )
     s2_df["date"] = pd.to_datetime(s2_df["date"])
 
-    # Classify crops causally (tag D)
-    clf_df = infer_region_labels(s2_df, years=list(range(2017, 2025)))
+    # Classify crops causally (tag D) using cached full-tile parquet when complete
+    lbl_cache = Path(f"data/labels/{REGION}.parquet")
+    if lbl_cache.exists():
+        clf_all = pd.read_parquet(lbl_cache)
+        clf_df = clf_all[clf_all["field_id"].isin(demo_ids)].copy()
+        if not demo_ids.issubset(set(clf_df["field_id"].astype(str))):
+            clf_df = infer_region_labels(s2_df, years=list(range(2017, 2025)))
+    else:
+        clf_df = infer_region_labels(s2_df, years=list(range(2017, 2025)))
+
+    soil_map = _load_soil_0_30(Path(f"data/soil/{REGION}_fields.parquet"))
+    pob_map = _load_pre_panel_obdml(Path(f"results/neighbours/{REGION}_panel_obdml.csv"))
+    grading_cfg = yaml.safe_load(Path("config/grading.yaml").read_text(encoding="utf-8"))["grades"]
 
     out_dir = OUT_ROOT / REGION
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -240,6 +404,13 @@ def main() -> None:
         s = s2_df[s2_df["field_id"] == fid].sort_values("date")
         cf = clf_df[clf_df["field_id"] == fid]
         crop_by_year = {int(y): str(c) for y, c in zip(cf["year"], cf["crop"], strict=True)}
+        soil_f = soil_map.get(fid, {})
+        soil_note = (
+            f"SoilGrids 2.0 0-30 cm [E]: clay {soil_f['clay']}%, "
+            f"sand {soil_f['sand']}%, SOC {soil_f['soc']} g/kg"
+            if {"clay", "sand", "soc"}.issubset(soil_f)
+            else "SoilGrids 2.0 context pending"
+        )
 
         seasons_raw = detect_seasons(s["date"], s["ndvi"], cfg) if not s.empty else []
         seasons: list[Season] = []
@@ -286,6 +457,9 @@ def main() -> None:
         # Score options
         opt_models: list[Option] = []
         raw_metrics_list: list[dict[str, float | None]] = []
+        cur_ryi = (
+            float(ev_res["ryi"][0]) if ev_res.get("ryi") and np.isfinite(ev_res["ryi"][0]) else 0.0
+        )
         for idx_o, seq in enumerate(all_seqs):
             oid_str = "current" if idx_o == 0 else B.oid(seq)
             m_dict: dict[str, Tagged] = {}
@@ -320,23 +494,75 @@ def main() -> None:
                     witness="physics",
                     metric="ryi",
                     estimate=m_dict["ryi"],
-                    diagnostics={"taw_prior_mm": 150.0, "calibrated": False},
+                    diagnostics={
+                        "taw_prior_mm": 150.0,
+                        "calibrated": False,
+                        **({f"soilgrids_{k}": v for k, v in soil_f.items()} if soil_f else {}),
+                    },
                 )
             ]
+            nb_res: list[WitnessResult] = []
+            nb_notes: list[str] = []
+            if idx_o > 0:
+                nb_res, nb_notes = _match_neighbours_contrast(cur_seq_raw, seq, pob_map)
+                w_res.extend(nb_res)
+
+            phys_delta = (raw_m.get("ryi") or 0.0) - cur_ryi
+            phys_eff = Effect(phys_delta, phys_delta, phys_delta)
+            nb_eff = (
+                Effect(
+                    float(nb_res[0].estimate.value or 0.0),
+                    float(nb_res[0].estimate.lo90 or 0.0),
+                    float(nb_res[0].estimate.hi90 or 0.0),
+                )
+                if nb_res
+                else None
+            )
+            key_tags = {
+                "weather": "E",
+                "taw": "A",
+                "kc_scale": "A",
+                "budget": "A",
+                "crop_history": "D",
+            }
+            grade_val, base_reasons = grade_option(
+                physics=phys_eff if idx_o > 0 else None,
+                neighbours=nb_eff,
+                credibility=None,
+                key_input_tags=key_tags,
+                cfg=grading_cfg,
+            )
+            grade_reasons = [
+                *base_reasons,
+                "Tier 3: physics uses 150 mm TAW prior (A); ABC calibration pending",
+                soil_note,
+                (
+                    f"Neighbours Panel-OBDML (<=2021) passes 4 causal gates (tag D; {_T24_NOTE})"
+                    if nb_res
+                    else (
+                        "No matching pre-cutoff Panel-OBDML cover contrast for this sequence "
+                        f"(tag D; {_T24_NOTE})"
+                    )
+                ),
+            ]
+            ev_lines = [
+                "Physics [D] with 150 mm TAW prior [A]",
+                soil_note,
+                *(
+                    nb_notes
+                    if nb_notes
+                    else ["Neighbours: no pre-cutoff cover contrast matched to this sequence [D]"]
+                ),
+            ]
+
             opt_models.append(
                 Option(
                     option_id=oid_str,
                     sequence=list(seq),
                     metrics=m_dict,
                     witnesses=w_res,
-                    grade="D",
-                    grade_reasons=[
-                        "Tier 3: physics uses 150 mm TAW prior (A); ABC calibration pending",
-                        (
-                            "Neighbours witness OFF "
-                            "(Tier 3 classifier labels not ground-truth validated)"
-                        ),
-                    ],
+                    grade=grade_val,
+                    grade_reasons=grade_reasons,
                     regret=Tagged(
                         value=0.0, unit="rank-regret (0=best)", tag="D", source="model:rotate.rank"
                     ),
@@ -346,13 +572,16 @@ def main() -> None:
                             "Ranked on balanced priorities "
                             "(water use, RYI, cover days, family breaks)"
                         ],
-                        evidence=["Physics [D] with 150 mm TAW prior [A]; Neighbours OFF"],
+                        evidence=ev_lines,
                         benefits=[],
                         gaps=[
                             "ABC calibration not yet run (credibility null)",
-                            "TAW uses 150 mm prior [A]",
+                            "TAW uses 150 mm prior [A] (SoilGrids 250 m [E] is coarse context)",
                         ],
-                        risks=["Tier 3 crop history inferred from Sentinel-2 NDVI classifier [D]"],
+                        risks=[
+                            "Tier 3 crop history inferred from Sentinel-2 NDVI classifier [D] "
+                            f"({_T24_NOTE})"
+                        ],
                     ),
                 )
             )

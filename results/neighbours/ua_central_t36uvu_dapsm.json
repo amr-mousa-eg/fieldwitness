@@ -2,578 +2,833 @@
   "region_id": "ua_central_t36uvu",
   "tier": 3,
   "crop_source": "classifier (Tier 3 causal S2 L2A phenology + TWDTW, tag D)",
-  "geometry": "FTW boundaries (395 unique fields), centroid in EPSG:32636",
+  "geometry": "FTW boundaries (400 unique fields), centroid in EPSG:32636",
   "max_pairwise_dist_km": 25.695,
   "primary_dml": {
     "pre_cutoff_le_2021": {
       "period": "pre_cutoff_le_2021",
       "total_rows": 108,
-      "fitted": 64,
+      "fitted": 88,
       "overlap": {
-        "pass": 52,
+        "pass": 76,
         "fail": 12,
         "untested": 0,
+        "pass_share_of_tested": 0.8636,
+        "wilson95": [
+          0.7766,
+          0.9202
+        ]
+      },
+      "balance": {
+        "pass": 24,
+        "fail": 64,
+        "untested": 0,
+        "pass_share_of_tested": 0.2727,
+        "wilson95": [
+          0.1907,
+          0.3738
+        ]
+      },
+      "placebo": {
+        "pass": 45,
+        "fail": 27,
+        "untested": 16,
+        "pass_share_of_tested": 0.625,
+        "wilson95": [
+          0.5095,
+          0.7278
+        ]
+      },
+      "negctrl": {
+        "pass": 26,
+        "fail": 6,
+        "untested": 56,
+        "pass_share_of_tested": 0.8125,
+        "wilson95": [
+          0.6469,
+          0.9111
+        ]
+      },
+      "median_smd_raw_max": 0.5523984394199415,
+      "median_smd_weighted_max": 0.38052703096464713,
+      "evidence": 8
+    },
+    "full_2018_2024": {
+      "period": "full_2018_2024",
+      "total_rows": 108,
+      "fitted": 92,
+      "overlap": {
+        "pass": 84,
+        "fail": 8,
+        "untested": 0,
+        "pass_share_of_tested": 0.913,
+        "wilson95": [
+          0.8377,
+          0.9553
+        ]
+      },
+      "balance": {
+        "pass": 52,
+        "fail": 40,
+        "untested": 0,
+        "pass_share_of_tested": 0.5652,
+        "wilson95": [
+          0.4633,
+          0.6619
+        ]
+      },
+      "placebo": {
+        "pass": 65,
+        "fail": 27,
+        "untested": 0,
+        "pass_share_of_tested": 0.7065,
+        "wilson95": [
+          0.6067,
+          0.7898
+        ]
+      },
+      "negctrl": {
+        "pass": 68,
+        "fail": 20,
+        "untested": 4,
+        "pass_share_of_tested": 0.7727,
+        "wilson95": [
+          0.6749,
+          0.8478
+        ]
+      },
+      "median_smd_raw_max": 0.7599417117324138,
+      "median_smd_weighted_max": 0.24100127608258373,
+      "evidence": 26
+    }
+  },
+  "matching_dml": {
+    "pre_cutoff_le_2021": {
+      "period": "pre_cutoff_le_2021",
+      "total_rows": 192,
+      "fitted": 132,
+      "overlap": {
+        "pass": 100,
+        "fail": 32,
+        "untested": 0,
+        "pass_share_of_tested": 0.7576,
+        "wilson95": [
+          0.6779,
+          0.8227
+        ]
+      },
+      "balance": {
+        "pass": 8,
+        "fail": 124,
+        "untested": 0,
+        "pass_share_of_tested": 0.0606,
+        "wilson95": [
+          0.031,
+          0.115
+        ]
+      },
+      "placebo": {
+        "pass": 41,
+        "fail": 23,
+        "untested": 68,
+        "pass_share_of_tested": 0.6406,
+        "wilson95": [
+          0.5182,
+          0.7471
+        ]
+      },
+      "negctrl": {
+        "pass": 58,
+        "fail": 6,
+        "untested": 68,
+        "pass_share_of_tested": 0.9062,
+        "wilson95": [
+          0.8102,
+          0.9563
+        ]
+      },
+      "median_smd_raw_max": 0.777764461111452,
+      "median_smd_weighted_max": 0.5316013651128075,
+      "evidence": 6
+    },
+    "full_2018_2024": {
+      "period": "full_2018_2024",
+      "total_rows": 324,
+      "fitted": 240,
+      "overlap": {
+        "pass": 204,
+        "fail": 36,
+        "untested": 0,
+        "pass_share_of_tested": 0.85,
+        "wilson95": [
+          0.7993,
+          0.8896
+        ]
+      },
+      "balance": {
+        "pass": 40,
+        "fail": 200,
+        "untested": 0,
+        "pass_share_of_tested": 0.1667,
+        "wilson95": [
+          0.1248,
+          0.219
+        ]
+      },
+      "placebo": {
+        "pass": 142,
+        "fail": 50,
+        "untested": 48,
+        "pass_share_of_tested": 0.7396,
+        "wilson95": [
+          0.6732,
+          0.7965
+        ]
+      },
+      "negctrl": {
+        "pass": 155,
+        "fail": 69,
+        "untested": 16,
+        "pass_share_of_tested": 0.692,
+        "wilson95": [
+          0.6287,
+          0.7488
+        ]
+      },
+      "median_smd_raw_max": 0.7780040838133742,
+      "median_smd_weighted_max": 0.39169302298489783,
+      "evidence": 16
+    }
+  },
+  "dapsm": {
+    "pre_cutoff_le_2021": {
+      "period": "pre_cutoff_le_2021",
+      "rows_used": 1600,
+      "fields_used": 400,
+      "blocks_used": 8,
+      "contrast_pairs": 16,
+      "contrast_rows": 192,
+      "fitted": 132,
+      "chosen_w": 0.5,
+      "exact_year": true,
+      "w_grid_summary": [
+        {
+          "w": 0.0,
+          "median_smd_max": 0.5147771415995431,
+          "mean_smd_max": 0.7221959871596538,
+          "n_pass_balance": 28,
+          "n_contrasts": 132
+        },
+        {
+          "w": 0.1,
+          "median_smd_max": 0.5223408084115104,
+          "mean_smd_max": 0.6299877065297673,
+          "n_pass_balance": 24,
+          "n_contrasts": 132
+        },
+        {
+          "w": 0.2,
+          "median_smd_max": 0.5559736421450857,
+          "mean_smd_max": 0.6730739042644455,
+          "n_pass_balance": 16,
+          "n_contrasts": 132
+        },
+        {
+          "w": 0.3,
+          "median_smd_max": 0.5559736421450857,
+          "mean_smd_max": 0.7164006007660424,
+          "n_pass_balance": 20,
+          "n_contrasts": 132
+        },
+        {
+          "w": 0.4,
+          "median_smd_max": 0.5005708880202459,
+          "mean_smd_max": 0.6761769217259624,
+          "n_pass_balance": 28,
+          "n_contrasts": 132
+        },
+        {
+          "w": 0.5,
+          "median_smd_max": 0.4876222610543296,
+          "mean_smd_max": 0.705643265276302,
+          "n_pass_balance": 16,
+          "n_contrasts": 132
+        },
+        {
+          "w": 0.6,
+          "median_smd_max": 0.5096844009534688,
+          "mean_smd_max": 0.6965174816019261,
+          "n_pass_balance": 12,
+          "n_contrasts": 132
+        },
+        {
+          "w": 0.7,
+          "median_smd_max": 0.5232074615505883,
+          "mean_smd_max": 0.7723318157199057,
+          "n_pass_balance": 4,
+          "n_contrasts": 132
+        },
+        {
+          "w": 0.8,
+          "median_smd_max": 0.5575773807781869,
+          "mean_smd_max": 0.7805652736513881,
+          "n_pass_balance": 4,
+          "n_contrasts": 132
+        },
+        {
+          "w": 0.9,
+          "median_smd_max": 0.6249120399686025,
+          "mean_smd_max": 0.7149571455305735,
+          "n_pass_balance": 4,
+          "n_contrasts": 132
+        },
+        {
+          "w": 1.0,
+          "median_smd_max": 0.7523560617044984,
+          "mean_smd_max": 0.7782814525092799,
+          "n_pass_balance": 0,
+          "n_contrasts": 132
+        }
+      ],
+      "old_ipw": {
+        "overlap": {
+          "pass": 100,
+          "fail": 32,
+          "untested": 0,
+          "pass_share_of_tested": 0.7576,
+          "wilson95": [
+            0.6779,
+            0.8227
+          ]
+        },
+        "balance": {
+          "pass": 8,
+          "fail": 124,
+          "untested": 0,
+          "pass_share_of_tested": 0.0606,
+          "wilson95": [
+            0.031,
+            0.115
+          ]
+        },
+        "placebo": {
+          "pass": 41,
+          "fail": 23,
+          "untested": 68,
+          "pass_share_of_tested": 0.6406,
+          "wilson95": [
+            0.5182,
+            0.7471
+          ]
+        },
+        "negctrl": {
+          "pass": 58,
+          "fail": 6,
+          "untested": 68,
+          "pass_share_of_tested": 0.9062,
+          "wilson95": [
+            0.8102,
+            0.9563
+          ]
+        }
+      },
+      "old_ipw_evidence": 6,
+      "dapsm": {
+        "overlap": {
+          "pass": 100,
+          "fail": 32,
+          "untested": 0,
+          "pass_share_of_tested": 0.7576,
+          "wilson95": [
+            0.6779,
+            0.8227
+          ]
+        },
+        "balance": {
+          "pass": 16,
+          "fail": 116,
+          "untested": 0,
+          "pass_share_of_tested": 0.1212,
+          "wilson95": [
+            0.076,
+            0.1878
+          ]
+        },
+        "placebo": {
+          "pass": 36,
+          "fail": 28,
+          "untested": 68,
+          "pass_share_of_tested": 0.5625,
+          "wilson95": [
+            0.4409,
+            0.6771
+          ]
+        },
+        "negctrl": {
+          "pass": 83,
+          "fail": 45,
+          "untested": 4,
+          "pass_share_of_tested": 0.6484,
+          "wilson95": [
+            0.5625,
+            0.7257
+          ]
+        }
+      },
+      "dapsm_evidence": 3,
+      "dapsm_worst_covariates": {
+        "sand_pct": 28,
+        "soc_g_kg": 28,
+        "clay_pct": 28,
+        "area_ha": 20,
+        "season_precip_mm": 12,
+        "season_tmax_c": 12,
+        "lon": 4
+      }
+    },
+    "full_2018_2024": {
+      "period": "full_2018_2024",
+      "rows_used": 2800,
+      "fields_used": 400,
+      "blocks_used": 8,
+      "contrast_pairs": 27,
+      "contrast_rows": 324,
+      "fitted": 240,
+      "chosen_w": 0.5,
+      "exact_year": true,
+      "w_grid_summary": [
+        {
+          "w": 0.0,
+          "median_smd_max": 0.47540065424848144,
+          "mean_smd_max": 0.49105005235461924,
+          "n_pass_balance": 44,
+          "n_contrasts": 236
+        },
+        {
+          "w": 0.1,
+          "median_smd_max": 0.489435690959754,
+          "mean_smd_max": 0.48872466329527603,
+          "n_pass_balance": 40,
+          "n_contrasts": 236
+        },
+        {
+          "w": 0.2,
+          "median_smd_max": 0.47571056341031165,
+          "mean_smd_max": 0.4864897462830782,
+          "n_pass_balance": 40,
+          "n_contrasts": 236
+        },
+        {
+          "w": 0.3,
+          "median_smd_max": 0.4753023425020601,
+          "mean_smd_max": 0.4878213301326262,
+          "n_pass_balance": 44,
+          "n_contrasts": 236
+        },
+        {
+          "w": 0.4,
+          "median_smd_max": 0.507387499673779,
+          "mean_smd_max": 0.4912623971157833,
+          "n_pass_balance": 40,
+          "n_contrasts": 236
+        },
+        {
+          "w": 0.5,
+          "median_smd_max": 0.46844003373948623,
+          "mean_smd_max": 0.4893962366923176,
+          "n_pass_balance": 44,
+          "n_contrasts": 236
+        },
+        {
+          "w": 0.6,
+          "median_smd_max": 0.5243407119937324,
+          "mean_smd_max": 0.4943502461909619,
+          "n_pass_balance": 28,
+          "n_contrasts": 236
+        },
+        {
+          "w": 0.7,
+          "median_smd_max": 0.511551713974759,
+          "mean_smd_max": 0.5130136704821625,
+          "n_pass_balance": 36,
+          "n_contrasts": 236
+        },
+        {
+          "w": 0.8,
+          "median_smd_max": 0.5169442699544946,
+          "mean_smd_max": 0.5351466713595353,
+          "n_pass_balance": 40,
+          "n_contrasts": 236
+        },
+        {
+          "w": 0.9,
+          "median_smd_max": 0.5091807528880422,
+          "mean_smd_max": 0.5375603849698687,
+          "n_pass_balance": 24,
+          "n_contrasts": 236
+        },
+        {
+          "w": 1.0,
+          "median_smd_max": 0.6307870767053316,
+          "mean_smd_max": 0.6318582940842661,
+          "n_pass_balance": 20,
+          "n_contrasts": 236
+        }
+      ],
+      "old_ipw": {
+        "overlap": {
+          "pass": 204,
+          "fail": 36,
+          "untested": 0,
+          "pass_share_of_tested": 0.85,
+          "wilson95": [
+            0.7993,
+            0.8896
+          ]
+        },
+        "balance": {
+          "pass": 40,
+          "fail": 200,
+          "untested": 0,
+          "pass_share_of_tested": 0.1667,
+          "wilson95": [
+            0.1248,
+            0.219
+          ]
+        },
+        "placebo": {
+          "pass": 142,
+          "fail": 50,
+          "untested": 48,
+          "pass_share_of_tested": 0.7396,
+          "wilson95": [
+            0.6732,
+            0.7965
+          ]
+        },
+        "negctrl": {
+          "pass": 155,
+          "fail": 69,
+          "untested": 16,
+          "pass_share_of_tested": 0.692,
+          "wilson95": [
+            0.6287,
+            0.7488
+          ]
+        }
+      },
+      "old_ipw_evidence": 16,
+      "dapsm": {
+        "overlap": {
+          "pass": 204,
+          "fail": 36,
+          "untested": 0,
+          "pass_share_of_tested": 0.85,
+          "wilson95": [
+            0.7993,
+            0.8896
+          ]
+        },
+        "balance": {
+          "pass": 44,
+          "fail": 192,
+          "untested": 4,
+          "pass_share_of_tested": 0.1864,
+          "wilson95": [
+            0.1419,
+            0.241
+          ]
+        },
+        "placebo": {
+          "pass": 124,
+          "fail": 60,
+          "untested": 56,
+          "pass_share_of_tested": 0.6739,
+          "wilson95": [
+            0.6032,
+            0.7375
+          ]
+        },
+        "negctrl": {
+          "pass": 151,
+          "fail": 89,
+          "untested": 0,
+          "pass_share_of_tested": 0.6292,
+          "wilson95": [
+            0.5665,
+            0.6878
+          ]
+        }
+      },
+      "dapsm_evidence": 14,
+      "dapsm_worst_covariates": {
+        "area_ha": 80,
+        "sand_pct": 68,
+        "soc_g_kg": 40,
+        "clay_pct": 20,
+        "lat": 16,
+        "lon": 12
+      }
+    }
+  },
+  "panel_obdml": {
+    "pre_cutoff_le_2021": {
+      "period": "pre_cutoff_le_2021",
+      "total_rows": 108,
+      "fitted": 88,
+      "overlap": {
+        "pass": 64,
+        "fail": 24,
+        "untested": 0,
+        "pass_share_of_tested": 0.7273,
+        "wilson95": [
+          0.6262,
+          0.8093
+        ]
+      },
+      "balance": {
+        "pass": 42,
+        "fail": 46,
+        "untested": 0,
+        "pass_share_of_tested": 0.4773,
+        "wilson95": [
+          0.3761,
+          0.5804
+        ]
+      },
+      "placebo": {
+        "pass": 62,
+        "fail": 10,
+        "untested": 16,
+        "pass_share_of_tested": 0.8611,
+        "wilson95": [
+          0.7629,
+          0.9228
+        ]
+      },
+      "negctrl": {
+        "pass": 75,
+        "fail": 9,
+        "untested": 4,
+        "pass_share_of_tested": 0.8929,
+        "wilson95": [
+          0.8088,
+          0.9426
+        ]
+      },
+      "median_smd_raw_max": 0.5714285714285714,
+      "median_smd_weighted_max": 0.2602874425942373,
+      "evidence": 14,
+      "median_smd_ipw_max": 0.290429357264042
+    },
+    "full_2018_2024": {
+      "period": "full_2018_2024",
+      "total_rows": 108,
+      "fitted": 92,
+      "overlap": {
+        "pass": 69,
+        "fail": 23,
+        "untested": 0,
+        "pass_share_of_tested": 0.75,
+        "wilson95": [
+          0.6527,
+          0.8272
+        ]
+      },
+      "balance": {
+        "pass": 69,
+        "fail": 23,
+        "untested": 0,
+        "pass_share_of_tested": 0.75,
+        "wilson95": [
+          0.6527,
+          0.8272
+        ]
+      },
+      "placebo": {
+        "pass": 82,
+        "fail": 10,
+        "untested": 0,
+        "pass_share_of_tested": 0.8913,
+        "wilson95": [
+          0.8114,
+          0.9399
+        ]
+      },
+      "negctrl": {
+        "pass": 81,
+        "fail": 7,
+        "untested": 4,
+        "pass_share_of_tested": 0.9205,
+        "wilson95": [
+          0.8448,
+          0.9609
+        ]
+      },
+      "median_smd_raw_max": 0.893948636134205,
+      "median_smd_weighted_max": 0.16863814615051842,
+      "evidence": 44,
+      "median_smd_ipw_max": 0.2660130934091848
+    }
+  },
+  "panel_obdml_matching": {
+    "pre_cutoff_le_2021": {
+      "period": "pre_cutoff_le_2021",
+      "total_rows": 192,
+      "fitted": 132,
+      "overlap": {
+        "pass": 93,
+        "fail": 39,
+        "untested": 0,
+        "pass_share_of_tested": 0.7045,
+        "wilson95": [
+          0.6218,
+          0.7757
+        ]
+      },
+      "balance": {
+        "pass": 24,
+        "fail": 108,
+        "untested": 0,
+        "pass_share_of_tested": 0.1818,
+        "wilson95": [
+          0.1253,
+          0.2563
+        ]
+      },
+      "placebo": {
+        "pass": 52,
+        "fail": 12,
+        "untested": 68,
         "pass_share_of_tested": 0.8125,
         "wilson95": [
           0.7003,
           0.8894
         ]
       },
-      "balance": {
-        "pass": 12,
-        "fail": 52,
-        "untested": 0,
-        "pass_share_of_tested": 0.1875,
-        "wilson95": [
-          0.1106,
-          0.2997
-        ]
-      },
-      "placebo": {
-        "pass": 23,
-        "fail": 21,
-        "untested": 20,
-        "pass_share_of_tested": 0.5227,
-        "wilson95": [
-          0.3794,
-          0.6625
-        ]
-      },
       "negctrl": {
-        "pass": 16,
-        "fail": 16,
-        "untested": 32,
-        "pass_share_of_tested": 0.5,
+        "pass": 119,
+        "fail": 9,
+        "untested": 4,
+        "pass_share_of_tested": 0.9297,
         "wilson95": [
-          0.3363,
-          0.6637
+          0.8718,
+          0.9626
         ]
       },
-      "median_smd_raw_max": 0.5942476855586488,
-      "median_smd_weighted_max": 0.3208453101741449,
-      "evidence": 7
+      "median_smd_raw_max": 0.8074578218028988,
+      "median_smd_weighted_max": 0.4914379205757956,
+      "evidence": 13,
+      "median_smd_ipw_max": 0.6392540128573234
     },
     "full_2018_2024": {
       "period": "full_2018_2024",
-      "total_rows": 108,
-      "fitted": 72,
+      "total_rows": 324,
+      "fitted": 240,
       "overlap": {
-        "pass": 64,
-        "fail": 8,
+        "pass": 155,
+        "fail": 85,
         "untested": 0,
-        "pass_share_of_tested": 0.8889,
+        "pass_share_of_tested": 0.6458,
         "wilson95": [
-          0.7958,
-          0.9426
+          0.5835,
+          0.7036
         ]
       },
       "balance": {
-        "pass": 48,
-        "fail": 24,
+        "pass": 43,
+        "fail": 197,
         "untested": 0,
-        "pass_share_of_tested": 0.6667,
+        "pass_share_of_tested": 0.1792,
         "wilson95": [
-          0.5518,
-          0.7647
+          0.1358,
+          0.2326
         ]
       },
       "placebo": {
-        "pass": 36,
-        "fail": 28,
-        "untested": 8,
-        "pass_share_of_tested": 0.5625,
-        "wilson95": [
-          0.4409,
-          0.6771
-        ]
-      },
-      "negctrl": {
-        "pass": 31,
-        "fail": 29,
-        "untested": 12,
-        "pass_share_of_tested": 0.5167,
-        "wilson95": [
-          0.3931,
-          0.6382
-        ]
-      },
-      "median_smd_raw_max": 0.5528986560488711,
-      "median_smd_weighted_max": 0.1743979346065757,
-      "evidence": 11
-    }
-  },
-  "matching_dml": {
-    "pre_cutoff_le_2021": {
-      "period": "pre_cutoff_le_2021",
-      "total_rows": 168,
-      "fitted": 108,
-      "overlap": {
-        "pass": 84,
-        "fail": 24,
-        "untested": 0,
-        "pass_share_of_tested": 0.7778,
-        "wilson95": [
-          0.6906,
-          0.8459
-        ]
-      },
-      "balance": {
-        "pass": 12,
-        "fail": 96,
-        "untested": 0,
-        "pass_share_of_tested": 0.1111,
-        "wilson95": [
-          0.0647,
-          0.1842
-        ]
-      },
-      "placebo": {
-        "pass": 26,
-        "fail": 18,
-        "untested": 64,
-        "pass_share_of_tested": 0.5909,
-        "wilson95": [
-          0.4441,
-          0.7231
-        ]
-      },
-      "negctrl": {
-        "pass": 35,
-        "fail": 25,
+        "pass": 173,
+        "fail": 19,
         "untested": 48,
-        "pass_share_of_tested": 0.5833,
+        "pass_share_of_tested": 0.901,
         "wilson95": [
-          0.4573,
-          0.6994
-        ]
-      },
-      "median_smd_raw_max": 0.6390751327870191,
-      "median_smd_weighted_max": 0.5736278321047562,
-      "evidence": 4
-    },
-    "full_2018_2024": {
-      "period": "full_2018_2024",
-      "total_rows": 216,
-      "fitted": 172,
-      "overlap": {
-        "pass": 144,
-        "fail": 28,
-        "untested": 0,
-        "pass_share_of_tested": 0.8372,
-        "wilson95": [
-          0.7748,
-          0.8849
-        ]
-      },
-      "balance": {
-        "pass": 36,
-        "fail": 136,
-        "untested": 0,
-        "pass_share_of_tested": 0.2093,
-        "wilson95": [
-          0.1552,
-          0.2761
-        ]
-      },
-      "placebo": {
-        "pass": 107,
-        "fail": 37,
-        "untested": 28,
-        "pass_share_of_tested": 0.7431,
-        "wilson95": [
-          0.666,
-          0.8075
+          0.8506,
+          0.9357
         ]
       },
       "negctrl": {
-        "pass": 73,
-        "fail": 39,
-        "untested": 60,
-        "pass_share_of_tested": 0.6518,
+        "pass": 216,
+        "fail": 24,
+        "untested": 0,
+        "pass_share_of_tested": 0.9,
         "wilson95": [
-          0.5599,
-          0.7337
+          0.8555,
+          0.9319
         ]
       },
-      "median_smd_raw_max": 0.6794044689751295,
-      "median_smd_weighted_max": 0.349765932042656,
-      "evidence": 13
-    }
-  },
-  "dapsm": {
-    "pre_cutoff_le_2021": {
-      "period": "pre_cutoff_le_2021",
-      "rows_used": 1580,
-      "fields_used": 395,
-      "blocks_used": 8,
-      "contrast_pairs": 14,
-      "contrast_rows": 168,
-      "fitted": 108,
-      "chosen_w": 0.8,
-      "w_grid_summary": [
-        {
-          "w": 0.0,
-          "median_smd_max": 0.7450261936030651,
-          "mean_smd_max": 1.4078783831582935,
-          "n_pass_balance": 0,
-          "n_contrasts": 108
-        },
-        {
-          "w": 0.1,
-          "median_smd_max": 0.7473894804979202,
-          "mean_smd_max": 1.185300906793907,
-          "n_pass_balance": 0,
-          "n_contrasts": 108
-        },
-        {
-          "w": 0.2,
-          "median_smd_max": 0.586044364604541,
-          "mean_smd_max": 1.0035489663677475,
-          "n_pass_balance": 0,
-          "n_contrasts": 108
-        },
-        {
-          "w": 0.3,
-          "median_smd_max": 0.5847053462046862,
-          "mean_smd_max": 0.981222220242112,
-          "n_pass_balance": 0,
-          "n_contrasts": 108
-        },
-        {
-          "w": 0.4,
-          "median_smd_max": 0.5822449717376564,
-          "mean_smd_max": 0.9753813421399863,
-          "n_pass_balance": 0,
-          "n_contrasts": 108
-        },
-        {
-          "w": 0.5,
-          "median_smd_max": 0.578202133567428,
-          "mean_smd_max": 0.9549534365563314,
-          "n_pass_balance": 4,
-          "n_contrasts": 108
-        },
-        {
-          "w": 0.6,
-          "median_smd_max": 0.6059842190743174,
-          "mean_smd_max": 0.9693724408197311,
-          "n_pass_balance": 4,
-          "n_contrasts": 108
-        },
-        {
-          "w": 0.7,
-          "median_smd_max": 0.5567369026820198,
-          "mean_smd_max": 0.9384343303975228,
-          "n_pass_balance": 0,
-          "n_contrasts": 108
-        },
-        {
-          "w": 0.8,
-          "median_smd_max": 0.5341261103780152,
-          "mean_smd_max": 0.9175074241982023,
-          "n_pass_balance": 0,
-          "n_contrasts": 108
-        },
-        {
-          "w": 0.9,
-          "median_smd_max": 0.555090285849222,
-          "mean_smd_max": 0.9245467653641264,
-          "n_pass_balance": 4,
-          "n_contrasts": 108
-        },
-        {
-          "w": 1.0,
-          "median_smd_max": 0.624911398389296,
-          "mean_smd_max": 0.9900179460456536,
-          "n_pass_balance": 4,
-          "n_contrasts": 108
-        }
-      ],
-      "old_ipw": {
-        "overlap": {
-          "pass": 84,
-          "fail": 24,
-          "untested": 0,
-          "pass_share_of_tested": 0.7778,
-          "wilson95": [
-            0.6906,
-            0.8459
-          ]
-        },
-        "balance": {
-          "pass": 12,
-          "fail": 96,
-          "untested": 0,
-          "pass_share_of_tested": 0.1111,
-          "wilson95": [
-            0.0647,
-            0.1842
-          ]
-        },
-        "placebo": {
-          "pass": 26,
-          "fail": 18,
-          "untested": 64,
-          "pass_share_of_tested": 0.5909,
-          "wilson95": [
-            0.4441,
-            0.7231
-          ]
-        },
-        "negctrl": {
-          "pass": 35,
-          "fail": 25,
-          "untested": 48,
-          "pass_share_of_tested": 0.5833,
-          "wilson95": [
-            0.4573,
-            0.6994
-          ]
-        }
-      },
-      "old_ipw_evidence": 4,
-      "dapsm": {
-        "overlap": {
-          "pass": 84,
-          "fail": 24,
-          "untested": 0,
-          "pass_share_of_tested": 0.7778,
-          "wilson95": [
-            0.6906,
-            0.8459
-          ]
-        },
-        "balance": {
-          "pass": 0,
-          "fail": 108,
-          "untested": 0,
-          "pass_share_of_tested": 0.0,
-          "wilson95": [
-            0.0,
-            0.0343
-          ]
-        },
-        "placebo": {
-          "pass": 22,
-          "fail": 22,
-          "untested": 64,
-          "pass_share_of_tested": 0.5,
-          "wilson95": [
-            0.3583,
-            0.6417
-          ]
-        },
-        "negctrl": {
-          "pass": 46,
-          "fail": 14,
-          "untested": 48,
-          "pass_share_of_tested": 0.7667,
-          "wilson95": [
-            0.6456,
-            0.8556
-          ]
-        }
-      },
-      "dapsm_evidence": 0,
-      "dapsm_worst_covariates": {
-        "area_ha": 40,
-        "clay_pct": 12,
-        "soc_g_kg": 12,
-        "year": 12,
-        "season_tmax_c": 12,
-        "sand_pct": 8,
-        "lat": 4,
-        "season_precip_mm": 4,
-        "lon": 4
-      }
-    },
-    "full_2018_2024": {
-      "period": "full_2018_2024",
-      "rows_used": 2765,
-      "fields_used": 395,
-      "blocks_used": 8,
-      "contrast_pairs": 18,
-      "contrast_rows": 216,
-      "fitted": 172,
-      "chosen_w": 0.4,
-      "w_grid_summary": [
-        {
-          "w": 0.0,
-          "median_smd_max": 0.7688188833797946,
-          "mean_smd_max": 0.8282609886761488,
-          "n_pass_balance": 8,
-          "n_contrasts": 172
-        },
-        {
-          "w": 0.1,
-          "median_smd_max": 0.5756780306231323,
-          "mean_smd_max": 0.6608640112539579,
-          "n_pass_balance": 4,
-          "n_contrasts": 172
-        },
-        {
-          "w": 0.2,
-          "median_smd_max": 0.5180224001541003,
-          "mean_smd_max": 0.6172778108026908,
-          "n_pass_balance": 4,
-          "n_contrasts": 172
-        },
-        {
-          "w": 0.3,
-          "median_smd_max": 0.4818272119226546,
-          "mean_smd_max": 0.5740368781999025,
-          "n_pass_balance": 8,
-          "n_contrasts": 172
-        },
-        {
-          "w": 0.4,
-          "median_smd_max": 0.4620387563367158,
-          "mean_smd_max": 0.5407538800598073,
-          "n_pass_balance": 8,
-          "n_contrasts": 172
-        },
-        {
-          "w": 0.5,
-          "median_smd_max": 0.47850586186784433,
-          "mean_smd_max": 0.5453427331651507,
-          "n_pass_balance": 16,
-          "n_contrasts": 172
-        },
-        {
-          "w": 0.6,
-          "median_smd_max": 0.47964388605717845,
-          "mean_smd_max": 0.5419608818204555,
-          "n_pass_balance": 12,
-          "n_contrasts": 172
-        },
-        {
-          "w": 0.7,
-          "median_smd_max": 0.48094695563034484,
-          "mean_smd_max": 0.512996755532155,
-          "n_pass_balance": 16,
-          "n_contrasts": 172
-        },
-        {
-          "w": 0.8,
-          "median_smd_max": 0.4751961099551926,
-          "mean_smd_max": 0.5291885383995051,
-          "n_pass_balance": 12,
-          "n_contrasts": 172
-        },
-        {
-          "w": 0.9,
-          "median_smd_max": 0.4764543463898739,
-          "mean_smd_max": 0.5219929126215112,
-          "n_pass_balance": 20,
-          "n_contrasts": 172
-        },
-        {
-          "w": 1.0,
-          "median_smd_max": 0.49557842329534396,
-          "mean_smd_max": 0.551810812226612,
-          "n_pass_balance": 4,
-          "n_contrasts": 172
-        }
-      ],
-      "old_ipw": {
-        "overlap": {
-          "pass": 144,
-          "fail": 28,
-          "untested": 0,
-          "pass_share_of_tested": 0.8372,
-          "wilson95": [
-            0.7748,
-            0.8849
-          ]
-        },
-        "balance": {
-          "pass": 36,
-          "fail": 136,
-          "untested": 0,
-          "pass_share_of_tested": 0.2093,
-          "wilson95": [
-            0.1552,
-            0.2761
-          ]
-        },
-        "placebo": {
-          "pass": 107,
-          "fail": 37,
-          "untested": 28,
-          "pass_share_of_tested": 0.7431,
-          "wilson95": [
-            0.666,
-            0.8075
-          ]
-        },
-        "negctrl": {
-          "pass": 73,
-          "fail": 39,
-          "untested": 60,
-          "pass_share_of_tested": 0.6518,
-          "wilson95": [
-            0.5599,
-            0.7337
-          ]
-        }
-      },
-      "old_ipw_evidence": 13,
-      "dapsm": {
-        "overlap": {
-          "pass": 144,
-          "fail": 28,
-          "untested": 0,
-          "pass_share_of_tested": 0.8372,
-          "wilson95": [
-            0.7748,
-            0.8849
-          ]
-        },
-        "balance": {
-          "pass": 8,
-          "fail": 164,
-          "untested": 0,
-          "pass_share_of_tested": 0.0465,
-          "wilson95": [
-            0.0238,
-            0.0891
-          ]
-        },
-        "placebo": {
-          "pass": 92,
-          "fail": 52,
-          "untested": 28,
-          "pass_share_of_tested": 0.6389,
-          "wilson95": [
-            0.5578,
-            0.7128
-          ]
-        },
-        "negctrl": {
-          "pass": 67,
-          "fail": 45,
-          "untested": 60,
-          "pass_share_of_tested": 0.5982,
-          "wilson95": [
-            0.5056,
-            0.6843
-          ]
-        }
-      },
-      "dapsm_evidence": 1,
-      "dapsm_worst_covariates": {
-        "year": 48,
-        "season_precip_mm": 40,
-        "area_ha": 24,
-        "season_tmax_c": 24,
-        "soc_g_kg": 20,
-        "sand_pct": 8,
-        "clay_pct": 8
-      }
+      "median_smd_raw_max": 0.9470418051240936,
+      "median_smd_weighted_max": 0.3626057439353537,
+      "evidence": 12,
+      "median_smd_ipw_max": 0.5057863342909266
     }
   },
   "passing_contrasts": {
-    "primary_dml": [
+    "panel_obdml": [
+      {
+        "period": "pre_cutoff_le_2021",
+        "crop": "maize",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "peak_ndvi",
+        "stratum": "all",
+        "effect": -0.007470193861657383,
+        "ci_low": -0.025516596273573,
+        "ci_high": 0.010576208550258237,
+        "lo90": -0.021929289375640124,
+        "hi90": 0.006988901652325359,
+        "n": 446
+      },
+      {
+        "period": "pre_cutoff_le_2021",
+        "crop": "maize",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "canopy_drop",
+        "stratum": "all",
+        "effect": -0.017190394396791393,
+        "ci_low": -0.0379572203870947,
+        "ci_high": 0.0035764315935119147,
+        "lo90": -0.03382914120417688,
+        "hi90": -0.0005516475894059084,
+        "n": 446
+      },
+      {
+        "period": "pre_cutoff_le_2021",
+        "crop": "sunflower",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "canopy_integral",
+        "stratum": "all",
+        "effect": -4.509491176340884,
+        "ci_low": -4.960894655509466,
+        "ci_high": -4.058087697172302,
+        "lo90": -4.8711635956776655,
+        "hi90": -4.147818757004102,
+        "n": 454
+      },
+      {
+        "period": "pre_cutoff_le_2021",
+        "crop": "sunflower",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "peak_ndvi",
+        "stratum": "all",
+        "effect": -0.03915606713293396,
+        "ci_low": -0.05358030139039102,
+        "ci_high": -0.02473183287547689,
+        "lo90": -0.05071301771422685,
+        "hi90": -0.027599116551641066,
+        "n": 454
+      },
       {
         "period": "pre_cutoff_le_2021",
         "crop": "sunflower",
@@ -581,9 +836,12 @@
         "reference_prev": "winter_wheat",
         "outcome": "cover_days",
         "stratum": "all",
-        "effect": -6.296488715269544,
-        "ci_low": -10.08171263502627,
-        "ci_high": -2.5112647955128184
+        "effect": -4.808284253507502,
+        "ci_low": -8.579942859852045,
+        "ci_high": -1.0366256471629582,
+        "lo90": -7.830203569640158,
+        "hi90": -1.7863649373748447,
+        "n": 454
       },
       {
         "period": "pre_cutoff_le_2021",
@@ -592,9 +850,12 @@
         "reference_prev": "sunflower",
         "outcome": "canopy_integral",
         "stratum": "all",
-        "effect": -1.837806732685525,
-        "ci_low": -2.841056242660338,
-        "ci_high": -0.8345572227107116
+        "effect": -1.611275952258311,
+        "ci_low": -3.0687587428243246,
+        "ci_high": -0.15379316169229762,
+        "lo90": -2.779036838764172,
+        "hi90": -0.44351506575245025,
+        "n": 560
       },
       {
         "period": "pre_cutoff_le_2021",
@@ -603,9 +864,12 @@
         "reference_prev": "sunflower",
         "outcome": "canopy_integral",
         "stratum": "dry",
-        "effect": -1.4954832412470171,
-        "ci_low": -2.841466291839458,
-        "ci_high": -0.14950019065457654
+        "effect": -1.7138980175417908,
+        "ci_low": -3.275674869525029,
+        "ci_high": -0.15212116555855282,
+        "lo90": -2.965221143276959,
+        "hi90": -0.46257489180662303,
+        "n": 368
       },
       {
         "period": "pre_cutoff_le_2021",
@@ -614,20 +878,12 @@
         "reference_prev": "sunflower",
         "outcome": "peak_ndvi",
         "stratum": "all",
-        "effect": -0.01627135894930163,
-        "ci_low": -0.029218698158104916,
-        "ci_high": -0.003324019740498344
-      },
-      {
-        "period": "pre_cutoff_le_2021",
-        "crop": "sunflower",
-        "treated_prev": "maize",
-        "reference_prev": "sunflower",
-        "outcome": "peak_ndvi",
-        "stratum": "dry",
-        "effect": -0.02502929078538736,
-        "ci_low": -0.043265482101189516,
-        "ci_high": -0.006793099469585201
+        "effect": -0.010384763610028096,
+        "ci_low": -0.02104149007397617,
+        "ci_high": 0.00027196285391997525,
+        "lo90": -0.018923120579552,
+        "hi90": -0.0018464066405041932,
+        "n": 560
       },
       {
         "period": "pre_cutoff_le_2021",
@@ -636,9 +892,12 @@
         "reference_prev": "sunflower",
         "outcome": "cover_days",
         "stratum": "all",
-        "effect": -3.7255019766324033,
-        "ci_low": -6.441043630268192,
-        "ci_high": -1.0099603229966143
+        "effect": -4.714173289814952,
+        "ci_low": -8.965125405838734,
+        "ci_high": -0.46322117379117067,
+        "lo90": -8.120111009034327,
+        "hi90": -1.3082355705955782,
+        "n": 560
       },
       {
         "period": "pre_cutoff_le_2021",
@@ -647,20 +906,292 @@
         "reference_prev": "sunflower",
         "outcome": "cover_days",
         "stratum": "dry",
-        "effect": -3.575753026743618,
-        "ci_low": -6.803358243291061,
-        "ci_high": -0.34814781019617547
+        "effect": -4.3724531263922675,
+        "ci_low": -7.770957791378544,
+        "ci_high": -0.9739484614059908,
+        "lo90": -7.09539493130885,
+        "hi90": -1.6495113214756847,
+        "n": 368
+      },
+      {
+        "period": "pre_cutoff_le_2021",
+        "crop": "sunflower",
+        "treated_prev": "maize",
+        "reference_prev": "sunflower",
+        "outcome": "canopy_drop",
+        "stratum": "all",
+        "effect": -0.014315624785271179,
+        "ci_low": -0.02991885986328527,
+        "ci_high": 0.001287610292742913,
+        "lo90": -0.02681721159302005,
+        "hi90": -0.0018140379775223089,
+        "n": 560
+      },
+      {
+        "period": "pre_cutoff_le_2021",
+        "crop": "sunflower",
+        "treated_prev": "maize",
+        "reference_prev": "winter_wheat",
+        "outcome": "canopy_integral",
+        "stratum": "all",
+        "effect": -5.719386019488834,
+        "ci_low": -7.700999642063569,
+        "ci_high": -3.7377723969140986,
+        "lo90": -7.307089761576451,
+        "hi90": -4.131682277401216,
+        "n": 316
+      },
+      {
+        "period": "pre_cutoff_le_2021",
+        "crop": "sunflower",
+        "treated_prev": "maize",
+        "reference_prev": "winter_wheat",
+        "outcome": "cover_days",
+        "stratum": "all",
+        "effect": -9.47315995782839,
+        "ci_low": -14.060964898181489,
+        "ci_high": -4.88535501747529,
+        "lo90": -13.14899009382755,
+        "hi90": -5.79732982182923,
+        "n": 316
+      },
+      {
+        "period": "pre_cutoff_le_2021",
+        "crop": "sunflower",
+        "treated_prev": "maize",
+        "reference_prev": "winter_wheat",
+        "outcome": "canopy_drop",
+        "stratum": "all",
+        "effect": -0.05550297949859413,
+        "ci_low": -0.07434985467391984,
+        "ci_high": -0.03665610432326842,
+        "lo90": -0.07060342789157763,
+        "hi90": -0.04040253110561064,
+        "n": 316
       },
       {
         "period": "full_2018_2024",
-        "crop": "sunflower",
+        "crop": "maize",
+        "treated_prev": "maize",
+        "reference_prev": "winter_wheat",
+        "outcome": "canopy_integral",
+        "stratum": "all",
+        "effect": -4.349437242642051,
+        "ci_low": -7.331343279744356,
+        "ci_high": -1.3675312055397466,
+        "lo90": -6.738592888185881,
+        "hi90": -1.9602815970982217,
+        "n": 594
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "maize",
+        "treated_prev": "maize",
+        "reference_prev": "winter_wheat",
+        "outcome": "canopy_integral",
+        "stratum": "wet",
+        "effect": -4.303275605298043,
+        "ci_low": -7.966015569114797,
+        "ci_high": -0.6405356414812893,
+        "lo90": -7.237927386349979,
+        "hi90": -1.3686238242461068,
+        "n": 533
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "maize",
+        "treated_prev": "maize",
+        "reference_prev": "winter_wheat",
+        "outcome": "peak_ndvi",
+        "stratum": "all",
+        "effect": -0.011417862605246411,
+        "ci_low": -0.020199190276869596,
+        "ci_high": -0.0026365349336232267,
+        "lo90": -0.018453617025736554,
+        "hi90": -0.0043821081847562685,
+        "n": 594
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "maize",
+        "treated_prev": "maize",
+        "reference_prev": "winter_wheat",
+        "outcome": "peak_ndvi",
+        "stratum": "wet",
+        "effect": -0.009673865815972961,
+        "ci_low": -0.018239304018455957,
+        "ci_high": -0.001108427613489964,
+        "lo90": -0.016536645790725384,
+        "hi90": -0.0028110858412205408,
+        "n": 533
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "maize",
+        "treated_prev": "maize",
+        "reference_prev": "winter_wheat",
+        "outcome": "canopy_drop",
+        "stratum": "all",
+        "effect": -0.006235222591710478,
+        "ci_low": -0.02726512226069757,
+        "ci_high": 0.014794677077276615,
+        "lo90": -0.023084748664706934,
+        "hi90": 0.010614303481285978,
+        "n": 594
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "maize",
+        "treated_prev": "maize",
+        "reference_prev": "winter_wheat",
+        "outcome": "canopy_drop",
+        "stratum": "wet",
+        "effect": -0.002342517501006461,
+        "ci_low": -0.029486025231996074,
+        "ci_high": 0.024800990229983153,
+        "lo90": -0.02409037404928827,
+        "hi90": 0.019405339047275347,
+        "n": 533
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "maize",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "canopy_integral",
+        "stratum": "all",
+        "effect": -5.794353670796839,
+        "ci_low": -10.140622026285264,
+        "ci_high": -1.4480853153084121,
+        "lo90": -9.276660440145726,
+        "hi90": -2.312046901447951,
+        "n": 555
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "maize",
         "treated_prev": "sunflower",
         "reference_prev": "winter_wheat",
         "outcome": "canopy_integral",
         "stratum": "wet",
-        "effect": -1.0147735389492658,
-        "ci_low": -2.604622821630376,
-        "ci_high": 0.5750757437318448
+        "effect": -5.576711900815766,
+        "ci_low": -11.068902754021835,
+        "ci_high": -0.08452104760969892,
+        "lo90": -9.977151961661075,
+        "hi90": -1.1762718399704584,
+        "n": 465
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "maize",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "cover_days",
+        "stratum": "all",
+        "effect": -9.797719644410346,
+        "ci_low": -15.628328086333738,
+        "ci_high": -3.9671112024869544,
+        "lo90": -14.469305838827665,
+        "hi90": -5.126133449993027,
+        "n": 555
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "maize",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "cover_days",
+        "stratum": "wet",
+        "effect": -9.04006893676177,
+        "ci_low": -19.080092313377182,
+        "ci_high": 0.9999544398536422,
+        "lo90": -17.084312529005373,
+        "hi90": -0.9958253445181651,
+        "n": 465
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "maize",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "canopy_drop",
+        "stratum": "all",
+        "effect": -0.014261277743807442,
+        "ci_low": -0.03355657812084626,
+        "ci_high": 0.005034022633231376,
+        "lo90": -0.029721012307765693,
+        "hi90": 0.0011984568201508106,
+        "n": 555
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "maize",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "canopy_drop",
+        "stratum": "wet",
+        "effect": -0.012719892519582702,
+        "ci_low": -0.04064039474857404,
+        "ci_high": 0.015200609709408638,
+        "lo90": -0.035090290747031995,
+        "hi90": 0.00965050570786659,
+        "n": 465
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "canopy_integral",
+        "stratum": "all",
+        "effect": -4.310794416994134,
+        "ci_low": -5.0488776118036975,
+        "ci_high": -3.5727112221845707,
+        "lo90": -4.902159674590879,
+        "hi90": -3.7194291593973885,
+        "n": 777
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "canopy_integral",
+        "stratum": "dry",
+        "effect": -5.175498922173873,
+        "ci_low": -6.186639855473436,
+        "ci_high": -4.164357988874311,
+        "lo90": -5.985642849975386,
+        "hi90": -4.36535499437236,
+        "n": 433
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "peak_ndvi",
+        "stratum": "all",
+        "effect": -0.04610967372873508,
+        "ci_low": -0.06263327952499939,
+        "ci_high": -0.029586067932470782,
+        "lo90": -0.059348677768999276,
+        "hi90": -0.03287066968847089,
+        "n": 777
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "peak_ndvi",
+        "stratum": "dry",
+        "effect": -0.05300467051727487,
+        "ci_low": -0.08299605388691392,
+        "ci_high": -0.023013287147635824,
+        "lo90": -0.07703429519480931,
+        "hi90": -0.028975045839740435,
+        "n": 433
       },
       {
         "period": "full_2018_2024",
@@ -669,9 +1200,26 @@
         "reference_prev": "winter_wheat",
         "outcome": "cover_days",
         "stratum": "dry",
-        "effect": -7.384303584735708,
-        "ci_low": -11.148065171483285,
-        "ci_high": -3.62054199798813
+        "effect": -7.893350208585839,
+        "ci_low": -9.98486369064089,
+        "ci_high": -5.80183672653079,
+        "lo90": -9.569107654061447,
+        "hi90": -6.217592763110231,
+        "n": 433
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "canopy_drop",
+        "stratum": "dry",
+        "effect": -0.030351825725903343,
+        "ci_low": -0.05036348320027182,
+        "ci_high": -0.010340168251534866,
+        "lo90": -0.04638551821543516,
+        "hi90": -0.014318133236371523,
+        "n": 433
       },
       {
         "period": "full_2018_2024",
@@ -680,9 +1228,12 @@
         "reference_prev": "sunflower",
         "outcome": "canopy_integral",
         "stratum": "all",
-        "effect": -1.0766224711845538,
-        "ci_low": -1.9321977440901104,
-        "ci_high": -0.22104719827899733
+        "effect": -1.439704648948911,
+        "ci_low": -2.1678807696976827,
+        "ci_high": -0.7115285282001391,
+        "lo90": -2.0231321842872574,
+        "hi90": -0.8562771136105645,
+        "n": 945
       },
       {
         "period": "full_2018_2024",
@@ -690,21 +1241,41 @@
         "treated_prev": "maize",
         "reference_prev": "sunflower",
         "outcome": "canopy_integral",
+        "stratum": "dry",
+        "effect": -1.317339224538159,
+        "ci_low": -2.4118740289343066,
+        "ci_high": -0.2228044201420114,
+        "lo90": -2.194299790910811,
+        "hi90": -0.44037865816550703,
+        "n": 513
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "treated_prev": "maize",
+        "reference_prev": "sunflower",
+        "outcome": "peak_ndvi",
+        "stratum": "all",
+        "effect": -0.007016146161562382,
+        "ci_low": -0.014783146081597469,
+        "ci_high": 0.0007508537584727032,
+        "lo90": -0.013239203319299928,
+        "hi90": -0.0007930890038248366,
+        "n": 945
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "treated_prev": "maize",
+        "reference_prev": "sunflower",
+        "outcome": "peak_ndvi",
         "stratum": "wet",
-        "effect": -0.2659786912404691,
-        "ci_low": -1.4797322553464556,
-        "ci_high": 0.9477748728655173
-      },
-      {
-        "period": "full_2018_2024",
-        "crop": "sunflower",
-        "treated_prev": "maize",
-        "reference_prev": "sunflower",
-        "outcome": "canopy_integral",
-        "stratum": "dry",
-        "effect": -1.2669619356201622,
-        "ci_low": -2.4438615281689398,
-        "ci_high": -0.0900623430713845
+        "effect": -0.0001805033281153684,
+        "ci_low": -0.01599534642799678,
+        "ci_high": 0.015634339771766047,
+        "lo90": -0.012851634210625884,
+        "hi90": 0.012490627554395147,
+        "n": 432
       },
       {
         "period": "full_2018_2024",
@@ -712,21 +1283,83 @@
         "treated_prev": "maize",
         "reference_prev": "sunflower",
         "outcome": "peak_ndvi",
+        "stratum": "dry",
+        "effect": -0.012102253348119537,
+        "ci_low": -0.02857263626149336,
+        "ci_high": 0.004368129565254286,
+        "lo90": -0.025298614277048985,
+        "hi90": 0.0010941075808099093,
+        "n": 513
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "treated_prev": "maize",
+        "reference_prev": "sunflower",
+        "outcome": "cover_days",
         "stratum": "all",
-        "effect": -0.008289326703719029,
-        "ci_low": -0.018154373313787532,
-        "ci_high": 0.0015757199063494744
+        "effect": -2.358675403341391,
+        "ci_low": -3.6615274601549492,
+        "ci_high": -1.0558233465278322,
+        "lo90": -3.40254342202293,
+        "hi90": -1.3148073846598514,
+        "n": 945
       },
       {
         "period": "full_2018_2024",
         "crop": "sunflower",
         "treated_prev": "maize",
         "reference_prev": "sunflower",
-        "outcome": "peak_ndvi",
+        "outcome": "cover_days",
+        "stratum": "wet",
+        "effect": -3.855728072913279,
+        "ci_low": -9.787209364319697,
+        "ci_high": 2.075753218493138,
+        "lo90": -8.608135371290889,
+        "hi90": 0.8966792254643297,
+        "n": 432
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "treated_prev": "maize",
+        "reference_prev": "sunflower",
+        "outcome": "cover_days",
         "stratum": "dry",
-        "effect": -0.007574522305955205,
-        "ci_low": -0.021904120202402393,
-        "ci_high": 0.006755075590491982
+        "effect": -0.5034055388052024,
+        "ci_low": -5.426680251907297,
+        "ci_high": 4.419869174296893,
+        "lo90": -4.448019966294453,
+        "hi90": 3.4412088886840477,
+        "n": 513
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "treated_prev": "maize",
+        "reference_prev": "sunflower",
+        "outcome": "canopy_drop",
+        "stratum": "all",
+        "effect": -0.011893318508006056,
+        "ci_low": -0.02056755738247876,
+        "ci_high": -0.0032190796335333505,
+        "lo90": -0.01884327149776594,
+        "hi90": -0.00494336551824617,
+        "n": 945
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "treated_prev": "maize",
+        "reference_prev": "sunflower",
+        "outcome": "canopy_drop",
+        "stratum": "wet",
+        "effect": 0.0025428613183445504,
+        "ci_low": -0.029117949748094552,
+        "ci_high": 0.034203672384783654,
+        "lo90": -0.022824338238146488,
+        "hi90": 0.027910060874835586,
+        "n": 432
       },
       {
         "period": "full_2018_2024",
@@ -735,9 +1368,12 @@
         "reference_prev": "sunflower",
         "outcome": "canopy_drop",
         "stratum": "dry",
-        "effect": -0.011850843915310343,
-        "ci_low": -0.028543857137871186,
-        "ci_high": 0.004842169307250498
+        "effect": -0.023735651804451367,
+        "ci_low": -0.044978832066479436,
+        "ci_high": -0.002492471542423297,
+        "lo90": -0.040756062045697455,
+        "hi90": -0.006715241563205274,
+        "n": 513
       },
       {
         "period": "full_2018_2024",
@@ -745,10 +1381,27 @@
         "treated_prev": "maize",
         "reference_prev": "winter_wheat",
         "outcome": "canopy_integral",
-        "stratum": "wet",
-        "effect": -1.4423337240206349,
-        "ci_low": -2.7225188639902873,
-        "ci_high": -0.16214858405098265
+        "stratum": "all",
+        "effect": -4.985437213579483,
+        "ci_low": -5.63768421091865,
+        "ci_high": -4.333190216240316,
+        "lo90": -5.508028997690895,
+        "hi90": -4.4628454294680715,
+        "n": 682
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "treated_prev": "maize",
+        "reference_prev": "winter_wheat",
+        "outcome": "peak_ndvi",
+        "stratum": "all",
+        "effect": -0.05102956368747887,
+        "ci_low": -0.0697120936515554,
+        "ci_high": -0.03234703372340235,
+        "lo90": -0.06599833580213951,
+        "hi90": -0.03606079157281823,
+        "n": 682
       },
       {
         "period": "full_2018_2024",
@@ -757,9 +1410,26 @@
         "reference_prev": "winter_wheat",
         "outcome": "peak_ndvi",
         "stratum": "wet",
-        "effect": -0.04760040013841458,
-        "ci_low": -0.05960944903962492,
-        "ci_high": -0.035591351237204236
+        "effect": -0.03603060152073256,
+        "ci_low": -0.04763572945792776,
+        "ci_high": -0.024425473583537353,
+        "lo90": -0.04532883445745909,
+        "hi90": -0.026732368584006024,
+        "n": 380
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "treated_prev": "maize",
+        "reference_prev": "winter_wheat",
+        "outcome": "cover_days",
+        "stratum": "all",
+        "effect": -4.3751931485023805,
+        "ci_low": -7.295884657650049,
+        "ci_high": -1.4545016393547119,
+        "lo90": -6.715302635906955,
+        "hi90": -2.035083661097806,
+        "n": 682
       },
       {
         "period": "full_2018_2024",
@@ -768,9 +1438,1128 @@
         "reference_prev": "winter_wheat",
         "outcome": "cover_days",
         "stratum": "wet",
-        "effect": 10.402268653809653,
-        "ci_low": 6.204688386827904,
-        "ci_high": 14.599848920791402
+        "effect": -1.2574183140724005,
+        "ci_low": -8.478672368361515,
+        "ci_high": 5.963835740216715,
+        "lo90": -7.043214270432106,
+        "hi90": 4.528377642287305,
+        "n": 380
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "treated_prev": "maize",
+        "reference_prev": "winter_wheat",
+        "outcome": "canopy_drop",
+        "stratum": "all",
+        "effect": -0.04674196391380179,
+        "ci_low": -0.06616477710397417,
+        "ci_high": -0.02731915072362941,
+        "lo90": -0.062303863989881025,
+        "hi90": -0.031180063837722552,
+        "n": 682
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "treated_prev": "maize",
+        "reference_prev": "winter_wheat",
+        "outcome": "canopy_drop",
+        "stratum": "wet",
+        "effect": -0.03977984845380354,
+        "ci_low": -0.053252257121925495,
+        "ci_high": -0.02630743978568159,
+        "lo90": -0.050574179605765615,
+        "hi90": -0.02898551730184147,
+        "n": 380
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "winter_wheat",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "peak_ndvi",
+        "stratum": "all",
+        "effect": -0.018342031110913853,
+        "ci_low": -0.053716446378914096,
+        "ci_high": 0.017032384157086394,
+        "lo90": -0.04668463577175114,
+        "hi90": 0.010000573549923435,
+        "n": 313
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "winter_wheat",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "peak_ndvi",
+        "stratum": "dry",
+        "effect": -0.027306391938407133,
+        "ci_low": -0.07193529913931697,
+        "ci_high": 0.0173225152625027,
+        "lo90": -0.06306385856103741,
+        "hi90": 0.00845107468422315,
+        "n": 166
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "winter_wheat",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "canopy_drop",
+        "stratum": "all",
+        "effect": 0.13165010363239818,
+        "ci_low": 0.0660004924112658,
+        "ci_high": 0.19729971485353057,
+        "lo90": 0.07905047865255016,
+        "hi90": 0.1842497286122462,
+        "n": 313
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "winter_wheat",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "canopy_drop",
+        "stratum": "dry",
+        "effect": 0.19230444820442497,
+        "ci_low": 0.08725286713481299,
+        "ci_high": 0.2973560292740369,
+        "lo90": 0.1081352708853216,
+        "hi90": 0.27647362552352833,
+        "n": 166
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "winter_wheat",
+        "treated_prev": "maize",
+        "reference_prev": "winter_wheat",
+        "outcome": "canopy_integral",
+        "stratum": "all",
+        "effect": -4.829917781315125,
+        "ci_low": -10.119110090801342,
+        "ci_high": 0.45927452817109415,
+        "lo90": -9.067711832953265,
+        "hi90": -0.5921237296769846,
+        "n": 279
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "winter_wheat",
+        "treated_prev": "maize",
+        "reference_prev": "winter_wheat",
+        "outcome": "peak_ndvi",
+        "stratum": "all",
+        "effect": -0.042320909533004616,
+        "ci_low": -0.08194347662387608,
+        "ci_high": -0.002698342442133149,
+        "lo90": -0.07406720826885808,
+        "hi90": -0.010574610797151149,
+        "n": 279
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "winter_wheat",
+        "treated_prev": "maize",
+        "reference_prev": "winter_wheat",
+        "outcome": "cover_days",
+        "stratum": "all",
+        "effect": -3.4581722315331493,
+        "ci_low": -16.323493700367234,
+        "ci_high": 9.407149237300935,
+        "lo90": -13.766094425107836,
+        "hi90": 6.849749962041537,
+        "n": 279
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "winter_wheat",
+        "treated_prev": "maize",
+        "reference_prev": "winter_wheat",
+        "outcome": "canopy_drop",
+        "stratum": "all",
+        "effect": 0.009433929866791787,
+        "ci_low": -0.07244157721100968,
+        "ci_high": 0.09130943694459324,
+        "lo90": -0.05616616870532225,
+        "hi90": 0.07503402843890582,
+        "n": 279
+      }
+    ],
+    "panel_obdml_matching": [
+      {
+        "period": "pre_cutoff_le_2021",
+        "crop": "sunflower",
+        "prev2_crop": "maize",
+        "treated_prev": "maize",
+        "reference_prev": "sunflower",
+        "outcome": "peak_ndvi",
+        "stratum": "all",
+        "effect": -0.00823946017767953,
+        "ci_low": -0.04486796981042296,
+        "ci_high": 0.028389049455063903,
+        "lo90": -0.037586867335406525,
+        "hi90": 0.021107946980047462,
+        "n": 142
+      },
+      {
+        "period": "pre_cutoff_le_2021",
+        "crop": "sunflower",
+        "prev2_crop": "maize",
+        "treated_prev": "maize",
+        "reference_prev": "sunflower",
+        "outcome": "cover_days",
+        "stratum": "all",
+        "effect": -6.082523123783665,
+        "ci_low": -11.535813850230653,
+        "ci_high": -0.6292323973366782,
+        "lo90": -10.451795717813305,
+        "hi90": -1.713250529754025,
+        "n": 142
+      },
+      {
+        "period": "pre_cutoff_le_2021",
+        "crop": "sunflower",
+        "prev2_crop": "maize",
+        "treated_prev": "maize",
+        "reference_prev": "sunflower",
+        "outcome": "canopy_drop",
+        "stratum": "all",
+        "effect": -0.016324643350730795,
+        "ci_low": -0.06085038512148616,
+        "ci_high": 0.028201098420024575,
+        "lo90": -0.05199945201338123,
+        "hi90": 0.019350165311919635,
+        "n": 142
+      },
+      {
+        "period": "pre_cutoff_le_2021",
+        "crop": "sunflower",
+        "prev2_crop": "maize",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "canopy_integral",
+        "stratum": "all",
+        "effect": -8.027475063029383,
+        "ci_low": -13.68561169007743,
+        "ci_high": -2.369338435981337,
+        "lo90": -12.520803873789925,
+        "hi90": -3.534146252268842,
+        "n": 91
+      },
+      {
+        "period": "pre_cutoff_le_2021",
+        "crop": "sunflower",
+        "prev2_crop": "maize",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "peak_ndvi",
+        "stratum": "all",
+        "effect": -0.044993483222375126,
+        "ci_low": -0.10476662455600957,
+        "ci_high": 0.01477965811125933,
+        "lo90": -0.09246147414719037,
+        "hi90": 0.0024745077024401207,
+        "n": 91
+      },
+      {
+        "period": "pre_cutoff_le_2021",
+        "crop": "sunflower",
+        "prev2_crop": "maize",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "cover_days",
+        "stratum": "all",
+        "effect": -8.729370918010419,
+        "ci_low": -22.3915793899706,
+        "ci_high": 4.932837553949762,
+        "lo90": -19.57901966141715,
+        "hi90": 2.1202778253963093,
+        "n": 91
+      },
+      {
+        "period": "pre_cutoff_le_2021",
+        "crop": "sunflower",
+        "prev2_crop": "maize",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "canopy_drop",
+        "stratum": "all",
+        "effect": -0.0653163006424321,
+        "ci_low": -0.10573678876170847,
+        "ci_high": -0.024895812523155737,
+        "lo90": -0.09741565698231328,
+        "hi90": -0.03321694430255092,
+        "n": 91
+      },
+      {
+        "period": "pre_cutoff_le_2021",
+        "crop": "sunflower",
+        "prev2_crop": "sunflower",
+        "treated_prev": "maize",
+        "reference_prev": "sunflower",
+        "outcome": "canopy_integral",
+        "stratum": "all",
+        "effect": -1.4205158630080337,
+        "ci_low": -2.4865344587247487,
+        "ci_high": -0.3544972672913189,
+        "lo90": -2.2746287406513055,
+        "hi90": -0.5664029853647619,
+        "n": 236
+      },
+      {
+        "period": "pre_cutoff_le_2021",
+        "crop": "sunflower",
+        "prev2_crop": "sunflower",
+        "treated_prev": "maize",
+        "reference_prev": "sunflower",
+        "outcome": "peak_ndvi",
+        "stratum": "all",
+        "effect": -0.01002422978688099,
+        "ci_low": -0.02986669504140997,
+        "ci_high": 0.009818235467647991,
+        "lo90": -0.025922362489423534,
+        "hi90": 0.005873902915661554,
+        "n": 236
+      },
+      {
+        "period": "pre_cutoff_le_2021",
+        "crop": "sunflower",
+        "prev2_crop": "sunflower",
+        "treated_prev": "maize",
+        "reference_prev": "sunflower",
+        "outcome": "cover_days",
+        "stratum": "all",
+        "effect": -4.918028382214102,
+        "ci_low": -10.41171722287298,
+        "ci_high": 0.5756604584447773,
+        "lo90": -9.319668656994828,
+        "hi90": -0.5163881074333743,
+        "n": 236
+      },
+      {
+        "period": "pre_cutoff_le_2021",
+        "crop": "sunflower",
+        "prev2_crop": "sunflower",
+        "treated_prev": "maize",
+        "reference_prev": "sunflower",
+        "outcome": "canopy_drop",
+        "stratum": "all",
+        "effect": -0.007812937080942245,
+        "ci_low": -0.029233242582402317,
+        "ci_high": 0.013607368420517827,
+        "lo90": -0.0249752631842215,
+        "hi90": 0.00934938902233701,
+        "n": 236
+      },
+      {
+        "period": "pre_cutoff_le_2021",
+        "crop": "sunflower",
+        "prev2_crop": "sunflower",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "canopy_integral",
+        "stratum": "all",
+        "effect": -4.625401942154412,
+        "ci_low": -7.224008987199864,
+        "ci_high": -2.026794897108961,
+        "lo90": -6.689048805598894,
+        "hi90": -2.5617550787099304,
+        "n": 183
+      },
+      {
+        "period": "pre_cutoff_le_2021",
+        "crop": "sunflower",
+        "prev2_crop": "sunflower",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "peak_ndvi",
+        "stratum": "all",
+        "effect": -0.03303743728789994,
+        "ci_low": -0.05951885216052777,
+        "ci_high": -0.00655602241527212,
+        "lo90": -0.05406727665728972,
+        "hi90": -0.012007597918510169,
+        "n": 183
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "maize",
+        "prev2_crop": "sunflower",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "canopy_integral",
+        "stratum": "all",
+        "effect": -3.3997487623720026,
+        "ci_low": -7.55147414244471,
+        "ci_high": 0.7519766177007048,
+        "lo90": -6.726184272790468,
+        "hi90": -0.07331325195353688,
+        "n": 233
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "maize",
+        "prev2_crop": "sunflower",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "canopy_drop",
+        "stratum": "all",
+        "effect": -0.014431242721788888,
+        "ci_low": -0.037848198788898835,
+        "ci_high": 0.008985713345321058,
+        "lo90": -0.03319332043083512,
+        "hi90": 0.004330834987257349,
+        "n": 233
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "prev2_crop": "maize",
+        "treated_prev": "maize",
+        "reference_prev": "sunflower",
+        "outcome": "canopy_integral",
+        "stratum": "all",
+        "effect": -1.0551548640034958,
+        "ci_low": -2.106620446926158,
+        "ci_high": -0.003689281080833773,
+        "lo90": -1.8976076114334193,
+        "hi90": -0.2127021165735724,
+        "n": 358
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "prev2_crop": "maize",
+        "treated_prev": "maize",
+        "reference_prev": "sunflower",
+        "outcome": "cover_days",
+        "stratum": "all",
+        "effect": 0.24865731524613383,
+        "ci_low": -3.371276267350851,
+        "ci_high": 3.8685908978431187,
+        "lo90": -2.6516972391044895,
+        "hi90": 3.149011869596757,
+        "n": 358
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "prev2_crop": "maize",
+        "treated_prev": "maize",
+        "reference_prev": "sunflower",
+        "outcome": "canopy_drop",
+        "stratum": "all",
+        "effect": -0.015586067883428232,
+        "ci_low": -0.03798636090341516,
+        "ci_high": 0.0068142251365586985,
+        "lo90": -0.03353357724980123,
+        "hi90": 0.00236144148294477,
+        "n": 358
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "prev2_crop": "maize",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "canopy_integral",
+        "stratum": "all",
+        "effect": -5.399240826953621,
+        "ci_low": -7.154459236660243,
+        "ci_high": -3.6440224172469993,
+        "lo90": -6.793122588629414,
+        "hi90": -4.005359065277828,
+        "n": 266
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "prev2_crop": "maize",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "peak_ndvi",
+        "stratum": "all",
+        "effect": -0.0602169751024481,
+        "ci_low": -0.09050977187508465,
+        "ci_high": -0.029924178329811545,
+        "lo90": -0.08427356925507387,
+        "hi90": -0.036160380949822324,
+        "n": 266
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "prev2_crop": "maize",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "cover_days",
+        "stratum": "all",
+        "effect": -6.22032241196438,
+        "ci_low": -12.548506347618801,
+        "ci_high": 0.10786152369004043,
+        "lo90": -11.245759772727247,
+        "hi90": -1.1948850512015143,
+        "n": 266
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "prev2_crop": "sunflower",
+        "treated_prev": "maize",
+        "reference_prev": "sunflower",
+        "outcome": "canopy_integral",
+        "stratum": "all",
+        "effect": -1.8732951511954885,
+        "ci_low": -2.5194331270199233,
+        "ci_high": -1.2271571753710537,
+        "lo90": -2.3909922796540832,
+        "hi90": -1.3555980227368938,
+        "n": 320
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "prev2_crop": "sunflower",
+        "treated_prev": "maize",
+        "reference_prev": "sunflower",
+        "outcome": "peak_ndvi",
+        "stratum": "all",
+        "effect": -0.00532934261340032,
+        "ci_low": -0.025694677829875317,
+        "ci_high": 0.015035992603074675,
+        "lo90": -0.021646407940219166,
+        "hi90": 0.010987722713418524,
+        "n": 320
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "prev2_crop": "sunflower",
+        "treated_prev": "maize",
+        "reference_prev": "sunflower",
+        "outcome": "canopy_drop",
+        "stratum": "all",
+        "effect": -0.00045470023851644704,
+        "ci_low": -0.022718789643838368,
+        "ci_high": 0.02180938916680547,
+        "lo90": -0.018293080869486167,
+        "hi90": 0.01738368039245327,
+        "n": 320
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "prev2_crop": "sunflower",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "peak_ndvi",
+        "stratum": "all",
+        "effect": -0.050447674806416765,
+        "ci_low": -0.09519720138757334,
+        "ci_high": -0.005698148225260186,
+        "lo90": -0.08630178380130588,
+        "hi90": -0.014593565811527646,
+        "n": 264
+      }
+    ],
+    "dapsm": [
+      {
+        "period": "pre_cutoff_le_2021",
+        "crop": "sunflower",
+        "prev2_crop": "sunflower",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "canopy_integral",
+        "stratum": "all",
+        "new_effect": -6.039187054979942,
+        "new_ci_low": -7.333920995477444,
+        "new_ci_high": -4.669788265630953,
+        "n": 183
+      },
+      {
+        "period": "pre_cutoff_le_2021",
+        "crop": "sunflower",
+        "prev2_crop": "sunflower",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "peak_ndvi",
+        "stratum": "all",
+        "new_effect": -0.037585368201035196,
+        "new_ci_low": -0.05626260526608514,
+        "new_ci_high": -0.021222346427908597,
+        "n": 183
+      },
+      {
+        "period": "pre_cutoff_le_2021",
+        "crop": "sunflower",
+        "prev2_crop": "sunflower",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "canopy_drop",
+        "stratum": "all",
+        "new_effect": -0.036714748931714246,
+        "new_ci_low": -0.05167537885261796,
+        "new_ci_high": -0.017335843140061796,
+        "n": 183
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "maize",
+        "prev2_crop": "sunflower",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "cover_days",
+        "stratum": "all",
+        "new_effect": -2.537313432835821,
+        "new_ci_low": -11.212700534759358,
+        "new_ci_high": 4.50093930635838,
+        "n": 233
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "maize",
+        "prev2_crop": "sunflower",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "cover_days",
+        "stratum": "wet",
+        "new_effect": -2.08955223880597,
+        "new_ci_low": -10.147170231729055,
+        "new_ci_high": 4.334141791044775,
+        "n": 232
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "maize",
+        "prev2_crop": "winter_wheat",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "canopy_integral",
+        "stratum": "wet",
+        "new_effect": -9.345836338405137,
+        "new_ci_low": -19.599059384424194,
+        "new_ci_high": -3.3069366134235776,
+        "n": 75
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "maize",
+        "prev2_crop": "winter_wheat",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "peak_ndvi",
+        "stratum": "wet",
+        "new_effect": -0.010608598522957433,
+        "new_ci_low": -0.04122751842049756,
+        "new_ci_high": 0.022128937349295122,
+        "n": 75
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "prev2_crop": "maize",
+        "treated_prev": "maize",
+        "reference_prev": "sunflower",
+        "outcome": "canopy_integral",
+        "stratum": "all",
+        "new_effect": -1.75859302561994,
+        "new_ci_low": -2.2932940290131842,
+        "new_ci_high": -0.5391945353890832,
+        "n": 358
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "prev2_crop": "maize",
+        "treated_prev": "maize",
+        "reference_prev": "sunflower",
+        "outcome": "cover_days",
+        "stratum": "all",
+        "new_effect": -0.9020618556701031,
+        "new_ci_low": -5.516718456424338,
+        "new_ci_high": 6.506140628294328,
+        "n": 358
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "prev2_crop": "maize",
+        "treated_prev": "maize",
+        "reference_prev": "sunflower",
+        "outcome": "canopy_drop",
+        "stratum": "all",
+        "new_effect": -0.032715786727613314,
+        "new_ci_low": -0.05647258797605275,
+        "new_ci_high": -0.01765745446956829,
+        "n": 358
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "prev2_crop": "maize",
+        "treated_prev": "maize",
+        "reference_prev": "winter_wheat",
+        "outcome": "canopy_integral",
+        "stratum": "all",
+        "new_effect": -7.8327082780632145,
+        "new_ci_low": -10.077062966515008,
+        "new_ci_high": -5.843671789629882,
+        "n": 296
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "prev2_crop": "maize",
+        "treated_prev": "maize",
+        "reference_prev": "winter_wheat",
+        "outcome": "peak_ndvi",
+        "stratum": "all",
+        "new_effect": -0.06847838551273597,
+        "new_ci_low": -0.09320308316294683,
+        "new_ci_high": -0.05166711651756398,
+        "n": 296
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "prev2_crop": "maize",
+        "treated_prev": "maize",
+        "reference_prev": "winter_wheat",
+        "outcome": "cover_days",
+        "stratum": "all",
+        "new_effect": -10.824742268041238,
+        "new_ci_low": -18.313246268656716,
+        "new_ci_high": 0.04845747295968338,
+        "n": 296
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "prev2_crop": "maize",
+        "treated_prev": "maize",
+        "reference_prev": "winter_wheat",
+        "outcome": "canopy_drop",
+        "stratum": "all",
+        "new_effect": -0.07297077117457865,
+        "new_ci_low": -0.11175379222698968,
+        "new_ci_high": -0.04816151850964137,
+        "n": 296
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "prev2_crop": "sunflower",
+        "treated_prev": "maize",
+        "reference_prev": "winter_wheat",
+        "outcome": "canopy_drop",
+        "stratum": "all",
+        "new_effect": -0.04542890561010788,
+        "new_ci_low": -0.06663770141940914,
+        "new_ci_high": -0.030145524852498547,
+        "n": 228
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "prev2_crop": "sunflower",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "canopy_integral",
+        "stratum": "all",
+        "new_effect": -5.789906801332295,
+        "new_ci_low": -6.765369873127524,
+        "new_ci_high": -4.7150444928039486,
+        "n": 264
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "winter_wheat",
+        "prev2_crop": "maize",
+        "treated_prev": "maize",
+        "reference_prev": "winter_wheat",
+        "outcome": "cover_days",
+        "stratum": "all",
+        "new_effect": -5.0,
+        "new_ci_low": -15.0,
+        "new_ci_high": 0.423728813559322,
+        "n": 60
+      }
+    ],
+    "primary_dml": [
+      {
+        "period": "pre_cutoff_le_2021",
+        "crop": "maize",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "cover_days",
+        "stratum": "wet",
+        "effect": -5.6876449172388845,
+        "ci_low": -12.79014471357854,
+        "ci_high": 1.414854879100771
+      },
+      {
+        "period": "pre_cutoff_le_2021",
+        "crop": "maize",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "canopy_drop",
+        "stratum": "all",
+        "effect": -0.0035417202284996024,
+        "ci_low": -0.01990374977041246,
+        "ci_high": 0.012820309313413256
+      },
+      {
+        "period": "pre_cutoff_le_2021",
+        "crop": "maize",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "canopy_drop",
+        "stratum": "wet",
+        "effect": -0.0084674040367097,
+        "ci_low": -0.02862494876813091,
+        "ci_high": 0.01169014069471151
+      },
+      {
+        "period": "pre_cutoff_le_2021",
+        "crop": "sunflower",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "canopy_integral",
+        "stratum": "all",
+        "effect": -4.429580750552414,
+        "ci_low": -5.8408002760519935,
+        "ci_high": -3.0183612250528338
+      },
+      {
+        "period": "pre_cutoff_le_2021",
+        "crop": "sunflower",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "cover_days",
+        "stratum": "all",
+        "effect": -3.5215202431038044,
+        "ci_low": -7.167493105986917,
+        "ci_high": 0.12445261977930899
+      },
+      {
+        "period": "pre_cutoff_le_2021",
+        "crop": "sunflower",
+        "treated_prev": "maize",
+        "reference_prev": "sunflower",
+        "outcome": "canopy_integral",
+        "stratum": "all",
+        "effect": -1.33139031331438,
+        "ci_low": -2.2652760591243015,
+        "ci_high": -0.3975045675044586
+      },
+      {
+        "period": "pre_cutoff_le_2021",
+        "crop": "sunflower",
+        "treated_prev": "maize",
+        "reference_prev": "sunflower",
+        "outcome": "peak_ndvi",
+        "stratum": "all",
+        "effect": -0.003651792986316739,
+        "ci_low": -0.01689074981908929,
+        "ci_high": 0.009587163846455811
+      },
+      {
+        "period": "pre_cutoff_le_2021",
+        "crop": "sunflower",
+        "treated_prev": "maize",
+        "reference_prev": "sunflower",
+        "outcome": "cover_days",
+        "stratum": "all",
+        "effect": -4.765625253122798,
+        "ci_low": -7.447141317273487,
+        "ci_high": -2.0841091889721097
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "maize",
+        "treated_prev": "maize",
+        "reference_prev": "winter_wheat",
+        "outcome": "canopy_integral",
+        "stratum": "all",
+        "effect": -3.793632493025807,
+        "ci_low": -5.461981024861817,
+        "ci_high": -2.125283961189797
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "maize",
+        "treated_prev": "maize",
+        "reference_prev": "winter_wheat",
+        "outcome": "canopy_integral",
+        "stratum": "wet",
+        "effect": -3.888196257586391,
+        "ci_low": -5.738025420298546,
+        "ci_high": -2.0383670948742365
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "maize",
+        "treated_prev": "maize",
+        "reference_prev": "winter_wheat",
+        "outcome": "cover_days",
+        "stratum": "all",
+        "effect": -4.570170150739471,
+        "ci_low": -8.208373441872249,
+        "ci_high": -0.9319668596066926
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "maize",
+        "treated_prev": "maize",
+        "reference_prev": "winter_wheat",
+        "outcome": "cover_days",
+        "stratum": "wet",
+        "effect": -4.8276132466812856,
+        "ci_low": -8.761211159297078,
+        "ci_high": -0.8940153340654935
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "maize",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "cover_days",
+        "stratum": "all",
+        "effect": -5.92452673407763,
+        "ci_low": -11.731479195465518,
+        "ci_high": -0.11757427268974219
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "canopy_integral",
+        "stratum": "all",
+        "effect": -4.428956340384624,
+        "ci_low": -5.458905074053987,
+        "ci_high": -3.3990076067152613
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "canopy_integral",
+        "stratum": "wet",
+        "effect": -2.146977841143167,
+        "ci_low": -3.491173230079446,
+        "ci_high": -0.8027824522068876
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "canopy_integral",
+        "stratum": "dry",
+        "effect": -5.1133962501042785,
+        "ci_low": -6.7974302686818575,
+        "ci_high": -3.4293622315266994
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "treated_prev": "sunflower",
+        "reference_prev": "winter_wheat",
+        "outcome": "cover_days",
+        "stratum": "dry",
+        "effect": -7.191649760377233,
+        "ci_low": -11.6039442491956,
+        "ci_high": -2.779355271558866
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "treated_prev": "maize",
+        "reference_prev": "sunflower",
+        "outcome": "canopy_integral",
+        "stratum": "wet",
+        "effect": -1.1868439757215592,
+        "ci_low": -2.3192648111339538,
+        "ci_high": -0.05442314030916462
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "treated_prev": "maize",
+        "reference_prev": "sunflower",
+        "outcome": "peak_ndvi",
+        "stratum": "all",
+        "effect": 0.002757127868950676,
+        "ci_low": -0.007519827733994255,
+        "ci_high": 0.013034083471895608
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "treated_prev": "maize",
+        "reference_prev": "sunflower",
+        "outcome": "peak_ndvi",
+        "stratum": "wet",
+        "effect": 0.00502875971667172,
+        "ci_low": -0.00706081233500004,
+        "ci_high": 0.01711833176834348
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "treated_prev": "maize",
+        "reference_prev": "sunflower",
+        "outcome": "cover_days",
+        "stratum": "all",
+        "effect": -2.6883715399439296,
+        "ci_low": -5.192170772359162,
+        "ci_high": -0.1845723075286969
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "treated_prev": "maize",
+        "reference_prev": "sunflower",
+        "outcome": "cover_days",
+        "stratum": "wet",
+        "effect": -5.223008391544934,
+        "ci_low": -9.079042594991565,
+        "ci_high": -1.366974188098304
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "treated_prev": "maize",
+        "reference_prev": "sunflower",
+        "outcome": "canopy_drop",
+        "stratum": "wet",
+        "effect": 0.005996440322924684,
+        "ci_low": -0.008025244791003533,
+        "ci_high": 0.0200181254368529
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "treated_prev": "maize",
+        "reference_prev": "winter_wheat",
+        "outcome": "canopy_integral",
+        "stratum": "wet",
+        "effect": -3.2314829014387705,
+        "ci_low": -4.442017721689335,
+        "ci_high": -2.020948081188206
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "treated_prev": "maize",
+        "reference_prev": "winter_wheat",
+        "outcome": "peak_ndvi",
+        "stratum": "wet",
+        "effect": -0.0338084092686959,
+        "ci_low": -0.044592072519924336,
+        "ci_high": -0.02302474601746747
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "treated_prev": "maize",
+        "reference_prev": "winter_wheat",
+        "outcome": "cover_days",
+        "stratum": "all",
+        "effect": -2.761112274426582,
+        "ci_low": -5.987133976453216,
+        "ci_high": 0.46490942760005183
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "treated_prev": "maize",
+        "reference_prev": "winter_wheat",
+        "outcome": "cover_days",
+        "stratum": "wet",
+        "effect": 0.7056917816009516,
+        "ci_low": -3.1221727661300767,
+        "ci_high": 4.53355632933198
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "treated_prev": "maize",
+        "reference_prev": "winter_wheat",
+        "outcome": "canopy_drop",
+        "stratum": "wet",
+        "effect": -0.03384438463546479,
+        "ci_low": -0.04687952521779584,
+        "ci_high": -0.020809244053133738
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "winter_wheat",
+        "treated_prev": "maize",
+        "reference_prev": "sunflower",
+        "outcome": "canopy_integral",
+        "stratum": "dry",
+        "effect": -3.470256789154593,
+        "ci_low": -6.7553321076359545,
+        "ci_high": -0.1851814706732311
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "winter_wheat",
+        "treated_prev": "maize",
+        "reference_prev": "sunflower",
+        "outcome": "peak_ndvi",
+        "stratum": "dry",
+        "effect": -0.005787261396096004,
+        "ci_low": -0.03625898934316025,
+        "ci_high": 0.02468446655096824
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "winter_wheat",
+        "treated_prev": "maize",
+        "reference_prev": "sunflower",
+        "outcome": "cover_days",
+        "stratum": "dry",
+        "effect": -7.264139544880753,
+        "ci_low": -12.43819361019001,
+        "ci_high": -2.0900854795714956
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "winter_wheat",
+        "treated_prev": "maize",
+        "reference_prev": "sunflower",
+        "outcome": "canopy_drop",
+        "stratum": "dry",
+        "effect": -0.08766891174854624,
+        "ci_low": -0.14347855674109475,
+        "ci_high": -0.031859266755997734
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "winter_wheat",
+        "treated_prev": "maize",
+        "reference_prev": "winter_wheat",
+        "outcome": "canopy_integral",
+        "stratum": "all",
+        "effect": -7.250688878509511,
+        "ci_low": -10.212013398888631,
+        "ci_high": -4.28936435813039
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "winter_wheat",
+        "treated_prev": "maize",
+        "reference_prev": "winter_wheat",
+        "outcome": "cover_days",
+        "stratum": "all",
+        "effect": -6.405988418659038,
+        "ci_low": -11.46760461649928,
+        "ci_high": -1.344372220818796
       }
     ],
     "matching_dml": [
@@ -782,9 +2571,10 @@
         "reference_prev": "sunflower",
         "outcome": "canopy_integral",
         "stratum": "all",
-        "effect": -2.4890332526622654,
-        "ci_low": -4.597026866753205,
-        "ci_high": -0.38103963857132594
+        "effect": -2.0822362084831254,
+        "ci_low": -3.8942442717638324,
+        "ci_high": -0.2702281452024182,
+        "n": 142
       },
       {
         "period": "pre_cutoff_le_2021",
@@ -794,33 +2584,62 @@
         "reference_prev": "sunflower",
         "outcome": "peak_ndvi",
         "stratum": "all",
-        "effect": -0.029215279834841717,
-        "ci_low": -0.055756524089792425,
-        "ci_high": -0.0026740355798910084
+        "effect": -0.01440152693964553,
+        "ci_low": -0.040064190289536006,
+        "ci_high": 0.01126113641024495,
+        "n": 142
+      },
+      {
+        "period": "pre_cutoff_le_2021",
+        "crop": "sunflower",
+        "prev2_crop": "maize",
+        "treated_prev": "maize",
+        "reference_prev": "sunflower",
+        "outcome": "cover_days",
+        "stratum": "all",
+        "effect": -6.760107119269307,
+        "ci_low": -11.554344685109616,
+        "ci_high": -1.9658695534289992,
+        "n": 142
+      },
+      {
+        "period": "pre_cutoff_le_2021",
+        "crop": "sunflower",
+        "prev2_crop": "maize",
+        "treated_prev": "maize",
+        "reference_prev": "sunflower",
+        "outcome": "canopy_drop",
+        "stratum": "all",
+        "effect": -0.025566042796735754,
+        "ci_low": -0.05497688191114827,
+        "ci_high": 0.003844796317676768,
+        "n": 142
       },
       {
         "period": "pre_cutoff_le_2021",
         "crop": "sunflower",
         "prev2_crop": "sunflower",
         "treated_prev": "maize",
-        "reference_prev": "sunflower",
-        "outcome": "canopy_integral",
+        "reference_prev": "winter_wheat",
+        "outcome": "peak_ndvi",
         "stratum": "all",
-        "effect": -1.6423581422197635,
-        "ci_low": -3.2246726680404394,
-        "ci_high": -0.06004361639908762
+        "effect": -0.05131914186106675,
+        "ci_low": -0.07642952724241081,
+        "ci_high": -0.0262087564797227,
+        "n": 141
       },
       {
         "period": "pre_cutoff_le_2021",
         "crop": "sunflower",
         "prev2_crop": "sunflower",
         "treated_prev": "maize",
-        "reference_prev": "sunflower",
+        "reference_prev": "winter_wheat",
         "outcome": "canopy_drop",
         "stratum": "all",
-        "effect": -0.015466175100384864,
-        "ci_low": -0.03654705609490929,
-        "ci_high": 0.00561470589413956
+        "effect": -0.05257203632900596,
+        "ci_low": -0.08183045483085696,
+        "ci_high": -0.023313617827154954,
+        "n": 141
       },
       {
         "period": "full_2018_2024",
@@ -830,9 +2649,23 @@
         "reference_prev": "sunflower",
         "outcome": "canopy_integral",
         "stratum": "all",
-        "effect": -0.9382279782694924,
-        "ci_low": -2.2666301074284103,
-        "ci_high": 0.3901741508894254
+        "effect": -0.9207972638578539,
+        "ci_low": -2.1703065843785545,
+        "ci_high": 0.32871205666284653,
+        "n": 358
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "prev2_crop": "maize",
+        "treated_prev": "maize",
+        "reference_prev": "sunflower",
+        "outcome": "peak_ndvi",
+        "stratum": "all",
+        "effect": -0.0011226424044479516,
+        "ci_low": -0.017197989977597233,
+        "ci_high": 0.01495270516870133,
+        "n": 358
       },
       {
         "period": "full_2018_2024",
@@ -842,9 +2675,10 @@
         "reference_prev": "sunflower",
         "outcome": "cover_days",
         "stratum": "all",
-        "effect": -2.390297868308913,
-        "ci_low": -6.385092707056387,
-        "ci_high": 1.6044969704385608
+        "effect": -0.741368731567734,
+        "ci_low": -4.593204816573361,
+        "ci_high": 3.110467353437893,
+        "n": 358
       },
       {
         "period": "full_2018_2024",
@@ -854,21 +2688,23 @@
         "reference_prev": "sunflower",
         "outcome": "canopy_drop",
         "stratum": "all",
-        "effect": -0.01026442985558032,
-        "ci_low": -0.027753138608269,
-        "ci_high": 0.0072242788971083605
+        "effect": -0.003673231404368421,
+        "ci_low": -0.022215781160879022,
+        "ci_high": 0.014869318352142181,
+        "n": 358
       },
       {
         "period": "full_2018_2024",
         "crop": "sunflower",
-        "prev2_crop": "maize",
-        "treated_prev": "sunflower",
-        "reference_prev": "winter_wheat",
-        "outcome": "cover_days",
+        "prev2_crop": "sunflower",
+        "treated_prev": "maize",
+        "reference_prev": "sunflower",
+        "outcome": "canopy_integral",
         "stratum": "all",
-        "effect": -3.5425083240762447,
-        "ci_low": -8.287725865538878,
-        "ci_high": 1.2027092173863894
+        "effect": -2.04843085487189,
+        "ci_low": -3.3610475646629068,
+        "ci_high": -0.7358141450808728,
+        "n": 320
       },
       {
         "period": "full_2018_2024",
@@ -878,9 +2714,10 @@
         "reference_prev": "sunflower",
         "outcome": "peak_ndvi",
         "stratum": "all",
-        "effect": -0.004093451253726932,
-        "ci_low": -0.02068834857155718,
-        "ci_high": 0.012501446064103312
+        "effect": -0.007868387291519193,
+        "ci_low": -0.025301545350195152,
+        "ci_high": 0.009564770767156764,
+        "n": 320
       },
       {
         "period": "full_2018_2024",
@@ -888,109 +2725,129 @@
         "prev2_crop": "sunflower",
         "treated_prev": "maize",
         "reference_prev": "sunflower",
-        "outcome": "canopy_drop",
-        "stratum": "all",
-        "effect": -0.0025098292532066075,
-        "ci_low": -0.022952439597300568,
-        "ci_high": 0.017932781090887355
-      },
-      {
-        "period": "full_2018_2024",
-        "crop": "sunflower",
-        "prev2_crop": "sunflower",
-        "treated_prev": "maize",
-        "reference_prev": "winter_wheat",
         "outcome": "cover_days",
         "stratum": "all",
-        "effect": 2.7438577171979857,
-        "ci_low": -2.314105414553066,
-        "ci_high": 7.8018208489490375
+        "effect": -5.7679605909420895,
+        "ci_low": -9.580199322221269,
+        "ci_high": -1.9557218596629102,
+        "n": 320
       },
       {
         "period": "full_2018_2024",
         "crop": "sunflower",
         "prev2_crop": "sunflower",
         "treated_prev": "maize",
-        "reference_prev": "winter_wheat",
-        "outcome": "canopy_drop",
-        "stratum": "all",
-        "effect": -0.09042649355236639,
-        "ci_low": -0.11338589890448411,
-        "ci_high": -0.06746708820024866
-      },
-      {
-        "period": "full_2018_2024",
-        "crop": "sunflower",
-        "prev2_crop": "sunflower",
-        "treated_prev": "sunflower",
         "reference_prev": "winter_wheat",
         "outcome": "canopy_integral",
-        "stratum": "dry",
-        "effect": -6.1389001690489,
-        "ci_low": -8.161937377435994,
-        "ci_high": -4.115862960661806
+        "stratum": "all",
+        "effect": -4.231354822534241,
+        "ci_low": -6.02680038354887,
+        "ci_high": -2.4359092615196127,
+        "n": 228
       },
       {
         "period": "full_2018_2024",
         "crop": "sunflower",
         "prev2_crop": "sunflower",
+        "treated_prev": "maize",
+        "reference_prev": "winter_wheat",
+        "outcome": "peak_ndvi",
+        "stratum": "all",
+        "effect": -0.04372001790705831,
+        "ci_low": -0.06369553154035727,
+        "ci_high": -0.02374450427375935,
+        "n": 228
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "prev2_crop": "sunflower",
+        "treated_prev": "maize",
+        "reference_prev": "winter_wheat",
+        "outcome": "peak_ndvi",
+        "stratum": "dry",
+        "effect": -0.09861155506171887,
+        "ci_low": -0.1413469807707004,
+        "ci_high": -0.05587612935273734,
+        "n": 79
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "prev2_crop": "sunflower",
+        "treated_prev": "maize",
+        "reference_prev": "winter_wheat",
+        "outcome": "canopy_drop",
+        "stratum": "all",
+        "effect": -0.040142931401054925,
+        "ci_low": -0.06312803187449746,
+        "ci_high": -0.017157830927612392,
+        "n": 228
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "prev2_crop": "sunflower",
+        "treated_prev": "maize",
+        "reference_prev": "winter_wheat",
+        "outcome": "canopy_drop",
+        "stratum": "dry",
+        "effect": -0.05689835620637585,
+        "ci_low": -0.10973217436145268,
+        "ci_high": -0.004064538051299027,
+        "n": 79
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "sunflower",
+        "prev2_crop": "winter_wheat",
         "treated_prev": "sunflower",
         "reference_prev": "winter_wheat",
         "outcome": "peak_ndvi",
         "stratum": "all",
-        "effect": -0.05279902324133202,
-        "ci_low": -0.06893754138679876,
-        "ci_high": -0.03666050509586527
+        "effect": -0.03050904994435741,
+        "ci_low": -0.05851312125696454,
+        "ci_high": -0.002504978631750282,
+        "n": 120
       },
       {
         "period": "full_2018_2024",
         "crop": "sunflower",
-        "prev2_crop": "sunflower",
-        "treated_prev": "sunflower",
-        "reference_prev": "winter_wheat",
-        "outcome": "peak_ndvi",
-        "stratum": "dry",
-        "effect": -0.0752231915931642,
-        "ci_low": -0.09760750560658656,
-        "ci_high": -0.05283887757974183
-      },
-      {
-        "period": "full_2018_2024",
-        "crop": "sunflower",
-        "prev2_crop": "sunflower",
+        "prev2_crop": "winter_wheat",
         "treated_prev": "sunflower",
         "reference_prev": "winter_wheat",
         "outcome": "canopy_drop",
         "stratum": "all",
-        "effect": -0.061119934636820514,
-        "ci_low": -0.07975113278766287,
-        "ci_high": -0.04248873648597816
+        "effect": 0.00015999556157163104,
+        "ci_low": -0.032632606176644235,
+        "ci_high": 0.0329525972997875,
+        "n": 120
       },
       {
         "period": "full_2018_2024",
-        "crop": "sunflower",
-        "prev2_crop": "sunflower",
-        "treated_prev": "sunflower",
-        "reference_prev": "winter_wheat",
-        "outcome": "canopy_drop",
-        "stratum": "dry",
-        "effect": -0.08287261373067677,
-        "ci_low": -0.10971432152110451,
-        "ci_high": -0.05603090594024902
-      }
-    ],
-    "dapsm": [
-      {
-        "period": "full_2018_2024",
-        "crop": "sunflower",
+        "crop": "winter_wheat",
         "prev2_crop": "maize",
         "treated_prev": "maize",
         "reference_prev": "sunflower",
-        "outcome": "canopy_drop",
-        "stratum": "all",
-        "new_effect": -0.03163462258957779,
-        "new_ci_low": -0.065527669523184,
-        "new_ci_high": -0.009894253074391002
+        "outcome": "canopy_integral",
+        "stratum": "dry",
+        "effect": -0.9305783748701898,
+        "ci_low": -5.948141096276992,
+        "ci_high": 4.086984346536613,
+        "n": 67
+      },
+      {
+        "period": "full_2018_2024",
+        "crop": "winter_wheat",
+        "prev2_crop": "maize",
+        "treated_prev": "maize",
+        "reference_prev": "sunflower",
+        "outcome": "peak_ndvi",
+        "stratum": "dry",
+        "effect": 0.01056994813735526,
+        "ci_low": -0.028571858597859177,
+        "ci_high": 0.0497117548725697,
+        "n": 67
       }
     ]
   }
