@@ -1169,9 +1169,14 @@ Pre-registered BEFORE running on Central Ukraine (`ua_central_t36uvu`) data (`CL
    - Updated `MethodsDiagram.tsx` (`field_story`, `w1_physics`, `w2_past`, `w3_neighbours`, `agreement`; linked `w3_neighbours` to `#m-limits` to preserve `methodsDiagram.test.ts` invariants), added `s2cog` and `worldcereal` to `DATASETS`, and documented `2023-08-15` GIBS HLS basemap and `ogh-ghlc10` v1.2 / WorldCereal in `DATA.md`.
    - Removed leading changelog dates (`2026-11-XX — `) from all 9 items in "What we got wrong (and what changed)" (`methods.wrong.1..9`) in both `en.json` and `ar.json` while keeping every explanatory sentence intact, and added `overflow-wrap: anywhere` in `app/src/styles.css` so `.methods` renders with `0` horizontal overflow on `390px` mobile viewports.
 
+## 2026-11-14 — [antigravity] Enable Witness 3 ON Badge in Data & Methods Diagram (`docs/witness3-on-diagram`)
+
+- Updated `w3_neighbours.status` from `"OFF"` to `"ON"` in `app/src/MethodsDiagram.tsx` so the Data & Methods architecture diagram reflects active Panel-OBDML/DAPSM Witness 3 in Central Ukraine (`ua_central_t36uvu`, 30 pre-cutoff contrasts ACTIVE `[D]`) while keeping the Kansas diagnostic caveat line (`0 of 32`) visible inside the card.
+- Updated `app/tests/methodsDiagram.test.ts` to assert `w3_neighbours.status === "ON"` (`mdia-status--on`, no `mdia-box--off`) while preserving the `.mdia-box--off` non-colour-only CSS rule check.
+
 ## Autopilot handoff
 
-- **Updated:** 2026-11-14 (branch `docs/update-methods-data-scoreboard`)
-- **What this run did:** Updated Methods, Data, MethodsDiagram, Scoreboard (adding `CqrScoreSection`, `metaKansas`/`metaUkraine`, `score.introSingle`, `#m-regions`, `s2cog`, `worldcereal`), and `DATA.md` with latest calibrated Ukraine 120-field, Split-CQR, and honest Kansas results; stripped leading dates from `methods.wrong.1..9` in EN & AR without removing text; fixed mobile `.methods` link wrapping; added verification tests in `app/tests/websitePolish.test.ts`; verified `tsc`, `vitest`, `vite build`, `ruff`, `t10_red_team_audit.py`, `pytest`, and headless Chromium (Desktop 1440×900 Light/Dark + Mobile 390×844 EN/AR RTL, 0 overflow, 0 errors).
-- **Next task:** Push PR, merge to `main`, and verify live GitHub Pages deployment (`https://amr-mousa-eg.github.io/fieldwitness/`).
-- **Risks / Notes:** `methods.limits.7` and existing `methodsDiagram.test.ts` / `gradeValidity.test.ts` / `methods.test.ts` invariants remain strictly preserved; Tier 3 Ukraine ABC credibility remains in-sample over classifier-derived labels (`kappa = 0.035` maize vs sunflower).
+- **Updated:** 2026-11-14 (branch `docs/witness3-on-diagram`)
+- **What this run did:** Changed Witness 3 (`w3_neighbours`) status from `OFF` to `ON` in `app/src/MethodsDiagram.tsx`, updated `app/tests/methodsDiagram.test.ts`, and verified all tests, build, and live deployment.
+- **Next task:** Monitor live feedback or post-freeze roadmap tasks.
+- **Risks / Notes:** Kansas (`ks_t14slh`) observational Neighbours contrasts remain gated `OFF` inside the simulation/grading pipeline (`0/92`, `0/32`, `0/4`), which remains documented explicitly on the diagram box, in `#m-regions`, and in `methods.limits.4`.

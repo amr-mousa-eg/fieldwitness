@@ -103,7 +103,7 @@ export const DIAGRAM_STAGES: DiagramStage[] = [
           "Ukraine (T36UVU): 30 pre-cutoff Panel-OBDML/DAPSM contrasts ACTIVE [D]",
         ],
         target: "m-limits",
-        status: "OFF",
+        status: "ON",
       },
     ],
   },

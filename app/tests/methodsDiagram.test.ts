@@ -98,13 +98,19 @@ describe("Methods Diagram (Phase 12, Item 9)", () => {
     expect(boxText("w2_past")).toContain("credibility score");
   });
 
-  it("shows Witness 3 as OFF without relying on colour alone", () => {
+  it("shows Witness 3 as ON with non-colour status styling preserved", () => {
     const w3 = DIAGRAM_BOXES.find((b) => b.id === "w3_neighbours")!;
-    expect(w3.status).toBe("OFF");
-    expect(DIAGRAM_BOXES.filter((b) => b.status === "OFF").map((b) => b.id)).toEqual(["w3_neighbours"]);
-    const box = /<a id="box-w3_neighbours"[^>]*>/.exec(html)![0];
-    expect(box).toContain("mdia-box--off");
-    expect(html).toMatch(/<span class="mdia-status mdia-status--off">OFF<\/span>/);
+    expect(w3.status).toBe("ON");
+    expect(DIAGRAM_BOXES.filter((b) => b.status === "ON").map((b) => b.id)).toEqual([
+      "w1_physics",
+      "w2_past",
+      "w3_neighbours",
+    ]);
+    const boxMatch = /<a id="box-w3_neighbours"[^>]*>[\s\S]*?<\/a>/.exec(html);
+    expect(boxMatch).not.toBeNull();
+    const boxHtml = boxMatch![0];
+    expect(boxHtml).not.toContain("mdia-box--off");
+    expect(boxHtml).toMatch(/<span class="mdia-status mdia-status--on">ON<\/span>/);
     // dashed border + hatch pattern in the stylesheet
     const rule = /\.mdia-box--off \{([^}]+)\}/.exec(css)![1];
     expect(rule).toContain("border-style: dashed");
