@@ -1237,10 +1237,30 @@ Pre-registered BEFORE running on Central Ukraine (`ua_central_t36uvu`) data (`CL
    - Fixed `parseHash` query stripping and added lossless hash query codecs (`?pw=...&no=...&cg=...&cs=...&irr=...&cap=...&dt=...&dp=...`) with live state lifting across `FieldPage`, `FieldCard`, and `PrintDossier` + a one-click **"Copy share link"** button in the field header.
    - Built a zero-dependency deterministic ISO 18004 QR encoder (`app/src/qrCode.tsx`, Byte mode, EC Level L, Versions 1–10) embedded cleanly inside `PrintDossier.tsx` alongside active farmer profile & weather sensitivity pills (`37` new EN/AR keys at `100%` parity; `app/tests/phaseP3.test.ts`, `tests/test_packs_extras.py`).
 
+## [antigravity] UX/UI Enhancements, Home Landing Page, NASA-Style Dropdown, Split Reference Tabs, Map Scroll Fix & IEEE A4 Paper (`feat/ux-home-nav-split-map-scroll`)
+
+1. **Home Page & Assiut STEM School Team Roster (`app/src/HomePage.tsx`, `app/src/teamConfig.ts`, `app/src/route.ts`):**
+   - Added responsive, bilingual (`EN`/`AR` RTL) **Home** landing page as the default entry route (`#/` / `#/home`) featuring: (a) IEEE A4 conference research paper links (`./paper/FieldWitness_Research_Paper.{pdf,docx}`), (b) public GitHub repository card (`647` verified automated tests), (c) a 2-minute walkthrough video slot (`demoVideoUrl` placeholder ready with timestamped chapters), (d) verified regional & cross-language parity metrics (`320` pilot fields, `−253.4 mm` mean Kansas water savings, `31 Dec 2021` leak-free freeze, `5.7 × 10⁻⁶ mm` 3D Python parity), and (e) all `5` Assiut STEM School authors with photo avatar slots, initials fallback, roles, affiliations, and `mailto:` links.
+   - Added static-render `useLocale` snapshot parity fix (`app/src/locale.ts`) so SSR/Vitest markup respects the active locale identically to `t()`.
+
+2. **NASA-Style Navigation Dropdown & Split Documentation Pages (`app/src/App.tsx`, `app/src/ResourcesPage.tsx`, `app/src/TermsPage.tsx`, `app/src/datasets.ts`):**
+   - Grouped `Methods`, `Resources`, and `Terms used` under a single accessible header dropdown (`Methods & Docs ▾`, ESC / outside-click dismissal, arrow & ARIA roles) matching primary top-level nav.
+   - Extracted the `33` dataset & licence table (`ResourcesPage.tsx`) and searchable glossary card grid (`TermsPage.tsx`, `#glossary-*` anchors) into dedicated standalone tabs, updating diagram/3D/tooltip deep links (`MethodsDiagram.tsx`, `Field3DView.tsx`, `Explain.tsx`, `tour.ts`) and preserving legacy `#/<region>/methods#m-data` and `#/<region>/methods#glossary-*` redirects in `parseHash`.
+
+3. **Centered Full-Width Methods & Diagram Redesign (`app/src/styles.css`, `app/src/MethodsPage.tsx`):**
+   - Removed the `62rem` left-aligned cap on `.methods` so `Methods`, `Resources`, and `Terms` align cleanly across the full `90rem` centered `.app-field` shell alongside `Scoreboard`.
+   - Upgraded `.mdia` pipeline diagram with proportional 4-stage column tracks (`1.05fr 1.35fr 1.1fr 0.9fr`), raised clickable box cards, RTL arrow mirroring, and zero new palette tokens (`websitePolish.test.ts` & `methodsDiagram.test.ts`).
+
+4. **Desktop Map Viewport Scroll Lock (`app/src/styles.css`):**
+   - Fixed nested scroll container propagation on desktop (`@media (min-width: 48.01rem)`) with `html:has(.app--map)` + flex-constrained `.app--map .app-main { min-height: 0; overflow: hidden; }` and `grid-template-rows: minmax(0, 1fr)` so `.rail` scrolls independently without shifting the viewport header/map/footer.
+
+5. **IEEE A4 Conference Research Paper (`docs/paper/FieldWitness_Research_Paper.{docx,pdf}`, `app/public/paper/FieldWitness_Research_Paper.{docx,pdf}`):**
+   - Built directly from `/home/antigravity/conference-template-a4.docx` preserving Strict OOXML template styles & two-column layout, featuring the 3+2 IEEE author grid for all 5 Assiut STEM School contributors and exact verified metrics (`382` Python + `255` Vitest + `10` Cloudflare Worker tests).
+
 ## Autopilot handoff
 
-- **Updated:** (branch `feat/phase-p3-interactive-maps-ux`)
-- **What this run did:** Completed and verified Phase P3 (`E4.1 & E4.2` — S7 Map Option Deltas, Synchronized Trend Playback, Scale Contract, GIBS Switcher, Hover HUD, Shareable URL State & Deterministic QR Print Dossier) and merged/verified Phase P2 (`PR #54`).
-- **Next task:** **Phase P3 is complete; Phase P4 (`E5 & E6`) has NOT been started**, per explicit user scope boundary ("only finish p2 and p3, and focus more on p3, dont start p4 in any case").
+- **Updated:** (branch `feat/ux-home-nav-split-map-scroll`)
+- **What this run did:** Implemented and verified the pre-Map Home landing page (paper downloads, repo links, 2-min video slot, verified impact stats, 5-member Assiut STEM School roster), NASA-style `Methods & Docs ▾` dropdown, standalone `Resources` & searchable `Terms` tabs, full-width centered `Methods` + redesigned `.mdia` diagram, desktop Map scroll fix, and IEEE A4 `.docx`/`.pdf` research paper.
+- **Next task:** **Phase P3 is complete; Phase P4 (`E5 & E6`) has NOT been started**, per explicit user scope boundary ("dont start p4 in any case"). User can add `demoVideoUrl` and team portraits in `app/src/teamConfig.ts` + `app/public/team/` when recorded/photographed.
 - **Risks / Notes:** Live GIBS WMTS imagery layers rely on NASA GIBS availability in online mode and fall back gracefully to the neutral vector canvas when offline.
 

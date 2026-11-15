@@ -8,6 +8,7 @@ import { FieldList } from "../src/FieldList";
 import { mapAttributionText } from "../src/MapView";
 import { MethodsPage } from "../src/MethodsPage";
 import { PrintDossier } from "../src/PrintDossier";
+import { ResourcesPage } from "../src/ResourcesPage";
 import { CqrScoreSection, RegionGradeSummary } from "../src/Scoreboard";
 import { UkraineNeighboursSection } from "../src/UkraineNeighboursSection";
 import { getLocale, setLocale, t } from "../src/strings";
@@ -296,9 +297,11 @@ describe("Methods, Data & Scoreboard updates", () => {
         const methodsHtml = unescapeHtml(renderToStaticMarkup(createElement(MethodsPage)));
         expect(methodsHtml).toContain('id="m-regions"');
         expect(methodsHtml).toContain(t("methods.regions.heading"));
-        expect(methodsHtml).toContain(t("methods.ds.s2cog.name"));
-        expect(methodsHtml).toContain(t("methods.ds.worldcereal.name"));
         expect(methodsHtml).not.toMatch(/2026-11-\d{2}/);
+
+        const resourcesHtml = unescapeHtml(renderToStaticMarkup(createElement(ResourcesPage)));
+        expect(resourcesHtml).toContain(t("methods.ds.s2cog.name"));
+        expect(resourcesHtml).toContain(t("methods.ds.worldcereal.name"));
       }
     } finally {
       setLocale(prev);

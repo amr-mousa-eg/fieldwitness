@@ -10,12 +10,15 @@ import en from "../src/strings/en.json";
 const SRC = join(import.meta.dirname, "../src");
 const diagramSource = readFileSync(join(SRC, "MethodsDiagram.tsx"), "utf8");
 const methodsSource = readFileSync(join(SRC, "MethodsPage.tsx"), "utf8");
+const resourcesSource = readFileSync(join(SRC, "ResourcesPage.tsx"), "utf8");
+const termsSource = readFileSync(join(SRC, "TermsPage.tsx"), "utf8");
+const datasetsSource = readFileSync(join(SRC, "datasets.ts"), "utf8");
 const css = readFileSync(join(SRC, "styles.css"), "utf8");
 const strings = en as Record<string, string>;
 
-/** The official source list: DATASETS in MethodsPage.tsx (the Methods data table). */
+/** The official source list: DATASETS in datasets.ts (rendered on ResourcesPage). */
 const DATASETS = /DATASETS = \[([^\]]+)\]/
-  .exec(methodsSource)![1]
+  .exec(datasetsSource)![1]
   .match(/"(\w+)"/g)!
   .map((s) => s.slice(1, -1));
 
@@ -117,12 +120,16 @@ describe("Methods Diagram (Phase 12, Item 9)", () => {
     expect(rule).toContain("repeating-linear-gradient");
   });
 
-  it("makes every box a link to an element that exists on the Methods page", () => {
+  it("makes every box a link to an element that exists on its target documentation page", () => {
     for (const b of DIAGRAM_BOXES) {
-      expect(html, b.id).toContain(`<a id="box-${b.id}" href="#/kansas/methods#${b.target}"`);
+      const expectedPage =
+        b.target === "m-data" ? "resources" : b.target.startsWith("glossary") ? "terms" : "methods";
+      expect(html, b.id).toContain(`<a id="box-${b.id}" href="#/kansas/${expectedPage}#${b.target}"`);
       if (b.target.startsWith("glossary-")) {
         expect(EXPLAINERS as readonly string[], b.id).toContain(b.target.slice("glossary-".length));
-        expect(methodsSource).toContain("id={`glossary-${id}`}");
+        expect(termsSource).toContain("id={`glossary-${e.id}`}");
+      } else if (expectedPage === "resources") {
+        expect(resourcesSource, b.id).toContain(`id="${b.target}"`);
       } else {
         expect(methodsSource, b.id).toContain(`id="${b.target}"`);
       }

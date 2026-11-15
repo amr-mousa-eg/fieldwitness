@@ -46,12 +46,17 @@ describe("hash routes", () => {
     expect(parseHash(routeHref("r", "f", "options")).tab).toBe("options");
     expect(parseHash(routeHref("r", "f", "advisor")).tab).toBe("advisor");
     expect(parseHash("#/r/f/bogus").tab).toBe("story");
-    expect(parseHash("")).toEqual({ ...map, regionId: null, fieldId: null });
+    expect(parseHash("")).toEqual({ page: "home", tab: "story", regionId: null, fieldId: null });
   });
 
-  it("round-trips region pages, which are never field ids", () => {
+  it("round-trips region pages and legacy methods sub-anchors", () => {
+    expect(parseHash(pageHref("ks", "home"))).toMatchObject({ regionId: null, page: "home", fieldId: null });
     expect(parseHash(pageHref("ks", "scoreboard"))).toMatchObject({ regionId: "ks", page: "scoreboard", fieldId: null });
-    expect(parseHash("#/ks/glossary")).toMatchObject({ regionId: "ks", page: "methods", fieldId: null });
+    expect(parseHash(pageHref("ks", "resources"))).toMatchObject({ regionId: "ks", page: "resources", fieldId: null });
+    expect(parseHash(pageHref("ks", "terms"))).toMatchObject({ regionId: "ks", page: "terms", fieldId: null });
+    expect(parseHash("#/ks/glossary")).toMatchObject({ regionId: "ks", page: "terms", fieldId: null });
+    expect(parseHash("#/ks/methods#m-data")).toMatchObject({ regionId: "ks", page: "resources", fieldId: null });
+    expect(parseHash("#/ks/methods#glossary-ndvi")).toMatchObject({ regionId: "ks", page: "terms", fieldId: null });
     expect(pageHref("ks", "map")).toBe("#/ks");
   });
 });

@@ -98,7 +98,7 @@ export function Explain({ id }: { id: ExplainerId }) {
           </span>
           <span className="explain-glossary">
             <a
-              href={`#/${(typeof window !== "undefined" && window.location.hash.replace(/^#\/?/, "").split("/")[0]) || "kansas"}/methods#glossary-${id}`}
+              href={`#/${(typeof window !== "undefined" && window.location.hash.replace(/^#\/?/, "").split("/")[0]) || "ks_t14slh"}/terms#glossary-${id}`}
               onClick={() => setPos(null)}
             >
               {t("explain.to_glossary")}

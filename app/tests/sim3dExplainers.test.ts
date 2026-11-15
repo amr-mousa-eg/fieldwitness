@@ -5,7 +5,7 @@ import { EXPLAINERS, SIM3D_EXPLAINERS, explainer } from "../src/explainers";
 
 const SRC = join(import.meta.dirname, "../src");
 const field3dCode = readFileSync(join(SRC, "Field3DView.tsx"), "utf8");
-const methodsCode = readFileSync(join(SRC, "MethodsPage.tsx"), "utf8");
+const termsCode = readFileSync(join(SRC, "TermsPage.tsx"), "utf8");
 
 describe("3D Simulation Explainers & Technical Glossary (Phase 12, Item 8)", () => {
   it("includes all 6 required 3D simulation notes in SIM3D_EXPLAINERS", () => {
@@ -66,9 +66,9 @@ describe("3D Simulation Explainers & Technical Glossary (Phase 12, Item 8)", () 
   it("links every 3D note to its technical glossary entry", () => {
     expect(field3dCode).toContain("sim3d-guide");
     expect(field3dCode).toContain("sim3d-guide-glossary-link");
-    expect(field3dCode).toContain("methods#glossary-");
-    expect(methodsCode).toContain('id="glossary"');
-    expect(methodsCode).toContain("glossary-entry");
-    expect(methodsCode).toContain("glossary-${id}");
+    expect(field3dCode).toContain("terms#glossary-");
+    expect(termsCode).toContain('id="glossary"');
+    expect(termsCode).toContain("glossary-entry");
+    expect(termsCode).toContain("glossary-${e.id}");
   });
 });

@@ -797,7 +797,7 @@ export default function Field3DView({
             <p className="sim3d-guide-intro">{t("sim3d.explainers.intro")}</p>
           </div>
           <a
-            href={`#/${regionId}/methods#glossary`}
+            href={`#/${regionId}/terms#glossary`}
             className="sim3d-glossary-jump-btn"
           >
             {t("sim3d.explainers.viewGlossary")} →
@@ -812,7 +812,7 @@ export default function Field3DView({
                 <div className="sim3d-guide-card-head">
                   <h4 className="sim3d-guide-card-title">{e.title}</h4>
                   <a
-                    href={`#/${regionId}/methods#glossary-${id}`}
+                    href={`#/${regionId}/terms#glossary-${id}`}
                     className="sim3d-guide-glossary-link"
                     title={t("sim3d.glossaryTitle", { title: e.title })}
                   >

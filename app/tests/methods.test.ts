@@ -6,11 +6,14 @@ import en from "../src/strings/en.json";
 const SRC = join(import.meta.dirname, "../src");
 const strings = en as Record<string, string>;
 const methods = readFileSync(join(SRC, "MethodsPage.tsx"), "utf8");
+const resources = readFileSync(join(SRC, "ResourcesPage.tsx"), "utf8");
+const datasetsSource = readFileSync(join(SRC, "datasets.ts"), "utf8");
 
 describe("Methods & data page (T9.6)", () => {
   it("has name, use and licence for every dataset", () => {
-    const ids = /DATASETS = \[([^\]]+)\]/.exec(methods)![1].match(/"(\w+)"/g)!.map((s) => s.slice(1, -1));
+    const ids = /DATASETS = \[([^\]]+)\]/.exec(datasetsSource)![1].match(/"(\w+)"/g)!.map((s) => s.slice(1, -1));
     expect(ids.length).toBeGreaterThan(5);
+    expect(resources).toContain("DATASETS");
     for (const id of ids) {
       for (const part of ["name", "use", "licence"]) expect(strings[`methods.ds.${id}.${part}`], `${id}.${part}`).toBeTruthy();
     }

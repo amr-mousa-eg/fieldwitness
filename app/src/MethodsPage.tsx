@@ -3,58 +3,21 @@ import { DiagnosisSection } from "./DiagnosisSection";
 import { Explain } from "./Explain";
 import { MethodsDiagram } from "./MethodsDiagram";
 import { IS_DEMO_DATA } from "./data";
-import { EXPLAINERS, explainer } from "./explainers";
+import { pageHref, useRoute } from "./route";
 import { type StringKey, t } from "./strings";
-import { TagBadge, TagLegend } from "./tags";
+import { TagBadge } from "./tags";
 import { UkraineNeighboursSection } from "./UkraineNeighboursSection";
+import { HOME_LINKS } from "./teamConfig";
 
-/** Datasets as listed in DATA.md; text in strings/en.json (methods.ds.<id>.*). */
-/** Datasets as listed in DATA.md; text in strings/en.json (methods.ds.<id>.*). */
-export const DATASETS = [
-  "hls",
-  "s2cog",
-  "power",
-  "smap",
-  "gpm",
-  "nasadem",
-  "viirs",
-  "ecostress",
-  "grace",
-  "soilgrids",
-  "ssurgo",
-  "csb",
-  "prism",
-  "naip",
-  "nlcd",
-  "ldas",
-  "gaez",
-  "cocorahs",
-  "nwis",
-  "quickstats",
-  "agdatacommons",
-  "landfire",
-  "era5",
-  "openet",
-  "gedi",
-  "ams",
-  "ftw",
-  "worldcereal",
-  "rpg",
-  "hcat",
-  "fao56",
-  "faostat",
-  "taxonomy",
-] as const;
-
-const REPO_URL = "https://github.com/amr-mousa-eg/fieldwitness";
+export { DATASETS } from "./datasets";
 
 const list = (prefix: string, n: number) =>
   Array.from({ length: n }, (_, i) => t(`${prefix}.${i + 1}` as StringKey));
 
 /**
- * Links such as #/kansas/methods#glossary-hindcast carry a second "#" inside the hash route, so
+ * Links such as #/kansas/methods#m-limits carry a second "#" inside the hash route, so
  * the browser cannot scroll to the target by itself. Scroll there and move keyboard focus to it
- * on load and whenever the hash changes (diagram boxes, "Open in glossary" links).
+ * on load and whenever the hash changes.
  */
 function useAnchorJump(): void {
   useEffect(() => {
@@ -65,7 +28,6 @@ function useAnchorJump(): void {
       if (at < 0) return;
       const el = document.getElementById(decodeURIComponent(hash.slice(at + 1)));
       if (!el) return;
-      // after App moves focus to <main> on a page change
       timer = window.setTimeout(() => {
         if (!el.hasAttribute("tabindex")) el.setAttribute("tabindex", "-1");
         el.focus({ preventScroll: true });
@@ -83,10 +45,25 @@ function useAnchorJump(): void {
 
 export function MethodsPage() {
   useAnchorJump();
+  const regionId = useRoute().regionId ?? "ks_t14slh";
+
   return (
     <article className="methods" aria-labelledby="methods-h">
-      <h2 id="methods-h">{t("methods.heading")}</h2>
-      <p className="fixed-line">{t("fixed.judgment")}</p>
+      <div className="ref-page-head">
+        <div>
+          <h2 id="methods-h">{t("methods.heading")}</h2>
+          <p className="fixed-line">{t("fixed.judgment")}</p>
+        </div>
+        <div className="ref-page-links">
+          <a className="secondary-btn" href={pageHref(regionId, "resources")}>
+            {t("nav.resources")} →
+          </a>
+          <a className="secondary-btn" href={pageHref(regionId, "terms")}>
+            {t("nav.terms")} →
+          </a>
+        </div>
+      </div>
+
       {IS_DEMO_DATA && <p className="notice">{t("methods.demo")}</p>}
 
       <MethodsDiagram />
@@ -134,7 +111,7 @@ export function MethodsPage() {
         </div>
       </section>
 
-      <section aria-labelledby="m-how">
+      <section aria-labelledby="m-how" id="m-how-sec">
         <h3 id="m-how">
           {t("methods.how")} <Explain id="witness" /> <Explain id="credibility" />
         </h3>
@@ -286,64 +263,13 @@ export function MethodsPage() {
         <p>{t("methods.roadmap.privacy")}</p>
       </section>
 
-      <section aria-labelledby="m-data">
-        <h3 id="m-data">{t("methods.data")}</h3>
-        <div className="table-wrap">
-          <table className="scores datasets">
-            <thead>
-              <tr>
-                <th scope="col">{t("methods.ds.name")}</th>
-                <th scope="col">{t("methods.ds.use")}</th>
-                <th scope="col">{t("methods.ds.licence")}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {DATASETS.map((d) => (
-                <tr key={d}>
-                  <th scope="row">{t(`methods.ds.${d}.name`)}</th>
-                  <td>{t(`methods.ds.${d}.use`)}</td>
-                  <td>{t(`methods.ds.${d}.licence`)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <p className="muted">{t("methods.data.note")}</p>
-      </section>
-
-      <section aria-labelledby="m-terms" id="glossary">
-        <h3 id="m-terms">{t("methods.terms")}</h3>
-        <dl className="glossary">
-          {EXPLAINERS.map((id) => {
-            const e = explainer(id);
-            return (
-              <div key={id} id={`glossary-${id}`} className="glossary-entry">
-                <dt>{e.title}</dt>
-                <dd>
-                  {e.body}{" "}
-                  <span className="muted">
-                    {t("explain.source")}{" "}
-                    {e.url ? (
-                      <a href={e.url} target="_blank" rel="noreferrer">
-                        {e.source}
-                      </a>
-                    ) : (
-                      e.source
-                    )}
-                  </span>
-                </dd>
-              </div>
-            );
-          })}
-        </dl>
-      </section>
-
-      <TagLegend />
-
       <section aria-labelledby="m-repo">
         <h3 id="m-repo">{t("methods.repo")}</h3>
         <p>
-          {t("methods.repo.text")} <a href={REPO_URL}>{REPO_URL}</a>
+          {t("methods.repo.text")}{" "}
+          <a href={HOME_LINKS.repoUrl} target="_blank" rel="noreferrer">
+            {HOME_LINKS.repoUrl}
+          </a>
         </p>
       </section>
     </article>

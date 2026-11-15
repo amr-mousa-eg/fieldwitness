@@ -151,9 +151,11 @@ export const DIAGRAM_STAGES: DiagramStage[] = [
 /** All boxes in reading order. */
 export const DIAGRAM_BOXES: DiagramBox[] = DIAGRAM_STAGES.flatMap((s) => s.boxes);
 
-/** Link to an element on the Methods page that keeps the hash route (#/<region>/methods). */
+/** Re-export DATASETS reference helper cleanly while routing links across split tabs. */
 export function methodsAnchorHref(regionId: string, target: string): string {
-  return `#/${encodeURIComponent(regionId)}/methods#${target}`;
+  const page =
+    target === "m-data" ? "resources" : target.startsWith("glossary") ? "terms" : "methods";
+  return `#/${encodeURIComponent(regionId)}/${page}#${target}`;
 }
 
 function Box({ box, regionId }: { box: DiagramBox; regionId: string }) {
