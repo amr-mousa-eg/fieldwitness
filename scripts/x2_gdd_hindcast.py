@@ -1,4 +1,4 @@
-"""Experiment 2 (DECISIONS.md 2026-11-12): the T7.1 hindcast in calendar or gdd phenology mode.
+"""Experiment 2 (DECISIONS.md): the T7.1 hindcast in calendar or gdd phenology mode.
 
 Usage: uv run python -u scripts/x2_gdd_hindcast.py [n_ref] [k] [max_fields] [calendar|gdd]
 Copy of scripts/t71_hindcast.py with only these changes: weather also returns POWER Tmax/Tmin,

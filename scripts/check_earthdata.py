@@ -5,7 +5,7 @@ Usage:
     uv run python scripts/check_earthdata.py --granule-name "<pattern>"   # one tile, one date
 
 Credentials: earthaccess reads %USERPROFILE%\\_netrc on Windows. This script never prints them.
-Collection names/versions verified in CMR on 2026-11-04 (docs/api_notes.md).
+Collection names/versions verified in CMR (docs/api_notes.md).
 """
 
 import argparse

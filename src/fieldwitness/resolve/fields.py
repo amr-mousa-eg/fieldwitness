@@ -1,6 +1,6 @@
 """Field identity, scale flags, point lookup and pilot-field selection (PLAN.md T1.4).
 
-Rules (user decisions 2026-11-04, DECISIONS.md / PLAN.md):
+Rules (user decisions, DECISIONS.md / PLAN.md):
 - field_id = SHA-1 hex of the WKB of the geometry in EPSG:4326, coordinates rounded to 6 decimals.
 - A field is an annual arable crop parcel on the current year (fieldwitness.data.hcat).
 - Interior pixels: HLS 30 m pixel centres >= 15 m inside the field edge

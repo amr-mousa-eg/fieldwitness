@@ -60,14 +60,14 @@ describe("customField coverage checker", () => {
 });
 
 describe("customField harvest years calculation", () => {
-  it("computes 2026, 2025, 2024 for November 2026", () => {
-    const nov2026 = new Date(2026, 10, 8); // month 10 is Nov (0-indexed)
-    expect(getRecentHarvestYears(nov2026)).toEqual([2026, 2025, 2024]);
+  it("computes 2024, 2023, 2022 for November 2024", () => {
+    const nov2024 = new Date(2024, 10, 8); // month 10 is Nov (0-indexed)
+    expect(getRecentHarvestYears(nov2024)).toEqual([2024, 2023, 2022]);
   });
 
   it("computes previous 3 years if before harvest season end", () => {
-    const march2026 = new Date(2026, 2, 15); // month 2 is March
-    expect(getRecentHarvestYears(march2026)).toEqual([2025, 2024, 2023]);
+    const march2024 = new Date(2024, 2, 15); // month 2 is March
+    expect(getRecentHarvestYears(march2024)).toEqual([2023, 2022, 2021]);
   });
 });
 
@@ -118,20 +118,20 @@ describe("customField distance and nearest analysed field", () => {
 
 describe("customField CSV generator and parser", () => {
   it("generates CSV template with UTF-8 BOM and correct headers", () => {
-    const nov2026 = new Date(2026, 10, 8);
-    const csv = generateCsvTemplate(nov2026);
+    const nov2024 = new Date(2024, 10, 8);
+    const csv = generateCsvTemplate(nov2024);
     expect(csv.charCodeAt(0)).toBe(0xfeff); // UTF-8 BOM
     expect(csv).toContain("question,answer,help");
     expect(csv).toContain("latitude");
-    expect(csv).toContain("crop_2026");
-    expect(csv).toContain("crop_2025");
     expect(csv).toContain("crop_2024");
+    expect(csv).toContain("crop_2023");
+    expect(csv).toContain("crop_2022");
   });
 
   it("successfully parses valid CSV template round-trip", () => {
-    const nov2026 = new Date(2026, 10, 8);
-    const csv = generateCsvTemplate(nov2026);
-    const parsed = parseCsvInput(csv, nov2026);
+    const nov2024 = new Date(2024, 10, 8);
+    const csv = generateCsvTemplate(nov2024);
+    const parsed = parseCsvInput(csv, nov2024);
     expect(parsed.errors).toEqual([]);
     expect(parsed.data).not.toBeNull();
     expect(parsed.data?.latitude).toBeCloseTo(37.9717);
@@ -153,12 +153,12 @@ describe("customField CSV generator and parser", () => {
     const unknownCsv = `question,answer,help
 latitude,"37.9717","help"
 longitude,"-100.8727","help"
-crop_2026,"I don't know","help"
-sowing_2026,"unknown","help"
+crop_2024,"I don't know","help"
+sowing_2024,"unknown","help"
 irrigated,"unknown","help"
 soil_organic_matter_pct,"unknown","help"
 soil_ph,"n/a","help"`;
-    const parsed = parseCsvInput(unknownCsv, new Date(2026, 10, 8));
+    const parsed = parseCsvInput(unknownCsv, new Date(2024, 10, 8));
     expect(parsed.errors).toEqual([]);
     expect(parsed.data).not.toBeNull();
     expect(parsed.data?.seasons[0].crop).toBe("unknown");

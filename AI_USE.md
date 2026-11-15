@@ -7,7 +7,7 @@
 - The product itself contains **no AI model that makes or ranks recommendations**. Every number
   comes from documented formulas, statistics and satellite data, and every sentence the app shows
   comes from fixed deterministic templates over those numbers.
-- Since 2026-11-13 the web app also has an **optional assistant chatbot** ("Ask FieldWitness"). By
+- Since the web app also has an **optional assistant chatbot** ("Ask FieldWitness"). By
   default it answers from a fixed, tested set of project facts and the open field's pack. When a
   chat proxy is configured, questions it cannot answer locally go to a third-party large language
   model (Google Gemini free tier by default, or Groq) through a server-side proxy

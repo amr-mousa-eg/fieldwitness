@@ -1,4 +1,4 @@
-"""Conformal experiment (DECISIONS.md 2026-11-12): rolling-origin pseudo-forecasts.
+"""Conformal experiment (DECISIONS.md): rolling-origin pseudo-forecasts.
 
 Usage: uv run python -u scripts/x4_rolling_origin.py <cut-off year>
 Executes scripts/t71_hindcast.py unchanged except for three in-memory replacements (asserted):

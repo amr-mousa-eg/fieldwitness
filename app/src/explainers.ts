@@ -4,7 +4,7 @@ import en from "./strings/en.json";
 
 /**
  * Explainer ids (T9.10). Text, source and link live in strings/en.json and strings/ar.json as
- * explain.<id>.title / .body / .source / .url; every source was read on 2026-11-06.
+ * explain.<id>.title /.body /.source /.url; every source was read.
  */
 export const EXPLAINERS = [
   "evapotranspiration",

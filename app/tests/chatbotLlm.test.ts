@@ -185,7 +185,7 @@ describe("guardrails and local answers", () => {
 describe("KB facts consistency", () => {
   const factValues = new Set(Object.values(FACTS).map((f) => f.value));
   // Literals that are names or labels, not results.
-  const LITERALS = [/FAO-56/g, /\b\d+ m\b/g, /SoilGrids 2\.0/g, /Sentinel-2/g, /S2\b/g, /3-band/g, /2026/g, /T14SLH/g, /2021-12-31/g, /0–1/g, /3-season/g,
+  const LITERALS = [/FAO-56/g, /\b\d+ m\b/g, /SoilGrids 2\.0/g, /Sentinel-2/g, /S2\b/g, /3-band/g, /T14SLH/g, /2021-12-31/g, /0–1/g, /3-season/g,
     /\b[123]\)/g, /\b3D\b/g, /\b0 of\b/g, /95%/g, /T2M_(MAX|MIN)/g, /HLS 30/g];
 
   it("every number in the knowledge base comes from the FACTS block", () => {

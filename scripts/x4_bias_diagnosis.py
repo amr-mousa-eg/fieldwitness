@@ -1,5 +1,5 @@
 """Bias diagnosis and per-crop centre recalibration (experiment; see DECISIONS.md pre-registration
-of 2026-11-12). Usage:
+of). Usage:
 
     uv run python scripts/x4_bias_diagnosis.py --data <folder with power/ and fields/>
 

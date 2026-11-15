@@ -1,5 +1,5 @@
 # ruff: noqa: E501  (markdown table rows)
-"""Conformal experiment (pre-registered in DECISIONS.md 2026-11-12): calibrate and evaluate.
+"""Conformal experiment (pre-registered in DECISIONS.md): calibrate and evaluate.
 
 Usage: uv run python -u scripts/x4_conformal.py
 Calibration: results/hindcast/conformal/pseudo_cut{2018,2019,2020}.jsonl (seasons 2019-2021,

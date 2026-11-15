@@ -37,19 +37,19 @@ npm run build     # production build into app/dist (real packs only)
 
 ## Branch notes (copy into DECISIONS.md at merge)
 
-- 2026-11-04 (user): Track 2 on worktree `D:\NASA Project-app`, branch `app`; only `app/`, the
+- (user): Track 2 on worktree `D:\NASA Project-app`, branch `app`; only `app/`, the
   fixture scripts and `docs/schema_ext_proposal.md` change here. No merge before Gate 6.
-- 2026-11-04 (user): missing data goes into per-field `.series`, `.calendar`, `.scenarios` files
+- (user): missing data goes into per-field `.series`, `.calendar`, `.scenarios` files
   and a per-region `layers.json`; PROPOSED types in the app; the §3 extension is a proposal until
   approved.
-- 2026-11-04 (user): approved packages react, react-dom, @types/react, @types/react-dom, vite,
+- (user): approved packages react, react-dom, @types/react, @types/react-dom, vite,
   @vitejs/plugin-react, vitest (MIT), typescript (Apache-2.0); Recharts (MIT) later for charts.
   The user runs `npm install` personally.
-- 2026-11-04 (user): §3 extension answers Q1–Q7 approved (`docs/schema_ext_proposal.md` §5):
+- (user): §3 extension answers Q1–Q7 approved (`docs/schema_ext_proposal.md` §5):
   harvest-year day for SOS/peak/EOS; no marks in `series`; six exempt fields; `bare_by_option`;
   map colouring = Current only (alternative = stretch item); scenarios hold weather-sensitive
   metrics only; `packs/regions.json`.
-- 2026-11-07: first test on real Kansas packs (`ks_t14slh`, 200 fields, 803 files, 85.7 MB).
+- first test on real Kansas packs (`ks_t14slh`, 200 fields, 803 files, 85.7 MB).
   App fixes: back-test filters by hindcast mode (real ledgers hold forecast + forced per season);
   scoreboard columns follow the score keys present (`mae_median` added; `timing_err_days` absent)
   and the baseline count is not hard-coded (B3 not run); option names from `|` ids; Current is

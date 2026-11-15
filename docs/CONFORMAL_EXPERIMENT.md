@@ -1,6 +1,6 @@
 # Stretching the prediction ranges to match reality: a negative result
 
-*12 Nov 2026. This experiment is on the branch `experiment/conformal` only and is not part of the live website. All numbers come from `results/hindcast/conformal/before_after.md`, which also gives every confidence range.*
+*. This experiment is on the branch `experiment/conformal` only and is not part of the live website. All numbers come from `results/hindcast/conformal/before_after.md`, which also gives every confidence range.*
 
 ## The problem
 

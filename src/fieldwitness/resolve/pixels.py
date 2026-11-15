@@ -16,7 +16,7 @@ def interior_pixel_counts(
     Grid: pixel (col i, row j) has its centre at (ulx + res*(i + 0.5), uly - res*(j + 0.5)), with
     the tile origin ULX/ULY from the HLS granule metadata (CMR AdditionalAttributes). Geometries
     must already be in the tile's UTM CRS (metres). PLAN.md T1.4 defines interior pixels with a
-    15 m (half-pixel) inward buffer since 2026-11-04 (was 30 m; the census reports both). Points on
+    15 m (half-pixel) inward buffer (was 30 m; the census reports both). Points on
     the boundary do not count (shapely.contains_xy).
     """
     out = np.zeros(len(geoms), dtype=np.int64)

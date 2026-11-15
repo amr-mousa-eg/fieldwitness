@@ -1,15 +1,15 @@
 # Field definition: annual arable crop parcels (HCAT3)
 
-Generated 2026-11-04 from the official HCAT3 table (https://github.com/maja601/EuroCrops/blob/main/hcat_core/HCAT3.csv, 384 classes) by `fieldwitness.data.hcat.is_annual_arable`. User decision 2026-11-04 (DECISIONS.md); applies to the census, T1.4 and T1.6. Parcels with a missing `hcat:code` are excluded.
+Generated from the official HCAT3 table (https://github.com/maja601/EuroCrops/blob/main/hcat_core/HCAT3.csv, 384 classes) by `fieldwitness.data.hcat.is_annual_arable`. User decision (DECISIONS.md); applies to the census, T1.4 and T1.6. Parcels with a missing `hcat:code` are excluded.
 
-## Selection vs crop history (user decision 2026-11-04)
+## Selection vs crop history (user decision)
 
 - **Selection** — which parcels count as fields: `is_annual_arable` on the **current (most recent) year** only, using the kept/excluded lists below.
 - **Crop history** — every year of a selected field is mapped by `history_state`:
   - annual arable crops → their HCAT3 code (named via `crops.yaml` in T1.6);
   - `3301110000` fallow_land_not_crop → state **"fallow"**;
   - `33010901..` temporary_grass and `33010902..` poaceae_grasses (grass leys) → state **"temporary_grass"**;
-  - `3301090301` alfalfa_lucerne → state **"perennial_forage"** (kept in histories, never a rotation option in the MVP; user decision 2026-11-04);
+  - `3301090301` alfalfa_lucerne → state **"perennial_forage"** (kept in histories, never a rotation option in the MVP; user decision);
   - other excluded classes inside 3301 (miscanthus, kitchen gardens, strawberries, asparagus, rhubarb, artichoke) → state "other_arable";
   - missing code, `3399` not_known_and_other or a generic code → state "unknown" (never removes a field);
   - a code in groups `3302`–`3308` → the field has **left arable use**.
@@ -50,7 +50,7 @@ Licence: derived from the EuroCrops HCAT3 table, **CC-BY-SA-4.0** (https://githu
 - `3301230000` rhubarb
 - `3301270000` artichoke
 
-Exclusion prefixes: see `EXCLUDED_ARABLE_PREFIXES` in `fieldwitness.data.hcat` (alfalfa added 2026-11-04).
+Exclusion prefixes: see `EXCLUDED_ARABLE_PREFIXES` in `fieldwitness.data.hcat` (alfalfa added).
 
 ## Kept classes (277, all under 3301 arable_crops)
 

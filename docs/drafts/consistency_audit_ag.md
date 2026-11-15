@@ -1,6 +1,6 @@
 # FieldWitness — Consistency Audit (AG-1)
 
-Audit conducted on 12 Nov 2026 by Google Antigravity across project documentation, submission drafts, and frontend copy.
+Audit conducted on by Google Antigravity across project documentation, submission drafts, and frontend copy.
 
 ---
 
@@ -77,7 +77,7 @@ Columns: `claim | where stated (file:line) | source value | file:line | status (
 | **Netlify** | Mirror URL removed from README per D3; sole URL is GitHub Pages | Present in `PLAN.md:465`, `DECISIONS.md:422`, `app/deploy/README.md`, `HOW_WE_BUILT_FIELDWITNESS.md`. | **Accurate.** Not presented as active live URL in user documentation. Configs in `app/netlify.toml` are explicitly marked "PREPARED, NOT DEPLOYED". |
 | **OpenET** | Excluded from MVP; moved to stretch S6 | Never accessed; documented as excluded due to unverified commercial license terms in `DATA.md:83` and `submission.md:116`. | **Clean.** Accurately documented as unused. |
 | **POLARIS** | Purged in Gate 0 as unverified/invented | Recorded in `README.md:118`, `en.json:466`, and `HOW_WE_BUILT_FIELDWITNESS.md:160` as a purged dataset. | **Clean.** Accurately documented as discarded historical exploration. |
-| **SSURGO** | Re-introduced on 11 Nov for read-only independent check | Accurately documented in `DATA.md:79` and `en.json:448,504` as an independent validation check only (never a simulation input). However, `README.md:118` and `en.json:466` still lump SSURGO with POLARIS as "invented datasets removed", which creates an apparent contradiction unless qualified. | **Minor ambiguity.** `README.md:118` and `en.json:466` should clarify: "(purged in Gate 0; SSURGO re-verified in Phase 12 for an independent check only)". |
+| **SSURGO** | Re-introduced for read-only independent check | Accurately documented in `DATA.md:79` and `en.json:448,504` as an independent validation check only (never a simulation input). However, `README.md:118` and `en.json:466` still lump SSURGO with POLARIS as "invented datasets removed", which creates an apparent contradiction unless qualified. | **Minor ambiguity.** `README.md:118` and `en.json:466` should clarify: "(purged in Gate 0; SSURGO re-verified in Phase 12 for an independent check only)". |
 
 ---
 
@@ -85,9 +85,9 @@ Columns: `claim | where stated (file:line) | source value | file:line | status (
 
 | Feature / Artifact | Freeze Status | Repository Reality | Verdict |
 |---|---|---|---|
-| **Rotation Builder** | Implemented 11 Nov behind `?builder=1`; enabled by default on 12 Nov | `app/src/featureFlags.ts:13-16` has builder enabled by default; kill switch is `?builder=0`. Outdated comments in `RotationBuilder.tsx:1` and `rotationBuilder.test.ts:1` still refer to `?builder=1`. | **Compliant.** Active by default; comments are harmless leftovers. |
-| **Farm View** | Implemented 11 Nov behind `feature/farm-view`; enabled by default on 12 Nov | `app/src/featureFlags.ts:27-32` activates Farm view whenever builder is enabled; kill switch is `?farm=0`. Merged in PR #11 (`a3524f9`). | **Compliant.** Live and functional. |
-| **Code Freeze Adherence** | Building frozen end of 12 Nov 2026; documentation and bug fixes only | No feature code added on `main` post-freeze. PRs #13, #14, #15 remain unmerged draft experiments by Claude Code. | **Compliant.** |
+| **Rotation Builder** | Implemented behind `?builder=1`; enabled by default | `app/src/featureFlags.ts:13-16` has builder enabled by default; kill switch is `?builder=0`. Outdated comments in `RotationBuilder.tsx:1` and `rotationBuilder.test.ts:1` still refer to `?builder=1`. | **Compliant.** Active by default; comments are harmless leftovers. |
+| **Farm View** | Implemented behind `feature/farm-view`; enabled by default | `app/src/featureFlags.ts:27-32` activates Farm view whenever builder is enabled; kill switch is `?farm=0`. Merged in PR #11 (`a3524f9`). | **Compliant.** Live and functional. |
+| **Code Freeze Adherence** | Building frozen end of; documentation and bug fixes only | No feature code added on `main` post-freeze. PRs #13, #14, #15 remain unmerged draft experiments by Claude Code. | **Compliant.** |
 | **Tag `v1.0-spaceapps`** | Must not be created or touched by AI agents | Tag does not exist in local or remote repository. Awaiting owner creation. | **Compliant.** |
 
 ---

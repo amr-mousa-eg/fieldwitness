@@ -1,6 +1,6 @@
 """Asymmetric & symmetric Conformalized Quantile Regression (CQR) calibration.
 
-Pre-registered in DECISIONS.md (2026-11-13). Output tag D (model statistics).
+Pre-registered in DECISIONS.md. Output tag D (model statistics).
 Does not modify stored medians (q50) or production FieldPacks; strictly calibrates
 prediction bounds [lo, hi] via:
   - Symmetric CQR (Romano et al., NeurIPS 2019):

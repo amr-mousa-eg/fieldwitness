@@ -8,7 +8,7 @@ from fieldwitness.data.power import PARAMETERS, parse
 
 FIXTURE = json.loads(
     (Path(__file__).parent / "fixtures" / "power_daily_trimmed.json").read_text(encoding="utf-8")
-)  # real POWER response (2026-11-04, Kansas tile centre, 2001-2024), trimmed to 6 days
+)  # real POWER response (Kansas tile centre, 2001-2024), trimmed to 6 days
 
 
 def test_parse_recorded_response():

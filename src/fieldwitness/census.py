@@ -462,7 +462,7 @@ def write_region(res: dict) -> Path:
         lines += [f"### Sample `{name}`", "", "```json", json.dumps(b, indent=1), "```", ""]
     lines += [
         "Interior pixels: HLS 30 m pixel centres strictly inside the field after an inward buffer "
-        "of 30 m (old rule) or 15 m (PLAN.md T1.4 since 2026-11-04), on the tile grid (ULX/ULY "
+        "of 30 m (old rule) or 15 m (PLAN.md T1.4), on the tile grid (ULX/ULY "
         "from CMR). Scale flag: field "
         f"< {SCALE_FLAG_HA} ha (pixel area > field area / 4, CLAUDE.md rule 5). Fields are "
         "counted once, by centroid inside the sample box.",

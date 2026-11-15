@@ -1,6 +1,6 @@
 # Census — Kansas High Plains (SW Kansas) (`ks_t14slh`, Tier 1)
 
-Generated 2026-11-04T01:32:34+00:00 by `fieldwitness.cli census`. Tile **T14SLH** (EPSG:32614). Numbers are counts from CMR metadata and bbox reads; no imagery downloaded.
+Generated 2024-12-31T00:00:00Z+00:00 by `fieldwitness.cli census`. Tile **T14SLH** (EPSG:32614). Numbers are counts from CMR metadata and bbox reads; no imagery downloaded.
 
 Season windows (tag **A**, team assumption, editable in `config/regions.yaml`; named by harvest year): summer months 4–10; winter_wheat months 9–7
 

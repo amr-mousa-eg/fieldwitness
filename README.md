@@ -1,7 +1,7 @@
 # FieldWitness
 
 **Crop-rotation decision support for a field, with three independent witnesses behind every
-option.** Built for the NASA Space Apps Challenge 2026, challenge "Field Shift: Adapting
+option.** Built for the NASA Space Apps Challenge, challenge "Field Shift: Adapting
 Farms with NASA Data".
 
 FieldWitness does not decide for the farmer. It shows evidence, says how strong that evidence is,

@@ -1,5 +1,5 @@
 # ruff: noqa: E501
-"""Reliability tiers, step 1 of 2 (training data only; DECISIONS.md 2026-11-12).
+"""Reliability tiers, step 1 of 2 (training data only; DECISIONS.md).
 
 Usage: uv run python -u scripts/x5_train.py
 Reads ONLY the 2019-2021 pseudo-forecasts (cut-offs 2018-2020) and the matching credibility
@@ -71,7 +71,7 @@ def main():
     pred_train = rl.fit_predict(chosen, train, train)
     bounds = rl.tier_bounds(pred_train)
     doc = {
-        "preregistration": "DECISIONS.md 2026-11-12 (commit c28cf32)",
+        "preregistration": "DECISIONS.md (commit c28cf32)",
         "training": {
             "seasons": [2019, 2020, 2021],
             "rows": len(train),

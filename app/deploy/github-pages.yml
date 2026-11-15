@@ -3,7 +3,7 @@
 # Requires a PUBLIC repo on GitHub Free (Pages in private repos needs a paid plan; see
 # app/deploy/README.md). Manual trigger only, so nothing deploys by accident.
 # Action versions and permissions from docs.github.com "Using custom workflows with GitHub Pages"
-# (checked 2026-11-07).
+#.
 name: Deploy app to GitHub Pages
 
 on:

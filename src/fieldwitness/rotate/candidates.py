@@ -9,7 +9,7 @@ A candidate is a sequence of N_SEASONS crop keys (oldest first). Constraints, in
 3. at most `max_consecutive_family` seasons in a row of the same botanical family
    (default 2, a team choice, tag A, UNVERIFIED). Fallow has no family and breaks a run;
 4. at least one harvested crop, and no two consecutive non-crop seasons (fallow / cover crop)
-   (team choice 2026-11-07, tag A, UNVERIFIED).
+   (team choice, tag A, UNVERIFIED).
 """
 
 from calendar import monthrange
@@ -61,7 +61,7 @@ def family_ok(seq: tuple[str, ...], crops: CropsFile, max_run: int) -> bool:
 
 
 def non_crop_ok(seq: tuple[str, ...], crops: CropsFile) -> bool:
-    """Team constraints (A, UNVERIFIED, 2026-11-07): at least one harvested crop and at most
+    """Team constraints (A, UNVERIFIED): at least one harvested crop and at most
     one consecutive non-crop season (fallow or cover crop)."""
     nc = [c in NON_CROP_KEYS for c in seq]
     if all(nc):

@@ -149,7 +149,7 @@ export function localizeGradeReason(raw: string): string {
 
 /**
  * Season dates are days of the harvest year; 1 = 1 Jan, 0 = 31 Dec of the year before,
- * negative = earlier that autumn (schema decision Q1, 2026-11-04).
+ * negative = earlier that autumn (schema decision Q1).
  */
 export function harvestDayToDate(harvestYear: number, day: number): Date {
   return new Date(Date.UTC(harvestYear, 0, 1) + (day - 1) * 86_400_000);

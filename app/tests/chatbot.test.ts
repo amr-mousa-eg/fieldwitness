@@ -71,7 +71,7 @@ const MOCK_PACK: FieldPack = {
   },
   ledger: [],
   data_as_of: "2024-12-31",
-  generated_at: "2026-11-07T00:00:00Z",
+  generated_at: "2024-12-31T00:00:00Z",
 };
 
 const MOCK_CALENDAR: FieldCalendar = {

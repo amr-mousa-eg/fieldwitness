@@ -1,6 +1,6 @@
 """Experiment 1: distance-adjusted propensity score matching (DAPSM) for the neighbour witness.
 
-Pre-registered in DECISIONS.md (2026-11-12, "Pre-registration: two algorithm experiments").
+Pre-registered in DECISIONS.md ("Pre-registration: two algorithm experiments").
 Same contrasts, confounders, outcomes, strata and thresholds as the T5.xa matching-history design
 (`neighbours/matching.py`); only the way treated and reference rows are compared changes:
 

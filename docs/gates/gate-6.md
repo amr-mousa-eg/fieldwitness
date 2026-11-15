@@ -1,4 +1,4 @@
-# Gate 6 review (Kansas, 2026-11-07)
+# Gate 6 review (Kansas)
 
 **Gate test (PLAN line 425):** a full `FieldPack` (minus ledger) for one field validates against the schema.
 

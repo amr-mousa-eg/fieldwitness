@@ -1,6 +1,6 @@
 """NASA POWER daily point client (PLAN.md T1.2).
 
-API verified 2026-11-04 (docs/api_notes.md): GET https://power.larc.nasa.gov/api/temporal/daily/point,
+API (docs/api_notes.md): GET https://power.larc.nasa.gov/api/temporal/daily/point,
 community AG, JSON; `properties.parameter.<NAME>` = {YYYYMMDD: value}; fill value -999;
 `geometry.coordinates[2]` = elevation (m). One call covering 2001-2024 returned 8,766 days.
 

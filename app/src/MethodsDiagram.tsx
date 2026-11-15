@@ -2,7 +2,7 @@ import { useRoute } from "./route";
 import { type StringKey, t } from "./strings";
 
 /**
- * Methods diagram (Phase 12, Item 9; redesigned 11 Nov 2026).
+ * Methods diagram (Phase 12, Item 9; redesigned).
  *
  * Four numbered stages, read left to right on desktop and top to bottom on phones (the CSS in
  * styles.css switches the layout; text stays at full size). Every box is a real link to the

@@ -1,5 +1,5 @@
 """Context datasets (PLAN.md T1.8): NASADEM slope per field, GRACE/GRACE-FO regional water
-storage, SMAP L4 root-zone soil moisture. Collection ids verified in CMR on 2026-11-04
+storage, SMAP L4 root-zone soil moisture. Collection ids verified in CMR
 (docs/api_notes.md):
 - NASADEM_HGT v001 (C2763264762-LPCLOUD), 1 arc-second; slope is derived on the HLS 30 m tile grid.
 - TELLUS_GRAC-GRFO_MASCON_CRI_GRID_RL06.3_V4 (C3195527175-POCLOUD): `lwe_thickness` (cm) on a
@@ -160,7 +160,7 @@ def smap_monthly_anomaly(series: pd.DataFrame, base_end: dt.date) -> pd.DataFram
 def smap_build(csv_path: str | Path, base_end: dt.date) -> pd.DataFrame:
     """AppEEARS SPL4SMGP results CSV (3-hourly, one 9 km cell per region) -> monthly mean and
     anomaly per region (tag D, context only, scale flag: 9 km >> field). Column names as
-    returned by AppEEARS 2026-11-04 (see docs/api_notes.md)."""
+    returned by AppEEARS (see docs/api_notes.md)."""
     raw = pd.read_csv(csv_path)
     col = "SPL4SMGP_008_Geophysical_Data_sm_rootzone"
     raw["date"] = pd.to_datetime(raw["Date"].str.replace(" UTC", "", regex=False)).dt.date

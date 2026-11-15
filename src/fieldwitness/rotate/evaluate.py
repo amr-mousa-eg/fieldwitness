@@ -62,7 +62,7 @@ def evaluate(rain, eto, candidates, region_id: str, draws: dict, cover_frac: flo
     ok = ~np.isnan(r["ryi"])
     cnt = ok.sum(-1)
     tot = np.where(ok, r["ryi"], 0.0).sum(-1)
-    # option A (user decision 2026-11-07): RYI per rotation year = sum over all seasons / number
+    # option A (user decision): RYI per rotation year = sum over all seasons / number
     # of seasons; fallow and cover-crop seasons (no RYI) count as 0. NaN only if no crop at all.
     ryi = np.where(cnt > 0, tot / r["ryi"].shape[-1], np.nan).reshape(n, -1)
     return {

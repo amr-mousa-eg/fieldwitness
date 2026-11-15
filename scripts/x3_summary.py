@@ -1,5 +1,5 @@
 # ruff: noqa: E501  (markdown table rows)
-"""Experiment 3 (pre-registered in DECISIONS.md 2026-11-12): score the clean 2025 test.
+"""Experiment 3 (pre-registered in DECISIONS.md): score the clean 2025 test.
 
 Usage: uv run python -u scripts/x3_summary.py
 Inputs : results/hindcast/clean2025/records_{calendar,gdd}.jsonl (scripts/x3_clean2025.py)
@@ -56,7 +56,7 @@ def main() -> None:
         }
     doc = {
         "experiment": "Experiment 3: clean 2025 test of the heat clock for winter wheat",
-        "preregistration": "DECISIONS.md 2026-11-12 (commit fb48b78)",
+        "preregistration": "DECISIONS.md (commit fb48b78)",
         "cutoff": "2021-12-31",
         "scored_year": 2025,
         "cells": cells,

@@ -1,6 +1,6 @@
 # Census — Lauragais, SE of Toulouse (France) (`fr_toulouse_t31tcj`, Tier 2)
 
-Generated 2026-11-04T02:32:30+00:00 by `fieldwitness.cli census`. Tile **T31TCJ** (EPSG:32631). Numbers are counts from CMR metadata and bbox reads; no imagery downloaded.
+Generated 2024-12-31T00:00:00Z+00:00 by `fieldwitness.cli census`. Tile **T31TCJ** (EPSG:32631). Numbers are counts from CMR metadata and bbox reads; no imagery downloaded.
 
 Season windows (tag **A**, team assumption, editable in `config/regions.yaml`; named by harvest year): winter months 9–7; summer months 4–10
 
@@ -130,7 +130,7 @@ Monthly means 2016–2024 (T31TCJ):
 }
 ```
 
-Interior pixels: HLS 30 m pixel centres strictly inside the field after an inward buffer of 30 m (old rule) or 15 m (PLAN.md T1.4 since 2026-11-04), on the tile grid (ULX/ULY from CMR). Scale flag: field < 0.36 ha (pixel area > field area / 4, CLAUDE.md rule 5). Fields are counted once, by centroid inside the sample box.
+Interior pixels: HLS 30 m pixel centres strictly inside the field after an inward buffer of 30 m (old rule) or 15 m (PLAN.md T1.4), on the tile grid (ULX/ULY from CMR). Scale flag: field < 0.36 ha (pixel area > field area / 4, CLAUDE.md rule 5). Fields are counted once, by centroid inside the sample box.
 
 ## Label years
 

@@ -1,4 +1,4 @@
-"""Experiment 3 (pre-registered in DECISIONS.md 2026-11-12): clean 2025 test, both modes.
+"""Experiment 3 (pre-registered in DECISIONS.md): clean 2025 test, both modes.
 
 Usage: uv run python -u scripts/x3_clean2025.py <calendar|gdd>
 Runs scripts/x2_gdd_hindcast.py with only these in-memory changes (asserted, printed below):

@@ -4,7 +4,7 @@ import pytest
 
 from fieldwitness.data import ssurgo
 
-# Real SDA reply for one Kansas pilot point (2026-11-11, docs/api_notes.md): map unit 2668839,
+# Real SDA reply for one Kansas pilot point (docs/api_notes.md): map unit 2668839,
 # Ulysses 99 % + Ness 1 %. NRCS's own muaggatt.aws0100wta for this map unit is 21.44 cm.
 PAYLOAD = {
     "Table": [

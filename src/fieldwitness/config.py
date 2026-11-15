@@ -84,7 +84,7 @@ class KcIniByRegion(_Strict):
 
 
 class GddPhenology(_Strict):
-    """Thermal-time phenology (Experiment 2, DECISIONS.md 2026-11-12). Values in degrees F.
+    """Thermal-time phenology (Experiment 2, DECISIONS.md). Values in degrees F.
 
     Limits and stage GDDs are read from the cited extension source (tag E); which source stage
     ends which FAO-56 stage is a team mapping approved by the user (tag A, `mapping_choice`).

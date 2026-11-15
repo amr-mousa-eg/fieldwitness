@@ -1,6 +1,6 @@
 """Thermal-time (GDD) stage lengths for the FAO-56 Kc curve (Experiment 2). Output tag D.
 
-Pre-registered in DECISIONS.md (2026-11-12). Used only when `phenology_mode == "gdd"`; the
+Pre-registered in DECISIONS.md. Used only when `phenology_mode == "gdd"`; the
 calendar mode never calls this module.
 
 Daily GDD (degrees C here; source values in degrees F are converted exactly):

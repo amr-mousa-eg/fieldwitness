@@ -1,6 +1,6 @@
 # Field Shift: Adapting Farms with NASA Data — official challenge text
 
-Source: the official Space Apps 2026 challenge page, copied by the team on 4 Nov 2026 (https://www.spaceappschallenge.org/2026/challenges/field-shift-adapting-farms-with-nasa-data/). Difficulty: Intermediate, Advanced. Subjects: Arts & Multimedia, Earth Science, Software. Check the Resources tab before 14 Nov; more resources may be added.
+Source: the official Space Apps 2026 challenge page, copied by the team on (https://www.spaceappschallenge.org/2026/challenges/field-shift-adapting-farms-with-nasa-data/). Difficulty: Intermediate, Advanced. Subjects: Arts & Multimedia, Earth Science, Software. Check the Resources tab; more resources may be added.
 
 Note: the page writes "SI" where most readers would expect "AI" (artificial intelligence); the text below keeps the page's wording.
 

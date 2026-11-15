@@ -85,7 +85,7 @@ export const PRESET_LOCATIONS: PresetLocation[] = [
 
 /**
  * Computes past 3 completed harvest years from the reference date (PLAN.md T2.2).
- * Kansas summer crop harvest completes in Oct/Nov; in Nov 2026, returns [2026, 2025, 2024].
+ * Kansas summer crop harvest completes in Oct/Nov; in November of year Y, returns [Y, Y-1, Y-2].
  */
 export function getRecentHarvestYears(now: Date = new Date()): [number, number, number] {
   const currentYear = now.getFullYear();

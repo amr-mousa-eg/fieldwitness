@@ -1,5 +1,5 @@
 # ruff: noqa: E501
-"""Reliability tiers, step 2 of 2: the one test on 2022-2024 (DECISIONS.md 2026-11-12).
+"""Reliability tiers, step 2 of 2: the one test on 2022-2024 (DECISIONS.md).
 
 Usage: uv run python -u scripts/x5_test.py
 Reads the frozen model choice and tier boundaries (model_and_tiers.json, written by x5_train.py

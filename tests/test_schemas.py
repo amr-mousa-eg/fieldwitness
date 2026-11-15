@@ -81,7 +81,7 @@ def pack(**over):
         ),
         ledger=[],
         data_as_of=date(2024, 12, 31),
-        generated_at=datetime(2026, 11, 4, 12, 0),
+        generated_at=datetime(2024, 12, 31, 12, 0),
     )
     kw.update(over)
     return s.FieldPack(**kw)

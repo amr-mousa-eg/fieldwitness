@@ -85,7 +85,7 @@ def login() -> requests.Session:
 def _call(session: requests.Session, method: str, url: str, **kw) -> requests.Response:
     """Request with one re-login on HTTP 403. AppEEARS docs: "All programs should check for an HTTP
     403 Forbidden status code to successfully handle token expiration by acquiring a new token."
-    (Observed 2026-11-04: a logout in another process revoked this session's token.)"""
+    (Observed a logout in another process revoked this session's token.)"""
     r = session.request(method, url, **kw)
     if r.status_code == 403:
         fresh = login()

@@ -1,6 +1,6 @@
 /**
  * Empirical Grade & Credibility Validity Check Results.
- * Pre-registered in DECISIONS.md (2026-11-09) and evaluated under cut-off as_of(2021-12-31).
+ * Pre-registered in DECISIONS.md and evaluated under cut-off as_of(2021-12-31).
  *
  * Source: results/hindcast/grade_validity.json
  */

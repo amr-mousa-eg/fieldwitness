@@ -1,6 +1,6 @@
-# Extension to PLAN.md §3 (data contracts) — approved 2026-11-04
+# Extension to PLAN.md §3 (data contracts) —
 
-**Status:** FINAL — approved by the user on 2026-11-04 (answers Q1–Q7, §5). Ready to merge into `main` (CLAUDE.md rule 11 satisfied). Written on the `app` branch; nothing on `main` has changed yet. Merge steps: §6.
+**Status:** FINAL — approved by the user (answers Q1–Q7, §5). Ready to merge into `main` (CLAUDE.md rule 11 satisfied). Written on the `app` branch; nothing on `main` has changed yet. Merge steps: §6.
 
 **Canonical code:** `scripts/fixture_schemas.py` (Part 2). The models below are a copy of it. The synthetic fixtures in `app/fixtures/ks_demo_synthetic/` validate against it; the examples below are trimmed from those fixtures. **Every number in the examples is SYNTHETIC.**
 
@@ -17,7 +17,7 @@ Several Phase 9 views need data that §3 does not define:
 | T9.1 Map, T9.5 Scoreboard | `index.json` and `hindcast.json` are *named* in §3 but have no model | `index.json`, `hindcast.json` |
 | T9.1 region switcher | list of regions | `packs/regions.json` (new) |
 
-The `FieldPack` (§3) is unchanged. File layout (user decision 2026-11-04): per field `<field_id>.json` (§3), `.series.json`, `.calendar.json`, `.scenarios.json`; per region `index.json`, `hindcast.json`, `layers.json`. Each file < 300 KB.
+The `FieldPack` (§3) is unchanged. File layout (user decision): per field `<field_id>.json` (§3), `.series.json`, `.calendar.json`, `.scenarios.json`; per region `index.json`, `hindcast.json`, `layers.json`. Each file < 300 KB.
 
 ## 2. Conventions
 
@@ -344,7 +344,7 @@ class RegionList(BaseModel):   # packs/regions.json, for the region switcher (T9
 { "regions": [ { "region_id": "ks_demo_synthetic", "name": "Kansas — DEMO DATA (synthetic)", "tier": 1 } ] }
 ```
 
-## 5. Decisions (user, 2026-11-04)
+## 5. Decisions (user)
 
 | # | Question | Decision |
 |---|---|---|

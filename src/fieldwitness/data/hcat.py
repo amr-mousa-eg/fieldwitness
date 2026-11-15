@@ -1,19 +1,19 @@
 """Field definition on the HCAT3 crop taxonomy: annual arable crop parcels.
 
 HCAT3 = Hierarchical Crop and Agriculture Taxonomy v3 (EuroCrops,
-https://github.com/maja601/EuroCrops/blob/main/hcat_core/HCAT3.csv, fetched 2026-11-04).
+https://github.com/maja601/EuroCrops/blob/main/hcat_core/HCAT3.csv).
 Codes are 10 digits; leading digits select increasingly specific groups. The French
 RPG/EuroCrops V2 GeoParquet (`hcat:code`) maps its crop codes to HCAT3 via
 https://fiboa.org/code/fr/fr.csv.
 
-User decision 2026-11-04 (DECISIONS.md): a field is an *annual arable crop parcel*.
+User decision (DECISIONS.md): a field is an *annual arable crop parcel*.
 Kept: HCAT3 group 3301 `arable_crops`. Excluded: every other group (3302 pasture/meadow/
 grassland, 3303 permanent crops, 3304 mushrooms/energy/GM, 3305 greenhouse, 3306 tree/wood/
 forest, 3307 peat/turf, 3308 unmaintained, 3399 not known/other), missing codes, and the 3301
 classes below that are fallow, grass leys, multi-year crops or gardens rather than annual field
 crops. Used by the census, T1.4 and T1.6.
 
-Two roles (user decision 2026-11-04, DECISIONS.md):
+Two roles (user decision, DECISIONS.md):
 - *Selection* — `is_annual_arable` on the current (most recent) year decides which parcels count
   as fields.
 - *Crop history* — `history_state` maps every year of a field's history to a crop state. Fallow,
@@ -37,7 +37,7 @@ EXCLUDED_ARABLE_PREFIXES = {
     "330120": "asparagus",  # perennial
     "330123": "rhubarb",  # perennial
     "330127": "artichoke",  # perennial
-    "3301090301": "alfalfa_lucerne",  # multi-year forage (user decision 2026-11-04)
+    "3301090301": "alfalfa_lucerne",  # multi-year forage (user decision)
 }
 
 
@@ -68,7 +68,7 @@ PERENNIAL_FORAGE = "perennial_forage"  # alfalfa: a history state, never a rotat
 OTHER_ARABLE = "other_arable"
 UNKNOWN = "unknown"
 
-# HCAT3 groups whose presence in any year means the field left arable use (user rule 2026-11-04):
+# HCAT3 groups whose presence in any year means the field left arable use (user rule):
 # 3302 pasture/meadow/grassland, 3303 permanent crops, 3304 mushrooms/energy/GM, 3305 greenhouse,
 # 3306 tree/wood/forest, 3307 peat/turf, 3308 unmaintained.
 NON_ARABLE_GROUPS = ("3302", "3303", "3304", "3305", "3306", "3307", "3308")

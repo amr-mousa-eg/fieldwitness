@@ -1,4 +1,4 @@
-"""Reliability tiers experiment (DECISIONS.md 2026-11-12): credibility at each forecast cut-off.
+"""Reliability tiers experiment (DECISIONS.md): credibility at each forecast cut-off.
 
 Usage: uv run python -u scripts/x5_credibility.py <cut-off year>
 Calls `compute_cutoff_credibility` of scripts/t7_grade_validity.py unchanged, with its module
