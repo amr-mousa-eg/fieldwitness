@@ -36,7 +36,7 @@ const throwing: StorageLike = {
 
 describe("customFieldStore device storage", () => {
   it("converts form data to tagged immutable record with tag E and schema version 1.0", () => {
-    const form = getDefaultFormData(new Date(2026, 10, 8));
+    const form = getDefaultFormData(new Date(2024, 10, 8));
     form.name = "Test Field 1";
     form.latitude = 37.9717;
     form.longitude = -100.8727;
@@ -57,7 +57,7 @@ describe("customFieldStore device storage", () => {
 
   it("round-trips saving, loading, and updating custom fields in storage", () => {
     const s = mem();
-    const form = getDefaultFormData(new Date(2026, 10, 8));
+    const form = getDefaultFormData(new Date(2024, 10, 8));
     form.name = "Quarter A";
     form.latitude = 37.97;
     form.longitude = -100.87;
@@ -91,7 +91,7 @@ describe("customFieldStore device storage", () => {
 
   it("exports and imports fields as JSON", () => {
     const s1 = mem();
-    const form = getDefaultFormData(new Date(2026, 10, 8));
+    const form = getDefaultFormData(new Date(2024, 10, 8));
     form.name = "Export Field";
     form.latitude = 38.0;
     form.longitude = -100.5;
@@ -117,7 +117,7 @@ describe("customFieldStore device storage", () => {
   it("handles storage exceptions gracefully", () => {
     // Reading or writing when storage throws does not crash
     expect(loadSavedFields(throwing)).toEqual([]);
-    const form = getDefaultFormData(new Date(2026, 10, 8));
+    const form = getDefaultFormData(new Date(2024, 10, 8));
     const rec = convertFormToRecord(form, false, "f_throw");
     expect(saveCustomField(rec, throwing)).toBe(false);
     expect(deleteCustomField("f_throw", throwing)).toBe(false);

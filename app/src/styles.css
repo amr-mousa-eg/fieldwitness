@@ -2560,7 +2560,7 @@ table.mini {
   outline-offset: 2px;
 }
 
-/* Methods diagram (Item 9, redesigned 11 Nov): four numbered stages. Desktop reads left to
+/* Methods diagram (Item 9, redesigned): four numbered stages. Desktop reads left to
    right; phones get a vertical layout at full text size (no scaling). Boxes are links. */
 .mdia {
   margin: 1rem 0;

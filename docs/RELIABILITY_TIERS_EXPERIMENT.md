@@ -1,6 +1,6 @@
 # Can past mistakes tell us which predictions to trust? A negative result
 
-*12 Nov 2026. This experiment is on the branch `experiment/reliability-grades` only and is not part of the live website. All numbers come from `results/hindcast/reliability/test_by_tier.md`.*
+*. This experiment is on the branch `experiment/reliability-grades` only and is not part of the live website. All numbers come from `results/hindcast/reliability/test_by_tier.md`.*
 
 ## The problem
 

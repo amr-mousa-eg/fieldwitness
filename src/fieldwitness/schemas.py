@@ -1,7 +1,7 @@
 """Data contracts: PLAN.md §3 (field pack) and §3b (app data files), as Pydantic v2 models.
 
 Source: `scripts/fixture_schemas.py` on branch `app` (commit dd97bf5), the canonical code of the
-§3 extension approved by the user on 2026-11-04 (`docs/schema_ext_proposal.md` §5, Q1–Q7;
+§3 extension approved by the user (`docs/schema_ext_proposal.md` §5, Q1–Q7;
 DECISIONS.md). §3's `Field` keeps its PLAN name here (the app copy calls it `FieldModel`), so
 pydantic's `Field` is imported as `PydanticField`.
 
@@ -53,7 +53,7 @@ class Season(BaseModel):
     crop: str | None
     crop_conf: float
     crop_source: Literal["label", "classifier", "user"]
-    # day of the harvest year, negative = previous autumn (user decision Q1, 2026-11-04)
+    # day of the harvest year, negative = previous autumn (user decision Q1)
     sos: Tagged
     peak: Tagged
     eos: Tagged
@@ -163,7 +163,7 @@ EXEMPT_FIELDS = frozenset(
 
 
 # ---------------------------------------------------------------------------------------------
-# PLAN.md §3b — app data files (approved 2026-11-04)
+# PLAN.md §3b — app data files
 # ---------------------------------------------------------------------------------------------
 
 
@@ -324,7 +324,7 @@ class FieldSim3D(BaseModel):
 
 
 # --- packs/<region>/<field_id>.sim3d_inputs.json (Rotation Builder, Level B; user-approved
-# 2026-11-11). Inputs of the in-browser 3D replay; each block carries one tag and source, so the
+# ). Inputs of the in-browser 3D replay; each block carries one tag and source, so the
 # blocks are tagged containers (see TAGGED_CONTAINERS).
 class Sim3DInputDay(BaseModel):
     rain_mm: list[float]  # 365 daily values of the median-rain year

@@ -1,4 +1,4 @@
-# CLAUDE.md — FieldWitness (NASA Space Apps 2026, "Field Shift")
+# CLAUDE.md — FieldWitness (NASA Space Apps, "Field Shift")
 
 Read this file and `PLAN.md` at the start of every session. `PLAN.md` is the source of truth for scope, order and acceptance tests. Log every decision that changes the plan in `DECISIONS.md`.
 

@@ -1,6 +1,6 @@
 # Census — Nile Delta (Egypt) (`eg_nile_delta`, Tier 3)
 
-Generated 2026-11-04T01:41:13+00:00 by `fieldwitness.cli census`. Tile **T36RTV** (EPSG:32636). Numbers are counts from CMR metadata and bbox reads; no imagery downloaded.
+Generated 2024-12-31T00:00:00Z+00:00 by `fieldwitness.cli census`. Tile **T36RTV** (EPSG:32636). Numbers are counts from CMR metadata and bbox reads; no imagery downloaded.
 
 Season windows (tag **A**, team assumption, editable in `config/regions.yaml`; named by harvest year): winter months 11–5; summer months 5–10
 

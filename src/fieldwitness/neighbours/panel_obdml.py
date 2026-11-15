@@ -1,6 +1,6 @@
 """Panel Overlap-Balanced Double Machine Learning (Panel-OBDML / AOW-ATO).
 
-Pre-registered in `DECISIONS.md` (2026-11-14) to resolve the structural identification,
+Pre-registered in `DECISIONS.md` to resolve the structural identification,
 balance, placebo, and negative-control flaws identified in `diagnostics.py` and `matching.py`:
 
 1. Estimand alignment (Li, Morgan & Zaslavsky 2018 JASA; Mao, Li & Greene 2019 Biometrics):

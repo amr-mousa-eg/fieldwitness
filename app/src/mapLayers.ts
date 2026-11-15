@@ -78,7 +78,7 @@ export function rampExpression(prop: string, [lo, hi]: Domain, ramp: readonly st
 /**
  * Low-zoom backdrop: GIBS MODIS Terra Corrected Reflectance true colour (EPSG:3857,
  * GoogleMapsCompatible_Level9, JPEG). Layer id, tile matrix set and URL template taken from the
- * GIBS WMTS GetCapabilities (epsg3857/best, read 2026-11-11). Date 2023-08-15 is cloud-free over
+ * GIBS WMTS GetCapabilities (epsg3857/best). Date 2023-08-15 is cloud-free over
  * the Kansas pilot (tiles checked by eye at z8); 2023-07-04, the HLS date, is partly cloudy.
  */
 export const GIBS_BACKDROP_URL =

@@ -6,7 +6,7 @@ peak minus the left / right trough), the usual threshold method; fractions are c
 paper (UNVERIFIED). Seasons whose rise or fall is not fully inside the data are dropped.
 Harvest year = calendar year of EOS; a 2nd season ending the same year gets index 1.
 Day numbers: 1 Jan of the harvest year = 1, 31 Dec before = 0, negative = earlier.
-Winter dormancy (user decision 2026-11-04, from agronomy, not tuned): two peaks whose trough lies
+Winter dormancy (user decision, from agronomy, not tuned): two peaks whose trough lies
 in Dec-Feb and stays at or above the cover threshold (not bare soil) are one season; the higher
 peak is kept. Crop-like season: seasonal amplitude (peak minus the lower base) must reach
 seasons.min_crop_amplitude (tag A, set on the dev set only); weaker green-ups (weeds, volunteers)

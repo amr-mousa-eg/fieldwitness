@@ -600,10 +600,7 @@ def write_outputs(
             "vs Kansas (`ks_t14slh`)"
         ),
         "",
-        (
-            "Executed with `scripts/run_ukraine_neighbours.py` "
-            "(pre-registered 2026-11-14 in `DECISIONS.md`)."
-        ),
+        ("Executed with `scripts/run_ukraine_neighbours.py` (pre-registered in `DECISIONS.md`)."),
         "",
         "## Provenance & Regional Fixes",
         "",

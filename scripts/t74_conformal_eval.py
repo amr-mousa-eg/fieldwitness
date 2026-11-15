@@ -1,6 +1,6 @@
 """Phase 4 evaluation of symmetric and asymmetric CQR prediction intervals.
 
-Pre-registered in DECISIONS.md (2026-11-13).
+Pre-registered in DECISIONS.md.
 Reads:
   - Calibration: results/hindcast/conformal/pseudo_cut{2018,2019,2020}.jsonl
   - Held-out test: results/hindcast/ks_t14slh_records.jsonl
@@ -275,7 +275,7 @@ def evaluate() -> dict[str, Any]:
     payload = {
         "schema_version": "1.0",
         "tag": "D",
-        "source": "model:calibration@v1 (CQR pre-registered 2026-11-13 + E2.2 stratified audit)",
+        "source": "model:calibration@v1 (CQR pre-registered + E2.2 stratified audit)",
         "n_cal_rows": int(len(cal)),
         "n_test_rows": int(len(test)),
         "n_spatial_blocks": int(len(all_blocks)),

@@ -4,7 +4,7 @@ Real request and response shapes for every external API, recorded from one small
 
 ## NASA CMR — collection search (no login)
 
-Checked 2026-11-04.
+Checked.
 
 - Endpoint: `GET https://cmr.earthdata.nasa.gov/search/collections.json?short_name=<SN>&page_size=<n>`
 - Optional wildcard: `short_name=ECO_L3T_JET*&options[short_name][pattern]=true` (needs `curl -g`).
@@ -33,7 +33,7 @@ Notes:
 
 ## earthaccess 0.19.0 — login (read from installed source)
 
-Checked 2026-11-04 in `.venv/Lib/site-packages/earthaccess/{api,auth,system}.py`.
+Checked in `.venv/Lib/site-packages/earthaccess/{api,auth,system}.py`.
 
 - `earthaccess.login(strategy="all")` tries `"environment"` → `"netrc"` → `"interactive"`.
   - `environment`: `EARTHDATA_USERNAME` + `EARTHDATA_PASSWORD`, or `EARTHDATA_TOKEN`.
@@ -49,7 +49,7 @@ Checked 2026-11-04 in `.venv/Lib/site-packages/earthaccess/{api,auth,system}.py`
 
 ## HLS-VI granule search — test results (T0.2)
 
-Checked 2026-11-04 with `scripts/check_earthdata.py` (login via `_netrc`: `authenticated: True`).
+Checked with `scripts/check_earthdata.py` (login via `_netrc`: `authenticated: True`).
 Search box (access test only): `bounding_box=(-100.95, 37.95, -100.85, 38.05)`, SW Kansas → MGRS tile **T14SLH**.
 
 - One tile, one date (`granule_name="HLS-VI.*.T14SLH.2023185*"`, 2023-07-04): `HLSS30_VI` → 1 granule
@@ -101,7 +101,7 @@ SR collections verified in CMR: `HLSL30` v`2.0` (`C2021957657-LPCLOUD`, from 201
 
 ## AppEEARS API (T0.3)
 
-Checked 2026-11-04 against the official docs at `https://appeears.earthdatacloud.nasa.gov/api/` and live calls.
+Checked against the official docs at `https://appeears.earthdatacloud.nasa.gov/api/` and live calls.
 Script: `scripts/check_appeears.py`.
 
 ### Endpoints used
@@ -154,7 +154,7 @@ The surface-reflectance fallback was **not needed**: AppEEARS serves both HLS-VI
 
 ### AppEEARS task result (T0.3)
 
-- Task `09338e93-d3fa-493d-bc4a-476ac22a2b88`: created 2026-11-04T00:30:31Z, `processing` from ~00:52, `done` at 00:53:07Z (~22.5 min, mostly `pending`).
+- Task `09338e93-d3fa-493d-bc4a-476ac22a2b88`: created 2024-12-31T00:00:00Z, `processing` from ~00:52, `done` at 00:53:07Z (~22.5 min, mostly `pending`).
 - `GET /task/{id}` keys when done: `api_version`, `attempts`, `cached_files`, `completed`, `crashed`, `created`, `error`, `estimate`, `expires_on`, `has_nsidc_daac`, `has_swath`, `params`, `retry_at`, `status`, `svc_version`, `task_id`, `task_name`, `task_type`, `tier`, `updated`, `user_id`, `web_version`, `worker_version`.
 - Bundle: 17 files, all sha256-verified — one NetCDF per product (`<Product>.020_30m_aid0001_14N.nc`, NetCDF4/HDF5, 33–68 KB),
   per-date statistics CSVs (`HLS{L,S}30-VI-020-Statistics.csv`: File Name, Dataset, aid, Date, UTM Zone, Count, Minimum, Maximum, Range, Mean, Standard Deviation, Variance, Upper Quartile, Upper 1.5 IQR, Median, Lower 1.5 IQR, Lower Quartile),
@@ -164,7 +164,7 @@ The surface-reflectance fallback was **not needed**: AppEEARS serves both HLS-VI
 - NetCDF (opened with `xarray` + `h5netcdf[h5py]`): dims `time × ydim (17) × xdim (18)`; VI file variables `NDVI`, `EVI` (float64, `_FillValue` −19999), `crs`; SR file `Fmask` (`_FillValue` 255), `crs`.
 - **Time axis gotcha:** `time` has `units: "days since 2013-04-11 00:00:00"` and `calendar: "julian"`. Read as plain (Gregorian) day counts, the dates match the statistics CSV exactly. Do **not** decode with a real Julian calendar (cftime) — that shifts dates by ~13 days. Open with `decode_times=False` and add days to 2013-04-11.
 
-### Gap: 47 L30 Fmask dates vs 33 L30 VI dates (investigated 2026-11-04)
+### Gap: 47 L30 Fmask dates vs 33 L30 VI dates (investigated)
 
 The 14 dates in the Fmask file but not in the VI file (NetCDF and statistics CSV agree):
 
@@ -193,7 +193,7 @@ Explanation:
 
 ## Source Cooperative GeoParquet via pyarrow / geopandas (T0.4)
 
-Checked 2026-11-04 (geopandas 1.2.0, pyarrow 26.0.1, from installed source).
+Checked (geopandas 1.2.0, pyarrow 26.0.1, from installed source).
 
 - `pyarrow.fs.S3FileSystem(anonymous=True, endpoint_override="data.source.coop", scheme="https", region="us-east-1")` works: path = `<account>/<key>` (e.g. `ftw/harmonized-field-data/...`). HTTPS fallback (`fsspec.filesystem("https")` + `https://data.source.coop/<key>`) was not needed.
 - `geopandas.read_parquet(path, bbox=(xmin, ymin, xmax, ymax), filesystem=fs)`: needs the GeoParquet `bbox` covering column; the box must be in the **file's CRS**. It reads whole column chunks of matching row groups.
@@ -211,16 +211,16 @@ Checked 2026-11-04 (geopandas 1.2.0, pyarrow 26.0.1, from installed source).
 
 - FTW `Ukraine.parquet`: 4,116,875 rows, 63 row groups, 1,985 MB (~32 MB per row group) — larger row groups than Punjab (~6 MB).
 
-## CMR facts for the census (T0.5 planning, 2026-11-04)
+## CMR facts for the census (T0.5 planning)
 
 - HLS granule cloud cover: `umm.AdditionalAttributes[Name="CLOUD_COVERAGE"].Values[0]` (string, percent of the tile); `umm.CloudCover` is absent. Also useful: `SPATIAL_COVERAGE` (percent of the tile with data), `MGRS_TILE_ID`, `SENSING_TIME`.
 - MGRS tiles at candidate points (HLSS30_VI search, June 2023): Beauce (1.60, 48.25) → `T31UCP`; Punjab/Jagraon (75.47, 30.79) → `T43REQ`; central Ukraine (32.26, 48.51) → `T36UVU`; Nile Delta (31.00, 30.79) → `T36RTV` and `T36RUV` (overlap).
 - FTW Egypt partition: `.../admin:country_code=EG/Egypt.parquet` (size not yet read).
-- **ECOSTRESS `ECO_L3T_JET` v003 is a partial archive**: 378,068 granules, earliest 2019-08-23, latest 2026-10-28, and zero granules in June 2023 (no spatial filter). v002: 4,803,551 granules, 2018-07-10 → 2026-10-31. At the Kansas point (−100.9, 38.0), all time: v003 66, v002 850. `point=` and `bounding_box=` searches work for both.
+- **ECOSTRESS `ECO_L3T_JET` v003 is a partial archive**: 378,068 granules, earliest 2019-08-23, latest, and zero granules in June 2023 (no spatial filter). v002: 4,803,551 granules, 2018-07-10 →. At the Kansas point (−100.9, 38.0), all time: v003 66, v002 850. `point=` and `bounding_box=` searches work for both.
 
 ## NASA POWER — daily point API (Gate 0, for T1.2)
 
-Checked 2026-11-04 (docs: https://power.larc.nasa.gov/docs/services/api/temporal/daily/).
+Checked (docs: https://power.larc.nasa.gov/docs/services/api/temporal/daily/).
 
 - Request: `GET https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MAX,T2M_MIN,RH2M,WS2M,ALLSKY_SFC_SW_DWN,PRECTOTCORR&community=AG&longitude=-100.6604&latitude=38.3425&start=20230101&end=20231231&format=JSON` (Kansas T14SLH tile centre). Max 20 parameters per point request; dates `YYYYMMDD`.
 - Response: HTTP 200, 36,856 bytes. Top keys: `type`, `geometry`, `properties`, `header`, `messages`, `parameters`, `times`.
@@ -232,19 +232,19 @@ Checked 2026-11-04 (docs: https://power.larc.nasa.gov/docs/services/api/temporal
 
 ## ISRIC SoilGrids — REST properties/query (Gate 0, for T1.3)
 
-Checked 2026-11-04: **service unavailable.** `GET https://rest.isric.org/soilgrids/v2.0/properties/query?lon=-100.6604&lat=38.3425&property=sand&property=clay&property=soc&property=bdod&depth=0-5cm&depth=30-60cm&value=mean&value=Q0.05&value=Q0.5&value=Q0.95` → HTTP 503 "Service Temporarily Unavailable" (nginx); the OpenAPI document and the docs page also failed (503 / timeout). ISRIC's map server `https://maps.isric.org/` answers HTTP 200 (WCS/WMS) — candidate fallback for T1.3, not yet verified from its docs. Retry 1 at 2026-11-04T02:56Z: no response within 90 s (curl timeout). Retry 2 scheduled for 2026-11-05; if still down, check the WCS fallback (docs and licence first).
+Checked **service unavailable.** `GET https://rest.isric.org/soilgrids/v2.0/properties/query?lon=-100.6604&lat=38.3425&property=sand&property=clay&property=soc&property=bdod&depth=0-5cm&depth=30-60cm&value=mean&value=Q0.05&value=Q0.5&value=Q0.95` → HTTP 503 "Service Temporarily Unavailable" (nginx); the OpenAPI document and the docs page also failed (503 / timeout). ISRIC's map server `https://maps.isric.org/` answers HTTP 200 (WCS/WMS) — candidate fallback for T1.3, not yet verified from its docs. Retry 1: no response within 90 s (curl timeout). Retry 2 scheduled; if still down, check the WCS fallback (docs and licence first).
 
 ## Kansas WIMAS (Gate 0, for T1.7)
 
-Checked 2026-11-04: `https://geohydro.kgs.ku.edu/geohydro/wimas/` is public (no registration) but opens on a **disclaimer page that must be accepted ("I ACCEPT")** before any query. Terms (from the page): DWR and KGS offer "no warranty or guarantee of the accuracy or completeness"; data reflect files as of 11/01/2026; products must not be used in violation of K.S.A 45-220(c)(2). No bulk download without the disclaimer was found (the KGS High Plains data page links only to WIMAS). **Not queried: accepting the terms is the user's decision.**
+Checked `https://geohydro.kgs.ku.edu/geohydro/wimas/` is public (no registration) but opens on a **disclaimer page that must be accepted ("I ACCEPT")** before any query. Terms (from the page): DWR and KGS offer "no warranty or guarantee of the accuracy or completeness"; data reflect files as of 11/01/2026; products must not be used in violation of K.S.A 45-220(c)(2). No bulk download without the disclaimer was found (the KGS High Plains data page links only to WIMAS). **Not queried: accepting the terms is the user's decision.**
 
 ## OpenET (Gate 0)
 
-**Removed from the MVP and moved to stretch S6 (user, 2026-11-04), pending the user's reading of its terms. Not accessed.**
+**Removed from the MVP and moved to stretch S6 (user), pending the user's reading of its terms. Not accessed.**
 
 ## HLS direct COG read via earthaccess (Gate 0; T1.5b fallback)
 
-Checked 2026-11-04 with `scripts/check_hls_cog.py` (rasterio 1.5.2 / GDAL 3.12.2, rioxarray 0.23.0).
+Checked with `scripts/check_hls_cog.py` (rasterio 1.5.2 / GDAL 3.12.2, rioxarray 0.23.0).
 
 - Auth: `earthaccess.login(strategy="netrc")`, then `fs = earthaccess.get_fsspec_https_session()` and `rasterio.open(url, opener=fs.open)` (rasterio's `opener` serves GDAL through Python file objects). **No credentials, cookies or tokens are written to disk**; no GDAL netrc/cookie settings are used.
 - Test: granule `HLS-VI.S30.T14SLH.2023185T172901.v2.0`, 256 × 256 window at (−100.90, 38.00).
@@ -263,7 +263,7 @@ Checked 2026-11-04 with `scripts/check_hls_cog.py` (rasterio 1.5.2 / GDAL 3.12.2
 
 ## GBIF species match and USDA PLANTS (crop families, T0.6)
 
-Checked 2026-11-04 with one call each, then `scripts/check_families.py`.
+Checked with one call each, then `scripts/check_families.py`.
 
 - GBIF: `GET https://api.gbif.org/v1/species/match?name=Zea%20mays&kingdom=Plantae` → keys `usageKey, scientificName, canonicalName, rank, status, confidence, matchType, kingdom, phylum, class, order, family, genus, species` (+ `*Key`). Zea mays: usageKey 5290052, ACCEPTED, EXACT, confidence 100, family Poaceae.
 - USDA PLANTS (no key needed): `GET https://plantsservices.sc.egov.usda.gov/api/PlantSearch?searchText=<name>` → list of `{Text, Plant{Id, Symbol, ScientificName (HTML), CommonName, Rank, ...}}`; `GET .../api/PlantProfile?symbol=<SYMBOL>` → profile with `Ancestors` (family rank, e.g. "Poaceae Barnhart", authority included).
@@ -271,7 +271,7 @@ Checked 2026-11-04 with one call each, then `scripts/check_families.py`.
 
 ## SoilGrids 2.0 via WCS (T1.3; REST fallback)
 
-Checked 2026-11-04 (docs: https://docs.isric.org/globaldata/soilgrids/wcs.html; units table: https://docs.isric.org/globaldata/soilgrids/SoilGrids_faqs_01.html; licence: ISRIC data policy v2024-1, CC-BY 4.0 for SoilGrids).
+Checked (docs: https://docs.isric.org/globaldata/soilgrids/wcs.html; units table: https://docs.isric.org/globaldata/soilgrids/SoilGrids_faqs_01.html; licence: ISRIC data policy v2024-1, CC-BY 4.0 for SoilGrids).
 
 - GetCapabilities: `GET https://maps.isric.org/mapserv?map=/map/<property>.map&SERVICE=WCS&VERSION=2.0.0&REQUEST=GetCapabilities` → 30 coverage ids per property: `<property>_<depth>_<stat>` with depths 0-5cm, 5-15cm, 15-30cm, 30-60cm, 60-100cm, 100-200cm and stats Q0.05, Q0.5, Q0.95, mean, uncertainty.
 - GetCoverage: `SERVICE=WCS&VERSION=2.0.1&REQUEST=GetCoverage&COVERAGEID=sand_0-5cm_mean&FORMAT=GEOTIFF_INT16&SUBSET=X(w,e)&SUBSET=Y(s,n)&SUBSETTINGCRS=http://www.opengis.net/def/crs/EPSG/0/4326&OUTPUTCRS=http://www.opengis.net/def/crs/EPSG/0/4326` → `image/tiff`, int16, EPSG:4326, ≈ 0.0023° cells (server reprojects from the native EPSG:152160 Homolosine 250 m grid); ≈ 200 KB for the Kansas tile.
@@ -280,16 +280,16 @@ Checked 2026-11-04 (docs: https://docs.isric.org/globaldata/soilgrids/wcs.html; 
 
 ## Context datasets (T1.8)
 
-Checked 2026-11-04 in CMR, then downloaded with earthaccess.
+Checked in CMR, then downloaded with earthaccess.
 
 - NASADEM_HGT v001 (`C2763264762-LPCLOUD`): granules `NASADEM_HGT_n37w101`, `n37w102`, `n38w101`, `n38w102` (≈ 6.5 MB zip each) cover T14SLH; each zip holds `<tile>.hgt`, `.num`, `.swb`; read via `zip://…!<tile>.hgt` (GDAL SRTMHGT). Also available: `NASADEM_SC` (slope/curvature), not used.
 - TELLUS_GRAC-GRFO_MASCON_CRI_GRID_RL06.3_V4 (`C3195527175-POCLOUD`): one granule `GRCTellus.JPL.200204_202608.GLO.RL06.3M.MSCNv04CRI.nc` (46 MB). Dims time 260 × lat 360 × lon 720 (0.5°, lon 0.25–359.75). Variables: `lwe_thickness` (cm), `uncertainty`, `land_mask`, `scale_factor` ("to be used with mascon solution that has the CRI filter applied; based on CLM data from 2002-2009"), `mascon_ID`, `GAD`, bounds. Global attributes: `time_mean_removed` 2004.000–2009.999; licence link https://science.nasa.gov/earth-science/earth-science-data/data-information-policy.
 - SPL4SMGP v008 (`C3480440870-NSIDC_CPRD`): 3-hourly 9 km granules; used through AppEEARS product `SPL4SMGP.008`, layer `Geophysical_Data_sm_rootzone` ("Root zone soil moisture (0-100 cm)", m^3/m^3, fill −9999).
-  - Result (task `b5e1ec71…`, downloaded 2026-11-04): 3 points (one per region), 2015-04-01..2024-12-31, 3-hourly, 28,504 rows each (85,512 total), no fills or negatives, range 0.158–0.376. Results CSV columns: Category, ID, Latitude, Longitude, Date (`YYYY-MM-DD HH:MM:SS UTC`), SMAP_Tile, SPL4SMGP_008_Line_Y_9.00805km, SPL4SMGP_008_Sample_X_9.00805km, SPL4SMGP_008_Geophysical_Data_sm_rootzone. 9 km cell: context only, scale flag. Cached in `data/context/smap/` (gitignored).
+  - Result (task `b5e1ec71…`, downloaded): 3 points (one per region), 2015-04-01..2024-12-31, 3-hourly, 28,504 rows each (85,512 total), no fills or negatives, range 0.158–0.376. Results CSV columns: Category, ID, Latitude, Longitude, Date (`YYYY-MM-DD HH:MM:SS UTC`), SMAP_Tile, SPL4SMGP_008_Line_Y_9.00805km, SPL4SMGP_008_Sample_X_9.00805km, SPL4SMGP_008_Geophysical_Data_sm_rootzone. 9 km cell: context only, scale flag. Cached in `data/context/smap/` (gitignored).
 
 ## DoubleML for Python (T5.2)
 
-Checked 2026-11-07 (PyPI JSON `https://pypi.org/pypi/doubleml/json`; docs `https://docs.doubleml.org/stable/`, pages `api/generated/doubleml.plm.DoubleMLPLR.html` and `api/generated/doubleml.data.DoubleMLData.html`; source `https://github.com/DoubleML/doubleml-for-py`).
+Checked (PyPI JSON `https://pypi.org/pypi/doubleml/json`; docs `https://docs.doubleml.org/stable/`, pages `api/generated/doubleml.plm.DoubleMLPLR.html` and `api/generated/doubleml.data.DoubleMLData.html`; source `https://github.com/DoubleML/doubleml-for-py`).
 
 - **Licence:** BSD 3-Clause (PyPI `license` text, "Copyright (c) 2019-2023 Philipp Bach, Victor Chernozhukov, Sven Klaassen, Malte S. Kurz, Martin Spindler"; classifier `License :: OSI Approved :: BSD License`). Compatible with this repo; keep the notice when redistributing.
 - **Latest release on PyPI:** 0.11.4, `requires_python >= 3.10`.
@@ -298,12 +298,12 @@ Checked 2026-11-07 (PyPI JSON `https://pypi.org/pypi/doubleml/json`; docs `https
 - **Partially linear model:** `doubleml.plm.DoubleMLPLR(obj_dml_data, ml_l, ml_m, ml_g=None, n_folds=5, n_rep=1, score='partialling out', draw_sample_splitting=True)`. `ml_l` learns E[Y|X], `ml_m` learns E[D|X] (a classifier with `predict_proba` is allowed for binary D); `ml_g` only for `score='IV-type'`.
 - **Methods / attributes:** `fit(n_jobs_cv=None, store_predictions=True, external_predictions=None, store_models=False)`; `confint(joint=False, level=0.95)`; `coef`, `se`, `pval`, `summary`; also `sensitivity_analysis(...)`, `tune(...)`.
 - **Own folds (rule 7, spatial blocks):** `set_sample_splitting(all_smpls, all_smpls_cluster=None)` is documented: `all_smpls` is a nested list (one entry per repetition) of `(train_idx, test_idx)` tuples; `n_folds` and `n_rep` are derived from it. Use with `draw_sample_splitting=False`.
-- **Installed 2026-11-07:** doubleml 0.11.4, scikit-learn 1.9.1 (`uv add` by the user). `inspect.signature` of the installed `DoubleMLData.__init__`, `DoubleMLPLR.__init__`, `fit`, `set_sample_splitting`, `confint` matches the docs above.
+- **Installed ** doubleml 0.11.4, scikit-learn 1.9.1 (`uv add` by the user). `inspect.signature` of the installed `DoubleMLData.__init__`, `DoubleMLPLR.__init__`, `fit`, `set_sample_splitting`, `confint` matches the docs above.
 - **Test call** (synthetic, seed 20261114, n = 400, true effect 0.5, `RandomForestRegressor(50)` for `ml_l` and `ml_m`, 5 own folds via `set_sample_splitting([folds])` with `draw_sample_splitting=False`): `coef` and `se` are `numpy.ndarray` of length 1 (0.428, 0.051); `n_folds` 5, `n_rep` 1; `confint(level=0.95)` returns a `pandas.DataFrame` indexed by the treatment name with columns `2.5 %` and `97.5 %` (0.328, 0.528).
 
 ## USDA-NRCS Soil Data Access (SSURGO) — Phase 12 soil check
 
-Checked 2026-11-11 from the official pages: `https://sdmdataaccess.sc.egov.usda.gov/WebServiceHelp.aspx` (POST REST), `https://sdmdataaccess.sc.egov.usda.gov/documents/AdvancedQueries.html` (spatial macros), `https://sdmdataaccess.sc.egov.usda.gov/Citation.htm`, and the SDM "Table Column Descriptions" report (`https://sdmdataaccess.sc.egov.usda.gov/documents/TableColumnDescriptionsReport.pdf`, read with pypdf). Used only by `scripts/check_ssurgo.py`; never a simulation input.
+Checked from the official pages: `https://sdmdataaccess.sc.egov.usda.gov/WebServiceHelp.aspx` (POST REST), `https://sdmdataaccess.sc.egov.usda.gov/documents/AdvancedQueries.html` (spatial macros), `https://sdmdataaccess.sc.egov.usda.gov/Citation.htm`, and the SDM "Table Column Descriptions" report (`https://sdmdataaccess.sc.egov.usda.gov/documents/TableColumnDescriptionsReport.pdf`, read with pypdf). Used only by `scripts/check_ssurgo.py`; never a simulation input.
 
 - **Endpoint:** `POST https://sdmdataaccess.sc.egov.usda.gov/tabular/post.rest`, body JSON `{"query": "<SQL>", "format": "JSON+COLUMNNAME"}` (parameter names case-insensitive; `QUERY` required; `FORMAT` one of `XML` (default), `JSON`, `JSON+COLUMNNAME`, `JSON+COLUMNNAME+METADATA`, `~`). Max 100,000 rows per query. No rate limit is stated; we send one point per request, sequentially, with a 1 s pause, and cache every reply.
 - **Point lookup:** `SDA_Get_Mukey_from_intersection_with_WktWgs84('point(<lon> <lat>)')` is a table function returning the `mukey` of every map unit the WKT geometry intersects (docs example uses lon then lat).
@@ -313,9 +313,9 @@ Checked 2026-11-11 from the official pages: `https://sdmdataaccess.sc.egov.usda.
 - **Citation (Citation.htm):** Soil Survey Staff, Natural Resources Conservation Service, United States Department of Agriculture. Soil Survey Geographic (SSURGO) Database. Available online at https://sdmdataaccess.sc.egov.usda.gov. Accessed 11/11/2026.
 - **Terms:** the SDA pages state no data licence. The site "Disclaimer" (a JavaScript alert on the home page) is the standard USDA computer-system notice: the system "may be accessed and used only for official Government business (or as otherwise permitted by regulation) by authorized personnel", and use implies consent to monitoring. Public-domain status of SSURGO was not confirmed from an official page today (the NRCS SSURGO page timed out): UNVERIFIED.
 
-## LLM chat proxy: Google Gemini (OpenAI-compatible) and Groq — chatbot, 2026-11-13
+## LLM chat proxy: Google Gemini (OpenAI-compatible) and Groq — chatbot
 
-Checked 2026-11-13 from the official pages. No test call made (every call needs a key; rule: never read or ask for keys).
+Checked from the official pages. No test call made (every call needs a key; rule: never read or ask for keys).
 
 - **Gemini, OpenAI-compatible** (`https://ai.google.dev/gemini-api/docs/openai` → redirects to `https://aistudio.google.com/docs/openai`): base URL `https://generativelanguage.googleapis.com/v1beta/openai/`, POST `chat/completions`, header `Authorization: Bearer $GEMINI_API_KEY`, body `{"model", "messages": [{"role","content"}]}` plus optional `reasoning_effort`, `stream`. Reply read from `choices[0].message.content` (the page shows SDK access paths, not a full JSON reply: full shape UNVERIFIED).
 - **Gemini free tier** (`https://aistudio.google.com/docs/pricing`): text models listed "Free of charge" include `gemini-4-hydrogen`, `gemini-3.8-flash`, `gemini-3.6-flash`, `gemini-3.5-flash-lite`, `gemini-3.1-flash-lite`, `gemini-3-flash-preview`, `gemini-2.5-flash-lite` (`gemini-2.5-flash` and `gemini-2.5-pro` are marked deprecated). Free plan card: "Content used to improve our products". Chosen default: `gemini-3.5-flash-lite` (free, non-deprecated, light). Per-model free RPM/RPD: `https://aistudio.google.com/docs/rate-limits` says limits "can be viewed in Google AI Studio" — not stated on the page: UNVERIFIED.
@@ -324,7 +324,7 @@ Checked 2026-11-13 from the official pages. No test call made (every call needs 
 - **Workers KV Free plan** (`developers.cloudflare.com/kv/platform/limits/`): 100,000 reads/day, 1,000 writes/day (different keys), 1 write/s to the same key. Namespace: `npx wrangler kv namespace create <BINDING>`; binding `[[kv_namespaces]] binding, id`.
 - **Workers Free plan**: 100,000 requests/day (`/workers/platform/pricing/`).
 
-## NASA & Partner Resources Verification (2026-11-13)
+## NASA & Partner Resources Verification
 
 Verified via direct HTTP/REST probes and CMR/GIBS endpoints:
 
@@ -391,14 +391,14 @@ Verified via direct HTTP/REST probes and CMR/GIBS endpoints:
 - **Endpoint:** `GET https://quickstats.nass.usda.gov/api/api_GET/` (requires `key` via `NASS_QUICKSTATS_API_KEY`).
 - **Guardrail:** Strictly restricted to `AREA HARVESTED` / crop frequency context. Zero commodity prices or revenue predictions allowed per CLAUDE.md Rule 4.
 
-## Element84 Earth Search v1 (`sentinel-2-l2a` Collection 1 COGs) — Verified 2026-11-13
+## Element84 Earth Search v1 (`sentinel-2-l2a` Collection 1 COGs) — Verified
 
 - **STAC Search Endpoint:** `POST https://earth-search.aws.element84.com/v1/search`
 - **Query Shape:** `{"collections": ["sentinel-2-l2a"], "query": {"grid:code": {"eq": "MGRS-36UVU"}, "eo:cloud_cover": {"lt": 35.0}}, "datetime": "2017-01-01T00:00:00Z/2024-12-31T23:59:59Z", "limit": 200}` (pagination via `links` where `rel == "next"` using `nxt["body"]`).
 - **Assets & 20 m IFD Layout:** Each feature provides `assets.red` (B04, 10 m IFD 0 / 20 m `5490×5490` IFD 1, `512×512` tiles), `assets.nir` (B08, same layout), and `assets.scl` (SCL, native 20 m `5490×5490` IFD 0, `512×512` tiles, clear land classes `4 = Vegetation`, `5 = Not-vegetated`).
 - **Radiometric Offset Caveat (`earthsearch:boa_offset_applied` vs `raster:bands[0].offset`):** On 70 of 128 selected scenes (2018–2024 ESA Processing Baselines 04.00/05.xx), STAC `assets.{red,nir}.raster:bands[0].offset` still advertises `-0.1`, while `properties["earthsearch:boa_offset_applied"]` is `true` and the underlying COG uint16 DNs are already offset-corrected (matching `Element84/earth-search#71`). Live pixel checks on `T36UVU` confirmed water (`SCL=6`) median Red DN `209–277` and dark vegetation (`SCL=4`) median Red DN `471–549` (well below `1000`). Applying `-0.1` again clips dark vegetation Red reflectance to `0.0` and produces spurious `NDVI = 1.0`. Bypassing `raster:bands[0].offset` when `earthsearch:boa_offset_applied == true` eliminated all `>= 0.999` artifacts across 48,199 rows (`max NDVI = 0.9874`).
 
-## Phase P2 Empirical EO & Precipitation Verification — Verified 2026-11-14
+## Phase P2 Empirical EO & Precipitation Verification — Verified
 
 - **NASA Earthdata CMR & Protected Downloads (`ECO_L3T_JET`, `ECO_L2T_LSTE`, `GPM_3IMERGDF.07`):**
   - CMR search verified: `ECO_L3T_JET.003` (`KS 0 / UA 0` hits in 2020–21), `ECO_L3T_JET.002` (`KS 432`), `ECO_L2T_LSTE.002` (`KS 1,252 / UA 87`), `GPM_3IMERGDF.07` (`UA 365`).

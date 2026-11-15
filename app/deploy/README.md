@@ -3,7 +3,7 @@
 Nothing here creates an account or publishes anything. The owner decides the host and runs the
 first deploy.
 
-## Facts checked (2026-11-07)
+## Facts checked
 
 | | GitHub Pages | Netlify (Free) |
 |---|---|---|
@@ -50,7 +50,7 @@ MSYS_NO_PATHCONV=1 VITE_BASE=/fieldwitness/ npm run build   # Pages path (Git Ba
 In Git Bash, `MSYS_NO_PATHCONV=1` is needed. Without it, `/fieldwitness/` is rewritten to
 `C:/Program Files/Git/fieldwitness/`, and the build refuses that value.
 
-Checked locally on 2026-11-07 with the `/fieldwitness/` build in `vite preview`:
+Checked locally with the `/fieldwitness/` build in `vite preview`:
 - `scripts/offline-check.mjs` passes;
 - the service worker controls the page;
 - the app shell and 200 fields render after an offline reload.

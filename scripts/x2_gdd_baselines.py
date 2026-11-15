@@ -1,11 +1,11 @@
-"""Experiment 2 (DECISIONS.md 2026-11-12): T7.3 baselines in calendar or gdd phenology mode.
+"""Experiment 2 (DECISIONS.md): T7.3 baselines in calendar or gdd phenology mode.
 
 Usage: uv run python -u scripts/x2_gdd_baselines.py [calendar|gdd]
 Copy of scripts/t73_baselines.py with only these changes: weather also returns POWER Tmax/Tmin,
 the physics baselines B1/B2 run in the given phenology mode, targets are read from
 results/hindcast/gdd/records_<mode>.jsonl and outputs go to results/hindcast/gdd/baselines_<mode>.*
 (the published files are never written). B0 does not use phenology. Winter wheat seasons
-are skipped, as in the published baselines (DECISIONS.md 2026-11-09, item 2).
+are skipped, as in the published baselines (DECISIONS.md, item 2).
 
 Original T7.3 description follows.
 Same targets (field-seasons in ks_t14slh_records.jsonl), same observed statistics, same scoring
@@ -162,7 +162,7 @@ for rec in recs:
     fid = rec["field_id"]
     for s in rec["seasons"]:
         c, y = s["crop"], s["year"]
-        if c not in CROPS:  # published baselines cover maize/sorghum only (DECISIONS 2026-11-09)
+        if c not in CROPS:  # published baselines cover maize/sorghum only (DECISIONS)
             continue
         doy, nd = obs_series(fid, y)
         obs = stats(doy, nd[:, None])[0]

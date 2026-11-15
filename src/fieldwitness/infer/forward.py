@@ -76,7 +76,7 @@ def gdd_stages(tmax, tmin, sow, off: int, crop: dict, span: int) -> np.ndarray:
     """(n, 4) FAO-56 stage lengths from thermal time (Experiment 2, physics/phenology.py).
 
     sow: (n,) sowing index in the span. count_start "planting": GDD summed from sowing.
-    "jan1_harvest_year" (winter wheat, user choice 2026-11-12): sowing to 31 Dec stays in the
+    "jan1_harvest_year" (winter wheat, user choice): sowing to 31 Dec stays in the
     initial stage (calendar days), GDD summed from 1 Jan of the harvest year (index `off`).
     """
     g = crop.get("gdd")

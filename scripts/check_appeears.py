@@ -4,7 +4,7 @@ Usage:
     uv run python scripts/check_appeears.py                 # submit, wait, download, log out
     uv run python scripts/check_appeears.py --task-id <id>  # resume waiting/downloading a task
 
-API verified from https://appeears.earthdatacloud.nasa.gov/api/ on 2026-11-04 (docs/api_notes.md).
+API verified from https://appeears.earthdatacloud.nasa.gov/api/ (docs/api_notes.md).
 Credentials (CLAUDE.md rule 12 exception): the urs.earthdata.nasa.gov entry of _netrc is read in
 memory and passed only to POST /login. The password and the Bearer token are never printed,
 logged or written to disk; the token is disposed with POST /logout at the end.

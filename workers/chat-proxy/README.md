@@ -76,7 +76,7 @@ then `npx wrangler deploy`.
 | Google Gemini (default) | `https://generativelanguage.googleapis.com/v1beta/openai` | `gemini-3.5-flash-lite` | aistudio.google.com |
 | Groq | `https://api.groq.com/openai/v1` | `llama-3.3-70b-versatile` | console.groq.com |
 
-Both were checked against the official docs on 2026-11-13 (`docs/api_notes.md`). Google's pricing
+Both were checked against the official docs (`docs/api_notes.md`). Google's pricing
 page lists `gemini-3.5-flash-lite` as "Free of charge" on the free tier; the exact free-tier RPM/RPD
 for it is shown only inside AI Studio (UNVERIFIED here). Groq's per-model free limits are shown only
 in the account's limits page (UNVERIFIED here). If Gemini replies come back empty, uncomment

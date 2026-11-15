@@ -86,7 +86,7 @@ def write_md(data: dict, out_path: Path) -> None:
         data["reason"],
         "",
         "Without user authorization for a multi-gigabyte download exception (similar to the",
-        "2026-11-04 T1.5 exception), tile expansion cannot proceed under the 1 GB cap.",
+        " T1.5 exception), tile expansion cannot proceed under the 1 GB cap.",
         "Consequently, T5.xc (re-grading) is skipped because no contrast passed diagnostics.",
     ]
     out_path.write_text("\n".join(lines), encoding="utf-8")

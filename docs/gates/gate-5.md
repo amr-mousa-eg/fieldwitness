@@ -1,4 +1,4 @@
-# Gate 5 — Phase 5 (neighbour witness), 2026-11-07
+# Gate 5 — Phase 5 (neighbour witness)
 
 **Gate test (PLAN §5): at least one Tier 1 contrast passes diagnostics. Result: FAIL.**
 

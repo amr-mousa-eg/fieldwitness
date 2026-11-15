@@ -1,6 +1,6 @@
 """Split-conformal recalibration of the stored prediction intervals (experiment, branch only).
 
-Pre-registered in DECISIONS.md (2026-11-12, "conformal recalibration of the prediction
+Pre-registered in DECISIONS.md ("conformal recalibration of the prediction
 intervals"). Not used by packs or the app. Output tag D (model statistics).
 
 Score per field-season: s = |y - q50| / h, with h = (q95 - q5) / 2 (half-width of the stored

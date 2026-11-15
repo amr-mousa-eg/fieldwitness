@@ -75,7 +75,7 @@ def test_crops_file_rejects_unknown_source():
 
 def test_rotation_options_have_verified_ky_and_stage_lengths():
     """A crop offered as an MVP rotation option needs a verified Ky (for RYI) and verified stage
-    lengths in every selected region that lists it (user decisions 2026-11-04)."""
+    lengths in every selected region that lists it (user decisions)."""
     crops = load_crops()
     regions = load_regions()
     for rid in SELECTED:

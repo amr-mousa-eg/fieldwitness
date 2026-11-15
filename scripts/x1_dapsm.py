@@ -1,4 +1,4 @@
-"""Experiment 1 (pre-registered in DECISIONS.md 2026-11-12): DAPSM for the neighbour witness.
+"""Experiment 1 (pre-registered in DECISIONS.md): DAPSM for the neighbour witness.
 
 Usage: uv run python -u scripts/x1_dapsm.py
 Inputs : data/neighbours/ks_t14slh_field_season.parquet, data/fields/ks_t14slh_pilot.parquet
@@ -234,7 +234,7 @@ def write_report(res, grid, w_star, dmax, n_rows) -> None:
     worst = fit["new_worst_covariate"].value_counts().to_dict()
     doc = {
         "experiment": "Experiment 1: distance-adjusted propensity score matching (DAPSM)",
-        "preregistration": "DECISIONS.md 2026-11-12 'Pre-registration: two algorithm experiments'",
+        "preregistration": "DECISIONS.md 'Pre-registration: two algorithm experiments'",
         "cutoff_year": CUT_YEAR,
         "rows_used": n_rows,
         "geometry_source": "data/fields/ks_t14slh_pilot.parquet (CSB polygons, WGS 84); "

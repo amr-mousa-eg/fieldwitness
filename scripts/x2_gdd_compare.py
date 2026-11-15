@@ -1,4 +1,4 @@
-"""Experiment 2 (pre-registered in DECISIONS.md 2026-11-12): calendar vs gdd phenology.
+"""Experiment 2 (pre-registered in DECISIONS.md): calendar vs gdd phenology.
 
 Usage: uv run python -u scripts/x2_gdd_compare.py
 Inputs : results/hindcast/gdd/records_{calendar,gdd}.jsonl (scripts/x2_gdd_hindcast.py),
@@ -204,7 +204,7 @@ def main() -> None:
     res = compare(cal, gdd)
     doc = {
         "experiment": "Experiment 2: thermal-time (GDD) phenology",
-        "preregistration": "DECISIONS.md 2026-11-12 (commit c6b82f7), amendment (commit 17bc5cd)",
+        "preregistration": "DECISIONS.md (commit c6b82f7), amendment (commit 17bc5cd)",
         "cutoff": "2021-12-31",
         "scored_years": [2022, 2023, 2024],
         "bootstrap": {"blocks": "10 km", "resamples": N_BOOT, "seed": SEED},

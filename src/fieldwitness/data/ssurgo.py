@@ -1,7 +1,7 @@
 """USDA-NRCS SSURGO via Soil Data Access (SDA): independent soil check only (Phase 12).
 
 Not a simulation input: nothing in the pipeline, packs or results reads this module. Request
-and response shapes were verified on 2026-11-11 (docs/api_notes.md, "Soil Data Access"):
+and response shapes were verified (docs/api_notes.md, "Soil Data Access"):
 POST JSON {"query": <SQL>, "format": "JSON+COLUMNNAME"} to `URL`; the reply is
 {"Table": [[column names], [row], ...]} with every value as a string (or null), and `{}` when
 the query returns no rows. The table function SDA_Get_Mukey_from_intersection_with_WktWgs84

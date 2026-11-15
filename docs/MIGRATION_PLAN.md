@@ -1,6 +1,6 @@
 # FieldWitness — migration and continuation plan
 
-Prepared 8 Nov 2026 for moving `D:\NASA Project` to a second Windows laptop and continuing with a different AI coding environment.
+Prepared for moving `D:\NASA Project` to a second Windows laptop and continuing with a different AI coding environment.
 
 **Status of this document:** plan only. Nothing here has been executed. Every command is read-only until §3 Phase A, and Phase A only starts after you approve it.
 
@@ -109,7 +109,7 @@ $out = "$HOME\Documents\fieldwitness_inspection_$(Get-Date -Format yyyyMMdd-HHmm
 
 ### 1.1 The project
 
-**FieldWitness** — NASA Space Apps 2026 entry for "Field Shift: Adapting Farms with NASA Data". A crop-rotation decision-support web app: for a field, it reconstructs the field's history from NASA HLS satellite data, simulates rotation options with a FAO-56 water-balance model calibrated to that history, compares them with natural experiments in neighbouring fields, grades the evidence A–D, explains every option (why, evidence, benefits, gaps, risks), and scores its own predictions against later seasons (hindcast). Hackathon: 14–15 Nov 2026; official rules and submission guide released 13 Nov.
+**FieldWitness** — NASA Space Apps entry for "Field Shift: Adapting Farms with NASA Data". A crop-rotation decision-support web app: for a field, it reconstructs the field's history from NASA HLS satellite data, simulates rotation options with a FAO-56 water-balance model calibrated to that history, compares them with natural experiments in neighbouring fields, grades the evidence A–D, explains every option (why, evidence, benefits, gaps, risks), and scores its own predictions against later seasons (hindcast). Hackathon:; official rules and submission guide released.
 
 ### 1.2 Repository structure (REPORTED; confirm with §0)
 
@@ -157,7 +157,7 @@ Gitignored (therefore **not** on GitHub): `data/`, `packs/` (generated packs), `
 2. Deployment (T9.8): Netlify account exists; plan is a ~40-field demo set, dragged as a built folder. Repo stays private until the user decides.
 3. Tier 2/3 regions (Toulouse, Ukraine), T2.3 classifier, Nile confidence map — extras.
 4. WIMAS manual download (T4.6), OpenET (stretch, terms unread).
-5. Phase 10: LICENSE (missing), README/AI_USE final, red-team review, official rules check (13 Nov), demo video or 7 slides, submission page, References field.
+5. Phase 10: LICENSE (missing), README/AI_USE final, red-team review, official rules check, demo video or 7 slides, submission page, References field.
 6. Optional polish: app bundle 1.77 MB (lazy-load the map), POWER and GBIF/USDA licence confirmation in DATA.md.
 
 ### 1.5 Known issues that matter for the move
@@ -237,7 +237,7 @@ foreach ($p in 'data','packs','docs\refs','logs') { if (Test-Path $p) {
   "$p,$($s.Count),$($s.Sum)" } } | Set-Content "E:\fieldwitness\manifest_old.csv"
 ```
 
-**Leave the old laptop untouched** after Phase A: no deletions, no cleanup, no uninstalls, until §10 passes on the new laptop and ideally until after submission (16 Nov).
+**Leave the old laptop untouched** after Phase A: no deletions, no cleanup, no uninstalls, until §10 passes on the new laptop and ideally until after submission.
 
 ### Phase B — new laptop
 
@@ -393,7 +393,7 @@ No new documentation system is created. Changes go into the existing files:
 
 ## 8. Continuing in Google Antigravity
 
-**Decision (user, 8 Nov):** "Anti-Gravity" means **Google Antigravity**, the AI coding IDE used on the new laptop. It is **not** a FieldWitness feature, so no feature task is added to PLAN.md. Development continues with the existing open tasks.
+**Decision (user):** "Anti-Gravity" means **Google Antigravity**, the AI coding IDE used on the new laptop. It is **not** a FieldWitness feature, so no feature task is added to PLAN.md. Development continues with the existing open tasks.
 
 ### 8.1 Setup on the new laptop
 
@@ -408,7 +408,7 @@ No new documentation system is created. Changes go into the existing files:
 
 - Same loop as before, now with you approving each plan: next task from the handoff → plan (≤10 lines) → implement → acceptance test + full test suite → tick PLAN.md → one line in DECISIONS.md → commit → push when green.
 - The Claude Code autopilot (`scripts/autopilot.ps1`) is paused. Keep the script in the repo; it still works if Claude Code is ever used again.
-- Priority order up to the 13 Nov freeze: Phase 5 (T5.x design, T5.2 double ML, T5.3 diagnostics) → deployment of the ~40-field demo (you approve each step) → Phase 10 (LICENSE, README/AI_USE final, red team, rules check on 13 Nov) → extras (Toulouse, Ukraine, Nile confidence map) only if time remains.
+- Priority order up to the freeze: Phase 5 (T5.x design, T5.2 double ML, T5.3 diagnostics) → deployment of the ~40-field demo (you approve each step) → Phase 10 (LICENSE, README/AI_USE final, red team, rules check) → extras (Toulouse, Ukraine, Nile confidence map) only if time remains.
 - The demo video or 7 slides and the submission page are yours; the agent can draft texts in `docs/drafts/`.
 
 ### 8.3 Risks specific to the switch
@@ -430,7 +430,7 @@ Paste this as the first message in the new environment, opened at the project ro
 You are continuing an existing engineering project, not starting a new one. Inspect files before assuming anything.
 
 PROJECT
-FieldWitness — NASA Space Apps 2026 entry for the challenge "Field Shift: Adapting Farms with NASA Data" (full text: docs/official_challenge.md). A crop-rotation decision-support web app. For a field it reconstructs the field's history from NASA HLS 30 m satellite data, simulates rotation options with a FAO-56 water-balance model calibrated to that history, compares them with natural experiments in neighbouring fields, grades the evidence A–D, explains each option (why, evidence, benefits, gaps, risks), and scores its own predictions against later seasons (hindcast vs baselines). Hackathon 14–15 Nov 2026; official rules released 13 Nov (feature freeze that day).
+FieldWitness — NASA Space Apps entry for the challenge "Field Shift: Adapting Farms with NASA Data" (full text: docs/official_challenge.md). A crop-rotation decision-support web app. For a field it reconstructs the field's history from NASA HLS 30 m satellite data, simulates rotation options with a FAO-56 water-balance model calibrated to that history, compares them with natural experiments in neighbouring fields, grades the evidence A–D, explains each option (why, evidence, benefits, gaps, risks), and scores its own predictions against later seasons (hindcast vs baselines). Hackathon; official rules released (feature freeze that day).
 
 SOURCE OF TRUTH (read in this order before doing anything)
 1. CLAUDE.md — hard rules and working agreement. They apply to you, whatever your environment.
@@ -445,7 +445,7 @@ One Git repository at the project root, remote origin = github.com/amr-mousa-eg/
 
 STATE (verify against PLAN.md ticks and the handoff)
 Done: Phases 0–4 (T2.2 negative result recorded; T2.3 deferred; T4.6 waits for a manual WIMAS download), Phase 6, Phase 7 (hindcast skill weak, reported as is), Phase 8 (200 Kansas packs, validator clean), Phase 9 views on real data.
-Open: Phase 5 neighbour evidence (T5.x design, double ML with doubleml 0.11.4, diagnostics), deployment (Netlify, ~40-field demo set; ask the user before any deploy or account action), Tier 2/3 regions (extras), Phase 10 (LICENSE, README/AI_USE final, red team, rules check on 13 Nov, demo, submission).
+Open: Phase 5 neighbour evidence (T5.x design, double ML with doubleml 0.11.4, diagnostics), deployment (Netlify, ~40-field demo set; ask the user before any deploy or account action), Tier 2/3 regions (extras), Phase 10 (LICENSE, README/AI_USE final, red team, rules check, demo, submission).
 
 RULES THAT MATTER MOST (full list in CLAUDE.md)
 - Never fabricate data, endpoints, parameters, coefficients, results or citations. Verify every external API from its official docs first.
@@ -504,4 +504,4 @@ None is strictly required: the repository documents are the source of truth, and
 
 ## Future work (not implemented)
 
-Planned research directions, not part of the current results (added 12 Nov 2026 on branch `experiment/algo-upgrade`): a physics-informed water-balance network (`src/fieldwitness/experimental/neural_physics/`) and amortised neural posterior estimation with `sbi` (`src/fieldwitness/experimental/neural_infer/`). Both are docstring-only stubs that raise `NotImplementedError`; neither is installed, used or validated.
+Planned research directions, not part of the current results (added on branch `experiment/algo-upgrade`): a physics-informed water-balance network (`src/fieldwitness/experimental/neural_physics/`) and amortised neural posterior estimation with `sbi` (`src/fieldwitness/experimental/neural_infer/`). Both are docstring-only stubs that raise `NotImplementedError`; neither is installed, used or validated.

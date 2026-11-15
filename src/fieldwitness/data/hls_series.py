@@ -1,6 +1,6 @@
 """T1.5: HLS-VI (NDVI, EVI) + Fmask time series for pilot fields via AppEEARS point tasks.
 
-Why point tasks (DECISIONS.md 2026-11-04): AppEEARS area tasks are limited by the number of output
+Why point tasks (DECISIONS.md): AppEEARS area tasks are limited by the number of output
 files (~4 field-years per task; 200 fields x 9 years would need ~450 tasks), and direct COG reads
 would be ~36 GB because HLS-VI COGs are striped and the fields span the tile. Point tasks are
 limited to 1,000 coordinates per request and by the number of values (~1,600 point-years per
@@ -27,7 +27,7 @@ from fieldwitness.resolve.pixels import HLS_RES_M
 OUT = Path("data/appeears")
 CAP_BYTES = 1e9  # CLAUDE.md rule 11: ask before downloading more than 1 GB
 
-# One-time exception approved by the user on 2026-11-04 (DECISIONS.md, "User approval: T1.5 HLS
+# One-time exception approved by the user (DECISIONS.md, "User approval: T1.5 HLS
 # download over the 1 GB cap"): the 30 Kansas T1.5 point tasks below, 1,317 MB in total from the
 # AppEEARS bundle listings. The cap is 1,317.5 MB, the largest total the approved "1,317 MB" can
 # denote; no other margin. It applies only when every task being downloaded is one of these IDs.
@@ -184,7 +184,7 @@ def year_root(region_id: str, year: int) -> Path:
 def submit_year(region_id: str, year: int) -> dict:
     """Submit one calendar year for the SAME sampled points as T1.5 (read from the saved points
     file, never recomputed) and the same chunks, products and layers (Experiment 3, user
-    approval 2026-11-12). Task IDs go to `year_registry_path`, written after each submit."""
+    approval). Task IDs go to `year_registry_path`, written after each submit."""
     coords = json.loads((OUT / f"{region_id}_points.json").read_text(encoding="utf-8"))
     chunks = chunk_by_field(coords)
     reg_path = year_registry_path(region_id, year)

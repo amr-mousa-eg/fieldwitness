@@ -1,6 +1,6 @@
 // Parity of the in-browser 3D replay (src/field3d/physics.ts) with the Python 3D path
 // (fieldwitness.packs.sim3d.simulate_weekly). Tolerances were fixed before the first run
-// (DECISIONS.md 2026-11-11, Rotation Builder Level B):
+// (DECISIONS.md, Rotation Builder Level B):
 //   soil water, rain, irrigation <= 0.05 mm per week; Ks and canopy proxy <= 0.005;
 //   crops and stages exact; root depth exact (both round to 0.01 m).
 // 1) all 200 public packs: every precomputed alternative (and Current when it has no

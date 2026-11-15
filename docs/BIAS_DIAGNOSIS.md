@@ -1,6 +1,6 @@
 # Bias diagnosis and per-crop centre recalibration (experiment, not adopted)
 
-*12 Nov 2026. Pre-registered in `DECISIONS.md` (commit eb19a5b) before running. Branch `experiment/bias-diagnosis`; nothing here changes `main`, packs, the app or config. Tables, plots and the frozen corrections are in `results/hindcast/bias_diagnosis/`.*
+*. Pre-registered in `DECISIONS.md` (commit eb19a5b) before running. Branch `experiment/bias-diagnosis`; nothing here changes `main`, packs, the app or config. Tables, plots and the frozen corrections are in `results/hindcast/bias_diagnosis/`.*
 
 **Question.** The 2022–2024 forecasts were biased (the conformal experiment found only about 31% of observed maize and wheat values above the predicted median). Is the bias already there in 2019–2021, and does a simple per-crop correction fitted on 2019–2021 remove it in 2022–2024?
 

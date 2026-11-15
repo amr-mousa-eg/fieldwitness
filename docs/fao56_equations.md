@@ -1,4 +1,4 @@
-# FAO-56 equations used in Phase 3 (transcribed 2026-11-04)
+# FAO-56 equations used in Phase 3 (transcribed)
 
 Source: Allen, R.G., Pereira, L.S., Raes, D., Smith, M. (1998). *Crop evapotranspiration — Guidelines for computing crop water requirements.* FAO Irrigation and Drainage Paper 56, **HTML edition (1998)**. The 2nd edition (2025) exists but is **not used**, for consistency with `config/crops.yaml` (values from the 1998 tables).
 

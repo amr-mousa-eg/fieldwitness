@@ -1,6 +1,6 @@
 """ISRIC SoilGrids 2.0 soil properties per pilot field via WCS (PLAN.md T1.3).
 
-The SoilGrids REST `properties/query` service was down on 2026-11-04 (HTTP 503 / timeouts); the
+The SoilGrids REST `properties/query` service was down (HTTP 503 / timeouts); the
 documented WCS on maps.isric.org works and is used instead (docs.isric.org/globaldata/soilgrids/
 wcs.html; GetCapabilities verified). Licence: CC-BY 4.0 for SoilGrids per the ISRIC data policy
 (v2024-1). Units and conversion factors from docs.isric.org SoilGrids_faqs_01 ("SoilGrids layers"):

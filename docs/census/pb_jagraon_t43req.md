@@ -1,6 +1,6 @@
 # Census — Punjab around Jagraon (India) (`pb_jagraon_t43req`, Tier 3)
 
-Generated 2026-11-04T01:35:10+00:00 by `fieldwitness.cli census`. Tile **T43REQ** (EPSG:32643). Numbers are counts from CMR metadata and bbox reads; no imagery downloaded.
+Generated 2024-12-31T00:00:00Z+00:00 by `fieldwitness.cli census`. Tile **T43REQ** (EPSG:32643). Numbers are counts from CMR metadata and bbox reads; no imagery downloaded.
 
 Season windows (tag **A**, team assumption, editable in `config/regions.yaml`; named by harvest year): kharif months 6–10; rabi months 11–4
 

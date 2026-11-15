@@ -1,10 +1,10 @@
-# Gate 1 review — Kansas (T14SLH), 2026-11-05
+# Gate 1 review — Kansas (T14SLH)
 
 Gate 1 definition (PLAN.md): one full Tier 1 region has polygons, HLS series, weather, soil values for the pilot fields and labels on disk.
 
 **Verdict: Gate 1 data layer PASSES for Kansas. Phase 2 has one FAILED acceptance test (T2.2). T1.7 is open (validation-only).**
 
-Evidence: 127 tests pass, ruff check and format clean (2026-11-05).
+Evidence: 127 tests pass, ruff check and format clean.
 
 ## Gate 1 items
 
@@ -37,7 +37,7 @@ Evidence: 127 tests pass, ruff check and format clean (2026-11-05).
 |---|---|---|
 | T2.1 smoothing property test | PASS | `tests/test_story.py` |
 | T2.5 bare-soil calendar | PASS | 200/200 fields, 0 insufficient months |
-| **T2.2 season count ≥ 90 %** | **FAIL** | 74.6 % on the original 30; dev 82.9 %; fresh test set 78.3 % (run once). `results/story/ks_seasons_test.json`. Winter wheat weakest (0.66). Not ticked; no further tuning (user decision 2026-11-04) |
+| **T2.2 season count ≥ 90 %** | **FAIL** | 74.6 % on the original 30; dev 82.9 %; fresh test set 78.3 % (run once). `results/story/ks_seasons_test.json`. Winter wheat weakest (0.66). Not ticked; no further tuning (user decision) |
 | T2.3 classifier | not started | inherits a 78 %-accurate season detector |
 
 ## Open risks

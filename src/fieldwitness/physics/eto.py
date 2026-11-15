@@ -1,7 +1,7 @@
 """Daily FAO Penman-Monteith grass reference evapotranspiration (T3.1).
 
 Source: Allen, R.G., Pereira, L.S., Raes, D., Smith, M. (1998). Crop evapotranspiration.
-FAO Irrigation and Drainage Paper 56, HTML edition (1998), read on 2026-11-04 from the equation
+FAO Irrigation and Drainage Paper 56, HTML edition (1998), read from the equation
 images and text of the chapter pages (local copies in the gitignored `docs/refs/fao56_eq/`):
   Ch. 3  https://www.fao.org/4/x0490e/x0490e07.htm  (Eq. 7, 8, 11-13, 17, 19, 21, 23-25, 34, 35,
                                                       37-40, 42 and the constants used here)

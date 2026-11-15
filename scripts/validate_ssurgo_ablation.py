@@ -1,6 +1,6 @@
 """Phase 4 SSURGO AWS vs Fixed 150 mm TAW Error Stratification Report.
 
-Pre-registered in DECISIONS.md (2026-11-13). Uses existing committed CSV/JSONL files:
+Pre-registered in DECISIONS.md. Uses existing committed CSV/JSONL files:
   - results/validation/soil_ssurgo_check.csv (198 fields with SSURGO AWS [E])
   - results/hindcast/ks_t14slh_records.jsonl (2022-2024 forecast errors [D/O])
 

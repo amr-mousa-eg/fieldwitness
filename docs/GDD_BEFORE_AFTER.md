@@ -1,6 +1,6 @@
 # Calendar clock vs heat clock: what changed in the predictions
 
-*12 Nov 2026. Experiment on branch `experiment/algo-upgrade`, not part of the live website. All numbers come from `results/hindcast/gdd_before_after/summary.md`; that file also gives every confidence range.*
+*. Experiment on branch `experiment/algo-upgrade`, not part of the live website. All numbers come from `results/hindcast/gdd_before_after/summary.md`; that file also gives every confidence range.*
 
 ## What we changed
 

@@ -1,6 +1,6 @@
 """T7: Grade and credibility empirical validity check on Kansas hindcast.
 
-Pre-registered in DECISIONS.md (2026-11-09) before execution:
+Pre-registered in DECISIONS.md before execution:
   - No circularity: credibility scores and evidence grades are evaluated strictly at the
     hindcast cut-off (as_of 2021-12-31). No 2022-2024 data enters credibility or grades.
   - Which grade: grade of the field's Current option (crops observed in scored seasons).

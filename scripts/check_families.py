@@ -3,8 +3,8 @@
 Usage:  uv run python -u scripts/check_families.py
 
 Scientific names come from FAO-66 crop chapters (PDF page cited) where they exist; rapeseed and the
-oat cover-crop proxy have no FAO-66 chapter, so their names were specified by the user (2026-11-04).
-APIs verified with one call each on 2026-11-04 (docs/api_notes.md). Prints a JSON summary.
+oat cover-crop proxy have no FAO-66 chapter, so their names were specified by the user.
+APIs verified with one call each (docs/api_notes.md). Prints a JSON summary.
 """
 
 import datetime as dt
@@ -27,10 +27,10 @@ NAMES = {
     "spring_barley": ("Hordeum vulgare", FAO66.format(149)),
     "sunflower": ("Helianthus annuus", FAO66.format(179)),
     "soybean": ("Glycine max", FAO66.format(139)),
-    "rapeseed": ("Brassica napus", "specified by the user (2026-11-04); no FAO-66 chapter"),
+    "rapeseed": ("Brassica napus", "specified by the user; no FAO-66 chapter"),
     "cover_crop": (
         "Avena sativa",
-        "specified by the user (2026-11-04) for the oat proxy; no FAO-66 chapter",
+        "specified by the user for the oat proxy; no FAO-66 chapter",
     ),
 }
 

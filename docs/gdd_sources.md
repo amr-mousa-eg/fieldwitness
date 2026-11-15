@@ -1,6 +1,6 @@
 # Thermal-time (GDD) parameters: sources and table locations (Experiment 2)
 
-Read on 2026-11-12. Values are copied into `config/crops.yaml` as new `gdd_phenology` keys (maize, sorghum, winter wheat). The existing FAO-56 values are unchanged. Used only when `phenology_mode: gdd` (experiment branch); packs and the app never use them.
+Read. Values are copied into `config/crops.yaml` as new `gdd_phenology` keys (maize, sorghum, winter wheat). The existing FAO-56 values are unchanged. Used only when `phenology_mode: gdd` (experiment branch); packs and the app never use them.
 
 ## Sources
 
@@ -20,7 +20,7 @@ Read on 2026-11-12. Values are copied into `config/crops.yaml` as new `gdd_pheno
 
 Checked and not used: Montana State MT200103 (Miller, Lanier, Brandt, July 2001), Table 1. Its hard red wheat GDD are counted from seeding and were measured on spring-sown wheat in Saskatchewan, not on Kansas winter wheat. The USA-NPN winter wheat forecast names no source for its stage bands.
 
-## Choices (tag A, approved by the user on 2026-11-12; DECISIONS.md)
+## Choices (tag A, approved by the user; DECISIONS.md)
 
 | Crop | Formula | Count start | Initial end | Development end | Mid end | Late end |
 |---|---|---|---|---|---|---|

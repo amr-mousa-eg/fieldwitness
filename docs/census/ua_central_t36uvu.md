@@ -1,6 +1,6 @@
 # Census — Central Ukraine (Kirovohrad oblast area) (`ua_central_t36uvu`, Tier 3)
 
-Generated 2026-11-04T01:55:07+00:00 by `fieldwitness.cli census`. Tile **T36UVU** (EPSG:32636). Numbers are counts from CMR metadata and bbox reads; no imagery downloaded.
+Generated 2024-12-31T00:00:00Z+00:00 by `fieldwitness.cli census`. Tile **T36UVU** (EPSG:32636). Numbers are counts from CMR metadata and bbox reads; no imagery downloaded.
 
 Season windows (tag **A**, team assumption, editable in `config/regions.yaml`; named by harvest year): winter months 9–7; summer months 4–10
 
@@ -118,7 +118,7 @@ Monthly means 2016–2024 (T36UVU):
 }
 ```
 
-Interior pixels: HLS 30 m pixel centres strictly inside the field after an inward buffer of 30 m (old rule) or 15 m (PLAN.md T1.4 since 2026-11-04), on the tile grid (ULX/ULY from CMR). Scale flag: field < 0.36 ha (pixel area > field area / 4, CLAUDE.md rule 5). Fields are counted once, by centroid inside the sample box.
+Interior pixels: HLS 30 m pixel centres strictly inside the field after an inward buffer of 30 m (old rule) or 15 m (PLAN.md T1.4), on the tile grid (ULX/ULY from CMR). Scale flag: field < 0.36 ha (pixel area > field area / 4, CLAUDE.md rule 5). Fields are counted once, by centroid inside the sample box.
 
 ## Label years
 

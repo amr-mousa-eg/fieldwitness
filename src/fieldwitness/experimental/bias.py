@@ -1,5 +1,5 @@
 """Bias diagnosis and per-crop centre recalibration (experiment; pre-registered in DECISIONS.md,
-2026-11-12 "[claude-code] PRE-REGISTRATION: bias diagnosis"). Not used by the pipeline or the app.
+ "[claude-code] PRE-REGISTRATION: bias diagnosis"). Not used by the pipeline or the app.
 
 All functions are pure. Signed error = predicted median - observed. Quantile levels are the ones
 stored by `scripts/t71_hindcast.py` (QS = 0.05, 0.25, 0.5, 0.75, 0.95).

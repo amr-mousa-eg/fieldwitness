@@ -1,6 +1,6 @@
 """T5.4: sign check of our Kansas previous-crop contrasts against published US findings.
 
-Sources (opened 2026-11-08, see DECISIONS.md):
+Sources (opened, see DECISIONS.md):
 - Kluger, Di Tommaso & Lobell, "Precrop Payoffs: Causal machine learning reveals large but
   variable yield benefits of crop rotation in major breadbaskets", arXiv:2506.02384v2
   (14 Oct 2025; Environ. Res. Lett. 20 (2025) 114037), Table S9, column Eff_2-year, US rows.

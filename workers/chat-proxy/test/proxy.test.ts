@@ -139,9 +139,9 @@ test("daily cap counts in KV and blocks at the cap", async () => {
   const store = new Map<string, string>();
   const kv = { get: async (k: string) => store.get(k) ?? null, put: async (k: string, v: string) => void store.set(k, v) };
   const env: Env = { ...ENV, DAILY_CAP: "2", USAGE: kv };
-  const now = new Date("2026-11-13T12:00:00Z");
+  const now = new Date("2024-12-31T12:00:00Z");
   assert.equal(await checkDailyCap(env, now), null);
   assert.equal(await checkDailyCap(env, now), null);
   assert.equal(await checkDailyCap(env, now), 12 * 3600);
-  assert.equal(store.get("count:2026-11-13"), "2");
+  assert.equal(store.get("count:2024-12-31"), "2");
 });

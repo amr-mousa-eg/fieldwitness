@@ -1,6 +1,6 @@
 <!-- DRAFT: FieldWitness Space Apps 2026 Submission
-     NOTE: Field names and length limits to verify against the official 2026 Submission and Judging Guide on 13 Nov.
-     Submission window: 14 Nov 09:00 to 15 Nov 23:59 local time (spaceappschallenge.org).
+     NOTE: Field names and length limits to verify against the official 2026 Submission and Judging Guide.
+     Submission window: 09:00 to 23:59 local time (spaceappschallenge.org).
      Verification status: All claims, numbers, and limitations grounded in repository results/ and verified datasets. -->
 
 # Space Apps 2026 Submission: FieldWitness
@@ -14,7 +14,7 @@ Challenge: **Field Shift: Adapting Farms with NASA Data**
 ---
 
 ## 1. Project Summary
-*(Field names and length limits to verify against the 2026 guide on 13 Nov)*
+*(Field names and length limits to verify against the guide)*
 
 FieldWitness is a public, no-login, offline-capable decision support web application that helps farmers evaluate crop rotation alternatives for their own fields. For every rotation option, the system evaluates:
 - Water consumption, dry-year drought risk, and bare-soil exposure windows;
@@ -31,7 +31,7 @@ Every recommendation is saved as an empirical prediction that next season's sate
 ---
 
 ## 2. Detailed Description
-*(Field names and length limits to verify against the 2026 guide on 13 Nov)*
+*(Field names and length limits to verify against the guide)*
 
 ### What it does
 A farmer or advisor selects a field from the map or searchable list. The interface provides synchronized views:
@@ -70,7 +70,7 @@ Overlays include field-scale slope erosion exposure, regional GRACE/GRACE-FO wat
 ---
 
 ## 3. NASA Data Used
-*(Field names and length limits to verify against the 2026 guide on 13 Nov)*
+*(Field names and length limits to verify against the guide)*
 
 1. **Harmonized Landsat Sentinel-2 (HLS):**
    - Products: `HLSL30` v002 (Landsat 8/9 OLI, DOI: 10.5067/HLS/HLSL30.002) and `HLSS30` v002 (Sentinel-2A/B MSI, DOI: 10.5067/HLS/HLSS30.002) surface reflectance, Fmask quality bands, and pre-computed vegetation index layers (`HLSL30_VI`, `HLSS30_VI`).
@@ -96,7 +96,7 @@ Overlays include field-scale slope erosion exposure, regional GRACE/GRACE-FO wat
 ---
 
 ## 4. Other Datasets Used
-*(Field names and length limits to verify against the 2026 guide on 13 Nov)*
+*(Field names and length limits to verify against the guide)*
 
 1. **USDA NASS Crop Sequence Boundaries (CSB), 2017–2024 Edition:**
    - Role: Provides field boundary geometry and annual crop classification labels for Kansas pilot fields (public domain).
@@ -119,7 +119,7 @@ Overlays include field-scale slope erosion exposure, regional GRACE/GRACE-FO wat
 ---
 
 ## 5. Use of Artificial Intelligence
-*(Field names and length limits to verify against the 2026 guide on 13 Nov)*
+*(Field names and length limits to verify against the guide)*
 
 - **Development Assistance:** FieldWitness was engineered using agentic AI pair programming tools—**Claude Code** (Anthropic) and **Google Antigravity** (Google DeepMind)—under strict human supervisory control across defined milestone gates.
 - **Working Agreement & Guardrails:**

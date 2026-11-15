@@ -1,6 +1,6 @@
 """Reliability tiers learned from measured error (experiment, branch only).
 
-Pre-registered in DECISIONS.md (2026-11-12, "reliability tiers learned from measured error").
+Pre-registered in DECISIONS.md ("reliability tiers learned from measured error").
 Not used by packs, the app or `config/grading.yaml`. Tiers R1-R4 are relative reliability, not
 evidence grades, and do not use the neighbour witness. Outputs tag D.
 """
