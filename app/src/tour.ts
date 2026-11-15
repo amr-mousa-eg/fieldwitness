@@ -28,7 +28,7 @@ export const TOUR_STEPS: TourStep[] = [
   {
     key: "field",
     requires: ["field"],
-    targets: [".field-items-list, .map-container", ".app-nav a:first-child"],
+    targets: [".field-items-list, .map-container", '.app-nav a[data-nav="map"], .app-nav a:first-child'],
   },
   {
     key: "season",

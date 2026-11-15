@@ -53,5 +53,5 @@ export function subscribeLocale(fn: () => void): () => void {
 }
 
 export function useLocale(): Locale {
-  return useSyncExternalStore(subscribeLocale, getLocale, () => "en");
+  return useSyncExternalStore(subscribeLocale, getLocale, getLocale);
 }

@@ -12,10 +12,22 @@ export type FieldTab = "story" | "options" | "calendar" | "advisor" | "sim3d";
 export const TABS: FieldTab[] = ["story", "options", "calendar", "advisor", "sim3d"];
 
 /** Region-level pages. Field ids are 40-hex hashes, so these names never collide with one. */
-export type RegionPage = "map" | "scoreboard" | "compare" | "methods" | "add-field";
-export const PAGES: RegionPage[] = ["map", "scoreboard", "compare", "methods", "add-field"];
+export type RegionPage =
+  | "home"
+  | "map"
+  | "scoreboard"
+  | "compare"
+  | "methods"
+  | "resources"
+  | "terms"
+  | "add-field";
 
-/** App location in the URL hash: #/<region_id>[/<page> | /<field_id>[/<tab>]] or #/add-field. */
+export type DocsPage = "methods" | "resources" | "terms";
+export const PRIMARY_PAGES: readonly RegionPage[] = ["home", "map", "scoreboard", "compare", "add-field"];
+export const DOCS_PAGES: readonly DocsPage[] = ["methods", "resources", "terms"];
+export const PAGES: RegionPage[] = [...PRIMARY_PAGES, ...DOCS_PAGES];
+
+/** App location in the URL hash: #/, #/home, #/<region_id>[/<page> | /<field_id>[/<tab>]], or #/add-field. */
 export interface Route {
   regionId: string | null;
   page: RegionPage;
@@ -25,17 +37,25 @@ export interface Route {
 
 export function parseHash(hash: string): Route {
   const clean = hash.split("?")[0];
-  const parts = clean
+  const anchorAt = clean.indexOf("#", 1);
+  const subAnchor = anchorAt >= 0 ? clean.slice(anchorAt + 1) : "";
+  const routePart = anchorAt >= 0 ? clean.slice(0, anchorAt) : clean;
+  const parts = routePart
     .replace(/^#\/?/, "")
     .split("/")
     .filter(Boolean)
     .map(decodeURIComponent);
+  if (parts.length === 0 || parts[0] === "home") {
+    return { regionId: null, page: "home", fieldId: null, tab: "story" };
+  }
   if (parts[0] === "add-field") {
     return { regionId: null, page: "add-field", fieldId: null, tab: "story" };
   }
   const [regionId = null, second = null, tab = "story"] = parts;
   const rawSecond = second !== null ? second.split(/[?#]/)[0] : null;
-  const normSecond = rawSecond === "glossary" ? "methods" : rawSecond;
+  let normSecond = rawSecond === "glossary" ? "terms" : rawSecond;
+  if (normSecond === "methods" && subAnchor === "m-data") normSecond = "resources";
+  else if (normSecond === "methods" && subAnchor.startsWith("glossary")) normSecond = "terms";
   const page = PAGES.includes(normSecond as RegionPage) ? (normSecond as RegionPage) : "map";
   const fieldId = normSecond !== null && !PAGES.includes(normSecond as RegionPage) ? normSecond : null;
   return { regionId, page, fieldId, tab: TABS.includes(tab as FieldTab) ? (tab as FieldTab) : "story" };
@@ -67,6 +87,7 @@ export function routeHref(regionId: string, fieldId?: string | null, tab?: Field
 }
 
 export function pageHref(regionId: string, page: RegionPage): string {
+  if (page === "home") return "#/home";
   if (page === "add-field") return "#/add-field";
   return page === "map" ? routeHref(regionId) : `#/${encodeURIComponent(regionId)}/${page}`;
 }
