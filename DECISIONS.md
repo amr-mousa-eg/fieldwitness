@@ -1174,9 +1174,23 @@ Pre-registered BEFORE running on Central Ukraine (`ua_central_t36uvu`) data (`CL
 - Updated `w3_neighbours.status` from `"OFF"` to `"ON"` in `app/src/MethodsDiagram.tsx` so the Data & Methods architecture diagram reflects active Panel-OBDML/DAPSM Witness 3 in Central Ukraine (`ua_central_t36uvu`, 30 pre-cutoff contrasts ACTIVE `[D]`) while keeping the Kansas diagnostic caveat line (`0 of 32`) visible inside the card.
 - Updated `app/tests/methodsDiagram.test.ts` to assert `w3_neighbours.status === "ON"` (`mdia-status--on`, no `mdia-box--off`) while preserving the `.mdia-box--off` non-colour-only CSS rule check.
 
+- **Updated:** 2026-11-14 (`docs/witness3-on-diagram`). See handoff below for current branch.
+
+## 2026-11-15 — [antigravity] Phase P0 (`E1.1` & `E2.1`): Ukraine GRACE + POWER Heat-Wave Regional Layers & Multi-Metric Baselines `B0–B2` (`feat/phase-p0-ua-layers-baselines`)
+
+1. **`E1.1` Multi-Year Regional Context Layers (`src/fieldwitness/packs/extras.py`, `scripts/build_regional_layers.py`):**
+   - Added [`grace_csr_layer`](src/fieldwitness/packs/extras.py) (UT-CSR RL06.3 Mascon GRACE/GRACE-FO `lwe_thickness`, `2003–2024`, `0.25°` land-masked grid) and [`heatwave_layer`](src/fieldwitness/packs/extras.py) (NASA POWER MERRA-2 `0.5° × 0.625°` annual days with `T2M_MAX >= 35 °C`, `2001–2024`).
+   - Built `packs/demo/ua_central_t36uvu/layers.json` (`grace_tws` across `24` CSR cells and `heatwave_days` across `9` POWER cells; previously empty `layers: []`), appended `heatwave_days` (`9` cells, `2001–2024`) to `packs/demo/ks_t14slh/layers.json`, updated `scripts/build_ukraine_demo_packs.py` so future rebuilds preserve both regional layers, added Arabic unit translations in `app/src/format.ts`, and documented sources/DOIs in `DATA.md`.
+
+2. **`E2.1` Leak-Free Central Ukraine Multi-Metric Baselines `B0–B2` (`scripts/eval_ukraine_baselines.py`, `results/hindcast/ua_central_t36uvu_baselines.json`, `packs/demo/ua_central_t36uvu/hindcast.json`):**
+   - Executed strict `as_of("2021-12-31")` (`max_fit_year = 2021 <= 2021`) out-of-sample evaluation on `2022–2024` across all `120` Ukraine demo fields (`n = 329` field-seasons: `156` sunflower, `115` maize, `58` winter wheat) for `fieldwitness` (`forecast` & `forced`) alongside `B0` (own-field / regional crop pool), `B1` (uncalibrated FAO-56 defaults + SoilGrids TAW), and `B2` (uncalibrated prior draws + SoilGrids TAW); `B3` omitted transparently because Panel-OBDML estimates cover deltas rather than daily NDVI trajectories.
+   - **Honest results (`CLAUDE.md` Rule 9):** In `forecast` mode, `fieldwitness` beats all three baselines (`B0 / B1 / B2`) on `sos` CRPS (`12.19` vs `18.14 / 15.74 / 13.43 d`), `peak` CRPS (`14.68` vs `18.26 / 23.62 / 17.52 d`), and `canopy_integral` Spearman rank correlation (`0.247` vs `0.185 / 0.203 / 0.150`), while trailing `B0` empirical pool on `canopy_integral` CRPS (`14.77` vs `13.19`) and `cover_days` CRPS (`44.56` vs `40.06 d`).
+   - Updated `methods.limits.5` and `methods.roadmap.gate.3` in `app/src/strings/{en,ar}.json`, synced `app/public/packs/`, added tests in `tests/test_packs_extras.py` (`5/5` pass) and `app/tests/phaseP0.test.ts` (`4/4` pass), and verified full Python (`373 passed`), frontend (`39` test files, `238 passed`), red-team audit, and headless Chromium checks (`0` console errors, `0` mobile overflow).
+
 ## Autopilot handoff
 
-- **Updated:** 2026-11-14 (branch `docs/witness3-on-diagram`)
-- **What this run did:** Changed Witness 3 (`w3_neighbours`) status from `OFF` to `ON` in `app/src/MethodsDiagram.tsx`, updated `app/tests/methodsDiagram.test.ts`, and verified all tests, build, and live deployment.
-- **Next task:** Monitor live feedback or post-freeze roadmap tasks.
-- **Risks / Notes:** Kansas (`ks_t14slh`) observational Neighbours contrasts remain gated `OFF` inside the simulation/grading pipeline (`0/92`, `0/32`, `0/4`), which remains documented explicitly on the diagram box, in `#m-regions`, and in `methods.limits.4`.
+- **Updated:** 2026-11-15 (branch `feat/phase-p0-ua-layers-baselines`)
+- **What this run did:** Completed Phase P0 (`E1.1` & `E2.1`): shipped CSR GRACE TWS & POWER `heatwave_days` layers in Central Ukraine + `heatwave_days` in Kansas, and leak-free `<= 2021` `B0–B2` + `fieldwitness` multi-metric hindcast baselines in `ua_central_t36uvu/hindcast.json` (`n = 329`).
+- **Next task:** Proceed to **Phase P1 (`E1.2` & `E3.1`)**: wire `SSURGO [E]` TAW (with SoilGrids fallback) into the Kansas pipeline and broaden Central Ukraine (`ua_central_t36uvu`) candidate rotations to include `sunflower` & `soybean` (+ audit `barley` / `rapeseed`).
+- **Risks / Notes:** `ua_central_t36uvu/hindcast.json` crop truth comes from causal TWDTW classifier labels (`tag D`, WorldCereal maize-vs-sunflower `κ = 0.035`), which stays prominently surfaced in Scoreboard notices and `Methods & data`.
+

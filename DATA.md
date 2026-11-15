@@ -94,9 +94,10 @@ Only the row groups whose `bbox` statistics intersect the query box are read (se
   - Scale: 9 km regional context only, scale-flagged (Rule 5).
   - Licence: NASA Earth Science Data Policy (open and free).
 - **NASA GRACE / GRACE-FO Mascons**:
-  - Product: `TELLUS_GRAC-GRFO_MASCON_CRI_GRID_RL06.3_V4` (PO.DAAC, 0.5° terrestrial water storage anomalies).
+  - Kansas (`ks_t14slh`): JPL `TELLUS_GRAC-GRFO_MASCON_CRI_GRID_RL06.3_V4` (PO.DAAC, 0.5° grid).
+  - Central Ukraine (`ua_central_t36uvu`): UT-CSR `CSR_GRACE_GRACE-FO_RL0603_Mascons_all-corrections.nc` + `CSR_GRACE_GRACE-FO_RL06_Mascons_v02_LandMask.nc` (`https://www2.csr.utexas.edu/grace/RL06_mascons.html`, Save 2024, DOI `https://doi.org/10.15781/cgq9-nh24`, 1° equal-area mascons on a 0.25° grid, `2003–2024`).
   - Scale: Coarse regional context only, scale-flagged.
-  - Licence: NASA Earth Science Data Policy.
+  - Licence: NASA Earth Science Data Policy / UT-CSR open data policy.
 - **NASA NLDAS & GLDAS Land Data Assimilation Systems**:
   - Products: `NLDAS_FORA0125_H.2.0` (`C2033151148-GES_DISC`, 0.125°), `GLDAS_NOAH025_3H.2.1` (`C1342986035-GES_DISC`, 0.25°).
   - Scale: Coarse regional hydrological forcing/context, scale-flagged.
@@ -108,6 +109,7 @@ Only the row groups whose `bbox` statistics intersect the query box are read (se
 ## Weather, soil, water use and partner datasets
 
 - **NASA POWER** daily point API, community AG: `https://power.larc.nasa.gov/api/temporal/daily/point` (parameters T2M_MAX, T2M_MIN, RH2M, WS2M, ALLSKY_SFC_SW_DWN, PRECTOTCORR).
+  - Grid & `heatwave_days` layer: NASA POWER Daily API v2.10.3 reports `sources: ["MERRA2", "POWER"]` ("Source Native Resolution Daily Data"); empirical boundary queries confirm MERRA-2 `0.5° lat × 0.625° lon` cells across both `T14SLH` and `T36UVU`. Regional `heatwave_days` layer counts days/year with `T2M_MAX >= 35.0 °C` (`2001–2024`, scale-flagged regional context).
   - Citation: Sparks, A. H. (2018). nasapower: A NASA POWER Global Meteorology, Surface Solar Energy and Climatology Data Client for R. *Journal of Open Source Software*, 3(30), 1035. https://doi.org/10.21105/joss.01035
   - Terms: NASA Open Data Policy (public domain, free reuse with attribution).
 - **ECMWF ERA5 & ERA5-Land Reanalysis**:

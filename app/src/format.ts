@@ -52,6 +52,12 @@ export function unitLabel(unit: string): string {
     "days vs continuous summer crop": "أيام مقارنةً بالمحصول الصيفي المستمر",
     "NDVI-days vs continuous summer crop": "يوم-NDVI مقارنةً بالمحصول الصيفي المستمر",
     "days/yr vs Current": "يوم/سنة مقارنةً بالحالي",
+    "days/year": "يوم/سنة",
+    "days/year per year": "يوم/سنة سنوياً",
+    "cm water-equivalent anomaly (vs 2004-2009 mean)": "سم شذوذ مكافئ مائي (مقارنةً بمتوسط 2004–2009)",
+    "cm water-equivalent anomaly (vs 2004-2009 mean) per year": "سم شذوذ مكافئ مائي سنوياً",
+    "m3/m3 anomaly vs monthly climatology": "م³/م³ شذوذ مقارنةً بالمعدل الشهري",
+    "m3/m3 anomaly vs monthly climatology per year": "م³/م³ شذوذ سنوياً",
   };
   return map[unit] ?? unit;
 }

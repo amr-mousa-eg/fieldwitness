@@ -1,0 +1,269 @@
+{
+  "region_id": "ua_central_t36uvu",
+  "cutoff": "2021-12-31",
+  "max_fit_year": 2021,
+  "n_fields": 120,
+  "n_field_seasons": 329,
+  "crops": {
+    "sunflower": 156,
+    "maize": 115,
+    "winter_wheat": 58
+  },
+  "fit_sources": {
+    "own_crop_posterior": 290,
+    "other_crop_posterior": 36,
+    "prior": 3
+  },
+  "b0_sources": {
+    "own_field_past": 290,
+    "region_crop_pool": 39
+  },
+  "rows": [
+    {
+      "method": "fieldwitness",
+      "mode": "forecast",
+      "metric": "sos",
+      "n": 329,
+      "scores": {
+        "crps": 12.186571352583586,
+        "covered50": 0.3252279635258359,
+        "covered90": 0.6231003039513677,
+        "mae_median": 14.936170212765957
+      }
+    },
+    {
+      "method": "fieldwitness",
+      "mode": "forecast",
+      "metric": "peak",
+      "n": 329,
+      "scores": {
+        "crps": 14.677087310030396,
+        "covered50": 0.547112462006079,
+        "covered90": 0.8844984802431611,
+        "mae_median": 19.76139817629179
+      }
+    },
+    {
+      "method": "fieldwitness",
+      "mode": "forecast",
+      "metric": "canopy_integral",
+      "n": 329,
+      "scores": {
+        "crps": 14.767416689893448,
+        "covered50": 0.1884498480243161,
+        "covered90": 0.5167173252279635,
+        "mae_median": 19.1116457551365,
+        "spearman": 0.24661643494025434
+      }
+    },
+    {
+      "method": "fieldwitness",
+      "mode": "forecast",
+      "metric": "cover_days",
+      "n": 329,
+      "scores": {
+        "crps": 44.55674255319149,
+        "covered50": 0.10638297872340426,
+        "covered90": 0.23100303951367782,
+        "mae_median": 47.765957446808514
+      }
+    },
+    {
+      "method": "B0",
+      "mode": "forecast",
+      "metric": "sos",
+      "n": 329,
+      "scores": {
+        "crps": 18.139277388569088,
+        "covered50": 0.23708206686930092,
+        "covered90": 0.3738601823708207,
+        "mae_median": 20.285714285714285
+      }
+    },
+    {
+      "method": "B0",
+      "mode": "forecast",
+      "metric": "peak",
+      "n": 329,
+      "scores": {
+        "crps": 18.262448976602897,
+        "covered50": 0.23100303951367782,
+        "covered90": 0.4072948328267477,
+        "mae_median": 22.0258358662614
+      }
+    },
+    {
+      "method": "B0",
+      "mode": "forecast",
+      "metric": "canopy_integral",
+      "n": 329,
+      "scores": {
+        "crps": 13.188874787127347,
+        "covered50": 0.2796352583586626,
+        "covered90": 0.45288753799392095,
+        "mae_median": 15.7160654052822,
+        "spearman": 0.18464484586251922
+      }
+    },
+    {
+      "method": "B0",
+      "mode": "forecast",
+      "metric": "cover_days",
+      "n": 329,
+      "scores": {
+        "crps": 40.05711375949169,
+        "covered50": 0.2887537993920973,
+        "covered90": 0.44680851063829785,
+        "mae_median": 47.58966565349544
+      }
+    },
+    {
+      "method": "B1",
+      "mode": "forecast",
+      "metric": "sos",
+      "n": 329,
+      "scores": {
+        "crps": 15.741054103343465,
+        "covered50": 0.12158054711246201,
+        "covered90": 0.21580547112462006,
+        "mae_median": 16.896656534954406
+      }
+    },
+    {
+      "method": "B1",
+      "mode": "forecast",
+      "metric": "peak",
+      "n": 329,
+      "scores": {
+        "crps": 23.62371443768997,
+        "covered50": 0.4012158054711246,
+        "covered90": 0.5957446808510638,
+        "mae_median": 26.711246200607903
+      }
+    },
+    {
+      "method": "B1",
+      "mode": "forecast",
+      "metric": "canopy_integral",
+      "n": 329,
+      "scores": {
+        "crps": 16.267906930910573,
+        "covered50": 0.17933130699088146,
+        "covered90": 0.41033434650455924,
+        "mae_median": 19.428760282833675,
+        "spearman": 0.2033307113870739
+      }
+    },
+    {
+      "method": "B1",
+      "mode": "forecast",
+      "metric": "cover_days",
+      "n": 329,
+      "scores": {
+        "crps": 45.082524164133744,
+        "covered50": 0.0729483282674772,
+        "covered90": 0.17325227963525835,
+        "mae_median": 46.983282674772035
+      }
+    },
+    {
+      "method": "B2",
+      "mode": "forecast",
+      "metric": "sos",
+      "n": 329,
+      "scores": {
+        "crps": 13.425468161094226,
+        "covered50": 0.3768996960486322,
+        "covered90": 0.7142857142857143,
+        "mae_median": 17.507598784194528
+      }
+    },
+    {
+      "method": "B2",
+      "mode": "forecast",
+      "metric": "peak",
+      "n": 329,
+      "scores": {
+        "crps": 17.523200455927054,
+        "covered50": 0.60790273556231,
+        "covered90": 0.9118541033434651,
+        "mae_median": 21.706686930091184
+      }
+    },
+    {
+      "method": "B2",
+      "mode": "forecast",
+      "metric": "canopy_integral",
+      "n": 329,
+      "scores": {
+        "crps": 17.465303249617566,
+        "covered50": 0.1945288753799392,
+        "covered90": 0.5045592705167173,
+        "mae_median": 22.796681652171976,
+        "spearman": 0.14951013924489964
+      }
+    },
+    {
+      "method": "B2",
+      "mode": "forecast",
+      "metric": "cover_days",
+      "n": 329,
+      "scores": {
+        "crps": 43.539256686930095,
+        "covered50": 0.15501519756838905,
+        "covered90": 0.303951367781155,
+        "mae_median": 47.84346504559271
+      }
+    },
+    {
+      "method": "fieldwitness",
+      "mode": "forced",
+      "metric": "sos",
+      "n": 329,
+      "scores": {
+        "crps": 11.951786018237081,
+        "covered50": 0.3373860182370821,
+        "covered90": 0.6443768996960486,
+        "mae_median": 14.604863221884498
+      }
+    },
+    {
+      "method": "fieldwitness",
+      "mode": "forced",
+      "metric": "peak",
+      "n": 329,
+      "scores": {
+        "crps": 15.074286018237082,
+        "covered50": 0.6322188449848024,
+        "covered90": 0.8814589665653495,
+        "mae_median": 18.747720364741642
+      }
+    },
+    {
+      "method": "fieldwitness",
+      "mode": "forced",
+      "metric": "canopy_integral",
+      "n": 329,
+      "scores": {
+        "crps": 16.233937903158388,
+        "covered50": 0.17933130699088146,
+        "covered90": 0.42249240121580545,
+        "mae_median": 20.18742452150725,
+        "spearman": 0.21395364353729746
+      }
+    },
+    {
+      "method": "fieldwitness",
+      "mode": "forced",
+      "metric": "cover_days",
+      "n": 329,
+      "scores": {
+        "crps": 44.256636550151974,
+        "covered50": 0.11550151975683891,
+        "covered90": 0.24620060790273557,
+        "mae_median": 47.27203647416413
+      }
+    }
+  ],
+  "caveats": "Tier 3 crop states come from causal Sentinel-2 phenology+TWDTW classifier [D] (WorldCereal 2021 cropland 98.25%, wheat-maize 0.0%, maize-vs-sunflower kappa=0.035); B3 omitted because Panel-OBDML contrasts cover cover_days deltas, not NDVI trajectories."
+}

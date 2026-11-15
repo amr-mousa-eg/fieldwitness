@@ -1426,13 +1426,30 @@ def main() -> None:
     )
     _write(out_dir / "index.json", reg_idx, problems)
 
-    # RegionLayers (empty regional coarse layers + field_colouring)
+    # RegionLayers (UT-CSR GRACE when available + POWER heatwave_days + field_colouring)
+    reg_cfg_ua = yaml.safe_load(Path("config/regions.yaml").read_text("utf-8"))["regions"][REGION]
+    ua_bbox = tuple(float(x) for x in reg_cfg_ua["bbox_lonlat"])
+    reg_layers_list = []
+    csr_nc = Path("data/context/grace/CSR_GRACE_GRACE-FO_RL0603_Mascons_all-corrections.nc")
+    csr_mk = Path("data/context/grace/CSR_GRACE_GRACE-FO_RL06_Mascons_v02_LandMask.nc")
+    layer_cutoff = date(2024, 12, 31)
+    if csr_nc.exists() and csr_mk.exists():
+        reg_layers_list.append(
+            X.grace_csr_layer(str(csr_nc), str(csr_mk), ua_bbox, cutoff_date=layer_cutoff)
+        )
+    reg_layers_list.append(
+        X.heatwave_layer(
+            ua_bbox,
+            threshold_c=float(vcfg["heat_tmax_c"]["maize"]["value"]),
+            cutoff_date=layer_cutoff,
+        )
+    )
     reg_layers = RegionLayers(
         schema_version="1.2",
         region_id=REGION,
-        layers=[],
+        layers=reg_layers_list,
         field_colouring=colour,
-        data_as_of=as_of,
+        data_as_of=max(as_of, layer_cutoff),
     )
     _write(out_dir / "layers.json", reg_layers, problems)
 
