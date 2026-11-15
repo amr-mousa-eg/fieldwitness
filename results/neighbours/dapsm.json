@@ -1,6 +1,6 @@
 {
   "experiment": "Experiment 1: distance-adjusted propensity score matching (DAPSM)",
-  "preregistration": "DECISIONS.md 2026-11-12 'Pre-registration: two algorithm experiments'",
+  "preregistration": "DECISIONS.md 'Pre-registration: two algorithm experiments'",
   "cutoff_year": 2021,
   "rows_used": 800,
   "geometry_source": "data/fields/ks_t14slh_pilot.parquet (CSB polygons, WGS 84); centroid in EPSG:32614",

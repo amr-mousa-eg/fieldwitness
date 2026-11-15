@@ -1,6 +1,6 @@
 # GDD before/after: tables (calendar = before, heat clock gdd = after)
 
-Pre-registration: DECISIONS.md 2026-11-12 (commit 6f62874). All numbers come from the Experiment 2 run outputs; 95 % CI = spatial block bootstrap (10 km blocks, 1,000 resamples, seed 42). Statistics tag D (model) scored against O (HLS); crop labels E. Plain-language summary: `docs/GDD_BEFORE_AFTER.md`.
+Pre-registration: DECISIONS.md (commit 6f62874). All numbers come from the Experiment 2 run outputs; 95 % CI = spatial block bootstrap (10 km blocks, 1,000 resamples, seed 42). Statistics tag D (model) scored against O (HLS); crop labels E. Plain-language summary: `docs/GDD_BEFORE_AFTER.md`.
 
 ## 1. Summary table
 

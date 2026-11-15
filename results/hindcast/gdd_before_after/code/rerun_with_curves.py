@@ -1,7 +1,7 @@
 """Re-run scripts/x2_gdd_hindcast.py unchanged, plus a read-only hook that keeps daily curves.
 
 Usage: uv run python -u results/hindcast/gdd_before_after/code/rerun_with_curves.py <calendar|gdd>
-Pre-registered in DECISIONS.md (2026-11-12, "GDD before/after presentation").
+Pre-registered in DECISIONS.md ("GDD before/after presentation").
 
 The runner's source is read and executed with three in-memory text changes, none of which
 draws random numbers or changes a score:

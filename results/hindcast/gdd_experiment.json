@@ -1,6 +1,6 @@
 {
  "experiment": "Experiment 2: thermal-time (GDD) phenology",
- "preregistration": "DECISIONS.md 2026-11-12 (commit c6b82f7), amendment (commit 17bc5cd)",
+ "preregistration": "DECISIONS.md (commit c6b82f7), amendment (commit 17bc5cd)",
  "cutoff": "2021-12-31",
  "scored_years": [
   2022,

@@ -1,4 +1,4 @@
-"""Pure aggregation helpers for the GDD before/after presentation (pre-registered 2026-11-12).
+"""Pure aggregation helpers for the GDD before/after presentation.
 
 Same block bootstrap as `scripts/t7_diagnosis.py` (10 km blocks, 1,000 resamples, seed 42,
 percentile 95 % CI); the median uses the same resampled blocks. No model is run here.

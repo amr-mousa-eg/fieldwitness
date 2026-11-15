@@ -1,7 +1,7 @@
 # FieldWitness chat proxy (Cloudflare Workers free plan). See README.md in this folder.
 name = "fieldwitness-chat-proxy"
 main = "src/index.ts"
-compatibility_date = "2026-11-01"
+compatibility_date = "2024-11-01"
 
 [vars]
 ALLOWED_ORIGIN = "https://amr-mousa-eg.github.io"

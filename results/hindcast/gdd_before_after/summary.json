@@ -1,5 +1,5 @@
 {
- "pre_registration": "DECISIONS.md 2026-11-12 (commit 6f62874)",
+ "pre_registration": "DECISIONS.md (commit 6f62874)",
  "sanity": {
   "calendar_records_vs_published": {
    "n": 200,
