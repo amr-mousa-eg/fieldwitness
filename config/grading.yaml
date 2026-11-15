@@ -20,6 +20,6 @@ credibility:  # T4.5: combine season-rank agreement and timing error into 0-1
 scale_flag:
   pixel_area_ratio: 4           # CLAUDE.md rule 5: flag when pixel area > field area / 4
 
-interior_pixels:                # PLAN.md T1.4 (user decision 2026-11-04)
+interior_pixels:                # PLAN.md T1.4 ()
   buffer_m: 15
   min_pixels: 4
