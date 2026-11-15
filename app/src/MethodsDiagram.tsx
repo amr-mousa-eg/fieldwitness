@@ -187,6 +187,16 @@ function Box({ box, regionId }: { box: DiagramBox; regionId: string }) {
           {t(`methods.diagram.box.${box.id}.line${idx}` as StringKey)}
         </span>
       ))}
+      {box.id === "w3_neighbours" && (
+        <span className="mdia-region-pills">
+          <span className="mdia-region-pill mdia-region-pill--off">
+            {t("methods.diagram.w3.ksPill")}
+          </span>
+          <span className="mdia-region-pill mdia-region-pill--on">
+            {t("methods.diagram.w3.uaPill")}
+          </span>
+        </span>
+      )}
     </a>
   );
 }
@@ -196,17 +206,27 @@ export function MethodsDiagram() {
   return (
     <figure className="mdia" aria-labelledby="methods-diagram-caption">
       <figcaption id="methods-diagram-caption" className="mdia-caption">
-        {t("methods.diagram.caption")}
+        <span className="mdia-caption-text">{t("methods.diagram.caption")}</span>
+        <span className="mdia-legend" aria-hidden="true">
+          <span className="mdia-status mdia-status--on">{t("methods.diagram.status.on")}</span>
+          <span className="mdia-legend-sep">·</span>
+          <span className="mdia-legend-item">{t("methods.diagram.legendHint")}</span>
+        </span>
       </figcaption>
       <ol className="mdia-stages">
         {DIAGRAM_STAGES.map((stage) => (
-          <li key={stage.id} id={`stage-${stage.id}`} className="mdia-stage">
+          <li
+            key={stage.id}
+            id={`stage-${stage.id}`}
+            className={`mdia-stage${stage.id === "get" ? " mdia-stage--get" : ""}`}
+          >
             <p className="mdia-stage-title">
               <span className="mdia-step" aria-hidden="true">
                 {stage.step}
               </span>
               <span className="sr-only">{t("methods.diagram.stepSr", { step: stage.step })}</span>
-              {t(`methods.diagram.stage.${stage.id}` as StringKey)}
+              <span className="mdia-stage-heading">{t(`methods.diagram.stage.${stage.id}` as StringKey)}</span>
+              <span className="mdia-stage-role">{t(`methods.diagram.role.${stage.id}` as StringKey)}</span>
             </p>
             <div className="mdia-boxes">
               {stage.boxes.map((box) => (

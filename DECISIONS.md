@@ -1257,10 +1257,28 @@ Pre-registered BEFORE running on Central Ukraine (`ua_central_t36uvu`) data (`CL
 5. **IEEE A4 Conference Research Paper (`docs/paper/FieldWitness_Research_Paper.{docx,pdf}`, `app/public/paper/FieldWitness_Research_Paper.{docx,pdf}`):**
    - Built directly from `/home/antigravity/conference-template-a4.docx` preserving Strict OOXML template styles & two-column layout, featuring the 3+2 IEEE author grid for all 5 Assiut STEM School contributors and exact verified metrics (`382` Python + `255` Vitest + `10` Cloudflare Worker tests).
 
+## [antigravity] 2026-11-15: Final Submission Polish, Presentation Deck, Public Repo-Link Removal & Full Audit (`feat/final-submission-polish`)
+
+1. **Final Editable 7-Slide Presentation & Website Hosting (`app/public/presentation/FieldWitness_Final_Presentation.pptx`, `app/src/HomePage.tsx`, `app/src/ResourcesPage.tsx`, `app/src/teamConfig.ts`):**
+   - Built a 7-slide `16:9` editable PowerPoint presentation aligned with the FieldWitness visual identity, embedded `10` verified application screenshots with descriptive OOXML `descr` alt text, and included detailed timing and `[SWITCH TO WEBSITE]` / `[RETURN TO SLIDES]` speaker notes across all 7 slides.
+   - Replaced the Homepage GitHub Repository card below the hero/media row with a styled `#home-pres-h` **Final 7-Slide Presentation** download card (`HOME_LINKS.presentationPptxUrl = "./presentation/FieldWitness_Final_Presentation.pptx"`), paired with quick navigation to `Resources` and `Terms used`. Kept `HOME_LINKS.demoVideoUrl = null` cleanly pending user recording.
+
+2. **Public Repository Link Removal Across Entire Website (`app/src/`, `app/public/llms.txt`, `app/tests/uxHomeAndNav.test.ts`):**
+   - Removed every public link and visitor reference to `github.com/amr-mousa-eg/fieldwitness` and dev template paths (`app/public/team/`, `app/src/teamConfig.ts`) across `HomePage.tsx`, `MethodsPage.tsx`, `ResourcesPage.tsx`, `llms.txt`, `chatbotContext.ts`, and `en.json`/`ar.json` while keeping the GitHub repository and internal codebase completely intact. Verified zero `github.com/amr-mousa-eg` hits across source files and compiled `app/dist/`.
+
+3. **Methods & Data Diagram Visual Upgrade (`app/src/MethodsDiagram.tsx`, `app/src/styles.css`):**
+   - Upgraded the 4-stage pipeline diagram with legend bar, numbered stage role badges (`Inputs`, `3 Witnesses`, `Audit`, `Decision`), Stage 4 emphasis (`mdia-stage--get`), and dual-region Witness 3 diagnostic pills (`Kansas: OFF (0/32)` / `Ukraine: ON (30/30)`), while preserving all `methodsDiagram.test.ts` invariants, EN/AR RTL arrow mirroring, zero hardcoded hex tokens, and `0 px` horizontal overflow across desktop and mobile.
+
+4. **Comprehensive Website Content & Region-Awareness Audit (`app/src/FieldPage.tsx`, `app/src/ComparePage.tsx`, `app/src/PrintDossier.tsx`, `app/src/AddFieldPage.tsx`, `app/src/chatbotContext.ts`, `app/src/strings/{en,ar}.json`):**
+   - Made pixel resolution labels (`20 m` Copernicus Sentinel-2 for `ua_central_t36uvu` vs `30 m` NASA HLS for `ks_t14slh`) consistent across `FieldPage`, `ComparePage`, `PrintDossier`, and `chatbotContext` (keeping `chatbotLlm.test.ts` `LITERALS` rules satisfied).
+   - Fixed `AddFieldPage.tsx` out-of-tile notice to check clicked/entered `latitude`/`longitude` via `isInsideKansasTile` instead of active route `regionId`, updated `methods.wrong.6` for KS SSURGO `[E]`, updated `methods.builder.1` (`36` KS / `8` UA options), refined `.home-team-email` line-wrapping, and maintained `100%` (`1,373`/`1,373` key) EN/AR string parity.
+
 ## Autopilot handoff
 
-- **Updated:** (branch `feat/ux-home-nav-split-map-scroll`)
-- **What this run did:** Implemented and verified the pre-Map Home landing page (paper downloads, repo links, 2-min video slot, verified impact stats, 5-member Assiut STEM School roster), NASA-style `Methods & Docs ▾` dropdown, standalone `Resources` & searchable `Terms` tabs, full-width centered `Methods` + redesigned `.mdia` diagram, desktop Map scroll fix, and IEEE A4 `.docx`/`.pdf` research paper.
-- **Next task:** **Phase P3 is complete; Phase P4 (`E5 & E6`) has NOT been started**, per explicit user scope boundary ("dont start p4 in any case"). User can add `demoVideoUrl` and team portraits in `app/src/teamConfig.ts` + `app/public/team/` when recorded/photographed.
-- **Risks / Notes:** Live GIBS WMTS imagery layers rely on NASA GIBS availability in online mode and fall back gracefully to the neutral vector canvas when offline.
+- **Updated:** 2026-11-15T20:39Z (branch `feat/final-submission-polish`)
+- **What this run did:** Built the final 7-slide `.pptx` presentation + speaker notes + official NASA submission `.docx`, replaced Homepage/Methods/Resources/llms repo links with the hosted presentation CTA (zero public GitHub repo links remaining in source or `app/dist/`), upgraded `MethodsDiagram.tsx` + `styles.css`, fixed region-aware `20 m`/`30 m` UI/print/chatbot labels and `AddFieldPage` tile checks, and verified Python (`382 passed, 9 skipped`, `ruff`, red-team audit, `validate-packs: 0 problems`), frontend (`43/43` Vitest files / `255 passed, 2 skipped`, `tsc`, `vite build`), Cloudflare Worker (`10/10`), and Chromium layout/RTL screenshots (`0 px` horizontal overflow).
+- **In progress:** None.
+- **Background tasks:** None active (all completed cleanly).
+- **Remaining / Next task:** Sole remaining item before final portal submission is recording and uploading the 2-minute walkthrough video, then setting `HOME_LINKS.demoVideoUrl` in `app/src/teamConfig.ts` and rebuilding/deploying Pages. **Phase P4 remains intentionally unstarted** per user boundary.
+- **Risks / Notes:** `app/public/presentation/FieldWitness_Final_Presentation.pptx` is served directly as a static asset via Vite/GitHub Pages (`./presentation/FieldWitness_Final_Presentation.pptx`); verify live Pages deployment once merged to `main`.
 

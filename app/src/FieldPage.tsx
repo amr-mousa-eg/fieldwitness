@@ -177,7 +177,13 @@ export function FieldPage({
                 <dd>{t("fields.area", { area: pack.field.area_ha })}</dd>
               </div>
               <div>
-                <dt>{t("field.pixels")}</dt>
+                <dt>
+                  {t(
+                    regionId === "ua_central_t36uvu" || pack.field.region_id === "ua_central_t36uvu"
+                      ? "field.pixelsUa"
+                      : "field.pixels",
+                  )}
+                </dt>
                 <dd>{pack.field.interior_pixels}</dd>
               </div>
               <div>

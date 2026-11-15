@@ -341,7 +341,9 @@ export function AddFieldPage({ index, regionId }: AddFieldPageProps) {
           <div className="coverage-alert-box success">
             <h4 className="alert-heading">{t("addfield.supported.title")}</h4>
             <p className="alert-body">
-              {regionId === "ua_central_t36uvu" ? t("addfield.supported.descRegion") : t("addfield.supported.desc")}
+              {form.longitude !== null && form.latitude !== null && isInsideKansasTile(form.longitude, form.latitude)
+                ? t("addfield.supported.desc")
+                : t("addfield.supported.descRegion")}
             </p>
           </div>
         )}

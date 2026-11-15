@@ -78,14 +78,9 @@ export function ResourcesPage() {
         <p className="muted">{t("methods.data.note")}</p>
       </section>
 
-      <section aria-labelledby="m-repo" id="m-repo-section">
-        <h3 id="m-repo">{t("methods.repo")}</h3>
-        <p>
-          {t("methods.repo.text")}{" "}
-          <a href={HOME_LINKS.repoUrl} target="_blank" rel="noreferrer">
-            {HOME_LINKS.repoUrl}
-          </a>
-        </p>
+      <section aria-labelledby="m-pubs" id="m-pubs-section">
+        <h3 id="m-pubs">{t("resources.pubs.heading")}</h3>
+        <p>{t("resources.pubs.text")}</p>
         <div className="home-btn-group" style={{ marginTop: "0.75rem" }}>
           <a
             className="home-btn home-btn--primary"
@@ -97,6 +92,9 @@ export function ResourcesPage() {
           </a>
           <a className="home-btn home-btn--secondary" href={HOME_LINKS.paperDocxUrl} download>
             {t("home.paper.downloadDocx")}
+          </a>
+          <a className="home-btn home-btn--secondary" href={HOME_LINKS.presentationPptxUrl} download>
+            {t("home.presentation.downloadPptx")} ↓
           </a>
         </div>
       </section>

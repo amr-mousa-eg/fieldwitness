@@ -17,13 +17,14 @@ const css = readFileSync(join(SRC, "styles.css"), "utf8");
 const appSource = readFileSync(join(SRC, "App.tsx"), "utf8");
 
 describe("Home Page, NASA-style Docs Dropdown, Split Tabs & Map Scroll", () => {
-  it("renders all 5 Assiut STEM School team members, emails, paper downloads, repo link, video slot, and impact cards", () => {
+  it("renders all 5 Assiut STEM School team members, emails, paper downloads, presentation CTA, video slot, impact cards, and zero public repo links", () => {
     const prev = getLocale();
     try {
       setLocale("en");
       const html = renderToStaticMarkup(createElement(HomePage, { regionId: "ks_t14slh" }));
 
-      expect(html).toContain(HOME_LINKS.repoUrl);
+      expect(html).not.toContain("github.com/amr-mousa-eg/fieldwitness");
+      expect(html).toContain(HOME_LINKS.presentationPptxUrl);
       expect(html).toContain(HOME_LINKS.paperPdfUrl);
       expect(html).toContain(HOME_LINKS.paperDocxUrl);
       expect(html).toContain("320");
@@ -39,6 +40,7 @@ describe("Home Page, NASA-style Docs Dropdown, Split Tabs & Map Scroll", () => {
 
       setLocale("ar");
       const arHtml = renderToStaticMarkup(createElement(HomePage, { regionId: "ks_t14slh" }));
+      expect(arHtml).not.toContain("github.com/amr-mousa-eg/fieldwitness");
       for (const m of TEAM_MEMBERS) {
         expect(arHtml, m.nameAr).toContain(m.nameAr);
       }
@@ -47,7 +49,7 @@ describe("Home Page, NASA-style Docs Dropdown, Split Tabs & Map Scroll", () => {
     }
   });
 
-  it("renders ResourcesPage with all 33 datasets, repo link, and paper downloads", () => {
+  it("renders ResourcesPage with all 33 datasets, zero public repo links, and paper + presentation downloads", () => {
     const prev = getLocale();
     const prevWin = (globalThis as { window?: unknown }).window;
     (globalThis as { window?: unknown }).window = {
@@ -59,7 +61,8 @@ describe("Home Page, NASA-style Docs Dropdown, Split Tabs & Map Scroll", () => {
       setLocale("en");
       const html = renderToStaticMarkup(createElement(ResourcesPage));
       expect(html).toContain('id="m-data"');
-      expect(html).toContain(HOME_LINKS.repoUrl);
+      expect(html).not.toContain("github.com/amr-mousa-eg/fieldwitness");
+      expect(html).toContain(HOME_LINKS.presentationPptxUrl);
       expect(html).toContain(HOME_LINKS.paperPdfUrl);
       expect(DATASETS).toHaveLength(33);
     } finally {

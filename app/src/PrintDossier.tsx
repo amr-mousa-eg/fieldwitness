@@ -97,7 +97,7 @@ export function PrintDossier({
               <td>{regionLabel}</td>
               <th>{t("print.area")}</th>
               <td>{t("fields.area", { area: pack.field.area_ha.toFixed(1) })}</td>
-              <th>{t("print.pixels")}</th>
+              <th>{t(isUkraine ? "print.pixelsUa" : "print.pixels")}</th>
               <td>{pack.field.interior_pixels} [O]</td>
             </tr>
             <tr>
@@ -188,7 +188,7 @@ export function PrintDossier({
             </li>
             <li>
               <strong>{t("print.w2Label")}</strong>{" "}
-              {t("print.w2Desc", { cred: ((pack.credibility.value ?? 0) * 100).toFixed(0) })}{" "}
+              {t(isUkraine ? "print.w2DescUa" : "print.w2Desc", { cred: ((pack.credibility.value ?? 0) * 100).toFixed(0) })}{" "}
               <span className="print-badge on">{t("print.badgeActive")}</span>
             </li>
             <li>
@@ -227,7 +227,7 @@ export function PrintDossier({
 
       {/* Satellite History Compact Table */}
       <div className="print-section">
-        <h3>{t("print.satHeading")}</h3>
+        <h3>{t(isUkraine ? "print.satHeadingUa" : "print.satHeading")}</h3>
         <table className="print-data-table print-compact">
           <thead>
             <tr>
@@ -265,7 +265,7 @@ export function PrintDossier({
             <div className="print-tags-legend">
               <strong>{t("tag.legend")}:</strong> <code>[O]</code> {t("tag.O")} · <code>[D]</code> {t("tag.D")} · <code>[E]</code> {t("tag.E")} · <code>[A]</code> {t("tag.A")}.
             </div>
-            <p className="print-attribution">{t("print.attribution")}</p>
+            <p className="print-attribution">{t(isUkraine ? "print.attributionUa" : "print.attribution")}</p>
             <p className="print-disclaimer">
               <strong>{t("print.notice")}</strong> {t("fixed.judgment")}
             </p>

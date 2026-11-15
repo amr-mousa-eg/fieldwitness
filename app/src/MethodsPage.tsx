@@ -7,7 +7,6 @@ import { pageHref, useRoute } from "./route";
 import { type StringKey, t } from "./strings";
 import { TagBadge } from "./tags";
 import { UkraineNeighboursSection } from "./UkraineNeighboursSection";
-import { HOME_LINKS } from "./teamConfig";
 
 export { DATASETS } from "./datasets";
 
@@ -261,16 +260,6 @@ export function MethodsPage() {
           ))}
         </ul>
         <p>{t("methods.roadmap.privacy")}</p>
-      </section>
-
-      <section aria-labelledby="m-repo">
-        <h3 id="m-repo">{t("methods.repo")}</h3>
-        <p>
-          {t("methods.repo.text")}{" "}
-          <a href={HOME_LINKS.repoUrl} target="_blank" rel="noreferrer">
-            {HOME_LINKS.repoUrl}
-          </a>
-        </p>
       </section>
     </article>
   );
