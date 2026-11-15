@@ -1,5 +1,8 @@
+from datetime import date
+
 import numpy as np
 import pandas as pd
+import xarray as xr
 
 from fieldwitness.packs import extras as X
 from fieldwitness.schemas import check_tagged
@@ -29,4 +32,68 @@ def test_regions_list_and_smap_layer_tagged():
     lay = X.smap_layer(pd.DataFrame(rows), -100.0, 38.0)
     assert lay.scale_flag and lay.grid.years == [2016, 2017, 2018]
     assert abs(lay.trend.value - 0.01) < 1e-6
+    assert check_tagged(lay) == []
+
+
+def test_grace_csr_layer_synthetic_netcdf(tmp_path):
+    dates = pd.date_range("2002-06-15", "2006-12-15", freq="MS")
+    days_since = (dates - pd.Timestamp("2002-01-01")).days.astype(float)
+    lats = np.array([47.875, 48.125])
+    lons = np.array([31.875, 32.125])
+    # Cell (i, j=0) is land (1.0), cell (i, j=1) is ocean (0.0)
+    mask_arr = np.array([[1.0, 0.0], [1.0, 0.0]])
+    data_arr = np.zeros((len(days_since), 2, 2), dtype=float)
+    for k, dt_k in enumerate(dates):
+        data_arr[k, :, 0] = -2.0 * (dt_k.year - 2003)
+        data_arr[k, :, 1] = 999.0  # ocean cell must be excluded
+
+    nc = tmp_path / "csr.nc"
+    mk = tmp_path / "mask.nc"
+    xr.Dataset(
+        {"lwe_thickness": (("time", "lat", "lon"), data_arr)},
+        coords={"time": days_since, "lat": lats, "lon": lons},
+    ).to_netcdf(nc, engine="h5netcdf")
+    xr.Dataset(
+        {"LO_val": (("lat", "lon"), mask_arr)},
+        coords={"lat": lats, "lon": lons},
+    ).to_netcdf(mk, engine="h5netcdf")
+
+    lay = X.grace_csr_layer(
+        str(nc), str(mk), (31.7, 47.7, 32.3, 48.3), cutoff_date=date(2005, 12, 31)
+    )
+    assert lay.layer_id == "grace_tws"
+    assert lay.scale_flag
+    assert len(lay.grid.cells) == 2  # ocean cells excluded
+    assert lay.grid.years == [2003, 2004, 2005]  # 2002 partial dropped, 2006 past cutoff
+    assert lay.region_mean.values == [0.0, -2.0, -4.0]
+    assert abs(lay.trend.value - (-2.0)) < 1e-6
+    assert check_tagged(lay) == []
+
+
+def test_heatwave_layer_merra2_cells_and_cutoff():
+    cells = X.merra2_cells((31.7, 47.8, 32.1, 48.1))
+    assert len(cells) == 1
+    lon_c, lat_c, box = cells[0]
+    assert (lon_c, lat_c) == (31.875, 48.0)
+    assert box == (31.5625, 47.75, 32.1875, 48.25)
+
+    idx = pd.date_range("2020-01-01", "2023-12-31", freq="D")
+    tmax = np.full(len(idx), 20.0)
+    for y, n_hot in ((2020, 5), (2021, 10), (2022, 15), (2023, 30)):
+        mask = idx.year == y
+        hot_pos = np.where(mask)[0][:n_hot]
+        tmax[hot_pos] = 36.0
+    df = pd.DataFrame({"T2M_MAX": tmax}, index=idx)
+
+    lay = X.heatwave_layer(
+        (31.7, 47.8, 32.1, 48.1),
+        threshold_c=35.0,
+        cutoff_date=date(2022, 12, 31),
+        loader=lambda _lo, _la: (df, 100.0),
+    )
+    assert lay.layer_id == "heatwave_days"
+    assert lay.scale_flag
+    assert lay.grid.years == [2020, 2021, 2022]
+    assert lay.region_mean.values == [5.0, 10.0, 15.0]
+    assert abs(lay.trend.value - 5.0) < 1e-6
     assert check_tagged(lay) == []

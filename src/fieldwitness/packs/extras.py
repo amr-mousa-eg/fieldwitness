@@ -2,14 +2,16 @@
 
 - `field_calendar`: observed bare months (T2.5, tag O), simulated bare share per month per option
   (tag D, `rotate.exposure.option_canopy`), crop vulnerability (T3.6, tag D).
-- `region_layers`: GRACE and SMAP grids + region means + trend, and Current-option field colouring.
+- `region_layers`: GRACE (JPL TELLUS or UT-CSR RL06.3), SMAP, and POWER heat-wave grids + region
+  means + trend, and Current-option field colouring.
 - `regions_list`: `packs/regions.json`.
 
 Team choices (A, UNVERIFIED): `water_stress` uses a rainfed run with the median ABC world (TAW,
 Kc scale) of the field; frost / water-stress colouring = mean over modelled Current crops of the
-worst monthly share. The heat-wave layer is NOT built: the POWER grid size is not stated in the
-POWER docs we read (see `data/power.py`), so no honest grid can be drawn. The SMAP cell box is
-the point +-4.5 km (approximate; the AppEEARS point task returns one 9 km cell, no cell edges).
+worst monthly share. Heat-wave days count days/year with `T2M_MAX >= 35.0 degC` (summer heat
+threshold A from `config/vulnerability.yaml`) on the NASA POWER MERRA-2 native `0.5 x 0.625 deg`
+grid verified in POWER API v2.10.3 headers and empirical cell boundaries (`T14SLH`/`T36UVU`).
+The SMAP cell box is the point +-4.5 km (approximate; AppEEARS point task returns one 9 km cell).
 """
 
 from __future__ import annotations
@@ -22,6 +24,7 @@ import pandas as pd
 import xarray as xr
 import yaml
 
+from fieldwitness.data import power
 from fieldwitness.physics import waterbal
 from fieldwitness.physics.kc import kc_curve
 from fieldwitness.physics.vulnerability import HAZARDS, CropWindow, hazard_shares
@@ -310,6 +313,156 @@ def smap_layer(smap: pd.DataFrame, lon: float, lat: float) -> RegionalLayer:
         "m3/m3 anomaly vs monthly climatology",
         "SPL4SMGP.008 root-zone soil moisture, annual mean of monthly anomalies",
         vals,
+    )
+
+
+def grace_csr_layer(
+    nc: str,
+    mask_nc: str,
+    bbox: tuple[float, float, float, float],
+    cutoff_date: date | None = None,
+) -> RegionalLayer:
+    """Annual mean of UT-CSR GRACE/GRACE-FO RL06.3 lwe_thickness (cm) per 0.25 deg land cell.
+
+    CSR RL06.3M mascons ship with GIA and ellipsoidal corrections already applied (unlike JPL
+    TELLUS CRI, there is no separate scale_factor array). Native solution uses 1 deg equal-area
+    mascons represented on a 0.25 deg grid (`time` in days since 2002-01-01).
+    """
+    w, s, e, n = bbox
+    lon360 = sorted((w % 360, e % 360))
+    with (
+        xr.open_dataset(nc, engine="h5netcdf") as ds,
+        xr.open_dataset(mask_nc, engine="h5netcdf") as mk,
+    ):
+        sel = ds.sel(lat=slice(s, n), lon=slice(*lon360))
+        msel = mk.sel(lat=slice(s, n), lon=slice(*lon360))
+        land = msel["LO_val"] == 1
+        lwe = sel["lwe_thickness"].where(land)
+        raw_t = lwe["time"].values
+        t = (
+            pd.to_datetime(raw_t, unit="D", origin="2002-01-01")
+            if np.issubdtype(raw_t.dtype, np.number)
+            else pd.to_datetime(raw_t)
+        )
+        keep = np.ones(len(t), bool) if cutoff_date is None else t.date <= cutoff_date
+        lwe = lwe.isel(time=np.where(keep)[0])
+        t = t[keep]
+        last = t.max()
+        years = [y for y in range(t.min().year + 1, last.year + (1 if last.month == 12 else 0))]
+        lats = sel["lat"].values
+        lons = sel["lon"].values
+        dlat = float(abs(np.diff(lats)).mean()) if len(lats) > 1 else 0.25
+        dlon = float(abs(np.diff(lons)).mean()) if len(lons) > 1 else 0.25
+        cells, wts, per_cell = [], [], []
+        for i, la in enumerate(lats):
+            for j, lo in enumerate(lons):
+                if not bool(land.isel(lat=i, lon=j).values):
+                    continue
+                ser = pd.Series(lwe.isel(lat=i, lon=j).values, index=t)
+                ann = ser.groupby(ser.index.year).agg(["mean", "count"])
+                vals = [
+                    _r(ann.loc[y, "mean"], 3)
+                    if y in ann.index and ann.loc[y, "count"] >= 6
+                    else None
+                    for y in years
+                ]
+                lo180 = float(lo) - 360.0 if lo > 180 else float(lo)
+                cells.append(
+                    GridCell(
+                        bbox_lonlat=(
+                            lo180 - dlon / 2,
+                            float(la) - dlat / 2,
+                            lo180 + dlon / 2,
+                            float(la) + dlat / 2,
+                        ),
+                        values=vals,
+                    )
+                )
+                wts.append(math.cos(math.radians(float(la))))
+                per_cell.append(vals)
+    mean = []
+    for k in range(len(years)):
+        v = [(c[k], wt) for c, wt in zip(per_cell, wts, strict=True) if c[k] is not None]
+        mean.append(sum(a * b for a, b in v) / sum(b for _, b in v) if v else None)
+    km = dlat * 111.0
+    return _layer(
+        "grace_tws",
+        round(km, 1),
+        f"UT-CSR GRACE/GRACE-FO RL06.3 mascons on {dlat:g} deg grid (1 deg equal-area mascons, "
+        "Save 2024); effective resolution is coarser than grid spacing",
+        years,
+        cells,
+        "cm water-equivalent anomaly (vs 2004-2009 mean)",
+        "CSR_GRACE_GRACE-FO_RL0603_Mascons (all-corrections, DOI 10.15781/cgq9-nh24), "
+        "annual mean of monthly values",
+        mean,
+    )
+
+
+def merra2_cells(
+    bbox: tuple[float, float, float, float],
+) -> list[tuple[float, float, tuple[float, float, float, float]]]:
+    """Intersecting MERRA-2 0.5 deg lat x 0.625 deg lon cell centres and bounds for `bbox`."""
+    w, s, e, n = bbox
+    dlat, dlon = 0.5, 0.625
+    j0 = math.floor((w + 180.0) / dlon + 0.5)
+    j1 = math.ceil((e + 180.0) / dlon - 0.5)
+    i0 = math.floor((s + 90.0) / dlat + 0.5)
+    i1 = math.ceil((n + 90.0) / dlat - 0.5)
+    out: list[tuple[float, float, tuple[float, float, float, float]]] = []
+    for i in range(i0, i1 + 1):
+        lat_c = round(-90.0 + dlat * i, 4)
+        for j in range(j0, j1 + 1):
+            lon_c = round(-180.0 + dlon * j, 4)
+            cell_box = (lon_c - dlon / 2, lat_c - dlat / 2, lon_c + dlon / 2, lat_c + dlat / 2)
+            if cell_box[2] > w and cell_box[0] < e and cell_box[3] > s and cell_box[1] < n:
+                out.append((lon_c, lat_c, cell_box))
+    return out
+
+
+def heatwave_layer(
+    bbox: tuple[float, float, float, float],
+    threshold_c: float = 35.0,
+    cutoff_date: date | None = None,
+    loader=None,
+) -> RegionalLayer:
+    """Annual days with NASA POWER T2M_MAX >= `threshold_c` on intersecting MERRA-2 cells."""
+    fn = loader or power.cached
+    grid = merra2_cells(bbox)
+    per_cell_maps: list[dict[int, float]] = []
+    wts: list[float] = []
+    year_set: set[int] = set()
+    for lon_c, lat_c, _ in grid:
+        df, _ = fn(lon_c, lat_c)
+        if cutoff_date is not None:
+            df = df[df.index.date <= cutoff_date]
+        ser = df["T2M_MAX"].dropna()
+        ann_cnt = ser.groupby(ser.index.year).count()
+        ann_hot = (ser >= threshold_c).groupby(ser.index.year).sum()
+        cell_yr = {int(y): float(ann_hot[y]) for y, cnt in ann_cnt.items() if int(cnt) >= 330}
+        per_cell_maps.append(cell_yr)
+        wts.append(math.cos(math.radians(lat_c)))
+        year_set.update(cell_yr.keys())
+    years = sorted(year_set)
+    cells = [
+        GridCell(bbox_lonlat=box, values=[cmap.get(y) for y in years])
+        for (_, _, box), cmap in zip(grid, per_cell_maps, strict=True)
+    ]
+    mean: list[float | None] = []
+    for y in years:
+        v = [(cmap[y], wt) for cmap, wt in zip(per_cell_maps, wts, strict=True) if y in cmap]
+        mean.append(sum(a * b for a, b in v) / sum(b for _, b in v) if v else None)
+    return _layer(
+        "heatwave_days",
+        55.5,
+        "NASA POWER Daily API (MERRA-2 native 0.5 deg lat x 0.625 deg lon grid, ~55.5 km lat); "
+        "regional context only",
+        years,
+        cells,
+        "days/year",
+        f"NASA POWER T2M_MAX >= {threshold_c:.1f} degC (summer threshold A, vulnerability.yaml), "
+        "annual count",
+        mean,
     )
 
 
