@@ -1,12 +1,17 @@
 {
-  "n_fields_graded": 187,
+  "n_fields_graded": 190,
   "skipped": {
-    "current_not_simulatable": 13
+    "current_not_simulatable": 10
   },
   "grade_counts_all_options": {
-    "C": 3600,
-    "B": 2772,
-    "D": 360
+    "C": 3532,
+    "B": 2912,
+    "D": 396
   },
-  "note": "no neighbour witness (T5.2 blocked) -> max grade B; physics interval = weather variability (A)"
+  "top_grade_counts": {
+    "C": 102,
+    "B": 77,
+    "D": 11
+  },
+  "note": "no spatial neighbour witness (T5.2 blocked) -> max grade B; soil TAW is observed SSURGO/SoilGrids [E]"
 }

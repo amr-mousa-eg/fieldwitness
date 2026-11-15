@@ -8,7 +8,7 @@ describe("Hindcast Skill Diagnostic Breakdown (Item 1)", () => {
     expect(data.sample_size).toBe(463);
 
     const primary = data.primary_question.results;
-    expect(primary.overall.n_paired_baselines).toBe(266);
+    expect(primary.overall.n_paired_baselines).toBe(463);
     expect(primary.overall.beats_b1).toBe(true);
     expect(primary.overall.beats_b2).toBe(true);
     expect(primary.overall.diff_vs_b1_ci95?.[0]).toBeGreaterThan(0);
@@ -22,18 +22,20 @@ describe("Hindcast Skill Diagnostic Breakdown (Item 1)", () => {
     expect(maize.diff_vs_b1_ci95?.[0]).toBeGreaterThan(0);
     expect(maize.diff_vs_b2_ci95?.[0]).toBeGreaterThan(0);
 
-    // Sorghum does not statistically beat B1/B2 (CI spans 0)
+    // Sorghum beats B1 and B2 under SSURGO [E] TAW
     const sorghum = primary.by_crop.sorghum;
     expect(sorghum.n).toBe(142);
-    expect(sorghum.beats_b1).toBe(false);
-    expect(sorghum.beats_b2).toBe(false);
-    expect(sorghum.diff_vs_b1_ci95?.[0]).toBeLessThan(0);
-    expect(sorghum.diff_vs_b1_ci95?.[1]).toBeGreaterThan(0);
+    expect(sorghum.beats_b1).toBe(true);
+    expect(sorghum.beats_b2).toBe(true);
+    expect(sorghum.diff_vs_b1_ci95?.[0]).toBeGreaterThan(0);
+    expect(sorghum.diff_vs_b2_ci95?.[0]).toBeGreaterThan(0);
 
-    // Winter wheat has no baseline computed in T7.3
+    // Winter wheat baselines evaluated in SSURGO-backed T7.3/T7 diagnosis
     const wheat = primary.by_crop.winter_wheat;
     expect(wheat.n).toBe(197);
-    expect(wheat.status).toBe("baseline not computed in T7.3");
+    expect(wheat.status).toBe("evaluated");
+    expect(wheat.beats_b1).toBe(true);
+    expect(wheat.beats_b2).toBe(true);
 
     // Fallow is too few to judge (n = 0)
     const fallow = primary.by_crop.fallow;

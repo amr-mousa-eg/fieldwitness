@@ -9,14 +9,13 @@
     "taw_soilgrids_median_mm": 206.5,
     "taw_soilgrids_max_mm": 241.3,
     "top_grade_counts": {
-      "B": 67,
-      "C": 45,
-      "A": 8
+      "B": 73,
+      "C": 47
     },
     "all_candidate_grade_counts": {
-      "B": 331,
-      "C": 206,
-      "A": 63
+      "B": 567,
+      "C": 349,
+      "A": 44
     },
     "n_ref": 3000,
     "k": 150,

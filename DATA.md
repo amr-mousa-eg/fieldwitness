@@ -122,7 +122,7 @@ Only the row groups whose `bbox` statistics intersect the query box are read (se
   - Licence: Free research/educational use; terms of service apply.
 - **USDA-NRCS Web Soil Survey (WSS) / SSURGO & STATSGO2**:
   - Source: USDA Natural Resources Conservation Service via Soil Data Access (SDA) REST API (`https://sdmdataaccess.sc.egov.usda.gov/tabular/post.rest`).
-  - High-res: SSURGO 1:24,000 mapunits (county catalogs, e.g. `KS055`, median 282.1 mm AWS across pilot).
+  - High-res: SSURGO 1:24,000 mapunits (`fieldwitness.data.ssurgo_taw`, county catalogs e.g. `KS055`, median `282.1 mm` AWS over 0–135 cm across 198 Kansas pilot fields), used as the primary `[E]` soil water capacity in Kansas packs with ISRIC SoilGrids 2.0 Saxton & Rawls `[E]` fallback on 2 shallow fields (`149.8`, `187.1 mm`).
   - Fallback: STATSGO2 1:250,000 generalized mapping (national catalog `areasymbol = 'US'`).
   - Licence: Public domain.
 - **USDA NASS Cropland Data Layer (CDL) & CropScape**:

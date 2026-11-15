@@ -6,7 +6,7 @@
 import type { Sim3DOption, Sim3DScenario } from "../types";
 import { headsVisible, historyOnlyKey, rainDropCount, seasonGrowth, showIrrigation, toCropKind } from "./growth";
 
-export type PlotKind = "maize" | "sorghum" | "winter_wheat" | "cover" | "bare" | "not_simulated";
+export type PlotKind = "maize" | "sorghum" | "winter_wheat" | "sunflower" | "soybean" | "cover" | "bare" | "not_simulated";
 
 export interface PlotWeek {
   kind: PlotKind;
@@ -39,9 +39,9 @@ export function isCoverWeek(option: Sim3DOption, scen: Sim3DScenario, w: number)
 }
 
 /** One plot in one week. */
-export function plotWeek(option: Sim3DOption, scen: Sim3DScenario, week: number): PlotWeek {
+export function plotWeek(option: Sim3DOption, scen: Sim3DScenario, week: number, regionId?: string): PlotWeek {
   const w = Math.max(0, Math.min(week, scen.soil_water_mm.length - 1));
-  const hist = historyOnlyKey(option.sequence, option.crops, w);
+  const hist = historyOnlyKey(option.sequence, option.crops, w, regionId);
   const ks = scen.ks[w] ?? 1;
   const taw = scen.taw_mm[w] ?? 0;
   const base = {
@@ -120,7 +120,7 @@ export function weekLook(rainMm: number[], w: number, month: number, isDark: boo
 }
 
 /** Telemetry for the metric strip under the farm (same fields as the glass view). */
-export function weekTelemetry(option: Sim3DOption, scen: Sim3DScenario, week: number) {
+export function weekTelemetry(option: Sim3DOption, scen: Sim3DScenario, week: number, regionId?: string) {
   const w = Math.max(0, Math.min(week, scen.soil_water_mm.length - 1));
   return {
     week: w,
@@ -133,7 +133,7 @@ export function weekTelemetry(option: Sim3DOption, scen: Sim3DScenario, week: nu
     rain: scen.rain_mm[w] ?? 0,
     irrigation: scen.irrigation_mm[w] ?? 0,
     rootDepth: option.root_depth_m[w] ?? 0,
-    historyOnly: historyOnlyKey(option.sequence, option.crops, w),
+    historyOnly: historyOnlyKey(option.sequence, option.crops, w, regionId),
     cover: isCoverWeek(option, scen, w),
   };
 }

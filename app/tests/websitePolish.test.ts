@@ -285,7 +285,7 @@ describe("Methods, Data & Scoreboard updates", () => {
         setLocale(loc);
         const cqrHtml = unescapeHtml(renderToStaticMarkup(createElement(CqrScoreSection)));
         expect(cqrHtml).toContain(t("score.cqr.heading"));
-        expect(cqrHtml).toContain("89.3 %");
+        expect(cqrHtml).toContain("88.8 %");
         expect(cqrHtml).toContain(t("score.cqr.pass"));
 
         const ksHtml = unescapeHtml(renderToStaticMarkup(createElement(RegionGradeSummary, { index: ksIndex })));

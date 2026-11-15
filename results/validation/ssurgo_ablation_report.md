@@ -1,18 +1,15 @@
-# SSURGO AWS vs Fixed 150 mm TAW Prior — Error Stratification Report
+# Phase P1 (E1.2): Observed USDA SSURGO [E] Upgrade Report (Kansas `ks_t14slh`)
 
-Fields matched with valid SSURGO profiles: **198**; Mean SSURGO AWS `[E]`: **265.8 mm** vs mean shipped sim TAW `[A/D]`: **146.6 mm**.
+Switched all 200 Kansas pilot fields from the `150 mm [A]` prior TAW assumption to empirical USDA-NRCS SSURGO AWS `0–135 cm` (`[E]`, `n=198`, median `282.1 mm`) with ISRIC SoilGrids 2.0 Saxton & Rawls (`[E]`) fallback on the `2` shallow profiles (`71b9fde5`: `149.8 mm`, `189e2365`: `187.1 mm`).
 
-| Metric | Climate Regime | TAW Deficit Tercile | n | Mean TAW Gap (mm) | Mean Signed Error (y - q50) | MAE | 90% Cov |
-|---|---|---|---|---|---|---|---|
-| canopy_integral | drought_2022_2023 | low_gap | 87 | 63.1 | -7.44 | 19.62 | 29.9% |
-| canopy_integral | drought_2022_2023 | mid_gap | 87 | 129.3 | -22.03 | 24.39 | 27.6% |
-| canopy_integral | drought_2022_2023 | high_gap | 88 | 164.3 | -17.63 | 19.77 | 27.3% |
-| canopy_integral | wet_2024 | low_gap | 67 | 66.8 | +9.63 | 19.49 | 34.3% |
-| canopy_integral | wet_2024 | mid_gap | 67 | 128.4 | -1.29 | 16.81 | 35.8% |
-| canopy_integral | wet_2024 | high_gap | 64 | 164.6 | +0.72 | 20.02 | 34.4% |
-| cover_days | drought_2022_2023 | low_gap | 87 | 63.1 | +12.86 | 38.52 | 12.6% |
-| cover_days | drought_2022_2023 | mid_gap | 87 | 129.3 | -13.98 | 40.43 | 6.9% |
-| cover_days | drought_2022_2023 | high_gap | 88 | 164.3 | -3.35 | 29.93 | 9.1% |
-| cover_days | wet_2024 | low_gap | 67 | 66.8 | +35.10 | 39.61 | 3.0% |
-| cover_days | wet_2024 | mid_gap | 67 | 128.4 | +20.75 | 35.78 | 6.0% |
-| cover_days | wet_2024 | high_gap | 64 | 164.6 | +21.08 | 38.75 | 1.6% |
+## Before (150 mm [A]) vs After (SSURGO [E]) Summary
+
+| Metric | Before (`150 mm [A]`) | After (`SSURGO [E]`) |
+|---|---|---|
+| In-sample credibility median | `0.5` (`42.7%` >= 0.6) | `0.483` (`38.9%` >= 0.6) |
+| Option grades (`B / C / D`) | `2772 / 3600 / 360` | `2912 / 3532 / 396` |
+| Top option grade counts (`B / C / D`) | `—` | `77 / 102 / 11` |
+| Canopy integral Spearman rho (`forecast`) | `0.264` (`n=266`) | `0.262` (`n=463`) |
+| Canopy integral CRPS (`forecast`) | `14.87` | `17.86` |
+| Peak timing CRPS / MAE (`forecast`) | `11.47` / `15.5 d` | `27.31` / `33.5 d` |
+| Grade B vs D CRPS diff CI95 | `[-3.2777, 14.3151]` | `[-1.5354, 13.9383]` |

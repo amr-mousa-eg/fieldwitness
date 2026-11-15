@@ -15,9 +15,17 @@ const hasPacks = existsSync(DIR);
 const PERENNIAL_FIELD = "189e236596fa05b85f1c19fe582083601b59b353"; // current: perennial forage → sorghum → sorghum
 
 describe("history-only seasons", () => {
-  it("only the modelled season keys are simulated", () => {
+  it("only the modelled season keys are simulated per region", () => {
     for (const k of ["maize", "sorghum", "winter_wheat", "fallow", "cover_crop"]) expect(isHistoryOnly(k)).toBe(false);
-    for (const k of ["perennial_forage", "non_arable", "other_annual", "soybean"]) expect(isHistoryOnly(k)).toBe(true);
+    for (const k of ["sunflower", "soybean", "perennial_forage", "non_arable", "other_annual", "rapeseed"]) {
+      expect(isHistoryOnly(k)).toBe(true);
+    }
+    for (const k of ["maize", "winter_wheat", "sunflower", "soybean", "fallow", "cover_crop"]) {
+      expect(isHistoryOnly(k, "ua_central_t36uvu")).toBe(false);
+    }
+    for (const k of ["sorghum", "perennial_forage", "non_arable", "other_annual", "rapeseed"]) {
+      expect(isHistoryOnly(k, "ua_central_t36uvu")).toBe(true);
+    }
   });
 
   it("label reads 'Perennial forage (history only; not simulated)'", () => {

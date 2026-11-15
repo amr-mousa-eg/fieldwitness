@@ -77,8 +77,9 @@ for fid in pilot.index:
         continue
     cy = np.array(cy, float)
     t_model = "D" if d["source"] == "posterior" else "A"
+    taw_tag = d.get("taw_tag") or ("E" if "taw_base_mm" in d else t_model)
     tags = {
-        "taw": t_model,
+        "taw": taw_tag,
         "kc_scale": t_model,
         "irrigation_budget": t_model,
         "sowing_dates": "A",

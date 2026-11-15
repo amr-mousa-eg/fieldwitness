@@ -1,23 +1,22 @@
 {
- "fields": 200,
- "scenarios_per_field": [
-  12
- ],
- "total_mb": 9.33,
- "kb_per_field": 46.7,
- "share_fields_rank1_changes_vs_baseline": {
-  "t+0_p-20": 0.54,
-  "t+0_p-10": 0.34,
-  "t+0_p+0": 0.0,
-  "t+0_p+10": 0.245,
-  "t+1_p-20": 0.58,
-  "t+1_p-10": 0.43,
-  "t+1_p+0": 0.115,
-  "t+1_p+10": 0.165,
-  "t+2_p-20": 0.595,
-  "t+2_p-10": 0.505,
-  "t+2_p+0": 0.23,
-  "t+2_p+10": 0.1
- },
- "note": "sensitivity tests on past weather, not climate projections; shifts are tag A"
+  "fields": 200,
+  "scenarios_per_field": [
+    12
+  ],
+  "total_mb": 9.33,
+  "share_fields_rank1_changes_vs_baseline": {
+    "t+0_p-20": 0.55,
+    "t+0_p-10": 0.285,
+    "t+0_p+0": 0.0,
+    "t+0_p+10": 0.22,
+    "t+1_p-20": 0.62,
+    "t+1_p-10": 0.38,
+    "t+1_p+0": 0.115,
+    "t+1_p+10": 0.13,
+    "t+2_p-20": 0.665,
+    "t+2_p-10": 0.465,
+    "t+2_p+0": 0.22,
+    "t+2_p+10": 0.05
+  },
+  "note": "sensitivity tests on past weather, not climate projections; shifts are tag A"
 }

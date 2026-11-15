@@ -17,10 +17,11 @@ export function shadeLevel(share: number | null): number | null {
 export function vulnerabilityFor(
   cal: FieldCalendar,
   option: Pick<Option, "sequence">,
+  regionId?: string,
 ): { found: CropVulnerability[]; missing: string[]; historyOnly: string[] } {
   const all = [...new Set(option.sequence)];
-  const historyOnly = all.filter(isHistoryOnly);
-  const crops = all.filter((c) => !isHistoryOnly(c));
+  const historyOnly = all.filter((c) => isHistoryOnly(c, regionId));
+  const crops = all.filter((c) => !isHistoryOnly(c, regionId));
   const found = crops.flatMap((c) => cal.vulnerability.filter((v) => v.crop === c));
   const missing = crops.filter((c) => !cal.vulnerability.some((v) => v.crop === c));
   return { found, missing, historyOnly };

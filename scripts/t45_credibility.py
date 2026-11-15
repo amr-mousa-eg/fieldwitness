@@ -23,6 +23,7 @@ import pandas as pd
 import yaml
 
 from fieldwitness.data import labels, power
+from fieldwitness.data.ssurgo_taw import get_field_taw_base
 from fieldwitness.infer import abc, forward, priors, synthetic
 from fieldwitness.physics.forcing import forcing
 
@@ -75,6 +76,7 @@ rows = []
 by_field = {fid: g for fid, g in series.groupby("field_id")}
 pos = pilot.set_index("field_id")
 for i, fid in enumerate(pilot["field_id"]):
+    f_taw_base = get_field_taw_base(field_id=str(fid))
     lf = lab[lab["field_id"] == fid]
     seasons = {c: [] for c in CROPS}
     if len(lf):
@@ -86,8 +88,9 @@ for i, fid in enumerate(pilot["field_id"]):
             g = g[(g["doy"] >= 1) & (g["doy"] <= 365)].sort_values("doy")
             if len(g) < MIN_OBS or rec.year not in wx:
                 continue
+            f_cfg = {**cfgs[rec.crop], "taw_base_mm": f_taw_base}
             ref = abc.reference_table(
-                *wx[rec.year], n_ref, crop_p[rec.crop], cfgs[rec.crop], seed=SEED + 1000 + rec.year
+                *wx[rec.year], n_ref, crop_p[rec.crop], f_cfg, seed=SEED + 1000 + rec.year
             )
             doy, nd = g["doy"].to_numpy(int), g["ndvi"].to_numpy(float)
             p = abc.posterior(doy, nd, ref, noise, k, rng)

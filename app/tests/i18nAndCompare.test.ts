@@ -147,7 +147,7 @@ describe("bilingual i18n (EN / AR)", () => {
       expect(diagHtml).not.toContain(">YES<");
       expect(diagHtml).not.toContain(">NO<");
       expect(diagHtml).toContain("yes-badge");
-      expect(diagHtml).toContain("no-badge");
+      expect(diagHtml).toContain(ar["diagnosis.yes"]);
 
       const rankHtml = renderToStaticMarkup(
         createElement(RankingExplainerSection, { ranked, priorities: DEFAULT_PRIORITIES }),

@@ -29,7 +29,14 @@ export function legalSequences(pack: FieldPack): string[][] {
   const out: string[][] = [];
   for (const o of pack.options) {
     const key = o.sequence.join("|");
-    if (o.option_id === "current" || o.sequence.length !== N_SEASONS || o.sequence.some(isHistoryOnly) || seen.has(key)) continue;
+    if (
+      o.option_id === "current" ||
+      o.sequence.length !== N_SEASONS ||
+      o.sequence.some((k) => isHistoryOnly(k, pack.field.region_id)) ||
+      seen.has(key)
+    ) {
+      continue;
+    }
     seen.add(key);
     out.push(o.sequence);
   }

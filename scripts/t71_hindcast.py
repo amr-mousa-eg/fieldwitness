@@ -34,6 +34,7 @@ import yaml
 
 from fieldwitness.data import labels, power
 from fieldwitness.data.asof import as_of, forcing_weather
+from fieldwitness.data.ssurgo_taw import get_field_taw_base
 from fieldwitness.infer import abc, forward, priors, synthetic
 from fieldwitness.physics.forcing import forcing
 from fieldwitness.rotate.slots import SOW_DAY
@@ -152,6 +153,8 @@ for fid in pilot.index:
     n_new += 1
     r = pilot.loc[fid]
     lon, lat = r["lon"], r["lat"]
+    f_taw_base = get_field_taw_base(field_id=str(fid))
+    f_cfgs = {c: {**cfgs[c], "taw_base_mm": f_taw_base} for c in CROPS}
     recs = []
     with as_of(CUT):
         lab = labels.read(region)
@@ -160,7 +163,7 @@ for fid in pilot.index:
         pools = {c: [] for c in CROPS}
         for rec in lf.itertuples():
             doy, nd = thin(*obs_series(fid, rec.year), fid, rec.year)
-            wxy = forward.season_weather(wx_past, rec.year, cfgs[rec.crop])
+            wxy = forward.season_weather(wx_past, rec.year, f_cfgs[rec.crop])
             if len(doy) < MIN_OBS or wxy is None or rec.year > CUT.year:
                 continue
             leak["max_fit_year"] = max(leak["max_fit_year"], int(rec.year))
@@ -168,7 +171,7 @@ for fid in pilot.index:
                 *wxy,
                 n_ref,
                 crop_p[rec.crop],
-                cfgs[rec.crop],
+                f_cfgs[rec.crop],
                 seed=SEED + 1000 + rec.year,
             )
             rg = rng_w if rec.crop == "winter_wheat" else rng
@@ -205,9 +208,9 @@ for fid in pilot.index:
             src = "other_crop_posterior"
         else:
             pool, src = prior_all, "prior"
-        CURRENT.update(p=crop_p[c], cfg=cfgs[c])
+        CURRENT.update(p=crop_p[c], cfg=f_cfgs[c])
         rg = rng_w if c == "winter_wheat" else rng
-        wy = forward.season_weather(wy_all, y, cfgs[c])
+        wy = forward.season_weather(wy_all, y, f_cfgs[c])
         obs = stats(doy, nd[:, None])[0]
         entry = {
             "year": y,
@@ -217,7 +220,9 @@ for fid in pilot.index:
         }
         for mode in ("forecast", "forced"):
             if mode == "forecast":
-                wl = [w2 for yy in wx_past if (w2 := forward.season_weather(wx_past, yy, cfgs[c]))]
+                wl = [
+                    w2 for yy in wx_past if (w2 := forward.season_weather(wx_past, yy, f_cfgs[c]))
+                ]
             elif wy is not None:
                 wl = [wy]
             else:

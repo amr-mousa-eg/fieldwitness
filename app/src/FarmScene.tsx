@@ -24,6 +24,7 @@ import type { Sim3DOption, Sim3DScenario } from "./types";
 
 export interface FarmSceneProps {
   plots: [{ option: Sim3DOption; scenario: Sim3DScenario }, { option: Sim3DOption; scenario: Sim3DScenario }];
+  regionId?: string;
   weekIndex: number;
   month: number;
   isDark: boolean;
@@ -32,8 +33,8 @@ export interface FarmSceneProps {
   onFrameStats?: (s: FrameStats) => void;
 }
 
-type CropKey = "maize" | "sorghum" | "winter_wheat";
-const CROPS: CropKey[] = ["maize", "sorghum", "winter_wheat"];
+type CropKey = "maize" | "sorghum" | "winter_wheat" | "sunflower" | "soybean";
+const CROPS: CropKey[] = ["maize", "sorghum", "winter_wheat", "sunflower", "soybean"];
 // Plot centres on the screen-horizontal diagonal (x - z) of the isometric view: left, right.
 const PLOT_POS: [number, number][] = [
   [-1.5, 1.5],
@@ -54,7 +55,13 @@ function plantColours(isDark: boolean) {
     healthy: new THREE.Color(isDark ? 0x6fbf4a : 0x4f8f2f),
     pale: new THREE.Color(isDark ? 0xe6dc9a : 0xd8cf86),
     ripe: new THREE.Color(isDark ? 0xe0bf63 : 0xc9a64a),
-    head: { maize: new THREE.Color(0xe3c14a), sorghum: new THREE.Color(0xa0522d), winter_wheat: new THREE.Color(0xd6b14a) },
+    head: {
+      maize: new THREE.Color(0xe3c14a),
+      sorghum: new THREE.Color(0xa0522d),
+      winter_wheat: new THREE.Color(0xd6b14a),
+      sunflower: new THREE.Color(0xfacc15),
+      soybean: new THREE.Color(0xb5a642),
+    },
     cover: new THREE.Color(isDark ? 0x7fd06a : 0x5aa845),
     soilDry: new THREE.Color(isDark ? 0x7d5f43 : 0x9a7350),
     soilWet: new THREE.Color(isDark ? 0x3f2e20 : 0x5e4430),
@@ -62,14 +69,14 @@ function plantColours(isDark: boolean) {
   };
 }
 
-export function FarmScene({ plots, weekIndex, month, isDark, quality, reducedMotion, onFrameStats }: FarmSceneProps) {
+export function FarmScene({ plots, regionId, weekIndex, month, isDark, quality, reducedMotion, onFrameStats }: FarmSceneProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const apiRef = useRef<{ update: () => void; theme: (dark: boolean) => void } | null>(null);
   const darkRef = useRef(isDark);
   darkRef.current = isDark;
-  const latest = useRef({ plots, weekIndex, month });
-  latest.current = { plots, weekIndex, month };
+  const latest = useRef({ plots, regionId, weekIndex, month });
+  latest.current = { plots, regionId, weekIndex, month };
   const statsCb = useRef(onFrameStats);
   statsCb.current = onFrameStats;
 
@@ -349,7 +356,13 @@ export function FarmScene({ plots, weekIndex, month, isDark, quality, reducedMot
             });
             cover.instanceMatrix.needsUpdate = true;
           }
-          if (p.kind === "maize" || p.kind === "sorghum" || p.kind === "winter_wheat") {
+          if (
+            p.kind === "maize" ||
+            p.kind === "sorghum" ||
+            p.kind === "winter_wheat" ||
+            p.kind === "sunflower" ||
+            p.kind === "soybean"
+          ) {
             const s = setFor(p.kind);
             const height = MATURE_HEIGHT[p.kind] * PLANT_SCALE * Math.max(0.08, p.growth);
             const spread = (0.55 + 0.45 * p.growth) * PLANT_SCALE;
@@ -394,11 +407,11 @@ export function FarmScene({ plots, weekIndex, month, isDark, quality, reducedMot
 
     let dirty = true;
     const update = () => {
-      const { plots: pl, weekIndex: w, month: m } = latest.current;
+      const { plots: pl, regionId: reg, weekIndex: w, month: m } = latest.current;
       const look = weekLook(pl[0].scenario.rain_mm, w, m, T.dark, quality.maxRainDrops);
       (scene.background as THREE.Color).setHex(look.sky);
       grassMat.color.setHex(look.grass);
-      pl.forEach((p, i) => plotApis[i].update(plotWeek(p.option, p.scenario, w)));
+      pl.forEach((p, i) => plotApis[i].update(plotWeek(p.option, p.scenario, w, reg)));
       rain.count = look.rainDrops;
       placeDrops();
       renderer.shadowMap.needsUpdate = true;
@@ -505,7 +518,7 @@ export function FarmScene({ plots, weekIndex, month, isDark, quality, reducedMot
 
   useEffect(() => {
     apiRef.current?.update();
-  }, [plots, weekIndex, month]);
+  }, [plots, regionId, weekIndex, month]);
 
   return (
     <div ref={containerRef} className="farm-canvas-wrap">

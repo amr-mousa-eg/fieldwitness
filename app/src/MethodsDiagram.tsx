@@ -80,7 +80,7 @@ export const DIAGRAM_STAGES: DiagramStage[] = [
         label: "Witness 1: Physics",
         lines: [
           "FAO-56 water balance, driven by NASA POWER weather",
-          "KS 150 mm [A] prior; UA SoilGrids 0–135 cm TAW [E] (med. 206.5 mm)",
+          "KS SSURGO [E] TAW (med. 282.1 mm); UA SoilGrids 0–135 cm [E] (med. 206.5 mm)",
         ],
         target: "glossary-water_balance",
         status: "ON",
@@ -90,7 +90,7 @@ export const DIAGRAM_STAGES: DiagramStage[] = [
         label: "Witness 2: Own past",
         lines: [
           "HLS/S2 history calibrates the physics (ABC) and gives a credibility score",
-          "UA: 120/120 calibrated (73 ≥ 0.60, med. 0.658); KS: 185/200 (med. 0.500)",
+          "UA: 120/120 calibrated (73 ≥ 0.60, med. 0.658); KS: 185/200 (med. 0.483)",
         ],
         target: "glossary-credibility",
         status: "ON",
@@ -117,7 +117,7 @@ export const DIAGRAM_STAGES: DiagramStage[] = [
         label: "Evidence grade",
         lines: [
           "Agreement between witnesses gives A–D",
-          "Capped at B in Kansas; A–C unlocked in Ukraine (8 A / 67 B / 45 C top)",
+          "Capped at B in Kansas; A–C unlocked in Ukraine (73 B / 47 C top · 44 A options)",
         ],
         target: "m-regions",
       },
@@ -126,8 +126,8 @@ export const DIAGRAM_STAGES: DiagramStage[] = [
         label: "Hindcast check",
         lines: [
           "Data frozen at 31 Dec 2021, then 2022–2024 predicted",
-          "Split-CQR lifted 90% coverage (SOS 85.8–90.3%; canopy 70.4–77.4%)",
-          "Beats baselines B1/B2 overall and for maize",
+          "Split-CQR lifted 90% coverage (SOS 86.3–91.1% sym; canopy 71.8–79.0%)",
+          "Beats baselines B1/B2 overall & all 3 crops (KS)",
         ],
         target: "glossary-hindcast",
       },

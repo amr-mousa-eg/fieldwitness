@@ -23,13 +23,13 @@ describe("Grade & Credibility Validity (Kansas Pilot)", () => {
     const strings = en as Record<string, string>;
     expect(strings["score.gradeValidity.heading"]).toBeTruthy();
     expect(strings["score.gradeValidity.verdict"]).toBe(
-      "We could not show that evidence grades predict accuracy (n = 463 field-seasons): grade-B fields had lower average error than grade-D (CRPS 17.0 vs 24.0), but the difference is within the uncertainty (95% CI of the difference −3.3 to 14.3). Grade D had only 25 field-seasons."
+      "We could not show that evidence grades predict accuracy (n = 463 field-seasons): grade-B fields had lower average error than grade-D (CRPS 17.9 vs 24.8), but the difference is within the uncertainty (95% CI of the difference −1.5 to 13.9). Grade D had only 25 field-seasons."
     );
     expect(strings["score.gradeValidity.bDesc"]).toBeTruthy();
     expect(strings["score.gradeValidity.cDesc"]).toBeTruthy();
     expect(strings["score.gradeValidity.dDesc"]).toBeTruthy();
     expect(strings["methods.limits.7"]).toBe(
-      "We could not show that evidence grades predict accuracy (n = 463 field-seasons): grade-B fields had lower average error than grade-D (CRPS 17.0 vs 24.0), but the difference is within the uncertainty (95% CI of the difference −3.3 to 14.3). Grade D had only 25 field-seasons."
+      "We could not show that evidence grades predict accuracy (n = 463 field-seasons): grade-B fields had lower average error than grade-D (CRPS 17.9 vs 24.8), but the difference is within the uncertainty (95% CI of the difference −1.5 to 13.9). Grade D had only 25 field-seasons."
     );
   });
 });

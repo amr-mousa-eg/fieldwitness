@@ -72,7 +72,7 @@ describe("phone performance caps", () => {
   });
 
   it("instance counts stay under the tier cap and are lower on phones", () => {
-    for (const crop of ["maize", "sorghum", "winter_wheat"] as const) {
+    for (const crop of ["maize", "sorghum", "winter_wheat", "sunflower", "soybean"] as const) {
       for (const tier of [HIGH_TIER, LOW_TIER]) {
         const n = plantsPerSide(crop, tier);
         expect(n * n * 2).toBeLessThanOrEqual(tier.maxPlantInstances);

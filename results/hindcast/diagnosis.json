@@ -9,91 +9,97 @@
     "results": {
       "overall": {
         "n_total": 463,
-        "n_paired_baselines": 266,
-        "fw_crps_mean": 14.864827809344938,
+        "n_paired_baselines": 463,
+        "fw_crps_mean": 17.864245166894356,
         "fw_crps_ci95": [
-          13.200655527134453,
-          16.709675472326524
+          16.4193953633817,
+          19.35361606847674
         ],
-        "b1_crps_mean": 16.098065542739224,
-        "b2_crps_mean": 16.215836827061924,
-        "diff_vs_b1_mean": 1.233237733394286,
+        "b1_crps_mean": 19.67414551819081,
+        "b2_crps_mean": 20.449867302264458,
+        "diff_vs_b1_mean": 1.8099003512964498,
         "diff_vs_b1_ci95": [
-          0.47889234118404306,
-          1.9940457760625006
+          1.3920090316871465,
+          2.2229204863123164
         ],
         "beats_b1": true,
-        "diff_vs_b2_mean": 1.3510090177169893,
+        "diff_vs_b2_mean": 2.5856221353701017,
         "diff_vs_b2_ci95": [
-          0.7362745861986733,
-          1.904329719130914
+          2.040766647114188,
+          3.098935692945023
         ],
         "beats_b2": true,
-        "note": "Baselines B1 and B2 were generated in T7.3 for maize and sorghum (n=266). Winter wheat baselines were omitted in T7.3."
+        "note": "Baselines B1 and B2 evaluated across n=463 paired field-seasons (maize, sorghum, winter_wheat)."
       },
       "by_crop": {
         "maize": {
           "n": 124,
-          "fw_crps_mean": 17.67922403834742,
+          "fw_crps_mean": 18.230832051397705,
           "fw_crps_ci95": [
-            15.22393989054034,
-            20.375413835413035
+            15.993827215975958,
+            20.719265174151563
           ],
-          "b1_crps_mean": 19.44546982876459,
-          "b2_crps_mean": 19.709607454275552,
-          "diff_vs_b1_mean": 1.7662457904171778,
+          "b1_crps_mean": 20.68034219044521,
+          "b2_crps_mean": 21.24261851913889,
+          "diff_vs_b1_mean": 2.4495101390475034,
           "diff_vs_b1_ci95": [
-            0.7258269439250857,
-            2.8938916549348876
+            1.5881980532933722,
+            3.324576183109947
           ],
           "beats_b1": true,
-          "diff_vs_b2_mean": 2.0303834159281355,
+          "diff_vs_b2_mean": 3.0117864677411825,
           "diff_vs_b2_ci95": [
-            1.172212469768868,
-            2.8747806129694142
+            1.9070572086210777,
+            4.03993468272356
           ],
           "beats_b2": true,
           "status": "evaluated"
         },
         "sorghum": {
           "n": 142,
-          "fw_crps_mean": 12.407186031906154,
+          "fw_crps_mean": 12.70128207660154,
           "fw_crps_ci95": [
-            10.008648983397416,
-            14.732532581571705
+            10.58205933893517,
+            15.160592095689365
           ],
-          "b1_crps_mean": 13.174980109871997,
-          "b2_crps_mean": 13.16493853287538,
-          "diff_vs_b1_mean": 0.7677940779658454,
+          "b1_crps_mean": 14.068960045042878,
+          "b2_crps_mean": 14.497679749701415,
+          "diff_vs_b1_mean": 1.3676779684413425,
           "diff_vs_b1_ci95": [
-            -0.09719348368861742,
-            1.637105322733048
+            0.5618766459409995,
+            2.184890356072136
           ],
-          "beats_b1": false,
-          "diff_vs_b2_mean": 0.757752500969228,
+          "beats_b1": true,
+          "diff_vs_b2_mean": 1.7963976730998772,
           "diff_vs_b2_ci95": [
-            -0.05532035524673264,
-            1.5283701373347736
+            0.9739320986359096,
+            2.5587318325343005
           ],
-          "beats_b2": false,
+          "beats_b2": true,
           "status": "evaluated"
         },
         "winter_wheat": {
           "n": 197,
-          "fw_crps_mean": 21.14865427712785,
+          "fw_crps_mean": 21.355026817367275,
           "fw_crps_ci95": [
-            18.780516212475995,
-            23.424728283545853
+            19.39042417169141,
+            23.497522535016575
           ],
-          "b1_crps_mean": null,
-          "b2_crps_mean": null,
-          "diff_vs_b1_mean": null,
-          "diff_vs_b1_ci95": null,
-          "beats_b1": null,
-          "diff_vs_b2_mean": null,
-          "diff_vs_b2_ci95": null,
-          "beats_b2": null,
-          "status": "baseline not computed in T7.3"
+          "b1_crps_mean": 23.081089425944405,
+          "b2_crps_mean": 24.241285990444776,
+          "diff_vs_b1_mean": 1.7260626085771336,
+          "diff_vs_b1_ci95": [
+            1.221129993686699,
+            2.1408930958379297
+          ],
+          "beats_b1": true,
+          "diff_vs_b2_mean": 2.8862591730775016,
+          "diff_vs_b2_ci95": [
+            2.0620336401695587,
+            3.639610524759585
+          ],
+          "beats_b2": true,
+          "status": "evaluated"
         },
         "fallow": {
           "n": 0,
@@ -109,83 +115,89 @@
       {
         "category": "maize",
         "n": 124,
-        "fw_crps_mean": 17.67922403834742,
+        "fw_crps_mean": 18.230832051397705,
         "fw_crps_ci95": [
-          15.22393989054034,
-          20.375413835413035
+          15.993827215975958,
+          20.719265174151563
         ],
-        "fw_peak_err_mean": 14.919354838709678,
+        "fw_peak_err_mean": 17.237903225806452,
         "fw_peak_err_ci95": [
-          12.299858870967743,
-          18.20697623877137
+          14.09375,
+          21.14274514964656
         ],
-        "fw_cov90_mean": 0.27419354838709675,
+        "fw_cov90_mean": 0.23387096774193547,
         "fw_cov90_ci95": [
-          0.1981981981981982,
-          0.3511778876235765
+          0.15124883286647992,
+          0.32091509237031624
         ],
         "diff_vs_b1_ci95": [
-          0.7258269439250857,
-          2.8938916549348876
+          1.5881980532933722,
+          3.324576183109947
         ],
         "verdict_vs_b1": "FieldWitness beats baseline (CI > 0)",
         "diff_vs_b2_ci95": [
-          1.172212469768868,
-          2.8747806129694142
+          1.9070572086210777,
+          4.03993468272356
         ],
         "verdict_vs_b2": "FieldWitness beats baseline (CI > 0)"
       },
       {
         "category": "sorghum",
         "n": 142,
-        "fw_crps_mean": 12.407186031906154,
+        "fw_crps_mean": 12.70128207660154,
         "fw_crps_ci95": [
-          10.008648983397416,
-          14.732532581571705
+          10.58205933893517,
+          15.160592095689365
         ],
-        "fw_peak_err_mean": 16.154929577464788,
+        "fw_peak_err_mean": 16.338028169014084,
         "fw_peak_err_ci95": [
-          13.538012295081968,
-          18.69279513888889
+          13.728425898352194,
+          19.455883416939994
         ],
-        "fw_cov90_mean": 0.43661971830985913,
+        "fw_cov90_mean": 0.3732394366197183,
         "fw_cov90_ci95": [
-          0.3550609004008634,
-          0.532881711828817
+          0.2802954545454545,
+          0.4645229441163108
         ],
         "diff_vs_b1_ci95": [
-          -0.09719348368861742,
-          1.637105322733048
+          0.5618766459409995,
+          2.184890356072136
         ],
-        "verdict_vs_b1": "comparable within uncertainty (CI spans 0)",
+        "verdict_vs_b1": "FieldWitness beats baseline (CI > 0)",
         "diff_vs_b2_ci95": [
-          -0.05532035524673264,
-          1.5283701373347736
+          0.9739320986359096,
+          2.5587318325343005
         ],
-        "verdict_vs_b2": "comparable within uncertainty (CI spans 0)"
+        "verdict_vs_b2": "FieldWitness beats baseline (CI > 0)"
       },
       {
         "category": "winter_wheat",
         "n": 197,
-        "fw_crps_mean": 21.14865427712785,
+        "fw_crps_mean": 21.355026817367275,
         "fw_crps_ci95": [
-          18.780516212475995,
-          23.424728283545853
+          19.39042417169141,
+          23.497522535016575
         ],
-        "fw_peak_err_mean": 58.94670050761421,
+        "fw_peak_err_mean": 56.02284263959391,
         "fw_peak_err_ci95": [
-          52.173646044357916,
-          66.28486158376963
+          48.621912202380955,
+          63.94732587064676
         ],
-        "fw_cov90_mean": 0.23857868020304568,
+        "fw_cov90_mean": 0.25380710659898476,
         "fw_cov90_ci95": [
-          0.18403426218660393,
-          0.2990696278511404
+          0.19402144681995429,
+          0.31772651885474856
         ],
-        "diff_vs_b1_ci95": null,
-        "verdict_vs_b1": "not evaluated (no baseline)",
-        "diff_vs_b2_ci95": null,
-        "verdict_vs_b2": "not evaluated (no baseline)"
+        "diff_vs_b1_ci95": [
+          1.221129993686699,
+          2.1408930958379297
+        ],
+        "verdict_vs_b1": "FieldWitness beats baseline (CI > 0)",
+        "diff_vs_b2_ci95": [
+          2.0620336401695587,
+          3.639610524759585
+        ],
+        "verdict_vs_b2": "FieldWitness beats baseline (CI > 0)"
       },
       {
         "category": "fallow",
@@ -197,87 +209,87 @@
       {
         "category": "2022",
         "n": 134,
-        "fw_crps_mean": 18.461319008613597,
+        "fw_crps_mean": 19.308346576826477,
         "fw_crps_ci95": [
-          16.391363414068397,
-          20.507919620390087
+          16.86716552641036,
+          21.730997944368912
         ],
-        "fw_peak_err_mean": 37.66417910447761,
+        "fw_peak_err_mean": 37.70522388059702,
         "fw_peak_err_ci95": [
-          30.877767857142857,
-          46.0861328125
+          29.956106879983643,
+          46.40016276041667
         ],
-        "fw_cov90_mean": 0.26865671641791045,
+        "fw_cov90_mean": 0.22388059701492538,
         "fw_cov90_ci95": [
-          0.19996323529411766,
-          0.3386408375089477
+          0.1571321961620469,
+          0.2960074074074074
         ],
         "diff_vs_b1_ci95": [
-          -0.4130725695502254,
-          1.6735328683995132
+          1.2789577541998085,
+          2.7968973530338412
         ],
-        "verdict_vs_b1": "comparable within uncertainty (CI spans 0)",
+        "verdict_vs_b1": "FieldWitness beats baseline (CI > 0)",
         "diff_vs_b2_ci95": [
-          1.0292986794674686,
-          2.6130070565260572
+          3.1538372558157586,
+          4.6717941142301935
         ],
         "verdict_vs_b2": "FieldWitness beats baseline (CI > 0)"
       },
       {
         "category": "2023",
         "n": 129,
-        "fw_crps_mean": 18.239047293546776,
+        "fw_crps_mean": 18.752998827788648,
         "fw_crps_ci95": [
-          15.71085411008707,
-          20.940855775505415
+          16.249749062654605,
+          21.6311623548704
         ],
-        "fw_peak_err_mean": 29.8953488372093,
+        "fw_peak_err_mean": 30.61627906976744,
         "fw_peak_err_ci95": [
-          22.43374445676275,
-          37.984407018442624
+          22.6356679389313,
+          39.9962953125
         ],
-        "fw_cov90_mean": 0.29457364341085274,
+        "fw_cov90_mean": 0.27906976744186046,
         "fw_cov90_ci95": [
-          0.21535714285714286,
-          0.3709677419354839
+          0.20738751147842058,
+          0.35247107039537123
         ],
         "diff_vs_b1_ci95": [
-          0.16258205347690724,
-          2.881030412600943
+          1.6668327142797854,
+          2.970722443841727
         ],
         "verdict_vs_b1": "FieldWitness beats baseline (CI > 0)",
         "diff_vs_b2_ci95": [
-          0.8321999767470929,
-          2.5840936766731684
+          3.3327635010536465,
+          4.6440580411436585
         ],
         "verdict_vs_b2": "FieldWitness beats baseline (CI > 0)"
       },
       {
         "category": "2024",
         "n": 200,
-        "fw_crps_mean": 16.46837620929092,
+        "fw_crps_mean": 16.323451110963013,
         "fw_crps_ci95": [
-          14.26352512392851,
-          18.89652074521881
+          14.21366238784377,
+          18.493404509520765
         ],
-        "fw_peak_err_mean": 34.265,
+        "fw_peak_err_mean": 32.46,
         "fw_peak_err_ci95": [
-          30.944052595628417,
-          38.45571305177393
+          27.968029730104764,
+          37.17386070564463
         ],
-        "fw_cov90_mean": 0.345,
+        "fw_cov90_mean": 0.33,
         "fw_cov90_ci95": [
-          0.2791599934851652,
-          0.41346531413612564
+          0.2615,
+          0.40002415458937196
         ],
         "diff_vs_b1_ci95": [
-          0.6936729400293259,
-          2.478292312805592
+          0.8084170299352724,
+          1.9161733949511173
         ],
         "verdict_vs_b1": "FieldWitness beats baseline (CI > 0)",
         "diff_vs_b2_ci95": [
-          -0.05437322926033675,
-          1.6110384872025898
+          -0.14593804923209688,
+          1.673972143505519
         ],
         "verdict_vs_b2": "comparable within uncertainty (CI spans 0)"
       }
@@ -286,87 +298,87 @@
       {
         "category": "<10 ha",
         "n": 115,
-        "fw_crps_mean": 19.825861825069964,
+        "fw_crps_mean": 20.27830057642517,
         "fw_crps_ci95": [
-          16.256630116652595,
-          23.477047118013584
+          16.946048327969034,
+          23.931351589987386
         ],
-        "fw_peak_err_mean": 36.70434782608696,
+        "fw_peak_err_mean": 37.11304347826087,
         "fw_peak_err_ci95": [
-          29.141904016212234,
-          44.75054133858268
+          30.26261943922306,
+          45.18882307160152
         ],
-        "fw_cov90_mean": 0.28695652173913044,
+        "fw_cov90_mean": 0.23478260869565218,
         "fw_cov90_ci95": [
-          0.2086782608695652,
-          0.37173720661792997
+          0.1592920353982301,
+          0.3114754098360656
         ],
         "diff_vs_b1_ci95": [
-          -1.3334227291819465,
-          1.3913648698833498
+          0.4804157121382315,
+          1.8286378085001496
         ],
-        "verdict_vs_b1": "comparable within uncertainty (CI spans 0)",
+        "verdict_vs_b1": "FieldWitness beats baseline (CI > 0)",
         "diff_vs_b2_ci95": [
-          -0.5588111296230043,
-          1.6412720761219857
+          1.3403338135897058,
+          2.9715471747762296
         ],
-        "verdict_vs_b2": "comparable within uncertainty (CI spans 0)"
+        "verdict_vs_b2": "FieldWitness beats baseline (CI > 0)"
       },
       {
         "category": "10-50 ha",
         "n": 176,
-        "fw_crps_mean": 16.272819457587214,
+        "fw_crps_mean": 16.45280529443095,
         "fw_crps_ci95": [
-          14.199423180888765,
-          18.525696040708155
+          14.444787695351957,
+          18.297289821936044
         ],
-        "fw_peak_err_mean": 33.33522727272727,
+        "fw_peak_err_mean": 31.50284090909091,
         "fw_peak_err_ci95": [
-          27.936523039432874,
-          39.767352252342036
+          25.842723727422005,
+          37.85578929539295
         ],
         "fw_cov90_mean": 0.3181818181818182,
         "fw_cov90_ci95": [
-          0.2556818181818182,
-          0.38953488372093026
+          0.2542305622814097,
+          0.38691964285714286
         ],
         "diff_vs_b1_ci95": [
-          0.8101983722109031,
-          2.926277933376733
+          1.3802004539863728,
+          2.76260865087112
         ],
         "verdict_vs_b1": "FieldWitness beats baseline (CI > 0)",
         "diff_vs_b2_ci95": [
-          0.32526564017213255,
-          2.2140003661376597
+          1.5221475950761703,
+          3.2045985383756554
         ],
         "verdict_vs_b2": "FieldWitness beats baseline (CI > 0)"
       },
       {
         "category": ">50 ha",
         "n": 172,
-        "fw_crps_mean": 17.304295089892697,
+        "fw_crps_mean": 17.694460547461308,
         "fw_crps_ci95": [
-          15.5323391132995,
-          19.394214268807133
+          15.77655776992375,
+          19.721401977666577
         ],
-        "fw_peak_err_mean": 32.95639534883721,
+        "fw_peak_err_mean": 33.031976744186046,
         "fw_peak_err_ci95": [
-          26.880381816507,
-          39.80869318181817
+          27.014684857027788,
+          39.90220879120879
         ],
-        "fw_cov90_mean": 0.313953488372093,
+        "fw_cov90_mean": 0.28488372093023256,
         "fw_cov90_ci95": [
-          0.24220422060914468,
-          0.3855154081816543
+          0.2234326505276226,
+          0.3468344995436568
         ],
         "diff_vs_b1_ci95": [
-          0.08247753523436745,
-          2.848356509336168
+          1.2452957097796635,
+          2.8107042149744204
         ],
         "verdict_vs_b1": "FieldWitness beats baseline (CI > 0)",
         "diff_vs_b2_ci95": [
-          1.0329435955934556,
-          2.8191445093803034
+          2.0787817939681625,
+          3.9577235310601178
         ],
         "verdict_vs_b2": "FieldWitness beats baseline (CI > 0)"
       }
@@ -374,74 +386,74 @@
     "by_grade": [
       {
         "category": "B",
-        "n": 170,
-        "fw_crps_mean": 16.958511762877947,
+        "n": 139,
+        "fw_crps_mean": 17.931294425076054,
         "fw_crps_ci95": [
-          15.042004547003865,
-          18.980746555398582
+          15.55319751813409,
+          20.434853069831842
         ],
-        "fw_peak_err_mean": 29.152941176470588,
+        "fw_peak_err_mean": 28.676258992805757,
         "fw_peak_err_ci95": [
-          24.478182756400546,
-          34.472033898305085
+          22.48992872594154,
+          35.42428236376694
         ],
-        "fw_cov90_mean": 0.3235294117647059,
+        "fw_cov90_mean": 0.2589928057553957,
         "fw_cov90_ci95": [
-          0.25316260353180187,
-          0.394305114638448
+          0.18544677419354838,
+          0.3267
         ],
         "diff_vs_b1_ci95": [
-          -0.4968778060435661,
-          1.6947119804297424
+          0.6149464163528904,
+          2.26616918010655
         ],
-        "verdict_vs_b1": "comparable within uncertainty (CI spans 0)",
+        "verdict_vs_b1": "FieldWitness beats baseline (CI > 0)",
         "diff_vs_b2_ci95": [
-          0.043232919337265495,
-          1.7070624622052635
+          0.740952828524691,
+          2.336262313981709
         ],
         "verdict_vs_b2": "FieldWitness beats baseline (CI > 0)"
       },
       {
         "category": "C",
-        "n": 268,
-        "fw_crps_mean": 17.30139507712526,
+        "n": 299,
+        "fw_crps_mean": 17.251909129688183,
         "fw_crps_ci95": [
-          15.369438828711157,
-          19.463926265899516
+          15.620616777905406,
+          18.756796017667835
         ],
-        "fw_peak_err_mean": 37.093283582089555,
+        "fw_peak_err_mean": 35.5685618729097,
         "fw_peak_err_ci95": [
-          32.18881392045455,
-          42.618831168831164
+          30.252659546869594,
+          41.35830637915542
         ],
-        "fw_cov90_mean": 0.30597014925373134,
+        "fw_cov90_mean": 0.3010033444816054,
         "fw_cov90_ci95": [
-          0.25,
-          0.35880255964527746
+          0.2533783783783784,
+          0.3471359695682944
         ],
         "diff_vs_b1_ci95": [
-          0.5126690401653762,
-          2.8130660049874776
+          1.5770317670700909,
+          2.574114880784807
         ],
         "verdict_vs_b1": "FieldWitness beats baseline (CI > 0)",
         "diff_vs_b2_ci95": [
-          1.0282160676727874,
-          2.5186539916160706
+          2.573421004869817,
+          3.9941874765966303
         ],
         "verdict_vs_b2": "FieldWitness beats baseline (CI > 0)"
       },
       {
         "category": "D",
         "n": 25,
-        "fw_crps_mean": 24.02432838084474,
+        "fw_crps_mean": 24.814990296389915,
         "fw_crps_ci95": [
-          15.947679923317276,
-          30.405302270815373
+          16.79936884655368,
+          30.853901971870606
         ],
-        "fw_peak_err_mean": 34.38,
+        "fw_peak_err_mean": 34.92,
         "fw_peak_err_ci95": [
-          23.453829966329966,
-          45.11851023017903
+          23.3921875,
+          45.90084064327485
         ],
         "fw_cov90_mean": 0.24,
         "fw_cov90_ci95": [
@@ -449,13 +461,13 @@
           0.4737468671679197
         ],
         "diff_vs_b1_ci95": [
-          -0.7925909844945732,
-          4.427054127744926
+          -0.987745026912156,
+          3.0096688044105404
         ],
         "verdict_vs_b1": "comparable within uncertainty (CI spans 0)",
         "diff_vs_b2_ci95": [
-          -0.4422707755331174,
-          0.462498748239277
+          -0.17619181896605512,
+          0.10587622261875523
         ],
         "verdict_vs_b2": "comparable within uncertainty (CI spans 0)"
       }
@@ -474,29 +486,29 @@
       {
         "category": ">=20",
         "n": 463,
-        "fw_crps_mean": 17.53850775352039,
+        "fw_crps_mean": 17.864245166894356,
         "fw_crps_ci95": [
-          15.926264138589161,
-          19.143053612567318
+          16.4193953633817,
+          19.35361606847674
         ],
-        "fw_peak_err_mean": 34.03131749460043,
+        "fw_peak_err_mean": 33.46436285097192,
         "fw_peak_err_ci95": [
-          30.400341570888614,
-          37.90836999239351
+          29.27758279337653,
+          38.01146080728473
         ],
-        "fw_cov90_mean": 0.30885529157667385,
+        "fw_cov90_mean": 0.28509719222462204,
         "fw_cov90_ci95": [
-          0.2681783036551078,
-          0.3511945832341978
+          0.2453219078800657,
+          0.3233451946088928
         ],
         "diff_vs_b1_ci95": [
-          0.47889234118404306,
-          1.9940457760625006
+          1.3920090316871465,
+          2.2229204863123164
         ],
         "verdict_vs_b1": "FieldWitness beats baseline (CI > 0)",
         "diff_vs_b2_ci95": [
-          0.7362745861986733,
-          1.904329719130914
+          2.040766647114188,
+          3.098935692945023
         ],
         "verdict_vs_b2": "FieldWitness beats baseline (CI > 0)"
       }
@@ -505,32 +517,32 @@
   "findings": [
     {
       "dimension": "crop",
-      "finding": "Skill is highest (lowest CRPS) for sorghum (CRPS 12.41, 95% CI [10.01, 14.73]), followed by maize (CRPS 17.68, 95% CI [15.22, 20.38]), and lowest for winter wheat (CRPS 21.15, 95% CI [18.78, 23.42]).",
+      "finding": "Skill is highest (lowest CRPS) for sorghum (CRPS 12.70, 95% CI [10.58, 15.16]), followed by maize (CRPS 18.23, 95% CI [15.99, 20.72]), and lowest for winter wheat (CRPS 21.36, 95% CI [19.39, 23.50]).",
       "cause": "cause not established"
     },
     {
       "dimension": "crop_timing_anomaly",
-      "finding": "Winter wheat displays a severe timing error (peak timing absolute error 58.9 d, 95% CI [52.2, 66.3] d; median signed timing error +36.0 d).",
-      "cause": "Proposed explanation (not tested): Predicted peak DOY is systematically ~36 days later than observed heading in Kansas (late May vs July model peak). Phenology prior stage lengths for winter wheat require calibration (proposed as a separate decision)."
+      "finding": "Winter wheat displays a severe timing error (peak timing absolute error 56.0 d, 95% CI [48.6, 63.9] d; median signed timing error +30.0 d).",
+      "cause": "Proposed explanation (not tested): Predicted peak DOY is systematically ~30 days later than observed heading in Kansas (late May vs July model peak). Phenology prior stage lengths for winter wheat require calibration (proposed as a separate decision)."
     },
     {
       "dimension": "year",
-      "finding": "Skill is higher in 2024 (CRPS 16.47, 95% CI [14.26, 18.90]) than in 2023 (CRPS 18.24, 95% CI [15.71, 20.94]) and 2022 (CRPS 18.46, 95% CI [16.39, 20.51]), though intervals overlap.",
+      "finding": "By year: 2024 (CRPS 16.32, 95% CI [14.21, 18.49]), 2023 (CRPS 18.75, 95% CI [16.25, 21.63]), and 2022 (CRPS 19.31, 95% CI [16.87, 21.73]), with overlapping bootstrap intervals.",
       "cause": "cause not established"
     },
     {
       "dimension": "field_size",
-      "finding": "Skill is comparable across all field size classes (<10 ha: CRPS 19.83, 95% CI [16.26, 23.48]; 10\u201350 ha: CRPS 16.27, 95% CI [14.20, 18.53]; >50 ha: CRPS 17.30, 95% CI [15.53, 19.39]).",
+      "finding": "Skill is comparable across all field size classes (<10 ha: CRPS 20.28, 95% CI [16.95, 23.93]; 10-50 ha: CRPS 16.45, 95% CI [14.44, 18.30]; >50 ha: CRPS 17.69, 95% CI [15.78, 19.72]).",
       "cause": "cause not established"
     },
     {
       "dimension": "grade",
-      "finding": "Evidence Grade B exhibits average CRPS of 16.96 [15.04, 18.98] vs Grade C of 17.30 [15.37, 19.46] and Grade D of 24.02 [15.95, 30.41], but differences are within spatial bootstrap uncertainty.",
+      "finding": "Evidence Grade B exhibits average CRPS of 17.93 [15.55, 20.43], Grade C exhibits average CRPS of 17.25 [15.62, 18.76], Grade D exhibits average CRPS of 24.81 [16.80, 30.85], with overlapping spatial bootstrap uncertainty.",
       "cause": "cause not established"
     },
     {
       "dimension": "hls_observations",
-      "finding": "All 463 Kansas field-seasons had >=20 clear HLS observations (bins <10 and 10\u201319 had n=0, too few to judge).",
+      "finding": "463 of 463 Kansas field-seasons had >=20 clear HLS observations (bins <10 and 10-19 had n<20, too few to judge).",
       "cause": "Semi-arid clear skies and dual Sentinel-2 / Landsat coverage over tile T14SLH produced dense time series across all fields."
     }
   ]

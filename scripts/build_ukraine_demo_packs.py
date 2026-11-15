@@ -14,6 +14,7 @@ Outputs packs/demo/ua_central_t36uvu/ and updates packs/demo/regions.json.
 
 from __future__ import annotations
 
+import argparse
 import json
 import multiprocessing
 from concurrent.futures import ProcessPoolExecutor, as_completed
@@ -86,15 +87,20 @@ UA_HLS_BASEMAP_URL = (
     "GoogleMapsCompatible_Level12/{z}/{y}/{x}.png"
 )
 
-# Modelled crops in rotate.slots (SOW_DAY) that also have ua_central_t36uvu params in crops.yaml
-ROTATION_CROPS = ("winter_wheat", "maize", "fallow", "cover_crop")
+# Modelled crops in rotate.slots (SOW_DAY) with verified ua_central_t36uvu params in crops.yaml
+# (barley & rapeseed remain excluded from rotation ranking per CLAUDE.md Rule 1: unverified Ky)
+ROTATION_CROPS = ("winter_wheat", "maize", "sunflower", "soybean", "fallow", "cover_crop")
 CANDIDATE_SEQS = [
-    ("winter_wheat", "maize", "cover_crop"),
-    ("winter_wheat", "maize", "maize"),
-    ("winter_wheat", "maize", "winter_wheat"),
+    ("winter_wheat", "sunflower", "soybean"),
+    ("winter_wheat", "maize", "soybean"),
+    ("winter_wheat", "soybean", "sunflower"),
+    ("winter_wheat", "maize", "sunflower"),
+    ("winter_wheat", "sunflower", "cover_crop"),
+    ("sunflower", "soybean", "winter_wheat"),
+    ("maize", "soybean", "winter_wheat"),
+    ("sunflower", "maize", "winter_wheat"),
     ("winter_wheat", "maize", "fallow"),
-    ("winter_wheat", "winter_wheat", "maize"),
-    ("maize", "winter_wheat", "fallow"),
+    ("winter_wheat", "sunflower", "fallow"),
 ]
 # Crops in config/crops.yaml calibrated by ABC in Tier 3 Ukraine
 ABC_SUMMER_CROPS = ("sunflower", "maize")
@@ -509,7 +515,10 @@ def _match_neighbours_contrast(
     if not pob_map:
         return [], []
     cand_pairs = set(zip(cand_seq, cand_seq[1:], strict=False))
-    if ("winter_wheat", "maize") not in cand_pairs:
+    if ("winter_wheat", "sunflower") not in cand_pairs and (
+        "winter_wheat",
+        "maize",
+    ) not in cand_pairs:
         return [], []
     cur_pairs = set(zip(cur_seq_raw, cur_seq_raw[1:], strict=False))
     if ("winter_wheat", "sunflower") in cur_pairs:
@@ -651,6 +660,108 @@ def _build_one_field(f_idx: int):
     prior_hidden = ctx["prior_hidden"]
     as_of = ctx["as_of"]
     problems: list[str] = []
+    suffixes = (
+        ".json",
+        ".series.json",
+        ".calendar.json",
+        ".scenarios.json",
+        ".sim3d.json",
+        ".sim3d_inputs.json",
+    )
+    if ctx.get("resume") and all((out_dir / f"{fid}{sfx}").exists() for sfx in suffixes):
+        try:
+            pack = FieldPack.model_validate_json((out_dir / f"{fid}.json").read_text("utf-8"))
+            cal = FieldCalendar.model_validate_json(
+                (out_dir / f"{fid}.calendar.json").read_text("utf-8")
+            )
+            if any(v.crop == "soybean" for v in cal.vulnerability) and len(pack.options) >= 2:
+                _, cred_val, cred_meta = _calibrate_field_abc(
+                    fid=fid,
+                    field_idx=f_idx,
+                    s2_field=s,
+                    crop_by_year=crop_by_year,
+                    wx_by_year=wx_by_year,
+                    taw_base_mm=taw_base_mm,
+                    taw_tag=taw_tag,
+                    noise_sd=noise_sd,
+                    cfg0=cfg0,
+                    crop_params_map=crop_params_map,
+                    cred_cfg=cred_cfg,
+                    rng=rng_abc,
+                    prior_hidden=prior_hidden,
+                )
+                cur_opt = next(o for o in pack.options if o.option_id == "current")
+                cand_models = sorted(
+                    (o for o in pack.options if o.option_id != "current"),
+                    key=lambda x: x.rank,
+                )
+                top_opt = cand_models[0]
+                ws_max = (
+                    max(v.shares["water_stress"].values[0] or 0.0 for v in cal.vulnerability)
+                    if cal.vulnerability
+                    else 0.0
+                )
+                fr_max = (
+                    max(v.shares["frost"].values[0] or 0.0 for v in cal.vulnerability)
+                    if cal.vulnerability
+                    else 0.0
+                )
+                ws_tag = Tagged(
+                    value=round(float(ws_max), 3),
+                    unit="share of years",
+                    tag="D",
+                    source="POWER daily weather x crop windows (crops.yaml)",
+                )
+                fr_tag = Tagged(
+                    value=round(float(fr_max), 3),
+                    unit="share of years",
+                    tag="D",
+                    source="POWER daily weather x crop windows (crops.yaml)",
+                )
+                hind_f: list[tuple[str, float, float, float]] = []
+                for sm in pack.story:
+                    if sm.year in (2022, 2023, 2024) and sm.cover_days.value is not None:
+                        pred_cd = (cur_opt.metrics["cover_days"].value or 0.0) / 3.0
+                        hind_f.append(
+                            (
+                                fid,
+                                float(sm.cover_days.value),
+                                pred_cd,
+                                float(sm.canopy_integral.value or 0.0),
+                            )
+                        )
+                geom_simple = shapely.from_wkt(pack.field.geometry_wkt)
+                geom_summary_wkt = shapely.to_wkt(
+                    geom_simple.simplify(0.0001, preserve_topology=True),
+                    rounding_precision=5,
+                )
+                summary = FieldSummary(
+                    field_id=fid,
+                    geometry_wkt=geom_summary_wkt,
+                    area_ha=pack.field.area_ha,
+                    current_sequence=list(cur_opt.sequence),
+                    top_option_id=top_opt.option_id,
+                    top_grade=top_opt.grade,
+                )
+                med_taw_r = cred_meta["taw_post_median_mm"]
+                log_msg = (
+                    f"{fid[:8]} [cached] TAW={taw_base_mm:.1f}->{med_taw_r:.1f}mm "
+                    f"cred={cred_val} grades={[o.grade for o in cand_models]} top={top_opt.grade}"
+                )
+                return (
+                    f_idx,
+                    fid,
+                    cur_opt.metrics["erosion_exposure"],
+                    ws_tag,
+                    fr_tag,
+                    hind_f,
+                    summary,
+                    cred_meta,
+                    problems,
+                    log_msg,
+                )
+        except Exception:
+            pass
     if True:
         field_draws, cred_val, cred_meta = _calibrate_field_abc(
             fid=fid,
@@ -710,11 +821,8 @@ def _build_one_field(f_idx: int):
 
         # Current 3-year sequence (2022, 2023, 2024) mapped to modelled crops
         cur_seq_raw = [crop_by_year.get(y, "fallow") for y in (2022, 2023, 2024)]
-        cur_seq = [
-            c if c in ROTATION_CROPS else ("maize" if c == "sunflower" else "fallow")
-            for c in cur_seq_raw
-        ]
-        cand_seqs = [sq for sq in CANDIDATE_SEQS if list(sq) != cur_seq][:5]
+        cur_seq = [c if c in ROTATION_CROPS else "fallow" for c in cur_seq_raw]
+        cand_seqs = [sq for sq in CANDIDATE_SEQS if list(sq) != cur_seq][:8]
         cur_ev = evaluate(rain, eto, [tuple(cur_seq)], REGION, field_draws)
         cand_ev = evaluate(rain, eto, cand_seqs, REGION, field_draws)
         ranked = rank_field(cand_ev, presets)
@@ -1034,7 +1142,13 @@ def _build_one_field(f_idx: int):
         canopies = {o.option_id: X.canopy_for(o.sequence, REGION) for o in opt_models}
         eto_s = forcing(w_df, float(r["lat"]), elev)["eto"]
         vuln = X.vulnerability(
-            w_df, eto_s, ["winter_wheat", "maize"], REGION, vcfg, taw_mm=med_taw, kc_scale=med_kc
+            w_df,
+            eto_s,
+            ["winter_wheat", "maize", "sunflower", "soybean"],
+            REGION,
+            vcfg,
+            taw_mm=med_taw,
+            kc_scale=med_kc,
         )
         cal = FieldCalendar(
             schema_version="1.2",
@@ -1220,6 +1334,10 @@ def _build_one_field(f_idx: int):
 def main() -> None:
     import geopandas as gpd
 
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--resume", action="store_true", help="Reuse already-built field JSONs")
+    args = ap.parse_args()
+
     pilot_all = gpd.read_parquet(f"data/fields/{REGION}_pilot.parquet")
     pilot_20 = _select_demo_fields(pilot_all)
     demo_ids = set(pilot_20["field_id"].astype(str))
@@ -1289,8 +1407,14 @@ def main() -> None:
 
     out_dir = OUT_ROOT / REGION
     out_dir.mkdir(parents=True, exist_ok=True)
-    for stale in out_dir.glob("*.json"):
-        stale.unlink()
+    if args.resume:
+        for stale_name in ("index.json", "layers.json", "hindcast.json"):
+            p_stale = out_dir / stale_name
+            if p_stale.exists():
+                p_stale.unlink()
+    else:
+        for stale in out_dir.glob("*.json"):
+            stale.unlink()
 
     crops = load_crops()
     cfg = load_story()
@@ -1332,6 +1456,7 @@ def main() -> None:
             "noise_sd": noise_sd,
             "prior_hidden": prior_hidden,
             "as_of": as_of,
+            "resume": bool(args.resume),
         }
     )
 
