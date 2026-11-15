@@ -170,3 +170,32 @@ def test_obs_checks_series_and_field_calendar_tagged():
         obs_checks=checks,
     )
     assert check_tagged(cal) == []
+
+
+def test_build_option_deltas_for_demo_packs():
+    from pathlib import Path
+
+    for region_id in ("ks_t14slh", "ua_central_t36uvu"):
+        rdir = Path("packs/demo") / region_id
+        od_path = rdir / "option_deltas.json"
+        if not od_path.exists():
+            continue
+        built = X.build_option_deltas_for_region(rdir)
+        loaded = X.RegionOptionDeltas.model_validate_json(od_path.read_bytes())
+        assert loaded == built
+        assert check_tagged(loaded) == []
+        assert len(loaded.fields) == loaded.n_fields
+        for fid, entry in loaded.fields.items():
+            assert entry.field_id == fid
+            assert set(entry.deltas.keys()) == {
+                "delta_water_use_mm",
+                "delta_bad_year_water_mm",
+                "delta_bare_months",
+                "delta_ryi",
+                "delta_erosion_exposure",
+            }
+            for tag_v in entry.deltas.values():
+                assert tag_v.tag in ("O", "D", "E", "A")
+                assert tag_v.source
+        for s in loaded.summary.values():
+            assert 0 <= s.improved_count <= s.valid_count <= loaded.n_fields

@@ -98,3 +98,12 @@ export const GIBS_SRTM_COLOR_URL =
 
 /** Below this zoom the MODIS/VIIRS backdrop shows; from it on, the HLS 30 m layer takes over. */
 export const BASEMAP_HANDOVER_ZOOM = 10;
+
+export type BackdropId = "modis" | "viirs" | "imerg" | "srtm";
+
+export const BACKDROP_OPTIONS: readonly { id: BackdropId; url: string; maxzoom: number; overlayOnly?: boolean }[] = [
+  { id: "modis", url: GIBS_BACKDROP_URL, maxzoom: 9 },
+  { id: "viirs", url: GIBS_VIIRS_BACKDROP_URL, maxzoom: 9 },
+  { id: "imerg", url: GIBS_IMERG_PRECIP_URL, maxzoom: 6, overlayOnly: true },
+  { id: "srtm", url: GIBS_SRTM_COLOR_URL, maxzoom: 12, overlayOnly: true },
+];

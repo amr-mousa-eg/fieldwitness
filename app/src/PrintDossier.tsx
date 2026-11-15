@@ -1,30 +1,80 @@
 import { fieldNumber } from "./fields";
 import { formatDate, localizeCounterfactualFlip, localizeMeasureNext } from "./format";
 import { generateFieldSummary } from "./fieldSummary";
+import { QrCodeSvg } from "./qrCode";
 import { explainRanking } from "./rankingExplainer";
-import { DEFAULT_PRIORITIES, NO_CONSTRAINTS, rankOptions } from "./rank";
+import {
+  type Constraints,
+  DEFAULT_PRIORITIES,
+  NO_CONSTRAINTS,
+  type Priorities,
+  findScenario,
+  isDefault,
+  rankOptions,
+} from "./rank";
+import { fieldStateHref } from "./route";
 import { cropName, optionName, t } from "./strings";
-import type { FieldPack, RegionIndex } from "./types";
+import type { FieldPack, FieldScenarios, RegionIndex } from "./types";
+
+function signedPrint(v: number, unit: "temp" | "rain"): string {
+  const s = v > 0 ? `+${v}` : v < 0 ? `−${-v}` : "0";
+  return t(unit === "temp" ? "whatif.tempValue" : "whatif.rainValue", { v: s });
+}
 
 export function PrintDossier({
   pack,
   regionId,
   index,
+  priorities = DEFAULT_PRIORITIES,
+  constraints = NO_CONSTRAINTS,
+  dt = 0,
+  dp = 0,
+  scenarios = null,
+  shareUrl,
 }: {
   pack: FieldPack;
   regionId: string;
   index?: RegionIndex | null;
+  priorities?: Priorities;
+  constraints?: Constraints;
+  dt?: number;
+  dp?: number;
+  scenarios?: FieldScenarios | null;
+  shareUrl?: string;
 }) {
   const fieldId = pack.field.field_id;
+  const activeRegion = regionId || pack.field.region_id;
   const num = index ? fieldNumber(fieldId, index.fields) : fieldId.slice(0, 8);
-  const ranked = rankOptions(pack.options, DEFAULT_PRIORITIES, NO_CONSTRAINTS, null);
-  const rankingExpl = explainRanking(ranked, DEFAULT_PRIORITIES);
-  const summary = generateFieldSummary(pack, DEFAULT_PRIORITIES, NO_CONSTRAINTS, null);
-  const currentOpt = pack.options.find((o) => o.option_id === "current");
-  const topAlts = ranked.filter((r) => r.option.option_id !== "current").slice(0, 3);
-  const isUkraine = (regionId || pack.field.region_id) === "ua_central_t36uvu";
+  const scenario = dt === 0 && dp === 0 ? null : findScenario(scenarios, dt, dp);
+  const ranked = rankOptions(pack.options, priorities, constraints, scenario);
+  const rankingExpl = explainRanking(ranked, priorities);
+  const summary = generateFieldSummary(pack, priorities, constraints, scenario);
+  const currentRanked = ranked.find((r) => r.option.option_id === "current");
+  const currentOpt = currentRanked?.option ?? pack.options.find((o) => o.option_id === "current");
+  const currentMetrics = currentRanked?.metrics ?? currentOpt?.metrics;
+  const keptAlts = ranked.filter((r) => r.kept && r.option.option_id !== "current");
+  const topAlts = (keptAlts.length > 0 ? keptAlts : ranked.filter((r) => r.option.option_id !== "current")).slice(0, 3);
+  const isUkraine = activeRegion === "ua_central_t36uvu";
   const hasActiveNeighbours = pack.options.some((o) => o.witnesses.some((w) => w.witness === "neighbours"));
   const regionLabel = index?.name ?? (isUkraine ? "Central Ukraine (T36UVU)" : t("print.regionVal"));
+
+  const hasCustomPrefs =
+    !isDefault(priorities) ||
+    constraints.dontWant.length > 0 ||
+    constraints.cantGrow.length > 0 ||
+    constraints.canSell !== null ||
+    constraints.irrigation !== "unset" ||
+    constraints.waterCapMm !== null;
+  const hasScenario = dt !== 0 || dp !== 0;
+
+  const fallbackHash = fieldStateHref(activeRegion, fieldId, "options", priorities, constraints, dt, dp);
+  const rawUrl =
+    shareUrl ??
+    (typeof window !== "undefined"
+      ? `${window.location.origin}${window.location.pathname}${fallbackHash}`
+      : `https://fieldwitness.org/${fallbackHash}`);
+  const qrPayload = new TextEncoder().encode(rawUrl).length <= 270 ? rawUrl : fallbackHash;
+  const canRenderQr = new TextEncoder().encode(qrPayload).length <= 270;
 
   return (
     <section className="print-dossier" aria-label={t("print.aria")}>
@@ -67,6 +117,19 @@ export function PrintDossier({
         <h3>{t("print.execHeading")}</h3>
         <p className="print-summary-sentence">{summary.sentence}</p>
         <p className="print-ranking-sentence">{rankingExpl.sentence}</p>
+        {(hasCustomPrefs || hasScenario) && (
+          <div className="print-profile-banner">
+            <strong>{t("print.profileHeading")}:</strong>
+            <div className="print-profile-pills">
+              {hasCustomPrefs && <span className="print-profile-pill">{t("print.profileCustomized")}</span>}
+              {hasScenario && (
+                <span className="print-profile-pill">
+                  {t("print.profileScenario", { temp: signedPrint(dt, "temp"), rain: signedPrint(dp, "rain") })}
+                </span>
+              )}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Top Rotation Options Table */}
@@ -86,15 +149,15 @@ export function PrintDossier({
             </tr>
           </thead>
           <tbody>
-            {currentOpt && (
+            {currentOpt && currentMetrics && (
               <tr className="print-row-current">
                 <td><strong>{t("print.currentRole")}</strong></td>
                 <td>{optionName(currentOpt)}</td>
                 <td><span className="print-grade">{currentOpt.grade}</span></td>
-                <td>{currentOpt.metrics.water_use_mm?.value?.toFixed(0) ?? "—"} [D]</td>
-                <td>{currentOpt.metrics.bad_year_water_mm?.value?.toFixed(0) ?? "—"} [D]</td>
-                <td>{((currentOpt.metrics.cover_days?.value != null ? (365 * 3 - currentOpt.metrics.cover_days.value) / 30.4375 : 0)).toFixed(1)} [D]</td>
-                <td>{currentOpt.metrics.ryi?.value?.toFixed(2) ?? "—"} [D]</td>
+                <td>{currentMetrics.water_use_mm?.value?.toFixed(0) ?? "—"} [D]</td>
+                <td>{currentMetrics.bad_year_water_mm?.value?.toFixed(0) ?? "—"} [D]</td>
+                <td>{((currentMetrics.cover_days?.value != null ? (365 * 3 - currentMetrics.cover_days.value) / 30.4375 : 0)).toFixed(1)} [D]</td>
+                <td>{currentMetrics.ryi?.value?.toFixed(2) ?? "—"} [D]</td>
                 <td>{currentOpt.regret.value?.toFixed(2) ?? "0.00"} [D]</td>
               </tr>
             )}
@@ -103,10 +166,10 @@ export function PrintDossier({
                 <td><strong>{t("print.altRole", { n: i + 1 })}</strong></td>
                 <td>{optionName(r.option)}</td>
                 <td><span className="print-grade">{r.option.grade}</span></td>
-                <td>{r.option.metrics.water_use_mm?.value?.toFixed(0) ?? "—"} [D]</td>
-                <td>{r.option.metrics.bad_year_water_mm?.value?.toFixed(0) ?? "—"} [D]</td>
-                <td>{((r.option.metrics.cover_days?.value != null ? (365 * 3 - r.option.metrics.cover_days.value) / 30.4375 : 0)).toFixed(1)} [D]</td>
-                <td>{r.option.metrics.ryi?.value?.toFixed(2) ?? "—"} [D]</td>
+                <td>{r.metrics.water_use_mm?.value?.toFixed(0) ?? "—"} [D]</td>
+                <td>{r.metrics.bad_year_water_mm?.value?.toFixed(0) ?? "—"} [D]</td>
+                <td>{((r.metrics.cover_days?.value != null ? (365 * 3 - r.metrics.cover_days.value) / 30.4375 : 0)).toFixed(1)} [D]</td>
+                <td>{r.metrics.ryi?.value?.toFixed(2) ?? "—"} [D]</td>
                 <td>{r.option.regret.value?.toFixed(2) ?? "0.00"} [D]</td>
               </tr>
             ))}
@@ -195,15 +258,25 @@ export function PrintDossier({
         </table>
       </div>
 
-      {/* Footer & Fixed Disclaimer */}
+      {/* Footer, Deterministic QR Link & Fixed Disclaimer */}
       <footer className="print-dossier-footer">
-        <div className="print-tags-legend">
-          <strong>{t("tag.legend")}:</strong> <code>[O]</code> {t("tag.O")} · <code>[D]</code> {t("tag.D")} · <code>[E]</code> {t("tag.E")} · <code>[A]</code> {t("tag.A")}.
+        <div className="print-footer-row">
+          <div className="print-footer-text">
+            <div className="print-tags-legend">
+              <strong>{t("tag.legend")}:</strong> <code>[O]</code> {t("tag.O")} · <code>[D]</code> {t("tag.D")} · <code>[E]</code> {t("tag.E")} · <code>[A]</code> {t("tag.A")}.
+            </div>
+            <p className="print-attribution">{t("print.attribution")}</p>
+            <p className="print-disclaimer">
+              <strong>{t("print.notice")}</strong> {t("fixed.judgment")}
+            </p>
+          </div>
+          {canRenderQr && (
+            <div className="print-qr-box">
+              <QrCodeSvg value={qrPayload} size={76} label={t("print.qrCaption")} />
+              <span className="print-qr-caption">{t("print.qrCaption")}</span>
+            </div>
+          )}
         </div>
-        <p className="print-attribution">{t("print.attribution")}</p>
-        <p className="print-disclaimer">
-          <strong>{t("print.notice")}</strong> {t("fixed.judgment")}
-        </p>
       </footer>
     </section>
   );

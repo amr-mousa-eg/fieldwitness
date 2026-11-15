@@ -5,22 +5,29 @@ import {
   Map as MapLibreMap,
   type MapOptions,
   NavigationControl,
+  type RasterTileSource,
   setWorkerUrl,
 } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 // MapLibre 6 finds its worker next to its own module; once bundled that file is not there,
 // so hand it the bundled worker URL (same origin, cached by the service worker).
 import workerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?url";
+import { formatNumber } from "./format";
+import { getFieldNumberMap } from "./fields";
 import {
+  BACKDROP_OPTIONS,
   BASEMAP_HANDOVER_ZOOM,
+  type BackdropId,
   type Domain,
   GIBS_BACKDROP_URL,
   RAMPS,
   rampExpression,
 } from "./mapLayers";
-import { t } from "./strings";
+import type { FieldOptionDelta } from "./optionDeltas";
+import { cropName, t } from "./strings";
+import { TagBadge, TaggedValue } from "./tags";
 import { getMapColours } from "./theme";
-import type { RegionIndex } from "./types";
+import type { RegionIndex, Tag, Tagged } from "./types";
 import { useTheme } from "./useTheme";
 import { wktToGeometry } from "./wkt";
 
@@ -145,14 +152,29 @@ function showSelected(m: MapLibreMap, fieldId: string | null): void {
   }
 }
 
+export interface MapHudInfo {
+  activeLabel?: string;
+  tagged?: Record<string, Tagged>;
+  deltas?: Record<string, FieldOptionDelta>;
+  gridLabel?: string;
+  gridYear?: number;
+  gridUnit?: string;
+  gridTag?: Tag;
+  gridSource?: string;
+}
+
 interface Props {
   index: RegionIndex;
   selectedId: string | null;
   onSelect: (fieldId: string) => void;
-  /** T9.11a: field colouring values (Current option) and their colour domain. */
-  colouring?: { values: Record<string, number | null>; domain: Domain } | null;
+  /** T9.11a & S7: field colouring values (Current or Rank-1 delta), colour domain, and optional ramp. */
+  colouring?: { values: Record<string, number | null>; domain: Domain; ramp?: readonly string[] } | null;
   /** T9.11b: one year of a regional grid layer, drawn under the fields. */
   grid?: { data: GeoJSON.FeatureCollection; domain: Domain; ramp: readonly string[] } | null;
+  /** Phase P3: active NASA GIBS backdrop / overlay selection. */
+  backdropId?: BackdropId;
+  /** Phase P3: telemetry metadata for interactive field & grid hover HUD. */
+  hudInfo?: MapHudInfo | null;
 }
 
 /** MapLibre does not re-export its expression types either; take the colour type from a fill layer. */
@@ -201,23 +223,36 @@ export function mapAttributionText(basemap: string | null | undefined): string {
     : t("map.attribution.none");
 }
 
-export function MapView({ index, selectedId, onSelect, colouring = null, grid = null }: Props) {
+export function MapView({
+  index,
+  selectedId,
+  onSelect,
+  colouring = null,
+  grid = null,
+  backdropId = "modis",
+  hudInfo = null,
+}: Props) {
   const { effective } = useTheme();
   const dark = effective === "dark";
   const colours = getMapColours(dark);
   const container = useRef<HTMLDivElement>(null);
   const map = useRef<MapLibreMap | null>(null);
   const [ready, setReady] = useState(false);
+  const [hoveredFieldId, setHoveredFieldId] = useState<string | null>(null);
+  const [hoveredGridVal, setHoveredGridVal] = useState<number | null>(null);
   const onSelectRef = useRef(onSelect);
   onSelectRef.current = onSelect;
   const selectedIdRef = useRef(selectedId);
   selectedIdRef.current = selectedId;
   const fields = useMemo(() => getCachedFields(index), [index]);
+  const fieldNumberMap = useMemo(() => getFieldNumberMap(index.fields), [index.fields]);
 
   // One map per region index.
   useEffect(() => {
     let m: MapLibreMap | null = null;
     let cancelled = false;
+    setHoveredFieldId(null);
+    setHoveredGridVal(null);
 
     const rafId = requestAnimationFrame(() => {
       if (cancelled || !container.current) return;
@@ -239,7 +274,7 @@ export function MapView({ index, selectedId, onSelect, colouring = null, grid = 
       m.on("error", (e) => {
         // Gracefully handle tile loading errors (e.g. offline fallback to neutral background)
         const srcId = (e as unknown as { sourceId?: string })?.sourceId;
-        if (e?.error?.message?.includes("tile") || srcId === "basemap" || srcId === "backdrop") {
+        if (e?.error?.message?.includes("tile") || srcId === "basemap" || srcId === "backdrop" || srcId === "gibs-overlay-src") {
           return;
         }
       });
@@ -325,9 +360,23 @@ export function MapView({ index, selectedId, onSelect, colouring = null, grid = 
               const id = e.features?.[0]?.properties?.field_id;
               if (typeof id === "string") onSelectRef.current(id);
             });
-            m!.on("mouseenter", layer, () => (m!.getCanvas().style.cursor = "pointer"));
-            m!.on("mouseleave", layer, () => (m!.getCanvas().style.cursor = ""));
+            m!.on("mousemove", layer, (e) => {
+              m!.getCanvas().style.cursor = "pointer";
+              const id = e.features?.[0]?.properties?.field_id;
+              if (typeof id === "string") setHoveredFieldId(id);
+            });
+            m!.on("mouseleave", layer, () => {
+              m!.getCanvas().style.cursor = "";
+              setHoveredFieldId(null);
+            });
           }
+          m!.on("mousemove", "grid-fill", (e) => {
+            const v = e.features?.[0]?.properties?.v;
+            setHoveredGridVal(typeof v === "number" && Number.isFinite(v) ? v : null);
+          });
+          m!.on("mouseleave", "grid-fill", () => {
+            setHoveredGridVal(null);
+          });
           showSelected(m!, selectedIdRef.current);
           setReady(true);
         });
@@ -370,21 +419,22 @@ export function MapView({ index, selectedId, onSelect, colouring = null, grid = 
     if (map.current) showSelected(map.current, selectedId);
   }, [selectedId]);
 
-  // T9.11a: colour fields (fill and markers) by a Current-option value; no colouring = default.
+  // T9.11a & S7: colour fields (fill and markers) by a Current-option value or Rank-1 delta; no colouring = default.
   useEffect(() => {
     const m = map.current;
     if (!ready || !m) return;
     const coloured = withValues(fields, colouring?.values);
     (m.getSource("fields") as GeoJSONSource).setData(coloured);
     (m.getSource("field-points") as GeoJSONSource).setData(fieldPoints(coloured));
+    const ramp = colouring?.ramp ?? RAMPS.sequential;
     const colour = (
-      colouring ? rampExpression("cv", colouring.domain, RAMPS.sequential, NO_VALUE) : colours.fieldFill
+      colouring ? rampExpression("cv", colouring.domain, ramp, NO_VALUE) : colours.fieldFill
     ) as ColourValue;
     m.setPaintProperty("fields-fill", "fill-color", colour);
     m.setPaintProperty("fields-fill", "fill-opacity", colouring ? 0.85 : 0.55);
     m.setPaintProperty("fields-marker", "circle-color", colour);
     m.setPaintProperty("fields-marker-selected", "circle-color", colour);
-  }, [ready, fields, colouring]);
+  }, [ready, fields, colouring, colours]);
 
   // T9.11b: one year of a regional layer.
   useEffect(() => {
@@ -394,8 +444,103 @@ export function MapView({ index, selectedId, onSelect, colouring = null, grid = 
     m.setLayoutProperty("grid-fill", "visibility", grid ? "visible" : "none");
     if (grid) {
       m.setPaintProperty("grid-fill", "fill-color", rampExpression("v", grid.domain, grid.ramp, NO_VALUE) as ColourValue);
+    } else {
+      setHoveredGridVal(null);
     }
   }, [ready, grid]);
 
-  return <div ref={container} className="map" role="region" aria-label={t("map.label")} />;
+  // Phase P3: NASA GIBS imagery backdrop / overlay switcher (MODIS, VIIRS, GPM IMERG, SRTM).
+  useEffect(() => {
+    const m = map.current;
+    if (!ready || !m) return;
+    const opt = BACKDROP_OPTIONS.find((o) => o.id === backdropId) ?? BACKDROP_OPTIONS[0];
+    try {
+      const backdropSrc = m.getSource("backdrop") as RasterTileSource | undefined;
+      if (opt.overlayOnly) {
+        if (backdropSrc?.setTiles) backdropSrc.setTiles([GIBS_BACKDROP_URL]);
+        const overlaySrc = m.getSource("gibs-overlay-src") as RasterTileSource | undefined;
+        if (overlaySrc) {
+          overlaySrc.setTiles?.([opt.url]);
+          if (m.getLayer("gibs-overlay")) m.setLayoutProperty("gibs-overlay", "visibility", "visible");
+        } else {
+          m.addSource("gibs-overlay-src", {
+            type: "raster",
+            tiles: [opt.url],
+            tileSize: 256,
+            maxzoom: opt.maxzoom,
+          });
+          m.addLayer(
+            {
+              id: "gibs-overlay",
+              type: "raster",
+              source: "gibs-overlay-src",
+              paint: { "raster-opacity": 0.55 },
+            },
+            "grid-fill",
+          );
+        }
+      } else {
+        if (backdropSrc?.setTiles) backdropSrc.setTiles([opt.url]);
+        if (m.getLayer("gibs-overlay")) m.setLayoutProperty("gibs-overlay", "visibility", "none");
+      }
+    } catch {
+      // ignore if map is unmounting or region uses static imagery only
+    }
+  }, [ready, backdropId, index.basemap]);
+
+  const hoveredSummary = hoveredFieldId ? index.fields.find((f) => f.field_id === hoveredFieldId) : undefined;
+  const hoveredNum = hoveredFieldId ? fieldNumberMap.get(hoveredFieldId) : undefined;
+  const hoveredDelta = hoveredFieldId ? hudInfo?.deltas?.[hoveredFieldId] : undefined;
+  const hoveredTagged = hoveredFieldId ? hudInfo?.tagged?.[hoveredFieldId] : undefined;
+  const showHud = Boolean(hoveredSummary || (hoveredGridVal !== null && hudInfo?.gridLabel));
+
+  return (
+    <div className="map-stage">
+      <div ref={container} className="map" role="region" aria-label={t("map.label")} />
+      {showHud && (
+        <div className="map-hover-hud" role="status" aria-live="polite">
+          {hoveredSummary && (
+            <div className="map-hud-field">
+              <div className="map-hud-title">
+                <strong>{t("field.label", { num: hoveredNum ?? 1 })}</strong>{" "}
+                <span className={`grade grade-${hoveredSummary.top_grade}`}>{hoveredSummary.top_grade}</span>{" "}
+                <span className="muted">({t("fields.area", { area: hoveredSummary.area_ha })})</span>
+              </div>
+              {hudInfo?.activeLabel && hoveredTagged && (
+                <div className="map-hud-metric">
+                  <span>{hudInfo.activeLabel}:</span> <TaggedValue v={hoveredTagged} />
+                </div>
+              )}
+              {hoveredDelta && (
+                <div className="map-hud-seq">
+                  <span className="muted">{t("map.hud.currentVsAlt")}</span>{" "}
+                  <span>
+                    {hoveredDelta.current_sequence.map((c) => cropName(c)).join(" → ")} ({hoveredDelta.current_grade}) →{" "}
+                    <strong>
+                      {hoveredDelta.alt_sequence.map((c) => cropName(c)).join(" → ")} ({hoveredDelta.alt_grade})
+                    </strong>
+                  </span>
+                </div>
+              )}
+              <div className="map-hud-hint muted">{t("map.hud.clickToOpen")}</div>
+            </div>
+          )}
+          {hoveredGridVal !== null && hudInfo?.gridLabel && (
+            <div className="map-hud-grid">
+              <span className="muted">{t("map.hud.gridCell")}</span>{" "}
+              <strong>
+                {hudInfo.gridLabel}
+                {hudInfo.gridYear !== undefined ? ` (${hudInfo.gridYear})` : ""}:
+              </strong>{" "}
+              <span>
+                {formatNumber(hoveredGridVal, hudInfo.gridUnit ?? "")}
+                {hudInfo.gridUnit ? ` ${hudInfo.gridUnit}` : ""}
+              </span>{" "}
+              {hudInfo.gridTag && <TagBadge tag={hudInfo.gridTag} source={hudInfo.gridSource} />}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
 }

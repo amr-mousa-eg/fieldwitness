@@ -1,3 +1,4 @@
+import type { RegionOptionDeltas } from "./optionDeltas";
 import type {
   FieldCalendar,
   FieldPack,
@@ -40,6 +41,8 @@ export const loadIndex = (region: string) =>
   get<RegionIndex>(`${region}/index.json`, { cache: "no-cache" });
 export const loadHindcast = (region: string) => get<RegionHindcast>(`${region}/hindcast.json`);
 export const loadLayers = (region: string) => get<RegionLayers>(`${region}/layers.json`);
+export const loadOptionDeltas = (region: string) =>
+  get<RegionOptionDeltas>(`${region}/option_deltas.json`);
 export const loadPack = (region: string, fid: string) => get<FieldPack>(`${region}/${fid}.json`);
 export const loadSeries = (region: string, fid: string) =>
   get<FieldSeries>(`${region}/${fid}.series.json`);

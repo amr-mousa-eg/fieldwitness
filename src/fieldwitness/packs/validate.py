@@ -10,6 +10,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from fieldwitness.packs.extras import RegionOptionDeltas
 from fieldwitness.schemas import (
     FieldCalendar,
     FieldPack,
@@ -30,6 +31,7 @@ _BY_NAME = {
     "index.json": RegionIndex,
     "layers.json": RegionLayers,
     "hindcast.json": RegionHindcast,
+    "option_deltas.json": RegionOptionDeltas,
 }
 _BY_SUFFIX = {
     ".series.json": FieldSeries,

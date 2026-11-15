@@ -319,9 +319,18 @@ a {
 }
 .map-container {
   position: relative;
+  display: flex;
+  flex-direction: column;
   height: 100%;
   min-height: 0;
   overflow: hidden;
+}
+.map-stage {
+  position: relative;
+  flex: 1 1 0%;
+  min-height: 0;
+  width: 100%;
+  height: 100%;
 }
 .map,
 .map-loading {
@@ -2764,6 +2773,7 @@ table.mini {
   .field-aside,
   .tour-card,
   .guidance-panel,
+  .share-btn,
   .print-btn,
   #theme-toggle {
     display: none !important;
@@ -3002,11 +3012,72 @@ table.mini {
     font-size: 7pt;
   }
 
+  .print-profile-banner {
+    margin-top: 3pt;
+    padding-top: 3pt;
+    border-top: 1px dashed #cccccc;
+    font-size: 7pt;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 3pt 6pt;
+  }
+
+  .print-profile-pills {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 4pt;
+  }
+
+  .print-profile-pill {
+    display: inline-block;
+    padding: 0.5pt 4pt;
+    border: 1px solid #999999;
+    border-radius: 3pt;
+    font-size: 6.8pt;
+    color: #111111;
+    background: #f3f5f4 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
   .print-dossier-footer {
     border-top: 1px solid #cccccc;
     padding-top: 3.5pt;
     margin-top: 3.5pt;
     break-inside: avoid;
+  }
+
+  .print-footer-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 8pt;
+  }
+
+  .print-footer-text {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .print-qr-box {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5pt;
+    padding: 2pt;
+    border: 1px solid #dddddd;
+    border-radius: 3pt;
+    background: #ffffff !important;
+  }
+
+  .print-qr-caption {
+    font-size: 5.8pt;
+    color: #444444;
+    text-align: center;
+    max-width: 68pt;
+    line-height: 1.15;
   }
 
   .print-tags-legend {
@@ -3516,3 +3587,218 @@ html.tour-open .chatbot-root {
 
 
 
+
+/* ---- Phase P3: S7 Delta Overlays, Trend Scrubber, Scale Contract, Hover HUD & Shareable URL ---- */
+.layer-group-heading {
+  margin: 0.45rem 0 0.15rem !important;
+  font-size: 0.74rem !important;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+[dir="rtl"] .layer-group-heading {
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.scrubber-transport {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.25rem;
+}
+
+.scrubber-btn {
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.25rem 0.55rem;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  background: var(--page);
+  color: var(--ink);
+  cursor: pointer;
+  line-height: 1.25;
+}
+.scrubber-btn:hover {
+  border-color: var(--focus);
+  background: var(--surface-tint);
+}
+.scrubber-play-btn {
+  flex: 1 1 auto;
+}
+.scrubber-play-btn[aria-pressed="true"] {
+  background: var(--focus);
+  border-color: var(--focus);
+  color: var(--on-accent);
+}
+[dir="rtl"] .scrubber-btn[aria-label] {
+  unicode-bidi: isolate;
+}
+
+.sync-snapshot {
+  margin-top: 0.5rem;
+  padding: 0.5rem 0.6rem;
+  background: var(--page);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+}
+.sync-snapshot-head {
+  font-size: 0.78rem !important;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0 0 0.35rem !important;
+}
+.sync-snapshot-list {
+  display: grid;
+  gap: 0.25rem;
+  margin: 0;
+}
+.sync-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.2rem 0.35rem;
+  border-radius: 3px;
+  font-size: 0.78rem;
+}
+.sync-row dt {
+  color: var(--muted);
+  font-weight: 500;
+}
+.sync-row dd {
+  margin: 0;
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+.sync-row--active {
+  background: var(--surface-tint);
+  border-inline-start: 3px solid var(--focus);
+}
+.sync-row--active dt {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.scale-contract-card {
+  border: 1px solid var(--rule);
+  background: var(--page);
+  border-radius: 4px;
+  padding: 0.55rem 0.7rem;
+  margin-top: 0.25rem;
+  display: grid;
+  gap: 0.25rem;
+}
+.scale-contract-card h3 {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 0.86rem;
+}
+.scale-contract-card p {
+  margin: 0;
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+.s7-summary-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 0.85rem;
+  padding: 0.45rem 0.85rem;
+  background: var(--panel);
+  border-bottom: 1px solid var(--rule);
+  font-size: 0.84rem;
+  z-index: 8;
+}
+.s7-summary-main {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.85rem;
+  min-width: 0;
+}
+.s7-summary-stat {
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.s7-clear-btn {
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.2rem 0.55rem;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  background: var(--page);
+  color: var(--ink);
+  cursor: pointer;
+}
+.s7-clear-btn:hover {
+  border-color: var(--focus);
+  background: var(--surface-tint);
+}
+
+.map-hover-hud {
+  position: absolute;
+  inset-inline-end: 0.85rem;
+  bottom: 2.35rem;
+  z-index: 9;
+  pointer-events: none;
+  max-width: min(21rem, calc(100% - 1.7rem));
+  padding: 0.55rem 0.75rem;
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.22);
+  font-size: 0.8rem;
+  line-height: 1.35;
+  display: grid;
+  gap: 0.35rem;
+}
+.map-hud-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+}
+.map-hud-title .grade {
+  margin-inline-start: 0;
+}
+.map-hud-seq {
+  font-size: 0.78rem;
+}
+.map-hud-hint {
+  font-size: 0.72rem;
+}
+
+.share-btn {
+  font: inherit;
+  font-size: 0.85rem;
+  padding: 0.25rem 0.65rem;
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  color: var(--ink);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  line-height: 1.3;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.share-btn:hover {
+  background: var(--rule);
+  border-color: var(--focus);
+}
+
+@media (max-width: 52rem) {
+  .map-stage {
+    min-height: 16rem;
+  }
+  .map-hover-hud {
+    display: none;
+  }
+}
