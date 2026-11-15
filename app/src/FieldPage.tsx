@@ -1,20 +1,50 @@
 import { Suspense, lazy, useEffect, useState } from "react";
 import { AdvisorConsole } from "./AdvisorConsole";
 import { CalendarView } from "./CalendarView";
-import { setActiveFieldPack } from "./chatbotContext";
+import { setActiveFieldPack, setActiveFieldScenarios, setActivePriorities } from "./chatbotContext";
 import { FieldCard } from "./FieldCard";
 import { FieldStory } from "./FieldStory";
 import { PrintDossier } from "./PrintDossier";
 import { ScaleFlags } from "./ScaleFlags";
-import { loadPack } from "./data";
+import { loadPack, loadScenarios } from "./data";
 import { formatDate } from "./format";
 import { fieldNumber } from "./fields";
-import { compareHref, type FieldTab, TABS, routeHref } from "./route";
+import {
+  type Constraints,
+  DEFAULT_PRIORITIES,
+  NO_CONSTRAINTS,
+  type Priorities,
+} from "./rank";
+import {
+  type FieldTab,
+  TABS,
+  compareHref,
+  fieldStateHref,
+  parseFieldStateQuery,
+  routeHref,
+} from "./route";
 import { t } from "./strings";
 import { TagLegend } from "./tags";
-import type { FieldPack, RegionIndex } from "./types";
+import type { FieldPack, FieldScenarios, RegionIndex } from "./types";
 
 const Field3DView = lazy(() => import("./Field3DView"));
+
+function readStored<T>(key: string, fallback: T): T {
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? ({ ...fallback, ...JSON.parse(raw) } as T) : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function writeStored<T>(key: string, value: T): void {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch {
+    /* storage blocked: keep in-memory state only */
+  }
+}
 
 export function FieldPage({
   regionId,
@@ -28,7 +58,52 @@ export function FieldPage({
   index?: RegionIndex | null;
 }) {
   const [pack, setPack] = useState<FieldPack | null>(null);
+  const [scenarios, setScenarios] = useState<FieldScenarios | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+
+  const [priorities, setPrioritiesState] = useState<Priorities>(() => {
+    const shared = typeof window !== "undefined" ? parseFieldStateQuery(window.location.hash) : { hasState: false };
+    return shared.priorities ?? readStored<Priorities>(`fw:${fieldId}:priorities`, DEFAULT_PRIORITIES);
+  });
+  const [constraints, setConstraintsState] = useState<Constraints>(() => {
+    const shared = typeof window !== "undefined" ? parseFieldStateQuery(window.location.hash) : { hasState: false };
+    return shared.constraints ?? readStored<Constraints>(`fw:${fieldId}:constraints`, NO_CONSTRAINTS);
+  });
+  const [[dt, dp], setWeatherState] = useState<[number, number]>(() => {
+    const shared = typeof window !== "undefined" ? parseFieldStateQuery(window.location.hash) : { hasState: false };
+    return [shared.dt ?? 0, shared.dp ?? 0];
+  });
+
+  // Restore stored or URL-shared state when navigating to a different field or opening a shared hash.
+  useEffect(() => {
+    const shared = parseFieldStateQuery(window.location.hash);
+    if (shared.hasState) {
+      const nextP = shared.priorities ?? DEFAULT_PRIORITIES;
+      const nextC = shared.constraints ?? NO_CONSTRAINTS;
+      setPrioritiesState(nextP);
+      setConstraintsState(nextC);
+      setWeatherState([shared.dt ?? 0, shared.dp ?? 0]);
+      writeStored(`fw:${fieldId}:priorities`, nextP);
+      writeStored(`fw:${fieldId}:constraints`, nextC);
+    } else {
+      setPrioritiesState(readStored<Priorities>(`fw:${fieldId}:priorities`, DEFAULT_PRIORITIES));
+      setConstraintsState(readStored<Constraints>(`fw:${fieldId}:constraints`, NO_CONSTRAINTS));
+      setWeatherState([0, 0]);
+    }
+  }, [fieldId]);
+
+  const setPriorities = (p: Priorities) => {
+    setPrioritiesState(p);
+    writeStored(`fw:${fieldId}:priorities`, p);
+  };
+  const setConstraints = (c: Constraints) => {
+    setConstraintsState(c);
+    writeStored(`fw:${fieldId}:constraints`, c);
+  };
+  const setWeather = (nextDt: number, nextDp: number) => {
+    setWeatherState([nextDt, nextDp]);
+  };
 
   useEffect(() => {
     document.getElementById("main")?.focus();
@@ -36,16 +111,53 @@ export function FieldPage({
 
   useEffect(() => {
     setPack(null);
+    setScenarios(null);
     setError(null);
     loadPack(regionId, fieldId)
       .then(setPack)
       .catch((e: Error) => setError(e.message));
+    loadScenarios(regionId, fieldId)
+      .then((s) => {
+        setScenarios(s);
+        setActiveFieldScenarios(s);
+      })
+      .catch(() => {
+        setScenarios(null);
+        setActiveFieldScenarios(null);
+      });
   }, [regionId, fieldId]);
 
   useEffect(() => {
     setActiveFieldPack(pack);
     return () => setActiveFieldPack(null);
   }, [pack]);
+
+  useEffect(() => {
+    setActivePriorities(priorities);
+  }, [priorities]);
+
+  const shareHash = fieldStateHref(regionId, fieldId, "options", priorities, constraints, dt, dp);
+  const shareUrl =
+    typeof window !== "undefined"
+      ? `${window.location.origin}${window.location.pathname}${shareHash}`
+      : `https://fieldwitness.org/${shareHash}`;
+
+  const onCopyShare = () => {
+    try {
+      if (tab === "options") {
+        window.history?.replaceState(null, "", shareHash);
+      }
+      if (navigator.clipboard?.writeText) {
+        Promise.resolve(navigator.clipboard.writeText(shareUrl)).catch(() => {
+          // Clipboard access may be blocked when unfocused; URL bar/hash state is still updated.
+        });
+      }
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2200);
+    } catch {
+      window.location.hash = shareHash.replace(/^#/, "");
+    }
+  };
 
   return (
     <article className="field-page">
@@ -83,6 +195,15 @@ export function FieldPage({
               </a>
               <button
                 type="button"
+                className="share-btn"
+                onClick={onCopyShare}
+                title={t("field.share.title")}
+                aria-live="polite"
+              >
+                {copied ? `✓ ${t("field.share.copied")}` : `🔗 ${t("field.share")}`}
+              </button>
+              <button
+                type="button"
                 className="print-btn"
                 onClick={() => window.print()}
                 title={t("field.print.title")}
@@ -99,7 +220,19 @@ export function FieldPage({
             ))}
           </nav>
           {tab === "story" && <FieldStory pack={pack} regionId={regionId} />}
-          {tab === "options" && <FieldCard pack={pack} regionId={regionId} />}
+          {tab === "options" && (
+            <FieldCard
+              pack={pack}
+              regionId={regionId}
+              priorities={priorities}
+              onPrioritiesChange={setPriorities}
+              constraints={constraints}
+              onConstraintsChange={setConstraints}
+              weather={[dt, dp]}
+              onWeatherChange={setWeather}
+              scenarios={scenarios}
+            />
+          )}
           {tab === "calendar" && <CalendarView pack={pack} regionId={regionId} />}
           {tab === "advisor" && <AdvisorConsole pack={pack} />}
           {tab === "sim3d" && (
@@ -111,7 +244,17 @@ export function FieldPage({
             <ScaleFlags flags={pack.field.scale_flags} />
             <TagLegend />
           </div>
-          <PrintDossier pack={pack} regionId={regionId} index={index} />
+          <PrintDossier
+            pack={pack}
+            regionId={regionId}
+            index={index}
+            priorities={priorities}
+            constraints={constraints}
+            dt={dt}
+            dp={dp}
+            scenarios={scenarios}
+            shareUrl={shareUrl}
+          />
         </>
       )}
     </article>

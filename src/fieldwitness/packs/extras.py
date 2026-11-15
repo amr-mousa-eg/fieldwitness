@@ -19,11 +19,13 @@ from __future__ import annotations
 import math
 from datetime import date
 from pathlib import Path
+from typing import Literal
 
 import numpy as np
 import pandas as pd
 import xarray as xr
 import yaml
+from pydantic import BaseModel
 
 from fieldwitness.data import power
 from fieldwitness.physics import waterbal
@@ -35,9 +37,11 @@ from fieldwitness.schemas import (
     BareMonth,
     CropVulnerability,
     FieldCalendar,
+    FieldPack,
     GridCell,
     RegionalLayer,
     RegionEntry,
+    RegionIndex,
     RegionLayers,
     RegionList,
     Tagged,
@@ -581,3 +585,137 @@ def region_layers(
 
 def regions_list(entries: list[tuple[str, str, int]]) -> RegionList:
     return RegionList(regions=[RegionEntry(region_id=a, name=b, tier=c) for a, b, c in entries])  # type: ignore[arg-type]
+
+
+# ---------------------------------------------------------------- S7 Rank-1 option deltas
+
+OptionDeltaMetric = Literal[
+    "delta_water_use_mm",
+    "delta_bad_year_water_mm",
+    "delta_bare_months",
+    "delta_ryi",
+    "delta_erosion_exposure",
+]
+
+_DELTA_SPECS: tuple[tuple[OptionDeltaMetric, str, str, int, bool], ...] = (
+    ("delta_water_use_mm", "water_use_mm", "mm per rotation", 1, False),
+    (
+        "delta_bad_year_water_mm",
+        "bad_year_water_mm",
+        "mm per rotation (CVaR10, upper tail)",
+        1,
+        False,
+    ),
+    ("delta_bare_months", "cover_days", "months", 1, False),
+    ("delta_ryi", "ryi", "0-1", 3, True),
+    (
+        "delta_erosion_exposure",
+        "erosion_exposure",
+        "relative, within-field comparison only",
+        3,
+        False,
+    ),
+)
+
+
+class FieldOptionDelta(BaseModel):
+    field_id: str
+    current_sequence: list[str]
+    current_grade: Literal["A", "B", "C", "D"]
+    alt_option_id: str
+    alt_sequence: list[str]
+    alt_grade: Literal["A", "B", "C", "D"]
+    deltas: dict[OptionDeltaMetric, Tagged]
+
+
+class OptionDeltaSummary(BaseModel):
+    mean: Tagged
+    improved_count: int
+    valid_count: int
+
+
+class RegionOptionDeltas(BaseModel):
+    schema_version: str
+    region_id: str
+    data_as_of: date
+    n_fields: int
+    fields: dict[str, FieldOptionDelta]
+    summary: dict[OptionDeltaMetric, OptionDeltaSummary]
+
+
+def _bare_months_from_cover(cover_days: float) -> float:
+    bare_days = max(0.0, 1095.0 - float(cover_days))
+    return round(bare_days / 30.4375, 1)
+
+
+def build_option_deltas_for_region(region_dir: Path) -> RegionOptionDeltas:
+    """Compute Rank-1 Alternative minus Current deltas for every field in a region pack dir."""
+    idx = RegionIndex.model_validate_json((region_dir / "index.json").read_bytes())
+    fields_out: dict[str, FieldOptionDelta] = {}
+    collected: dict[OptionDeltaMetric, list[float]] = {k: [] for k, *_ in _DELTA_SPECS}
+
+    for summary in idx.fields:
+        fid = summary.field_id
+        pack = FieldPack.model_validate_json((region_dir / f"{fid}.json").read_bytes())
+        cur = next((o for o in pack.options if o.option_id == "current"), None)
+        alts = [o for o in pack.options if o.option_id != "current"]
+        if cur is None or not alts:
+            continue
+        alt = min(alts, key=lambda o: (o.rank if o.rank > 0 else 9999, o.option_id))
+
+        deltas: dict[OptionDeltaMetric, Tagged] = {}
+        for delta_key, src_metric, unit, digits, _higher_better in _DELTA_SPECS:
+            cm = cur.metrics.get(src_metric)
+            am = alt.metrics.get(src_metric)
+            cv = cm.value if cm is not None else None
+            av = am.value if am is not None else None
+            if cv is None or av is None:
+                val: float | None = None
+            elif delta_key == "delta_bare_months":
+                val = _r(_bare_months_from_cover(av) - _bare_months_from_cover(cv), digits)
+            else:
+                val = _r(float(av) - float(cv), digits)
+
+            if val is not None:
+                collected[delta_key].append(val)
+
+            tag = am.tag if am is not None else "D"
+            src = f"Rank-1 {alt.option_id} vs Current ({src_metric})"
+            deltas[delta_key] = Tagged(value=val, unit=unit, tag=tag, source=src)
+
+        fields_out[fid] = FieldOptionDelta(
+            field_id=fid,
+            current_sequence=list(cur.sequence),
+            current_grade=cur.grade,
+            alt_option_id=alt.option_id,
+            alt_sequence=list(alt.sequence),
+            alt_grade=alt.grade,
+            deltas=deltas,
+        )
+
+    summary_out: dict[OptionDeltaMetric, OptionDeltaSummary] = {}
+    for delta_key, src_metric, unit, digits, higher_better in _DELTA_SPECS:
+        vals = collected[delta_key]
+        mean_val = _r(float(np.mean(vals)), digits) if vals else None
+        improved = sum(1 for v in vals if (v > 0 if higher_better else v < 0))
+        summary_out[delta_key] = OptionDeltaSummary(
+            mean=Tagged(
+                value=mean_val,
+                unit=unit,
+                tag="D",
+                source=(
+                    f"Mean Rank-1 minus Current across {len(vals)} comparable fields ({src_metric})"
+                ),
+            ),
+            improved_count=improved,
+            valid_count=len(vals),
+        )
+
+    return RegionOptionDeltas(
+        schema_version=SCHEMA_VERSION,
+        region_id=idx.region_id,
+        data_as_of=idx.data_as_of,
+        n_fields=len(idx.fields),
+        fields=fields_out,
+        summary=summary_out,
+    )

@@ -328,27 +328,62 @@ function WhatIfPanel({
   );
 }
 
-export function FieldCard({ pack, regionId }: { pack: FieldPack; regionId: string }) {
+export function FieldCard({
+  pack,
+  regionId,
+  priorities: controlledPriorities,
+  onPrioritiesChange,
+  constraints: controlledConstraints,
+  onConstraintsChange,
+  weather: controlledWeather,
+  onWeatherChange,
+  scenarios: controlledScenarios,
+}: {
+  pack: FieldPack;
+  regionId: string;
+  priorities?: Priorities;
+  onPrioritiesChange?: (p: Priorities) => void;
+  constraints?: Constraints;
+  onConstraintsChange?: (c: Constraints) => void;
+  weather?: [number, number];
+  onWeatherChange?: (dt: number, dp: number) => void;
+  scenarios?: FieldScenarios | null;
+}) {
   const fid = pack.field.field_id;
-  const [scenarios, setScenarios] = useState<FieldScenarios | null>(null);
-  const [priorities, setPriorities] = useStored<Priorities>(`fw:${fid}:priorities`, DEFAULT_PRIORITIES);
-  const [constraints, setConstraints] = useStored<Constraints>(`fw:${fid}:constraints`, NO_CONSTRAINTS);
-  const [[dt, dp], setWeather] = useState<[number, number]>([0, 0]);
+  const [internalScenarios, setInternalScenarios] = useState<FieldScenarios | null>(null);
+  const [internalPriorities, setInternalPriorities] = useStored<Priorities>(`fw:${fid}:priorities`, DEFAULT_PRIORITIES);
+  const [internalConstraints, setInternalConstraints] = useStored<Constraints>(`fw:${fid}:constraints`, NO_CONSTRAINTS);
+  const [internalWeather, setInternalWeather] = useState<[number, number]>([0, 0]);
   const [open, setOpen] = useState<string | null>(null);
 
+  const scenarios = controlledScenarios !== undefined ? controlledScenarios : internalScenarios;
+  const priorities = controlledPriorities ?? internalPriorities;
+  const setPriorities = onPrioritiesChange ?? setInternalPriorities;
+  const constraints = controlledConstraints ?? internalConstraints;
+  const setConstraints = onConstraintsChange ?? setInternalConstraints;
+  const [dt, dp] = controlledWeather ?? internalWeather;
+  const setWeather = (a: number, b: number) => {
+    if (onWeatherChange) onWeatherChange(a, b);
+    else setInternalWeather([a, b]);
+  };
+
   useEffect(() => {
-    setScenarios(null);
+    if (controlledScenarios !== undefined) {
+      setActiveFieldScenarios(controlledScenarios);
+      return;
+    }
+    setInternalScenarios(null);
     setActiveFieldScenarios(null);
     loadScenarios(regionId, fid)
       .then((s) => {
-        setScenarios(s);
+        setInternalScenarios(s);
         setActiveFieldScenarios(s);
       })
       .catch(() => {
-        setScenarios(null);
+        setInternalScenarios(null);
         setActiveFieldScenarios(null);
       });
-  }, [regionId, fid]);
+  }, [regionId, fid, controlledScenarios]);
 
   useEffect(() => {
     setActivePriorities(priorities);
@@ -481,7 +516,7 @@ export function FieldCard({ pack, regionId }: { pack: FieldPack; regionId: strin
       </section>
       <aside className="card-controls">
         <PriorityPanel p={priorities} set={setPriorities} />
-        <WhatIfPanel scenarios={scenarios} dt={dt} dp={dp} set={(a, b) => setWeather([a, b])} />
+        <WhatIfPanel scenarios={scenarios} dt={dt} dp={dp} set={(a, b) => setWeather(a, b)} />
         <ConstraintPanel crops={crops} c={constraints} set={setConstraints} />
         <CorrectionPanel key={fid} pack={pack} />
         <p className="muted">{t("card.store")}</p>

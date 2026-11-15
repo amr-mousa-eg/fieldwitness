@@ -21,7 +21,9 @@ For each field:
   use, bad-year water use, ground cover, Relative Yield Index (0–1, no tonnes), erosion and other
   priority measures, and an A–D evidence grade. You can move priority sliders, set constraints
   ("crops I can't plant", irrigation, water cap) and run weather what-ifs (temperature and rainfall
-  shifts on past weather; not climate projections).
+  shifts on past weather; not climate projections). Live farmer settings can be copied as a
+  shareable URL (`?pw=...&dt=...&dp=...`) and printed onto a 1-page field dossier with a
+  deterministic ISO 18004 SVG QR code (`PrintDossier`).
 - **"Why this ranking?" explainer.** Full score contribution breakdown comparing the top-ranked option
   against the next-best alternative under the user's active priority weights, with deterministic plain-language
   attribution.
@@ -42,9 +44,13 @@ For each field:
   switches to the glass soil view. Kill switches: `?builder=0`, `?farm=0`.
 - **Advisor console.** Credibility of the physics for this field, what to measure next, the
   smallest change that would flip the top option, and a back-test of past predictions.
-- **Map layers and scoreboard.** Fields coloured by erosion, water stress or frost share. Regional
-  GRACE water-storage and SMAP soil-moisture layers. A hindcast scoreboard against simpler
-  baselines, including diagnostic breakdowns and grade-validity checks.
+- **Map layers and scoreboard.** Fields coloured by Current rotation exposure (`erosion`, `water_stress`,
+  `frost`) or **Rank-1 alternative deltas vs Current (`S7`: `option_deltas.json`)** on 0-centred
+  diverging ramps with a regional impact KPI banner and live hover telemetry HUD (`Current → Rank-1`).
+  Synchronized regional NASA layers (`GRACE`, `SMAP`, `HEAT-WAVE`) include Play/Pause + Prev/Next trend
+  controls, simultaneous multi-layer year snapshots, a MODIS/VIIRS/GPM IMERG/SRTM imagery switcher,
+  and an explicit fine (20–30 m) vs coarse (9–55 km) pixel scale contract card. A hindcast scoreboard
+  compares FieldWitness against simpler baselines with diagnostic breakdowns and grade-validity checks.
 - **Add my field (v0).** Client-side zero-server field digitizer and rotation evaluator running locally in
   browser storage.
 - **Ask FieldWitness (optional assistant).** A chat drawer that explains the project and the open
