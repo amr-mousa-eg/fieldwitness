@@ -1,12 +1,12 @@
-# Regions from the T0.5 census (PLAN.md §2, T0.5). Final choice (user, 2026-11-04, DECISIONS.md):
+# Regions from the T0.5 census (PLAN.md §2, T0.5). Final choice (user, , DECISIONS.md):
 # Tier 1 ks_t14slh, Tier 2 fr_toulouse_t31tcj, Tier 3 ua_central_t36uvu; eg_nile_delta showcase only.
-# T0.6 (2026-11-04): bbox_lonlat = HLS tile footprint [W, S, E, N] from the tile grid (CMR ULX/ULY);
+# T0.6: bbox_lonlat = HLS tile footprint [W, S, E, N] from the tile grid (CMR ULX/ULY);
 # crops = keys of config/crops.yaml, chosen from area shares in the census boxes (DECISIONS.md).
 #
 # tiles: MGRS tile IDs verified in CMR (docs/api_notes.md). point: [lon, lat] of the census
 #   boundary sample (a 20 km x 20 km box). For multi-tile regions the sample box is centred on the
 #   chosen tile instead (the tile with the larger field cover fraction).
-# seasons: team assumptions, tag A (user decision 2026-11-04), editable. Months are inclusive.
+# seasons: team assumptions, tag A (), editable. Months are inclusive.
 #   A season is named by its harvest year = calendar year of its end month (PLAN.md T2.2);
 #   start > end means the season crosses the new year.
 # boundary.year: polygons of this year only (FTW holds a 2024 and a 2025 layer).
@@ -14,7 +14,7 @@
 # boundary.arable_only: keep annual arable crop parcels only (HCAT3, fieldwitness.data.hcat).
 # boundary.cap_mb / columns / cache_as: per-region read cap (default 200 MB), column subset, and a
 #   cache file name under data/census/ (gitignored) for reuse in T1.4.
-# status (user decision 2026-11-04, DECISIONS.md): selected | showcase | rejected | comparison_only.
+# status (, DECISIONS.md): selected | showcase | rejected | comparison_only.
 
 regions:
   ks_t14slh:
@@ -41,7 +41,7 @@ regions:
       winter_wheat: {start: 9, end: 7, tag: A}
 
   fr_beauce_t31ucp:
-    status: comparison  # not selected; kept as the Tier 2 comparison (user 2026-11-04)
+    status: comparison  # not selected; kept as the Tier 2 comparison ()
     tier: 2
     name: Beauce (France)
     tiles: [T31UCP]
@@ -50,7 +50,7 @@ regions:
       source: French RPG (IGN) / EuroCrops V2
       key: ftw/harmonized-field-data/fr/year=2024/fr-2024.parquet
       year: null
-      arable_only: true  # annual arable parcels only (fieldwitness.data.hcat), user 2026-11-04
+      arable_only: true  # annual arable parcels only (fieldwitness.data.hcat)
     labels:
       source: RPG / EuroCrops V2
       key_pattern: ftw/harmonized-field-data/fr/year={y}/fr-{y}.parquet
@@ -80,16 +80,16 @@ regions:
     name: Central Ukraine (Kirovohrad oblast area)
     tiles: [T36UVU]
     bbox_lonlat: [31.6392, 47.7574, 33.1328, 48.753]
-    # Approved by the user 2026-11-04 (FAOSTAT national list, tag E). Wheat and barley enter as winter and
+    # Approved by the (FAOSTAT national list, tag E). Wheat and barley enter as winter and
     # spring variants; T2.2 assigns the variant per field-season from autumn vs spring green-up (tag D).
     crops: [winter_wheat, spring_wheat, sunflower, maize, winter_barley, spring_barley, soybean, rapeseed, fallow, cover_crop]
     crops_source:
-      status: approved_by_user_2026-11-04
+      status: approved_by_user
       tag: E
       source: "FAO. 2025 (last update 2025-12-31). FAOSTAT: Production — Crops and livestock products (QCL), bulk file
         Production_Crops_Livestock_E_All_Data_(Normalized). Area harvested (element 5312), Ukraine (area code 230).
         Accessed 4 November 2026. https://bulks-faostat.fao.org/production/. Licence: CC-BY-4.0."
-      level: "national (oblast data: ukrstat.gov.ua unreachable, stat.gov.ua HTTP 403 on 2026-11-04)"
+      level: "national (oblast data: ukrstat.gov.ua unreachable, stat.gov.ua HTTP 403)"
       faostat_items: [Wheat, Sunflower seed, Maize (corn), Barley, Soya beans, Rape or colza seed]
       shares_2019_2021_mean: {wheat: 25.5, sunflower: 23.7, maize: 19.7, barley: 9.3, soybean: 5.3, rapeseed: 4.2}
       shares_2023_2024_mean: {sunflower: 23.3, wheat: 21.8, maize: 18.3, soybean: 10.4, barley: 6.6, rapeseed: 6.1}
@@ -101,7 +101,7 @@ regions:
       source: Fields of the World global predictions (alpha)
       key: ftw/global-data/predictions/vectors/alpha/results-by-admin-conf/admin:country_code=UA/Ukraine.parquet
       year: 2024
-      cap_mb: 260  # one-off, user-approved 2026-11-04 (10 km box est. 254 MB with all columns)
+      cap_mb: 260  # one-off, user- (10 km box est. 254 MB with all columns)
       columns: [geometry, "determination:datetime"]
       cache_as: ua_t36uvu_box10km_ftw.parquet
     labels: {source: none, years: null}
@@ -140,7 +140,7 @@ regions:
       source: French RPG (IGN) / EuroCrops V2
       key: ftw/harmonized-field-data/fr/year=2024/fr-2024.parquet
       year: null
-      arable_only: true  # annual arable parcels only (fieldwitness.data.hcat), user 2026-11-04
+      arable_only: true  # annual arable parcels only (fieldwitness.data.hcat)
     labels:
       source: RPG / EuroCrops V2
       key_pattern: ftw/harmonized-field-data/fr/year={y}/fr-{y}.parquet
