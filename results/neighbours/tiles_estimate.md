@@ -22,5 +22,5 @@ Rule: CLAUDE.md Rule 11 (1 GB download cap per run). Stop if > 1 GB.
 Even a single additional tile (~1.23 GB) exceeds the 1.0 GB download cap (CLAUDE.md rule 11). Full 8-tile ring would require ~9.8 GB.
 
 Without user authorization for a multi-gigabyte download exception (similar to the
-2026-11-04 T1.5 exception), tile expansion cannot proceed under the 1 GB cap.
+T1.5 exception), tile expansion cannot proceed under the 1 GB cap.
 Consequently, T5.xc (re-grading) is skipped because no contrast passed diagnostics.

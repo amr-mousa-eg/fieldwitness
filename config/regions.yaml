@@ -88,7 +88,7 @@ regions:
       tag: E
       source: "FAO. 2025 (last update 2025-12-31). FAOSTAT: Production — Crops and livestock products (QCL), bulk file
         Production_Crops_Livestock_E_All_Data_(Normalized). Area harvested (element 5312), Ukraine (area code 230).
-        Accessed 4 November 2026. https://bulks-faostat.fao.org/production/. Licence: CC-BY-4.0."
+        https://bulks-faostat.fao.org/production/. Licence: CC-BY-4.0."
       level: "national (oblast data: ukrstat.gov.ua unreachable, stat.gov.ua HTTP 403)"
       faostat_items: [Wheat, Sunflower seed, Maize (corn), Barley, Soya beans, Rape or colza seed]
       shares_2019_2021_mean: {wheat: 25.5, sunflower: 23.7, maize: 19.7, barley: 9.3, soybean: 5.3, rapeseed: 4.2}

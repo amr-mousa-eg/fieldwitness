@@ -1,6 +1,6 @@
 # Experiment 1 — distance-adjusted propensity score matching (DAPSM): negative result
 
-Pre-registered in `DECISIONS.md` (2026-11-12, "Pre-registration: two algorithm experiments", commit `c6b82f7`) before any run.
+Pre-registered in `DECISIONS.md` ("Pre-registration: two algorithm experiments", commit `c6b82f7`) before any run.
 Source: `scripts/x1_dapsm.py`, code `src/fieldwitness/neighbours/dapsm.py`, tests `tests/test_dapsm.py`.
 Outputs: `dapsm.json` (summary), `dapsm_contrasts.csv` (every contrast row, old and new checks), `dapsm_w_grid.csv` (every contrast × every w), `field_centroids.csv`, `field_distance_km.npy`.
 All statistics tag D. Thresholds are the T5.3 team choices (tag A, UNVERIFIED), not tuned.

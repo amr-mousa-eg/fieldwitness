@@ -1,4 +1,4 @@
-"""Build the GDD before/after tables and charts (pre-registered in DECISIONS.md 2026-11-12).
+"""Build the GDD before/after tables and charts (pre-registered in DECISIONS.md).
 
 Usage: uv run python -u results/hindcast/gdd_before_after/code/build.py
 Reads only existing Experiment 2 outputs (records, baselines, curves from rerun_with_curves.py)
@@ -72,7 +72,7 @@ def main() -> None:
         ]
     )
     m = ag.paired(cal, gdd)
-    doc: dict = {"pre_registration": "DECISIONS.md 2026-11-12 (commit 6f62874)"}
+    doc: dict = {"pre_registration": "DECISIONS.md (commit 6f62874)"}
 
     # 7. sanity
     doc["sanity"] = {

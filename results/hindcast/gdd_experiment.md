@@ -1,6 +1,6 @@
 # Experiment 2 — thermal-time (GDD) phenology: mixed result, H2 not supported
 
-This experiment was pre-registered in `DECISIONS.md` (2026-11-12, commit `c6b82f7`) before any run. The user approved the amendment on dormancy and stage mapping (commit `17bc5cd`) before any Experiment 2 code ran.
+This experiment was pre-registered in `DECISIONS.md` (commit `c6b82f7`) before any run. The user approved the amendment on dormancy and stage mapping (commit `17bc5cd`) before any Experiment 2 code ran.
 
 - Sources and table locations: `docs/gdd_sources.md`.
 - Code: `physics/phenology.py`, `infer/forward.py` (`phenology_mode`), and `scripts/x2_gdd_hindcast.py`, `x2_gdd_baselines.py`, `x2_gdd_compare.py`.
