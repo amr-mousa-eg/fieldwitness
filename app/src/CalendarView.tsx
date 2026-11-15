@@ -106,8 +106,16 @@ function BareCalendar({ cal, optionId, label }: { cal: FieldCalendar; optionId: 
   );
 }
 
-function VulnerabilityCalendar({ cal, sequence }: { cal: FieldCalendar; sequence: string[] }) {
-  const { found, missing, historyOnly } = vulnerabilityFor(cal, { sequence });
+function VulnerabilityCalendar({
+  cal,
+  sequence,
+  regionId,
+}: {
+  cal: FieldCalendar;
+  sequence: string[];
+  regionId: string;
+}) {
+  const { found, missing, historyOnly } = vulnerabilityFor(cal, { sequence }, regionId);
   return (
     <section aria-labelledby="vuln-h">
       <h3 id="vuln-h">
@@ -281,7 +289,7 @@ export function CalendarView({ pack, regionId }: { pack: FieldPack; regionId: st
       {cal && (
         <>
           <BareCalendar cal={cal} optionId={option.option_id} label={optionName(option)} />
-          <VulnerabilityCalendar cal={cal} sequence={option.sequence} />
+          <VulnerabilityCalendar cal={cal} sequence={option.sequence} regionId={regionId} />
         </>
       )}
       {layers && <ContextStrip layers={layers} />}

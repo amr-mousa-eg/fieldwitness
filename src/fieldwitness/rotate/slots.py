@@ -4,6 +4,8 @@ Numbers come from `config/crops.yaml` (FAO-56 Tables 11, 12, 22, 24; verified fl
 Team choices (tag A, UNVERIFIED), kept here in one place:
 - sowing days (0-based day of the harvest year, negative = previous autumn): maize 105 and
   sorghum 152 as in `config/synthetic.yaml`; winter wheat -78 = 15 Oct (Table 11 says "October");
+  sunflower 120 (~early May; Table 11 says "April/May") and soybean 135 (~mid-May; Table 11 says
+  "May");
 - winter wheat in Table 11 (Idaho row) lasts 335 days, so it ends in mid-September: kept as
   printed, not tuned;
 - cover crop (oats proxy): stage lengths 20/25/60/30 d = FAO-56 Table 11 row "Barley/Oats/Wheat,
@@ -19,7 +21,13 @@ from fieldwitness.config import load_crops
 from fieldwitness.physics.kc import kc_curve
 from fieldwitness.physics.rotation import SlotSpec, fallow_slot
 
-SOW_DAY = {"maize": 105, "sorghum": 152, "winter_wheat": -78}  # A, UNVERIFIED
+SOW_DAY = {
+    "maize": 105,
+    "sorghum": 152,
+    "winter_wheat": -78,
+    "sunflower": 120,
+    "soybean": 135,
+}  # A, UNVERIFIED
 COVER_STAGES = (20, 25, 60, 30)  # FAO-56 Table 11, Barley/Oats/Wheat, March/Apr, 35-45 deg L
 COVER_SOW_DAY = None  # placed by the timeline layout, not by a date
 

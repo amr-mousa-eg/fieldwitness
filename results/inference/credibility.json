@@ -5,11 +5,12 @@
     "full": 101,
     "timing_only": 84,
     "not_assessable": 15,
-    "median": 0.5,
-    "share_ge_0.6": 0.427,
+    "median": 0.483,
+    "share_ge_0.6": 0.389,
     "n_ref": 3000,
     "k": 150,
     "tag": "D",
+    "taw_source": "ssurgo (198) + soilgrids_saxton_rawls_fallback (2), tag E",
     "caveat": "in-sample posterior predictive; sorghum sow day is a team choice (A)"
   },
   "fields": [
@@ -20,7 +21,7 @@
       "credibility": 0.0,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 20.8,
+      "median_timing_error_days": 20.2,
       "years": [
         2019,
         2022
@@ -30,10 +31,10 @@
       "field_id": "1ce6e474f605025b83af3a0ff5b71442ec09a337",
       "crop": "maize",
       "n_seasons": 1,
-      "credibility": 0.658,
+      "credibility": 0.283,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 6.8,
+      "median_timing_error_days": 14.3,
       "years": [
         2019
       ]
@@ -42,10 +43,10 @@
       "field_id": "ec4d5af741404a7ed6d72c79d89d1ddce9130a70",
       "crop": "maize",
       "n_seasons": 2,
-      "credibility": 0.375,
+      "credibility": 0.175,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 12.5,
+      "median_timing_error_days": 16.5,
       "years": [
         2020,
         2023
@@ -55,10 +56,10 @@
       "field_id": "be4c1c64e8f7337c4774f54913abd98770784b42",
       "crop": "maize",
       "n_seasons": 1,
-      "credibility": 0.65,
+      "credibility": 0.667,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 7.0,
+      "median_timing_error_days": 6.7,
       "years": [
         2017
       ]
@@ -70,7 +71,7 @@
       "credibility": 0.0,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 25.5,
+      "median_timing_error_days": 23.0,
       "years": [
         2018
       ]
@@ -95,10 +96,10 @@
       "field_id": "f9e6babeb08decb617a77676fd6d738b7c5af592",
       "crop": "sorghum",
       "n_seasons": 2,
-      "credibility": 0.671,
+      "credibility": 0.679,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 6.6,
+      "median_timing_error_days": 6.4,
       "years": [
         2019,
         2022
@@ -108,10 +109,10 @@
       "field_id": "a5c7fbe011385083f16d9d1580fb81cf26dd1fda",
       "crop": "maize",
       "n_seasons": 4,
-      "credibility": 0.5,
+      "credibility": 0.2,
       "mode": "full",
-      "spearman": 1.0,
-      "median_timing_error_days": 23.3,
+      "spearman": 0.4,
+      "median_timing_error_days": 24.8,
       "years": [
         2017,
         2019,
@@ -123,10 +124,10 @@
       "field_id": "70bdb6e29892c13b2e16a229937f65cc0b4c1894",
       "crop": "sorghum",
       "n_seasons": 2,
-      "credibility": 0.475,
+      "credibility": 0.383,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 10.5,
+      "median_timing_error_days": 12.3,
       "years": [
         2019,
         2022
@@ -136,10 +137,10 @@
       "field_id": "04e13c7da490f533af49ccb12879229bd173afb7",
       "crop": "sorghum",
       "n_seasons": 2,
-      "credibility": 0.721,
+      "credibility": 0.746,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 5.6,
+      "median_timing_error_days": 5.1,
       "years": [
         2020,
         2021
@@ -149,10 +150,10 @@
       "field_id": "0d5615b52572c5c2eeac7fdfef8cdda167050a22",
       "crop": "sorghum",
       "n_seasons": 2,
-      "credibility": 0.733,
+      "credibility": 0.713,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 5.3,
+      "median_timing_error_days": 5.8,
       "years": [
         2020,
         2021
@@ -162,10 +163,10 @@
       "field_id": "4bf9f45c9cf8ecf337eaa33ebb5504ab99024019",
       "crop": "sorghum",
       "n_seasons": 2,
-      "credibility": 0.6,
+      "credibility": 0.658,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 8.0,
+      "median_timing_error_days": 6.8,
       "years": [
         2019,
         2022
@@ -175,10 +176,10 @@
       "field_id": "5007e150251b78684ebb4d9d1f33df4bcb10a3a9",
       "crop": "sorghum",
       "n_seasons": 5,
-      "credibility": 0.308,
+      "credibility": 0.1,
       "mode": "full",
-      "spearman": 0.5,
-      "median_timing_error_days": 17.7,
+      "spearman": 0.2,
+      "median_timing_error_days": 21.7,
       "years": [
         2017,
         2018,
@@ -202,7 +203,7 @@
       "credibility": 0.0,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 59.4,
+      "median_timing_error_days": 59.5,
       "years": [
         2019,
         2022
@@ -215,7 +216,7 @@
       "credibility": 0.0,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 25.5,
+      "median_timing_error_days": 26.0,
       "years": [
         2019,
         2022
@@ -225,10 +226,10 @@
       "field_id": "db5f2aa61ebe1e3056ebd6ada9243913ea558665",
       "crop": "sorghum",
       "n_seasons": 2,
-      "credibility": 0.246,
+      "credibility": 0.183,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 15.1,
+      "median_timing_error_days": 16.3,
       "years": [
         2019,
         2022
@@ -238,10 +239,10 @@
       "field_id": "bde1fabf714a23c5967df3d2406c7e2226086fef",
       "crop": "sorghum",
       "n_seasons": 2,
-      "credibility": 0.683,
+      "credibility": 0.708,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 6.3,
+      "median_timing_error_days": 5.8,
       "years": [
         2019,
         2022
@@ -254,7 +255,7 @@
       "credibility": 0.35,
       "mode": "full",
       "spearman": 0.7,
-      "median_timing_error_days": 32.8,
+      "median_timing_error_days": 33.3,
       "years": [
         2017,
         2019,
@@ -270,7 +271,7 @@
       "credibility": 0.5,
       "mode": "full",
       "spearman": 1.0,
-      "median_timing_error_days": 49.2,
+      "median_timing_error_days": 48.8,
       "years": [
         2018,
         2019,
@@ -296,10 +297,10 @@
       "field_id": "aa700a67784b0170ca07cd3e471b77ef646a1b57",
       "crop": "maize",
       "n_seasons": 4,
-      "credibility": 0.863,
+      "credibility": 0.871,
       "mode": "full",
       "spearman": 1.0,
-      "median_timing_error_days": 5.5,
+      "median_timing_error_days": 5.2,
       "years": [
         2017,
         2019,
@@ -311,10 +312,10 @@
       "field_id": "53ebf3f3e4ed4b76f25a724cea586cfa77d8c8ea",
       "crop": "sorghum",
       "n_seasons": 2,
-      "credibility": 0.708,
+      "credibility": 0.679,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 5.8,
+      "median_timing_error_days": 6.4,
       "years": [
         2019,
         2022
@@ -324,10 +325,10 @@
       "field_id": "65f920b5ea21b70fc8068812459378a44310a346",
       "crop": "sorghum",
       "n_seasons": 2,
-      "credibility": 0.654,
+      "credibility": 0.658,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 6.9,
+      "median_timing_error_days": 6.8,
       "years": [
         2020,
         2021
@@ -340,7 +341,7 @@
       "credibility": 0.0,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 71.5,
+      "median_timing_error_days": 73.7,
       "years": [
         2019
       ]
@@ -349,10 +350,10 @@
       "field_id": "60fed7ceafc6dbf735578cf44f0d5249b98fb346",
       "crop": "sorghum",
       "n_seasons": 2,
-      "credibility": 0.658,
+      "credibility": 0.675,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 6.8,
+      "median_timing_error_days": 6.5,
       "years": [
         2019,
         2022
@@ -362,10 +363,10 @@
       "field_id": "0e23af1482cc130e6c2211daa4b5b37a34258f89",
       "crop": "maize",
       "n_seasons": 1,
-      "credibility": 0.45,
+      "credibility": 0.3,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 11.0,
+      "median_timing_error_days": 14.0,
       "years": [
         2020
       ]
@@ -382,10 +383,10 @@
       "field_id": "6b4963de71bd2049cb38189ce1a1e0ec032fed73",
       "crop": "maize",
       "n_seasons": 4,
-      "credibility": 0.712,
+      "credibility": 0.735,
       "mode": "full",
       "spearman": 0.8,
-      "median_timing_error_days": 7.5,
+      "median_timing_error_days": 6.6,
       "years": [
         2017,
         2019,
@@ -400,7 +401,7 @@
       "credibility": 0.0,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 25.3,
+      "median_timing_error_days": 24.8,
       "years": [
         2019,
         2022
@@ -410,10 +411,10 @@
       "field_id": "fee515613b3a8d90ab21e99d1ff2cbd7a0547ca5",
       "crop": "sorghum",
       "n_seasons": 2,
-      "credibility": 0.358,
+      "credibility": 0.354,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 12.8,
+      "median_timing_error_days": 12.9,
       "years": [
         2019,
         2022
@@ -423,10 +424,10 @@
       "field_id": "3f0c53f2b1286a1a179ad2404c4d38f2fe8eeaea",
       "crop": "sorghum",
       "n_seasons": 1,
-      "credibility": 0.8,
+      "credibility": 0.7,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 4.0,
+      "median_timing_error_days": 6.0,
       "years": [
         2022
       ]
@@ -435,10 +436,10 @@
       "field_id": "c41b7f43c966b9f42fd27236c6e0bf9e005ed07a",
       "crop": "maize",
       "n_seasons": 4,
-      "credibility": 0.179,
+      "credibility": 0.135,
       "mode": "full",
       "spearman": 0.0,
-      "median_timing_error_days": 12.8,
+      "median_timing_error_days": 14.6,
       "years": [
         2019,
         2020,
@@ -450,10 +451,10 @@
       "field_id": "a3837ffcc070d71313f2866d64d38159b7de7246",
       "crop": "maize",
       "n_seasons": 7,
-      "credibility": 0.424,
+      "credibility": 0.414,
       "mode": "full",
-      "spearman": 0.464,
-      "median_timing_error_days": 12.3,
+      "spearman": 0.429,
+      "median_timing_error_days": 12.0,
       "years": [
         2017,
         2018,
@@ -468,10 +469,10 @@
       "field_id": "61e20a1d4e2604fcd9bf9ca434fa0f5964dbe8f2",
       "crop": "maize",
       "n_seasons": 4,
-      "credibility": 0.883,
+      "credibility": 0.787,
       "mode": "full",
-      "spearman": 1.0,
-      "median_timing_error_days": 4.7,
+      "spearman": 0.8,
+      "median_timing_error_days": 4.5,
       "years": [
         2017,
         2019,
@@ -499,10 +500,10 @@
       "field_id": "0650f2937860abd03894b3730b0e7440d8186c3e",
       "crop": "sorghum",
       "n_seasons": 4,
-      "credibility": 0.867,
+      "credibility": 0.875,
       "mode": "full",
       "spearman": 1.0,
-      "median_timing_error_days": 5.3,
+      "median_timing_error_days": 5.0,
       "years": [
         2017,
         2018,
@@ -517,7 +518,7 @@
       "credibility": 0.0,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 75.2,
+      "median_timing_error_days": 75.0,
       "years": [
         2021
       ]
@@ -529,7 +530,7 @@
       "credibility": 0.0,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 24.3,
+      "median_timing_error_days": 25.5,
       "years": [
         2020,
         2022
@@ -539,10 +540,10 @@
       "field_id": "7fbd13d528bb5f9d3a6795f28c3700f3dcfc3d09",
       "crop": "sorghum",
       "n_seasons": 1,
-      "credibility": 0.458,
+      "credibility": 0.533,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 10.8,
+      "median_timing_error_days": 9.3,
       "years": [
         2018
       ]
@@ -551,10 +552,10 @@
       "field_id": "18bd71b52d1ad4e9ced104f247c018f8419442a3",
       "crop": "maize",
       "n_seasons": 3,
-      "credibility": 0.792,
+      "credibility": 0.688,
       "mode": "full",
       "spearman": 1.0,
-      "median_timing_error_days": 8.3,
+      "median_timing_error_days": 12.5,
       "years": [
         2018,
         2020,
@@ -568,7 +569,7 @@
       "credibility": 0.0,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 44.5,
+      "median_timing_error_days": 41.4,
       "years": [
         2019,
         2022
@@ -578,10 +579,10 @@
       "field_id": "f2cce773675d4f5a3ecbe8756cdb9c2f89025053",
       "crop": "sorghum",
       "n_seasons": 2,
-      "credibility": 0.633,
+      "credibility": 0.567,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 7.3,
+      "median_timing_error_days": 8.7,
       "years": [
         2019,
         2022
@@ -591,10 +592,10 @@
       "field_id": "6cadd5247a41492fa0a4f736768817c691b8c8d6",
       "crop": "maize",
       "n_seasons": 1,
-      "credibility": 0.75,
+      "credibility": 0.2,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 5.0,
+      "median_timing_error_days": 16.0,
       "years": [
         2019
       ]
@@ -603,10 +604,10 @@
       "field_id": "59e443e882acedfccaf014e2f6fb4bb57e2ca492",
       "crop": "maize",
       "n_seasons": 2,
-      "credibility": 0.25,
+      "credibility": 0.242,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 15.0,
+      "median_timing_error_days": 15.2,
       "years": [
         2019,
         2022
@@ -616,10 +617,10 @@
       "field_id": "e6d044ae381f972e141476bf6e824529b2c026c0",
       "crop": "maize",
       "n_seasons": 2,
-      "credibility": 0.425,
+      "credibility": 0.0,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 11.5,
+      "median_timing_error_days": 20.0,
       "years": [
         2019,
         2022
@@ -629,10 +630,10 @@
       "field_id": "fb55c559285e7628e870caa89661027ddceefdee",
       "crop": "maize",
       "n_seasons": 1,
-      "credibility": 0.667,
+      "credibility": 0.033,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 6.7,
+      "median_timing_error_days": 19.3,
       "years": [
         2019
       ]
@@ -644,7 +645,7 @@
       "credibility": 0.0,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 28.9,
+      "median_timing_error_days": 35.2,
       "years": [
         2019,
         2022
@@ -654,10 +655,10 @@
       "field_id": "52a7fe052fd657d44c274f13da235a449d71e56d",
       "crop": "sorghum",
       "n_seasons": 1,
-      "credibility": 0.45,
+      "credibility": 0.367,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 11.0,
+      "median_timing_error_days": 12.7,
       "years": [
         2020
       ]
@@ -666,10 +667,10 @@
       "field_id": "5cd227a000cb149d8b1f85fe99d753df3ef60230",
       "crop": "sorghum",
       "n_seasons": 2,
-      "credibility": 0.017,
+      "credibility": 0.012,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 19.7,
+      "median_timing_error_days": 19.8,
       "years": [
         2020,
         2021
@@ -679,10 +680,10 @@
       "field_id": "6dc6b8daf2a9c5ab7053406238cdb0ff20e7434e",
       "crop": "maize",
       "n_seasons": 2,
-      "credibility": 0.033,
+      "credibility": 0.008,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 19.3,
+      "median_timing_error_days": 19.8,
       "years": [
         2018,
         2019
@@ -692,10 +693,10 @@
       "field_id": "b940044cd3e8fa0b33d62897ba63180ef4c2c1ea",
       "crop": "maize",
       "n_seasons": 2,
-      "credibility": 0.325,
+      "credibility": 0.308,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 13.5,
+      "median_timing_error_days": 13.8,
       "years": [
         2017,
         2020
@@ -708,7 +709,7 @@
       "credibility": 0.0,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 40.1,
+      "median_timing_error_days": 39.5,
       "years": [
         2019,
         2022
@@ -718,10 +719,10 @@
       "field_id": "4498e967e7a9b5a88d93a931514f8f89945f7864",
       "crop": "maize",
       "n_seasons": 5,
-      "credibility": 0.775,
+      "credibility": 0.525,
       "mode": "full",
-      "spearman": 1.0,
-      "median_timing_error_days": 9.0,
+      "spearman": 0.6,
+      "median_timing_error_days": 11.0,
       "years": [
         2018,
         2019,
@@ -734,10 +735,10 @@
       "field_id": "c6942a04b7abbbefa6690a53914eb65fa18a785e",
       "crop": "maize",
       "n_seasons": 2,
-      "credibility": 0.083,
+      "credibility": 0.092,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 18.3,
+      "median_timing_error_days": 18.2,
       "years": [
         2019,
         2020
@@ -755,10 +756,10 @@
       "field_id": "f8acc54b093c4d31885f2d41d68c2e96bd1908cf",
       "crop": "sorghum",
       "n_seasons": 3,
-      "credibility": 0.667,
+      "credibility": 0.642,
       "mode": "full",
       "spearman": 1.0,
-      "median_timing_error_days": 13.3,
+      "median_timing_error_days": 14.3,
       "years": [
         2018,
         2019,
@@ -769,10 +770,10 @@
       "field_id": "02cced77704c6b4a72bfdb5e0462c450800b7ae3",
       "crop": "maize",
       "n_seasons": 4,
-      "credibility": 0.637,
+      "credibility": 0.546,
       "mode": "full",
-      "spearman": 1.0,
-      "median_timing_error_days": 14.5,
+      "spearman": 0.8,
+      "median_timing_error_days": 14.2,
       "years": [
         2018,
         2019,
@@ -787,7 +788,7 @@
       "credibility": 0.0,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 29.0,
+      "median_timing_error_days": 27.0,
       "years": [
         2017,
         2023
@@ -826,10 +827,10 @@
       "field_id": "42970ffc4fe03b491ae38e65e63c9c9406db6fe2",
       "crop": "maize",
       "n_seasons": 3,
-      "credibility": 0.683,
+      "credibility": 0.675,
       "mode": "full",
       "spearman": 0.5,
-      "median_timing_error_days": 2.7,
+      "median_timing_error_days": 3.0,
       "years": [
         2020,
         2021,
@@ -843,7 +844,7 @@
       "credibility": 0.0,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 45.0,
+      "median_timing_error_days": 45.3,
       "years": [
         2022,
         2023
@@ -856,7 +857,7 @@
       "credibility": 0.0,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 25.2,
+      "median_timing_error_days": 32.2,
       "years": [
         2019,
         2023
@@ -866,10 +867,10 @@
       "field_id": "1c41850d9d252c0e35a43df9186c8f7e5fd470a6",
       "crop": "sorghum",
       "n_seasons": 2,
-      "credibility": 0.704,
+      "credibility": 0.625,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 5.9,
+      "median_timing_error_days": 7.5,
       "years": [
         2019,
         2022
@@ -887,10 +888,10 @@
       "field_id": "2f1d72e5dfababdfe19e7381d5fcb264ca66b8f6",
       "crop": "maize",
       "n_seasons": 2,
-      "credibility": 0.233,
+      "credibility": 0.254,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 15.3,
+      "median_timing_error_days": 14.9,
       "years": [
         2017,
         2023
@@ -900,10 +901,10 @@
       "field_id": "53ecebc95447f051eeb8abb04a13a4f260d95700",
       "crop": "maize",
       "n_seasons": 3,
-      "credibility": 0.025,
+      "credibility": 0.046,
       "mode": "full",
       "spearman": -0.5,
-      "median_timing_error_days": 19.0,
+      "median_timing_error_days": 18.2,
       "years": [
         2018,
         2020,
@@ -914,10 +915,10 @@
       "field_id": "82710dc438ad70da4e867ccd364bd1bde9e3ee88",
       "crop": "sorghum",
       "n_seasons": 2,
-      "credibility": 0.742,
+      "credibility": 0.7,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 5.2,
+      "median_timing_error_days": 6.0,
       "years": [
         2019,
         2022
@@ -935,10 +936,10 @@
       "field_id": "8f94ad95505dc756dc453aed38f2adaf429708ae",
       "crop": "maize",
       "n_seasons": 1,
-      "credibility": 0.267,
+      "credibility": 0.075,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 14.7,
+      "median_timing_error_days": 18.5,
       "years": [
         2019
       ]
@@ -947,10 +948,10 @@
       "field_id": "de3a8ba3a6bc62a6a22af3e7ab08035856886138",
       "crop": "sorghum",
       "n_seasons": 2,
-      "credibility": 0.708,
+      "credibility": 0.725,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 5.8,
+      "median_timing_error_days": 5.5,
       "years": [
         2019,
         2022
@@ -963,7 +964,7 @@
       "credibility": 0.0,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 25.3,
+      "median_timing_error_days": 26.0,
       "years": [
         2017,
         2020
@@ -981,9 +982,9 @@
       "field_id": "ebe3b8f95a165e279c775f5511c6c313e3c73ba7",
       "crop": "maize",
       "n_seasons": 4,
-      "credibility": 0.75,
+      "credibility": 0.85,
       "mode": "full",
-      "spearman": 0.8,
+      "spearman": 1.0,
       "median_timing_error_days": 6.0,
       "years": [
         2018,
@@ -996,10 +997,10 @@
       "field_id": "199d05c80a94d32fb8088a15d9231d8e9ec05464",
       "crop": "sorghum",
       "n_seasons": 3,
-      "credibility": 0.463,
+      "credibility": 0.483,
       "mode": "full",
       "spearman": 0.5,
-      "median_timing_error_days": 11.5,
+      "median_timing_error_days": 10.7,
       "years": [
         2018,
         2019,
@@ -1018,10 +1019,10 @@
       "field_id": "e6e90fc1736338957f599334c392c18bc7136b39",
       "crop": "maize",
       "n_seasons": 2,
-      "credibility": 0.117,
+      "credibility": 0.079,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 17.7,
+      "median_timing_error_days": 18.4,
       "years": [
         2019,
         2022
@@ -1031,10 +1032,10 @@
       "field_id": "05ecf98f9da9a300dfa515c79bbc73943964e773",
       "crop": "maize",
       "n_seasons": 4,
-      "credibility": 0.688,
+      "credibility": 0.61,
       "mode": "full",
       "spearman": 1.0,
-      "median_timing_error_days": 12.5,
+      "median_timing_error_days": 15.6,
       "years": [
         2017,
         2019,
@@ -1054,10 +1055,10 @@
       "field_id": "d6626453cd661f0a8ec240fc670406305dbc2806",
       "crop": "maize",
       "n_seasons": 1,
-      "credibility": 0.333,
+      "credibility": 0.308,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 13.3,
+      "median_timing_error_days": 13.8,
       "years": [
         2021
       ]
@@ -1066,10 +1067,10 @@
       "field_id": "e1485212358a5adbb410fc03aeb846b92c8db3a7",
       "crop": "maize",
       "n_seasons": 2,
-      "credibility": 0.0,
+      "credibility": 0.171,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 23.4,
+      "median_timing_error_days": 16.6,
       "years": [
         2022,
         2023
@@ -1094,10 +1095,10 @@
       "field_id": "8efc1154359e74046cc4d74500e3f319a935bbbf",
       "crop": "maize",
       "n_seasons": 1,
-      "credibility": 0.233,
+      "credibility": 0.167,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 15.3,
+      "median_timing_error_days": 16.7,
       "years": [
         2021
       ]
@@ -1114,10 +1115,10 @@
       "field_id": "b19fc2ff1df981dedaec3416e184fb597f5726de",
       "crop": "sorghum",
       "n_seasons": 2,
-      "credibility": 0.887,
+      "credibility": 0.808,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 2.2,
+      "median_timing_error_days": 3.8,
       "years": [
         2019,
         2022
@@ -1141,10 +1142,10 @@
       "field_id": "78433ded5a56eb2f8beb82cdee2aa66f3ef8c2ee",
       "crop": "sorghum",
       "n_seasons": 2,
-      "credibility": 0.867,
+      "credibility": 0.854,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 2.7,
+      "median_timing_error_days": 2.9,
       "years": [
         2021,
         2024
@@ -1154,10 +1155,10 @@
       "field_id": "7bf8c222f93f4d44a763d9bc84d5e90b4c921d06",
       "crop": "sorghum",
       "n_seasons": 3,
-      "credibility": 0.521,
+      "credibility": 0.208,
       "mode": "full",
-      "spearman": 0.5,
-      "median_timing_error_days": 9.2,
+      "spearman": -0.5,
+      "median_timing_error_days": 11.7,
       "years": [
         2018,
         2021,
@@ -1168,10 +1169,10 @@
       "field_id": "905e1f18bfd01edcc9f457e66691b2901cf4f198",
       "crop": "sorghum",
       "n_seasons": 3,
-      "credibility": 0.825,
+      "credibility": 0.842,
       "mode": "full",
       "spearman": 1.0,
-      "median_timing_error_days": 7.0,
+      "median_timing_error_days": 6.3,
       "years": [
         2018,
         2021,
@@ -1182,10 +1183,10 @@
       "field_id": "7c0e7d2c4900d8f73aea221357209360edc6854a",
       "crop": "sorghum",
       "n_seasons": 4,
-      "credibility": 0.675,
+      "credibility": 0.667,
       "mode": "full",
       "spearman": 0.8,
-      "median_timing_error_days": 9.0,
+      "median_timing_error_days": 9.3,
       "years": [
         2017,
         2020,
@@ -1197,10 +1198,10 @@
       "field_id": "e9dfa617c4d2e1a487553c08d5a287176af20b08",
       "crop": "sorghum",
       "n_seasons": 4,
-      "credibility": 0.49,
+      "credibility": 0.421,
       "mode": "full",
-      "spearman": 0.4,
-      "median_timing_error_days": 8.4,
+      "spearman": 0.2,
+      "median_timing_error_days": 7.2,
       "years": [
         2017,
         2020,
@@ -1215,7 +1216,7 @@
       "credibility": 0.0,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 22.3,
+      "median_timing_error_days": 22.2,
       "years": [
         2019,
         2020
@@ -1225,10 +1226,10 @@
       "field_id": "3a199ac21bfabe18eaf4150d414a3c2de7cde971",
       "crop": "sorghum",
       "n_seasons": 3,
-      "credibility": 0.25,
+      "credibility": 0.0,
       "mode": "full",
-      "spearman": 0.5,
-      "median_timing_error_days": 38.7,
+      "spearman": -0.5,
+      "median_timing_error_days": 43.5,
       "years": [
         2020,
         2021,
@@ -1242,7 +1243,7 @@
       "credibility": 0.0,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 39.2,
+      "median_timing_error_days": 40.7,
       "years": [
         2017,
         2023
@@ -1252,10 +1253,10 @@
       "field_id": "daf1719f844e1626d113fd2035a9fe402a564b69",
       "crop": "sorghum",
       "n_seasons": 2,
-      "credibility": 0.442,
+      "credibility": 0.475,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 11.2,
+      "median_timing_error_days": 10.5,
       "years": [
         2021,
         2024
@@ -1265,10 +1266,10 @@
       "field_id": "9784877b54b9f75b467f2ddccbbf1bd8bc805b67",
       "crop": "sorghum",
       "n_seasons": 2,
-      "credibility": 0.446,
+      "credibility": 0.421,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 11.1,
+      "median_timing_error_days": 11.6,
       "years": [
         2022,
         2024
@@ -1278,10 +1279,10 @@
       "field_id": "20332278fb19e0674dc98c42df02b96b10f067a8",
       "crop": "maize",
       "n_seasons": 2,
-      "credibility": 0.387,
+      "credibility": 0.383,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 12.2,
+      "median_timing_error_days": 12.3,
       "years": [
         2018,
         2021
@@ -1291,10 +1292,10 @@
       "field_id": "d4314fd894ec239e107ffc6182074848bf38312f",
       "crop": "sorghum",
       "n_seasons": 3,
-      "credibility": 0.742,
+      "credibility": 0.717,
       "mode": "full",
       "spearman": 1.0,
-      "median_timing_error_days": 10.3,
+      "median_timing_error_days": 11.3,
       "years": [
         2022,
         2023,
@@ -1305,10 +1306,10 @@
       "field_id": "786a117c2aad3d6381404381341bd54d93f96355",
       "crop": "sorghum",
       "n_seasons": 1,
-      "credibility": 0.167,
+      "credibility": 0.183,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 16.7,
+      "median_timing_error_days": 16.3,
       "years": [
         2024
       ]
@@ -1317,10 +1318,10 @@
       "field_id": "db8b9842246cdaf879002686fd81afae220fcc78",
       "crop": "sorghum",
       "n_seasons": 4,
-      "credibility": 0.425,
+      "credibility": 0.387,
       "mode": "full",
       "spearman": 0.4,
-      "median_timing_error_days": 11.0,
+      "median_timing_error_days": 12.5,
       "years": [
         2018,
         2019,
@@ -1332,10 +1333,10 @@
       "field_id": "86c681013b56a193d1fe0d70b0cd0ce412525fa0",
       "crop": "sorghum",
       "n_seasons": 3,
-      "credibility": 0.683,
+      "credibility": 0.671,
       "mode": "full",
       "spearman": 1.0,
-      "median_timing_error_days": 12.7,
+      "median_timing_error_days": 13.2,
       "years": [
         2018,
         2021,
@@ -1346,10 +1347,10 @@
       "field_id": "d282ffdc86417199b2fa0cf0f369bcb3a66e1466",
       "crop": "sorghum",
       "n_seasons": 3,
-      "credibility": 0.883,
+      "credibility": 0.821,
       "mode": "full",
       "spearman": 1.0,
-      "median_timing_error_days": 4.7,
+      "median_timing_error_days": 7.2,
       "years": [
         2017,
         2020,
@@ -1362,7 +1363,7 @@
       "n_seasons": 6,
       "credibility": 0.0,
       "mode": "full",
-      "spearman": -0.029,
+      "spearman": -0.2,
       "median_timing_error_days": 42.2,
       "years": [
         2017,
@@ -1377,10 +1378,10 @@
       "field_id": "68779621e9facfeaa24723e8a415d6dc6eb37a82",
       "crop": "maize",
       "n_seasons": 6,
-      "credibility": 0.66,
+      "credibility": 0.735,
       "mode": "full",
-      "spearman": 0.829,
-      "median_timing_error_days": 10.2,
+      "spearman": 0.886,
+      "median_timing_error_days": 8.3,
       "years": [
         2017,
         2018,
@@ -1394,10 +1395,10 @@
       "field_id": "bd97fb12fd57099291b3d5c0ee2ae955a9134b61",
       "crop": "sorghum",
       "n_seasons": 3,
-      "credibility": 0.6,
+      "credibility": 0.617,
       "mode": "full",
       "spearman": 0.5,
-      "median_timing_error_days": 6.0,
+      "median_timing_error_days": 5.3,
       "years": [
         2017,
         2020,
@@ -1408,10 +1409,10 @@
       "field_id": "7865a55ac5f0a05df4495692604e690c054ef1fc",
       "crop": "sorghum",
       "n_seasons": 3,
-      "credibility": 0.758,
+      "credibility": 0.825,
       "mode": "full",
       "spearman": 1.0,
-      "median_timing_error_days": 9.7,
+      "median_timing_error_days": 7.0,
       "years": [
         2018,
         2022,
@@ -1422,10 +1423,10 @@
       "field_id": "6f9ee58f4458584904d4535afb2cfda8d6743ab8",
       "crop": "maize",
       "n_seasons": 3,
-      "credibility": 0.792,
+      "credibility": 0.525,
       "mode": "full",
       "spearman": 1.0,
-      "median_timing_error_days": 8.3,
+      "median_timing_error_days": 19.0,
       "years": [
         2017,
         2018,
@@ -1436,10 +1437,10 @@
       "field_id": "9f647b75f822a70ea157acfcdf6158e957a44a9d",
       "crop": "sorghum",
       "n_seasons": 4,
-      "credibility": 0.748,
+      "credibility": 0.721,
       "mode": "full",
       "spearman": 0.8,
-      "median_timing_error_days": 6.1,
+      "median_timing_error_days": 7.2,
       "years": [
         2017,
         2020,
@@ -1451,10 +1452,10 @@
       "field_id": "364032c21c59252ea7bc434dece5aa40056cf7c0",
       "crop": "sorghum",
       "n_seasons": 4,
-      "credibility": 0.479,
+      "credibility": 0.465,
       "mode": "full",
       "spearman": 0.2,
-      "median_timing_error_days": 4.8,
+      "median_timing_error_days": 5.4,
       "years": [
         2017,
         2020,
@@ -1469,7 +1470,7 @@
       "credibility": 0.0,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 25.3,
+      "median_timing_error_days": 27.0,
       "years": [
         2019
       ]
@@ -1478,10 +1479,10 @@
       "field_id": "8d4341cacc1d1338d43b81552e621a7397c76a62",
       "crop": "maize",
       "n_seasons": 3,
-      "credibility": 0.342,
+      "credibility": 0.258,
       "mode": "full",
       "spearman": 0.5,
-      "median_timing_error_days": 16.3,
+      "median_timing_error_days": 19.7,
       "years": [
         2018,
         2019,
@@ -1492,10 +1493,10 @@
       "field_id": "0aa8b9234d54dcf896741987942859413b6f1aa5",
       "crop": "sorghum",
       "n_seasons": 3,
-      "credibility": 0.825,
+      "credibility": 0.838,
       "mode": "full",
       "spearman": 1.0,
-      "median_timing_error_days": 7.0,
+      "median_timing_error_days": 6.5,
       "years": [
         2018,
         2021,
@@ -1506,10 +1507,10 @@
       "field_id": "b6d16cd97ce61e33b8cb53e42da8e32689c63f6b",
       "crop": "sorghum",
       "n_seasons": 5,
-      "credibility": 0.725,
+      "credibility": 0.767,
       "mode": "full",
       "spearman": 0.9,
-      "median_timing_error_days": 9.0,
+      "median_timing_error_days": 7.3,
       "years": [
         2017,
         2018,
@@ -1525,7 +1526,7 @@
       "credibility": 0.0,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 31.8,
+      "median_timing_error_days": 28.5,
       "years": [
         2023,
         2024
@@ -1535,10 +1536,10 @@
       "field_id": "49f6772d07985a6f7d6e8072954f47d61fcc4f55",
       "crop": "sorghum",
       "n_seasons": 7,
-      "credibility": 0.576,
+      "credibility": 0.545,
       "mode": "full",
-      "spearman": 0.536,
-      "median_timing_error_days": 7.7,
+      "spearman": 0.607,
+      "median_timing_error_days": 10.3,
       "years": [
         2018,
         2019,
@@ -1553,10 +1554,10 @@
       "field_id": "0fac7e424995fdde952086673dc2af3fde818010",
       "crop": "sorghum",
       "n_seasons": 4,
-      "credibility": 0.762,
+      "credibility": 0.656,
       "mode": "full",
-      "spearman": 1.0,
-      "median_timing_error_days": 9.5,
+      "spearman": 0.8,
+      "median_timing_error_days": 9.8,
       "years": [
         2018,
         2019,
@@ -1568,10 +1569,10 @@
       "field_id": "b92fecfd2d4a4d3de1dfbc9ed1a37fe5b01ee928",
       "crop": "sorghum",
       "n_seasons": 3,
-      "credibility": 0.679,
+      "credibility": 0.683,
       "mode": "full",
       "spearman": 1.0,
-      "median_timing_error_days": 12.8,
+      "median_timing_error_days": 12.7,
       "years": [
         2020,
         2023,
@@ -1582,10 +1583,10 @@
       "field_id": "c531ab7b07aaba4b82fad3cc87d038cdf3136a54",
       "crop": "sorghum",
       "n_seasons": 3,
-      "credibility": 0.725,
+      "credibility": 0.483,
       "mode": "full",
-      "spearman": 1.0,
-      "median_timing_error_days": 11.0,
+      "spearman": 0.5,
+      "median_timing_error_days": 10.7,
       "years": [
         2017,
         2020,
@@ -1596,10 +1597,10 @@
       "field_id": "240fa53927d596d52790d19668e14589534072f2",
       "crop": "maize",
       "n_seasons": 3,
-      "credibility": 0.679,
+      "credibility": 0.683,
       "mode": "full",
       "spearman": 1.0,
-      "median_timing_error_days": 12.8,
+      "median_timing_error_days": 12.7,
       "years": [
         2019,
         2020,
@@ -1610,10 +1611,10 @@
       "field_id": "ed68b58111c37a959b7a3e554cacd5b86759be42",
       "crop": "sorghum",
       "n_seasons": 4,
-      "credibility": 0.575,
+      "credibility": 0.477,
       "mode": "full",
       "spearman": 0.4,
-      "median_timing_error_days": 5.0,
+      "median_timing_error_days": 8.9,
       "years": [
         2017,
         2020,
@@ -1625,10 +1626,10 @@
       "field_id": "e6ec681d2fd86aab04df91b15e7215b481833ad6",
       "crop": "maize",
       "n_seasons": 3,
-      "credibility": 0.875,
+      "credibility": 0.575,
       "mode": "full",
-      "spearman": 1.0,
-      "median_timing_error_days": 5.0,
+      "spearman": 0.5,
+      "median_timing_error_days": 7.0,
       "years": [
         2019,
         2020,
@@ -1639,10 +1640,10 @@
       "field_id": "479957fc7b403f03e9d802c07e8b284a850dacd3",
       "crop": "maize",
       "n_seasons": 3,
-      "credibility": 0.725,
+      "credibility": 0.625,
       "mode": "full",
       "spearman": 1.0,
-      "median_timing_error_days": 11.0,
+      "median_timing_error_days": 15.0,
       "years": [
         2017,
         2020,
@@ -1653,10 +1654,10 @@
       "field_id": "490d1ccb85346a98067fcb1f0875e48083bfd2f8",
       "crop": "sorghum",
       "n_seasons": 4,
-      "credibility": 0.556,
+      "credibility": 0.76,
       "mode": "full",
-      "spearman": 0.4,
-      "median_timing_error_days": 5.8,
+      "spearman": 0.8,
+      "median_timing_error_days": 5.6,
       "years": [
         2017,
         2020,
@@ -1668,10 +1669,10 @@
       "field_id": "58e79c28ce1ee65ddef9c80737d789d1f3bb2ae1",
       "crop": "maize",
       "n_seasons": 2,
-      "credibility": 0.004,
+      "credibility": 0.0,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 19.9,
+      "median_timing_error_days": 27.8,
       "years": [
         2019,
         2023
@@ -1681,10 +1682,10 @@
       "field_id": "9c9ee9a057bea7043d7eb5bffaca322cb2ec329a",
       "crop": "sorghum",
       "n_seasons": 4,
-      "credibility": 0.854,
+      "credibility": 0.729,
       "mode": "full",
-      "spearman": 1.0,
-      "median_timing_error_days": 5.8,
+      "spearman": 0.8,
+      "median_timing_error_days": 6.8,
       "years": [
         2017,
         2020,
@@ -1696,10 +1697,10 @@
       "field_id": "635b6de04312850a00d634745e74f97c9b12509b",
       "crop": "sorghum",
       "n_seasons": 4,
-      "credibility": 0.56,
+      "credibility": 0.537,
       "mode": "full",
       "spearman": 0.4,
-      "median_timing_error_days": 5.6,
+      "median_timing_error_days": 6.5,
       "years": [
         2017,
         2020,
@@ -1714,7 +1715,7 @@
       "credibility": 0.1,
       "mode": "full",
       "spearman": 0.2,
-      "median_timing_error_days": 22.6,
+      "median_timing_error_days": 22.5,
       "years": [
         2017,
         2018,
@@ -1726,10 +1727,10 @@
       "field_id": "f300b264b3c4c645d8aa7731b7239d3068309597",
       "crop": "sorghum",
       "n_seasons": 3,
-      "credibility": 0.825,
+      "credibility": 0.821,
       "mode": "full",
       "spearman": 1.0,
-      "median_timing_error_days": 7.0,
+      "median_timing_error_days": 7.2,
       "years": [
         2018,
         2021,
@@ -1740,10 +1741,10 @@
       "field_id": "b48e13edd44dd716c6ec11fd314265b201c99560",
       "crop": "maize",
       "n_seasons": 4,
-      "credibility": 0.754,
+      "credibility": 0.848,
       "mode": "full",
-      "spearman": 0.8,
-      "median_timing_error_days": 5.8,
+      "spearman": 1.0,
+      "median_timing_error_days": 6.1,
       "years": [
         2017,
         2019,
@@ -1769,9 +1770,9 @@
       "field_id": "24213b903106fd72ab109470862d366bf02c0928",
       "crop": "sorghum",
       "n_seasons": 4,
-      "credibility": 0.35,
+      "credibility": 0.55,
       "mode": "full",
-      "spearman": 0.0,
+      "spearman": 0.4,
       "median_timing_error_days": 6.0,
       "years": [
         2019,
@@ -1784,10 +1785,10 @@
       "field_id": "96dc5aab3636bbd6f201cde44611b4af3af2f803",
       "crop": "sorghum",
       "n_seasons": 3,
-      "credibility": 0.858,
+      "credibility": 0.742,
       "mode": "full",
       "spearman": 1.0,
-      "median_timing_error_days": 5.7,
+      "median_timing_error_days": 10.3,
       "years": [
         2020,
         2021,
@@ -1801,7 +1802,7 @@
       "credibility": 0.4,
       "mode": "full",
       "spearman": 0.8,
-      "median_timing_error_days": 30.3,
+      "median_timing_error_days": 31.0,
       "years": [
         2019,
         2022,
@@ -1813,10 +1814,10 @@
       "field_id": "c0b7e60adc673cf780cce9ce7a6986e310cc5382",
       "crop": "maize",
       "n_seasons": 5,
-      "credibility": 0.542,
+      "credibility": 0.608,
       "mode": "full",
-      "spearman": 0.9,
-      "median_timing_error_days": 16.3,
+      "spearman": 1.0,
+      "median_timing_error_days": 15.7,
       "years": [
         2017,
         2018,
@@ -1829,10 +1830,10 @@
       "field_id": "83a98187c0f13a626f5dd1027fa5c81f33c43f12",
       "crop": "sorghum",
       "n_seasons": 3,
-      "credibility": 0.467,
+      "credibility": 0.471,
       "mode": "full",
       "spearman": 0.5,
-      "median_timing_error_days": 11.3,
+      "median_timing_error_days": 11.2,
       "years": [
         2018,
         2021,
@@ -1843,10 +1844,10 @@
       "field_id": "10a1086c58e6d4f32e31c7c7c43448bb69201666",
       "crop": "maize",
       "n_seasons": 2,
-      "credibility": 0.8,
+      "credibility": 0.775,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 4.0,
+      "median_timing_error_days": 4.5,
       "years": [
         2021,
         2022
@@ -1856,10 +1857,10 @@
       "field_id": "1d5b5b594e6c54d7c4ddd27b72e0f527bf7162b7",
       "crop": "sorghum",
       "n_seasons": 3,
-      "credibility": 0.917,
+      "credibility": 0.9,
       "mode": "full",
       "spearman": 1.0,
-      "median_timing_error_days": 3.3,
+      "median_timing_error_days": 4.0,
       "years": [
         2019,
         2022,
@@ -1870,10 +1871,10 @@
       "field_id": "71303789d34cd15e07cc609505ab024bb96dcfd4",
       "crop": "sorghum",
       "n_seasons": 3,
-      "credibility": 0.533,
+      "credibility": 0.792,
       "mode": "full",
-      "spearman": 0.5,
-      "median_timing_error_days": 8.7,
+      "spearman": 1.0,
+      "median_timing_error_days": 8.3,
       "years": [
         2018,
         2021,
@@ -1884,10 +1885,10 @@
       "field_id": "aa4ad7fcef55ad9e9c24a90426f3214471472cd8",
       "crop": "maize",
       "n_seasons": 2,
-      "credibility": 0.308,
+      "credibility": 0.283,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 13.8,
+      "median_timing_error_days": 14.3,
       "years": [
         2018,
         2021
@@ -1897,10 +1898,10 @@
       "field_id": "8a79e7d53e6265800428aab023deb918b6341f21",
       "crop": "maize",
       "n_seasons": 2,
-      "credibility": 0.287,
+      "credibility": 0.179,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 14.2,
+      "median_timing_error_days": 16.4,
       "years": [
         2018,
         2021
@@ -1910,10 +1911,10 @@
       "field_id": "d35b7816c3e36e5c196b4f7062b25f067eb07b29",
       "crop": "sorghum",
       "n_seasons": 8,
-      "credibility": 0.621,
+      "credibility": 0.675,
       "mode": "full",
-      "spearman": 0.833,
-      "median_timing_error_days": 11.8,
+      "spearman": 0.929,
+      "median_timing_error_days": 11.6,
       "years": [
         2017,
         2018,
@@ -1929,10 +1930,10 @@
       "field_id": "ea1625dff31d189aa5b4d1b805683fa5526d9159",
       "crop": "sorghum",
       "n_seasons": 2,
-      "credibility": 0.625,
+      "credibility": 0.542,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 7.5,
+      "median_timing_error_days": 9.2,
       "years": [
         2021,
         2024
@@ -1942,10 +1943,10 @@
       "field_id": "aa7e0e311edac276dec2ceb1ac9fa3ea3aa8f59c",
       "crop": "sorghum",
       "n_seasons": 4,
-      "credibility": 0.773,
+      "credibility": 0.433,
       "mode": "full",
-      "spearman": 1.0,
-      "median_timing_error_days": 9.1,
+      "spearman": 0.4,
+      "median_timing_error_days": 10.7,
       "years": [
         2017,
         2018,
@@ -1957,10 +1958,10 @@
       "field_id": "5644739d8e3ac4979df87ed536448ea6651e33d2",
       "crop": "sorghum",
       "n_seasons": 2,
-      "credibility": 0.329,
+      "credibility": 0.233,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 13.4,
+      "median_timing_error_days": 15.3,
       "years": [
         2018,
         2021
@@ -1970,10 +1971,10 @@
       "field_id": "f865f8982977ecb13746c804b9f96b086003553d",
       "crop": "maize",
       "n_seasons": 5,
-      "credibility": 0.0,
+      "credibility": 0.15,
       "mode": "full",
-      "spearman": 0.0,
-      "median_timing_error_days": 29.0,
+      "spearman": 0.3,
+      "median_timing_error_days": 29.7,
       "years": [
         2017,
         2019,
@@ -1986,10 +1987,10 @@
       "field_id": "3ba5d597e69167f2a27dfd13c68b3c9a2fc713c6",
       "crop": "maize",
       "n_seasons": 6,
-      "credibility": 0.397,
+      "credibility": 0.425,
       "mode": "full",
-      "spearman": 0.486,
-      "median_timing_error_days": 13.8,
+      "spearman": 0.429,
+      "median_timing_error_days": 11.6,
       "years": [
         2017,
         2020,
@@ -2003,10 +2004,10 @@
       "field_id": "a6f8fbe357539ecbf3798964048295e83097b82d",
       "crop": "maize",
       "n_seasons": 3,
-      "credibility": 0.117,
+      "credibility": 0.054,
       "mode": "full",
       "spearman": -0.5,
-      "median_timing_error_days": 15.3,
+      "median_timing_error_days": 17.8,
       "years": [
         2019,
         2022,
@@ -2017,10 +2018,10 @@
       "field_id": "3454cbd8bc213c15805a1d31da009668ff59bc9e",
       "crop": "sorghum",
       "n_seasons": 4,
-      "credibility": 0.708,
+      "credibility": 0.506,
       "mode": "full",
-      "spearman": 0.8,
-      "median_timing_error_days": 7.7,
+      "spearman": 0.6,
+      "median_timing_error_days": 11.8,
       "years": [
         2018,
         2019,
@@ -2032,10 +2033,10 @@
       "field_id": "da438bc7b421460080a0eff51b3c16db41d8eec5",
       "crop": "maize",
       "n_seasons": 3,
-      "credibility": 0.775,
+      "credibility": 0.5,
       "mode": "full",
-      "spearman": 1.0,
-      "median_timing_error_days": 9.0,
+      "spearman": 0.5,
+      "median_timing_error_days": 10.0,
       "years": [
         2018,
         2023,
@@ -2046,10 +2047,10 @@
       "field_id": "e202b5664876c0808f86e018b040ec4fac69a1f9",
       "crop": "maize",
       "n_seasons": 6,
-      "credibility": 0.662,
+      "credibility": 0.658,
       "mode": "full",
       "spearman": 1.0,
-      "median_timing_error_days": 13.5,
+      "median_timing_error_days": 13.7,
       "years": [
         2017,
         2018,
@@ -2076,10 +2077,10 @@
       "field_id": "925a4f8329ad4bccc172215cafa0c7019945046c",
       "crop": "sorghum",
       "n_seasons": 3,
-      "credibility": 0.858,
+      "credibility": 0.867,
       "mode": "full",
       "spearman": 1.0,
-      "median_timing_error_days": 5.7,
+      "median_timing_error_days": 5.3,
       "years": [
         2017,
         2018,
@@ -2104,10 +2105,10 @@
       "field_id": "4da67b6118bf018e60a71259e2411c9c932bf960",
       "crop": "maize",
       "n_seasons": 5,
-      "credibility": 0.675,
+      "credibility": 0.742,
       "mode": "full",
-      "spearman": 0.8,
-      "median_timing_error_days": 9.0,
+      "spearman": 0.9,
+      "median_timing_error_days": 8.3,
       "years": [
         2017,
         2018,
@@ -2120,10 +2121,10 @@
       "field_id": "2e29208638ee43dbdf537fb7bc8fd57733f35b41",
       "crop": "maize",
       "n_seasons": 6,
-      "credibility": 0.293,
+      "credibility": 0.32,
       "mode": "full",
-      "spearman": 0.429,
-      "median_timing_error_days": 16.8,
+      "spearman": 0.486,
+      "median_timing_error_days": 16.9,
       "years": [
         2018,
         2019,
@@ -2137,10 +2138,10 @@
       "field_id": "814fdaf97d79e37cc7d8060fe97ee9294ecf2e7d",
       "crop": "maize",
       "n_seasons": 4,
-      "credibility": 0.621,
+      "credibility": 0.756,
       "mode": "full",
-      "spearman": 0.8,
-      "median_timing_error_days": 11.2,
+      "spearman": 1.0,
+      "median_timing_error_days": 9.8,
       "years": [
         2018,
         2020,
@@ -2168,10 +2169,10 @@
       "field_id": "290d2e24b3b6122ce4ec3a086b50b981d386222a",
       "crop": "maize",
       "n_seasons": 2,
-      "credibility": 0.012,
+      "credibility": 0.0,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 19.8,
+      "median_timing_error_days": 20.5,
       "years": [
         2020,
         2024
@@ -2184,7 +2185,7 @@
       "credibility": 0.0,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 35.0,
+      "median_timing_error_days": 36.0,
       "years": [
         2024
       ]
@@ -2193,10 +2194,10 @@
       "field_id": "acc388cde861e2bb3f52052c7704422c4f0e5698",
       "crop": "maize",
       "n_seasons": 3,
-      "credibility": 0.292,
+      "credibility": 0.267,
       "mode": "full",
       "spearman": 0.5,
-      "median_timing_error_days": 18.3,
+      "median_timing_error_days": 19.3,
       "years": [
         2017,
         2019,
@@ -2207,10 +2208,10 @@
       "field_id": "c945502188e5a74716646ec3a9cc04a7d5421a0e",
       "crop": "maize",
       "n_seasons": 5,
-      "credibility": 0.471,
+      "credibility": 0.567,
       "mode": "full",
-      "spearman": 0.7,
-      "median_timing_error_days": 15.2,
+      "spearman": 0.9,
+      "median_timing_error_days": 15.3,
       "years": [
         2019,
         2020,
@@ -2223,10 +2224,10 @@
       "field_id": "bd5ea7903fa160a316466daf9c6aec8d2bb02d39",
       "crop": "sorghum",
       "n_seasons": 2,
-      "credibility": 0.496,
+      "credibility": 0.492,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 10.1,
+      "median_timing_error_days": 10.2,
       "years": [
         2020,
         2023
@@ -2236,10 +2237,10 @@
       "field_id": "92ab7c28dc61a826b8145085af6f26847728ae55",
       "crop": "sorghum",
       "n_seasons": 5,
-      "credibility": 0.275,
+      "credibility": 0.237,
       "mode": "full",
-      "spearman": -0.2,
-      "median_timing_error_days": 9.0,
+      "spearman": -0.5,
+      "median_timing_error_days": 10.5,
       "years": [
         2017,
         2018,
@@ -2252,10 +2253,10 @@
       "field_id": "13c9aa108f76fa30771be67f759e8b2a7f7e4ec0",
       "crop": "maize",
       "n_seasons": 4,
-      "credibility": 0.392,
+      "credibility": 0.712,
       "mode": "full",
-      "spearman": 0.2,
-      "median_timing_error_days": 8.3,
+      "spearman": 0.8,
+      "median_timing_error_days": 7.5,
       "years": [
         2018,
         2020,
@@ -2267,10 +2268,10 @@
       "field_id": "cdadeb6564815ef8deb626784c7109a4c0141e9e",
       "crop": "sorghum",
       "n_seasons": 2,
-      "credibility": 0.721,
+      "credibility": 0.683,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 5.6,
+      "median_timing_error_days": 6.3,
       "years": [
         2018,
         2021
@@ -2280,10 +2281,10 @@
       "field_id": "d993613144e6e75b8de17a452205a396167c7d45",
       "crop": "maize",
       "n_seasons": 1,
-      "credibility": 0.183,
+      "credibility": 0.217,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 16.3,
+      "median_timing_error_days": 15.7,
       "years": [
         2024
       ]
@@ -2292,10 +2293,10 @@
       "field_id": "b80503bc89a169d8f8388e0779e67e159f058fcf",
       "crop": "sorghum",
       "n_seasons": 3,
-      "credibility": 0.842,
+      "credibility": 0.833,
       "mode": "full",
       "spearman": 1.0,
-      "median_timing_error_days": 6.3,
+      "median_timing_error_days": 6.7,
       "years": [
         2017,
         2020,
@@ -2306,10 +2307,10 @@
       "field_id": "ba8e47010bd2cf8a36b5ac8dda51273c38721f72",
       "crop": "maize",
       "n_seasons": 8,
-      "credibility": 0.588,
+      "credibility": 0.493,
       "mode": "full",
-      "spearman": 0.667,
-      "median_timing_error_days": 9.8,
+      "spearman": 0.595,
+      "median_timing_error_days": 12.2,
       "years": [
         2017,
         2018,
@@ -2325,10 +2326,10 @@
       "field_id": "5a7a0f5fb6b738d6a972f14ef76f18b58188c177",
       "crop": "sorghum",
       "n_seasons": 2,
-      "credibility": 0.588,
+      "credibility": 0.637,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 8.2,
+      "median_timing_error_days": 7.2,
       "years": [
         2018,
         2021
@@ -2338,10 +2339,10 @@
       "field_id": "8f036436f1926668e98386c028832dc0ef4a5378",
       "crop": "sorghum",
       "n_seasons": 3,
-      "credibility": 0.812,
+      "credibility": 0.621,
       "mode": "full",
       "spearman": 1.0,
-      "median_timing_error_days": 7.5,
+      "median_timing_error_days": 15.2,
       "years": [
         2017,
         2020,
@@ -2365,10 +2366,10 @@
       "field_id": "19614de2684e8fd84a10f9e510ae828736927d76",
       "crop": "maize",
       "n_seasons": 6,
-      "credibility": 0.663,
+      "credibility": 0.609,
       "mode": "full",
       "spearman": 0.771,
-      "median_timing_error_days": 8.9,
+      "median_timing_error_days": 11.1,
       "years": [
         2017,
         2018,
@@ -2382,10 +2383,10 @@
       "field_id": "52b855bab4eeee0e18c494bbee983ec37dc01b36",
       "crop": "sorghum",
       "n_seasons": 2,
-      "credibility": 0.55,
+      "credibility": 0.562,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 9.0,
+      "median_timing_error_days": 8.8,
       "years": [
         2018,
         2020
@@ -2395,10 +2396,10 @@
       "field_id": "1231336358a1e11061fa1a6aeb5201fb547a24b9",
       "crop": "maize",
       "n_seasons": 5,
-      "credibility": 0.425,
+      "credibility": 0.358,
       "mode": "full",
-      "spearman": 0.7,
-      "median_timing_error_days": 17.0,
+      "spearman": 0.5,
+      "median_timing_error_days": 15.7,
       "years": [
         2019,
         2021,
@@ -2411,10 +2412,10 @@
       "field_id": "6ba7f6593ef9e2dc09cbbf30b3b4325e5f4ac5d1",
       "crop": "maize",
       "n_seasons": 2,
-      "credibility": 0.329,
+      "credibility": 0.354,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 13.4,
+      "median_timing_error_days": 12.9,
       "years": [
         2020,
         2024
@@ -2424,10 +2425,10 @@
       "field_id": "1fe9a708d8484a8d64638522a5b30b520d1b5cf3",
       "crop": "maize",
       "n_seasons": 5,
-      "credibility": 0.15,
+      "credibility": 0.104,
       "mode": "full",
       "spearman": 0.0,
-      "median_timing_error_days": 14.0,
+      "median_timing_error_days": 15.8,
       "years": [
         2018,
         2019,
@@ -2443,7 +2444,7 @@
       "credibility": 0.25,
       "mode": "full",
       "spearman": 0.5,
-      "median_timing_error_days": 32.5,
+      "median_timing_error_days": 33.0,
       "years": [
         2018,
         2019,
@@ -2454,10 +2455,10 @@
       "field_id": "4d89c333e7f0eefcabc4993a446b1eed3a2f2e95",
       "crop": "sorghum",
       "n_seasons": 2,
-      "credibility": 0.396,
+      "credibility": 0.4,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 12.1,
+      "median_timing_error_days": 12.0,
       "years": [
         2018,
         2021
@@ -2467,10 +2468,10 @@
       "field_id": "f52acb45e8b5b82b5964e8682826435a925e8692",
       "crop": "sorghum",
       "n_seasons": 3,
-      "credibility": 0.583,
+      "credibility": 0.688,
       "mode": "full",
       "spearman": 1.0,
-      "median_timing_error_days": 16.7,
+      "median_timing_error_days": 12.5,
       "years": [
         2019,
         2022,
@@ -2481,10 +2482,10 @@
       "field_id": "ce244a1b7c1aa288698d345721ec17741f2777a0",
       "crop": "maize",
       "n_seasons": 5,
-      "credibility": 0.625,
+      "credibility": 0.604,
       "mode": "full",
       "spearman": 0.8,
-      "median_timing_error_days": 11.0,
+      "median_timing_error_days": 11.8,
       "years": [
         2018,
         2019,
@@ -2497,10 +2498,10 @@
       "field_id": "8f610d76f179486063f84cc30981abd983365d66",
       "crop": "maize",
       "n_seasons": 6,
-      "credibility": 0.203,
+      "credibility": 0.509,
       "mode": "full",
-      "spearman": 0.086,
-      "median_timing_error_days": 13.6,
+      "spearman": 0.714,
+      "median_timing_error_days": 13.9,
       "years": [
         2017,
         2018,
@@ -2514,10 +2515,10 @@
       "field_id": "f30e4e4d033a432232391184984fca9f02ee24b5",
       "crop": "sorghum",
       "n_seasons": 4,
-      "credibility": 0.535,
+      "credibility": 0.446,
       "mode": "full",
       "spearman": 0.4,
-      "median_timing_error_days": 6.6,
+      "median_timing_error_days": 10.2,
       "years": [
         2017,
         2020,
@@ -2529,10 +2530,10 @@
       "field_id": "f9e135796e8243385aae5793ccc5b97fd9c0e5d1",
       "crop": "maize",
       "n_seasons": 4,
-      "credibility": 0.8,
+      "credibility": 0.821,
       "mode": "full",
       "spearman": 1.0,
-      "median_timing_error_days": 8.0,
+      "median_timing_error_days": 7.2,
       "years": [
         2018,
         2020,
@@ -2547,7 +2548,7 @@
       "credibility": 0.0,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 24.3,
+      "median_timing_error_days": 23.7,
       "years": [
         2017,
         2024
@@ -2557,10 +2558,10 @@
       "field_id": "efc10a42fd5df1a643af3778f5ff5985f92f70eb",
       "crop": "maize",
       "n_seasons": 6,
-      "credibility": 0.612,
+      "credibility": 0.709,
       "mode": "full",
-      "spearman": 0.829,
-      "median_timing_error_days": 12.1,
+      "spearman": 0.943,
+      "median_timing_error_days": 10.5,
       "years": [
         2017,
         2019,
@@ -2574,10 +2575,10 @@
       "field_id": "0d0dca4303fc4160a3e62f48a89809495e20f2db",
       "crop": "maize",
       "n_seasons": 4,
-      "credibility": 0.306,
+      "credibility": 0.3,
       "mode": "full",
       "spearman": 0.2,
-      "median_timing_error_days": 11.8,
+      "median_timing_error_days": 12.0,
       "years": [
         2019,
         2022,
@@ -2592,7 +2593,7 @@
       "credibility": 0.0,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 50.3,
+      "median_timing_error_days": 58.7,
       "years": [
         2024
       ]
@@ -2604,7 +2605,7 @@
       "credibility": 0.0,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 22.7,
+      "median_timing_error_days": 23.3,
       "years": [
         2024
       ]
@@ -2627,10 +2628,10 @@
       "field_id": "3a9ea46fc0390bbd459c7d60b91f5fbf428d7d22",
       "crop": "maize",
       "n_seasons": 4,
-      "credibility": 0.34,
+      "credibility": 0.467,
       "mode": "full",
-      "spearman": 0.6,
-      "median_timing_error_days": 18.4,
+      "spearman": 0.8,
+      "median_timing_error_days": 17.3,
       "years": [
         2017,
         2019,
@@ -2642,10 +2643,10 @@
       "field_id": "03c35905c7b53a3f456b98f88a0c47acd7209cbb",
       "crop": "maize",
       "n_seasons": 4,
-      "credibility": 0.152,
+      "credibility": 0.108,
       "mode": "full",
-      "spearman": 0.0,
-      "median_timing_error_days": 13.9,
+      "spearman": -0.4,
+      "median_timing_error_days": 15.7,
       "years": [
         2019,
         2020,
@@ -2657,10 +2658,10 @@
       "field_id": "474345acff3ccb0ac2fe4fcf94cebf1019903923",
       "crop": "maize",
       "n_seasons": 1,
-      "credibility": 0.3,
+      "credibility": 0.242,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 14.0,
+      "median_timing_error_days": 15.2,
       "years": [
         2024
       ]
@@ -2669,10 +2670,10 @@
       "field_id": "5a6232376078efae40e5fda26684ab19c7bb6c77",
       "crop": "maize",
       "n_seasons": 1,
-      "credibility": 0.058,
+      "credibility": 0.183,
       "mode": "timing_only",
       "spearman": null,
-      "median_timing_error_days": 18.8,
+      "median_timing_error_days": 16.3,
       "years": [
         2024
       ]
@@ -2681,10 +2682,10 @@
       "field_id": "36d838d85e96ad2538320b1ce0b5668a8f44101d",
       "crop": "maize",
       "n_seasons": 5,
-      "credibility": 0.679,
+      "credibility": 0.517,
       "mode": "full",
-      "spearman": 0.8,
-      "median_timing_error_days": 8.8,
+      "spearman": 0.5,
+      "median_timing_error_days": 9.3,
       "years": [
         2017,
         2019,
@@ -2697,10 +2698,10 @@
       "field_id": "58303d3d4cf73b34fae90ab0f1aaeb749fd2efe2",
       "crop": "maize",
       "n_seasons": 4,
-      "credibility": 0.383,
+      "credibility": 0.762,
       "mode": "full",
-      "spearman": -0.2,
-      "median_timing_error_days": 4.7,
+      "spearman": 0.8,
+      "median_timing_error_days": 5.5,
       "years": [
         2018,
         2020,

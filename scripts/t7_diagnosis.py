@@ -82,16 +82,82 @@ def block_bootstrap(
     return mean_val, ci_val, None, None, n_effective
 
 
-def run_diagnosis() -> dict[str, Any]:
-    OUT_DIR.mkdir(parents=True, exist_ok=True)
-    print("Reading pilot fields and HLS series...")
-    pilot = pd.read_parquet("data/fields/ks_t14slh_pilot.parquet")
-    series = pd.read_parquet("data/fields/ks_t14slh_hls_series.parquet")
+def _load_inputs() -> tuple[pd.DataFrame, pd.DataFrame, dict[str, dict]]:
+    pilot_p = Path("data/fields/ks_t14slh_pilot.parquet")
+    series_p = Path("data/fields/ks_t14slh_hls_series.parquet")
+    labels_p = Path("data/labels/ks_t14slh.parquet")
+    if pilot_p.exists() and series_p.exists() and labels_p.exists():
+        pilot = pd.read_parquet(pilot_p)
+        series = pd.read_parquet(series_p)
+        series["year"] = series["date"].dt.year
+        series["doy"] = series["date"].dt.day_of_year
+        return pilot, series, compute_cutoff_credibility(pilot, series)
+
+    import rebuild_kansas_ssurgo as rk
+    import yaml
+
+    from fieldwitness.data.ssurgo_taw import get_field_taw_base
+    from fieldwitness.infer import abc, forward, priors
+    from fieldwitness.rotate.slots import SOW_DAY
+
+    pilot, series_map, labels_map = rk._build_local_dataset()
+    series = pd.concat(list(series_map.values()), ignore_index=True)
     series["year"] = series["date"].dt.year
     series["doy"] = series["date"].dt.day_of_year
 
-    print("Step 1: Cut-off credibility scores (as_of 2021-12-31)...")
-    cred_cutoff = compute_cutoff_credibility(pilot, series)
+    noise = rk._census_noise(series_map, max_year=2021)
+    grading = yaml.safe_load(Path("config/grading.yaml").read_text("utf-8"))["credibility"]
+    w_sp = float(grading["weight_spearman"])
+    sc_d = float(grading["timing_error_scale_days"])
+    cfg0 = forward.load_cfg()
+    nominal = {**cfg0["nominal_sow_doy"], "winter_wheat": SOW_DAY["winter_wheat"]}
+    sum_crops = ("maize", "sorghum")
+    crop_p = {c: forward.crop_params(c, "ks_t14slh") for c in sum_crops}
+    cfgs = {c: {**cfg0, "crop": c, "nominal_sow_doy": nominal} for c in sum_crops}
+
+    cred_cutoff: dict[str, dict] = {}
+    for idx, (_, r) in enumerate(pilot.iterrows()):
+        fid = str(r["field_id"])
+        lmap = labels_map[fid]
+        sdf = series_map[fid]
+        f_taw_base = get_field_taw_base(field_id=fid)
+        _, _, _, wx_past = rk._load_weather_years(float(r["lon"]), float(r["lat"]), 2001, 2021)
+        rng_c = np.random.default_rng([priors.SEED, 45, 2021, idx])
+        seasons_c: dict[str, list] = {c: [] for c in sum_crops}
+        for y in sorted(y_ for y_, cp in lmap.items() if y_ <= 2021 and cp in sum_crops):
+            c = lmap[y]
+            doy, nd = rk._obs_doy_ndvi(sdf, y)
+            f_cfg = {**cfgs[c], "taw_base_mm": f_taw_base}
+            wxy = forward.season_weather(wx_past, y, f_cfg)
+            if len(doy) < rk.MIN_OBS or wxy is None:
+                continue
+            ref = abc.reference_table(*wxy, 1000, crop_p[c], f_cfg, seed=priors.SEED + 1000 + y)
+            p = abc.posterior(doy, nd, ref, noise, 50, rng_c)
+            sim = abc.summary_stats(doy, ref["ndvi"][doy - 1][:, p["idx"]])
+            seasons_c[c].append((y, p["obs_stats"], np.median(sim, axis=0)))
+        best_c = max(sum_crops, key=lambda c: len(seasons_c[c]))
+        sc_list = seasons_c[best_c]
+        if not sc_list:
+            cred_cutoff[fid] = {"credibility": None}
+        else:
+            obs_c = np.array([x[1] for x in sc_list])
+            pr_c = np.array([x[2] for x in sc_list])
+            med_err = float(np.median(np.abs(obs_c[:, [0, 1, 2]] - pr_c[:, [0, 1, 2]]).mean(1)))
+            t_sc = max(0.0, 1 - med_err / sc_d)
+            rho_c = rk._rank_corr(obs_c[:, 3], pr_c[:, 3])
+            val = (
+                round(t_sc, 4)
+                if np.isnan(rho_c)
+                else round(w_sp * max(0.0, rho_c) + (1 - w_sp) * t_sc, 4)
+            )
+            cred_cutoff[fid] = {"credibility": val}
+    return pilot, series, cred_cutoff
+
+
+def run_diagnosis() -> dict[str, Any]:
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
+    print("Reading pilot fields and HLS series...")
+    pilot, series, cred_cutoff = _load_inputs()
 
     # Field metadata lookup
     field_meta = pilot.set_index("field_id").to_dict(orient="index")
@@ -195,6 +261,7 @@ def run_diagnosis() -> dict[str, Any]:
                         "fw_ci_crps": fc_ci["crps"],
                         "fw_ci_covered90": 1.0 if fc_ci["covered90"] else 0.0,
                         "fw_peak_abs_err": abs(fc_peak["err_median"]),
+                        "fw_peak_signed_err": fc_peak["err_median"],
                         "fw_peak_covered90": 1.0 if fc_peak["covered90"] else 0.0,
                         # Baseline CRPS
                         "b0_ci_crps": b0_ci_crps,
@@ -238,8 +305,8 @@ def run_diagnosis() -> dict[str, Any]:
         "diff_vs_b2_ci95": b2_diff_ci,
         "beats_b2": b2_beats_fw,
         "note": (
-            "Baselines B1 and B2 were generated in T7.3 for maize and sorghum (n=266). "
-            "Winter wheat baselines were omitted in T7.3."
+            f"Baselines B1 and B2 evaluated across n={n_paired_b1} paired field-seasons "
+            f"({', '.join(sorted(df.loc[df['b1_ci_crps'].notna(), 'crop'].unique()))})."
         ),
     }
 
@@ -374,6 +441,12 @@ def run_diagnosis() -> dict[str, Any]:
     ww_err = c_m["winter_wheat"]["fw_peak_err_mean"]
     ww_err_ci = c_m["winter_wheat"]["fw_peak_err_ci95"]
 
+    ww_sub = df[df["crop"] == "winter_wheat"]
+    ww_signed_med = float(ww_sub["fw_peak_signed_err"].median()) if not ww_sub.empty else 0.0
+    y_m = {y["category"]: y for y in exploratory["by_year"] if "fw_crps_mean" in y}
+    s_m = {s["category"]: s for s in exploratory["by_field_size"] if "fw_crps_mean" in s}
+    g_m = {g["category"]: g for g in exploratory["by_grade"] if "fw_crps_mean" in g}
+
     crop_finding = (
         f"Skill is highest (lowest CRPS) for sorghum (CRPS {sq_crps:.2f}, "
         f"95% CI [{sq_ci[0]:.2f}, {sq_ci[1]:.2f}]), followed by maize "
@@ -384,31 +457,46 @@ def run_diagnosis() -> dict[str, Any]:
     ww_anomaly_finding = (
         f"Winter wheat displays a severe timing error (peak timing absolute error "
         f"{ww_err:.1f} d, 95% CI [{ww_err_ci[0]:.1f}, {ww_err_ci[1]:.1f}] d; "
-        f"median signed timing error +36.0 d)."
+        f"median signed timing error {ww_signed_med:+.1f} d)."
     )
     ww_anomaly_cause = (
-        "Proposed explanation (not tested): Predicted peak DOY is systematically ~36 days "
-        "later than observed heading in Kansas (late May vs July model peak). Phenology prior "
-        "stage lengths for winter wheat require calibration (proposed as a separate decision)."
+        "Proposed explanation (not tested): Predicted peak DOY is systematically "
+        f"~{abs(ww_signed_med):.0f} days later than observed heading in Kansas "
+        "(late May vs July model peak). Phenology prior stage lengths for winter wheat "
+        "require calibration (proposed as a separate decision)."
     )
+
+    def _fmt(d: dict) -> str:
+        lo, hi = d["fw_crps_ci95"][0], d["fw_crps_ci95"][1]
+        return f"CRPS {d['fw_crps_mean']:.2f}, 95% CI [{lo:.2f}, {hi:.2f}]"
+
     year_finding = (
-        "Skill is higher in 2024 (CRPS 16.47, 95% CI [14.26, 18.90]) than in 2023 "
-        "(CRPS 18.24, 95% CI [15.71, 20.94]) and 2022 (CRPS 18.46, 95% CI [16.39, 20.51]), "
-        "though intervals overlap."
+        f"By year: 2024 ({_fmt(y_m['2024'])}), 2023 ({_fmt(y_m['2023'])}), and 2022 "
+        f"({_fmt(y_m['2022'])}), with overlapping bootstrap intervals."
+        if {"2022", "2023", "2024"}.issubset(y_m)
+        else "Year breakdown computed across held-out 2022-2024 seasons."
     )
     size_finding = (
-        "Skill is comparable across all field size classes (<10 ha: CRPS 19.83, "
-        "95% CI [16.26, 23.48]; 10–50 ha: CRPS 16.27, 95% CI [14.20, 18.53]; "
-        ">50 ha: CRPS 17.30, 95% CI [15.53, 19.39])."
+        f"Skill is comparable across all field size classes (<10 ha: {_fmt(s_m['<10 ha'])}; "
+        f"10-50 ha: {_fmt(s_m['10-50 ha'])}; >50 ha: {_fmt(s_m['>50 ha'])})."
+        if {"<10 ha", "10-50 ha", ">50 ha"}.issubset(s_m)
+        else "Field size breakdown computed across size classes."
     )
+    grade_parts = [
+        f"Grade {gr} exhibits average CRPS of {g_m[gr]['fw_crps_mean']:.2f} "
+        f"[{g_m[gr]['fw_crps_ci95'][0]:.2f}, {g_m[gr]['fw_crps_ci95'][1]:.2f}]"
+        for gr in ("B", "C", "D")
+        if gr in g_m
+    ]
     grade_finding = (
-        "Evidence Grade B exhibits average CRPS of 16.96 [15.04, 18.98] vs Grade C "
-        "of 17.30 [15.37, 19.46] and Grade D of 24.02 [15.95, 30.41], but differences "
-        "are within spatial bootstrap uncertainty."
+        f"Evidence {', '.join(grade_parts)}, with overlapping spatial bootstrap uncertainty."
+        if grade_parts
+        else "Grade breakdown computed across B, C, and D."
     )
+    n_ge20 = int((df["hls_bin"] == ">=20").sum())
     hls_finding = (
-        "All 463 Kansas field-seasons had >=20 clear HLS observations "
-        "(bins <10 and 10–19 had n=0, too few to judge)."
+        f"{n_ge20} of {len(df)} Kansas field-seasons had >=20 clear HLS observations "
+        "(bins <10 and 10-19 had n<20, too few to judge)."
     )
     hls_cause = (
         "Semi-arid clear skies and dual Sentinel-2 / Landsat coverage over tile T14SLH "

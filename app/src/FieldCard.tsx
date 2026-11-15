@@ -364,8 +364,8 @@ export function FieldCard({ pack, regionId }: { pack: FieldPack; regionId: strin
   const current = rows.find((r) => r.option.option_id === "current");
   // history-only states (perennial forage, ...) are not rotation options, so they get no constraint row
   const crops = useMemo(
-    () => [...new Set(pack.options.flatMap((o) => o.sequence))].filter((c) => !isHistoryOnly(c)).sort(),
-    [pack.options],
+    () => [...new Set(pack.options.flatMap((o) => o.sequence))].filter((c) => !isHistoryOnly(c, pack.field.region_id)).sort(),
+    [pack.options, pack.field.region_id],
   );
   const summary = useMemo(
     () => generateFieldSummary(pack, priorities, constraints, scenario),

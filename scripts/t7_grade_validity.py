@@ -31,6 +31,7 @@ from scipy import stats
 
 from fieldwitness.data import labels, power
 from fieldwitness.data.asof import as_of
+from fieldwitness.data.ssurgo_taw import get_field_taw_base
 from fieldwitness.infer import abc, forward, priors, synthetic
 from fieldwitness.physics.forcing import forcing
 
@@ -92,6 +93,7 @@ def compute_cutoff_credibility(pilot: pd.DataFrame, series: pd.DataFrame) -> dic
         lab = lab[lab["crop"].isin(CROPS)]
 
         for fid in pilot["field_id"]:
+            f_taw_base = get_field_taw_base(field_id=str(fid))
             lf = lab[lab["field_id"] == fid]
             seasons = {c: [] for c in CROPS}
             if len(lf):
@@ -105,11 +107,12 @@ def compute_cutoff_credibility(pilot: pd.DataFrame, series: pd.DataFrame) -> dic
                     g = g[(g["doy"] >= 1) & (g["doy"] <= 365)].sort_values("doy")
                     if len(g) < MIN_OBS or rec.year not in wx:
                         continue
+                    f_cfg = {**cfgs[rec.crop], "taw_base_mm": f_taw_base}
                     ref = abc.reference_table(
                         *wx[rec.year],
                         1000,
                         crop_p[rec.crop],
-                        cfgs[rec.crop],
+                        f_cfg,
                         seed=SEED + 1000 + rec.year,
                     )
                     doy, nd = g["doy"].to_numpy(int), g["ndvi"].to_numpy(float)

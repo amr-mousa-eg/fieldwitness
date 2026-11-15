@@ -25,6 +25,7 @@ import yaml
 
 from fieldwitness.data import labels, power
 from fieldwitness.data.asof import as_of
+from fieldwitness.data.ssurgo_taw import get_field_taw_base
 from fieldwitness.infer import abc, forward, priors, synthetic
 from fieldwitness.physics.forcing import forcing
 
@@ -98,13 +99,14 @@ def score(x, o):
     }
 
 
-def simulate(hid, wx_list, doy, crop, rng):
+def simulate(hid, wx_list, doy, crop, rng, taw_base_mm: float | None = None):
+    cfg_run = cfgs[crop] if taw_base_mm is None else {**cfgs[crop], "taw_base_mm": taw_base_mm}
     which = rng.integers(0, len(wx_list), S)
     sim = np.zeros((len(doy), S))
     for w in np.unique(which):
         m = which == w
         h = {k: v[m] for k, v in hid.items()}
-        out = forward.simulate(*wx_list[w], h, crop_p[crop], cfgs[crop])
+        out = forward.simulate(*wx_list[w], h, crop_p[crop], cfg_run)
         sim[:, m] = out["ndvi"][doy - 1, :]
     sim = np.clip(sim + rng.normal(0.0, noise, sim.shape), -1.0, 1.0)
     return stats(doy, sim)
@@ -163,6 +165,7 @@ def get_wx_list(fid: str, crop: str, cfg: dict) -> list[tuple[np.ndarray, np.nda
 rows = []
 for rec in recs:
     fid = rec["field_id"]
+    f_taw_base = get_field_taw_base(field_id=str(fid))
     for s in rec["seasons"]:
         c, y = s["crop"], s["year"]
         doy, nd = obs_series(fid, y)
@@ -173,8 +176,8 @@ for rec in recs:
         b0 = np.array(own if own else crop_pool[c])
         preds = {
             "B0": (b0, b0_src),
-            "B1": (simulate(default_hid, wl, doy, c, rng), "default_hidden"),
-            "B2": (simulate(prior_hid, wl, doy, c, rng), "prior"),
+            "B1": (simulate(default_hid, wl, doy, c, rng, f_taw_base), "default_hidden"),
+            "B2": (simulate(prior_hid, wl, doy, c, rng, f_taw_base), "prior"),
         }
         e = {"field_id": fid, "year": y, "crop": c}
         for name, (st, src) in preds.items():

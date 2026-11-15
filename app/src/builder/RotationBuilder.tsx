@@ -15,7 +15,7 @@ import { emitTour } from "../tourEvents";
 import type { FieldPack, FieldSim3DInputs, Option, Sim3DOption, Tagged } from "../types";
 import { N_SEASONS, type Placed, type RuleContext, cardState, isComplete, legalSequences, optionFor } from "./rules";
 
-const CARD_ORDER = ["maize", "sorghum", "winter_wheat", "cover_crop", "fallow"];
+const CARD_ORDER = ["maize", "sorghum", "winter_wheat", "sunflower", "soybean", "cover_crop", "fallow"];
 const DRAG_PX = 8;
 
 function Tokens({ tokens }: { tokens: SummaryToken[] }) {

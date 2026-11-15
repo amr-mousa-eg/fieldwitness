@@ -14,61 +14,61 @@
       "too_few_to_judge": false,
       "stored": {
         "cov90": {
-          "value": 0.2742,
-          "ci_low": 0.188,
-          "ci_high": 0.3577,
+          "value": 0.2339,
+          "ci_low": 0.1512,
+          "ci_high": 0.3209,
           "n": 124
         },
         "width90": {
-          "value": 18.4568,
-          "ci_low": 17.5235,
-          "ci_high": 19.3631,
+          "value": 18.4747,
+          "ci_low": 17.6347,
+          "ci_high": 19.2905,
           "n": 124
         },
         "winkler90": {
-          "value": 271.6735,
-          "ci_low": 227.6858,
-          "ci_high": 319.9998,
+          "value": 279.8438,
+          "ci_low": 235.853,
+          "ci_high": 328.2307,
           "n": 124
         }
       },
       "cqr_sym": {
         "cov90": {
-          "value": 0.7742,
-          "ci_low": 0.7059,
-          "ci_high": 0.8357,
+          "value": 0.7903,
+          "ci_low": 0.719,
+          "ci_high": 0.8522,
           "n": 124
         },
         "width90": {
-          "value": 60.3713,
-          "ci_low": 59.4171,
-          "ci_high": 61.3212,
+          "value": 62.6489,
+          "ci_low": 61.7057,
+          "ci_high": 63.5817,
           "n": 124
         },
         "winkler90": {
-          "value": 116.1868,
-          "ci_low": 94.0597,
-          "ci_high": 142.6881,
+          "value": 114.7108,
+          "ci_low": 94.4138,
+          "ci_high": 139.8885,
           "n": 124
         }
       },
       "cqr_asym": {
         "cov90": {
-          "value": 0.7661,
-          "ci_low": 0.697,
-          "ci_high": 0.8304,
+          "value": 0.7823,
+          "ci_low": 0.7111,
+          "ci_high": 0.8429,
           "n": 124
         },
         "width90": {
-          "value": 58.1952,
-          "ci_low": 57.069,
-          "ci_high": 59.3884,
+          "value": 59.3353,
+          "ci_low": 58.2087,
+          "ci_high": 60.4107,
           "n": 124
         },
         "winkler90": {
-          "value": 116.7626,
-          "ci_low": 93.323,
-          "ci_high": 145.8146,
+          "value": 114.5583,
+          "ci_low": 92.8235,
+          "ci_high": 143.1993,
           "n": 124
         }
       },
@@ -83,61 +83,61 @@
       "too_few_to_judge": false,
       "stored": {
         "cov90": {
-          "value": 0.1129,
-          "ci_low": 0.0615,
-          "ci_high": 0.1692,
+          "value": 0.1048,
+          "ci_low": 0.0555,
+          "ci_high": 0.1588,
           "n": 124
         },
         "width90": {
-          "value": 10.2363,
-          "ci_low": 10.065,
-          "ci_high": 10.4285,
+          "value": 9.3746,
+          "ci_low": 9.1821,
+          "ci_high": 9.5758,
           "n": 124
         },
         "winkler90": {
-          "value": 577.9782,
-          "ci_low": 475.0894,
-          "ci_high": 697.5276,
+          "value": 585.7294,
+          "ci_low": 484.3222,
+          "ci_high": 703.7974,
           "n": 124
         }
       },
       "cqr_sym": {
         "cov90": {
-          "value": 0.8226,
-          "ci_low": 0.7519,
-          "ci_high": 0.8908,
+          "value": 0.8145,
+          "ci_low": 0.7426,
+          "ci_high": 0.8862,
           "n": 124
         },
         "width90": {
-          "value": 111.4137,
-          "ci_low": 110.7677,
-          "ci_high": 111.9654,
+          "value": 110.5472,
+          "ci_low": 109.9898,
+          "ci_high": 111.0652,
           "n": 124
         },
         "winkler90": {
-          "value": 196.8734,
-          "ci_low": 153.0259,
-          "ci_high": 251.8961,
+          "value": 196.781,
+          "ci_low": 153.0953,
+          "ci_high": 251.7533,
           "n": 124
         }
       },
       "cqr_asym": {
         "cov90": {
-          "value": 0.7581,
-          "ci_low": 0.6812,
-          "ci_high": 0.8265,
+          "value": 0.7742,
+          "ci_low": 0.7,
+          "ci_high": 0.843,
           "n": 124
         },
         "width90": {
-          "value": 122.8887,
-          "ci_low": 121.7283,
-          "ci_high": 123.8425,
+          "value": 123.1222,
+          "ci_low": 122.0763,
+          "ci_high": 124.027,
           "n": 124
         },
         "winkler90": {
-          "value": 212.1952,
-          "ci_low": 172.7548,
-          "ci_high": 260.6157,
+          "value": 210.6867,
+          "ci_low": 172.006,
+          "ci_high": 257.9525,
           "n": 124
         }
       },
@@ -152,61 +152,61 @@
       "too_few_to_judge": false,
       "stored": {
         "cov90": {
-          "value": 0.9274,
-          "ci_low": 0.879,
-          "ci_high": 0.9685,
+          "value": 0.9113,
+          "ci_low": 0.8561,
+          "ci_high": 0.9609,
           "n": 124
         },
         "width90": {
-          "value": 59.4065,
-          "ci_low": 57.0454,
-          "ci_high": 61.8231,
+          "value": 58.3065,
+          "ci_low": 55.8397,
+          "ci_high": 60.8582,
           "n": 124
         },
         "winkler90": {
-          "value": 85.8016,
-          "ci_low": 61.3108,
-          "ci_high": 127.7979,
+          "value": 89.3871,
+          "ci_low": 62.8592,
+          "ci_high": 133.3507,
           "n": 124
         }
       },
       "cqr_sym": {
         "cov90": {
-          "value": 0.9355,
-          "ci_low": 0.8882,
-          "ci_high": 0.976,
+          "value": 0.9597,
+          "ci_low": 0.9237,
+          "ci_high": 0.9915,
           "n": 124
         },
         "width90": {
-          "value": 61.1161,
-          "ci_low": 58.7268,
-          "ci_high": 63.4849,
+          "value": 71.8226,
+          "ci_low": 69.3383,
+          "ci_high": 74.3895,
           "n": 124
         },
         "winkler90": {
-          "value": 86.8661,
-          "ci_low": 62.7829,
-          "ci_high": 128.3666,
+          "value": 95.5,
+          "ci_low": 72.5371,
+          "ci_high": 136.36,
           "n": 124
         }
       },
       "cqr_asym": {
         "cov90": {
-          "value": 0.9355,
-          "ci_low": 0.8879,
-          "ci_high": 0.9764,
+          "value": 0.9677,
+          "ci_low": 0.9328,
+          "ci_high": 0.9926,
           "n": 124
         },
         "width90": {
-          "value": 75.2452,
-          "ci_low": 72.8395,
-          "ci_high": 77.6646,
+          "value": 80.2339,
+          "ci_low": 77.7775,
+          "ci_high": 82.7744,
           "n": 124
         },
         "winkler90": {
-          "value": 100.5113,
-          "ci_low": 76.4443,
-          "ci_high": 141.7278,
+          "value": 104.3952,
+          "ci_low": 80.8938,
+          "ci_high": 144.9359,
           "n": 124
         }
       },
@@ -221,61 +221,61 @@
       "too_few_to_judge": false,
       "stored": {
         "cov90": {
-          "value": 0.3145,
-          "ci_low": 0.2195,
-          "ci_high": 0.3984,
+          "value": 0.3306,
+          "ci_low": 0.2391,
+          "ci_high": 0.4197,
           "n": 124
         },
         "width90": {
-          "value": 23.6129,
-          "ci_low": 21.296,
-          "ci_high": 26.1049,
+          "value": 23.204,
+          "ci_low": 20.9617,
+          "ci_high": 25.5815,
           "n": 124
         },
         "winkler90": {
-          "value": 235.2984,
-          "ci_low": 168.7239,
-          "ci_high": 317.6198,
+          "value": 246.6718,
+          "ci_low": 181.6428,
+          "ci_high": 331.5475,
           "n": 124
         }
       },
       "cqr_sym": {
         "cov90": {
-          "value": 0.8952,
-          "ci_low": 0.8376,
-          "ci_high": 0.9478,
+          "value": 0.9113,
+          "ci_low": 0.8571,
+          "ci_high": 0.958,
           "n": 124
         },
         "width90": {
-          "value": 69.5661,
-          "ci_low": 67.2552,
-          "ci_high": 72.0858,
+          "value": 72.4782,
+          "ci_low": 70.2256,
+          "ci_high": 74.7674,
           "n": 124
         },
         "winkler90": {
-          "value": 138.7597,
-          "ci_low": 84.6644,
-          "ci_high": 206.995,
+          "value": 139.4056,
+          "ci_low": 86.6117,
+          "ci_high": 207.805,
           "n": 124
         }
       },
       "cqr_asym": {
         "cov90": {
-          "value": 0.9032,
-          "ci_low": 0.8492,
-          "ci_high": 0.9508,
+          "value": 0.9113,
+          "ci_low": 0.8655,
+          "ci_high": 0.9558,
           "n": 124
         },
         "width90": {
-          "value": 95.4028,
-          "ci_low": 93.0495,
-          "ci_high": 97.8289,
+          "value": 94.9415,
+          "ci_low": 92.3593,
+          "ci_high": 97.5496,
           "n": 124
         },
         "winkler90": {
-          "value": 148.169,
-          "ci_low": 108.0793,
-          "ci_high": 201.1017,
+          "value": 147.6754,
+          "ci_low": 107.0601,
+          "ci_high": 201.6212,
           "n": 124
         }
       },
@@ -290,61 +290,61 @@
       "too_few_to_judge": false,
       "stored": {
         "cov90": {
-          "value": 0.4366,
-          "ci_low": 0.3446,
-          "ci_high": 0.5232,
+          "value": 0.3732,
+          "ci_low": 0.2803,
+          "ci_high": 0.4645,
           "n": 142
         },
         "width90": {
-          "value": 17.2447,
-          "ci_low": 16.6201,
-          "ci_high": 17.8144,
+          "value": 17.1378,
+          "ci_low": 16.559,
+          "ci_high": 17.6946,
           "n": 142
         },
         "winkler90": {
-          "value": 179.9053,
-          "ci_low": 139.9862,
-          "ci_high": 227.5027,
+          "value": 182.1033,
+          "ci_low": 143.509,
+          "ci_high": 227.7772,
           "n": 142
         }
       },
       "cqr_sym": {
         "cov90": {
-          "value": 0.7042,
-          "ci_low": 0.6143,
-          "ci_high": 0.7892,
+          "value": 0.7183,
+          "ci_low": 0.6344,
+          "ci_high": 0.7986,
           "n": 142
         },
         "width90": {
-          "value": 35.3142,
-          "ci_low": 34.6824,
-          "ci_high": 35.9142,
+          "value": 36.9282,
+          "ci_low": 36.304,
+          "ci_high": 37.5147,
           "n": 142
         },
         "winkler90": {
-          "value": 120.9134,
-          "ci_low": 91.7137,
-          "ci_high": 156.0592,
+          "value": 117.2448,
+          "ci_low": 89.8316,
+          "ci_high": 148.8985,
           "n": 142
         }
       },
       "cqr_asym": {
         "cov90": {
-          "value": 0.662,
-          "ci_low": 0.5755,
-          "ci_high": 0.7434,
+          "value": 0.6972,
+          "ci_low": 0.6099,
+          "ci_high": 0.7786,
           "n": 142
         },
         "width90": {
-          "value": 35.762,
-          "ci_low": 35.1354,
-          "ci_high": 36.3538,
+          "value": 36.672,
+          "ci_low": 36.0885,
+          "ci_high": 37.2352,
           "n": 142
         },
         "winkler90": {
-          "value": 122.8249,
-          "ci_low": 95.3485,
-          "ci_high": 154.5948,
+          "value": 119.694,
+          "ci_low": 93.0363,
+          "ci_high": 151.3056,
           "n": 142
         }
       },
@@ -359,21 +359,21 @@
       "too_few_to_judge": false,
       "stored": {
         "cov90": {
-          "value": 0.0634,
-          "ci_low": 0.0268,
-          "ci_high": 0.1045,
+          "value": 0.0563,
+          "ci_low": 0.0205,
+          "ci_high": 0.0966,
           "n": 142
         },
         "width90": {
-          "value": 6.1218,
-          "ci_low": 5.9118,
-          "ci_high": 6.3284,
+          "value": 5.7419,
+          "ci_low": 5.5532,
+          "ci_high": 5.948,
           "n": 142
         },
         "winkler90": {
-          "value": 559.8331,
-          "ci_low": 446.3932,
-          "ci_high": 697.496,
+          "value": 559.7489,
+          "ci_low": 446.0503,
+          "ci_high": 698.3041,
           "n": 142
         }
       },
@@ -385,35 +385,35 @@
           "n": 142
         },
         "width90": {
-          "value": 127.4035,
-          "ci_low": 126.3216,
-          "ci_high": 128.0893,
+          "value": 127.0236,
+          "ci_low": 125.9379,
+          "ci_high": 127.6938,
           "n": 142
         },
         "winkler90": {
-          "value": 226.6923,
-          "ci_low": 171.5832,
-          "ci_high": 299.4811,
+          "value": 226.6011,
+          "ci_low": 171.5605,
+          "ci_high": 299.2651,
           "n": 142
         }
       },
       "cqr_asym": {
         "cov90": {
           "value": 0.7958,
-          "ci_low": 0.7297,
-          "ci_high": 0.8542,
+          "ci_low": 0.7287,
+          "ci_high": 0.8551,
           "n": 142
         },
         "width90": {
-          "value": 96.7979,
-          "ci_low": 95.4714,
-          "ci_high": 97.8134,
+          "value": 97.5676,
+          "ci_low": 96.2496,
+          "ci_high": 98.5351,
           "n": 142
         },
         "winkler90": {
-          "value": 213.3894,
-          "ci_low": 162.4049,
-          "ci_high": 279.7923,
+          "value": 213.1732,
+          "ci_low": 162.9324,
+          "ci_high": 278.9661,
           "n": 142
         }
       },
@@ -429,60 +429,60 @@
       "stored": {
         "cov90": {
           "value": 0.8451,
-          "ci_low": 0.7817,
-          "ci_high": 0.9,
+          "ci_low": 0.7746,
+          "ci_high": 0.9048,
           "n": 142
         },
         "width90": {
-          "value": 48.9789,
-          "ci_low": 47.4526,
-          "ci_high": 50.5838,
+          "value": 48.1771,
+          "ci_low": 46.6253,
+          "ci_high": 49.6355,
           "n": 142
         },
         "winkler90": {
-          "value": 112.1479,
-          "ci_low": 81.0338,
-          "ci_high": 152.6376,
+          "value": 112.325,
+          "ci_low": 79.5962,
+          "ci_high": 156.6923,
           "n": 142
         }
       },
       "cqr_sym": {
         "cov90": {
-          "value": 0.8732,
-          "ci_low": 0.8113,
-          "ci_high": 0.9272,
+          "value": 0.8662,
+          "ci_low": 0.7971,
+          "ci_high": 0.9252,
           "n": 142
         },
         "width90": {
-          "value": 62.9493,
-          "ci_low": 61.4162,
-          "ci_high": 64.5547,
+          "value": 58.1771,
+          "ci_low": 56.6253,
+          "ci_high": 59.6355,
           "n": 142
         },
         "winkler90": {
-          "value": 105.8859,
-          "ci_low": 80.0562,
-          "ci_high": 142.4278,
+          "value": 106.832,
+          "ci_low": 78.815,
+          "ci_high": 146.2072,
           "n": 142
         }
       },
       "cqr_asym": {
         "cov90": {
-          "value": 0.8944,
-          "ci_low": 0.8446,
-          "ci_high": 0.9375,
+          "value": 0.8803,
+          "ci_low": 0.8138,
+          "ci_high": 0.9338,
           "n": 142
         },
         "width90": {
-          "value": 99.662,
-          "ci_low": 98.07,
-          "ci_high": 101.3173,
+          "value": 98.9588,
+          "ci_low": 97.4318,
+          "ci_high": 100.4452,
           "n": 142
         },
         "winkler90": {
-          "value": 127.5282,
-          "ci_low": 112.8508,
-          "ci_high": 145.9593,
+          "value": 130.5715,
+          "ci_low": 114.086,
+          "ci_high": 151.2417,
           "n": 142
         }
       },
@@ -497,21 +497,21 @@
       "too_few_to_judge": false,
       "stored": {
         "cov90": {
-          "value": 0.662,
-          "ci_low": 0.58,
-          "ci_high": 0.7464,
+          "value": 0.6408,
+          "ci_low": 0.5608,
+          "ci_high": 0.7206,
           "n": 142
         },
         "width90": {
-          "value": 28.2979,
-          "ci_low": 26.2823,
-          "ci_high": 30.2126,
+          "value": 28.1676,
+          "ci_low": 26.224,
+          "ci_high": 29.973,
           "n": 142
         },
         "winkler90": {
-          "value": 351.3049,
-          "ci_low": 236.6727,
-          "ci_high": 492.7932,
+          "value": 351.2944,
+          "ci_low": 235.6789,
+          "ci_high": 492.8868,
           "n": 142
         }
       },
@@ -523,35 +523,35 @@
           "n": 142
         },
         "width90": {
-          "value": 116.0303,
-          "ci_low": 113.994,
-          "ci_high": 118.0206,
+          "value": 113.6768,
+          "ci_low": 111.7683,
+          "ci_high": 115.6367,
           "n": 142
         },
         "winkler90": {
-          "value": 283.3261,
-          "ci_low": 203.0529,
-          "ci_high": 391.5172,
+          "value": 283.7754,
+          "ci_low": 203.3475,
+          "ci_high": 392.9387,
           "n": 142
         }
       },
       "cqr_asym": {
         "cov90": {
-          "value": 0.8873,
-          "ci_low": 0.8345,
-          "ci_high": 0.9362,
+          "value": 0.8944,
+          "ci_low": 0.8414,
+          "ci_high": 0.942,
           "n": 142
         },
         "width90": {
-          "value": 113.6641,
-          "ci_low": 111.587,
-          "ci_high": 115.8165,
+          "value": 111.6563,
+          "ci_low": 109.6804,
+          "ci_high": 113.5661,
           "n": 142
         },
         "winkler90": {
-          "value": 233.3613,
-          "ci_low": 173.1143,
-          "ci_high": 314.7204,
+          "value": 234.4662,
+          "ci_low": 172.6182,
+          "ci_high": 317.4947,
           "n": 142
         }
       },
@@ -566,61 +566,61 @@
       "too_few_to_judge": false,
       "stored": {
         "cov90": {
-          "value": 0.2386,
-          "ci_low": 0.185,
-          "ci_high": 0.3056,
+          "value": 0.2538,
+          "ci_low": 0.194,
+          "ci_high": 0.3177,
           "n": 197
         },
         "width90": {
-          "value": 22.4694,
-          "ci_low": 21.8758,
-          "ci_high": 23.0897,
+          "value": 23.2912,
+          "ci_low": 22.7159,
+          "ci_high": 23.9231,
           "n": 197
         },
         "winkler90": {
-          "value": 317.9957,
-          "ci_low": 280.7316,
-          "ci_high": 359.1133,
+          "value": 319.0366,
+          "ci_low": 281.459,
+          "ci_high": 359.7111,
           "n": 197
         }
       },
       "cqr_sym": {
         "cov90": {
-          "value": 0.736,
-          "ci_low": 0.6719,
-          "ci_high": 0.7969,
+          "value": 0.7614,
+          "ci_low": 0.6971,
+          "ci_high": 0.8216,
           "n": 197
         },
         "width90": {
-          "value": 72.1547,
-          "ci_low": 71.5553,
-          "ci_high": 72.7746,
+          "value": 74.678,
+          "ci_low": 74.1025,
+          "ci_high": 75.31,
           "n": 197
         },
         "winkler90": {
-          "value": 121.9803,
-          "ci_low": 105.5703,
-          "ci_high": 141.8257,
+          "value": 121.845,
+          "ci_low": 105.366,
+          "ci_high": 141.4465,
           "n": 197
         }
       },
       "cqr_asym": {
         "cov90": {
-          "value": 0.6853,
-          "ci_low": 0.6161,
-          "ci_high": 0.75,
+          "value": 0.6954,
+          "ci_low": 0.6313,
+          "ci_high": 0.7581,
           "n": 197
         },
         "width90": {
-          "value": 60.0993,
-          "ci_low": 59.499,
-          "ci_high": 60.7364,
+          "value": 61.2172,
+          "ci_low": 60.653,
+          "ci_high": 61.834,
           "n": 197
         },
         "winkler90": {
-          "value": 120.379,
-          "ci_low": 101.0382,
-          "ci_high": 146.0479,
+          "value": 114.8939,
+          "ci_low": 94.7972,
+          "ci_high": 139.6166,
           "n": 197
         }
       },
@@ -635,21 +635,21 @@
       "too_few_to_judge": false,
       "stored": {
         "cov90": {
-          "value": 0.0457,
-          "ci_low": 0.0162,
-          "ci_high": 0.0824,
+          "value": 0.0305,
+          "ci_low": 0.0053,
+          "ci_high": 0.065,
           "n": 197
         },
         "width90": {
-          "value": 10.0411,
-          "ci_low": 9.7188,
-          "ci_high": 10.3921,
+          "value": 8.2817,
+          "ci_low": 7.9701,
+          "ci_high": 8.5792,
           "n": 197
         },
         "winkler90": {
-          "value": 822.9244,
-          "ci_low": 726.7942,
-          "ci_high": 921.3077,
+          "value": 831.8401,
+          "ci_low": 734.7641,
+          "ci_high": 929.5593,
           "n": 197
         }
       },
@@ -661,35 +661,35 @@
           "n": 197
         },
         "width90": {
-          "value": 225.6046,
-          "ci_low": 225.229,
-          "ci_high": 226.0385,
+          "value": 223.8452,
+          "ci_low": 223.4858,
+          "ci_high": 224.2419,
           "n": 197
         },
         "winkler90": {
-          "value": 244.1782,
-          "ci_low": 230.8163,
-          "ci_high": 261.0123,
+          "value": 242.4239,
+          "ci_low": 229.0485,
+          "ci_high": 259.1394,
           "n": 197
         }
       },
       "cqr_asym": {
         "cov90": {
-          "value": 0.8934,
-          "ci_low": 0.8535,
-          "ci_high": 0.9327,
+          "value": 0.8883,
+          "ci_low": 0.8485,
+          "ci_high": 0.9263,
           "n": 197
         },
         "width90": {
-          "value": 189.069,
-          "ci_low": 188.5453,
-          "ci_high": 189.6153,
+          "value": 189.5838,
+          "ci_low": 189.1331,
+          "ci_high": 190.0213,
           "n": 197
         },
         "winkler90": {
-          "value": 246.8761,
-          "ci_low": 219.864,
-          "ci_high": 272.3013,
+          "value": 246.2081,
+          "ci_low": 220.4027,
+          "ci_high": 272.1835,
           "n": 197
         }
       },
@@ -705,60 +705,60 @@
       "stored": {
         "cov90": {
           "value": 0.3452,
-          "ci_low": 0.2727,
-          "ci_high": 0.4205,
+          "ci_low": 0.2732,
+          "ci_high": 0.418,
           "n": 197
         },
         "width90": {
-          "value": 85.7657,
-          "ci_low": 84.2619,
-          "ci_high": 87.2908,
+          "value": 85.4076,
+          "ci_low": 84.0273,
+          "ci_high": 86.7768,
           "n": 197
         },
         "winkler90": {
-          "value": 672.6896,
-          "ci_low": 544.3562,
-          "ci_high": 809.4295,
+          "value": 670.4025,
+          "ci_low": 541.9783,
+          "ci_high": 808.6959,
           "n": 197
         }
       },
       "cqr_sym": {
         "cov90": {
-          "value": 0.8071,
-          "ci_low": 0.75,
-          "ci_high": 0.8646,
+          "value": 0.7817,
+          "ci_low": 0.7182,
+          "ci_high": 0.849,
           "n": 197
         },
         "width90": {
-          "value": 174.3576,
-          "ci_low": 172.9572,
-          "ci_high": 175.8767,
+          "value": 164.8061,
+          "ci_low": 163.4351,
+          "ci_high": 166.1204,
           "n": 197
         },
         "winkler90": {
-          "value": 409.9769,
-          "ci_low": 324.1968,
-          "ci_high": 503.0509,
+          "value": 427.7655,
+          "ci_low": 335.9281,
+          "ci_high": 526.6361,
           "n": 197
         }
       },
       "cqr_asym": {
         "cov90": {
           "value": 0.7817,
-          "ci_low": 0.7179,
-          "ci_high": 0.8432,
+          "ci_low": 0.7204,
+          "ci_high": 0.8424,
           "n": 197
         },
         "width90": {
-          "value": 139.932,
-          "ci_low": 138.4495,
-          "ci_high": 141.3763,
+          "value": 139.6107,
+          "ci_low": 138.1599,
+          "ci_high": 141.0025,
           "n": 197
         },
         "winkler90": {
-          "value": 423.3381,
-          "ci_low": 320.6143,
-          "ci_high": 534.6088,
+          "value": 432.1538,
+          "ci_low": 329.1177,
+          "ci_high": 540.4975,
           "n": 197
         }
       },
@@ -773,65 +773,65 @@
       "too_few_to_judge": false,
       "stored": {
         "cov90": {
-          "value": 0.2081,
-          "ci_low": 0.1535,
-          "ci_high": 0.2637,
+          "value": 0.1878,
+          "ci_low": 0.1344,
+          "ci_high": 0.2428,
           "n": 197
         },
         "width90": {
-          "value": 38.651,
-          "ci_low": 36.7718,
-          "ci_high": 40.4751,
+          "value": 35.8482,
+          "ci_low": 33.8214,
+          "ci_high": 37.8406,
           "n": 197
         },
         "winkler90": {
-          "value": 1082.9556,
-          "ci_low": 945.0772,
-          "ci_high": 1211.0413,
+          "value": 1083.4777,
+          "ci_low": 948.4234,
+          "ci_high": 1211.2579,
           "n": 197
         }
       },
       "cqr_sym": {
         "cov90": {
-          "value": 0.8985,
-          "ci_low": 0.8526,
-          "ci_high": 0.9412,
+          "value": 0.8629,
+          "ci_low": 0.8075,
+          "ci_high": 0.9163,
           "n": 197
         },
         "width90": {
-          "value": 234.6383,
-          "ci_low": 232.7628,
-          "ci_high": 236.4597,
+          "value": 227.6482,
+          "ci_low": 225.6214,
+          "ci_high": 229.6406,
           "n": 197
         },
         "winkler90": {
-          "value": 274.9277,
-          "ci_low": 250.5888,
-          "ci_high": 305.8654,
+          "value": 274.1457,
+          "ci_low": 247.171,
+          "ci_high": 308.3714,
           "n": 197
         }
       },
       "cqr_asym": {
         "cov90": {
-          "value": 0.8579,
-          "ci_low": 0.8063,
-          "ci_high": 0.9063,
+          "value": 0.802,
+          "ci_low": 0.7465,
+          "ci_high": 0.8595,
           "n": 197
         },
         "width90": {
-          "value": 155.2033,
-          "ci_low": 153.3666,
-          "ci_high": 156.8651,
+          "value": 151.4551,
+          "ci_low": 149.4726,
+          "ci_high": 153.4212,
           "n": 197
         },
         "winkler90": {
-          "value": 231.3251,
-          "ci_low": 179.844,
-          "ci_high": 291.2601,
+          "value": 236.1201,
+          "ci_low": 182.9719,
+          "ci_high": 297.9971,
           "n": 197
         }
       },
-      "gate_85_95": "pass",
+      "gate_85_95": "fail",
       "gate_80_floor": "pass"
     }
   ]

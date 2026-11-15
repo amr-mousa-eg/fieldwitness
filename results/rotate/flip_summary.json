@@ -5,70 +5,70 @@
   "presets": {
     "balanced": {
       "mean_flip_share": {
-        "taw_mm": 0.187,
-        "kc_scale": 0.188,
-        "budget_mm": 0.253
+        "taw_mm": 0.107,
+        "kc_scale": 0.136,
+        "budget_mm": 0.185
       },
       "most_influential_input": {
-        "budget_mm": 89,
-        "kc_scale": 44,
-        "taw_mm": 67
+        "budget_mm": 91,
+        "kc_scale": 46,
+        "taw_mm": 63
       },
       "fields_with_any_flip_in_grid": {
-        "taw_mm": 129,
-        "kc_scale": 186,
-        "budget_mm": 187
+        "taw_mm": 43,
+        "kc_scale": 198,
+        "budget_mm": 177
       }
     },
     "water_saver": {
       "mean_flip_share": {
-        "taw_mm": 0.134,
-        "kc_scale": 0.045,
-        "budget_mm": 0.171
+        "taw_mm": 0.204,
+        "kc_scale": 0.089,
+        "budget_mm": 0.112
       },
       "most_influential_input": {
-        "budget_mm": 99,
-        "taw_mm": 94,
-        "kc_scale": 7
+        "kc_scale": 17,
+        "budget_mm": 52,
+        "taw_mm": 131
       },
       "fields_with_any_flip_in_grid": {
-        "taw_mm": 57,
-        "kc_scale": 101,
-        "budget_mm": 158
+        "taw_mm": 108,
+        "kc_scale": 172,
+        "budget_mm": 91
       }
     },
     "yield_first": {
       "mean_flip_share": {
-        "taw_mm": 0.196,
-        "kc_scale": 0.101,
-        "budget_mm": 0.089
+        "taw_mm": 0.066,
+        "kc_scale": 0.072,
+        "budget_mm": 0.049
       },
       "most_influential_input": {
-        "taw_mm": 156,
-        "budget_mm": 21,
-        "kc_scale": 23
+        "kc_scale": 41,
+        "budget_mm": 25,
+        "taw_mm": 134
       },
       "fields_with_any_flip_in_grid": {
-        "taw_mm": 124,
-        "kc_scale": 173,
-        "budget_mm": 105
+        "taw_mm": 61,
+        "kc_scale": 156,
+        "budget_mm": 58
       }
     },
     "resilient": {
       "mean_flip_share": {
-        "taw_mm": 0.263,
-        "kc_scale": 0.186,
-        "budget_mm": 0.151
+        "taw_mm": 0.184,
+        "kc_scale": 0.19,
+        "budget_mm": 0.116
       },
       "most_influential_input": {
-        "taw_mm": 125,
-        "budget_mm": 40,
-        "kc_scale": 35
+        "kc_scale": 66,
+        "taw_mm": 93,
+        "budget_mm": 41
       },
       "fields_with_any_flip_in_grid": {
-        "taw_mm": 141,
-        "kc_scale": 194,
-        "budget_mm": 158
+        "taw_mm": 118,
+        "kc_scale": 195,
+        "budget_mm": 105
       }
     }
   }

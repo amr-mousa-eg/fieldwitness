@@ -15,10 +15,10 @@
    "metric": "sos",
    "n": 463,
    "scores": {
-    "crps": 37.86301717062636,
-    "covered50": 0.21166306695464362,
-    "covered90": 0.3758099352051836,
-    "mae_median": 42.076673866090715
+    "crps": 37.90912823974082,
+    "covered50": 0.20302375809935205,
+    "covered90": 0.3650107991360691,
+    "mae_median": 42.01295896328294
    }
   },
   {
@@ -27,10 +27,10 @@
    "metric": "peak",
    "n": 463,
    "scores": {
-    "crps": 27.477997786177106,
-    "covered50": 0.43844492440604754,
-    "covered90": 0.6544276457883369,
-    "mae_median": 34.03131749460043
+    "crps": 27.30682559395248,
+    "covered50": 0.39956803455723544,
+    "covered90": 0.6501079913606912,
+    "mae_median": 33.46436285097192
    }
   },
   {
@@ -39,11 +39,11 @@
    "metric": "canopy_integral",
    "n": 463,
    "scores": {
-    "crps": 17.53850775352039,
-    "covered50": 0.16414686825053995,
-    "covered90": 0.30885529157667385,
-    "mae_median": 20.345229285684994,
-    "spearman": 0.25453011843384643
+    "crps": 17.864245166894356,
+    "covered50": 0.14038876889848811,
+    "covered90": 0.28509719222462204,
+    "mae_median": 20.769051721837897,
+    "spearman": 0.26229051734904824
    }
   },
   {
@@ -52,10 +52,10 @@
    "metric": "cover_days",
    "n": 463,
    "scores": {
-    "crps": 36.00193110151187,
-    "covered50": 0.032397408207343416,
-    "covered90": 0.06911447084233262,
-    "mae_median": 37.36393088552916
+    "crps": 36.08610966522678,
+    "covered50": 0.03455723542116631,
+    "covered90": 0.058315334773218146,
+    "mae_median": 37.27753779697624
    }
   },
   {
@@ -64,10 +64,10 @@
    "metric": "sos",
    "n": 463,
    "scores": {
-    "crps": 38.03460145788337,
-    "covered50": 0.21166306695464362,
-    "covered90": 0.38444924406047515,
-    "mae_median": 42.144708423326136
+    "crps": 37.199379157667394,
+    "covered50": 0.2267818574514039,
+    "covered90": 0.3801295896328294,
+    "mae_median": 41.05183585313175
    }
   },
   {
@@ -76,10 +76,10 @@
    "metric": "peak",
    "n": 463,
    "scores": {
-    "crps": 34.591402483801296,
-    "covered50": 0.2915766738660907,
-    "covered90": 0.4924406047516199,
-    "mae_median": 39.21274298056156
+    "crps": 32.93231857451404,
+    "covered50": 0.27213822894168466,
+    "covered90": 0.5010799136069114,
+    "mae_median": 38.16522678185745
    }
   },
   {
@@ -88,11 +88,11 @@
    "metric": "canopy_integral",
    "n": 463,
    "scores": {
-    "crps": 17.80448436252326,
-    "covered50": 0.10367170626349892,
-    "covered90": 0.22462203023758098,
-    "mae_median": 19.842341324537735,
-    "spearman": 0.2352552541515097
+    "crps": 17.888564056924192,
+    "covered50": 0.1101511879049676,
+    "covered90": 0.2203023758099352,
+    "mae_median": 19.955527755501354,
+    "spearman": 0.25333958527478856
    }
   },
   {
@@ -101,10 +101,10 @@
    "metric": "cover_days",
    "n": 463,
    "scores": {
-    "crps": 36.13202073434125,
-    "covered50": 0.023758099352051837,
-    "covered90": 0.06479481641468683,
-    "mae_median": 37.47948164146868
+    "crps": 36.11844638228941,
+    "covered50": 0.02591792656587473,
+    "covered90": 0.058315334773218146,
+    "mae_median": 37.36933045356371
    }
   }
  ],
@@ -113,8 +113,8 @@
  "extra": {
   "n_field_seasons": 463,
   "fit_source": {
-   "own_crop_posterior": 377,
-   "other_crop_posterior": 61,
+   "own_crop_posterior": 372,
+   "other_crop_posterior": 66,
    "prior": 25
   },
   "crop": {
@@ -125,30 +125,29 @@
   "spearman_by_year": {
    "forecast_2022": {
     "n": 134,
-    "spearman": 0.27828561239639626
+    "spearman": 0.285342710008853
    },
    "forecast_2023": {
     "n": 129,
-    "spearman": -0.0714781857645289
+    "spearman": -0.058368738819320226
    },
    "forecast_2024": {
     "n": 200,
-    "spearman": 0.40276547017383385
+    "spearman": 0.4071337336937572
    },
    "forced_2022": {
     "n": 134,
-    "spearman": 0.27410351014810785
+    "spearman": 0.29235064321353815
    },
    "forced_2023": {
     "n": 129,
-    "spearman": -0.006814624329159214
+    "spearman": -0.015063191892892472
    },
    "forced_2024": {
     "n": 200,
-    "spearman": 0.39776074233922726
+    "spearman": 0.4044126636262021
    }
   },
-  "tag": "D (model) vs O (HLS) statistics; labels tag E",
-  "caveats": "conditional on the observed CSB crop; maize/sorghum only; fit years <= 2021 only; baselines B0-B3 not yet run"
+  "tag": "D (model) vs O (HLS) statistics; SSURGO/SoilGrids soil E; labels E"
  }
 }

@@ -72,7 +72,7 @@ function blob(rx: number, ry: number, rz: number, y: number, ws = 6, hs = 5): TH
   return g;
 }
 
-/** Plant body (stalk + leaves) at unit height. Leaves alternate sides like grasses. */
+/** Plant body (stalk + leaves) at unit height. Leaves alternate sides like grasses/broadleaves. */
 export function plantBody(crop: Exclude<CropKind, "fallow">): THREE.BufferGeometry {
   if (crop === "winter_wheat") {
     // A clump of three thin tillers with narrow basal leaves.
@@ -90,6 +90,30 @@ export function plantBody(crop: Exclude<CropKind, "fallow">): THREE.BufferGeomet
     });
     return merge(parts);
   }
+  if (crop === "sunflower") {
+    const parts: THREE.BufferGeometry[] = [stalk(0.025, 0.015, 0, 0.96, 5)];
+    for (let i = 0; i < 6; i++) {
+      const t = i / 5;
+      const y = 0.2 + t * 0.58;
+      const yaw = i * 2.1;
+      parts.push(leaf(y, yaw, 0.34 * (1 - 0.3 * t), 0.15 * (1 - 0.2 * t), 0.16, 0.24, 4));
+    }
+    return merge(parts);
+  }
+  if (crop === "soybean") {
+    const parts: THREE.BufferGeometry[] = [
+      stalk(0.014, 0.008, 0, 0.88, 4),
+      stalk(0.01, 0.006, 0.2, 0.78, 3, 0.18, 0.14),
+      stalk(0.01, 0.006, 0.25, 0.75, 3, -0.16, -0.15),
+    ];
+    for (let i = 0; i < 8; i++) {
+      const t = i / 7;
+      const y = 0.22 + t * 0.58;
+      const yaw = i * 2.3;
+      parts.push(leaf(y, yaw, 0.22, 0.11, 0.1, 0.14, 3));
+    }
+    return merge(parts);
+  }
   const isMaize = crop === "maize";
   const parts: THREE.BufferGeometry[] = [stalk(isMaize ? 0.028 : 0.024, 0.014, 0, 1, 5)];
   const nLeaves = isMaize ? 7 : 6;
@@ -104,7 +128,7 @@ export function plantBody(crop: Exclude<CropKind, "fallow">): THREE.BufferGeomet
   return merge(parts);
 }
 
-/** Head geometry at unit height: maize tassel + ear, wheat ears, sorghum panicle. */
+/** Head geometry at unit height: maize tassel + ear, wheat ears, sorghum panicle, sunflower disc, soybean pods. */
 export function plantHead(crop: Exclude<CropKind, "fallow">): THREE.BufferGeometry {
   if (crop === "winter_wheat") {
     const tips: [number, number, number][] = [
@@ -133,6 +157,29 @@ export function plantHead(crop: Exclude<CropKind, "fallow">): THREE.BufferGeomet
     ear.translate(0.05, 0.52, 0);
     return merge([...tassel, spike, ear]);
   }
+  if (crop === "sunflower") {
+    const neck = stalk(0.014, 0.01, 0.94, 1.0, 4);
+    const disc = blob(0.14, 0.04, 0.14, 0, 8, 4);
+    disc.rotateX(0.45);
+    disc.translate(0, 1.02, 0.03);
+    return merge([neck, disc]);
+  }
+  if (crop === "soybean") {
+    const pods: [number, number, number][] = [
+      [0.04, 0.02, 0.5],
+      [-0.04, 0.01, 0.58],
+      [0.02, -0.04, 0.66],
+      [-0.03, -0.03, 0.44],
+    ];
+    return merge(
+      pods.map(([x, z, y]) => {
+        const g = blob(0.018, 0.045, 0.018, 0, 4, 3);
+        g.rotateZ(x > 0 ? -0.35 : 0.35);
+        g.translate(x, y, z);
+        return g;
+      }),
+    );
+  }
   // sorghum: compact oval panicle on a short peduncle
   return merge([stalk(0.01, 0.008, 0.95, 1.02, 3), blob(0.06, 0.1, 0.06, 1.08, 6, 4)]);
 }
@@ -145,16 +192,16 @@ export function weedRosette(): THREE.BufferGeometry {
 
 /**
  * Root system template at unit depth (y from 0 to −1) as line segments.
- * Maize and sorghum: a few thick-looking descending roots with laterals. Wheat: a fibrous mat.
+ * Maize and sorghum: a few thick-looking descending roots with laterals. Wheat/soybean: fibrous/nodulated strands.
  */
 export function rootTemplate(crop: Exclude<CropKind, "fallow">, seed: number): THREE.BufferGeometry {
   const rnd = seededRandom(seed);
   const pts: number[] = [];
   const seg = (a: number[], b: number[]) => pts.push(...a, ...b);
-  const strands = crop === "winter_wheat" ? 9 : 5;
+  const strands = crop === "winter_wheat" || crop === "soybean" ? 9 : 5;
   for (let s = 0; s < strands; s++) {
     const yaw = (s / strands) * Math.PI * 2 + rnd() * 0.5;
-    const spread = crop === "winter_wheat" ? 0.08 + rnd() * 0.06 : 0.12 + rnd() * 0.1;
+    const spread = crop === "winter_wheat" || crop === "soybean" ? 0.08 + rnd() * 0.06 : 0.12 + rnd() * 0.1;
     let prev = [0, 0, 0];
     const steps = 5;
     for (let k = 1; k <= steps; k++) {

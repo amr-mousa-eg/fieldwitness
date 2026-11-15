@@ -91,7 +91,7 @@ describe("Methods Diagram (Phase 12, Item 9)", () => {
     expect(strings["methods.limits.4"]).toContain("0 of 32");
     const hindcast = boxText("hindcast_check");
     expect(hindcast).toContain("Split-CQR");
-    expect(hindcast).toContain("85.8–90.3%");
+    expect(hindcast).toContain("86.3–91.1%");
     expect(hindcast).toContain("Beats baselines B1/B2 overall");
     expect(hindcast).toContain("31 Dec 2021");
     expect(boxText("w1_physics")).toContain("FAO-56");

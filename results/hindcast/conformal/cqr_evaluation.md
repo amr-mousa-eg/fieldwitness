@@ -5,15 +5,15 @@ Spatial blocks: `109` (10 km grid), 1,000 block bootstrap resamples (`seed=42`).
 
 | Crop | Metric | n | Stored Cov90 | Sym CQR Cov90 | Asym CQR Cov90 | Stored Winkler | Sym Winkler | Asym Winkler | Gate (85–95%) | Gate (>=80%) |
 |---|---|---|---|---|---|---|---|---|---|---|
-| maize | canopy_integral | 124 | 27.4% | 77.4% | 76.6% | 271.7 | 116.2 | 116.8 | **fail** | **fail** |
-| maize | cover_days | 124 | 11.3% | 82.3% | 75.8% | 578.0 | 196.9 | 212.2 | **fail** | **fail** |
-| maize | peak | 124 | 92.7% | 93.5% | 93.5% | 85.8 | 86.9 | 100.5 | **fail** | **fail** |
-| maize | sos | 124 | 31.4% | 89.5% | 90.3% | 235.3 | 138.8 | 148.2 | **pass** | **pass** |
-| sorghum | canopy_integral | 142 | 43.7% | 70.4% | 66.2% | 179.9 | 120.9 | 122.8 | **fail** | **fail** |
-| sorghum | cover_days | 142 | 6.3% | 88.7% | 79.6% | 559.8 | 226.7 | 213.4 | **fail** | **fail** |
-| sorghum | peak | 142 | 84.5% | 87.3% | 89.4% | 112.1 | 105.9 | 127.5 | **fail** | **fail** |
-| sorghum | sos | 142 | 66.2% | 89.4% | 88.7% | 351.3 | 283.3 | 233.4 | **pass** | **pass** |
-| winter_wheat | canopy_integral | 197 | 23.9% | 73.6% | 68.5% | 318.0 | 122.0 | 120.4 | **fail** | **fail** |
-| winter_wheat | cover_days | 197 | 4.6% | 95.9% | 89.3% | 822.9 | 244.2 | 246.9 | **pass** | **pass** |
-| winter_wheat | peak | 197 | 34.5% | 80.7% | 78.2% | 672.7 | 410.0 | 423.3 | **fail** | **fail** |
-| winter_wheat | sos | 197 | 20.8% | 89.8% | 85.8% | 1083.0 | 274.9 | 231.3 | **pass** | **pass** |
+| maize | canopy_integral | 124 | 23.4% | 79.0% | 78.2% | 279.8 | 114.7 | 114.6 | **fail** | **fail** |
+| maize | cover_days | 124 | 10.5% | 81.5% | 77.4% | 585.7 | 196.8 | 210.7 | **fail** | **fail** |
+| maize | peak | 124 | 91.1% | 96.0% | 96.8% | 89.4 | 95.5 | 104.4 | **fail** | **fail** |
+| maize | sos | 124 | 33.1% | 91.1% | 91.1% | 246.7 | 139.4 | 147.7 | **pass** | **pass** |
+| sorghum | canopy_integral | 142 | 37.3% | 71.8% | 69.7% | 182.1 | 117.2 | 119.7 | **fail** | **fail** |
+| sorghum | cover_days | 142 | 5.6% | 88.7% | 79.6% | 559.7 | 226.6 | 213.2 | **fail** | **fail** |
+| sorghum | peak | 142 | 84.5% | 86.6% | 88.0% | 112.3 | 106.8 | 130.6 | **fail** | **fail** |
+| sorghum | sos | 142 | 64.1% | 89.4% | 89.4% | 351.3 | 283.8 | 234.5 | **pass** | **pass** |
+| winter_wheat | canopy_integral | 197 | 25.4% | 76.1% | 69.5% | 319.0 | 121.8 | 114.9 | **fail** | **fail** |
+| winter_wheat | cover_days | 197 | 3.0% | 95.9% | 88.8% | 831.8 | 242.4 | 246.2 | **pass** | **pass** |
+| winter_wheat | peak | 197 | 34.5% | 78.2% | 78.2% | 670.4 | 427.8 | 432.2 | **fail** | **fail** |
+| winter_wheat | sos | 197 | 18.8% | 86.3% | 80.2% | 1083.5 | 274.1 | 236.1 | **fail** | **pass** |

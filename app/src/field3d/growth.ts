@@ -5,7 +5,7 @@
 
 import { isHistoryOnly } from "../seasons";
 
-export type CropKind = "maize" | "winter_wheat" | "sorghum" | "fallow";
+export type CropKind = "maize" | "winter_wheat" | "sorghum" | "sunflower" | "soybean" | "fallow";
 
 export interface QualityTier {
   name: "high" | "low";
@@ -56,14 +56,23 @@ export function pickQuality(viewportWidth: number, hardwareConcurrency: number |
 /** Plants per side for a crop; parts per plant (stalk + head) count against the tier cap. */
 export function plantsPerSide(crop: CropKind, tier: QualityTier): number {
   if (crop === "fallow") return 0;
-  const wanted = tier.name === "high" ? { maize: 11, sorghum: 12, winter_wheat: 20 }[crop] : { maize: 6, sorghum: 6, winter_wheat: 9 }[crop];
+  const wanted =
+    tier.name === "high"
+      ? { maize: 11, sorghum: 12, winter_wheat: 20, sunflower: 10, soybean: 16 }[crop]
+      : { maize: 6, sorghum: 6, winter_wheat: 9, sunflower: 5, soybean: 8 }[crop];
   const partsPerPlant = 2; // body + head instance
   const capPerSide = Math.floor(Math.sqrt(tier.maxPlantInstances / partsPerPlant));
   return Math.min(wanted, capPerSide);
 }
 
 export function toCropKind(crop: string | undefined): CropKind {
-  return crop === "maize" || crop === "winter_wheat" || crop === "sorghum" ? crop : "fallow";
+  return crop === "maize" ||
+    crop === "winter_wheat" ||
+    crop === "sorghum" ||
+    crop === "sunflower" ||
+    crop === "soybean"
+    ? crop
+    : "fallow";
 }
 
 /**
@@ -71,9 +80,14 @@ export function toCropKind(crop: string | undefined): CropKind {
  * year; weeks where the pack draws a crop (e.g. winter wheat sown in autumn for the next season)
  * keep that crop.
  */
-export function historyOnlyKey(sequence: readonly string[], crops: readonly string[], w: number): string | null {
+export function historyOnlyKey(
+  sequence: readonly string[],
+  crops: readonly string[],
+  w: number,
+  regionId?: string,
+): string | null {
   const key = sequence[Math.min(sequence.length - 1, Math.floor(w / 52))];
-  if (!key || !isHistoryOnly(key)) return null;
+  if (!key || !isHistoryOnly(key, regionId)) return null;
   return toCropKind(crops[w]) === "fallow" ? key : null;
 }
 
@@ -94,7 +108,7 @@ export function seasonGrowth(crops: string[], stages: string[], canopy: number[]
   return clamp01(g);
 }
 
-/** Heads (tassel/ear, wheat ear, sorghum panicle) show from the mid stage onward. */
+/** Heads (tassel/ear, wheat ear, sorghum panicle, sunflower capitulum, soybean pods) show from the mid stage onward. */
 export function headsVisible(crop: CropKind, stage: string): boolean {
   return crop !== "fallow" && (stage === "mid" || stage === "late");
 }
@@ -121,6 +135,8 @@ export const MATURE_HEIGHT: Record<Exclude<CropKind, "fallow">, number> = {
   maize: 1.15,
   sorghum: 0.95,
   winter_wheat: 0.6,
+  sunflower: 1.1,
+  soybean: 0.55,
 };
 
 export function median(xs: number[]): number {

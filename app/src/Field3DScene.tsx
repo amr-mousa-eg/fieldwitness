@@ -32,6 +32,7 @@ export interface FrameStats {
 export interface Field3DSceneProps {
   option: Sim3DOption;
   scenario: Sim3DScenario;
+  regionId?: string;
   weekIndex: number;
   isDark: boolean;
   quality: QualityTier;
@@ -67,6 +68,7 @@ const STRATA = [
 interface WeekState {
   option: Sim3DOption;
   scenario: Sim3DScenario;
+  regionId?: string;
   weekIndex: number;
 }
 
@@ -85,6 +87,7 @@ interface SceneApi {
 export function Field3DScene({
   option,
   scenario,
+  regionId,
   weekIndex,
   isDark,
   quality,
@@ -95,10 +98,10 @@ export function Field3DScene({
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const apiRef = useRef<SceneApi | null>(null);
-  const latest = useRef<WeekState>({ option, scenario, weekIndex });
+  const latest = useRef<WeekState>({ option, scenario, regionId, weekIndex });
   const darkRef = useRef(isDark);
   darkRef.current = isDark;
-  latest.current = { option, scenario, weekIndex };
+  latest.current = { option, scenario, regionId, weekIndex };
   const statsCb = useRef(onFrameStats);
   statsCb.current = onFrameStats;
 
@@ -481,11 +484,11 @@ export function Field3DScene({
     let dirty = true;
     let waterLevel = -SOIL_DEPTH;
 
-    const update = ({ option: opt, scenario: scen, weekIndex: wi }: WeekState) => {
+    const update = ({ option: opt, scenario: scen, regionId: reg, weekIndex: wi }: WeekState) => {
       const w = Math.max(0, Math.min(wi, scen.soil_water_mm.length - 1));
       // History-only season (e.g. perennial forage): not simulated, so no crop, no weeds (bare-soil
       // claim), no roots, no water level, no irrigation; only the neutral placeholder and the rain.
-      const hist = historyOnlyKey(opt.sequence, opt.crops, w) !== null;
+      const hist = historyOnlyKey(opt.sequence, opt.crops, w, reg) !== null;
       placeholder.visible = hist;
       waterBody.visible = waterSurf.visible = fillLine.visible = !hist;
       const kind = hist ? "fallow" : toCropKind(opt.crops[w]);
@@ -749,9 +752,10 @@ export function Field3DScene({
 
   // Per-week update and telemetry for the metric strip.
   useEffect(() => {
-    apiRef.current?.update({ option, scenario, weekIndex });
+    apiRef.current?.update({ option, scenario, regionId, weekIndex });
 
     const w = Math.min(weekIndex, scenario.soil_water_mm.length - 1);
+    const hist = historyOnlyKey(option.sequence, option.crops, w, regionId);
     onHoverData?.({
       week: w,
       crop: option.crops[w] ?? "fallow",
@@ -763,10 +767,10 @@ export function Field3DScene({
       rain: scenario.rain_mm[w] ?? 0,
       irrigation: scenario.irrigation_mm[w] ?? 0,
       rootDepth: option.root_depth_m[w] ?? 0,
-      historyOnly: historyOnlyKey(option.sequence, option.crops, w),
-      cover: historyOnlyKey(option.sequence, option.crops, w) === null && isCoverWeek(option, scenario, w),
+      historyOnly: hist,
+      cover: hist === null && isCoverWeek(option, scenario, w),
     });
-  }, [weekIndex, scenario, option, onHoverData]);
+  }, [weekIndex, scenario, option, regionId, onHoverData]);
 
   return (
     <div

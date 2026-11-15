@@ -1,142 +1,273 @@
 {
-  "schema_version": "1.0",
-  "tag": "D",
-  "external_soil_source": "USDA-NRCS SSURGO AWS [E]",
-  "n_fields_matched": 198,
-  "mean_ssurgo_aws_mm": 265.8,
-  "mean_sim_taw_mm": 146.6,
-  "cells": [
-    {
-      "metric": "canopy_integral",
-      "regime": "drought_2022_2023",
-      "deficit_bin": "low_gap",
-      "n": 87,
-      "too_few_to_judge": false,
-      "mean_taw_gap_mm": 63.1,
-      "mean_signed_err": -7.44,
-      "mae": 19.62,
-      "cov90": 0.2989
+  "schema_version": "1.1",
+  "baseline_note": "Before: uniform 150 mm [A] synthetic prior. After: per-field USDA-NRCS SSURGO AWS 0-135 cm [E] (198 fields) + ISRIC SoilGrids 2.0 Saxton & Rawls fallback [E] (2 shallow fields).",
+  "credibility": {
+    "before_median": 0.5,
+    "after_median": 0.483,
+    "before_share_ge_0.6": 0.427,
+    "after_share_ge_0.6": 0.389
+  },
+  "grades_summary": {
+    "before": {
+      "n_fields_graded": 187,
+      "skipped": {
+        "current_not_simulatable": 13
+      },
+      "grade_counts_all_options": {
+        "C": 3600,
+        "B": 2772,
+        "D": 360
+      },
+      "note": "no neighbour witness (T5.2 blocked) -> max grade B; physics interval = weather variability (A)"
     },
-    {
-      "metric": "canopy_integral",
-      "regime": "drought_2022_2023",
-      "deficit_bin": "mid_gap",
-      "n": 87,
-      "too_few_to_judge": false,
-      "mean_taw_gap_mm": 129.3,
-      "mean_signed_err": -22.03,
-      "mae": 24.39,
-      "cov90": 0.2759
-    },
-    {
-      "metric": "canopy_integral",
-      "regime": "drought_2022_2023",
-      "deficit_bin": "high_gap",
-      "n": 88,
-      "too_few_to_judge": false,
-      "mean_taw_gap_mm": 164.3,
-      "mean_signed_err": -17.63,
-      "mae": 19.77,
-      "cov90": 0.2727
-    },
-    {
-      "metric": "canopy_integral",
-      "regime": "wet_2024",
-      "deficit_bin": "low_gap",
-      "n": 67,
-      "too_few_to_judge": false,
-      "mean_taw_gap_mm": 66.8,
-      "mean_signed_err": 9.63,
-      "mae": 19.49,
-      "cov90": 0.3433
-    },
-    {
-      "metric": "canopy_integral",
-      "regime": "wet_2024",
-      "deficit_bin": "mid_gap",
-      "n": 67,
-      "too_few_to_judge": false,
-      "mean_taw_gap_mm": 128.4,
-      "mean_signed_err": -1.29,
-      "mae": 16.81,
-      "cov90": 0.3582
-    },
-    {
-      "metric": "canopy_integral",
-      "regime": "wet_2024",
-      "deficit_bin": "high_gap",
-      "n": 64,
-      "too_few_to_judge": false,
-      "mean_taw_gap_mm": 164.6,
-      "mean_signed_err": 0.72,
-      "mae": 20.02,
-      "cov90": 0.3438
-    },
-    {
-      "metric": "cover_days",
-      "regime": "drought_2022_2023",
-      "deficit_bin": "low_gap",
-      "n": 87,
-      "too_few_to_judge": false,
-      "mean_taw_gap_mm": 63.1,
-      "mean_signed_err": 12.86,
-      "mae": 38.52,
-      "cov90": 0.1264
-    },
-    {
-      "metric": "cover_days",
-      "regime": "drought_2022_2023",
-      "deficit_bin": "mid_gap",
-      "n": 87,
-      "too_few_to_judge": false,
-      "mean_taw_gap_mm": 129.3,
-      "mean_signed_err": -13.98,
-      "mae": 40.43,
-      "cov90": 0.069
-    },
-    {
-      "metric": "cover_days",
-      "regime": "drought_2022_2023",
-      "deficit_bin": "high_gap",
-      "n": 88,
-      "too_few_to_judge": false,
-      "mean_taw_gap_mm": 164.3,
-      "mean_signed_err": -3.35,
-      "mae": 29.93,
-      "cov90": 0.0909
-    },
-    {
-      "metric": "cover_days",
-      "regime": "wet_2024",
-      "deficit_bin": "low_gap",
-      "n": 67,
-      "too_few_to_judge": false,
-      "mean_taw_gap_mm": 66.8,
-      "mean_signed_err": 35.1,
-      "mae": 39.61,
-      "cov90": 0.0299
-    },
-    {
-      "metric": "cover_days",
-      "regime": "wet_2024",
-      "deficit_bin": "mid_gap",
-      "n": 67,
-      "too_few_to_judge": false,
-      "mean_taw_gap_mm": 128.4,
-      "mean_signed_err": 20.75,
-      "mae": 35.78,
-      "cov90": 0.0597
-    },
-    {
-      "metric": "cover_days",
-      "regime": "wet_2024",
-      "deficit_bin": "high_gap",
-      "n": 64,
-      "too_few_to_judge": false,
-      "mean_taw_gap_mm": 164.6,
-      "mean_signed_err": 21.08,
-      "mae": 38.75,
-      "cov90": 0.0156
+    "after": {
+      "n_fields_graded": 190,
+      "skipped": {
+        "current_not_simulatable": 10
+      },
+      "grade_counts_all_options": {
+        "C": 3532,
+        "B": 2912,
+        "D": 396
+      },
+      "top_grade_counts": {
+        "C": 102,
+        "B": 77,
+        "D": 11
+      },
+      "note": "no spatial neighbour witness (T5.2 blocked) -> max grade B; soil TAW is observed SSURGO/SoilGrids [E]"
     }
-  ]
+  },
+  "hindcast_forecast": {
+    "sos": {
+      "before": {
+        "n": 266,
+        "crps": 19.299,
+        "mae_median": 22.496,
+        "covered90": 0.5226
+      },
+      "after": {
+        "n": 463,
+        "crps": 37.909,
+        "mae_median": 42.013,
+        "covered90": 0.365
+      }
+    },
+    "peak": {
+      "before": {
+        "n": 266,
+        "crps": 11.468,
+        "mae_median": 15.483,
+        "covered90": 0.8872
+      },
+      "after": {
+        "n": 463,
+        "crps": 27.307,
+        "mae_median": 33.464,
+        "covered90": 0.6501
+      }
+    },
+    "canopy_integral": {
+      "before": {
+        "n": 266,
+        "crps": 14.871,
+        "mae_median": 17.262,
+        "covered90": 0.3496,
+        "spearman": 0.2642
+      },
+      "after": {
+        "n": 463,
+        "crps": 17.864,
+        "mae_median": 20.769,
+        "covered90": 0.2851,
+        "spearman": 0.2623
+      }
+    },
+    "cover_days": {
+      "before": {
+        "n": 266,
+        "crps": 30.375,
+        "mae_median": 31.654,
+        "covered90": 0.0902
+      },
+      "after": {
+        "n": 463,
+        "crps": 36.086,
+        "mae_median": 37.278,
+        "covered90": 0.0583
+      }
+    }
+  },
+  "cqr_summary": {
+    "before_n_test": 3704,
+    "after_n_test": 3704
+  },
+  "grade_validity": {
+    "before": {
+      "target": "forecast_ci_crps (canopy integral)",
+      "comparison": "Grade B vs Grade D",
+      "decision_rule": "Success iff B mean < D mean and 95% CI of (D - B) strictly > 0",
+      "diff_d_minus_b_mean": 7.0658,
+      "diff_d_minus_b_ci95": [
+        -3.2777,
+        14.3151
+      ],
+      "passed": false,
+      "verdict": "DID NOT PASS: Evidence grades did not show a statistically significant difference in predictive accuracy."
+    },
+    "after": {
+      "target": "forecast_ci_crps (canopy integral)",
+      "comparison": "Grade B vs Grade D",
+      "decision_rule": "Success iff B mean < D mean and 95% CI of (D - B) strictly > 0",
+      "diff_d_minus_b_mean": 6.8837,
+      "diff_d_minus_b_ci95": [
+        -1.5354,
+        13.9383
+      ],
+      "passed": false,
+      "verdict": "DID NOT PASS: Evidence grades did not show a statistically significant difference in predictive accuracy."
+    }
+  },
+  "stratification": {
+    "schema_version": "1.0",
+    "tag": "D",
+    "external_soil_source": "USDA-NRCS SSURGO AWS [E]",
+    "n_fields_matched": 198,
+    "mean_ssurgo_aws_mm": 265.8,
+    "mean_sim_taw_mm": 146.6,
+    "cells": [
+      {
+        "metric": "canopy_integral",
+        "regime": "drought_2022_2023",
+        "deficit_bin": "low_gap",
+        "n": 87,
+        "too_few_to_judge": false,
+        "mean_taw_gap_mm": 63.1,
+        "mean_signed_err": -8.27,
+        "mae": 19.67,
+        "cov90": 0.3103
+      },
+      {
+        "metric": "canopy_integral",
+        "regime": "drought_2022_2023",
+        "deficit_bin": "mid_gap",
+        "n": 87,
+        "too_few_to_judge": false,
+        "mean_taw_gap_mm": 129.3,
+        "mean_signed_err": -23.49,
+        "mae": 25.28,
+        "cov90": 0.2184
+      },
+      {
+        "metric": "canopy_integral",
+        "regime": "drought_2022_2023",
+        "deficit_bin": "high_gap",
+        "n": 88,
+        "too_few_to_judge": false,
+        "mean_taw_gap_mm": 164.3,
+        "mean_signed_err": -19.53,
+        "mae": 21.3,
+        "cov90": 0.2273
+      },
+      {
+        "metric": "canopy_integral",
+        "regime": "wet_2024",
+        "deficit_bin": "low_gap",
+        "n": 67,
+        "too_few_to_judge": false,
+        "mean_taw_gap_mm": 66.8,
+        "mean_signed_err": 8.58,
+        "mae": 18.82,
+        "cov90": 0.3433
+      },
+      {
+        "metric": "canopy_integral",
+        "regime": "wet_2024",
+        "deficit_bin": "mid_gap",
+        "n": 67,
+        "too_few_to_judge": false,
+        "mean_taw_gap_mm": 128.4,
+        "mean_signed_err": -3.06,
+        "mae": 17.14,
+        "cov90": 0.3284
+      },
+      {
+        "metric": "canopy_integral",
+        "regime": "wet_2024",
+        "deficit_bin": "high_gap",
+        "n": 64,
+        "too_few_to_judge": false,
+        "mean_taw_gap_mm": 164.6,
+        "mean_signed_err": -1.09,
+        "mae": 20.13,
+        "cov90": 0.3281
+      },
+      {
+        "metric": "cover_days",
+        "regime": "drought_2022_2023",
+        "deficit_bin": "low_gap",
+        "n": 87,
+        "too_few_to_judge": false,
+        "mean_taw_gap_mm": 63.1,
+        "mean_signed_err": 12.71,
+        "mae": 38.39,
+        "cov90": 0.1034
+      },
+      {
+        "metric": "cover_days",
+        "regime": "drought_2022_2023",
+        "deficit_bin": "mid_gap",
+        "n": 87,
+        "too_few_to_judge": false,
+        "mean_taw_gap_mm": 129.3,
+        "mean_signed_err": -14.24,
+        "mae": 40.47,
+        "cov90": 0.046
+      },
+      {
+        "metric": "cover_days",
+        "regime": "drought_2022_2023",
+        "deficit_bin": "high_gap",
+        "n": 88,
+        "too_few_to_judge": false,
+        "mean_taw_gap_mm": 164.3,
+        "mean_signed_err": -3.73,
+        "mae": 29.89,
+        "cov90": 0.0795
+      },
+      {
+        "metric": "cover_days",
+        "regime": "wet_2024",
+        "deficit_bin": "low_gap",
+        "n": 67,
+        "too_few_to_judge": false,
+        "mean_taw_gap_mm": 66.8,
+        "mean_signed_err": 34.9,
+        "mae": 39.44,
+        "cov90": 0.0299
+      },
+      {
+        "metric": "cover_days",
+        "regime": "wet_2024",
+        "deficit_bin": "mid_gap",
+        "n": 67,
+        "too_few_to_judge": false,
+        "mean_taw_gap_mm": 128.4,
+        "mean_signed_err": 20.41,
+        "mae": 35.66,
+        "cov90": 0.0597
+      },
+      {
+        "metric": "cover_days",
+        "regime": "wet_2024",
+        "deficit_bin": "high_gap",
+        "n": 64,
+        "too_few_to_judge": false,
+        "mean_taw_gap_mm": 164.6,
+        "mean_signed_err": 20.63,
+        "mae": 38.6,
+        "cov90": 0.0156
+      }
+    ]
+  }
 }

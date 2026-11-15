@@ -97,3 +97,40 @@ def test_heatwave_layer_merra2_cells_and_cutoff():
     assert lay.region_mean.values == [5.0, 10.0, 15.0]
     assert abs(lay.trend.value - 5.0) < 1e-6
     assert check_tagged(lay) == []
+
+
+def test_vulnerability_skips_unconfigured_region_crops():
+    idx = pd.date_range("2020-01-01", "2021-12-31", freq="D")
+    wx = pd.DataFrame(
+        {
+            "T2M_MAX": np.full(len(idx), 28.0),
+            "T2M_MIN": np.full(len(idx), 10.0),
+            "PRECTOTCORR": np.full(len(idx), 2.0),
+        },
+        index=idx,
+    )
+    eto = pd.Series(3.5, index=idx)
+    cfg = X.load_vuln_cfg()
+
+    ua = X.vulnerability(
+        wx,
+        eto,
+        ["winter_wheat", "maize", "sunflower", "soybean", "winter_barley", "rapeseed"],
+        "ua_central_t36uvu",
+        cfg,
+        taw_mm=200.0,
+        kc_scale=1.0,
+    )
+    assert [v.crop for v in ua] == ["winter_wheat", "maize", "sunflower", "soybean"]
+    assert check_tagged(ua) == []
+
+    ks = X.vulnerability(
+        wx,
+        eto,
+        ["winter_wheat", "maize", "sunflower", "soybean"],
+        "ks_t14slh",
+        cfg,
+        taw_mm=280.0,
+        kc_scale=1.0,
+    )
+    assert [v.crop for v in ks] == ["winter_wheat", "maize"]

@@ -26,7 +26,7 @@ from fieldwitness.rotate.evaluate import N_WORLDS, subsample_draws
 _ap = argparse.ArgumentParser(description="Pool per-field posterior worlds.")
 _ap.add_argument("n_ref", nargs="?", type=int, default=3000)
 _ap.add_argument("k", nargs="?", type=int, default=150)
-_ap.add_argument("--taw-source", choices=("config", "ssurgo"), default="config")
+_ap.add_argument("--taw-source", choices=("config", "ssurgo"), default="ssurgo")
 _args = _ap.parse_args()
 n_ref, k, taw_source = _args.n_ref, _args.k, _args.taw_source
 SEED = priors.SEED
@@ -88,8 +88,9 @@ for i, fid in enumerate(pilot.index):
             g = g[(g["doy"] >= 1) & (g["doy"] <= 365)].sort_values("doy")
             if len(g) < MIN_OBS or rec.year not in wx:
                 continue
+            f_cfg = {**cfgs[rec.crop], "taw_base_mm": f_taw_base}
             ref = abc.reference_table(
-                *wx[rec.year], n_ref, crop_p[rec.crop], cfgs[rec.crop], seed=SEED + 1000 + rec.year
+                *wx[rec.year], n_ref, crop_p[rec.crop], f_cfg, seed=SEED + 1000 + rec.year
             )
             p = abc.posterior(g["doy"].to_numpy(int), g["ndvi"].to_numpy(float), ref, noise, k, rng)
             w = worlds(ref["hidden"], f_taw_base)
@@ -105,6 +106,8 @@ for i, fid in enumerate(pilot.index):
     fields[str(fid)] = {
         "source": src,
         "tag": tag,
+        "taw_base_mm": round(float(f_taw_base), 2),
+        "taw_tag": "E" if taw_source == "ssurgo" else "A",
         "years": years,
         "taw_mm": [round(float(x), 2) for x in d["taw_mm"]],
         "kc_scale": [round(float(x), 4) for x in d["kc_scale"]],
@@ -123,7 +126,12 @@ out = {
         "n_ref": n_ref,
         "k": k,
         "seed": SEED,
-        "caveat": "in-sample fit; prior fallback is tag A; sow offset not stored",
+        "taw_source": taw_source,
+        "caveat": (
+            "in-sample fit; SSURGO AWS + SoilGrids fallback (tag E) base TAW"
+            if taw_source == "ssurgo"
+            else "in-sample fit; prior fallback is tag A; sow offset not stored"
+        ),
     },
     "fields": fields,
 }

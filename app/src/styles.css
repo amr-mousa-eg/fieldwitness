@@ -13,6 +13,8 @@
   --crop-wheat: #e7cf7e;
   --crop-sorghum: #d9a184;
   --crop-maize: #c9d98a;
+  --crop-sunflower: #e6cf67;
+  --crop-soybean: #b5cfa1;
   --crop-fallow: #d6c9b3;
   --crop-cover: #a9cfa4;
   --crop-other: #d5dbd8;
@@ -57,6 +59,8 @@
     --crop-wheat: #6e5d22;
     --crop-sorghum: #6b3f2c;
     --crop-maize: #55622a;
+    --crop-sunflower: #6d5f1f;
+    --crop-soybean: #3b5e3c;
     --crop-fallow: #5a4f3e;
     --crop-cover: #34573a;
     --crop-other: #3b464c;
@@ -93,6 +97,8 @@
   --crop-wheat: #6e5d22;
   --crop-sorghum: #6b3f2c;
   --crop-maize: #55622a;
+  --crop-sunflower: #6d5f1f;
+  --crop-soybean: #3b5e3c;
   --crop-fallow: #5a4f3e;
   --crop-cover: #34573a;
   --crop-other: #3b464c;
@@ -128,6 +134,8 @@
   --crop-wheat: #e7cf7e;
   --crop-sorghum: #d9a184;
   --crop-maize: #c9d98a;
+  --crop-sunflower: #e6cf67;
+  --crop-soybean: #b5cfa1;
   --crop-fallow: #d6c9b3;
   --crop-cover: #a9cfa4;
   --crop-other: #d5dbd8;
@@ -731,6 +739,12 @@ a {
 }
 .crop-maize {
   background: var(--crop-maize);
+}
+.crop-sunflower {
+  background: var(--crop-sunflower);
+}
+.crop-soybean {
+  background: var(--crop-soybean);
 }
 .crop-fallow {
   background: var(--crop-fallow);

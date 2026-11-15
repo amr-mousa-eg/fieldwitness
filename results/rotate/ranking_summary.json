@@ -1,21 +1,21 @@
 {
   "n_fields": 200,
   "n_candidates": 36,
-  "mean_pareto_share": 0.579,
+  "mean_pareto_share": 0.595,
   "reproducible": true,
   "top1_by_preset": {
     "balanced": [
       [
-        "sorghum-fallow-sorghum",
-        82
+        "sorghum-sorghum-fallow",
+        97
       ],
       [
-        "sorghum-sorghum-fallow",
-        74
+        "sorghum-fallow-sorghum",
+        68
       ],
       [
         "fallow-sorghum-cover_crop",
-        30
+        21
       ],
       [
         "winter_wheat-sorghum-fallow",
@@ -25,11 +25,11 @@
     "water_saver": [
       [
         "fallow-sorghum-cover_crop",
-        188
+        189
       ],
       [
         "sorghum-sorghum-fallow",
-        8
+        7
       ],
       [
         "fallow-sorghum-fallow",
@@ -39,29 +39,25 @@
     "yield_first": [
       [
         "sorghum-fallow-sorghum",
-        188
+        187
       ],
       [
         "sorghum-sorghum-fallow",
-        9
+        12
       ],
       [
         "fallow-sorghum-sorghum",
-        3
+        1
       ]
     ],
     "resilient": [
       [
         "sorghum-fallow-sorghum",
-        157
+        130
       ],
       [
         "sorghum-sorghum-fallow",
-        39
-      ],
-      [
-        "fallow-sorghum-sorghum",
-        4
+        70
       ]
     ]
   },

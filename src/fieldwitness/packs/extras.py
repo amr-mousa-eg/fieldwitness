@@ -48,7 +48,8 @@ SCHEMA_VERSION = "1.2"
 MONTHS = list(range(1, 13))
 _DIM = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 _MONTH_OF_DAY = np.repeat(MONTHS, _DIM)  # 365 days, no leap day (same as the timeline)
-VULN_CROPS = tuple(SOW_DAY)  # crops with a sowing day: maize, sorghum, winter_wheat
+# crops with a sowing day (maize, sorghum, winter_wheat, sunflower, soybean)
+VULN_CROPS = tuple(SOW_DAY)
 VULN_SRC = "POWER daily weather x crop windows (crops.yaml); thresholds A, UNVERIFIED"
 
 
@@ -132,9 +133,14 @@ def vulnerability(
     out = []
     years = (int(weather.index[0].year), int(weather.index[-1].year))
     q = float(cfg["rain_quantile"]["value"])
-    for crop in dict.fromkeys(c for c in crops if c in VULN_CROPS):
+    crops_cfg = _crops().crops
+    heat_map = cfg.get("heat_tmax_c", {})
+    for crop in dict.fromkeys(c for c in crops if c in VULN_CROPS and c in heat_map):
+        st_map = crops_cfg[crop].stage_lengths_days
+        if region_id not in st_map or st_map[region_id].value is None:
+            continue
         w, p = _window(crop, region_id)
-        heat = float(cfg["heat_tmax_c"][crop]["value"])
+        heat = float(heat_map[crop]["value"])
         frost = float(cfg["frost_tmin_c"]["value"])
         ks = _ks_series(w, p, weather, eto, taw_mm, kc_scale)
         sh = hazard_shares(weather, w, heat, frost, ks, q, float(cfg["cover_frac"]["value"]))

@@ -213,6 +213,7 @@ function FarmStage({
   current,
   other,
   otherLabel,
+  regionId,
   week,
   month,
   isDark,
@@ -224,6 +225,7 @@ function FarmStage({
   current: { option: Sim3DOption; scenario: Sim3DScenario };
   other: { option: Sim3DOption; scenario: Sim3DScenario };
   otherLabel: string;
+  regionId: string;
   week: number;
   month: number;
   isDark: boolean;
@@ -233,7 +235,7 @@ function FarmStage({
   source: string;
 }) {
   const plots = useMemo(() => [current, other] as [typeof current, typeof other], [current, other]);
-  const m = plots.map((p) => weekTelemetry(p.option, p.scenario, week));
+  const m = plots.map((p) => weekTelemetry(p.option, p.scenario, week, regionId));
   const labels = [t("sim3d.current"), otherLabel];
   return (
     <section className="farm-stage" aria-label={t("farm.label")}>
@@ -248,6 +250,7 @@ function FarmStage({
       </div>
       <FarmScene
         plots={plots}
+        regionId={regionId}
         weekIndex={week}
         month={month}
         isDark={isDark}
@@ -382,7 +385,7 @@ export default function Field3DView({
     if (!curScen || !altScen) return [];
 
     // History-only weeks (e.g. perennial forage) are not simulated: a gap in the line, not a value.
-    const sim = (o: Sim3DOption, i: number) => historyOnlyKey(o.sequence, o.crops, i) === null;
+    const sim = (o: Sim3DOption, i: number) => historyOnlyKey(o.sequence, o.crops, i, regionId) === null;
     return sim3d.weeks.map((wk, i) => ({
       week: wk.label,
       weekNum: i,
@@ -392,7 +395,7 @@ export default function Field3DView({
       curCanopy: Math.round((curScen.canopy_cover[i] ?? 0) * 100),
       altCanopy: Math.round((altScen.canopy_cover[i] ?? 0) * 100),
     }));
-  }, [sim3d, activeAlternative, scenarioId]);
+  }, [sim3d, activeAlternative, scenarioId, regionId]);
 
   if (loading) {
     return (
@@ -572,6 +575,7 @@ export default function Field3DView({
             current={{ option: sim3d.current, scenario: curScen }}
             other={{ option: activeAlternative, scenario: altScen }}
             otherLabel={sim3dOptionLabel(activeAlternative)}
+            regionId={regionId}
             week={week}
             month={activeWeekInfo.month}
             isDark={isDark}
@@ -604,6 +608,7 @@ export default function Field3DView({
                 <Field3DScene
                   option={sim3d.current}
                   scenario={curScen}
+                  regionId={regionId}
                   weekIndex={week}
                   isDark={isDark}
                   quality={quality}
@@ -635,6 +640,7 @@ export default function Field3DView({
                 <Field3DScene
                   option={activeAlternative}
                   scenario={altScen}
+                  regionId={regionId}
                   weekIndex={week}
                   isDark={isDark}
                   quality={quality}
@@ -698,7 +704,7 @@ export default function Field3DView({
               </LineChart>
             </ResponsiveContainer>
           </div>
-          {[...new Set(sim3d.current.sequence.filter(isHistoryOnly))].map((c) => (
+          {[...new Set(sim3d.current.sequence.filter((c) => isHistoryOnly(c, regionId)))].map((c) => (
             <p key={c} className="muted">
               {t("sim3d.current")}: {t("season.historyOnly", { crop: cropName(c) })}
             </p>
