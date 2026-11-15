@@ -2146,7 +2146,7 @@ table.mini {
 }
 .home-team-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(15.5rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(16.5rem, 1fr));
   gap: 0.85rem;
 }
 .home-team-card {
@@ -2207,8 +2207,8 @@ table.mini {
 }
 .home-team-email {
   margin-top: 0.2rem;
-  font-size: 0.71rem;
-  letter-spacing: -0.01em;
+  font-size: 0.67rem;
+  letter-spacing: -0.02em;
   color: var(--muted);
   text-decoration: none;
   overflow-wrap: anywhere;
@@ -3113,25 +3113,53 @@ table.mini {
 /* Methods diagram (Item 9, redesigned): four numbered stages. Desktop reads left to
    right; phones get a vertical layout at full text size (no scaling). Boxes are links. */
 .mdia {
-  margin: 0.5rem 0 0.25rem;
-  padding: 1.35rem 1.5rem;
+  margin: 0.75rem 0 0.5rem;
+  padding: 1.5rem;
   background: var(--panel);
   border: 1px solid var(--rule);
-  border-radius: 12px;
+  border-top: 4px solid var(--accent);
+  border-radius: 14px;
+  box-shadow: 0 4px 18px var(--shade);
 }
 .mdia-caption {
-  margin: 0 0 1.1rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem 1rem;
+  margin: 0 0 1.25rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--rule);
   color: var(--muted);
   font-size: 0.95rem;
   line-height: 1.45;
+}
+.mdia-caption-text {
+  flex: 1 1 22rem;
+  color: var(--ink);
+  font-weight: 500;
+}
+.mdia-legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  background: var(--surface-raised);
+  border: 1px solid var(--rule);
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+.mdia-legend-sep {
+  opacity: 0.5;
 }
 .mdia-stages {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.35fr) minmax(0, 1.1fr) minmax(0, 0.9fr);
-  column-gap: 2.35rem;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.38fr) minmax(0, 1.12fr) minmax(0, 1.08fr);
+  column-gap: 2.5rem;
   align-items: stretch;
 }
 .methods .mdia-stages > li {
@@ -3141,62 +3169,86 @@ table.mini {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
+  gap: 0.75rem;
   min-width: 0;
-  padding: 0.9rem;
+  padding: 1rem;
   background: var(--surface-tint);
   border: 1px solid var(--rule);
-  border-radius: 10px;
+  border-radius: 12px;
+}
+.mdia-stage--get {
+  background: var(--panel);
+  border: 1.5px solid var(--accent);
 }
 .mdia-stage-title {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 0.55rem;
+  gap: 0.45rem 0.55rem;
   margin: 0;
-  padding-bottom: 0.5rem;
+  padding-bottom: 0.6rem;
   border-bottom: 1px solid var(--rule);
   font-family: var(--display);
   font-size: 1.08rem;
   font-weight: 700;
   color: var(--ink);
 }
+.mdia-stage-heading {
+  flex: 1 1 auto;
+}
+.mdia-stage-role {
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  background: var(--surface-raised);
+  border: 1px solid var(--rule);
+  color: var(--muted);
+  font-family: var(--body);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
 .mdia-step {
   display: inline-grid;
   place-items: center;
   flex: none;
-  width: 1.85rem;
-  height: 1.85rem;
+  width: 1.95rem;
+  height: 1.95rem;
   border-radius: 50%;
   background: var(--accent);
   color: var(--on-accent);
   font-size: 0.95rem;
   font-weight: 700;
+  box-shadow: 0 2px 6px var(--shade);
 }
 .mdia-boxes {
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
+  gap: 0.75rem;
   flex: 1;
+}
+.mdia-stage--get .mdia-boxes {
+  justify-content: center;
 }
 .mdia-box {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
-  padding: 0.7rem 0.85rem;
-  border: 1.5px solid var(--rule);
-  border-inline-start: 3px solid var(--accent);
-  border-radius: 8px;
+  gap: 0.38rem;
+  padding: 0.8rem 0.95rem;
+  border: 1px solid var(--rule);
+  border-inline-start: 4px solid var(--accent);
+  border-radius: 9px;
   background: var(--surface-raised);
   color: var(--ink);
-  font-size: 0.9rem;
-  line-height: 1.38;
+  font-size: 0.92rem;
+  line-height: 1.42;
   text-decoration: none;
   overflow-wrap: anywhere;
-  transition: border-color 0.15s ease, transform 0.12s ease;
+  box-shadow: 0 1px 4px var(--shade);
+  transition: border-color 0.15s ease, transform 0.12s ease, box-shadow 0.15s ease;
 }
 .mdia-box:hover {
   border-color: var(--accent);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px var(--shade);
 }
 .mdia-box:hover .mdia-box-label {
   text-decoration: underline;
@@ -3209,12 +3261,12 @@ table.mini {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  align-items: baseline;
-  gap: 0.25rem 0.5rem;
+  align-items: center;
+  gap: 0.3rem 0.5rem;
 }
 .mdia-box-label {
   font-family: var(--display);
-  font-size: 1rem;
+  font-size: 1.02rem;
   font-weight: 700;
   color: var(--ink);
 }
@@ -3223,15 +3275,31 @@ table.mini {
   font-size: 0.875rem;
 }
 .mdia-sources {
-  margin: 0.15rem 0 0;
-  padding-inline-start: 1.15rem;
+  list-style: none;
+  margin: 0.2rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.3rem;
   font-size: 0.875rem;
 }
 .methods .mdia-sources li {
-  margin: 0.15rem 0;
+  position: relative;
+  margin: 0;
+  padding-inline-start: 0.85rem;
+  color: var(--ink);
+}
+.methods .mdia-sources li::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  top: 0.52em;
+  width: 0.38rem;
+  height: 0.38rem;
+  border-radius: 50%;
+  background: var(--accent);
 }
 .mdia-status {
-  padding: 0.05rem 0.45rem;
+  padding: 0.08rem 0.55rem;
   border: 1.5px solid currentColor;
   border-radius: 999px;
   font-size: 0.875rem;
@@ -3247,6 +3315,30 @@ table.mini {
   border-style: dashed;
   background: var(--panel);
 }
+.mdia-region-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.25rem;
+}
+.mdia-region-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.14rem 0.5rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.mdia-region-pill--off {
+  border: 1.5px dashed var(--muted);
+  background: var(--panel);
+  color: var(--muted);
+}
+.mdia-region-pill--on {
+  border: 1.5px solid var(--accent);
+  background: var(--surface-tint);
+  color: var(--accent);
+}
 /* Witness OFF: dashed border + hatched band + the word OFF, so it never relies on colour alone.
    The hatch stays in a band on the left so the text sits on a plain background. */
 .mdia-box--off {
@@ -3260,10 +3352,11 @@ table.mini {
 .mdia-arrow {
   position: absolute;
   top: 50%;
-  right: -1.7rem;
-  width: 1.05rem;
+  right: -1.85rem;
+  width: 1.2rem;
   height: 3px;
   background: var(--accent);
+  border-radius: 2px;
 }
 .mdia-arrow::after {
   content: "";
@@ -3277,7 +3370,7 @@ table.mini {
 }
 [dir="rtl"] .mdia-arrow {
   right: auto;
-  left: -1.7rem;
+  left: -1.85rem;
   transform: scaleX(-1);
 }
 @media (max-width: 52rem) {
@@ -4043,28 +4136,6 @@ html.tour-open .chatbot-root {
   flex-wrap: wrap;
   gap: 0.75rem;
   margin-top: 1rem;
-}
-
-[dir="rtl"] .mdia-arrow {
-  right: auto;
-  left: -1.6rem;
-}
-
-[dir="rtl"] .mdia-arrow::after {
-  right: auto;
-  left: -0.6rem;
-  border-width: 7px 10px 7px 0;
-  border-color: transparent var(--muted) transparent transparent;
-}
-
-@media (max-width: 52rem) {
-  [dir="rtl"] .mdia-arrow,
-  [dir="rtl"] .mdia-arrow::after {
-    right: auto;
-    left: 50%;
-    border-width: 10px 7px 0 7px;
-    border-color: var(--muted) transparent transparent transparent;
-  }
 }
 
 /* Keep numeric/code badges and coordinates clean inside RTL prose */

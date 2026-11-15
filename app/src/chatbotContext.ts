@@ -192,7 +192,7 @@ export const KNOWLEDGE_BASE: KnowledgeEntry[] = [
     id: "witnesses",
     title: "The Three Witnesses",
     keywords: ["witness", "witnesses", "three", "physics", "own past", "abc", "neighbour", "neighbor", "doubleml", "trials", "k-state", "colby", "circuit breaker", "ukraine", "t36uvu"],
-    answer: `Every rotation option is checked by three witnesses:\n1) Physics: FAO-56 root-zone water balance forced by NASA POWER daily weather [D].\n2) Field's own past: ABC calibration of the physics against the field's HLS 30 m history; this gives the credibility score [D].\n3) Neighbours: double ML on previous-crop effects across similar fields. In Kansas it stayed OFF (0 of ${F.neighbourPrimaryTotal} primary contrasts and 0 of ${F.neighbourMatchedTotal} matched contrasts passed), so Kansas demo packs reach grade B at most. In Central Ukraine (${F.uaFields} fields, ${F.uaSeasons} field-seasons), Panel-OBDML and Exact-Year DAPSM pass ${F.uaPreCutoffPass} pre-cutoff and ${F.uaFullPass} full-period contrasts across all four causal checks and are wired as tag [D] Neighbours witnesses alongside SoilGrids 2.0 root-zone TAW [E] and per-field ABC calibration [D] (${F.uaCredGe06} of ${F.uaDemoFields} demo fields reach ≥ ${F.credibilityMinA} credibility; ${F.uaAllGradeA} candidate options reach grade A). Crop labels in Ukraine are cross-checked against WorldCereal on cropland and winter wheat, while maize-vs-sunflower remains unvalidated at species level. The repo also contains benchmark code for published K-State Colby rotation trials [E].`,
+    answer: `Every rotation option is checked by three witnesses:\n1) Physics: FAO-56 root-zone water balance forced by NASA POWER daily weather [D].\n2) Field's own past: ABC calibration of the physics against the field's HLS 30 m and Sentinel-2 20 m history; this gives the credibility score [D].\n3) Neighbours: double ML on previous-crop effects across similar fields. In Kansas it stayed OFF (0 of ${F.neighbourPrimaryTotal} primary contrasts and 0 of ${F.neighbourMatchedTotal} matched contrasts passed), so Kansas demo packs reach grade B at most. In Central Ukraine (${F.uaFields} fields, ${F.uaSeasons} field-seasons), Panel-OBDML and Exact-Year DAPSM pass ${F.uaPreCutoffPass} pre-cutoff and ${F.uaFullPass} full-period contrasts across all four causal checks and are wired as tag [D] Neighbours witnesses alongside SoilGrids 2.0 root-zone TAW [E] and per-field ABC calibration [D] (${F.uaCredGe06} of ${F.uaDemoFields} demo fields reach ≥ ${F.credibilityMinA} credibility; ${F.uaAllGradeA} candidate options reach grade A). Crop labels in Ukraine are cross-checked against WorldCereal on cropland and winter wheat, while maize-vs-sunflower remains unvalidated at species level. The validation suite also benchmarks published K-State Colby rotation trials [E].`,
     sourceLabel: "Three witnesses (README.md, results/neighbours/, results/inference/)",
     followUps: ["How are evidence grades A–D assigned?", "What are the project's honest limits?", "What soil data is used?"],
   },
@@ -425,8 +425,9 @@ function summarizeFieldPack(ctx: ChatContextSnapshot, isAr = false): string {
       }
     }
 
+    const pxResAr = pack.field.region_id === "ua_central_t36uvu" ? "20 م" : "30 م";
     return (
-      `سياق الحقل النشط — ${numLabel} (${pack.field.area_ha.toFixed(1)} هكتار، ${pack.field.interior_pixels} بكسل داخلي 30 م [O]، حتى ${pack.data_as_of}):\n` +
+      `سياق الحقل النشط — ${numLabel} (${pack.field.area_ha.toFixed(1)} هكتار، ${pack.field.interior_pixels} بكسل داخلي ${pxResAr} [O]، حتى ${pack.data_as_of}):\n` +
       `• التاريخ المحصولي الأخير: ${recentHistory || "غير متاح"}\n` +
       `• مصداقية الشاهد 2 (ABC): ${cred} [D]\n` +
       (currentOpt ? `• الدورة الحالية: ${optionName(currentOpt, "ar")} (درجة ${currentOpt.grade})\n` : "") +
@@ -485,8 +486,9 @@ function summarizeFieldPack(ctx: ChatContextSnapshot, isAr = false): string {
     extra += `\n• Active Priority Weights [A]: ${activePrio}`;
   }
 
+  const pxResEn = pack.field.region_id === "ua_central_t36uvu" ? "20 m" : "30 m";
   return (
-    `Active Field Context — ${numLabel} (${pack.field.area_ha.toFixed(1)} ha, ${pack.field.interior_pixels} interior 30 m pixels [O], as of ${pack.data_as_of}):\n` +
+    `Active Field Context — ${numLabel} (${pack.field.area_ha.toFixed(1)} ha, ${pack.field.interior_pixels} interior ${pxResEn} pixels [O], as of ${pack.data_as_of}):\n` +
     `• Recent Crop History: ${pack.story.slice(-5).map((s) => `${s.year}: ${s.crop ? cropName(s.crop, "en") : "Fallow"}`).join(" -> ") || "N/A"}\n` +
     `• ABC Own-Past Credibility: ${cred} [D]\n` +
     (currentOpt ? `• Current Rotation: ${optionName(currentOpt, "en")} (Grade ${currentOpt.grade})\n` : "") +
@@ -798,14 +800,18 @@ export function answerQuestion(query: string, ctx: ChatContextSnapshot): ChatAns
             : `${s.year}: ${s.crop ? cropName(s.crop, "en") : "Fallow"} (clear obs: ${s.clear_obs} [O])`,
         )
         .join("\n• ");
+      const satLabelAr =
+        pack.field.region_id === "ua_central_t36uvu" ? "أقمار Sentinel-2 بدقة 20 م" : "أقمار NASA HLS بدقة 30 م";
+      const satLabelEn =
+        pack.field.region_id === "ua_central_t36uvu" ? "Copernicus Sentinel-2 20 m" : "NASA HLS 30 m";
       return isAr
         ? {
-            text: `تاريخ الأقمار الصناعية NASA HLS 30 م لـ **${label}** (${pack.field.interior_pixels} بكسل داخلي [O]):\n• ${hist}`,
+            text: `تاريخ ${satLabelAr} لـ **${label}** (${pack.field.interior_pixels} بكسل داخلي [O]):\n• ${hist}`,
             sourceLabel: `قصة ${label} [O/E]`,
             followUps: ["ما أفضل دورة لهذا الحقل؟", "ما الذي يُنصح بقياسه لاحقًا؟"],
           }
         : {
-            text: `Observed NASA HLS 30 m history for **${label}** (${pack.field.interior_pixels} interior pixels [O]):\n• ${hist}`,
+            text: `Observed ${satLabelEn} history for **${label}** (${pack.field.interior_pixels} interior pixels [O]):\n• ${hist}`,
             sourceLabel: `${label} Satellite Story [O/E]`,
             followUps: ["What is the top rotation for this field?", "What should I measure next?"],
           };

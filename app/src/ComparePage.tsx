@@ -241,7 +241,7 @@ export function ComparePage({ index }: { index: RegionIndex }) {
                     <td>{fmtDelta(packA.field.area_ha, packB.field.area_ha, 1, ` ${t("unit.ha")}`)}</td>
                   </tr>
                   <tr>
-                    <td>{t("compare.pixels")}</td>
+                    <td>{t(index.region_id === "ua_central_t36uvu" ? "compare.pixelsUa" : "compare.pixels")}</td>
                     <td>{t("compare.pixelsTag", { count: packA.field.interior_pixels })}</td>
                     <td>{t("compare.pixelsTag", { count: packB.field.interior_pixels })}</td>
                     <td>{fmtDelta(packA.field.interior_pixels, packB.field.interior_pixels, 0)}</td>

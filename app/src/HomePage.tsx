@@ -143,21 +143,20 @@ export function HomePage({ regionId }: { regionId: string }) {
             </div>
           </article>
 
-          {/* Public Repository Card */}
-          <article className="home-card" aria-labelledby="home-repo-h">
+          {/* Final 7-Slide Presentation Card */}
+          <article className="home-card" aria-labelledby="home-pres-h">
             <div className="home-card-head">
-              <h3 id="home-repo-h">{t("home.repo.heading")}</h3>
-              <span className="home-pill">{t("home.repo.badge")}</span>
+              <h3 id="home-pres-h">{t("home.presentation.heading")}</h3>
+              <span className="home-pill">{t("home.presentation.badge")}</span>
             </div>
-            <p>{t("home.repo.desc")}</p>
+            <p>{t("home.presentation.desc")}</p>
             <div className="home-btn-group">
               <a
                 className="home-btn home-btn--primary"
-                href={HOME_LINKS.repoUrl}
-                target="_blank"
-                rel="noreferrer"
+                href={HOME_LINKS.presentationPptxUrl}
+                download
               >
-                {t("home.repo.open")} ↗
+                {t("home.presentation.downloadPptx")} ↓
               </a>
               <a className="home-btn home-btn--secondary" href={pageHref(regionId, "resources")}>
                 {t("nav.resources")}

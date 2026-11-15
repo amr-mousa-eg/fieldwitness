@@ -9,6 +9,5 @@ FieldWitness is a public, open-source decision support web application developed
 Every recommendation includes transparent A–D evidence grades, bare-soil and climate hazard vulnerability calendars, and what-if scenario testing.
 
 Live Application: https://amr-mousa-eg.github.io/fieldwitness/
-Repository: https://github.com/amr-mousa-eg/fieldwitness
-Documentation: DATA.md, README.md, DECISIONS.md
+Documentation: Methods, Resources (33 datasets), and Terms glossary inside the web application.
 License: MIT
