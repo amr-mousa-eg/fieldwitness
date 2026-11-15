@@ -50,7 +50,7 @@ def fetch_era5_point(
         ],
         "timezone": "UTC",
     }
-    r = (session or requests).get(OPENMETEO_ARCHIVE_URL, params=params, timeout=30)
+    r = (session or requests).get(OPENMETEO_ARCHIVE_URL, params=params, timeout=60)
     r.raise_for_status()
     return r.json()
 

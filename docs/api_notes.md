@@ -397,3 +397,21 @@ Verified via direct HTTP/REST probes and CMR/GIBS endpoints:
 - **Query Shape:** `{"collections": ["sentinel-2-l2a"], "query": {"grid:code": {"eq": "MGRS-36UVU"}, "eo:cloud_cover": {"lt": 35.0}}, "datetime": "2017-01-01T00:00:00Z/2024-12-31T23:59:59Z", "limit": 200}` (pagination via `links` where `rel == "next"` using `nxt["body"]`).
 - **Assets & 20 m IFD Layout:** Each feature provides `assets.red` (B04, 10 m IFD 0 / 20 m `5490×5490` IFD 1, `512×512` tiles), `assets.nir` (B08, same layout), and `assets.scl` (SCL, native 20 m `5490×5490` IFD 0, `512×512` tiles, clear land classes `4 = Vegetation`, `5 = Not-vegetated`).
 - **Radiometric Offset Caveat (`earthsearch:boa_offset_applied` vs `raster:bands[0].offset`):** On 70 of 128 selected scenes (2018–2024 ESA Processing Baselines 04.00/05.xx), STAC `assets.{red,nir}.raster:bands[0].offset` still advertises `-0.1`, while `properties["earthsearch:boa_offset_applied"]` is `true` and the underlying COG uint16 DNs are already offset-corrected (matching `Element84/earth-search#71`). Live pixel checks on `T36UVU` confirmed water (`SCL=6`) median Red DN `209–277` and dark vegetation (`SCL=4`) median Red DN `471–549` (well below `1000`). Applying `-0.1` again clips dark vegetation Red reflectance to `0.0` and produces spurious `NDVI = 1.0`. Bypassing `raster:bands[0].offset` when `earthsearch:boa_offset_applied == true` eliminated all `>= 0.999` artifacts across 48,199 rows (`max NDVI = 0.9874`).
+
+## Phase P2 Empirical EO & Precipitation Verification — Verified 2026-11-14
+
+- **NASA Earthdata CMR & Protected Downloads (`ECO_L3T_JET`, `ECO_L2T_LSTE`, `GPM_3IMERGDF.07`):**
+  - CMR search verified: `ECO_L3T_JET.003` (`KS 0 / UA 0` hits in 2020–21), `ECO_L3T_JET.002` (`KS 432`), `ECO_L2T_LSTE.002` (`KS 1,252 / UA 87`), `GPM_3IMERGDF.07` (`UA 365`).
+  - Unauthenticated direct GETs against `lp-prod-protected` and `gesdisc` OPeNDAP `.ascii` return **`HTTP 302 -> urs.earthdata.nasa.gov`** because no `_netrc` exists in the cloud VM (`CLAUDE.md` Rules 10 & 12).
+- **USGS/NASA Landsat 8/9 Collection 2 L2 (`landsat-c2-l2` via Planetary Computer STAC + anonymous SAS token):**
+  - STAC search: `POST https://planetarycomputer.microsoft.com/api/stac/v1/search` and SAS token `GET https://planetarycomputer.microsoft.com/api/sas/v1/token/landsat-c2-l2` return **`HTTP 200`** with zero credentials.
+  - `lwir11` (`ST_B10`) & `qa_pixel` are Classic TIFF (`magic=42`), `256×256` DEFLATE tiles (`compression=8`, `predictor=1`, `bps=16`), 30 m COG grid / 100 m native TIRS, `scale=0.00341802`, `offset=149.0 K` (`-273.15 -> °C`). `HTTP 206` range reads verified; 250+ low-cloud scenes cover both `ks_t14slh` (`031_034`, `030_034`, `031_033`, `030_033`) and `ua_central_t36uvu` (`180_027`, `179_027`, `180_026`).
+- **Microsoft Planetary Computer `gpm-imerg-hhr.zarr`:**
+  - `.zmetadata` returned `HTTP 200`, but `precipitationCal/.zarray` uses `"chunks": [12, 3600, 1800]` (whole-globe slices > 50 MB / 6 h), so excluded under `CLAUDE.md` Rule 11 `< 1 GB` download cap.
+- **NOAA CoastWatch ERDDAP `chirps20GlobalDailyP05`:**
+  - Returns `HTTP 200` CSV, but metadata has `evenlySpaced=false` (`nValues=4572` across 40+ years, predominantly annual Dec 31 entries; querying full 2021 returned only `2020-12-31`), so rejected for daily extreme-rain cross-checks.
+- **ECMWF ERA5 Reanalysis via Open-Meteo Archive (`src/fieldwitness/data/era5.py`):**
+  - **`HTTP 200` verified** serving complete `2001–2024` daily `precipitation_sum`, `temperature_2m_max`, `et0_fao_evapotranspiration` (~120 KB/point, zero auth, `tag="E"`, `scale_flag=True`). Used for daily extreme-rain cross-checks against NASA POWER alongside documented Earthdata auth status for `GPM_3IMERGDF.07`.
+- **Sentinel-2 STAC 20 m Red-Edge / SWIR COGs (`earth-search.aws.element84.com`):**
+  - Cached manifests (`data/s2_cog/ua_central_t36uvu/scenes.json`) expose `rededge1` (B05), `rededge2` (B06), `rededge3` (B07), `swir16` (B11), `swir22` (B12) native 20 m COGs on the exact `5490×5490` pixel grid as `scl` and `red/nir` IFD 1 (`earthsearch:boa_offset_applied` rule identical).
+

@@ -185,35 +185,35 @@ export function MethodsPage() {
                 <td className="best">86.7 %</td>
                 <td>72.5 %</td>
                 <td>90.0 %</td>
-                <td>5.08 ms</td>
+                <td>5.04 ms</td>
               </tr>
               <tr>
                 <th scope="row">{t("methods.enhancements.algo.dtw")}</th>
                 <td className="best">88.7 %</td>
                 <td>56.2 %</td>
                 <td>83.3 %</td>
-                <td>4.76 ms</td>
+                <td>4.84 ms</td>
               </tr>
               <tr>
                 <th scope="row">{t("methods.enhancements.algo.wddtw")}</th>
                 <td>82.9 %</td>
-                <td className="best">75.4 %</td>
+                <td>75.4 %</td>
                 <td className="best">93.3 %</td>
-                <td>5.23 ms</td>
+                <td>4.84 ms</td>
               </tr>
               <tr>
                 <th scope="row">{t("methods.enhancements.algo.vdtw")}</th>
                 <td>70.8 %</td>
                 <td>56.7 %</td>
                 <td>61.7 %</td>
-                <td>5.14 ms</td>
+                <td>4.59 ms</td>
               </tr>
               <tr>
                 <th scope="row">{t("methods.enhancements.algo.cropformer")}</th>
-                <td>78.7 %</td>
-                <td>45.0 %</td>
-                <td>66.7 %</td>
-                <td className="best">1.07 ms</td>
+                <td className="best">86.7 %</td>
+                <td className="best">75.8 %</td>
+                <td>78.3 %</td>
+                <td className="best">1.05 ms</td>
               </tr>
               <tr>
                 <th scope="row">{t("methods.enhancements.algo.sg")}</th>

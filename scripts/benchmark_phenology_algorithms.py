@@ -268,7 +268,11 @@ def main():
             "5. **Vector DTW (VDTW: 56.7% Multi-Class, 70.8% Binary):**",
             "   - Multi-attribute spectral angle sensitive to semi-arid blue-band noise.",
             "",
-            "6. **CropFormer / Transformer Self-Attention (1.07 ms/field):**",
+            (
+                f"6. **CropFormer / Transformer Self-Attention "
+                f"({benchmark_results['test']['CropFormer (Self-Attention)']['ms_per_field']:.2f} "
+                f"ms/field):**"
+            ),
             "   - Fully vectorized tensor operations, over 10x faster than Savitzky-Golay.",
             "   - Captures global non-local dependencies directly from irregular time series.",
         ]

@@ -3,6 +3,7 @@ import type { CropVulnerability, FieldCalendar, Hazard, Option } from "./types";
 
 export const MONTHS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 export const HAZARDS: Hazard[] = ["heat", "frost", "water_stress", "extreme_rain_bare"];
+export const OBS_CHECK_KEYS = ["lst_heat", "extreme_rain_era5"] as const;
 
 /** Shade step 0–4 for a share 0–1; colour only supports the printed percentage (T9.7). */
 export function shadeLevel(share: number | null): number | null {

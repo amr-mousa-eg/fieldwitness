@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.1",
+  "ecostress": {
+    "status": "auth_required_no_netrc",
+    "collection": "ECO_L3T_JET.003 (C4057232489-LPCLOUD)",
+    "note": "Unauthenticated lp-prod-protected requests return HTTP 302 to urs.earthdata.nasa.gov (no _netrc in environment); Landsat 8/9 C2 L2 ST_B10 provides public 30 m/100 m thermal observations instead.",
+    "missing": [
+      "results/validation/sim_daily_eta.parquet",
+      "data/context/ecostress_overpasses.parquet"
+    ]
+  },
+  "status": "landsat_lst_substitute",
+  "landsat_lst": {
+    "ks_t14slh": {
+      "n_obs": 779,
+      "n_fields": 200,
+      "heat_threshold_c": 35.0,
+      "too_few_to_judge": false,
+      "mean_lst_c": 43.55,
+      "mean_air_tmax_c": 34.08,
+      "lst_minus_tmax_mean_c": 9.47,
+      "pearson_r": 0.5387,
+      "spearman_rho": 0.5274,
+      "hot_day_share_lst": 0.887,
+      "hot_day_share_power": 0.4365,
+      "heat_threshold_agreement": 0.4981,
+      "tag": "D",
+      "external_source": "USGS/NASA Landsat 8-9 C2 L2 lwir11 vs NASA POWER T2M_MAX"
+    },
+    "ua_central_t36uvu": {
+      "n_obs": 14128,
+      "n_fields": 400,
+      "heat_threshold_c": 35.0,
+      "too_few_to_judge": false,
+      "mean_lst_c": 36.81,
+      "mean_air_tmax_c": 26.81,
+      "lst_minus_tmax_mean_c": 10.01,
+      "pearson_r": 0.6412,
+      "spearman_rho": 0.5767,
+      "hot_day_share_lst": 0.6269,
+      "hot_day_share_power": 0.0283,
+      "heat_threshold_agreement": 0.4014,
+      "tag": "D",
+      "external_source": "USGS/NASA Landsat 8-9 C2 L2 lwir11 vs NASA POWER T2M_MAX"
+    }
+  }
+}

@@ -134,3 +134,39 @@ def test_vulnerability_skips_unconfigured_region_crops():
         kc_scale=1.0,
     )
     assert [v.crop for v in ks] == ["winter_wheat", "maize"]
+
+
+def test_obs_checks_series_and_field_calendar_tagged():
+    lst_df = pd.DataFrame(
+        [
+            {"field_id": "f1", "date": "2020-07-10", "lst_c": 37.5},
+            {"field_id": "f1", "date": "2021-07-12", "lst_c": 32.0},
+            {"field_id": "f1", "date": "2020-08-05", "lst_c": 38.2},
+        ]
+    )
+    era_dates = pd.date_range("2020-01-01", "2021-12-31", freq="D")
+    rain = np.zeros(len(era_dates), dtype=float)
+    rain[(era_dates.year == 2020) & (era_dates.month == 6) & (era_dates.day == 15)] = 42.0
+    era_df = pd.DataFrame({"date": era_dates, "rain_mm": rain})
+
+    checks = X.obs_checks_series(field_lst=lst_df, era5_df=era_df, heat_threshold_c=35.0)
+    assert checks is not None
+    assert set(checks.keys()) == {"lst_heat", "extreme_rain_era5"}
+    # Month 7 has 2 years (2020 hot, 2021 cool -> 0.5); Month 8 has only 1 year -> None
+    assert checks["lst_heat"].tag == "O"
+    assert checks["lst_heat"].values[6] == 0.5
+    assert checks["lst_heat"].values[7] is None
+    # June extreme rain occurred in 1 of 2 years -> 0.5
+    assert checks["extreme_rain_era5"].tag == "E"
+    assert checks["extreme_rain_era5"].values[5] == 0.5
+
+    cal = X.field_calendar(
+        "f1",
+        bare_obs=[],
+        obs_years=(2017, 2024),
+        by_option={},
+        vuln=[],
+        as_of=date(2024, 12, 31),
+        obs_checks=checks,
+    )
+    assert check_tagged(cal) == []

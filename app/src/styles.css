@@ -1459,6 +1459,12 @@ table.mini {
   font-weight: 600;
   min-width: 13rem;
 }
+.cal-scale-badge {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 400;
+  margin-top: 0.1rem;
+}
 .cal-cell.insufficient {
   font-size: 0.7rem;
   color: var(--muted);
