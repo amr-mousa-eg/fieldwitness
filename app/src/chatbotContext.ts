@@ -134,7 +134,7 @@ export const FACTS = {
   dtwBinaryMatchPct: { value: "88.7", src: "results/story/phenology_benchmark.json test Standard DTW binary_match_share" },
   wddtwMultiClassPct: { value: "75.4", src: "results/story/phenology_benchmark.json test WDDTW exact_crop_accuracy" },
   wddtwFallowPct: { value: "93.3", src: "results/story/phenology_benchmark.json test WDDTW fallow exact_acc" },
-  cropformerMsPerField: { value: "1.07", src: "results/story/phenology_benchmark.json test CropFormer ms_per_field" },
+  cropformerMsPerField: { value: "1.05", src: "results/story/phenology_benchmark.json test CropFormer ms_per_field" },
   seasonDetectionTotal: { value: "240", src: "results/story/phenology_benchmark.json test n_samples" },
   seasonDetectionTarget: { value: "90", src: "results/story/ks_seasons_test.json target" },
   hindcastSeasons: { value: "463", src: "results/hindcast/ks_t14slh_baselines.json n_field_seasons" },
@@ -169,6 +169,10 @@ export const FACTS = {
   uaTopGradeB: { value: "73", src: "results/inference/ua_central_t36uvu_credibility.json summary.top_grade_counts.B" },
   uaTopGradeC: { value: "47", src: "results/inference/ua_central_t36uvu_credibility.json summary.top_grade_counts.C" },
   uaAllGradeA: { value: "44", src: "results/inference/ua_central_t36uvu_credibility.json summary.all_candidate_grade_counts.A" },
+  uaCropformer3chMultiPct: { value: "82.4", src: "results/story/ua_cropformer_worldcereal.json multiclass_phenology_holdout 3ch exact_accuracy" },
+  uaCropformer8chMultiPct: { value: "85.9", src: "results/story/ua_cropformer_worldcereal.json multiclass_phenology_holdout 8ch exact_accuracy" },
+  uaCropformerKappa: { value: "0.122", src: "results/story/ua_cropformer_worldcereal.json worldcereal cropformer_3ch_mae_cv all_2020_2024 kappa" },
+  uaCropformerHoldoutKappa: { value: "0.028", src: "results/story/ua_cropformer_worldcereal.json worldcereal strict_spatiotemporal_le2021_to_2022_2024 8ch kappa" },
 } as const;
 
 const F = Object.fromEntries(Object.entries(FACTS).map(([k, v]) => [k, v.value])) as {
@@ -229,7 +233,7 @@ export const KNOWLEDGE_BASE: KnowledgeEntry[] = [
     id: "honesty",
     title: "Honest Limits & Hindcast Skill",
     keywords: ["limit", "limits", "honest", "hindcast", "accuracy", "spearman", "coverage", "season detection", "error", "skill", "caveat"],
-    answer: `FieldWitness reports its negative results openly alongside its Phase I and Phase IV algorithmic enhancements:\n• Season detection (${F.seasonDetectionTotal} held-out field-seasons): TWDTW reaches ${F.twdtwSeasonMatchPct}% season match (${F.twdtwMultiClassPct}% multi-class), Standard DTW reaches ${F.dtwBinaryMatchPct}% binary match, WDDTW reaches ${F.wddtwMultiClassPct}% multi-class (${F.wddtwFallowPct}% fallow), and CropFormer runs in ${F.cropformerMsPerField} ms/field against the ${F.seasonDetectionTarget}% target.\n• Hindcast (cut-off 2021-12-31, ${F.hindcastSeasons} maize, sorghum and winter wheat seasons under SSURGO [E] TAW): canopy-integral Spearman ρ = ${F.hindcastSpearman}; uncalibrated coverage was ${F.ciCoverage90Pct}% (canopy integral) and ${F.coverDaysCoverage90Pct}% (cover days), while Split-CQR calibration lifted coverage to ${F.cqrSosMinPct}–${F.cqrSosMaxPct}% for start-of-season, ${F.cqrCoverDaysWheatPct}% for winter-wheat cover days, and ${F.cqrCiMinPct}–${F.cqrCiMaxPct}% for canopy integral.\n• Neighbour witness: OFF in Kansas (0 of ${F.neighbourPrimaryTotal} and 0 of ${F.neighbourMatchedTotal} contrasts passed); ACTIVE [D] in Central Ukraine.\n• Winter wheat: uncalibrated baseline timing was ${F.wheatPeakMedianLateDays} days late (median).\n• No yield mass, prices or profit.`,
+    answer: `FieldWitness reports its negative results openly alongside its Phase I and Phase IV algorithmic enhancements:\n• Season detection (${F.seasonDetectionTotal} held-out field-seasons): TWDTW reaches ${F.twdtwSeasonMatchPct}% season match (${F.twdtwMultiClassPct}% multi-class), Standard DTW reaches ${F.dtwBinaryMatchPct}% binary match, WDDTW reaches ${F.wddtwMultiClassPct}% multi-class (${F.wddtwFallowPct}% fallow), and CropFormer runs in ${F.cropformerMsPerField} ms/field against the ${F.seasonDetectionTarget}% target. In Ukraine, MAE-pretrained S2 Red-Edge/SWIR CropFormer reaches ${F.uaCropformer8chMultiPct}% held-out multi-class consistency (vs ${F.uaCropformer3chMultiPct}% 3-band) and pooled WorldCereal κ = ${F.uaCropformerKappa}, though strict temporal holdout κ stays low at ${F.uaCropformerHoldoutKappa}.\n• Hindcast (cut-off 2021-12-31, ${F.hindcastSeasons} maize, sorghum and winter wheat seasons under SSURGO [E] TAW): canopy-integral Spearman ρ = ${F.hindcastSpearman}; uncalibrated coverage was ${F.ciCoverage90Pct}% (canopy integral) and ${F.coverDaysCoverage90Pct}% (cover days), while Split-CQR calibration lifted coverage to ${F.cqrSosMinPct}–${F.cqrSosMaxPct}% for start-of-season, ${F.cqrCoverDaysWheatPct}% for winter-wheat cover days, and ${F.cqrCiMinPct}–${F.cqrCiMaxPct}% for canopy integral.\n• Neighbour witness: OFF in Kansas (0 of ${F.neighbourPrimaryTotal} and 0 of ${F.neighbourMatchedTotal} contrasts passed); ACTIVE [D] in Central Ukraine.\n• Winter wheat: uncalibrated baseline timing was ${F.wheatPeakMedianLateDays} days late (median).\n• No yield mass, prices or profit.`,
     sourceLabel: "Honest limits (README.md, results/)",
     followUps: ["Why does FieldWitness not predict profit or tonnes/ha?", "How do the three witnesses work?"],
   },

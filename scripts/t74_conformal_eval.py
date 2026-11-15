@@ -119,6 +119,75 @@ def _block_bootstrap_mean(
     }
 
 
+def _load_static_taw(coords_path: Path = COORDS_FILE) -> dict[str, float]:
+    """Static observed SSURGO (with SoilGrids fallback) TAW [E] per field, zero temporal leakage."""
+    df = pd.read_csv(coords_path)
+    out: dict[str, float] = {}
+    for _, r in df.iterrows():
+        v = pd.to_numeric(r.get("ssurgo_aws_mm"), errors="coerce")
+        if not np.isfinite(v):
+            v = pd.to_numeric(r.get("sim_taw_median_mm"), errors="coerce")
+        if np.isfinite(v):
+            out[str(r["field_id"])] = float(v)
+    return out
+
+
+def _evaluate_hierarchical(
+    cal: pd.DataFrame,
+    test: pd.DataFrame,
+    all_blocks: list[str],
+    strat_col: str,
+    lbo_base: dict[tuple, dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Leave-block-out stratified Split-CQR falling back to (crop, run, metric)."""
+    by_strat = [*BY, strat_col]
+    lbo_strat = leave_block_out_cqr(cal, by_strat, all_blocks, level=0.90)
+    out = test.copy()
+    for mode in ("cqr_sym", "cqr_asym"):
+        los, his = [], []
+        for row in out.itertuples(index=False):
+            floor = 0.0 if row.metric in POSITIVE_FLOOR_METRICS else None
+            st_val = getattr(row, strat_col)
+            params = lbo_strat.get(((row.crop, row.run, row.metric, st_val), row.block))
+            if params is None or params["m_sym"] is None:
+                params = lbo_base.get(((row.crop, row.run, row.metric), row.block))
+            if mode == "cqr_sym":
+                m = params["m_sym"] if params and params["m_sym"] is not None else 0.0
+                lo, hi = apply_cqr(row.q_lo, row.q_hi, m, m, lower_bound=floor)
+            else:
+                mlo = params["m_lo"] if params and params["m_lo"] is not None else 0.0
+                mhi = params["m_hi"] if params and params["m_hi"] is not None else 0.0
+                lo, hi = apply_cqr(row.q_lo, row.q_hi, mlo, mhi, lower_bound=floor)
+            los.append(float(lo))
+            his.append(float(hi))
+        out[f"lo_{mode}"] = los
+        out[f"hi_{mode}"] = his
+        in_band = (out["y"] >= out[f"lo_{mode}"]) & (out["y"] <= out[f"hi_{mode}"])
+        out[f"cov_{mode}"] = in_band.astype(float)
+        out[f"width_{mode}"] = out[f"hi_{mode}"] - out[f"lo_{mode}"]
+        out[f"winkler_{mode}"] = interval_score(
+            out[f"lo_{mode}"], out[f"hi_{mode}"], out["y"], alpha=0.10
+        )
+
+    rows: list[dict[str, Any]] = []
+    for (crop, _run, metric), g in out[out["run"] == "forecast"].groupby(BY):
+        n = int(len(g))
+        if n < 20:
+            continue
+        rows.append(
+            {
+                "crop": crop,
+                "metric": metric,
+                "n": n,
+                "cqr_sym_cov90": _block_bootstrap_mean(g, "cov_cqr_sym")["value"],
+                "cqr_sym_winkler90": _block_bootstrap_mean(g, "winkler_cqr_sym")["value"],
+                "cqr_asym_cov90": _block_bootstrap_mean(g, "cov_cqr_asym")["value"],
+                "cqr_asym_winkler90": _block_bootstrap_mean(g, "winkler_cqr_asym")["value"],
+            }
+        )
+    return rows
+
+
 def evaluate() -> dict[str, Any]:
     blocks = _load_blocks()
     cal = _load_records(CAL_FILES, blocks, "cal")
@@ -181,14 +250,41 @@ def evaluate() -> dict[str, Any]:
             row["gate_80_floor"] = "pass" if practical_pass else "fail"
         summary_rows.append(row)
 
+    # Covariate-stratified Split-CQR (E2.2):
+    # 1) Static SSURGO soil TAW regime (split on calibration median, zero leakage)
+    # 2) Pre-cutoff calibration canopy vigor regime (split on <= 2020 canopy_integral median)
+    taw_map = _load_static_taw()
+    cal_taw_med = float(np.median([taw_map[f] for f in cal["field_id"].unique() if f in taw_map]))
+    for df_part in (cal, test):
+        df_part["taw_regime"] = df_part["field_id"].map(
+            lambda fid: "high_taw" if taw_map.get(fid, cal_taw_med) > cal_taw_med else "low_taw"
+        )
+    cal_ci = cal[cal["metric"] == "canopy_integral"].groupby("field_id")["y"].mean()
+    vigor_med = float(cal_ci.median()) if len(cal_ci) else 0.0
+    vigor_map = {
+        fid: ("high_vigor" if v >= vigor_med else "low_vigor") for fid, v in cal_ci.items()
+    }
+    for df_part in (cal, test):
+        df_part["vigor_regime"] = df_part["field_id"].map(
+            lambda fid: vigor_map.get(fid, "low_vigor")
+        )
+
+    strat_taw = _evaluate_hierarchical(cal, test, all_blocks, "taw_regime", lbo)
+    strat_vigor = _evaluate_hierarchical(cal, test, all_blocks, "vigor_regime", lbo)
+
     payload = {
         "schema_version": "1.0",
         "tag": "D",
-        "source": "model:calibration@v1 (CQR pre-registered 2026-11-13)",
+        "source": "model:calibration@v1 (CQR pre-registered 2026-11-13 + E2.2 stratified audit)",
         "n_cal_rows": int(len(cal)),
         "n_test_rows": int(len(test)),
         "n_spatial_blocks": int(len(all_blocks)),
         "forecast_summary": summary_rows,
+        "stratified_summary": {
+            "taw_regime_median_mm": round(cal_taw_med, 1),
+            "by_ssurgo_taw": strat_taw,
+            "by_precutoff_vigor": strat_vigor,
+        },
     }
     OUT_JSON.parent.mkdir(parents=True, exist_ok=True)
     OUT_JSON.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
@@ -228,6 +324,37 @@ def evaluate() -> dict[str, Any]:
             f"{r['cqr_sym']['winkler90']['value']:.1f} | "
             f"{r['cqr_asym']['winkler90']['value']:.1f} | "
             f"**{r['gate_85_95']}** | **{r['gate_80_floor']}** |"
+        )
+    strat_hdr = (
+        "| Crop | Metric | Unstrat. Asym Cov90 | TAW-Strat. Asym Cov90 | "
+        "Vigor-Strat. Asym Cov90 | Unstrat. Winkler | TAW-Strat. Winkler | "
+        "Vigor-Strat. Winkler |"
+    )
+    lines.extend(
+        [
+            "",
+            "## Covariate-Stratified Split-CQR Comparison "
+            "(SSURGO TAW & Pre-Cutoff Vigor, Hierarchical Fallback `n>=30`)",
+            "",
+            strat_hdr,
+            "|---|---|---|---|---|---|---|---|",
+        ]
+    )
+    taw_idx = {(r["crop"], r["metric"]): r for r in strat_taw}
+    vig_idx = {(r["crop"], r["metric"]): r for r in strat_vigor}
+    for r in summary_rows:
+        if r["too_few_to_judge"]:
+            continue
+        k = (r["crop"], r["metric"])
+        rt, rv = taw_idx.get(k), vig_idx.get(k)
+        if not rt or not rv:
+            continue
+        lines.append(
+            f"| {r['crop']} | {r['metric']} | "
+            f"{r['cqr_asym']['cov90']['value'] * 100:.1f}% | "
+            f"{rt['cqr_asym_cov90'] * 100:.1f}% | {rv['cqr_asym_cov90'] * 100:.1f}% | "
+            f"{r['cqr_asym']['winkler90']['value']:.1f} | "
+            f"{rt['cqr_asym_winkler90']:.1f} | {rv['cqr_asym_winkler90']:.1f} |"
         )
     OUT_MD.write_text("\n".join(lines) + "\n", encoding="utf-8")
     return payload

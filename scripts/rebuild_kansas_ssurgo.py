@@ -1010,6 +1010,9 @@ def _write_pack_worker(args):
     kc_med = float(np.median(d["kc_scale"]))
     bud_med = float(np.median(d["budget_mm"]))
     vuln = X.vulnerability(w, f_["eto"], vcrops, REGION, vcfg, taw_med, kc_med)
+    lst_all, era5_all = X.load_obs_checks_inputs(REGION, cutoff_date=as_of_date)
+    lst_f = lst_all[lst_all["field_id"].astype(str) == fid] if lst_all is not None else None
+    obs_c = X.obs_checks_series(field_lst=lst_f, era5_df=era5_all)
     cal = X.field_calendar(
         fid,
         bare_f,
@@ -1017,6 +1020,7 @@ def _write_pack_worker(args):
         X.bare_by_option(canopies),
         vuln,
         as_of_date,
+        obs_checks=obs_c,
     )
     scen_model = B.field_scenarios(fid, sc, ev["candidates"], ev["tag"], as_of_date)
 

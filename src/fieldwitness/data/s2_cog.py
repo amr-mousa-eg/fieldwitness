@@ -158,6 +158,7 @@ def fetch_cog_ifd(
     target_dim: int,
     session: requests.Session | None = None,
     timeout: int = 30,
+    target_height: int | None = None,
 ) -> tuple[str, CogIfd, int]:
     """Fetch COG header (first 32 KB) once and return `(endian, matching_ifd, header_bytes)`."""
     sess = session or requests.Session()
@@ -165,9 +166,10 @@ def fetch_cog_ifd(
     r_hdr.raise_for_status()
     hdr = r_hdr.content
     endian, ifds = parse_cog_ifds(hdr)
-    matching = [d for d in ifds if d.width == target_dim and d.height == target_dim]
+    want_h = target_dim if target_height is None else target_height
+    matching = [d for d in ifds if d.width == target_dim and d.height == want_h]
     if not matching:
-        raise ValueError(f"No {target_dim}x{target_dim} IFD in {url}")
+        raise ValueError(f"No {target_dim}x{want_h} IFD in {url}")
     return endian, matching[0], len(hdr)
 
 
@@ -571,6 +573,244 @@ def build_s2_series(
         "fields_with_obs": int(combined["field_id"].nunique()) if not combined.empty else 0,
         "date_min": str(combined["date"].min().date()) if not combined.empty else None,
         "date_max": str(combined["date"].max().date()) if not combined.empty else None,
+    }
+    (cache_dir / "summary.json").write_text(json.dumps(meta, indent=2), encoding="utf-8")
+    return combined, meta
+
+
+MS_BANDS = ("rededge1", "rededge3", "nir08", "swir16", "swir22", "scl")
+MS_COLS = [
+    "field_id",
+    "date",
+    "ndre1",
+    "ndre2",
+    "ndmi",
+    "nbr2",
+    "n_clear",
+    "clear_fraction",
+    "source_tag",
+]
+
+
+def extract_multispectral_scene_table(
+    scene: dict[str, Any],
+    px_df: pd.DataFrame,
+    session: requests.Session | None = None,
+) -> tuple[pd.DataFrame, int]:
+    """Extract clear-land 20 m Red-Edge & SWIR indices (`ndre1, ndre2, ndmi, nbr2`, tag O)."""
+    assets = scene.get("assets", {})
+    if not all(b in assets for b in MS_BANDS):
+        return pd.DataFrame(columns=MS_COLS), 0
+
+    props = scene["properties"]
+    date_str = props["datetime"][:10]
+    boa_applied = bool(props.get("earthsearch:boa_offset_applied", False))
+    scales: dict[str, tuple[float, float, int]] = {
+        b: _scale_offset(assets[b], boa_offset_applied=(boa_applied and b != "scl"))
+        for b in MS_BANDS
+    }
+    target_dim = round(109800.0 / RES_20M)  # 5490
+    cols = px_df["col"].to_numpy(int)
+    rws = px_df["row"].to_numpy(int)
+
+    sess = session or requests.Session()
+    bytes_used = 0
+    band_ifds: dict[str, tuple[str, CogIfd]] = {}
+    tile_arrays: dict[tuple[str, int, int], np.ndarray] = {}
+
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        hdr_futs = {
+            b: pool.submit(fetch_cog_ifd, assets[b]["href"], target_dim, sess) for b in MS_BANDS
+        }
+        for b, fut in hdr_futs.items():
+            endian, ifd, b_hdr = fut.result()
+            band_ifds[b] = (endian, ifd)
+            bytes_used += b_hdr
+
+        band_px: dict[str, tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]] = {}
+        tile_futs: dict[tuple[str, int, int], Any] = {}
+        for b in MS_BANDS:
+            endian, ifd = band_ifds[b]
+            tx_b = cols // ifd.tile_width
+            ty_b = rws // ifd.tile_height
+            lc_b = cols % ifd.tile_width
+            lr_b = rws % ifd.tile_height
+            band_px[b] = (tx_b, ty_b, lc_b, lr_b)
+            for tx, ty in sorted(set(zip(tx_b, ty_b, strict=True))):
+                tile_futs[(b, int(tx), int(ty))] = pool.submit(
+                    fetch_cog_tile_from_ifd,
+                    assets[b]["href"],
+                    ifd,
+                    endian,
+                    int(tx),
+                    int(ty),
+                    sess,
+                )
+        for key, fut in tile_futs.items():
+            arr, b_cnt = fut.result()
+            tile_arrays[key] = arr
+            bytes_used += b_cnt
+
+    # Gather pixel values per band across potentially differing tile sizes
+    n_px = len(px_df)
+    raw_px: dict[str, np.ndarray] = {}
+    for b in MS_BANDS:
+        dtype_b = np.uint8 if b == "scl" else np.uint16
+        arr_out = np.zeros(n_px, dtype=dtype_b)
+        tx_b, ty_b, lc_b, lr_b = band_px[b]
+        for tx, ty in set(zip(tx_b, ty_b, strict=True)):
+            itx, ity = int(tx), int(ty)
+            m = (tx_b == itx) & (ty_b == ity)
+            arr_out[m] = tile_arrays[(b, itx, ity)][lr_b[m], lc_b[m]]
+        raw_px[b] = arr_out
+
+    s_nd = scales["scl"][2]
+    s_v = raw_px["scl"]
+    ok = np.isin(s_v, CLEAR_SCL_CLASSES) & (s_v != s_nd)
+    for b in MS_BANDS[:-1]:
+        ok &= raw_px[b] != scales[b][2]
+    if not ok.any():
+        return pd.DataFrame(columns=MS_COLS), bytes_used
+
+    refl = {}
+    for b in MS_BANDS[:-1]:
+        sc, off, _ = scales[b]
+        refl[b] = np.clip(raw_px[b][ok].astype(float) * sc + off, 0.0, 1.0)
+
+    re1, re3 = refl["rededge1"], refl["rededge3"]
+    n8a, sw1, sw2 = refl["nir08"], refl["swir16"], refl["swir22"]
+
+    def _norm_diff(num: np.ndarray, den_a: np.ndarray, den_b: np.ndarray) -> np.ndarray:
+        d = den_a + den_b
+        return np.where(d > 0.01, np.clip(num / np.maximum(d, 0.01), -1.0, 1.0), np.nan)
+
+    ndre1 = _norm_diff(re3 - re1, re3, re1)
+    ndre2 = _norm_diff(n8a - re1, n8a, re1)
+    ndmi = _norm_diff(n8a - sw1, n8a, sw1)
+    nbr2 = _norm_diff(sw1 - sw2, sw1, sw2)
+
+    valid = np.isfinite(ndre1) & np.isfinite(ndre2) & np.isfinite(ndmi) & np.isfinite(nbr2)
+    if not valid.any():
+        return pd.DataFrame(columns=MS_COLS), bytes_used
+
+    all_px = pd.DataFrame(
+        {
+            "field_id": px_df["field_id"].to_numpy()[ok][valid],
+            "n_sampled": px_df["n_sampled"].to_numpy()[ok][valid],
+            "ndre1": ndre1[valid],
+            "ndre2": ndre2[valid],
+            "ndmi": ndmi[valid],
+            "nbr2": nbr2[valid],
+        }
+    )
+    out = (
+        all_px.groupby("field_id", as_index=False)
+        .agg(
+            ndre1=("ndre1", "median"),
+            ndre2=("ndre2", "median"),
+            ndmi=("ndmi", "median"),
+            nbr2=("nbr2", "median"),
+            n_clear=("ndre1", "size"),
+            n_sampled=("n_sampled", "first"),
+        )
+        .assign(
+            date=pd.Timestamp(date_str),
+            clear_fraction=lambda d: d["n_clear"] / d["n_sampled"],
+            source_tag="O",
+        )
+    )[MS_COLS]
+    return out, bytes_used
+
+
+def build_s2_multispectral(
+    region_id: str,
+    pilot: gpd.GeoDataFrame,
+    grid: dict[str, Any],
+    months: tuple[int, ...] = (4, 5, 6, 7, 8, 9, 10),
+    max_bytes: int = 220_000_000,
+) -> tuple[pd.DataFrame, dict[str, Any]]:
+    """Build Sentinel-2 20 m Red-Edge & SWIR indices over cached scenes within `max_bytes`."""
+    manifest_file = S2_CACHE_DIR / region_id / "scenes.json"
+    if not manifest_file.exists():
+        raise FileNotFoundError(f"Missing S2 scene manifest: {manifest_file}")
+    all_scenes = json.loads(manifest_file.read_text(encoding="utf-8"))
+    filtered = [sc for sc in all_scenes if int(sc["properties"]["datetime"][5:7]) in months]
+    by_ym: dict[tuple[int, int], list[dict[str, Any]]] = {}
+    for sc in filtered:
+        dt_s = sc["properties"]["datetime"]
+        by_ym.setdefault((int(dt_s[:4]), int(dt_s[5:7])), []).append(sc)
+    for ym in by_ym:
+        by_ym[ym].sort(key=lambda s: float(s["properties"].get("eo:cloud_cover", 100.0)))
+    month_priority = (7, 8, 9, 6, 10, 5, 4)
+    months_ordered = [m for m in month_priority if m in months] + [
+        m for m in sorted(months) if m not in month_priority
+    ]
+    years_ordered = sorted({ym[0] for ym in by_ym})
+    scenes: list[dict[str, Any]] = []
+    max_k = max((len(v) for v in by_ym.values()), default=0)
+    for k in range(max_k):
+        for m in months_ordered:
+            for y in years_ordered:
+                ym = (y, m)
+                if ym in by_ym and k < len(by_ym[ym]):
+                    scenes.append(by_ym[ym][k])
+
+    cache_dir = S2_CACHE_DIR / f"{region_id}_ms"
+    cache_dir.mkdir(parents=True, exist_ok=True)
+    out_path = Path("data/fields") / f"{region_id}_s2_multispectral.parquet"
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+
+    px_df = sample_interior_pixels_20m(pilot, grid)
+    tiles = sorted(set(zip(px_df["tx"], px_df["ty"], strict=True)))
+    frames: list[pd.DataFrame] = []
+    total_bytes = 0
+    downloaded = 0
+
+    with requests.Session() as sess:
+        adapter = HTTPAdapter(pool_connections=16, pool_maxsize=16)
+        sess.mount("https://", adapter)
+        for idx, sc in enumerate(scenes, 1):
+            sid = sc["id"]
+            sc_file = cache_dir / f"{sid}.parquet"
+            if sc_file.exists():
+                frames.append(pd.read_parquet(sc_file))
+                continue
+            if total_bytes + len(tiles) * 1_600_000 > max_bytes:
+                print(
+                    f"Reached MS byte cap {total_bytes / 1e6:.1f} MB "
+                    f"at scene {idx}/{len(scenes)}; stopping.",
+                    flush=True,
+                )
+                break
+            df_sc, b = extract_multispectral_scene_table(sc, px_df, session=sess)
+            df_sc.to_parquet(sc_file, index=False)
+            frames.append(df_sc)
+            total_bytes += b
+            downloaded += 1
+            if downloaded % 15 == 0 or idx == len(scenes):
+                print(
+                    f"  S2 MS scene {idx}/{len(scenes)} ({sc['properties']['datetime'][:10]}): "
+                    f"+{downloaded} downloaded, {total_bytes / 1e6:.1f} MB",
+                    flush=True,
+                )
+
+    combined = (
+        pd.concat([f for f in frames if not f.empty], ignore_index=True)
+        if any(not f.empty for f in frames)
+        else pd.DataFrame(columns=MS_COLS)
+    )
+    if not combined.empty:
+        combined["date"] = pd.to_datetime(combined["date"])
+        combined = combined.sort_values(["field_id", "date"]).reset_index(drop=True)
+    combined.to_parquet(out_path, index=False)
+    meta = {
+        "region_id": region_id,
+        "bands": list(MS_BANDS),
+        "cog_tiles_20m": [list(t) for t in tiles],
+        "scenes_targeted": len(scenes),
+        "downloaded_bytes_this_run": total_bytes,
+        "rows_written": int(len(combined)),
+        "fields_with_obs": int(combined["field_id"].nunique()) if not combined.empty else 0,
     }
     (cache_dir / "summary.json").write_text(json.dumps(meta, indent=2), encoding="utf-8")
     return combined, meta

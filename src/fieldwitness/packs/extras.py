@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import math
 from datetime import date
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -173,6 +174,95 @@ def vulnerability(
     return out
 
 
+def obs_checks_series(
+    field_lst: pd.DataFrame | None = None,
+    era5_df: pd.DataFrame | None = None,
+    heat_threshold_c: float = 35.0,
+    rain_quantile: float = 0.99,
+) -> dict[str, TaggedSeries] | None:
+    """Build observed satellite thermal [O] & ERA5 extreme-rain [E] monthly check rows."""
+    out: dict[str, TaggedSeries] = {}
+    if field_lst is not None and not field_lst.empty:
+        fl = field_lst.copy()
+        fl["date"] = pd.to_datetime(fl["date"])
+        fl = fl[fl["lst_c"].notna()]
+        fl["year"] = fl["date"].dt.year
+        fl["month"] = fl["date"].dt.month
+        lst_vals: list[float | None] = []
+        for m in MONTHS:
+            sm = fl[fl["month"] == m]
+            if sm["year"].nunique() < 2:
+                lst_vals.append(None)
+            else:
+                yr_hot = sm.groupby("year")["lst_c"].max() > heat_threshold_c
+                lst_vals.append(_r(float(yr_hot.mean())))
+        if any(v is not None for v in lst_vals):
+            out["lst_heat"] = TaggedSeries(
+                x=MONTHS,
+                values=lst_vals,
+                unit="share of years",
+                tag="O",
+                source=(
+                    f"USGS/NASA Landsat 8-9 C2 L2 ST_B10 (100 m TIRS / 30 m COG), "
+                    f"LST > {heat_threshold_c:.0f} degC"
+                ),
+            )
+
+    if era5_df is not None and not era5_df.empty:
+        er = era5_df.copy()
+        er["date"] = pd.to_datetime(er["date"])
+        er = er[er["rain_mm"].notna()]
+        if not er.empty:
+            q_thr = float(er["rain_mm"].quantile(rain_quantile))
+            er["year"] = er["date"].dt.year
+            er["month"] = er["date"].dt.month
+            years = sorted(er["year"].unique())
+            n_yr = max(len(years), 1)
+            er_vals: list[float | None] = []
+            ext = er[er["rain_mm"] > q_thr]
+            for m in MONTHS:
+                n_hit = int(ext[ext["month"] == m]["year"].nunique())
+                er_vals.append(_r(n_hit / n_yr))
+            out["extreme_rain_era5"] = TaggedSeries(
+                x=MONTHS,
+                values=er_vals,
+                unit="share of years",
+                tag="E",
+                source=(
+                    f"ECMWF ERA5 0.25 deg daily rain > {q_thr:.1f} mm/d "
+                    f"(local q{int(round(rain_quantile * 100))}, coarse context)"
+                ),
+            )
+    return out or None
+
+
+def load_obs_checks_inputs(
+    region_id: str,
+    cutoff_date: date | None = None,
+    data_dir: Path | str = "data",
+) -> tuple[pd.DataFrame | None, pd.DataFrame | None]:
+    """Load cached field Landsat LST [O] and ERA5 daily rain [E] tables clipped to `cutoff_date`."""
+    base = Path(data_dir)
+    lst_path = base / "context" / "landsat_lst" / f"{region_id}_lst.parquet"
+    era_path = base / "weather" / "era5" / f"{region_id}_era5_daily.parquet"
+
+    lst_df: pd.DataFrame | None = None
+    if lst_path.exists():
+        tmp = pd.read_parquet(lst_path)
+        if cutoff_date is not None and not tmp.empty:
+            tmp = tmp[pd.to_datetime(tmp["date"]).dt.date <= cutoff_date].copy()
+        lst_df = tmp
+
+    era_df: pd.DataFrame | None = None
+    if era_path.exists():
+        tmp = pd.read_parquet(era_path)
+        if cutoff_date is not None and not tmp.empty:
+            tmp = tmp[pd.to_datetime(tmp["date"]).dt.date <= cutoff_date].copy()
+        era_df = tmp
+
+    return lst_df, era_df
+
+
 def field_calendar(
     fid: str,
     bare_obs: list[dict],
@@ -180,6 +270,7 @@ def field_calendar(
     by_option: dict[str, TaggedSeries],
     vuln: list[CropVulnerability],
     as_of: date,
+    obs_checks: dict[str, TaggedSeries] | None = None,
 ) -> FieldCalendar:
     return FieldCalendar(
         schema_version=SCHEMA_VERSION,
@@ -188,6 +279,7 @@ def field_calendar(
         bare_observed_years=obs_years,
         bare_by_option=by_option,
         vulnerability=vuln,
+        obs_checks=obs_checks,
         data_as_of=as_of,
     )
 

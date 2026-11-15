@@ -1,0 +1,418 @@
+{
+  "region_id": "ua_central_t36uvu",
+  "reference_labels": "OpenGeoHub OGH-GHLC10 v1.2 (class 3 = ESA WorldCereal 10 m main-season maize)",
+  "spatial_validation": "Leave-2-blocks-out 4-fold CV across all 8 10 km FTW blocks (400 fields, 100/fold)",
+  "s2_multispectral_coverage": {
+    "total_rows": 17119,
+    "fields_with_obs": 400,
+    "years": [
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "channels": [
+      "ndvi",
+      "evi",
+      "clear_fraction",
+      "ndre1",
+      "ndre2",
+      "ndmi",
+      "nbr2",
+      "has_ms"
+    ]
+  },
+  "worldcereal_maize_vs_nonmaize": {
+    "baseline_twdtw_ndvi": {
+      "all_2020_2024": {
+        "n": 2000,
+        "tp": 34,
+        "fp": 639,
+        "fn": 41,
+        "tn": 1286,
+        "accuracy": 0.66,
+        "precision": 0.0505,
+        "recall": 0.4533,
+        "f1": 0.0909,
+        "kappa": 0.0251,
+        "accuracy_ci95": [
+          0.6062,
+          0.7197
+        ],
+        "f1_ci95": [
+          0.0469,
+          0.1195
+        ],
+        "kappa_ci95": [
+          0.0017,
+          0.0455
+        ]
+      },
+      "y2021_t24": {
+        "n": 400,
+        "tp": 15,
+        "fp": 259,
+        "fn": 0,
+        "tn": 126,
+        "accuracy": 0.3525,
+        "precision": 0.0547,
+        "recall": 1.0,
+        "f1": 0.1038,
+        "kappa": 0.0352,
+        "accuracy_ci95": [
+          0.2917,
+          0.4483
+        ],
+        "f1_ci95": [
+          0.0529,
+          0.1494
+        ],
+        "kappa_ci95": [
+          0.0168,
+          0.0563
+        ]
+      },
+      "post_2022_2024": {
+        "n": 1200,
+        "tp": 18,
+        "fp": 368,
+        "fn": 27,
+        "tn": 787,
+        "accuracy": 0.6708,
+        "precision": 0.0466,
+        "recall": 0.4,
+        "f1": 0.0835,
+        "kappa": 0.0175,
+        "accuracy_ci95": [
+          0.6033,
+          0.7426
+        ],
+        "f1_ci95": [
+          0.0437,
+          0.1111
+        ],
+        "kappa_ci95": [
+          -0.0166,
+          0.0429
+        ]
+      }
+    },
+    "cropformer_3ch_mae_cv": {
+      "all_2020_2024": {
+        "n": 2000,
+        "tp": 15,
+        "fp": 96,
+        "fn": 60,
+        "tn": 1829,
+        "accuracy": 0.922,
+        "precision": 0.1351,
+        "recall": 0.2,
+        "f1": 0.1613,
+        "kappa": 0.122,
+        "accuracy_ci95": [
+          0.8903,
+          0.9573
+        ],
+        "f1_ci95": [
+          0.0845,
+          0.2609
+        ],
+        "kappa_ci95": [
+          0.0495,
+          0.2316
+        ]
+      },
+      "y2021_t24": {
+        "n": 400,
+        "tp": 3,
+        "fp": 24,
+        "fn": 12,
+        "tn": 361,
+        "accuracy": 0.91,
+        "precision": 0.1111,
+        "recall": 0.2,
+        "f1": 0.1429,
+        "kappa": 0.0994,
+        "accuracy_ci95": [
+          0.8554,
+          0.9713
+        ],
+        "f1_ci95": [
+          0.0,
+          0.4444
+        ],
+        "kappa_ci95": [
+          -0.0427,
+          0.4093
+        ]
+      },
+      "post_2022_2024": {
+        "n": 1200,
+        "tp": 5,
+        "fp": 28,
+        "fn": 40,
+        "tn": 1127,
+        "accuracy": 0.9433,
+        "precision": 0.1515,
+        "recall": 0.1111,
+        "f1": 0.1282,
+        "kappa": 0.0996,
+        "accuracy_ci95": [
+          0.9175,
+          0.966
+        ],
+        "f1_ci95": [
+          0.0,
+          0.2479
+        ],
+        "kappa_ci95": [
+          -0.0191,
+          0.2262
+        ]
+      },
+      "ms_per_field": 0.243
+    },
+    "cropformer_8ch_no_mae_cv": {
+      "all_2020_2024": {
+        "n": 2000,
+        "tp": 5,
+        "fp": 35,
+        "fn": 70,
+        "tn": 1890,
+        "accuracy": 0.9475,
+        "precision": 0.125,
+        "recall": 0.0667,
+        "f1": 0.087,
+        "kappa": 0.0625,
+        "accuracy_ci95": [
+          0.9214,
+          0.9686
+        ],
+        "f1_ci95": [
+          0.0198,
+          0.1579
+        ],
+        "kappa_ci95": [
+          0.0107,
+          0.1319
+        ]
+      },
+      "y2021_t24": {
+        "n": 400,
+        "tp": 0,
+        "fp": 7,
+        "fn": 15,
+        "tn": 378,
+        "accuracy": 0.945,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "kappa": -0.0244,
+        "accuracy_ci95": [
+          0.9186,
+          0.9588
+        ],
+        "f1_ci95": [
+          0.0,
+          0.0
+        ],
+        "kappa_ci95": [
+          -0.0385,
+          -0.0076
+        ]
+      },
+      "post_2022_2024": {
+        "n": 1200,
+        "tp": 4,
+        "fp": 13,
+        "fn": 41,
+        "tn": 1142,
+        "accuracy": 0.955,
+        "precision": 0.2353,
+        "recall": 0.0889,
+        "f1": 0.129,
+        "kappa": 0.1107,
+        "accuracy_ci95": [
+          0.9298,
+          0.9801
+        ],
+        "f1_ci95": [
+          0.0,
+          0.25
+        ],
+        "kappa_ci95": [
+          0.0,
+          0.2197
+        ]
+      }
+    },
+    "cropformer_8ch_mae_cv": {
+      "all_2020_2024": {
+        "n": 2000,
+        "tp": 8,
+        "fp": 54,
+        "fn": 67,
+        "tn": 1871,
+        "accuracy": 0.9395,
+        "precision": 0.129,
+        "recall": 0.1067,
+        "f1": 0.1168,
+        "kappa": 0.0858,
+        "accuracy_ci95": [
+          0.9255,
+          0.956
+        ],
+        "f1_ci95": [
+          0.0317,
+          0.2609
+        ],
+        "kappa_ci95": [
+          -0.0017,
+          0.234
+        ]
+      },
+      "y2021_t24": {
+        "n": 400,
+        "tp": 3,
+        "fp": 11,
+        "fn": 12,
+        "tn": 374,
+        "accuracy": 0.9425,
+        "precision": 0.2143,
+        "recall": 0.2,
+        "f1": 0.2069,
+        "kappa": 0.1771,
+        "accuracy_ci95": [
+          0.9234,
+          0.9632
+        ],
+        "f1_ci95": [
+          0.0,
+          0.5265
+        ],
+        "kappa_ci95": [
+          -0.0374,
+          0.5013
+        ]
+      },
+      "post_2022_2024": {
+        "n": 1200,
+        "tp": 3,
+        "fp": 23,
+        "fn": 42,
+        "tn": 1132,
+        "accuracy": 0.9458,
+        "precision": 0.1154,
+        "recall": 0.0667,
+        "f1": 0.0845,
+        "kappa": 0.0587,
+        "accuracy_ci95": [
+          0.9294,
+          0.9619
+        ],
+        "f1_ci95": [
+          0.0,
+          0.2251
+        ],
+        "kappa_ci95": [
+          -0.0267,
+          0.1958
+        ]
+      },
+      "ms_per_field": 0.237
+    },
+    "strict_spatiotemporal_le2021_to_2022_2024": {
+      "cropformer_3ch_mae": {
+        "n": 1200,
+        "tp": 18,
+        "fp": 332,
+        "fn": 27,
+        "tn": 823,
+        "accuracy": 0.7008,
+        "precision": 0.0514,
+        "recall": 0.4,
+        "f1": 0.0911,
+        "kappa": 0.0264,
+        "accuracy_ci95": [
+          0.6346,
+          0.765
+        ],
+        "f1_ci95": [
+          0.0376,
+          0.14
+        ],
+        "kappa_ci95": [
+          -0.0189,
+          0.0756
+        ]
+      },
+      "cropformer_8ch_mae": {
+        "n": 1200,
+        "tp": 15,
+        "fp": 270,
+        "fn": 30,
+        "tn": 885,
+        "accuracy": 0.75,
+        "precision": 0.0526,
+        "recall": 0.3333,
+        "f1": 0.0909,
+        "kappa": 0.0279,
+        "accuracy_ci95": [
+          0.7135,
+          0.7811
+        ],
+        "f1_ci95": [
+          0.0398,
+          0.1387
+        ],
+        "kappa_ci95": [
+          -0.0129,
+          0.0731
+        ]
+      }
+    }
+  },
+  "multiclass_phenology_holdout": {
+    "cropformer_3ch_mae": {
+      "n_test": 1199,
+      "exact_accuracy": 0.824,
+      "per_class": {
+        "winter_wheat": {
+          "n": 276,
+          "recall": 0.9384
+        },
+        "maize": {
+          "n": 386,
+          "recall": 0.9171
+        },
+        "sunflower": {
+          "n": 537,
+          "recall": 0.6983
+        }
+      }
+    },
+    "cropformer_8ch_mae": {
+      "n_test": 1199,
+      "exact_accuracy": 0.859,
+      "per_class": {
+        "winter_wheat": {
+          "n": 276,
+          "recall": 0.9638
+        },
+        "maize": {
+          "n": 386,
+          "recall": 0.9352
+        },
+        "sunflower": {
+          "n": 537,
+          "recall": 0.7505
+        }
+      }
+    }
+  },
+  "notes": "Maize vs non-maize targets independent ESA WorldCereal 10 m labels cached in data/worldcereal_ogh/. MAE self-supervised pretraining uses strictly <= 2021 SITS from the 6 training blocks of each fold."
+}

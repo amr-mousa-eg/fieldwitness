@@ -16,6 +16,7 @@ import fieldwitness.data.era5  # noqa: F401
 import fieldwitness.data.gpm_imerg  # noqa: F401
 import fieldwitness.data.hls_qa  # noqa: F401  (registers its reader)
 import fieldwitness.data.labels  # noqa: F401  (registers its reader)
+import fieldwitness.data.landsat_lst  # noqa: F401  (registers its reader)
 import fieldwitness.data.nwis  # noqa: F401
 import fieldwitness.data.power  # noqa: F401  (registers its reader)
 import fieldwitness.data.prism  # noqa: F401
@@ -85,6 +86,20 @@ CASES = {
                     "eta_mm": [2.0, 3.0, 4.0],
                     "qc_good": [True] * 3,
                     "tag": ["D"] * 3,
+                }
+            )
+        )["date"]
+    ),
+    "landsat_lst": lambda fn: list(
+        fn(
+            table=pd.DataFrame(
+                {
+                    "field_id": ["f1"] * 3,
+                    "date": ["2021-06-01", "2021-12-31", "2022-07-01"],
+                    "lst_c": [29.0, 12.0, 36.5],
+                    "n_clear": [8] * 3,
+                    "clear_fraction": [0.9] * 3,
+                    "tag": ["O"] * 3,
                 }
             )
         )["date"]

@@ -1150,6 +1150,9 @@ def _build_one_field(f_idx: int):
             taw_mm=med_taw,
             kc_scale=med_kc,
         )
+        lst_all = ctx.get("lst_obs_df")
+        lst_f = lst_all[lst_all["field_id"].astype(str) == fid] if lst_all is not None else None
+        obs_c = X.obs_checks_series(field_lst=lst_f, era5_df=ctx.get("era5_obs_df"))
         cal = FieldCalendar(
             schema_version="1.2",
             field_id=fid,
@@ -1157,6 +1160,7 @@ def _build_one_field(f_idx: int):
             bare_observed_years=(2017, 2024),
             bare_by_option=X.bare_by_option(canopies),
             vulnerability=vuln,
+            obs_checks=obs_c,
             data_as_of=as_of,
         )
         _write(out_dir / f"{fid}.calendar.json", cal, problems)
@@ -1430,6 +1434,7 @@ def main() -> None:
     prior_hidden = priors.sample(2000, seed=SEED + 620)
     as_of = s2_df["date"].max().date() if not s2_df.empty else date(2024, 12, 31)
     story_fid = str(pilot_20.iloc[0]["field_id"])
+    lst_obs_df, era5_obs_df = X.load_obs_checks_inputs(REGION, cutoff_date=as_of)
 
     # Pre-warm POWER cache in parent before fork so child processes inherit read-only weather arrays
     for _, row in pilot_20.iterrows():
@@ -1456,6 +1461,8 @@ def main() -> None:
             "noise_sd": noise_sd,
             "prior_hidden": prior_hidden,
             "as_of": as_of,
+            "lst_obs_df": lst_obs_df,
+            "era5_obs_df": era5_obs_df,
             "resume": bool(args.resume),
         }
     )

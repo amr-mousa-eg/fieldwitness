@@ -55,6 +55,7 @@ export interface FieldCalendar {
   bare_observed_years: [number, number];
   bare_by_option: Record<string, TaggedSeries>;
   vulnerability: CropVulnerability[];
+  obs_checks?: Record<string, TaggedSeries> | null;
   data_as_of: string;
 }
 

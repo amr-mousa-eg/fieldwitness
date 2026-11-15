@@ -186,3 +186,72 @@ def test_extract_scene_applies_offset_scl_mask_and_asof(monkeypatch):
         clipped = hls_qa.read("ua_test", table=both)
         assert clipped["date"].max().date() <= dt.date(2021, 12, 31)
         assert len(clipped) == 1
+
+
+def test_extract_multispectral_scene_table(monkeypatch):
+    # Scale 0.0001 with boa_offset_applied=True (no -0.1 subtracted):
+    # rededge1=0.10, rededge3=0.30, nir08=0.50, swir16=0.25, swir22=0.15
+    arrays = {
+        "B05": np.full((512, 512), 1000, dtype=np.uint16),
+        "B07": np.full((512, 512), 3000, dtype=np.uint16),
+        "B8A": np.full((512, 512), 5000, dtype=np.uint16),
+        "B11": np.full((512, 512), 2500, dtype=np.uint16),
+        "B12": np.full((512, 512), 1500, dtype=np.uint16),
+        "SCL": np.full((512, 512), 4, dtype=np.uint8),
+    }
+    ifd_stub = s2_cog.CogIfd(
+        width=5490,
+        height=5490,
+        tile_width=512,
+        tile_height=512,
+        bits_per_sample=16,
+        compression=8,
+        predictor=2,
+        tile_offsets=[0],
+        tile_byte_counts=[1],
+    )
+
+    monkeypatch.setattr(s2_cog, "fetch_cog_ifd", lambda url, *args, **kwargs: ("<", ifd_stub, 64))
+
+    def fake_tile(url, *args, **kwargs):
+        for k, arr in arrays.items():
+            if k in url:
+                return arr, 128
+        raise AssertionError(f"Unexpected band url: {url}")
+
+    monkeypatch.setattr(s2_cog, "fetch_cog_tile_from_ifd", fake_tile)
+
+    grid = {"epsg": "EPSG:32636", "ulx": 400000.0, "uly": 5400000.0, "size_m": 109800.0}
+    poly = shapely.box(400000.0, 5399700.0, 400300.0, 5400000.0)
+    pilot = gpd.GeoDataFrame(
+        {"field_id": ["f_ua_ms"], "geometry": [poly]}, crs="EPSG:32636"
+    ).to_crs("EPSG:4326")
+    px_df = s2_cog.sample_interior_pixels_20m(pilot, grid)
+
+    def band_spec(code: str) -> dict:
+        return {
+            "href": f"https://example.com/{code}.tif",
+            "raster:bands": [{"scale": 0.0001, "offset": -0.1, "nodata": 0}],
+        }
+
+    scene = {
+        "id": "S2A_36UVU_20220715_0_L2A",
+        "properties": {"datetime": "2022-07-15T09:00:00Z", "earthsearch:boa_offset_applied": True},
+        "assets": {
+            "rededge1": band_spec("B05"),
+            "rededge3": band_spec("B07"),
+            "nir08": band_spec("B8A"),
+            "swir16": band_spec("B11"),
+            "swir22": band_spec("B12"),
+            "scl": {"href": "https://example.com/SCL.tif", "raster:bands": [{"nodata": 0}]},
+        },
+    }
+    df_ms, nbytes = s2_cog.extract_multispectral_scene_table(scene, px_df)
+    assert nbytes > 0
+    assert len(df_ms) == 1
+    row = df_ms.iloc[0]
+    assert row["ndre1"] == pytest.approx((0.30 - 0.10) / (0.30 + 0.10), abs=1e-4)
+    assert row["ndre2"] == pytest.approx((0.50 - 0.10) / (0.50 + 0.10), abs=1e-4)
+    assert row["ndmi"] == pytest.approx((0.50 - 0.25) / (0.50 + 0.25), abs=1e-4)
+    assert row["nbr2"] == pytest.approx((0.25 - 0.15) / (0.25 + 0.15), abs=1e-4)
+    assert row["source_tag"] == "O"

@@ -63,8 +63,12 @@ Only the row groups whose `bbox` statistics intersect the query box are read (se
   - Endpoint: `https://earth-search.aws.element84.com/v1/search`, collection `sentinel-2-l2a` (`grid:code = "MGRS-36UVU"`).
   - Access (`fieldwitness.data.s2_cog`): HTTP Range reads of targeted 20 m (`512×512`) COG tiles for `red` (B04 IFD 1), `nir` (B08 IFD 1), and `scl` (SCL IFD 0, keeping clear classes `SCL in {4, 5}`). Computes NDVI and 2-band EVI2 (`2.5 * (NIR - RED) / (NIR + 2.4 * RED + 1.0)`, Jiang et al. 2008, *Remote Sensing of Environment* 112(10):3833–3845) over up to 12 seeded interior pixel centres per field (15 m inward buffer).
   - Radiometric offset caveat: STAC `raster:bands` on baseline 04.00/05.xx scenes advertises `offset = -0.1` even when `earthsearch:boa_offset_applied == true`; `s2_cog.py` applies `-0.1` only when `earthsearch:boa_offset_applied` is falsy to avoid double subtraction.
-  - Central Ukraine dataset (`ua_central_t36uvu`): 128 balanced scenes (`2017-03-01` to `2024-11-17`), 48,199 clear field-date rows across 395 fields (`0` saturated `ndvi >= 0.999` values); combined session downloads across FTW (40.0 MB), S2 COG (~595 MB including offset fix re-extraction), NASA POWER (244 points, ~15 MB HTTP), and SoilGrids (35.1 KB) stayed ~650 MB (`< 1 GB` cap).
+  - Central Ukraine dataset (`ua_central_t36uvu`): 128 balanced scenes (`2017-03-01` to `2024-11-17`), 48,199 clear field-date rows across 395 fields (`0` saturated `ndvi >= 0.999` values); plus 20 m Red-Edge & SWIR multispectral cache (`data/fields/ua_central_t36uvu_s2_multispectral.parquet`, `17,119` rows across all `400` fields spanning `2017–2024`: `NDRE1` from `B05/B07`, `NDRE2` from `B05/B8A`, `NDMI` from `B8A/B11`, `NBR2` from `B11/B12`); total cached `data/` footprint remains `< 240 MB` (`<< 1 GB` cap).
   - Licence: Copernicus Sentinel Data Terms and Conditions (open and free, attribution to European Union / ESA / Copernicus via Element84 Earth Search AWS Public Dataset).
+- **USGS/NASA Landsat 8–9 Collection 2 Level-2 Land Surface Temperature (`ST_B10` / `lwir11`)**:
+  - Endpoint: Microsoft Planetary Computer STAC (`https://planetarycomputer.microsoft.com/api/stac/v1/search`, collection `landsat-c2-l2`) with signed COG HTTP range reads (`fieldwitness.data.landsat_lst`, 100 m TIRS resampled to 30 m grid; `QA_PIXEL` clear-sky masking).
+  - Usage: Field-level observed thermal stress check (`lst_heat [O]`, monthly share of years with clear LST > 35 °C) in `FieldCalendar.obs_checks` across Kansas (`152/200` fields with ≥ 2 yrs/month) and Central Ukraine (`120/120` fields), cross-checked in `results/validation/ecostress_eta_check.json`.
+  - Licence: USGS/NASA Landsat Public Domain.
 - **NASA GIBS HLS True-Colour Basemap (T9.1 / P0.1)**:
   - Source: NASA Global Imagery Browse Services (GIBS) / LP DAAC, part of NASA EOSDIS.
   - Layer: `HLS_S30_Nadir_BRDF_Adjusted_Reflectance` (Sentinel-2 MSI true-colour RGB: Red B04, Green B03, Blue B02).
@@ -83,7 +87,7 @@ Only the row groups whose `bbox` statistics intersect the query box are read (se
   - Licence: NASA Earth Science Data Policy (open and free).
 - **NASA ECOSTRESS Thermal Evapotranspiration**:
   - Products: `ECO_L3T_JET` v003 (Concept ID `C4057232489-LPCLOUD`, 70 m PT-JPL tiled ETa) and v002 (`C2076106409-LPCLOUD`).
-  - Scale: 70 m spatial resolution meets field scale contract (CLAUDE.md Rule 5).
+  - Scale: 70 m spatial resolution meets field scale contract (CLAUDE.md Rule 5). When Earthdata `_netrc` is absent, public Landsat 8–9 C2 L2 `ST_B10` provides the observed 30 m/100 m thermal stress check (`results/validation/ecostress_eta_check.json`).
   - Licence: NASA Earth Science Data Policy (open and free).
 - **NASA Shuttle Radar Topography Mission (SRTM) & NASADEM**:
   - Products: `NASADEM_HGT` v001 (`C2763264762-LPCLOUD`) and `SRTMGL1` v003 (`C2763266360-LPCLOUD`), 1 arc-second (~30 m global DEM).
@@ -114,7 +118,7 @@ Only the row groups whose `bbox` statistics intersect the query box are read (se
   - Terms: NASA Open Data Policy (public domain, free reuse with attribution).
 - **ECMWF ERA5 & ERA5-Land Reanalysis**:
   - Source: European Centre for Medium-Range Weather Forecasts (ECMWF) Copernicus Climate Change Service.
-  - Access: Open-Meteo Historical Archive REST API (`https://archive-api.open-meteo.com/v1/archive`) & Copernicus CDS.
+  - Access: Open-Meteo Historical Archive REST API (`https://archive-api.open-meteo.com/v1/archive`) & Copernicus CDS (`2001–2024` cached daily rain `0.25°`, scale-flagged coarse context `extreme_rain_era5 [E]` in `FieldCalendar.obs_checks` across all `320` calendars and cross-checked against NASA POWER in `results/validation/smap_gpm_check.json`).
   - Licence: Copernicus Open Access Licence (free reuse with attribution).
 - **PRISM Climate Group**:
   - Source: Oregon State University PRISM Climate Group (4 km and 800 m gridded weather).

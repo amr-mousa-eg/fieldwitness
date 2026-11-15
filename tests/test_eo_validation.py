@@ -6,9 +6,11 @@ import numpy as np
 import pandas as pd
 import pytest
 
+from fieldwitness.data.landsat_lst import dn_to_lst_c
 from fieldwitness.validate.eo_checks import (
     evaluate_ecostress_eta,
     evaluate_extreme_rain_agreement,
+    evaluate_landsat_lst_thermal,
     evaluate_smap_soil_moisture,
     evaluate_wimas_irrigation,
 )
@@ -90,3 +92,26 @@ def test_wimas_irrigation_converts_acre_feet_and_scores_r2():
     assert res["n_field_years"] == 3
     assert res["r2"] > 0.98
     assert res["mae_mm"] == pytest.approx(8.33, abs=0.1)
+
+
+def test_landsat_lst_qa_and_thermal_agreement():
+    # DN 47148 * 0.00341802 + 149.0 - 273.15 = 37.0 degC
+    dn = np.array([47148, 47148, 0, 44000], dtype=np.uint16)
+    qa = np.array([21824 & ~0xBE, 1 << 3, 0, 1 << 4], dtype=np.uint16)  # 1st clear, others masked
+    lst_c, valid = dn_to_lst_c(dn, qa)
+    assert list(valid) == [True, False, False, False]
+    assert lst_c[0] == pytest.approx(37.0, abs=0.02)
+
+    dates = pd.date_range("2021-07-01", periods=5, freq="D")
+    pwr = pd.DataFrame({"date": dates, "T2M_MAX": [28.0, 31.0, 36.0, 38.0, 33.0]})
+    obs = pd.DataFrame(
+        {
+            "field_id": ["f1"] * 5,
+            "date": dates,
+            "lst_c": [30.0, 32.5, 39.2, 41.0, 34.0],
+        }
+    )
+    res = evaluate_landsat_lst_thermal(pwr, obs, heat_threshold_c=35.0)
+    assert res["n_obs"] == 5
+    assert res["pearson_r"] > 0.95
+    assert res["heat_threshold_agreement"] == pytest.approx(1.0)

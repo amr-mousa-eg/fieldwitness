@@ -5,7 +5,7 @@ import { Explain } from "./Explain";
 import { useLocale } from "./locale";
 import { CHART_COLOURS } from "./theme";
 import { useTheme } from "./useTheme";
-import { HAZARDS, MONTHS, monthValue, shadeLevel, vulnerabilityFor } from "./calendar";
+import { HAZARDS, MONTHS, OBS_CHECK_KEYS, monthValue, shadeLevel, vulnerabilityFor } from "./calendar";
 import { setActiveFieldCalendar } from "./chatbotContext";
 import { loadCalendar, loadLayers } from "./data";
 import { formatTagged } from "./format";
@@ -238,6 +238,44 @@ export function ContextStrip({ layers }: { layers: RegionLayers }) {
   );
 }
 
+export function ObservedChecks({ cal }: { cal: FieldCalendar }) {
+  const checks = cal.obs_checks;
+  if (!checks) return null;
+  const keys = OBS_CHECK_KEYS.filter((k) => checks[k]);
+  if (keys.length === 0) return null;
+  return (
+    <section aria-labelledby="obs-checks-h">
+      <h3 id="obs-checks-h">{t("cal.obsChecks")}</h3>
+      <p className="muted">{t("cal.obsChecks.note")}</p>
+      <div className="table-wrap">
+        <table className="cal">
+          <Head />
+          <tbody>
+            {keys.map((k) => {
+              const s = checks[k]!;
+              const coarse = k !== "lst_heat";
+              return (
+                <tr key={k}>
+                  <th scope="row">
+                    {t(`cal.obsChecks.${k}`)} <TagBadge tag={s.tag} source={s.source} />
+                    <span className={`cal-scale-badge ${coarse ? "flag-coarse" : "flag-fine"}`}>
+                      <span aria-hidden="true">{coarse ? "◌" : "●"}</span>{" "}
+                      {t(coarse ? "cal.obsChecks.scaleCoarse" : "cal.obsChecks.scaleFine")}
+                    </span>
+                  </th>
+                  {MONTHS.map((m) => (
+                    <ShareCell key={m} share={monthValue(s.x, s.values, m)} kind="risk" />
+                  ))}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  );
+}
+
 export function CalendarView({ pack, regionId }: { pack: FieldPack; regionId: string }) {
   const fid = pack.field.field_id;
   const [cal, setCal] = useState<FieldCalendar | null>(null);
@@ -289,6 +327,7 @@ export function CalendarView({ pack, regionId }: { pack: FieldPack; regionId: st
       {cal && (
         <>
           <BareCalendar cal={cal} optionId={option.option_id} label={optionName(option)} />
+          <ObservedChecks cal={cal} />
           <VulnerabilityCalendar cal={cal} sequence={option.sequence} regionId={regionId} />
         </>
       )}

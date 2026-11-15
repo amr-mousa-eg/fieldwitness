@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "tag": "D",
-  "source": "model:calibration@v1 (CQR pre-registered 2026-11-13)",
+  "source": "model:calibration@v1 (CQR pre-registered 2026-11-13 + E2.2 stratified audit)",
   "n_cal_rows": 3424,
   "n_test_rows": 3704,
   "n_spatial_blocks": 109,
@@ -834,5 +834,228 @@
       "gate_85_95": "fail",
       "gate_80_floor": "pass"
     }
-  ]
+  ],
+  "stratified_summary": {
+    "taw_regime_median_mm": 282.0,
+    "by_ssurgo_taw": [
+      {
+        "crop": "maize",
+        "metric": "canopy_integral",
+        "n": 124,
+        "cqr_sym_cov90": 0.7661,
+        "cqr_sym_winkler90": 111.7231,
+        "cqr_asym_cov90": 0.8065,
+        "cqr_asym_winkler90": 126.2296
+      },
+      {
+        "crop": "maize",
+        "metric": "cover_days",
+        "n": 124,
+        "cqr_sym_cov90": 0.879,
+        "cqr_sym_winkler90": 201.527,
+        "cqr_asym_cov90": 0.7984,
+        "cqr_asym_winkler90": 232.8899
+      },
+      {
+        "crop": "maize",
+        "metric": "peak",
+        "n": 124,
+        "cqr_sym_cov90": 0.9516,
+        "cqr_sym_winkler90": 97.3226,
+        "cqr_asym_cov90": 0.9274,
+        "cqr_asym_winkler90": 129.3024
+      },
+      {
+        "crop": "maize",
+        "metric": "sos",
+        "n": 124,
+        "cqr_sym_cov90": 0.9355,
+        "cqr_sym_winkler90": 149.7444,
+        "cqr_asym_cov90": 0.9274,
+        "cqr_asym_winkler90": 185.1065
+      },
+      {
+        "crop": "sorghum",
+        "metric": "canopy_integral",
+        "n": 142,
+        "cqr_sym_cov90": 0.7324,
+        "cqr_sym_winkler90": 113.7183,
+        "cqr_asym_cov90": 0.7254,
+        "cqr_asym_winkler90": 113.8995
+      },
+      {
+        "crop": "sorghum",
+        "metric": "cover_days",
+        "n": 142,
+        "cqr_sym_cov90": 0.8873,
+        "cqr_sym_winkler90": 223.6433,
+        "cqr_asym_cov90": 0.8169,
+        "cqr_asym_winkler90": 210.5947
+      },
+      {
+        "crop": "sorghum",
+        "metric": "peak",
+        "n": 142,
+        "cqr_sym_cov90": 0.8592,
+        "cqr_sym_winkler90": 105.2264,
+        "cqr_asym_cov90": 0.8873,
+        "cqr_asym_winkler90": 130.3201
+      },
+      {
+        "crop": "sorghum",
+        "metric": "sos",
+        "n": 142,
+        "cqr_sym_cov90": 0.8732,
+        "cqr_sym_winkler90": 288.5296,
+        "cqr_asym_cov90": 0.9085,
+        "cqr_asym_winkler90": 235.819
+      },
+      {
+        "crop": "winter_wheat",
+        "metric": "canopy_integral",
+        "n": 197,
+        "cqr_sym_cov90": 0.7614,
+        "cqr_sym_winkler90": 119.1532,
+        "cqr_asym_cov90": 0.6904,
+        "cqr_asym_winkler90": 115.5406
+      },
+      {
+        "crop": "winter_wheat",
+        "metric": "cover_days",
+        "n": 197,
+        "cqr_sym_cov90": 0.9289,
+        "cqr_sym_winkler90": 245.5701,
+        "cqr_asym_cov90": 0.9036,
+        "cqr_asym_winkler90": 250.0751
+      },
+      {
+        "crop": "winter_wheat",
+        "metric": "peak",
+        "n": 197,
+        "cqr_sym_cov90": 0.7868,
+        "cqr_sym_winkler90": 428.0675,
+        "cqr_asym_cov90": 0.7766,
+        "cqr_asym_winkler90": 442.6584
+      },
+      {
+        "crop": "winter_wheat",
+        "metric": "sos",
+        "n": 197,
+        "cqr_sym_cov90": 0.8426,
+        "cqr_sym_winkler90": 275.3761,
+        "cqr_asym_cov90": 0.8325,
+        "cqr_asym_winkler90": 237.2688
+      }
+    ],
+    "by_precutoff_vigor": [
+      {
+        "crop": "maize",
+        "metric": "canopy_integral",
+        "n": 124,
+        "cqr_sym_cov90": 0.8065,
+        "cqr_sym_winkler90": 113.0532,
+        "cqr_asym_cov90": 0.75,
+        "cqr_asym_winkler90": 136.6729
+      },
+      {
+        "crop": "maize",
+        "metric": "cover_days",
+        "n": 124,
+        "cqr_sym_cov90": 0.8548,
+        "cqr_sym_winkler90": 215.3738,
+        "cqr_asym_cov90": 0.8306,
+        "cqr_asym_winkler90": 226.5726
+      },
+      {
+        "crop": "maize",
+        "metric": "peak",
+        "n": 124,
+        "cqr_sym_cov90": 0.9677,
+        "cqr_sym_winkler90": 95.7218,
+        "cqr_asym_cov90": 0.9677,
+        "cqr_asym_winkler90": 129.8065
+      },
+      {
+        "crop": "maize",
+        "metric": "sos",
+        "n": 124,
+        "cqr_sym_cov90": 0.8871,
+        "cqr_sym_winkler90": 137.9944,
+        "cqr_asym_cov90": 0.8952,
+        "cqr_asym_winkler90": 185.2629
+      },
+      {
+        "crop": "sorghum",
+        "metric": "canopy_integral",
+        "n": 142,
+        "cqr_sym_cov90": 0.7183,
+        "cqr_sym_winkler90": 120.055,
+        "cqr_asym_cov90": 0.6549,
+        "cqr_asym_winkler90": 134.8445
+      },
+      {
+        "crop": "sorghum",
+        "metric": "cover_days",
+        "n": 142,
+        "cqr_sym_cov90": 0.8944,
+        "cqr_sym_winkler90": 232.9532,
+        "cqr_asym_cov90": 0.7606,
+        "cqr_asym_winkler90": 231.8648
+      },
+      {
+        "crop": "sorghum",
+        "metric": "peak",
+        "n": 142,
+        "cqr_sym_cov90": 0.9085,
+        "cqr_sym_winkler90": 110.7194,
+        "cqr_asym_cov90": 0.8803,
+        "cqr_asym_winkler90": 128.6665
+      },
+      {
+        "crop": "sorghum",
+        "metric": "sos",
+        "n": 142,
+        "cqr_sym_cov90": 0.9014,
+        "cqr_sym_winkler90": 279.9965,
+        "cqr_asym_cov90": 0.9155,
+        "cqr_asym_winkler90": 224.8528
+      },
+      {
+        "crop": "winter_wheat",
+        "metric": "canopy_integral",
+        "n": 197,
+        "cqr_sym_cov90": 0.7513,
+        "cqr_sym_winkler90": 124.8269,
+        "cqr_asym_cov90": 0.7462,
+        "cqr_asym_winkler90": 134.9983
+      },
+      {
+        "crop": "winter_wheat",
+        "metric": "cover_days",
+        "n": 197,
+        "cqr_sym_cov90": 0.9036,
+        "cqr_sym_winkler90": 239.9315,
+        "cqr_asym_cov90": 0.8579,
+        "cqr_asym_winkler90": 261.8858
+      },
+      {
+        "crop": "winter_wheat",
+        "metric": "peak",
+        "n": 197,
+        "cqr_sym_cov90": 0.797,
+        "cqr_sym_winkler90": 424.2198,
+        "cqr_asym_cov90": 0.802,
+        "cqr_asym_winkler90": 435.8594
+      },
+      {
+        "crop": "winter_wheat",
+        "metric": "sos",
+        "n": 197,
+        "cqr_sym_cov90": 0.8731,
+        "cqr_sym_winkler90": 273.6939,
+        "cqr_asym_cov90": 0.802,
+        "cqr_asym_winkler90": 255.9845
+      }
+    ]
+  }
 }

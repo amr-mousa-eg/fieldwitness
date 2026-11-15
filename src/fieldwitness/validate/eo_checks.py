@@ -97,8 +97,9 @@ def evaluate_extreme_rain_agreement(
     power_daily: pd.DataFrame,
     imerg_daily: pd.DataFrame,
     threshold_mm: float = EXTREME_RAIN_THRESHOLD_MM,
+    external_source: str = "NASA GPM IMERG vs NASA POWER daily precipitation",
 ) -> dict[str, Any]:
-    """Compare daily extreme-rain detection between NASA POWER and GPM IMERG."""
+    """Compare daily extreme-rain detection between NASA POWER and an external rainfall source."""
     p = power_daily[["date", "rain_mm"]].copy()
     g = imerg_daily[["date", "rain_mm"]].copy()
     p["date"] = pd.to_datetime(p["date"]).dt.normalize()
@@ -133,7 +134,7 @@ def evaluate_extreme_rain_agreement(
         ),
         "csi": round(hits / denom_csi, 4) if denom_csi > 0 else None,
         "tag": "D",
-        "external_source": "NASA GPM IMERG vs NASA POWER daily precipitation",
+        "external_source": external_source,
     }
 
 
@@ -171,6 +172,56 @@ def evaluate_ecostress_eta(
         "spearman_rho": round(rho, 4) if rho is not None else None,
         "tag": "D",
         "external_source": "NASA ECOSTRESS ECO_L3T_JET v003 (C4057232489-LPCLOUD, 70 m)",
+    }
+
+
+def evaluate_landsat_lst_thermal(
+    power_daily: pd.DataFrame,
+    lst_obs: pd.DataFrame,
+    heat_threshold_c: float = 35.0,
+) -> dict[str, Any]:
+    """Compare observed field-level Landsat 8/9 C2 L2 ST_B10 LST (degC) vs POWER T2M_MAX."""
+    p = power_daily.copy()
+    if "date" not in p.columns:
+        p = p.reset_index()
+        if "index" in p.columns:
+            p = p.rename(columns={"index": "date"})
+    t_col = "T2M_MAX" if "T2M_MAX" in p.columns else "tmax_c"
+    p = p[["date", t_col]].rename(columns={t_col: "tmax_c"})
+    p["date"] = pd.to_datetime(p["date"]).dt.normalize()
+
+    lst = lst_obs[["field_id", "date", "lst_c"]].copy()
+    lst["date"] = pd.to_datetime(lst["date"]).dt.normalize()
+    m = lst.merge(p, on="date", how="inner").dropna()
+    n = len(m)
+    if n == 0:
+        return {
+            "n_obs": 0,
+            "too_few_to_judge": True,
+            "tag": "D",
+            "external_source": "USGS/NASA Landsat 8-9 C2 L2 lwir11 (100 m TIRS / 30 m COG)",
+        }
+
+    r, rho = _corr_pair(m["lst_c"].to_numpy(float), m["tmax_c"].to_numpy(float))
+    diff = m["lst_c"].to_numpy(float) - m["tmax_c"].to_numpy(float)
+    hot_lst = m["lst_c"] > heat_threshold_c
+    hot_air = m["tmax_c"] > heat_threshold_c
+    agree = float((hot_lst == hot_air).mean())
+    return {
+        "n_obs": int(n),
+        "n_fields": int(m["field_id"].nunique()),
+        "heat_threshold_c": float(heat_threshold_c),
+        "too_few_to_judge": bool(n < 20),
+        "mean_lst_c": round(float(m["lst_c"].mean()), 2),
+        "mean_air_tmax_c": round(float(m["tmax_c"].mean()), 2),
+        "lst_minus_tmax_mean_c": round(float(np.mean(diff)), 2),
+        "pearson_r": round(r, 4) if r is not None else None,
+        "spearman_rho": round(rho, 4) if rho is not None else None,
+        "hot_day_share_lst": round(float(hot_lst.mean()), 4),
+        "hot_day_share_power": round(float(hot_air.mean()), 4),
+        "heat_threshold_agreement": round(agree, 4),
+        "tag": "D",
+        "external_source": "USGS/NASA Landsat 8-9 C2 L2 lwir11 vs NASA POWER T2M_MAX",
     }
 
 

@@ -185,7 +185,7 @@ describe("guardrails and local answers", () => {
 describe("KB facts consistency", () => {
   const factValues = new Set(Object.values(FACTS).map((f) => f.value));
   // Literals that are names or labels, not results.
-  const LITERALS = [/FAO-56/g, /\b\d+ m\b/g, /SoilGrids 2\.0/g, /Sentinel-2/g, /2026/g, /T14SLH/g, /2021-12-31/g, /0–1/g, /3-season/g,
+  const LITERALS = [/FAO-56/g, /\b\d+ m\b/g, /SoilGrids 2\.0/g, /Sentinel-2/g, /S2\b/g, /3-band/g, /2026/g, /T14SLH/g, /2021-12-31/g, /0–1/g, /3-season/g,
     /\b[123]\)/g, /\b3D\b/g, /\b0 of\b/g, /95%/g, /T2M_(MAX|MIN)/g, /HLS 30/g];
 
   it("every number in the knowledge base comes from the FACTS block", () => {
@@ -251,6 +251,7 @@ describe("KB facts consistency", () => {
     const uaSeasons = readJson("results/neighbours/ua_central_t36uvu_field_season_summary.json");
     const uaReport = readText("results/neighbours/ua_central_t36uvu_report.md");
     const uaCred = readJson("results/inference/ua_central_t36uvu_credibility.json").summary;
+    const uaCf = readJson("results/story/ua_cropformer_worldcereal.json");
     expect(Number(FACTS.uaFields.value)).toBe(uaSummary.pilot_fields);
     expect(Number(FACTS.uaSeasons.value)).toBe(uaSeasons.rows);
     expect(uaReport).toContain(`${FACTS.uaPreCutoffPass.value} pre-cutoff`);
@@ -261,5 +262,9 @@ describe("KB facts consistency", () => {
     expect(Number(FACTS.uaTopGradeB.value)).toBe(uaCred.top_grade_counts.B);
     expect(Number(FACTS.uaTopGradeC.value)).toBe(uaCred.top_grade_counts.C);
     expect(Number(FACTS.uaAllGradeA.value)).toBe(uaCred.all_candidate_grade_counts.A);
+    expect(FACTS.uaCropformer3chMultiPct.value).toBe((uaCf.multiclass_phenology_holdout.cropformer_3ch_mae.exact_accuracy * 100).toFixed(1));
+    expect(FACTS.uaCropformer8chMultiPct.value).toBe((uaCf.multiclass_phenology_holdout.cropformer_8ch_mae.exact_accuracy * 100).toFixed(1));
+    expect(FACTS.uaCropformerKappa.value).toBe(uaCf.worldcereal_maize_vs_nonmaize.cropformer_3ch_mae_cv.all_2020_2024.kappa.toFixed(3));
+    expect(FACTS.uaCropformerHoldoutKappa.value).toBe(uaCf.worldcereal_maize_vs_nonmaize.strict_spatiotemporal_le2021_to_2022_2024.cropformer_8ch_mae.kappa.toFixed(3));
   });
 });

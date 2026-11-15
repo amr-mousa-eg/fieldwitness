@@ -1,0 +1,112 @@
+{
+  "region_id": "ks_t14slh",
+  "witness3_status": "OFF",
+  "circuit_breaker_verified": true,
+  "active_neighbours_in_sampled_packs": 0,
+  "panel_obdml_local_table_present": false,
+  "designs": {
+    "primary_dml": {
+      "rows_total": 144,
+      "fitted": 92,
+      "ci_excludes_zero": 20,
+      "pass_all_gates": 0,
+      "checks": {
+        "overlap_status": {
+          "pass": 60,
+          "fail": 32
+        },
+        "balance_status": {
+          "fail": 92
+        },
+        "placebo_status": {
+          "pass": 50,
+          "untested": 36,
+          "fail": 6
+        },
+        "negctrl_status": {
+          "untested": 64,
+          "pass": 23,
+          "fail": 5
+        }
+      }
+    },
+    "matching_history_dml": {
+      "rows_total": 72,
+      "fitted": 32,
+      "ci_excludes_zero": 10,
+      "pass_all_gates": 0,
+      "checks": {
+        "overlap_status": {
+          "pass": 32
+        },
+        "balance_status": {
+          "fail": 24,
+          "pass": 8
+        },
+        "placebo_status": {
+          "untested": 20,
+          "pass": 7,
+          "fail": 5
+        },
+        "negctrl_status": {
+          "pass": 23,
+          "fail": 5,
+          "untested": 4
+        }
+      }
+    },
+    "dapsm": {
+      "rows_total": 12,
+      "fitted": 4,
+      "pass_all_gates": 0,
+      "w_star": 0.0,
+      "checks": {
+        "overlap": {
+          "pass": 4,
+          "fail": 0,
+          "untested": 0,
+          "pass_share_of_tested": 1.0,
+          "wilson95": [
+            0.5101091596030786,
+            0.9999999999999999
+          ]
+        },
+        "balance": {
+          "pass": 0,
+          "fail": 4,
+          "untested": 0,
+          "pass_share_of_tested": 0.0,
+          "wilson95": [
+            0.0,
+            0.4898908403969213
+          ]
+        },
+        "placebo": {
+          "pass": 0,
+          "fail": 0,
+          "untested": 4,
+          "pass_share_of_tested": null,
+          "wilson95": [
+            NaN,
+            NaN
+          ]
+        },
+        "negctrl": {
+          "pass": 0,
+          "fail": 0,
+          "untested": 4,
+          "pass_share_of_tested": null,
+          "wilson95": [
+            NaN,
+            NaN
+          ]
+        }
+      }
+    }
+  },
+  "grading_policy": {
+    "grade_A_requires_neighbours": false,
+    "max_grade_when_neighbours_off": "B"
+  },
+  "conclusion": "Kansas Witness 3 stays strictly OFF (0/92 primary DML, 0/32 matching DML, 0/4 DAPSM). Rotational crop-history autocorrelation and missing irrigation ground labels violate balance and placebo checks. Panel-OBDML (<=t-3 residual + explicit year + ATO weighting) succeeded in Central Ukraine (30 pre-cutoff contrasts) and requires the local Kansas field_season parquet to test on KS."
+}

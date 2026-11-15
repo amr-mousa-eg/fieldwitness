@@ -236,6 +236,7 @@ class FieldCalendar(BaseModel):
     bare_observed_years: tuple[int, int]
     bare_by_option: dict[str, TaggedSeries]  # simulated bare share per month per option, tag D
     vulnerability: list[CropVulnerability]  # current crops + every option crop (T3.6)
+    obs_checks: dict[str, TaggedSeries] | None = None  # T3.7/E1.3 observed cross-checks (tag O/E)
     data_as_of: date
 
 
