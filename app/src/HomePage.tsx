@@ -94,30 +94,22 @@ export function HomePage({ regionId }: { regionId: string }) {
             <h3 id="home-media-h">{t("home.video.heading")}</h3>
             <span className="home-pill">{t("home.video.badge")}</span>
           </div>
-          {HOME_LINKS.demoVideoUrl ? (
-            <div className="home-video-embed">
-              <iframe
-                src={HOME_LINKS.demoVideoUrl}
-                title={t("home.video.heading")}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            </div>
-          ) : (
-            <div className="home-video-placeholder">
-              <div className="home-video-play-icon" aria-hidden="true">
-                ▶
-              </div>
-              <p className="home-video-placeholder-title">{t("home.video.placeholderTitle")}</p>
-              <p className="home-video-placeholder-desc">{t("home.video.placeholderDesc")}</p>
-              <ul className="home-video-chapters">
-                <li>{t("home.video.ch1")}</li>
-                <li>{t("home.video.ch2")}</li>
-                <li>{t("home.video.ch3")}</li>
-                <li>{t("home.video.ch4")}</li>
-              </ul>
-            </div>
-          )}
+          <div className="home-video-embed">
+            <iframe
+              src={HOME_LINKS.demoVideoUrl}
+              title="FieldWitness 2-Minute Walkthrough Video"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allowFullScreen
+              loading="lazy"
+            />
+          </div>
+          <ul className="home-video-chapters">
+            <li>{t("home.video.ch1")}</li>
+            <li>{t("home.video.ch2")}</li>
+            <li>{t("home.video.ch3")}</li>
+            <li>{t("home.video.ch4")}</li>
+          </ul>
         </div>
 
         <div className="home-stack">

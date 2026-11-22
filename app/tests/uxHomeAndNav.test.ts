@@ -29,7 +29,9 @@ describe("Home Page, NASA-style Docs Dropdown, Split Tabs & Map Scroll", () => {
       expect(html).toContain(HOME_LINKS.paperDocxUrl);
       expect(html).toContain("320");
       expect(html).toContain("2021");
-      expect(html).toContain("home-video-placeholder");
+      expect(html).toContain("https://www.youtube.com/embed/wvjxbmBhfkA");
+      expect(html).toContain("FieldWitness 2-Minute Walkthrough Video");
+      expect(html).not.toContain("home-video-placeholder");
 
       expect(TEAM_MEMBERS).toHaveLength(5);
       for (const m of TEAM_MEMBERS) {

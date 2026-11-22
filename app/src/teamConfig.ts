@@ -16,8 +16,8 @@ export const HOME_LINKS = {
   presentationPptxUrl: "./presentation/FieldWitness_Final_Presentation.pptx",
   paperPdfUrl: "./paper/FieldWitness_Research_Paper.pdf",
   paperDocxUrl: "./paper/FieldWitness_Research_Paper.docx",
-  /** Set to a public YouTube embed URL or MP4 URL once the 2-minute walkthrough video is recorded. */
-  demoVideoUrl: null as string | null,
+  /** YouTube embed URL of the 2-minute walkthrough (https://youtu.be/wvjxbmBhfkA). */
+  demoVideoUrl: "https://www.youtube.com/embed/wvjxbmBhfkA",
 };
 
 export const TEAM_MEMBERS: TeamMember[] = [
