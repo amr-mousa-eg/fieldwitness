@@ -1333,8 +1333,6 @@
   "home.impact.parity.note": "In-browser Three.js FAO-56 physics verified across 2,160 runs alongside 33 NASA & partner datasets.",
   "home.video.heading": "2-Minute Walkthrough Video",
   "home.video.badge": "2 min Demo",
-  "home.video.placeholderTitle": "Walkthrough video slot ready for recording link",
-  "home.video.placeholderDesc": "Our 2-minute video walkthrough covering the live map, S7 deltas, 3D field twin, and advisor console is being finalized and will be embedded here shortly.",
   "home.video.ch1": "0:00–0:30 · NASA HLS / GIBS Map & S7 Rank-1 Water Deltas",
   "home.video.ch2": "0:30–1:00 · Field Options, Six Farmer Priorities & Weather What-Ifs",
   "home.video.ch3": "1:00–1:30 · Interactive 3D Field Twin & Custom Rotation Builder",

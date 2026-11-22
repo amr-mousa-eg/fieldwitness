@@ -1282,3 +1282,9 @@ Pre-registered BEFORE running on Central Ukraine (`ua_central_t36uvu`) data (`CL
 - **Remaining / Next task:** Sole remaining item before final portal submission is recording and uploading the 2-minute walkthrough video, then setting `HOME_LINKS.demoVideoUrl` in `app/src/teamConfig.ts` and rebuilding/deploying Pages. **Phase P4 remains intentionally unstarted** per user boundary.
 - **Risks / Notes:** `app/public/presentation/FieldWitness_Final_Presentation.pptx` is served directly as a static asset via Vite/GitHub Pages (`./presentation/FieldWitness_Final_Presentation.pptx`); verify live Pages deployment once merged to `main`.
 
+
+## [claude-code] 2026-11-22: Embed 2-minute YouTube walkthrough on Home (`feat/home-youtube-video`)
+
+- Post-freeze change, approved by the user. Set `HOME_LINKS.demoVideoUrl` to `https://www.youtube.com/embed/wvjxbmBhfkA` (https://youtu.be/wvjxbmBhfkA) and replaced the dashed placeholder in `HomePage.tsx` with a lazy-loaded, responsive 16:9 iframe; the four chapter bullets now sit compactly under the player.
+- Removed the unused placeholder CSS and the `home.video.placeholderTitle` / `placeholderDesc` strings (EN + AR). `uxHomeAndNav.test.ts` now checks for the embed instead of the placeholder.
+- Local `npm test` / `npm run build` were not run (no `node_modules` in the worktree; install not permitted). By the user's decision, verification relies on the Pages workflow, which runs `npm test` and `npm run build` before deploying.
